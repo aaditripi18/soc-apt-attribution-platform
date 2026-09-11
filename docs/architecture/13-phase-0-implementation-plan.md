@@ -1,11 +1,12 @@
 # 13 — Phase 0 Implementation Plan
 
-**Status: PLANNED — implementation NOT started.** Translates the accepted architecture
-([ADR-0001](adr/0001-evidence-graph-core-architecture.md),
+**Status: IN PROGRESS.** G0.0 and G0.1 are **IMPLEMENTED/PASSED**; G0.2 onward are still planning only.
+Translates the accepted architecture ([ADR-0001](adr/0001-evidence-graph-core-architecture.md),
 [ADR-0002](adr/0002-attribution-scoring-and-evidence-methodology.md),
 [C0.1 §11](11-attack-knowledge-versioning.md), [C0.2 §12](12-deployment-and-endpoint-scope.md)) into small,
-independently verifiable gates. This document is **planning only**: no code, Dockerfiles, compose files,
-Elastic config, indexes, API, frontend, dataset acquisition, or ATT&CK vendoring were created.
+independently verifiable gates. Beyond G0.0 (repo scaffolding/CI) and G0.1 (the pinned ATT&CK artifact +
+its offline integrity verifier), no other code exists yet: no Dockerfiles, compose files, Elastic config,
+indexes, API, frontend, or dataset acquisition.
 
 **Authoritative constraints (carried verbatim into every gate):** no hard-coded ATT&CK vocabulary (all
 derived from the pinned v19.0 bundle); no live MITRE dependency at runtime; provenance on every derived
@@ -107,7 +108,7 @@ launcher scripts in `.venv/Scripts/` occasionally return `Permission denied` whe
 Bash (an MSYS/launcher quirk). Worked around with `python -m mypy` / `python -m pytest`; PowerShell and CI
 (Linux) are unaffected. No project code is implicated.
 
-### G0.1 — Pinned ATT&CK v19.0 acquisition & verification
+### G0.1 — Pinned ATT&CK v19.0 acquisition & verification — **IMPLEMENTED / PASSED (2026-09-11)**
 - **Objective:** execute the **already-accepted C0.1 decision** — **vendor** the exact official MITRE ATT&CK
   Enterprise **v19.0 STIX 2.1** bundle (`enterprise-attack-19.0.json` from `attack-stix-data`, tag v19.0) as
   an **immutable project artifact**; compute and freeze its **SHA-256**, STIX collection metadata, and object
@@ -127,6 +128,93 @@ Bash (an MSYS/launcher quirk). Worked around with `python -m mypy` / `python -m 
 - **Env:** network **once** to acquire (build-time only); no Elastic, no Windows.
 - **NOT yet:** no loading into a knowledge model (G0.2); **no discriminating-power / weights** (attribution,
   deferred).
+
+#### Verification: source confirmed before acquisition
+
+Before downloading anything, the official source was verified via the GitHub API (metadata only):
+tag `v19.0` resolves to an annotated, **GPG-signed** release tag; the file
+`enterprise-attack/enterprise-attack-19.0.json` exists at that tag with reported size **52,680,865 bytes**.
+The tag-pinned raw URL (`.../attack-stix-data/v19.0/...`, never `master`, never the unversioned
+`enterprise-attack.json`) was used for acquisition.
+
+#### Acquired artifact
+
+| Field | Value |
+|---|---|
+| Path | `data/attack/enterprise/v19.0/enterprise-attack-19.0.json` |
+| Size | 52,680,865 bytes (≈ 50.2 MB) — matches the GitHub API-reported size exactly |
+| SHA-256 | `df520ea0775a57db7bff760145b02fed89290802913e056b7ed5970b02f3626a` |
+| STIX collection | id `x-mitre-collection--1f5f1533-f617-4ca8-9ab4-6a02367fa019`, name "Enterprise ATT&CK", `x_mitre_version` **19.0**, `spec_version` **2.1** |
+| `attack_kb_version` | `enterprise-attack-19.0` |
+| Object fingerprint (raw, unfiltered) | 25,844 total; 15 tactics; 365 techniques; 493 sub-techniques; 189 groups; 729 malware + 95 tool; 56 campaigns; 21,026 relationships; 268 mitigations |
+| Sanity cross-check | active-only (excludes `revoked`/`x_mitre_deprecated`) counts: 15 tactics, **222 techniques, 475 sub-techniques, 44 mitigations — exact matches** to publicly reported v19.0 figures; 174 groups / 821 software vs. ~178/~949 estimated (small variance, expected — the estimate was a secondary-source figure, not computed from this artifact) |
+
+**Vendoring decision (recorded):** vendored as a **plain tracked file** (not Git LFS). At ~50 MB this is
+within git's technical limits; introducing LFS would add tooling every clone/CI run must have for a file
+that changes only on rare, deliberate ATT&CK version upgrades — unnecessary complexity for a personal
+project with no remote configured yet. Revisit if/when multiple pinned versions accumulate and repo size
+becomes a real concern.
+
+#### Deliverables
+
+- `data/attack/enterprise/v19.0/enterprise-attack-19.0.json` — the vendored, immutable artifact.
+- `data/attack/enterprise/v19.0/manifest.json` — the frozen acquisition record (attack_kb_version, domain,
+  STIX spec, artifact hash/size, STIX collection metadata, object fingerprint, source reference,
+  acquisition metadata).
+- `data/attack/enterprise/v19.0/NOTICE.md` — ATT&CK Terms of Use attribution (place 1 of 3; place 2 is the
+  new "MITRE ATT&CK® attribution" section in the top-level `README.md`; place 3, an analyst-output
+  attribution note, is deferred to whichever later gate first renders ATT&CK-derived content).
+- `scripts/acquire_attack_bundle.py` — the acquisition tool (network-touching; run only by a human, never
+  at runtime; kept out of the installed package). Also serves as independent re-verification: re-running it
+  re-downloads via a separate code path (`urllib`, vs. the initial `curl`+ad-hoc-Python check) and
+  reproduced the identical SHA-256.
+- `src/attribution_platform/attack_knowledge/verification.py` — offline, fail-closed artifact-integrity
+  verification (`verify_artifact()` + supporting functions/dataclasses). No technique/group/software query
+  API — that is G0.2. No network access anywhere in this module.
+- `tests/test_attack_artifact_integrity.py` — 21 tests; combined with the 3 pre-existing G0.0 smoke tests,
+  24 total (see the reconciled breakdown below).
+
+#### Verification commands & results
+
+```
+ruff format --check .   → 11 files already formatted
+ruff check .            → All checks passed!
+python -m mypy          → Success: no issues found in 11 source files
+python -m pytest -v     → 24 passed
+```
+
+Test breakdown (reconciled against the actual test functions — 21 in `test_attack_artifact_integrity.py` +
+3 pre-existing in `test_smoke.py` = **24**, matching pytest's `collected 24 items` / `24 passed` exactly):
+
+| Category | Count | Tests |
+|---|---:|---|
+| End-to-end against the **real** vendored v19.0 artifact | **8** | `test_1_…exists_at_expected_project_path`, `test_2_…sha256_matches…independently`, `test_3_…parses_successfully_as_stix`, `test_4_…collection_metadata_is_enterprise_v19_0`, `test_5_…is_not_the_floating_latest_bundle`, `test_6_…object_fingerprint_is_reproducible`, `test_full_verify_artifact_passes_end_to_end`, `test_verify_artifact_is_deterministic` |
+| Fixture-baseline sanity check | **1** | `test_synthetic_fixture_baseline_is_valid` |
+| Fail-closed tests, self-consistent synthetic fixtures | **11** | `test_7_fails_closed_on_{missing_artifact, missing_manifest, tampered_artifact_bytes_same_size, tampered_artifact_size, wrong_recorded_hash, wrong_attack_kb_version, floating_filename, tampered_object_fingerprint, tampered_collection_metadata, wrong_domain, wrong_stix_spec}` |
+| Untrusted-JSON-input rejection | **1** | `test_load_bundle_objects_rejects_non_bundle_json` |
+| Pre-existing G0.0 smoke tests | **3** | `test_package_version_is_defined`, `test_scaffolded_submodules_import_cleanly`, `test_no_network_or_external_service_access` |
+| **Total** | **24** | |
+
+(A prior draft of this report miscounted this breakdown as 9+1+12+1+3=26 — an arithmetic error in the
+prose summary, not a test-run or test-design discrepancy: pytest's actual collected/passed count was 24
+the whole time, and the enumerated fail-closed list above always had exactly 11 items. Corrected here.)
+
+**Independent hash verification:** recomputed via a second, separate acquisition (re-running
+`scripts/acquire_attack_bundle.py`, which uses `urllib` — a different code path from the initial `curl` +
+ad-hoc Python check) — reproduced the identical SHA-256, confirming no fabrication and genuine
+reproducibility.
+
+**Network-disabled verification (not just static inspection):** ran the full test suite with
+`socket.socket.connect`/`connect_ex` monkeypatched to raise `RuntimeError` on any connection attempt — all
+24 tests still passed. Sanity-checked the block itself was real (not a no-op) by confirming
+`scripts/acquire_attack_bundle.py`'s `download()` genuinely fails under the same block.
+
+#### Deviations
+
+One test-design bug found and fixed during implementation (not a `verification.py` bug): a fail-closed test
+appended a byte to a fixture to test SHA-256-mismatch detection, but the size check (which correctly runs
+before the costlier hash check) fired first. Split into two tests — one same-length tamper (exercises the
+SHA-256 check) and one size-changing tamper (exercises the size check) — both pass.
 
 ### G0.2 — Reproducible ATT&CK knowledge loading
 - **Objective:** load **only** the local pinned bundle via `mitreattack-python` into an in-memory,
@@ -450,3 +538,18 @@ long-term leverage.
 
 *No application code, Dockerfiles, compose files, Elastic config, indexes, API, or frontend were created. No
 ADR created or changed. C0.1/C0.2 unchanged. ATT&CK bundle not vendored; no datasets acquired.*
+
+---
+
+## Progress update (2026-09-11): G0.0 and G0.1 complete
+
+The section above is the historical planning-review snapshot from before implementation began; it is left
+as-is for the record. Since then:
+
+- **G0.0 IMPLEMENTED/PASSED** — see the G0.0 entry above.
+- **G0.1 IMPLEMENTED/PASSED** — see the G0.1 entry above: the pinned MITRE ATT&CK Enterprise v19.0 STIX 2.1
+  bundle is vendored, hash-verified, offline-verifiable, and attributed.
+- **Next gate: G0.2 — reproducible ATT&CK knowledge loading**, building the queryable knowledge-access
+  layer on top of the now-verified artifact.
+- All other Phase-0 gates (G0.2–G0.12) remain **not started**. No Dockerfiles, compose files, Elastic
+  config, indexes, API, or frontend exist. No ADR created or changed; C0.1/C0.2 unchanged.

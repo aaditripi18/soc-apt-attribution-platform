@@ -1,0 +1,7 @@
+# --- MITRE ATT&CK vendored artifacts (gate G0.1): preserve byte-for-byte. ---
+# The bundle's SHA-256 is the reproducibility anchor recorded in manifest.json
+# (docs/architecture/11-attack-knowledge-versioning.md). Marking these
+# "binary" disables Git's line-ending conversion (autocrlf) entirely, on any
+# platform or local git config, so a checkout can never silently change the
+# artifact's bytes and invalidate the recorded hash.
+data/attack/**/*.json binary

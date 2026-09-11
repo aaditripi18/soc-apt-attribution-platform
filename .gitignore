@@ -34,10 +34,16 @@ Thumbs.db
 .vscode/
 .idea/
 
-# --- Future Phase-0/1 artifacts (not yet created; ignored proactively so
-#     they are never committed by accident once these gates land) ---
-# Vendored ATT&CK STIX bundle is a deliberate, hash-verified exception to
-# this ignore — it will be added explicitly (git add -f) when G0.1 vendors
-# it, per docs/architecture/11-attack-knowledge-versioning.md.
-/data/
+# --- Future Phase-0/1 local artifacts (not tracked, e.g. a future Elastic
+#     data volume) ---
 /.elastic/
+
+# --- data/: local-only by default, EXCEPT the vendored, hash-verified
+#     ATT&CK STIX bundle under data/attack/, which is deliberately tracked
+#     (G0.1 — docs/architecture/11-attack-knowledge-versioning.md). ---
+/data/*
+!/data/attack/
+
+# Interrupted-download temp file from scripts/acquire_attack_bundle.py's
+# atomic-write step — must never be committed even if a download fails.
+*.part

@@ -9,9 +9,9 @@ governing principles.
 ## Project status
 
 The project has completed research and architecture design and is in
-**Phase 0 (foundation implementation)**. Nothing beyond repository scaffolding
-exists yet — there is no ATT&CK data, no Elastic integration, no domain logic,
-no API, and no frontend.
+**Phase 0 (foundation implementation)**. Repository scaffolding (G0.0) and the
+pinned ATT&CK v19.0 artifact (G0.1) are in place; there is no ATT&CK loader
+yet, no Elastic integration, no domain logic, no API, and no frontend.
 
 - **Architecture (accepted):** [docs/architecture/](docs/architecture/README.md) —
   see ADR-0001 (Evidence-Graph Core), ADR-0002 (Attribution Scoring & Evidence
@@ -35,6 +35,9 @@ src/attribution_platform/
   api/               read-model API (serves data, computes nothing) — G0.10
 tests/               pytest suite (no Elastic/Docker/Windows/network required)
 fixtures/            hand-authored synthetic telemetry fixtures (added from G0.4)
+data/attack/enterprise/v19.0/
+                     vendored, hash-verified MITRE ATT&CK v19.0 STIX 2.1
+                     bundle + acquisition manifest + attribution NOTICE — G0.1
 docs/                research and architecture documentation
 ```
 
@@ -93,6 +96,15 @@ primary development target is Windows 11 ([C0.2](docs/architecture/12-deployment
 at this gate the codebase has no OS-specific logic, so the simplest portable
 runner is used. Windows-specific behavior (the native endpoint collector)
 arrives in gate G0.11 and will be verified separately, not by this CI job.
+
+## MITRE ATT&CK® attribution
+
+This project uses MITRE ATT&CK® data (Enterprise **v19.0**, pinned and
+vendored under [`data/attack/enterprise/v19.0/`](data/attack/enterprise/v19.0/))
+under the [ATT&CK Terms of Use](https://attack.mitre.org/resources/terms-of-use/).
+MITRE ATT&CK and ATT&CK are registered trademarks of The MITRE Corporation.
+See [`data/attack/enterprise/v19.0/NOTICE.md`](data/attack/enterprise/v19.0/NOTICE.md)
+for the full attribution statement and acquisition record.
 
 ## Configuration
 
