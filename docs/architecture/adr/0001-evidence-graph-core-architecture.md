@@ -1,16 +1,23 @@
 # ADR-0001 — Evidence-Graph Core Architecture
 
-- **Status:** PROPOSED (awaiting review — nothing here is adopted)
-- **Date:** 2026-09-11
-- **Deciders:** project owner (review pending)
+- **Status:** ACCEPTED (2026-09-11)
+- **Date:** 2026-09-11 (proposed) · 2026-09-11 (accepted)
+- **Deciders:** project owner (accepted after the final architecture review)
 - **Supersedes / superseded by:** —
 - **Related:** [01 options](../01-architecture-options.md) · [02 recommended](../02-recommended-architecture.md)
   · [03 data flow](../03-system-data-flow.md) · [04 boundaries](../04-component-boundaries.md)
   · [05 open questions](../05-architecture-open-questions.md) · research
   [09](../../research/09-technology-decision-matrix.md)/[10](../../research/10-research-audit.md)
 
-> Every decision below is **PROPOSED** and takes effect only on approval. Reversibility is noted per
-> decision so review can focus on the hard-to-undo ones.
+> The decisions below are **ACCEPTED** as of 2026-09-11 (following [10 final review](../10-final-architecture-review.md)),
+> with **D8 modified per M1** (below). Reversibility is noted per decision. Acceptance does **not** start
+> implementation: the phase conditions C0.1–C0.3 in the final review remain outstanding.
+>
+> **Acceptance rationale:** the final architecture review classified all 14 decisions ACCEPT except D8
+> (MODIFY, now applied); no decision was rejected. The architecture concentrates build effort on the
+> explainable evidence→attribution differentiator while reusing Elastic/MITRE for undifferentiated work, and
+> is faithful to [CLAUDE.md](../../CLAUDE.md). Remaining gaps are specification/calibration work scheduled in
+> later phases, not architectural flaws — so the architecture is sound to adopt now.
 
 ## Context
 
@@ -41,8 +48,15 @@ scored highest on the criteria that encode the project's thesis.
 - **D7 — Two-axis confidence (ICD-203).** Report *likelihood* (WEP) and *confidence* (basis strength)
   separately; serialize to STIX 2.1 `confidence` via `stix2.confidence.scales` at the boundary only.
   *Reversibility: medium.*
-- **D8 — Discriminating-technique weighting.** Weight techniques by actor-characteristic rarity over the
-  ATT&CK Group×Technique matrix; validate on labeled scenarios before trust. *Reversibility: high (tunable).*
+- **D8 — Discriminating-power weighting (MODIFIED per final review M1).** Weight evidence by
+  **discriminating power `D`**, a **documentation-relative separation heuristic** computed from the pinned
+  ATT&CK Group×{Technique **and Software**} matrix — **never a probability or real-world rate**, and subject
+  to ATT&CK reporting bias. **Rarity is a weight, not proof of attribution**; **no attribution may rest on a
+  single technique** regardless of `D`. Discrimination is driven by **distinctive combinations** (honoring
+  the profile-union / sparse-sequence limitations — combination/sequence signals are approximate and
+  low-weight where data is thin), and support is **normalized against candidate profile size** so richly
+  documented actors cannot win by volume. Validate on labeled scenarios before trust. *Reversibility: high
+  (tunable).* (Aligns with ADR-0002 D16/D18/D19/D20/D21.)
 - **D9 — Embedded graph first, `GraphStore` port.** Start with an embedded graph library; keep a port so a
   graph DB (Kùzu/Neo4j/Memgraph) can drop in later based on real query needs. *Reversibility: high.*
 - **D10 — Reproducibility by construction.** Pinned ATT&CK version + content-hashed datasets + per-result

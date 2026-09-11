@@ -1,8 +1,8 @@
 # ADR-0002 — Attribution Scoring & Evidence Methodology
 
-- **STATUS: PROPOSED** (awaiting review — not accepted; nothing here is adopted or implemented)
-- **Date:** 2026-09-11
-- **Deciders:** project owner (review pending)
+- **STATUS: ACCEPTED** (2026-09-11)
+- **Date:** 2026-09-11 (proposed) · 2026-09-11 (accepted)
+- **Deciders:** project owner (accepted after the final architecture review)
 - **Related:** [ADR-0001](0001-evidence-graph-core-architecture.md) · detail in
   [06 evidence model](../06-evidence-model.md), [07 scoring spec](../07-attribution-scoring-spec.md),
   [08 validation & calibration](../08-validation-and-calibration.md) · grounds in research
@@ -10,7 +10,18 @@
   [10 audit](../../research/10-research-audit.md)
 
 > This ADR records the **decisions**; the three companion docs hold the precise definitions, formulae, and
-> test design. Every decision is PROPOSED and reversibility is noted.
+> test design. The decisions are **ACCEPTED** as of 2026-09-11 (following
+> [10 final review](../10-final-architecture-review.md)), with **D22 modified per M2** (below); reversibility
+> is noted per decision. Acceptance does **not** start implementation — the attribution engine (Phase 3)
+> remains gated on conditions C3.1–C3.3 in the final review (combination/dedup spec, a frozen
+> `calibration_version` from a real corpus, and the D22-as-modified validation).
+>
+> **Acceptance rationale:** the final review classified 21 of 22 decisions ACCEPT (four spec/calibration-
+> gated) and D22 MODIFY (now applied); none rejected. After the stress test the methodology avoids arbitrary
+> scoring by construction, separates likelihood from confidence, generates candidates over the full ATT&CK
+> universe, can abstain, and is honest about its residual limits (imitation, reporting bias, a validation
+> ceiling). The open work is specification and calibration concentrated in Phase 3 — not a flaw in the
+> methodology's structure — so it is sound to adopt now.
 
 ## Context
 
@@ -109,9 +120,15 @@ bias) and several risks. The following decisions harden the methodology; none ch
 - **D21 — Imitation/reporting-bias guards (CR-7).** Confidence may not be "high" on TTP overlap alone
   without independent corroboration; leads driven by profile richness bias toward abstention; output is
   phrased "consistent with," never "is." *Reversibility: medium.*
-- **D22 — Anti-circular validation (CR-8).** Validation must include independent/real-incident cases not
-  derived from ATT&CK tooling, and must separate pipeline-correctness from attribution-generalization; the
-  generalization ceiling is documented. *Reversibility: low.*
+- **D22 — Anti-circular validation (CR-8; MODIFIED per final review M2).** The **primary** anti-circular
+  mechanism is **blind-actor holdout** — remove a group's profile from the KB and confirm the system returns
+  "untracked actor" (not the nearest famous match) — together with **strict separation of
+  pipeline-correctness tests from attribution-generalization tests**. **Independent / real-incident
+  validation data is aspirational, not a prerequisite**: it is pursued where licensable public incident data
+  can be found, but its **absence must never block the project or a phase**. When such data is unavailable,
+  the **generalization claim is explicitly scoped to the available validation corpus** ("validated at
+  pipeline level and via blind-actor holdout; generalization to real-world incidents under-validated"), and
+  the system stays biased toward abstention. The ceiling is documented openly. *Reversibility: low.*
 
 ## Explicit evaluation of candidate techniques (as requested)
 

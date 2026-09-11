@@ -1,7 +1,10 @@
 # Architecture Documentation — SOC APT Attribution Platform
 
-**Status: PROPOSED throughout.** Nothing here is implemented or accepted. These documents transform the
-research (`../research/`) into a reviewable architecture. Read alongside [CLAUDE.md](../../CLAUDE.md).
+**Status: ADRs ACCEPTED (2026-09-11); not yet implemented.** ADR-0001 and ADR-0002 were accepted after the
+[final architecture review](10-final-architecture-review.md) (with modifications M1/M2 applied). These
+documents transform the research (`../research/`) into the adopted architecture. Acceptance does **not**
+start implementation — Phase 0 remains gated on conditions C0.1–C0.3 in the final review, and no application
+code exists. Read alongside [CLAUDE.md](../../CLAUDE.md).
 
 ## Reading order
 
@@ -22,8 +25,8 @@ research (`../research/`) into a reviewable architecture. Read alongside [CLAUDE
 
 | ADR | Title | Status |
 |---|---|---|
-| [adr/0001-evidence-graph-core-architecture.md](adr/0001-evidence-graph-core-architecture.md) | Evidence-Graph Core architecture (Option B) | **PROPOSED** |
-| [adr/0002-attribution-scoring-and-evidence-methodology.md](adr/0002-attribution-scoring-and-evidence-methodology.md) | Attribution scoring & evidence methodology | **PROPOSED** |
+| [adr/0001-evidence-graph-core-architecture.md](adr/0001-evidence-graph-core-architecture.md) | Evidence-Graph Core architecture (Option B) | **ACCEPTED** (2026-09-11, D8 modified per M1) |
+| [adr/0002-attribution-scoring-and-evidence-methodology.md](adr/0002-attribution-scoring-and-evidence-methodology.md) | Attribution scoring & evidence methodology | **ACCEPTED** (2026-09-11, D22 modified per M2) |
 
 ## The one-paragraph summary
 
@@ -33,8 +36,10 @@ tactic-ordered attack-chain reconstruction, and **ACH-based attribution** that r
 confidence as two separate, calibrated axes** and can answer "insufficient evidence." No arbitrary point
 scoring, no opaque/LLM step on the correctness path, and every conclusion traces back to raw events.
 
-## Nothing is decided
+## Accepted, but not started
 
-All ADR decisions and open questions are PROPOSED pending the owner's review. No application code exists;
-implementation does not begin until the architecture and the attribution methodology (ADR-0001 + ADR-0002)
-are approved.
+ADR-0001 and ADR-0002 are **ACCEPTED** (2026-09-11) with modifications M1 (D8) and M2 (D22) applied.
+**Implementation has not begun.** Phase 0 is still gated on the final review's conditions C0.1–C0.3 (pin a
+specific ATT&CK version; owner confirms deployment shape and Windows-first scope), and the attribution engine
+(Phase 3) remains gated on C3.1–C3.3. No application code exists. Several open questions in
+[05](05-architecture-open-questions.md) remain to be resolved by phase.
