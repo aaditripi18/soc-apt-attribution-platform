@@ -52,7 +52,7 @@ built, not missing decisions.
 
 Gate IDs are `G0.x`. Each gate is small and independently verifiable. "Env" = what must be running.
 
-### G0.0 — Repository scaffolding & CI skeleton
+### G0.0 — Repository scaffolding & CI skeleton — **IMPLEMENTED / PASSED (2026-09-11)**
 - **Objective:** module layout matching [ADR-0001 §"module layout"](02-recommended-architecture.md)
   (`attack_knowledge/`, `dataplane/`, `extraction/`, `domain/` contracts, `sources/` adapters, `api/`,
   `tests/`, `fixtures/`); a test runner, linter, and CI running an (initially empty) suite; a place for the
@@ -64,7 +64,48 @@ Gate IDs are `G0.x`. Each gate is small and independently verifiable. "Env" = wh
 - **Acceptance:** CI runs deterministically; structure matches the accepted module boundaries.
 - **Depends:** none.
 - **Env:** no Elastic, no Windows.
-- **NOT yet:** no domain logic, no Dockerfiles/compose (that's G0.11), no API, no frontend.
+- **NOT yet:** no domain logic, no Dockerfiles/compose (that's G0.7), no API, no frontend.
+
+#### Actual tooling/runtime choices (recorded at implementation)
+
+| Decision | Choice | Why |
+|---|---|---|
+| Language/runtime | **Python 3.12** (`requires-python = ">=3.12,<3.13"`) | Already implied by the architecture — `mitreattack-python`, `cti-python-stix2`, and the FastAPI-family API layer ([02](02-recommended-architecture.md)) are all Python; not a new choice, just formalized. 3.12 was already installed and is current-stable. |
+| Package layout | `src/attribution_platform/` (src-layout), submodules `domain/`, `attack_knowledge/`, `sources/`, `extraction/`, `dataplane/`, `api/` | Matches doc 13's G0.0 objective exactly; src-layout forces imports through the installed package (editable install), preventing accidental "works because cwd" imports. |
+| Build backend | `setuptools` (PEP 621 `pyproject.toml`, no `setup.py`) | Boring, standard, zero extra concepts — G0.0 only needs an editable install for tests, not packaging/publishing. |
+| Formatter + linter | **ruff** (`format` + `check`), pinned `0.8.4` | One boring tool instead of black+isort+flake8; fast; wide adoption. |
+| Type checker | **mypy**, pinned `1.13.0`, `strict = true` | Strongly-typed foundation from day one, per the requirement; strict mode costs nothing now (8 nearly-empty files) and sets the bar before real logic lands. |
+| Test runner | **pytest**, pinned `8.3.4` | Standard, boring, zero-config-friendly. |
+| Runtime dependencies | **none** | G0.0 has no domain logic, no Elastic client, no ATT&CK loader, no API framework — so there is nothing to depend on yet. Avoids scope creep; each later gate adds exactly the dependency it needs (`mitreattack-python` in G0.1/G0.2, an ES client in G0.7/G0.8, an API framework in G0.10). |
+| CI runner | GitHub Actions, `ubuntu-latest`, Python 3.12 pinned via `actions/setup-python` | No OS-specific code exists yet, so the simplest portable runner is used; Windows-specific behavior (G0.11, the native collector) will be verified separately, not by this job. Documented explicitly in the README so it isn't mistaken for "CI validates the Windows path." |
+| `.env.example` | **not created** | No configuration exists to document yet (no Elastic connection, no secrets) — correctly deferred per the plan's own instruction ("only if configuration is actually required"). |
+| Dependency pinning | Exact `==` pins for all dev dependencies | "Deterministic and reproducible... do not use floating dependencies unnecessarily." No lockfile tool (Poetry/PDM/uv) introduced — three exact-pinned dev dependencies don't need one; revisit if the dependency graph grows. |
+
+#### Verification results
+
+Run from a fresh `python -m venv .venv` + `pip install -e ".[dev]"` (Windows 11, Git Bash):
+
+```
+ruff format --check .   → 8 files already formatted
+ruff check .            → All checks passed!
+python -m mypy          → Success: no issues found in 8 source files
+python -m pytest -v     → 3 passed (test_package_version_is_defined,
+                                     test_scaffolded_submodules_import_cleanly,
+                                     test_no_network_or_external_service_access)
+```
+
+CI workflow YAML (`.github/workflows/ci.yml`) parsed and validated with `yaml.safe_load` — 1 job (`checks`),
+7 steps in the correct order (checkout → setup Python → install → format check → lint → type check → test).
+
+**Deviation found and fixed during implementation:** the initial `[tool.mypy]` config had no `files`/
+`packages` target, so bare `mypy` failed with "Missing target module, package, files, or command." Fixed by
+adding `files = ["src", "tests"]`. Re-verified clean after the fix (all four checks above are post-fix
+results).
+
+**Windows/Git-Bash-specific note (documented in README, not a defect):** the pip-installed `mypy`/`pytest`
+launcher scripts in `.venv/Scripts/` occasionally return `Permission denied` when invoked directly in Git
+Bash (an MSYS/launcher quirk). Worked around with `python -m mypy` / `python -m pytest`; PowerShell and CI
+(Linux) are unaffected. No project code is implicated.
 
 ### G0.1 — Pinned ATT&CK v19.0 acquisition & verification
 - **Objective:** execute the **already-accepted C0.1 decision** — **vendor** the exact official MITRE ATT&CK

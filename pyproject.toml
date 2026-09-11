@@ -1,0 +1,63 @@
+[build-system]
+requires = ["setuptools>=75.6"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "attribution-platform"
+version = "0.0.0"
+description = "SOC APT Attribution Platform — explainable, evidence-based APT attribution engine."
+readme = "README.md"
+requires-python = ">=3.12,<3.13"
+license = { text = "Proprietary" }
+authors = [{ name = "aaditripi" }]
+
+# G0.0 introduces no runtime dependencies: no domain logic, no Elastic client, no
+# ATT&CK loader, and no API framework exist yet (see docs/architecture/13-phase-0-implementation-plan.md).
+# Runtime dependencies are added only in the gates that need them (e.g. mitreattack-python
+# in G0.1/G0.2, an Elasticsearch client in G0.7/G0.8, an API framework in G0.10).
+dependencies = []
+
+[project.optional-dependencies]
+# Pinned exactly for deterministic, reproducible installs (Phase-0 requirement: no
+# unnecessary floating dependencies). Bump deliberately, not automatically.
+dev = [
+    "ruff==0.8.4",
+    "mypy==1.13.0",
+    "pytest==8.3.4",
+]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+attribution_platform = ["py.typed"]
+
+# --- Ruff: formatter + linter (single boring tool instead of black+isort+flake8) ---
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+src = ["src", "tests"]
+
+[tool.ruff.lint]
+select = [
+    "E",   # pycodestyle errors
+    "F",   # pyflakes
+    "I",   # isort (import sorting)
+    "UP",  # pyupgrade (modern syntax)
+    "B",   # flake8-bugbear (common bug patterns)
+    "SIM", # flake8-simplify
+]
+
+# --- Mypy: strict type checking from day one ---
+[tool.mypy]
+python_version = "3.12"
+mypy_path = "src"
+files = ["src", "tests"]
+strict = true
+warn_unused_ignores = true
+warn_redundant_casts = true
+
+# --- Pytest: no network, no external services at this gate ---
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-ra --strict-markers --strict-config"
