@@ -20,6 +20,7 @@ code exists. Read alongside [CLAUDE.md](../../CLAUDE.md).
 | [08-validation-and-calibration.md](08-validation-and-calibration.md) | Headless validation: golden corpus, case types, metrics, calibration procedure, reproducibility |
 | [09-methodology-stress-test.md](09-methodology-stress-test.md) | Conceptual stress test of the methodology: full-ATT&CK scalability, 8 worked scenarios, D-metric critique, failure modes, integrity audit, corrections, recommendation |
 | [10-final-architecture-review.md](10-final-architecture-review.md) | Acceptance-gate review: decision-by-decision verdicts on both ADRs, critical unresolved issues, required modifications, and the implementation-readiness assessment |
+| [11-attack-knowledge-versioning.md](11-attack-knowledge-versioning.md) | Phase-0 gate C0.1 (**ACCEPTED**): ATT&CK KB versioning — pinned immutable STIX 2.1 **Enterprise v19.0** bundle, vendored + SHA-256 at acquisition, reproducibility, deliberate upgrade/rollback, calibration impact, Terms-of-Use attribution |
 
 ## Architecture Decision Records
 
