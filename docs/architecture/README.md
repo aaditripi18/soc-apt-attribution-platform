@@ -21,6 +21,7 @@ code exists. Read alongside [CLAUDE.md](../../CLAUDE.md).
 | [09-methodology-stress-test.md](09-methodology-stress-test.md) | Conceptual stress test of the methodology: full-ATT&CK scalability, 8 worked scenarios, D-metric critique, failure modes, integrity audit, corrections, recommendation |
 | [10-final-architecture-review.md](10-final-architecture-review.md) | Acceptance-gate review: decision-by-decision verdicts on both ADRs, critical unresolved issues, required modifications, and the implementation-readiness assessment |
 | [11-attack-knowledge-versioning.md](11-attack-knowledge-versioning.md) | Phase-0 gate C0.1 (**ACCEPTED**): ATT&CK KB versioning — pinned immutable STIX 2.1 **Enterprise v19.0** bundle, vendored + SHA-256 at acquisition, reproducibility, deliberate upgrade/rollback, calibration impact, Terms-of-Use attribution |
+| [12-deployment-and-endpoint-scope.md](12-deployment-and-endpoint-scope.md) | Phase-0 gate C0.2 (**ACCEPTED**): hybrid deployment (containerized platform stack on WSL2/Docker-compatible runtime + **native Windows collector**), Windows-first endpoint scope (Linux architecture-only), **telemetry-source agnosticism (not Sysmon-only) + the source→collector→normalization→Observation→Evidence→Engine layering**, synthetic/replay path, portability, resources, isolation |
 
 ## Architecture Decision Records
 
