@@ -4,6 +4,12 @@
 Each has: the question, the realistic options, a **proposed lean**, and **what would resolve it**. Ordered
 by how much they gate Phase 1.
 
+> **Update (2026-09-11):** [ADR-0002](adr/0002-attribution-scoring-and-evidence-methodology.md) and its
+> companion specs ([06 evidence model](06-evidence-model.md), [07 scoring spec](07-attribution-scoring-spec.md),
+> [08 validation & calibration](08-validation-and-calibration.md)) now **resolve Q2 and Q7** (methodology
+> level) and **sharpen Q6**. See the per-question notes below. What ADR-0002 leaves open is the *fitted*
+> calibration values (need the corpus) and the concrete corpus contents — tracked under Q6.
+
 ---
 
 ### Q1 — Normalized-event contract & mapping thickness  *(gates Phase 1)*
@@ -15,14 +21,18 @@ ECS everywhere, per audit finding B-2 (schema is a 3-way future).
 **Resolves when:** we list the exact fields Phase 1 needs (host/user/process/cmdline/hashes/network) and
 confirm the mapper stays ≤ a small, obvious translation, not a second schema.
 
-### Q2 — Attribution scoring specification  *(gates Phase 3; spec must exist before code)*
+### Q2 — Attribution scoring specification  *(RESOLVED at methodology level by ADR-0002; PROPOSED)*
 **Question:** The exact, versioned formula for discriminating-technique weight, and how inputs feed
 **likelihood** vs **confidence** separately.
-**Options:** (a) TF-IDF-style weight over Group×Technique + rule-based confidence; (b) probabilistic model;
-(c) ML (deferred — opacity risk).
-**Proposed lean:** **(a)**, deterministic and explainable, ML explicitly deferred.
-**Resolves when:** a written `attribution-scoring-spec` with worked examples exists and passes review — a
-prerequisite deliverable of Phase 3, not an implementation detail.
+**Resolution (PROPOSED):** [ADR-0002](adr/0002-attribution-scoring-and-evidence-methodology.md) +
+[07 scoring spec](07-attribution-scoring-spec.md) define: ACH comparison; a single derived weighting
+(discriminating power `D` from the pinned Group×Technique matrix, with all seven required properties
+specified); two independent axes (likelihood via relative, WEP-banded support separation; confidence via
+coverage/quality/corroboration/consistency/contradiction/calibration, bounded by the weakest link); an
+"Unattributed" null hypothesis; and an explicit insufficient-evidence decision rule. ML deferred.
+**Still open (→ Q6):** the *fitted* `D` shape and decision-rule constants (`τ_separation`, `min_confidence`,
+`τ_margin`) require the calibration corpus; they are `calibration_version` parameters, not magic numbers.
+**Approve when:** you accept the methodology in ADR-0002/06/07 (worked examples included).
 
 ### Q3 — Graph substrate  *(gates Phase 2, reversible)*
 **Question:** Embedded graph (NetworkX/igraph) now, or a graph DB (Neo4j/Kùzu/Memgraph) from the start?
@@ -49,20 +59,27 @@ conversion fidelity holds on labeled data.
 technique-mapping foundation is proven (audit E-7).
 **Resolves when:** you confirm endpoint-first is acceptable for the portfolio narrative.
 
-### Q6 — Validation & calibration corpus  *(gates every "done")*
+### Q6 — Validation & calibration corpus  *(SHARPENED by ADR-0002; gates every "done")*
 **Question:** Which labeled datasets form the minimum golden + scenario corpus, and how is calibration
 measured?
-**Proposed lean:** Security-Datasets (MIT) + a few EVTX fixtures (GPL — local only) for technique mapping;
-CALDERA/Atomic scenarios for chains + attribution; calibration measured on the scenario set (not just
-top-1). 
-**Resolves when:** the concrete dataset list + metrics are written into a `corpus/README` before Phase 1
-exit.
+**Sharpened (PROPOSED):** [08 validation & calibration](08-validation-and-calibration.md) now specifies the
+**case types** (positive, negative, common-technique-only, ambiguous, competing-group, incomplete-telemetry,
+expected-but-missing, false-flag, alias), the **metrics** (ranking, **abstention**, competing-case,
+**calibration reliability diagrams for both axes**, discriminating-evidence, contradiction, explanation
+faithfulness, determinism), the **calibration procedure** (fit on a split, freeze a `calibration_version`,
+validate held-out, bias toward abstention when thin), and headless testability.
+**Still open:** the concrete dataset/case *contents* (which exact Security-Datasets/CALDERA/Atomic scenarios)
+— to be written into a `corpus/README` before Phase 1 exit; the fitted calibration values then feed Q2.
+**Resolves when:** the concrete case list exists and the first calibration is fit + validated.
 
-### Q7 — Actor aliasing & false-flag modeling  *(gates Phase 3)*
+### Q7 — Actor aliasing & false-flag modeling  *(RESOLVED at methodology level by ADR-0002 D10; PROPOSED)*
 **Question:** How do we represent actor aliases (APT29 = Cozy Bear = …) and deliberate deception?
-**Proposed lean:** normalize identity via ATT&CK Group aliases; represent false-flag as an explicit
-*hypothesis* + *contradicting evidence*, never a silent mis-attribution.
-**Resolves when:** the scoring spec (Q2) defines alias handling and a deception hypothesis type.
+**Resolution (PROPOSED):** aliases are collapsed to one `Candidate` via the KB alias set during candidate
+generation ([07](07-attribution-scoring-spec.md) §3); residual identity ambiguity is carried as
+`uncertainty`. Deception is surfaced as an explicit **alternative explanation** with **capped confidence**
+whenever easily-planted *evidentiary* artifacts point one way while hard-to-fake *behavioral* evidence points
+another ([07](07-attribution-scoring-spec.md) §10; worked Example D). Never a silent mis-attribution.
+**Approve when:** you accept ADR-0002 D10.
 
 ### Q8 — Attribution store technology  *(gates Phase 1, reversible)*
 **Question:** How to persist the evidence graph + results reproducibly?
