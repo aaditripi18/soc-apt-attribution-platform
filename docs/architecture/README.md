@@ -16,6 +16,7 @@ research (`../research/`) into a reviewable architecture. Read alongside [CLAUDE
 | [07-attribution-scoring-spec.md](07-attribution-scoring-spec.md) | The deterministic, explainable scoring mechanics (ACH, discriminating power, two axes, decision rule, worked examples) |
 | [08-validation-and-calibration.md](08-validation-and-calibration.md) | Headless validation: golden corpus, case types, metrics, calibration procedure, reproducibility |
 | [09-methodology-stress-test.md](09-methodology-stress-test.md) | Conceptual stress test of the methodology: full-ATT&CK scalability, 8 worked scenarios, D-metric critique, failure modes, integrity audit, corrections, recommendation |
+| [10-final-architecture-review.md](10-final-architecture-review.md) | Acceptance-gate review: decision-by-decision verdicts on both ADRs, critical unresolved issues, required modifications, and the implementation-readiness assessment |
 
 ## Architecture Decision Records
 
