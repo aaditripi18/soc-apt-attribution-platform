@@ -9,9 +9,11 @@ governing principles.
 ## Project status
 
 The project has completed research and architecture design and is in
-**Phase 0 (foundation implementation)**. Repository scaffolding (G0.0) and the
-pinned ATT&CK v19.0 artifact (G0.1) are in place; there is no ATT&CK loader
-yet, no Elastic integration, no domain logic, no API, and no frontend.
+**Phase 0 (foundation implementation)**. Repository scaffolding (G0.0), the
+pinned ATT&CK v19.0 artifact (G0.1), and a deterministic runtime loader for
+it (G0.2, implemented, awaiting review — not yet checkpointed) are in place;
+there is no Elastic integration, no domain contracts, no API, and no
+frontend yet.
 
 - **Architecture (accepted):** [docs/architecture/](docs/architecture/README.md) —
   see ADR-0001 (Evidence-Graph Core), ADR-0002 (Attribution Scoring & Evidence

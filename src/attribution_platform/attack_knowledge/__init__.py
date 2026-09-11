@@ -12,9 +12,14 @@ Gate status:
 
 - **G0.1 (implemented):** ``verification`` — offline, fail-closed artifact
   integrity verification (SHA-256, STIX collection metadata, object
-  fingerprint) against the vendored bundle's recorded manifest. No
-  technique/group/software query API exists yet.
-- **G0.2 (not started):** the knowledge-access loader (technique/tactic/
-  group/software/campaign lookups, alias resolution, relationship
-  traversal) that will be built on top of a verified artifact.
+  fingerprint) against the vendored bundle's recorded manifest.
+- **G0.2 (implemented):** ``loader`` — the deterministic runtime loader
+  (``load_attack_knowledge()``) that verifies the artifact via G0.1's
+  contract, then exposes the raw, verified STIX objects indexed by id and
+  by type (tactics/techniques/sub-techniques/groups/software/campaigns/
+  mitigations/relationships). Deliberately narrow: no alias resolution, no
+  relationship traversal, no re-typed domain model — see ``loader``'s
+  module docstring for the exact scope decisions.
+- **Not yet implemented:** typed domain contracts (G0.3), candidate
+  generation / alias resolution / relationship traversal, attribution.
 """

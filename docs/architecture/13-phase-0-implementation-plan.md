@@ -1,12 +1,13 @@
 # 13 — Phase 0 Implementation Plan
 
-**Status: IN PROGRESS.** G0.0 and G0.1 are **IMPLEMENTED/PASSED**; G0.2 onward are still planning only.
-Translates the accepted architecture ([ADR-0001](adr/0001-evidence-graph-core-architecture.md),
+**Status: IN PROGRESS.** G0.0 and G0.1 are **IMPLEMENTED/PASSED** (checkpointed); G0.2 is **IMPLEMENTED,
+AWAITING REVIEW** (not yet checkpointed/committed); G0.3 onward are still planning only. Translates the
+accepted architecture ([ADR-0001](adr/0001-evidence-graph-core-architecture.md),
 [ADR-0002](adr/0002-attribution-scoring-and-evidence-methodology.md),
 [C0.1 §11](11-attack-knowledge-versioning.md), [C0.2 §12](12-deployment-and-endpoint-scope.md)) into small,
-independently verifiable gates. Beyond G0.0 (repo scaffolding/CI) and G0.1 (the pinned ATT&CK artifact +
-its offline integrity verifier), no other code exists yet: no Dockerfiles, compose files, Elastic config,
-indexes, API, frontend, or dataset acquisition.
+independently verifiable gates. Beyond G0.0 (repo scaffolding/CI), G0.1 (the pinned ATT&CK artifact + its
+offline integrity verifier), and G0.2 (the deterministic runtime knowledge loader), no other code exists
+yet: no Dockerfiles, compose files, Elastic config, indexes, API, frontend, or dataset acquisition.
 
 **Authoritative constraints (carried verbatim into every gate):** no hard-coded ATT&CK vocabulary (all
 derived from the pinned v19.0 bundle); no live MITRE dependency at runtime; provenance on every derived
@@ -216,7 +217,7 @@ appended a byte to a fixture to test SHA-256-mismatch detection, but the size ch
 before the costlier hash check) fired first. Split into two tests — one same-length tamper (exercises the
 SHA-256 check) and one size-changing tamper (exercises the size check) — both pass.
 
-### G0.2 — Reproducible ATT&CK knowledge loading
+### G0.2 — Reproducible ATT&CK knowledge loading — **IMPLEMENTED (2026-09-11, awaiting review)**
 - **Objective:** load **only** the local pinned bundle via `mitreattack-python` into an in-memory,
   queryable knowledge model; **derive** tactics, techniques, sub-techniques, groups, software, campaigns,
   aliases, and relationships from the bundle (nothing hard-coded); expose version+hash.
@@ -233,6 +234,139 @@ SHA-256 check) and one size-changing tamper (exercises the size check) — both 
 - **Depends:** G0.1.
 - **Env:** no Elastic, no Windows.
 - **NOT yet:** no fused evidence graph, no candidate generation, no `D` computation, no graph database.
+
+#### Scope decisions recorded (deviations from the original sketch above)
+
+The original objective (written during planning) mentioned `mitreattack-python` and full alias/relationship
+traversal. The **actual implementation gate instructions** (2026-09-11) were more specific and took
+precedence where they conflicted, per the "minimal dependencies, deliberately narrow" constraints given at
+implementation time:
+
+1. **No `mitreattack-python` (or any new runtime dependency) added.** The loader is **stdlib-only**
+   (`json`, `pathlib`, `dataclasses`, `types.MappingProxyType`), built directly on G0.1's `verification`
+   module within the same package. Rationale: (a) the gate instructions explicitly said "keep runtime
+   dependencies minimal, do not add large frameworks or unnecessary packages" and "do not invent a second
+   ATT&CK schema" — `mitreattack-python`'s own object-model wrapper would itself be a second schema layer;
+   (b) `mitreattack-python` pulls in `stix2`/`taxii2-client`, and `taxii2-client` exists specifically to
+   talk to TAXII servers — unwanted dependency surface for a gate whose entire point is "no live MITRE
+   dependency." **This is not a rejection of `mitreattack-python`** — it remains a reasonable option for a
+   *later* gate if/when richer STIX object-model conveniences are actually needed; deferred, not ruled out.
+2. **No alias resolution, no relationship-traversal logic** (e.g. "techniques used by group G"). Both are
+   candidate-generation-adjacent machinery per ADR-0002 (candidate generation collapses aliases and walks
+   `uses` edges) — the current gate's forbidden list includes "candidate generation," and building
+   traversal/resolution *behavior* now would start encoding that logic prematurely. Raw `relationship`
+   objects are exposed as **data** (`AttackKnowledge.relationships()`); traversal *logic* on top of them is
+   deferred to whichever later gate (likely alongside G0.3 domain contracts or an attribution-adjacent
+   gate) actually needs it.
+3. **No re-typed per-object-type dataclasses** (e.g. no `Technique`/`Group` classes with hand-picked
+   fields). Objects stay as raw, verified STIX `dict`s, indexed by id and by type — satisfying "preserve
+   the authoritative STIX object fields needed by later phases" without guessing which fields matter yet.
+
+These are recorded here per CLAUDE.md principle 12 ("architectural decisions should be documented rather
+than silently changed") rather than silently diverging from the original sketch.
+
+#### Deliverables
+
+- `src/attribution_platform/attack_knowledge/loader.py` — `load_attack_knowledge()` (the zero-argument
+  runtime entrypoint, hard-wired to the one pinned artifact directory — no path parameter, so no caller can
+  redirect it), the internal path-parameterized `_load_from_dir()` (used by the entrypoint and by tests,
+  mirroring G0.1's own `verify_artifact(artifact_dir)` testing pattern), and the `AttackKnowledge`
+  container: `attack_kb_version`, `attack_kb_sha256`, `attack_domain`, `stix_spec`, `stix_collection`,
+  `object_fingerprint`, plus `objects_by_id`/`objects_by_type` (both `MappingProxyType`-wrapped, read-only)
+  and thin accessors (`tactics()`, `techniques()`, `sub_techniques()`, `groups()`, `software()`,
+  `campaigns()`, `mitigations()`, `relationships()`, `get_by_id()`, `objects_of_type()`). No
+  `calibration_version` field exists anywhere on it.
+- `src/attribution_platform/attack_knowledge/__init__.py` — updated gate-status docstring (G0.1 and G0.2
+  both implemented; domain contracts/candidate generation/attribution explicitly not yet).
+- `tests/test_attack_knowledge_loader.py` — 26 tests (see below). `tests/test_attack_artifact_integrity.py`
+  (G0.1) is **untouched** — confirmed via `git diff --stat`, zero changes.
+
+#### Verification commands & results
+
+```
+ruff format --check .   → 13 files already formatted
+ruff check .            → All checks passed!
+python -m mypy          → Success: no issues found in 13 source files
+python -m pytest -v     → 50 passed  (24 pre-existing G0.0/G0.1 + 26 G0.2)
+```
+
+G0.2 test breakdown (26 tests in `test_attack_knowledge_loader.py`):
+
+| Category | Count | Representative tests |
+|---|---:|---|
+| Pinned bundle loads successfully / no path argument | 3 | `test_default_artifact_dir_resolves_…`, `test_load_attack_knowledge_succeeds`, `test_load_attack_knowledge_takes_no_path_argument` |
+| Uses the expected versioned artifact | 4 | `test_loaded_knowledge_reports_the_expected_pinned_version`, `…sha256_matches_the_manifest_on_disk`, `…collection_metadata_is_enterprise_v19_0`, `…has_no_calibration_version_attribute` |
+| Deterministic / repeated loading | 4 | `test_repeated_loading_produces_the_same_logical_result`, `test_accessor_counts_match_the_recorded_object_fingerprint`, `test_get_by_id_and_objects_of_type_are_consistent`, `test_loaded_containers_are_read_only` |
+| **Deep immutability (added post-audit — see below)** | **7** | `test_object_returned_by_id_rejects_top_level_field_mutation`, `…returned_through_type_index_rejects_mutation`, `…by_id_and_by_type_return_the_identical_frozen_object`, `…nested_dict_fields_are_recursively_frozen`, `…nested_list_fields_are_tuples_not_lists`, `…no_plain_dict_or_list_survives_anywhere…`, `…deep_immutability_on_a_deliberately_nested_synthetic_fixture` |
+| Fail-closed via the existing G0.1 verification contract | 4 | `test_loader_accepts_a_valid_self_consistent_fixture`, `test_loader_fails_closed_on_tampered_manifest_hash`, `…on_wrong_pinned_version`, `…on_missing_artifact_directory` |
+| No network required | 2 | `test_loader_module_imports_no_networking_libraries`, `test_load_attack_knowledge_works_with_network_forcibly_blocked` |
+| Guard: no hard-coded ATT&CK IDs/tactic names | 2 | `test_loader_source_contains_no_hard_coded_technique_or_tactic_ids`, `test_loader_derives_tactics_from_the_bundle_not_a_literal_list` |
+| **Total** | **26** | matches `pytest`'s `collected 26 items` exactly (50 total with G0.0/G0.1) |
+
+**Network-disabled verification:** re-ran the *entire* suite (all 50 tests) with `socket.connect`/
+`connect_ex` monkeypatched to raise on any connection attempt — all 50 passed, confirming the immutability
+fix adds no network dependency either.
+
+#### Immutability audit (2026-09-11, post-implementation review)
+
+A focused audit checked the `AttackKnowledge` immutability claim empirically rather than trusting the
+original docstring. **Finding: the original implementation was only shallowly immutable.** The top-level
+`objects_by_id`/`objects_by_type` containers were genuinely read-only (`MappingProxyType`/`tuple`), but the
+individual STIX objects they contained were **plain, mutable `dict`s** — and nested lists/dicts inside those
+objects were plain mutable `list`/`dict` too. Empirically confirmed before fixing:
+
+```python
+obj = kb.objects_by_id[some_id]
+obj["name"] = "MUTATED"          # succeeded (BAD) — proven with the real v19.0 bundle
+obj["x_mitre_contents"][0]["injected"] = "MUTATED"  # succeeded (BAD) — nested mutation too
+```
+
+**Fix:** added `_deep_freeze()` to `loader.py` — a recursive transform (`dict` → `MappingProxyType` with
+every value frozen; `list` → `tuple` with every element frozen; scalars returned as-is) applied to every
+STIX object before it is indexed. `_index_by_id`/`_index_by_type` were replaced by a single
+`_freeze_and_index()` so both indices reference the **same** frozen instance per STIX id (no silent
+fork into separately-frozen copies). The `AttackKnowledge`/`get_by_id`/`objects_of_type`/accessor type
+annotations were updated to a new `FrozenStixObject` type alias (`MappingProxyType[str, Any]`, via Python
+3.12's PEP 695 `type` statement) throughout. No new runtime dependency; the raw STIX field structure is
+preserved semantically (field names/values unchanged — only container types become immutable, at every
+depth). No second ATT&CK schema was introduced.
+
+**Verified genuinely deeply immutable** (not just documented) by seven new tests, including: the exact
+audited pattern `knowledge.objects_by_id[id]["name"] = x` (raises `TypeError`); the same on the type-index
+path; that `by_id` and `by_type` return the *identical* frozen object; a recursive scanner asserting no
+plain `dict`/`list` survives anywhere inside a real loaded object (scans the collection object plus one
+representative object per STIX type); and a deterministic synthetic fixture with a deliberately
+4-level-deep nested structure (`dict → list → dict → list → scalar`) proving every level rejects mutation,
+independent of what the real bundle happens to contain.
+
+**This is a genuine implementation fix, not a documentation change** — per the audit's explicit instruction
+not to weaken the claim by editing docs alone. The module docstring was updated only to describe the
+now-true guarantee.
+
+**Sanity checks on real loaded data (not hard-coded assumptions):** `test_accessor_counts_match_the_recorded_object_fingerprint`
+confirms `len(kb.tactics())`, `techniques()`, `sub_techniques()`, `groups()`, `software()`, `campaigns()`,
+`mitigations()`, `relationships()` all equal the independently-computed G0.1 fingerprint fields for the
+**real** vendored v19.0 bundle — proving the two categorization paths (verification's `compute_object_fingerprint`
+and the loader's `objects_of_type`-based accessors) agree, without asserting anything about which specific
+groups/techniques exist (no hard-coded APT actor universe).
+
+#### Deviations
+
+- Initial implementation: a guard test asserted the literal string `"x-mitre-tactic"` appeared in
+  `AttackKnowledge.tactics()`'s source text, but `tactics()` correctly delegates to a named module constant
+  (`_TYPE_TACTIC`) rather than repeating the literal inline — good design, wrong test. Fixed to check the
+  constant's bound value instead.
+- Immutability audit: **one genuine implementation gap found and fixed** — see "Immutability audit" above
+  (not a mere test-design bug; the original code really did allow mutation below the top level).
+- Immutability audit, test-design bug (not an implementation bug): the new deep-immutability fixture test
+  initially expected `TypeError` from `tuple.append()`, but tuples have no `.append()` method at all, so
+  Python raises `AttributeError` instead. Fixed the test's expectation (`assert not hasattr(x, "append")`
+  plus a `TypeError` check on item assignment, which is the operation that actually proves immutability).
+
+**Not yet done (correctly, per scope):** typed domain contracts (G0.3), alias resolution, relationship
+traversal logic, any form of candidate generation/attribution/scoring/correlation/attack-chain
+reconstruction, API endpoints, Elastic integration, source adapters, Observation/Evidence extraction,
+frontend. **Not committed yet** — awaiting review.
 
 ### G0.3 — Canonical domain data contracts  *(resolves Q1)*
 - **Objective:** define the **normalized event contract** (ECS→domain fields needed for the endpoint slice:
@@ -541,15 +675,18 @@ ADR created or changed. C0.1/C0.2 unchanged. ATT&CK bundle not vendored; no data
 
 ---
 
-## Progress update (2026-09-11): G0.0 and G0.1 complete
+## Progress update (2026-09-11): G0.0, G0.1 checkpointed; G0.2 implemented, awaiting review
 
 The section above is the historical planning-review snapshot from before implementation began; it is left
 as-is for the record. Since then:
 
-- **G0.0 IMPLEMENTED/PASSED** — see the G0.0 entry above.
-- **G0.1 IMPLEMENTED/PASSED** — see the G0.1 entry above: the pinned MITRE ATT&CK Enterprise v19.0 STIX 2.1
-  bundle is vendored, hash-verified, offline-verifiable, and attributed.
-- **Next gate: G0.2 — reproducible ATT&CK knowledge loading**, building the queryable knowledge-access
-  layer on top of the now-verified artifact.
-- All other Phase-0 gates (G0.2–G0.12) remain **not started**. No Dockerfiles, compose files, Elastic
+- **G0.0 IMPLEMENTED/PASSED** (checkpointed at commit `c6d31a3`) — see the G0.0 entry above.
+- **G0.1 IMPLEMENTED/PASSED** (checkpointed at commit `2eea5f3`) — see the G0.1 entry above: the pinned
+  MITRE ATT&CK Enterprise v19.0 STIX 2.1 bundle is vendored, hash-verified, offline-verifiable, and
+  attributed.
+- **G0.2 IMPLEMENTED, AWAITING REVIEW (not yet checkpointed/committed)** — see the G0.2 entry above: the
+  deterministic runtime loader (`load_attack_knowledge()`) built on top of the verified G0.1 artifact.
+  **Not marked PASSED** until reviewed and accepted, per this gate's explicit instruction.
+- **Next gate (after G0.2 review): G0.3 — canonical domain data contracts.**
+- All other Phase-0 gates (G0.3–G0.12) remain **not started**. No Dockerfiles, compose files, Elastic
   config, indexes, API, or frontend exist. No ADR created or changed; C0.1/C0.2 unchanged.
