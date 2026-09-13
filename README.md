@@ -11,9 +11,10 @@ governing principles.
 The project has completed research and architecture design and is in
 **Phase 0 (foundation implementation)**. Repository scaffolding (G0.0), the
 pinned ATT&CK v19.0 artifact (G0.1), and a deterministic runtime loader for
-it (G0.2, implemented, awaiting review — not yet checkpointed) are in place;
-there is no Elastic integration, no domain contracts, no API, and no
-frontend yet.
+it (G0.2) are checkpointed; the source-agnostic domain contracts (G0.3 —
+Observation, Evidence, provenance, ATT&CK reference; implemented, awaiting
+review) are in place. There is no telemetry-source adapter, Elastic
+integration, API, or frontend yet.
 
 - **Architecture (accepted):** [docs/architecture/](docs/architecture/README.md) —
   see ADR-0001 (Evidence-Graph Core), ADR-0002 (Attribution Scoring & Evidence
@@ -27,8 +28,8 @@ frontend yet.
 
 ```
 src/attribution_platform/
-  domain/            core contracts (Observation, Evidence, TechniqueAssertion,
-                      provenance) — source-agnostic; implemented in gate G0.3
+  domain/            core contracts (Observation, Evidence, provenance,
+                      ATT&CK reference) — source-agnostic; implemented (G0.3)
   attack_knowledge/  pinned MITRE ATT&CK STIX loading & access — G0.1/G0.2
   sources/           telemetry-source adapters (Sysmon, Windows Event Logs,
                       synthetic/replay, ...) — G0.4

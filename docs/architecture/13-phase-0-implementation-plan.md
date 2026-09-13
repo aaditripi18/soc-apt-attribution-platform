@@ -1,13 +1,14 @@
 # 13 — Phase 0 Implementation Plan
 
-**Status: IN PROGRESS.** G0.0 and G0.1 are **IMPLEMENTED/PASSED** (checkpointed); G0.2 is **IMPLEMENTED,
-AWAITING REVIEW** (not yet checkpointed/committed); G0.3 onward are still planning only. Translates the
-accepted architecture ([ADR-0001](adr/0001-evidence-graph-core-architecture.md),
+**Status: IN PROGRESS.** G0.0, G0.1, and G0.2 are **IMPLEMENTED/PASSED** (checkpointed); G0.3 is
+**IMPLEMENTED, AWAITING REVIEW** (not yet checkpointed/committed); G0.4 onward are still planning only.
+Translates the accepted architecture ([ADR-0001](adr/0001-evidence-graph-core-architecture.md),
 [ADR-0002](adr/0002-attribution-scoring-and-evidence-methodology.md),
 [C0.1 §11](11-attack-knowledge-versioning.md), [C0.2 §12](12-deployment-and-endpoint-scope.md)) into small,
 independently verifiable gates. Beyond G0.0 (repo scaffolding/CI), G0.1 (the pinned ATT&CK artifact + its
-offline integrity verifier), and G0.2 (the deterministic runtime knowledge loader), no other code exists
-yet: no Dockerfiles, compose files, Elastic config, indexes, API, frontend, or dataset acquisition.
+offline integrity verifier), G0.2 (the deterministic runtime knowledge loader), and G0.3 (the source-agnostic
+domain contracts), no other code exists yet: no Dockerfiles, compose files, Elastic config, indexes, API,
+frontend, or dataset acquisition.
 
 **Authoritative constraints (carried verbatim into every gate):** no hard-coded ATT&CK vocabulary (all
 derived from the pinned v19.0 bundle); no live MITRE dependency at runtime; provenance on every derived
@@ -368,7 +369,7 @@ traversal logic, any form of candidate generation/attribution/scoring/correlatio
 reconstruction, API endpoints, Elastic integration, source adapters, Observation/Evidence extraction,
 frontend. **Not committed yet** — awaiting review.
 
-### G0.3 — Canonical domain data contracts  *(resolves Q1)*
+### G0.3 — Canonical domain data contracts  *(resolves Q1)* — **IMPLEMENTED (2026-09-13, awaiting review)**
 - **Objective:** define the **normalized event contract** (ECS→domain fields needed for the endpoint slice:
   host, user, process, command line, hashes, network, file, registry, timestamps) and the core domain
   schemas: `RawEventRef`, `Observation`, `Evidence`, `TechniqueAssertion`, provenance links, and the version
@@ -386,6 +387,86 @@ frontend. **Not committed yet** — awaiting review.
 - **Env:** no Elastic, no Windows.
 - **NOT yet:** **no** attribution-side entities (BehavioralFeature, Candidate, EvidenceLink, Hypothesis,
   AttributionAssessment, AttributionResult — [06 entities 5–10](06-evidence-model.md)); those are Phase 2/3.
+
+#### Q1 resolution — the terminology reconciliation with doc 06 (recorded per CLAUDE.md principle 12)
+
+The original objective (above) listed `RawEventRef`, `Observation`, `Evidence`, and `TechniqueAssertion`
+per [doc 06](06-evidence-model.md), which was written *before* this gate. Doc 06 framed **Observation as a
+detection-rule match** atop a separate **RawEvent**, with `TechniqueAssertion` as a further derived object.
+The G0.3 gate instructions (authoritative for Q1) reframe the boundary as: **Observation = normalized
+telemetry that came from a source**, and **Evidence = the derived, analyst-meaningful claim** backed by
+Observations. These are reconciled as follows (the reconciliation itself is the Q1 decision):
+
+| Concept | doc 06 (earlier) | **G0.3 resolution (this gate, authoritative)** |
+|---|---|---|
+| raw telemetry | `RawEvent` (stored object) | **Referenced, not stored** — a `SourceRef` pointer on the Observation (`source_type` + `source_event_id` + optional `dataset_ref`/`raw_payload_ref`). Raw bytes never copied into the domain layer. |
+| normalized telemetry | (implicit) | **`Observation`** — the normalized event; the source-agnostic boundary object. |
+| interpreted claim | `Observation` (detection match) + `Evidence` | **`Evidence`** — a derived claim referencing ≥1 Observation, with optional ATT&CK reference. |
+| technique link | `TechniqueAssertion` (separate object) | Collapsed into an **optional `AttackRef` on Evidence** ("where applicable"). A full standalone `TechniqueAssertion` object, and the doc-06 detection-`rule_ref`/`matched_fields` specifics, are **derivation-layer concerns deferred to G0.5** (extraction); `DerivationProvenance.method`/`method_version` generalizes doc 06's `rule_ref`. |
+
+The three levels the gate requires to stay distinct — **raw (referenced) → Observation (normalized) →
+Evidence (derived)** — are preserved and never collapsed into one object.
+
+**Final Q1 contract decisions:**
+- **Package:** `src/attribution_platform/domain/`, **stdlib-only** (no Pydantic/attrs/etc.).
+- **Identity:** all ids are **opaque strings supplied upstream** by the source/adapter or derivation layer;
+  the domain **never generates ids** and **never injects wall-clock time** (no `uuid4()`, no `datetime.now()`).
+  This keeps construction deterministic (G0.3 §5).
+- **Equality/ordering:** value-based (frozen dataclasses); ordering is not meaningful. Provenance
+  `source_observation_ids` are canonicalized to a **sorted, de-duplicated tuple** so equality is
+  order-independent and serialization deterministic.
+- **Timestamps:** `datetime`, **required timezone-aware** (naive rejected fail-closed); optional
+  `TimePrecision` enum for declared resolution.
+- **Immutability:** **frozen dataclasses + `tuple` only** — no `dict`/`list`/`MappingProxyType` field
+  anywhere, so the contracts are deeply immutable *by construction* (exceeds the G0.2 standard, which needed
+  a runtime deep-freeze because it wrapped raw JSON). Proven by an exhaustive "no mutable container at any
+  depth" test.
+- **Raw vs normalized (G0.3 §6):** source-native/raw fields are preserved **by reference** through
+  `SourceRef`, **not** via a generic `dict[str, Any]` bag and **not** via hundreds of mandatory fields. The
+  Observation carries a *curated* set of optional, ECS-aligned entity groups (`HostRef`, `UserRef`,
+  `ProcessRef` + parent lineage, `NetworkInfo`, `FileRef`/`HashSet`, `EventMetadata`); a genuinely new
+  *normalized* concept is added by a deliberate contract extension (bump `schema_version`), not an open bag.
+- **ATT&CK reference:** `AttackRef` is a pure pointer (`stix_id`, `object_type`, `attack_kb_version`,
+  optional `external_id`) — validates STIX-id *shape* only, never loads the KB, never resolves/traverses.
+- **Evidence quality vs attribution:** optional `EvidenceQuality` enum describes the *evidence item's own*
+  trustworthiness — a closed qualitative vocabulary, **not** a number, **not** ADR-0002 attribution
+  likelihood/confidence, with no combination logic. Guard test asserts no `likelihood`/`score`/`ach`/
+  `candidate`/`probability`/etc. field exists on any contract.
+- **Serialization:** a stdlib-only `to_serializable()` / `to_canonical_json()` (sorted-key, compact) giving
+  a deterministic representation for *future* persistence/API — **no** Elastic/FastAPI/DB/Pydantic coupling,
+  no API or Elastic mapping built.
+
+#### Contracts created
+`SourceRef`, `DerivationProvenance` (provenance.py); `AttackRef` (attack.py); `Observation`
+(observation.py); `Evidence` (evidence.py); entity value objects `HashSet`/`FileRef`/`ProcessRef`/`HostRef`/
+`UserRef`/`NetworkEndpoint`/`NetworkInfo`/`EventMetadata`/`TimeSpan` (entities.py); enums `EvidenceType`/
+`EvidenceQuality`/`TimePrecision` (enums.py); `DomainContractError` + validators (errors.py); serialization
+(serialization.py); re-exported from `domain/__init__.py`.
+
+#### Verification commands & results
+```
+ruff format --check .   → 22 files already formatted
+ruff check .            → All checks passed!
+python -m mypy          → Success: no issues found in 22 source files (strict)
+python -m pytest -v     → 84 passed  (50 pre-existing G0.0/G0.1/G0.2 + 34 new G0.3)
+```
+Network-disabled re-run (entire suite with `socket.connect`/`connect_ex` raising): **84 passed**. The 34
+G0.3 tests cover valid construction of every contract, fail-closed rejection (empty/whitespace ids, naive
+timestamps, empty provenance, non-enum evidence type, malformed `AttackRef` shape, reversed/naive
+`TimeSpan`), Observation←Evidence provenance linkage, deterministic value-equality + canonical-JSON,
+deep immutability at every exposed level (frozen-instance assignment + tuple mutation + exhaustive
+"no mutable container anywhere" scan), source-agnosticism (Observation constructs with zero source-specific
+fields; no field name encodes a source), and absence of attribution/scoring semantics.
+
+**Dependencies added:** none (stdlib-only). **G0.1/G0.2 unchanged** (`attack_knowledge/`, their tests,
+vendored artifact, `.gitattributes` — all confirmed untouched). **No G0.4+ implementation:** `extraction/`,
+`sources/`, `dataplane/`, `api/` remain docstring-only scaffolding.
+
+**Deferred to G0.4+ (explicitly not built here):** telemetry collectors / source adapters / normalization
+implementations (G0.4); Observation & Evidence *derivation* pipelines and the standalone `TechniqueAssertion`
++ detection `rule_ref`/`matched_fields` mechanics (G0.5); persistence/Elastic mappings (G0.7/G0.8); API
+(G0.10); and all attribution-side entities/logic (candidate generation, ACH, likelihood, attribution
+confidence, calibration — Phase 2/3). **Not committed yet** — awaiting review.
 
 ### G0.4 — Telemetry-source abstraction (adapter interface)
 - **Objective:** define the **`SourceAdapter` interface** (layers 1–3 → domain contract from
@@ -675,7 +756,7 @@ ADR created or changed. C0.1/C0.2 unchanged. ATT&CK bundle not vendored; no data
 
 ---
 
-## Progress update (2026-09-11): G0.0, G0.1 checkpointed; G0.2 implemented, awaiting review
+## Progress update (2026-09-13): G0.0–G0.2 checkpointed; G0.3 implemented, awaiting review
 
 The section above is the historical planning-review snapshot from before implementation began; it is left
 as-is for the record. Since then:
@@ -684,9 +765,13 @@ as-is for the record. Since then:
 - **G0.1 IMPLEMENTED/PASSED** (checkpointed at commit `2eea5f3`) — see the G0.1 entry above: the pinned
   MITRE ATT&CK Enterprise v19.0 STIX 2.1 bundle is vendored, hash-verified, offline-verifiable, and
   attributed.
-- **G0.2 IMPLEMENTED, AWAITING REVIEW (not yet checkpointed/committed)** — see the G0.2 entry above: the
-  deterministic runtime loader (`load_attack_knowledge()`) built on top of the verified G0.1 artifact.
-  **Not marked PASSED** until reviewed and accepted, per this gate's explicit instruction.
-- **Next gate (after G0.2 review): G0.3 — canonical domain data contracts.**
-- All other Phase-0 gates (G0.3–G0.12) remain **not started**. No Dockerfiles, compose files, Elastic
-  config, indexes, API, or frontend exist. No ADR created or changed; C0.1/C0.2 unchanged.
+- **G0.2 IMPLEMENTED/PASSED** (checkpointed at commit `f649e1f`) — see the G0.2 entry above: the
+  deterministic runtime loader (`load_attack_knowledge()`), deeply immutable, built on the verified G0.1
+  artifact.
+- **G0.3 IMPLEMENTED, AWAITING REVIEW (not yet checkpointed/committed)** — see the G0.3 entry above: the
+  source-agnostic domain contracts (`Observation`, `Evidence`, `SourceRef`/`DerivationProvenance`,
+  `AttackRef`, entity value objects, enums, serialization), resolving Q1. **Not marked PASSED** until
+  reviewed and accepted, per this gate's explicit instruction.
+- **Next gate (after G0.3 review): G0.4 — telemetry-source abstraction (adapter interface).**
+- All other Phase-0 gates (G0.4–G0.12) remain **not started**. No Dockerfiles, compose files, Elastic
+  config, indexes, API, source adapters, or frontend exist. No ADR created or changed; C0.1/C0.2 unchanged.
