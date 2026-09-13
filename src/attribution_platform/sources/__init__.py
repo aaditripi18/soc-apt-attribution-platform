@@ -11,6 +11,16 @@ any future attribution logic) may depend on a specific source.
 Adding a new telemetry source means adding a new adapter module here — it
 must never require changes to ``domain`` or the (future) attribution engine.
 
-Scaffolding only at this gate (G0.0) — no ``SourceAdapter`` interface or
-adapters exist yet. Implemented in G0.4.
+Gate status:
+
+- **G0.4 (implemented):** ``adapter`` — the ``SourceAdapter`` structural
+  protocol (stable ``source_type`` + ``to_observations``) and the
+  fail-closed ``convert()`` boundary function; ``synthetic`` — a trivial
+  reference adapter (:class:`SyntheticSourceAdapter`) proving the interface
+  is implementable and usable without any real source.
+- **Not yet implemented:** any real source adapter (Sysmon/Windows Event
+  Log/Linux/network/EDR/cloud — gate G0.9); the detection-match record
+  contract (gate G0.5's extraction boundary, not this package's concern).
 """
+
+from __future__ import annotations

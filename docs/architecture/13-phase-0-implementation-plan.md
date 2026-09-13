@@ -1,13 +1,14 @@
 # 13 — Phase 0 Implementation Plan
 
-**Status: IN PROGRESS.** G0.0, G0.1, and G0.2 are **IMPLEMENTED/PASSED** (checkpointed); G0.3 is
-**IMPLEMENTED, AWAITING REVIEW** (not yet checkpointed/committed); G0.4 onward are still planning only.
+**Status: IN PROGRESS.** G0.0, G0.1, G0.2, and G0.3 are **IMPLEMENTED/PASSED** (checkpointed); G0.4 is
+**IMPLEMENTED, AWAITING REVIEW** (not yet checkpointed/committed); G0.5 onward are still planning only.
 Translates the accepted architecture ([ADR-0001](adr/0001-evidence-graph-core-architecture.md),
 [ADR-0002](adr/0002-attribution-scoring-and-evidence-methodology.md),
 [C0.1 §11](11-attack-knowledge-versioning.md), [C0.2 §12](12-deployment-and-endpoint-scope.md)) into small,
 independently verifiable gates. Beyond G0.0 (repo scaffolding/CI), G0.1 (the pinned ATT&CK artifact + its
-offline integrity verifier), G0.2 (the deterministic runtime knowledge loader), and G0.3 (the source-agnostic
-domain contracts), no other code exists yet: no Dockerfiles, compose files, Elastic config, indexes, API,
+offline integrity verifier), G0.2 (the deterministic runtime knowledge loader), G0.3 (the source-agnostic
+domain contracts), and G0.4 (the SourceAdapter interface), no other code exists yet: no Dockerfiles, compose
+files, Elastic config, indexes, API,
 frontend, or dataset acquisition.
 
 **Authoritative constraints (carried verbatim into every gate):** no hard-coded ATT&CK vocabulary (all
@@ -468,7 +469,7 @@ implementations (G0.4); Observation & Evidence *derivation* pipelines and the st
 (G0.10); and all attribution-side entities/logic (candidate generation, ACH, likelihood, attribution
 confidence, calibration — Phase 2/3). **Not committed yet** — awaiting review.
 
-### G0.4 — Telemetry-source abstraction (adapter interface)
+### G0.4 — Telemetry-source abstraction (adapter interface) — **IMPLEMENTED (2026-09-13, awaiting review)**
 - **Objective:** define the **`SourceAdapter` interface** (layers 1–3 → domain contract from
   [12 §D.2](12-deployment-and-endpoint-scope.md)) and the **detection-match record** contract; provide a
   trivial **synthetic-fixture adapter** as the reference implementation.
@@ -483,6 +484,45 @@ confidence, calibration — Phase 2/3). **Not committed yet** — awaiting revie
 - **Depends:** G0.3.
 - **Env:** no Elastic, no Windows.
 - **NOT yet:** no real Sysmon/WEL adapters (G0.9); no Elastic.
+
+#### Scope decision: the detection-match record contract moved to G0.5
+
+The original objective (above) bundled the detection-match record contract into G0.4. The actual
+implementation instructions (2026-09-13) scoped G0.4 to only the `SourceAdapter` interface + conversion to
+`Observation`(s) + one reference adapter, explicitly forbidding "detection logic" at this gate — consistent
+with G0.5's own objective ("detection-match record → `Observation`"), where that contract already belongs.
+Deferred, not dropped; recorded per CLAUDE.md principle 12.
+
+#### Contracts/deliverables
+- `src/attribution_platform/sources/adapter.py` — `SourceAdapter` (a `typing.Protocol`, structural, no
+  base-class inheritance required) with two members (`source_type: str`, `to_observations(raw_record) ->
+  tuple[Observation, ...]`), and `convert(adapter, raw_record)` — the fail-closed boundary function every
+  caller invokes an adapter through.
+- `src/attribution_platform/sources/synthetic.py` — `SyntheticSourceAdapter` + `SyntheticRecord`, the
+  reference implementation (no real source; proves the interface is genuinely implementable).
+- `src/attribution_platform/sources/errors.py` — `SourceAdapterError` (mirrors `ArtifactIntegrityError` /
+  `DomainContractError`: each layer owns its own fail-closed error type).
+
+`convert()` enforces, in order: `source_type` present/non-empty; return value is a `tuple`; every element is
+an `Observation`; every returned `Observation.raw_reference.source_type` equals the adapter's own declared
+`source_type` (an adapter cannot mislabel its own provenance).
+
+#### Verification commands & results
+```
+ruff format --check .   → 26 files already formatted
+ruff check .            → All checks passed!
+python -m mypy          → Success: no issues found in 26 source files (strict)
+python -m pytest -v     → 96 passed  (84 pre-existing G0.0–G0.3 + 12 new G0.4)
+```
+12 G0.4 tests: reference-adapter construction/conversion/determinism/rejection of a wrong raw-record type
+(5); `convert()` fail-closed on missing/empty `source_type`, non-tuple return, non-`Observation` elements,
+and provenance `source_type` mismatch (5); a second, independently-defined adapter (no shared base class)
+converts correctly with zero changes to `domain/` or `adapter.py` — the acceptance criterion (1); the
+dependency-direction guard — AST scan confirms no `domain/*.py` module imports from `sources` (1).
+
+**Dependencies added:** none (stdlib-only; `typing.Protocol` + `runtime_checkable`). **G0.1/G0.2/G0.3
+unchanged** (confirmed via `git diff --stat`). **No G0.5+ implementation:** `extraction/`, `dataplane/`,
+`api/` remain docstring-only scaffolding. **Not committed yet** — awaiting review.
 
 ### G0.5 — Normalized Observation model + extraction boundary
 - **Objective:** implement **detection-match record → `Observation`** with provenance (source event refs,
