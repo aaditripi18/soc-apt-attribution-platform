@@ -1,14 +1,14 @@
 # 13 — Phase 0 Implementation Plan
 
-**Status: IN PROGRESS.** G0.0, G0.1, G0.2, and G0.3 are **IMPLEMENTED/PASSED** (checkpointed); G0.4 is
-**IMPLEMENTED, AWAITING REVIEW** (not yet checkpointed/committed); G0.5 onward are still planning only.
+**Status: IN PROGRESS.** G0.0–G0.4 are **IMPLEMENTED/PASSED** (checkpointed); G0.5 is **IMPLEMENTED,
+AWAITING REVIEW** (not yet checkpointed/committed); G0.6 onward are still planning only.
 Translates the accepted architecture ([ADR-0001](adr/0001-evidence-graph-core-architecture.md),
 [ADR-0002](adr/0002-attribution-scoring-and-evidence-methodology.md),
 [C0.1 §11](11-attack-knowledge-versioning.md), [C0.2 §12](12-deployment-and-endpoint-scope.md)) into small,
 independently verifiable gates. Beyond G0.0 (repo scaffolding/CI), G0.1 (the pinned ATT&CK artifact + its
 offline integrity verifier), G0.2 (the deterministic runtime knowledge loader), G0.3 (the source-agnostic
-domain contracts), and G0.4 (the SourceAdapter interface), no other code exists yet: no Dockerfiles, compose
-files, Elastic config, indexes, API,
+domain contracts), G0.4 (the SourceAdapter interface), and G0.5 (the detection-match → Observation extraction
+boundary), no other code exists yet: no Dockerfiles, compose files, Elastic config, indexes, API,
 frontend, or dataset acquisition.
 
 **Authoritative constraints (carried verbatim into every gate):** no hard-coded ATT&CK vocabulary (all
@@ -524,7 +524,7 @@ dependency-direction guard — AST scan confirms no `domain/*.py` module imports
 unchanged** (confirmed via `git diff --stat`). **No G0.5+ implementation:** `extraction/`, `dataplane/`,
 `api/` remain docstring-only scaffolding. **Not committed yet** — awaiting review.
 
-### G0.5 — Normalized Observation model + extraction boundary
+### G0.5 — Normalized Observation model + extraction boundary — **IMPLEMENTED (2026-09-13, awaiting review)**
 - **Objective:** implement **detection-match record → `Observation`** with provenance (source event refs,
   matched fields, rule ref, entities, time span) — [06 entity 2](06-evidence-model.md).
 - **Inputs:** G0.4 (detection-match contract + fixtures).
@@ -537,6 +537,24 @@ unchanged** (confirmed via `git diff --stat`). **No G0.5+ implementation:** `ext
 - **Depends:** G0.4.
 - **Env:** no Elastic, no Windows.
 - **NOT yet:** no technique mapping yet (G0.6); no real detection engine.
+
+#### Implementation notes (2026-09-13)
+- **Contracts:** `src/attribution_platform/extraction/detection_match.py` — `RuleRef` (rule_id +
+  rule_version), `MatchedEvent` (observation_id + G0.3 `SourceRef` + tz-aware timestamp + optional G0.3
+  entity groups), and `DetectionMatchRecord` (rule_ref + non-empty `matched_events` + optional
+  `matched_fields`). `extractor.py` — `extract_observations(record)` producing one `Observation` per matched
+  event, in order. `errors.py` — `ExtractionError`.
+- **Guarantees:** deterministic (pure function; no wall-clock/ids generated — all supplied by input);
+  provenance-preserving (`Observation.raw_reference` *is* the matched event's `SourceRef`, the existing G0.3
+  boundary — no new raw-data mechanism); fail-closed with a single typed error (record-level violations at
+  construction; per-event `DomainContractError` wrapped as `ExtractionError` with which-event context);
+  source-agnostic (generic contract + G0.3 types only).
+- **Scope decision (principle 12):** the detection-match record contract sketched under G0.4 lands here in
+  G0.5, alongside the extractor that consumes it (its natural home). Recorded in `detection_match.py`.
+- **Verification:** `ruff format --check` clean; `ruff check` clean; `mypy` strict — 30 files, no issues;
+  `pytest` — **110 passed** (96 prior G0.0–G0.4 + 14 new G0.5). No new dependencies (stdlib-only).
+  G0.1–G0.4 code/tests, the vendored ATT&CK artifact, and `.gitattributes` unchanged; `dataplane/`/`api/`
+  remain scaffolding (no G0.6+). **Not committed yet — awaiting review.**
 
 ### G0.6 — Evidence + TechniqueAssertion + provenance  *(logic core of the first slice)*
 - **Objective:** **`Observation` → `Evidence` → `TechniqueAssertion`** that references a technique in the
