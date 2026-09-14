@@ -22,7 +22,11 @@ Guarantees:
   generated ids (``evidence_id`` and any ``derived_at`` are supplied).
 - **Provenance-preserving:** the derived Evidence retains the supporting
   Observation ids and the rule context (``rule_id``/``rule_version`` become
-  ``DerivationProvenance.method``/``method_version``).
+  ``DerivationProvenance.method``/``method_version``). An optional
+  ``method_content_hash`` (gate G1.0 addition — additive, defaults to
+  ``None``) is carried onto ``DerivationProvenance.method_content_hash``
+  unchanged, for callers (e.g. the detection rule engine) that can supply a
+  content hash of the exact method definition used.
 - **ATT&CK linkage is validated, not copied:** if an ``AttackRef`` is given, it
   is checked against the loaded pinned KB via
   :func:`attribution_platform.attack_knowledge.resolution.resolve_attack_ref`
@@ -80,6 +84,7 @@ def derive_evidence(
     host: HostRef | None = None,
     user: UserRef | None = None,
     derived_at: datetime | None = None,
+    method_content_hash: str | None = None,
 ) -> Evidence:
     """Derive one ``Evidence`` from supporting Observations and rule context.
 
@@ -90,6 +95,13 @@ def derive_evidence(
     - ``attack_ref`` (optional): if given, ``knowledge`` is required and the
       reference is validated against it (raising ``AttackReferenceError`` if it
       does not resolve); the validated reference is attached to the Evidence.
+    - ``method_content_hash`` (optional, additive — gate G1.0): a content
+      hash of the exact method/rule definition used (e.g. a detection
+      rule-pack's SHA-256), carried onto
+      ``DerivationProvenance.method_content_hash`` unchanged. Distinguishes
+      two derivations that share the same ``rule_ref`` identity/version but
+      came from genuinely different rule content; left absent when the
+      caller has no such hash to record.
 
     All ids/timestamps are supplied by the caller; nothing is generated here.
     """
@@ -125,6 +137,7 @@ def derive_evidence(
             method_version=rule_ref.rule_version,
             source_observation_ids=source_observation_ids,
             derived_at=derived_at,
+            method_content_hash=method_content_hash,
         )
         return Evidence(
             evidence_id=evidence_id,

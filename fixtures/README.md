@@ -33,3 +33,12 @@ JSON, the shape a real capture export naturally takes), read by
 `SysmonSourceAdapter` through the identical `SourceAdapter -> Observation`
 boundary as every other source. Not a live capture; not a second
 fixture/replay framework (see that module's docstring for why).
+
+**G1.0 (Phase 1 — deterministic detection engine)** adds
+[`phase1_core_rules.json`](phase1_core_rules.json): a small, hand-authored,
+content-hashed rule pack (two rules — one behavioral, mapped to a real,
+pinned-KB-validated ATT&CK technique; one contextual, with no technique
+mapping) loaded by `attribution_platform.detection.load_rule_pack` and
+evaluated by `DetectionEngine`. Demonstrative content only, proving the
+loader/engine/ATT&CK-validation path works end to end — not real
+detection-engineering content, and not used to validate detection efficacy.

@@ -70,6 +70,14 @@ class DerivationProvenance:
       not fabricated here). Generalizes doc 06's ``rule_ref``.
     - ``method_version``: the version of that rule/analytic/schema, so a
       derivation is reproducible and traceable to the logic that made it.
+    - ``method_content_hash``: optional content hash of the *exact* method
+      definition used (e.g. a detection rule-pack's SHA-256 — gate G1.0).
+      ``method``/``method_version`` are a human-assigned identity; nothing
+      technical guarantees ``method_version`` changes when the method's
+      actual content does. This field closes that gap when a caller has a
+      real content hash to record — optional and additive, because not
+      every derivation method is content-hashable (or has been, prior to
+      this gate). Left absent (``None``) rather than fabricated.
     - ``source_observation_ids``: the Observation id(s) this was derived
       from — **required and non-empty** for any derived object. Stored as a
       canonical, de-duplicated, sorted tuple so equality is order-independent
@@ -79,14 +87,16 @@ class DerivationProvenance:
       determinism (docs/architecture/13, G0.3 §5), so this is only ever set
       when a caller has a real, meaningful derivation time to record.
 
-    All required strings are validated non-empty; ``derived_at`` if present
-    must be timezone-aware (fail closed).
+    All required strings are validated non-empty; ``method_content_hash`` if
+    present must also be non-empty; ``derived_at`` if present must be
+    timezone-aware (fail closed).
     """
 
     method: str
     method_version: str
     source_observation_ids: tuple[str, ...] = ()
     derived_at: datetime | None = field(default=None)
+    method_content_hash: str | None = None
 
     def __post_init__(self) -> None:
         ensure_nonempty_str(self.method, "DerivationProvenance.method")
@@ -107,6 +117,11 @@ class DerivationProvenance:
 
         if self.derived_at is not None:
             ensure_aware_datetime(self.derived_at, "DerivationProvenance.derived_at")
+
+        if self.method_content_hash is not None:
+            ensure_nonempty_str(
+                self.method_content_hash, "DerivationProvenance.method_content_hash"
+            )
 
     @classmethod
     def create(

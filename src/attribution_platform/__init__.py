@@ -30,6 +30,11 @@ Package layout (each submodule states which Phase-0 gate implements it):
                          them). Implemented in G0.9.
 - ``api``              — read-model API (serves stored data; performs no
                          attribution logic). Implemented in G0.10.
+- ``detection``        — deterministic detection rules/engine mapping
+                         Observations to ATT&CK-technique-validated
+                         DetectionResults, fanned out into ``extraction``'s
+                         unmodified ``derive_evidence()``. Source-agnostic
+                         and Elastic-free; the first Phase 1 gate (G1.0).
 
 This package intentionally contains no attribution, correlation, or
 attack-chain logic yet — see ADR-0001/ADR-0002 and the Phase-0 plan for why.

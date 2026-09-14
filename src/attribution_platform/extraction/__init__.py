@@ -20,7 +20,10 @@ Gate status:
   ``TechniqueAssertion`` object (the ATT&CK link is the G0.3 ``AttackRef`` on
   ``Evidence``); no scoring/likelihood/confidence/attribution.
 - **Not yet implemented (later gates):** correlation, attack chains,
-  candidate generation, attribution, any real detection engine, Elastic.
+  candidate generation, attribution, Elastic. A real detection *engine* now
+  exists — see ``attribution_platform.detection`` (gate G1.0) — but it
+  consumes this package's ``derive_evidence()`` unchanged rather than
+  replacing anything here.
 """
 
 from __future__ import annotations

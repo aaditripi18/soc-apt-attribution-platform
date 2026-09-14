@@ -1,0 +1,36 @@
+{
+  "pack_id": "phase1-core-rules",
+  "description": "Small, hand-authored, deterministic Phase-1 rule pack (gate G1.0). Demonstrates the detection engine + ATT&CK-mapping-validated rule pack end to end. Not real detection-engineering content; not used to validate detection efficacy.",
+  "rules": [
+    {
+      "rule_id": "platform-encoded-powershell",
+      "rule_version": "1.0",
+      "conditions": [
+        { "field_path": "process.name", "operator": "contains", "value": "powershell" },
+        { "field_path": "process.command_line", "operator": "contains", "value": "-enc" }
+      ],
+      "technique_mappings": [
+        {
+          "stix_id": "attack-pattern--970a3432-3237-47ad-bcca-7d8cbb217736",
+          "object_type": "attack-pattern",
+          "attack_kb_version": "enterprise-attack-19.0",
+          "external_id": "T1059.001",
+          "mapping_basis": "an encoded (-enc/-EncodedCommand) PowerShell invocation is a well-known PowerShell-execution pattern",
+          "mapping_source": "platform-rules"
+        }
+      ],
+      "evidence_type": "behavioral",
+      "rule_source": "platform-rules"
+    },
+    {
+      "rule_id": "platform-interactive-logon",
+      "rule_version": "1.0",
+      "conditions": [
+        { "field_path": "event.action", "operator": "contains", "value": "logon" }
+      ],
+      "technique_mappings": [],
+      "evidence_type": "contextual",
+      "rule_source": "platform-rules"
+    }
+  ]
+}
