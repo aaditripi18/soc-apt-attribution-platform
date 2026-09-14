@@ -35,6 +35,14 @@ Package layout (each submodule states which Phase-0 gate implements it):
                          DetectionResults, fanned out into ``extraction``'s
                          unmodified ``derive_evidence()``. Source-agnostic
                          and Elastic-free; the first Phase 1 gate (G1.0).
+- ``elastic_detections`` — normalizes Elastic Detection Engine alerts into
+                         the same ``detection.DetectionResult``, via a
+                         bounded, read-only ``dataplane.ElasticClient``
+                         query. Cross-cutting integration (composes
+                         ``dataplane``, ``attack_knowledge``, and
+                         ``detection`` — mirrors why ``replay`` is its own
+                         package rather than living inside one of the layers
+                         it composes). Implemented in G1.1.
 
 This package intentionally contains no attribution, correlation, or
 attack-chain logic yet — see ADR-0001/ADR-0002 and the Phase-0 plan for why.

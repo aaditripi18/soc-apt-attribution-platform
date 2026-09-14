@@ -249,7 +249,14 @@ class DetectionRule:
       tuple must be distinct — a rule mapping the same technique twice
       would make :func:`attribution_platform.detection.evidence.derive_evidence_from_detection`
       compose two identical ``evidence_id`` values (a provenance-audit
-      finding), so this is rejected at construction, fail-closed.
+      finding), so this is rejected at construction, fail-closed. As of the
+      G1.1 provenance review this same uniqueness invariant is *also*
+      enforced structurally by
+      :class:`~attribution_platform.detection.contracts.DetectionResult`
+      itself (covering every producer, not just this class) — the check
+      here is kept anyway so a rule pack with a duplicate mapping is
+      rejected at rule-pack **load** time, before it is ever evaluated
+      against telemetry, rather than only the first time it happens to fire.
     - ``evidence_type``: the ``EvidenceType`` any Evidence derived from this
       rule's firings should carry (defaults to ``BEHAVIORAL``).
     - ``rule_source``: becomes ``DetectionResult.detection_source`` when this

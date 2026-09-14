@@ -160,6 +160,9 @@ class _AlwaysFailsClient:
     def get_document(self, index: str, document_id: str) -> Any:
         raise ConnectionError("simulated transport failure")
 
+    def search(self, index: str, query: Any, *, size: int) -> tuple[Any, ...]:
+        return ()
+
 
 def test_get_observation_wraps_transport_failure_as_backend_error() -> None:
     with pytest.raises(BackendError, match="could not load Observation"):

@@ -29,12 +29,17 @@ Gate status:
   ``evidence`` — ``derive_evidence_from_detection()``, a thin fan-out into
   the existing, unmodified G0.6 ``derive_evidence()`` (one Evidence per
   technique mapping, or one unmapped).
+- **G1.1 (implemented, elsewhere):** an Elastic Detection Engine alert
+  adapter now exists — see
+  :mod:`attribution_platform.elastic_detections` — normalizing an Elastic
+  alert into the exact same ``DetectionResult`` this package defines. This
+  package itself is untouched: the adapter depends on ``detection``, never
+  the reverse (a guard test enforces this).
 - **Not yet implemented:** multi-Observation/sequence rules (Phase 2
-  correlation); an Elastic-detections adapter (a later Phase 1 gate); a
-  Sysmon/Windows-specific detection path (none is needed — rules are
-  source-agnostic by construction); any attribution, candidate generation,
-  scoring, or attack-chain logic (out of scope for the entire detection
-  layer, not just this gate).
+  correlation); a Sysmon/Windows-specific detection path (none is needed —
+  rules are source-agnostic by construction); any attribution, candidate
+  generation, scoring, or attack-chain logic (out of scope for the entire
+  detection layer, not just this gate).
 """
 
 from __future__ import annotations

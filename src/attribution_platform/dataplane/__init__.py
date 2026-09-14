@@ -22,6 +22,13 @@ Gate status:
   fail-closed round trip between G0.3 domain objects and Elastic documents
   (no second schema — documents are exactly
   ``attribution_platform.domain.to_serializable(obj)``).
+- **G1.1 (implemented):** ``client``/``http_client``/``fake_client`` gain one
+  additive method, ``search(index, query, *, size)`` — a bounded, read-only
+  query (no scroll/pagination, ``size`` required and capped), added because
+  reading Elastic Detection Engine alerts
+  (:mod:`attribution_platform.elastic_detections`) needs more than a
+  known-id lookup. No mutation surface added; ``ensure_index``/
+  ``index_document``/``get_document`` are unchanged.
 - **Not yet implemented:** replay/bulk ingestion (G0.9); the read-model API
   (G0.10); detection rules, EQL/ES|QL correlation, attack-chain logic, or
   attribution scoring (none of which belong in this package regardless of

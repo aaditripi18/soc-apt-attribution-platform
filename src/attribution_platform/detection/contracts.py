@@ -203,7 +203,18 @@ class DetectionResult:
     Optional:
     - ``technique_mappings``: zero or more validated :class:`TechniqueMapping`
       (a detection may legitimately have none — doc 06 allows evidentiary/
-      contextual Evidence with no ``attack_ref``).
+      contextual Evidence with no ``attack_ref``). Every ``attack_ref.stix_id``
+      across this tuple must be distinct — enforced structurally here (a
+      G1.1 provenance-review finding), not only by
+      :class:`~attribution_platform.detection.rules.DetectionRule`, so that
+      *any* producer of a ``DetectionResult`` — including gate G1.1's
+      Elastic-alert adapter, which constructs one directly rather than via
+      ``DetectionRule`` — is guaranteed the same collision-free
+      ``evidence_id`` derivation invariant
+      (:func:`attribution_platform.detection.evidence.derive_evidence_from_detection`
+      composes ``evidence_id`` from ``detection_id`` + ``attack_ref.stix_id``,
+      so a duplicate would otherwise produce two ``Evidence`` objects sharing
+      one id).
     - ``evidence_type``: the :class:`~attribution_platform.domain.EvidenceType`
       the firing rule declares for any Evidence derived from this detection
       (defaults to ``BEHAVIORAL`` — Phase 1 rules are behavioral pattern
@@ -262,12 +273,20 @@ class DetectionResult:
 
         if not isinstance(self.technique_mappings, tuple):
             raise DetectionError("DetectionResult.technique_mappings must be a tuple")
+        seen_stix_ids: set[str] = set()
         for i, tm in enumerate(self.technique_mappings):
             if not isinstance(tm, TechniqueMapping):
                 raise DetectionError(
                     f"DetectionResult.technique_mappings[{i}] must be a TechniqueMapping, "
                     f"got {type(tm).__name__}"
                 )
+            if tm.attack_ref.stix_id in seen_stix_ids:
+                raise DetectionError(
+                    f"DetectionResult.technique_mappings contains duplicate "
+                    f"attack_ref.stix_id {tm.attack_ref.stix_id!r} "
+                    f"(technique_mappings[{i}]) — a detection must map each technique at most once"
+                )
+            seen_stix_ids.add(tm.attack_ref.stix_id)
 
         if not isinstance(self.evidence_type, EvidenceType):
             raise DetectionError(

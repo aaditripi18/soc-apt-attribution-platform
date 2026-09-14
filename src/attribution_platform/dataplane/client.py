@@ -6,7 +6,17 @@ Mirrors the pattern already established by
 :class:`typing.Protocol` (structural typing), not an abstract base class, so
 a conforming object needs no inheritance or registration — it only needs the
 right shape. This is deliberately the *entire* Elastic surface this project
-depends on: three operations, nothing more.
+depends on: four operations, nothing more.
+
+``search`` (gate G1.1) is the one addition since G0.8, added only because a
+bounded, read-only query became genuinely necessary (reading Elastic
+Detection Engine alerts — see
+:mod:`attribution_platform.elastic_detections.alerts` — cannot be done with
+``get_document``, which requires an already-known document id). It is
+deliberately minimal: one page, one caller-supplied ``size`` cap, no
+scroll/point-in-time/pagination support and no way to request "all"
+results — genuinely unbounded retrieval is out of scope, not just
+undocumented.
 
 Two implementations exist:
 
@@ -49,6 +59,13 @@ class ElasticClient(Protocol):
     - ``get_document(index, document_id)``: return the stored document as a
       plain ``Mapping``, or ``None`` if no document with that id exists in
       that index.
+    - ``search(index, query, *, size)``: a **bounded, read-only** query —
+      return up to ``size`` matching documents' source bodies (Elasticsearch
+      Query DSL in ``query``, e.g. ``{"match_all": {}}``). ``size`` is
+      required (no default that could silently mean "everything") and must
+      be positive. No scrolling, no point-in-time, no "give me all matches"
+      mode — a caller needing more than one bounded page is out of scope for
+      this Protocol.
 
     Implementations must raise
     :class:`~attribution_platform.dataplane.errors.ElasticIntegrationError`
@@ -61,3 +78,7 @@ class ElasticClient(Protocol):
     def index_document(self, index: str, document_id: str, document: Mapping[str, Any]) -> None: ...
 
     def get_document(self, index: str, document_id: str) -> Mapping[str, Any] | None: ...
+
+    def search(
+        self, index: str, query: Mapping[str, Any], *, size: int
+    ) -> tuple[Mapping[str, Any], ...]: ...

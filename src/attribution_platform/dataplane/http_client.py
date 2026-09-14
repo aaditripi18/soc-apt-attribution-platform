@@ -8,7 +8,7 @@ API (index-create, document index, document get) using only
 followed (G0.1/G0.2 read raw ATT&CK STIX JSON without ``mitreattack-python``;
 ``scripts/acquire_attack_bundle.py`` fetches over HTTPS with ``urllib``, not
 ``requests``). The official ``elasticsearch`` Python package was considered
-and rejected for this gate: it is not required for three REST calls, and
+and rejected for this gate: it is not required for four REST calls, and
 adding it would mean pinning and vendoring a client whose version must track
 the server's major version — a real cost for a "thin client" gate. Revisit
 this decision if a later gate's needs (bulk ingestion at scale, scroll/PIT
@@ -156,3 +156,36 @@ class ElasticsearchHttpClient:
                 f"'_source' for {document_id!r} in {index!r} was not an object: {source!r}"
             )
         return source
+
+    def search(
+        self, index: str, query: Mapping[str, Any], *, size: int
+    ) -> tuple[Mapping[str, Any], ...]:
+        """Bounded, read-only search (gate G1.1): ``POST /{index}/_search``
+        with the given Query DSL body and a hard ``size`` cap. Returns each
+        hit's ``_source``. No scroll/point-in-time — a single bounded page."""
+        if size <= 0:
+            raise ElasticIntegrationError(f"search size must be positive, got {size}")
+        status, parsed = self._request(
+            "POST", f"/{index}/_search", {"query": dict(query), "size": size}
+        )
+        if status != 200:
+            raise ElasticIntegrationError(
+                f"search on {index!r} failed (status {status}): {parsed!r}"
+            )
+        if not isinstance(parsed, dict) or not isinstance(parsed.get("hits"), dict):
+            raise ElasticIntegrationError(
+                f"unexpected search response shape from {index!r}: {parsed!r}"
+            )
+        raw_hits = parsed["hits"].get("hits")
+        if not isinstance(raw_hits, list):
+            raise ElasticIntegrationError(
+                f"unexpected search response shape from {index!r}: {parsed!r}"
+            )
+        sources: list[Mapping[str, Any]] = []
+        for hit in raw_hits:
+            if not isinstance(hit, dict) or not isinstance(hit.get("_source"), dict):
+                raise ElasticIntegrationError(
+                    f"a search hit from {index!r} had an unexpected shape: {hit!r}"
+                )
+            sources.append(hit["_source"])
+        return tuple(sources)

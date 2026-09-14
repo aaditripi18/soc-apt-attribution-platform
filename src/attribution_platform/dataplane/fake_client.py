@@ -55,6 +55,23 @@ class FakeElasticClient:
         stored = self._documents.get(index, {}).get(document_id)
         return dict(stored) if stored is not None else None
 
+    def search(
+        self, index: str, query: Mapping[str, Any], *, size: int
+    ) -> tuple[Mapping[str, Any], ...]:
+        """Bounded, read-only search (gate G1.1). This fake does **not**
+        implement Elasticsearch's Query DSL -- ``query`` is accepted (to
+        satisfy the Protocol) but ignored; it returns up to ``size`` of the
+        documents already stored in ``index`` via ``index_document``, in
+        insertion order. Real query matching is exactly the kind of
+        Elasticsearch behavior this fake deliberately does not model (see
+        the module docstring) -- a test needing to verify actual query
+        construction should patch ``urllib.request.urlopen`` against
+        ``ElasticsearchHttpClient`` instead."""
+        if size <= 0:
+            raise ElasticIntegrationError(f"search size must be positive, got {size}")
+        documents = self._documents.get(index, {})
+        return tuple(dict(doc) for doc in list(documents.values())[:size])
+
     # --- test-introspection helpers (not part of the ElasticClient Protocol) ---
 
     def document_count(self, index: str) -> int:

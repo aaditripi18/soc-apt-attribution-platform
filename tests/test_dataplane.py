@@ -306,6 +306,11 @@ def test_persistence_functions_accept_any_conforming_client() -> None:
         def get_document(self, index: str, document_id: str) -> Mapping[str, Any] | None:
             return self._docs.get(index, {}).get(document_id)
 
+        def search(
+            self, index: str, query: Mapping[str, Any], *, size: int
+        ) -> tuple[Mapping[str, Any], ...]:
+            return tuple(dict(d) for d in list(self._docs.get(index, {}).values())[:size])
+
     client = _MinimalDictClient()
     assert isinstance(client, ElasticClient)
     obs = _full_observation("via-second-client")
