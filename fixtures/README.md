@@ -42,3 +42,17 @@ mapping) loaded by `attribution_platform.detection.load_rule_pack` and
 evaluated by `DetectionEngine`. Demonstrative content only, proving the
 loader/engine/ATT&CK-validation path works end to end — not real
 detection-engineering content, and not used to validate detection efficacy.
+
+**G1.2 (replay integrated with the DetectionEngine)** adds
+[`phase1_detection_replay.json`](phase1_detection_replay.json): a small,
+hand-authored, content-hashed **raw-telemetry** fixture (documented in
+`src/attribution_platform/replay/detection_fixtures.py`), read by
+`attribution_platform.replay.load_detection_replay_fixture_file` and pushed
+through `SourceAdapter -> extract_observations -> the real G1.0
+DetectionEngine -> derive_evidence_from_detection -> Elastic persistence`
+(`attribution_platform.replay.replay_fixture_through_detection_engine`).
+Unlike `phase0_benign_scenarios.json`, no scenario here asserts its own rule
+id or ATT&CK mapping — three scenarios (one that matches the encoded-
+PowerShell rule, one that matches the contextual logon rule, one that
+matches neither) exist specifically to prove the engine, not the fixture,
+decides what fires, evaluated against `phase1_core_rules.json`.

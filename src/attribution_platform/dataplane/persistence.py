@@ -24,6 +24,18 @@ trip — so it is implemented here, as the explicit, typed inverse of
 generic reflection-based deserializer and not as a new field on the domain
 contracts themselves.
 
+**G1.2 fix (round-trip completeness):** ``_derivation_provenance_from_dict``
+originally omitted ``method_content_hash`` — the field serialized correctly
+via ``to_serializable`` (nothing was ever lost from the *written* document)
+but a *reloaded* ``Evidence`` silently came back with
+``provenance.method_content_hash=None`` regardless of what was stored,
+because the field simply wasn't read back out. No test exercised this gap
+before G1.2's replay-through-persistence path (``derive_evidence`` from a
+rule-pack-loaded ``DetectionResult`` is the first caller that ever produces
+a non-``None`` ``method_content_hash`` and then persists it). Fixed
+additively — the field is now read back exactly like every other optional
+field here.
+
 **Idempotency.** Every write uses the domain object's own id
 (``observation_id`` / ``evidence_id``) as the Elasticsearch document id, so
 persisting the same object twice performs the same upsert twice and leaves
@@ -259,6 +271,7 @@ def _derivation_provenance_from_dict(d: Mapping[str, Any]) -> DerivationProvenan
         derived_at=(
             datetime.fromisoformat(d["derived_at"]) if d.get("derived_at") is not None else None
         ),
+        method_content_hash=d.get("method_content_hash"),
     )
 
 

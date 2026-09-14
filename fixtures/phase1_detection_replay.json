@@ -1,0 +1,44 @@
+{
+  "fixture_id": "phase1-detection-replay",
+  "description": "Hand-authored, deterministic raw-telemetry replay fixture (gate G1.2). Exercises raw record -> SourceAdapter -> Observation -> the real G1.0 DetectionEngine -> Evidence. Unlike phase0_benign_scenarios.json, no scenario here asserts its own rule id or ATT&CK mapping -- whether anything fires, and what it maps to, is decided entirely by evaluating these scenarios against fixtures/phase1_core_rules.json. Not real detection-engineering content; not used to validate detection efficacy.",
+  "scenarios": [
+    {
+      "scenario_id": "encoded-powershell-matches-platform-rule",
+      "raw_record": {
+        "record_id": "evt-1001",
+        "timestamp": "2026-02-01T09:00:00+00:00",
+        "observation_id": "obs-1001"
+      },
+      "process": {
+        "name": "powershell.exe",
+        "command_line": "powershell.exe -enc SGVsbG8gV29ybGQh"
+      }
+    },
+    {
+      "scenario_id": "interactive-logon-matches-contextual-rule",
+      "raw_record": {
+        "record_id": "evt-1002",
+        "timestamp": "2026-02-01T09:05:00+00:00",
+        "observation_id": "obs-1002"
+      },
+      "event": {
+        "action": "user-logon"
+      }
+    },
+    {
+      "scenario_id": "benign-notepad-matches-no-rule",
+      "raw_record": {
+        "record_id": "evt-1003",
+        "timestamp": "2026-02-01T09:10:00+00:00",
+        "observation_id": "obs-1003"
+      },
+      "process": {
+        "name": "notepad.exe",
+        "command_line": "notepad.exe C:\\Users\\analyst\\notes.txt"
+      },
+      "event": {
+        "action": "process-start"
+      }
+    }
+  ]
+}
