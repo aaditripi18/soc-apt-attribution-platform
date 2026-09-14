@@ -20,6 +20,10 @@ Gate status:
   mitigations/relationships). Deliberately narrow: no alias resolution, no
   relationship traversal, no re-typed domain model — see ``loader``'s
   module docstring for the exact scope decisions.
-- **Not yet implemented:** typed domain contracts (G0.3), candidate
-  generation / alias resolution / relationship traversal, attribution.
+- **G0.6 (implemented):** ``resolution`` — ``resolve_attack_ref()``, a
+  bounded KB lookup validating a domain ``AttackRef`` against the loaded KB
+  (exists + STIX type match + KB-version match). No alias resolution, no
+  relationship traversal.
+- **Not yet implemented:** candidate generation / alias resolution /
+  relationship traversal, attribution.
 """

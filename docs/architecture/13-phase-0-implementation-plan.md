@@ -1,15 +1,15 @@
 # 13 — Phase 0 Implementation Plan
 
-**Status: IN PROGRESS.** G0.0–G0.4 are **IMPLEMENTED/PASSED** (checkpointed); G0.5 is **IMPLEMENTED,
-AWAITING REVIEW** (not yet checkpointed/committed); G0.6 onward are still planning only.
+**Status: IN PROGRESS.** G0.0–G0.4 are **IMPLEMENTED/PASSED** (checkpointed); G0.5 and G0.6 are
+**IMPLEMENTED, AWAITING REVIEW** (not yet checkpointed/committed); G0.7 onward are still planning only.
 Translates the accepted architecture ([ADR-0001](adr/0001-evidence-graph-core-architecture.md),
 [ADR-0002](adr/0002-attribution-scoring-and-evidence-methodology.md),
 [C0.1 §11](11-attack-knowledge-versioning.md), [C0.2 §12](12-deployment-and-endpoint-scope.md)) into small,
 independently verifiable gates. Beyond G0.0 (repo scaffolding/CI), G0.1 (the pinned ATT&CK artifact + its
 offline integrity verifier), G0.2 (the deterministic runtime knowledge loader), G0.3 (the source-agnostic
-domain contracts), G0.4 (the SourceAdapter interface), and G0.5 (the detection-match → Observation extraction
-boundary), no other code exists yet: no Dockerfiles, compose files, Elastic config, indexes, API,
-frontend, or dataset acquisition.
+domain contracts), G0.4 (the SourceAdapter interface), G0.5 (the detection-match → Observation extraction
+boundary), and G0.6 (Observation → Evidence derivation + validated ATT&CK reference), no other code exists
+yet: no Dockerfiles, compose files, Elastic config, indexes, API, frontend, or dataset acquisition.
 
 **Authoritative constraints (carried verbatim into every gate):** no hard-coded ATT&CK vocabulary (all
 derived from the pinned v19.0 bundle); no live MITRE dependency at runtime; provenance on every derived
@@ -556,21 +556,46 @@ unchanged** (confirmed via `git diff --stat`). **No G0.5+ implementation:** `ext
   G0.1–G0.4 code/tests, the vendored ATT&CK artifact, and `.gitattributes` unchanged; `dataplane/`/`api/`
   remain scaffolding (no G0.6+). **Not committed yet — awaiting review.**
 
-### G0.6 — Evidence + TechniqueAssertion + provenance  *(logic core of the first slice)*
-- **Objective:** **`Observation` → `Evidence` → `TechniqueAssertion`** that references a technique in the
-  pinned KB (G0.2), with the full provenance chain and version stamping — [06 entities 3–4](06-evidence-model.md).
-- **Inputs:** G0.5 observations, G0.2 knowledge.
-- **Outputs:** evidence + technique-assertion objects; a `determinism_hash` over the canonical result.
-- **Work:** deterministic mapping from an observation to an evidence item and a **referenced** ATT&CK
-  technique (reference only — **no scoring, no diagnosticity, no weights**); assemble the provenance manifest.
-- **Tests/verify:** synthetic fixture → Observation → Evidence → TechniqueAssertion resolving a real v19.0
-  technique; **provenance walks back to the raw event ref**; same inputs+versions ⇒ identical
-  `determinism_hash`.
-- **Acceptance:** an evidence→technique reference exists, is fully traceable, and is reproducible — **with no
-  attribution performed**.
+### G0.6 — Evidence + ATT&CK technique reference + provenance — **IMPLEMENTED (2026-09-14, awaiting review)**
+- **Objective:** **`Observation` → `Evidence`** optionally linked to a technique/sub-technique in the pinned
+  KB (G0.2), with the full provenance chain and version stamping — [06 entities 3–4](06-evidence-model.md).
+- **Inputs:** G0.5 observations + rule context, G0.2 knowledge, G0.3 contracts.
+- **Delivered:**
+  - `attack_knowledge/resolution.py` — `resolve_attack_ref(knowledge, ref)`: a bounded, deterministic KB
+    lookup validating a G0.3 `AttackRef` against the loaded KB (KB-version match → id exists → resolved
+    STIX `type` == `object_type`). Returns the pinned object (a pointer, **no copy/second schema**); fails
+    closed with `AttackReferenceError`. No alias resolution / relationship traversal / candidate generation.
+  - `extraction/evidence_derivation.py` — `derive_evidence(...)`: a pure function from supporting
+    `Observation`s + `RuleRef` to one `Evidence`. Provenance retains the supporting `observation_id`s and the
+    rule context (`rule_id`/`rule_version` → `DerivationProvenance.method`/`method_version`). An optional
+    `AttackRef` is validated via `resolve_attack_ref` before attachment (an `attack_ref` without a `knowledge`
+    to validate against fails closed). All ids/timestamps supplied by the caller — no wall-clock, no generated
+    ids. `EvidenceDerivationError` for derivation-level failures and wrapped `DomainContractError`s.
+- **Scope decisions (per CLAUDE.md §12):** (1) reused the existing G0.3 `Evidence`/`DerivationProvenance`/
+  `AttackRef`/`EvidenceQuality` contracts unchanged — **no domain contract was extended**. (2) Doc 06's
+  standalone **`TechniqueAssertion` object is not built**; the ATT&CK link is expressed as the optional G0.3
+  `AttackRef` on `Evidence` (the minimal validated form), continuing the collapse recorded at G0.3. (3) The
+  derivation *logic* lives in `extraction` (the interpretation step consuming Observations), while Evidence
+  *contracts* remain in `domain`; the G0.0 map created no `evidence/` package.
+- **Architectural finding — `resolve_attack_ref`'s type check is defence-in-depth:** a well-formed STIX id
+  embeds its own type as a prefix, and G0.3 `AttackRef.__post_init__` already requires `object_type` to equal
+  that prefix. So against the real KB a *normally-constructed* `AttackRef` can never reach the resolver's
+  type-mismatch branch — that mismatch is caught at `AttackRef` construction (covered by G0.3's
+  `test_attack_ref_invalid_shapes_rejected`). The resolver's own type check is retained as defence-in-depth
+  (guarding against a KB object whose stored `type` disagrees with a truthful-looking id prefix) and is
+  tested via a minimal KB stub — see `tests/test_evidence_derivation.py::test_wrong_object_type_rejected`.
+- **Verify:** focused `tests/test_evidence_derivation.py` — **14 passed** (valid derivation; provenance
+  preservation of observation ids + rule context; valid technique **and** sub-technique references against the
+  real v19.0 KB; nonexistent-reference rejection; wrong-object-type rejection via stub; KB-version mismatch;
+  determinism incl. canonical-JSON equality; fail-closed paths; no hard-coded technique/tactic ids in the
+  G0.6 source). Full suite **124 passed** (110 prior + 14). `ruff format --check` + `ruff check` clean;
+  **mypy strict** clean (33 files). No new dependencies (stdlib-only).
+- **G0.1–G0.5 unchanged:** no prior source/test/artifact files modified; only two `__init__.py` docstrings +
+  re-exports added for the new modules. **Not committed yet — awaiting review.**
 - **Depends:** G0.5, G0.2, G0.3.
 - **Env:** no Elastic, no Windows (this is the Elastic-free logic core).
-- **NOT yet:** **no** BehavioralFeature/Candidate/ACH/scoring/likelihood/confidence.
+- **NOT yet:** **no** BehavioralFeature/Candidate/ACH/scoring/likelihood/confidence/attribution; no
+  correlation, attack chains, alias resolution, or relationship traversal.
 
 ### G0.7 — Reproducible local deployment (Compose)  *(platform bring-up; precedes Elastic integration)*
 - **Objective:** a **Docker Compose** definition that brings up **single-node Elasticsearch + Kibana**
