@@ -13,6 +13,13 @@ to prove the ingestion → normalization → Observation → Evidence → ATT&CK
 technique-reference pipeline works deterministically; they do not validate
 attribution correctness.
 
-No fixtures exist yet at gate G0.0 (repository scaffolding). The first
-fixtures are added in G0.4 (source abstraction) and used through G0.9
-(synthetic/replay ingestion path).
+No fixtures existed at gate G0.0 (repository scaffolding). G0.4 added the
+source-adapter interface fixtures are written for (`SyntheticRecord`/
+`SyntheticSourceAdapter`) but no fixture *file* yet. The first fixture file,
+[`phase0_benign_scenarios.json`](phase0_benign_scenarios.json), is added at
+**G0.9 (synthetic/replay ingestion path)**: a small, hand-authored JSON file
+of benign scenarios (documented in
+`src/attribution_platform/replay/fixtures.py`) that the replay pipeline
+(`attribution_platform.replay`) loads and pushes through
+`SourceAdapter -> extract_observations -> derive_evidence -> Elastic
+persistence` — the same pipeline a real telemetry source will use.

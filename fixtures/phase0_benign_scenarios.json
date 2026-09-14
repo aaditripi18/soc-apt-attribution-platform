@@ -1,0 +1,46 @@
+{
+  "fixture_id": "phase0-benign-scenarios",
+  "description": "Hand-authored, benign, deterministic Phase-0 replay fixture (gate G0.9). Exercises raw record -> SourceAdapter -> Observation -> Evidence -> Elastic persistence. Not a real telemetry capture; not used to validate attribution correctness.",
+  "scenarios": [
+    {
+      "scenario_id": "benign-powershell-script",
+      "raw_record": {
+        "record_id": "evt-0001",
+        "timestamp": "2026-01-01T12:00:00+00:00",
+        "observation_id": "obs-0001"
+      },
+      "rule": {
+        "rule_id": "synthetic-benign-powershell",
+        "rule_version": "1.0"
+      },
+      "evidence": {
+        "evidence_id": "ev-0001",
+        "evidence_type": "behavioral",
+        "claim": "PowerShell executed a locally-authored, signed administrative script (benign, synthetic).",
+        "attack_ref": {
+          "stix_id": "attack-pattern--970a3432-3237-47ad-bcca-7d8cbb217736",
+          "object_type": "attack-pattern",
+          "attack_kb_version": "enterprise-attack-19.0",
+          "external_id": "T1059.001"
+        }
+      }
+    },
+    {
+      "scenario_id": "benign-user-logon",
+      "raw_record": {
+        "record_id": "evt-0002",
+        "timestamp": "2026-01-01T12:05:00+00:00",
+        "observation_id": "obs-0002"
+      },
+      "rule": {
+        "rule_id": "synthetic-benign-logon",
+        "rule_version": "1.0"
+      },
+      "evidence": {
+        "evidence_id": "ev-0002",
+        "evidence_type": "contextual",
+        "claim": "Interactive user logon observed on the synthetic host (benign, synthetic; no technique mapping applies)."
+      }
+    }
+  ]
+}

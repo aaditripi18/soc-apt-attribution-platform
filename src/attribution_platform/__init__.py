@@ -20,6 +20,14 @@ Package layout (each submodule states which Phase-0 gate implements it):
                          Implemented in G0.5.
 - ``dataplane``        — Elasticsearch client and persistence. Implemented in
                          G0.7 (deployment) / G0.8 (integration).
+- ``replay``            — synthetic/replay ingestion: hand-authored fixtures
+                         pushed through the same source-agnostic pipeline a
+                         real telemetry source will use. Not part of the
+                         original G0.0 module map (added when G0.9 needed a
+                         home for this cross-cutting orchestration — it
+                         composes ``sources``, ``extraction``, and
+                         ``dataplane`` rather than belonging to any one of
+                         them). Implemented in G0.9.
 - ``api``              — read-model API (serves stored data; performs no
                          attribution logic). Implemented in G0.10.
 

@@ -1,10 +1,10 @@
 # 13 — Phase 0 Implementation Plan
 
-**Status: IN PROGRESS.** G0.0–G0.7 are **IMPLEMENTED/PASSED** (checkpointed; G0.7's compose stack was
-validated statically only — no Docker runtime available in the authoring environment); G0.8 is
-**IMPLEMENTED, AWAITING REVIEW** (persistence logic verified via mocks/fakes; no live Elasticsearch
-available to verify operationally, for the same reason — not yet checkpointed/committed); G0.9 onward are
-still planning only.
+**Status: IN PROGRESS.** G0.0–G0.8 are **IMPLEMENTED/PASSED** (checkpointed; G0.7's compose stack and
+G0.8's persistence layer are validated statically/via mocks only — no Docker/Elasticsearch runtime
+available in the authoring environment); G0.9 is **IMPLEMENTED, AWAITING REVIEW** (replay pipeline verified
+end-to-end against a fake Elastic client; no live Elasticsearch available to verify operationally, for the
+same reason — not yet checkpointed/committed); G0.10 onward are still planning only.
 Translates the accepted architecture ([ADR-0001](adr/0001-evidence-graph-core-architecture.md),
 [ADR-0002](adr/0002-attribution-scoring-and-evidence-methodology.md),
 [C0.1 §11](11-attack-knowledge-versioning.md), [C0.2 §12](12-deployment-and-endpoint-scope.md)) into small,
@@ -12,9 +12,10 @@ independently verifiable gates. Beyond G0.0 (repo scaffolding/CI), G0.1 (the pin
 offline integrity verifier), G0.2 (the deterministic runtime knowledge loader), G0.3 (the source-agnostic
 domain contracts), G0.4 (the SourceAdapter interface), G0.5 (the detection-match → Observation extraction
 boundary), G0.6 (Observation → Evidence derivation + validated ATT&CK reference), G0.7 (the Compose
-platform-stack skeleton — Elasticsearch + Kibana, not yet brought up), and G0.8 (the Elastic persistence
-layer — ``dataplane/``, not yet exercised against a live cluster), no other code exists yet: no replay
-ingestion, API, frontend, or dataset acquisition.
+platform-stack skeleton — Elasticsearch + Kibana, not yet brought up), G0.8 (the Elastic persistence layer
+— ``dataplane/``, not yet exercised against a live cluster), and G0.9 (the synthetic/replay ingestion path
+— ``replay/`` + one hand-authored fixture file), no other code exists yet: no real telemetry-source
+adapter, API, frontend, or external dataset acquisition.
 
 **Authoritative constraints (carried verbatim into every gate):** no hard-coded ATT&CK vocabulary (all
 derived from the pinned v19.0 bundle); no live MITRE dependency at runtime; provenance on every derived
@@ -742,18 +743,71 @@ unchanged** (confirmed via `git diff --stat`). **No G0.5+ implementation:** `ext
   ingestion (G0.9); no query/search surface (G0.10); no real bring-up smoke test (Docker unavailable in
   this environment).
 
-### G0.9 — Synthetic / replay ingestion path
+### G0.9 — Synthetic / replay ingestion path — **IMPLEMENTED (2026-09-14, awaiting review)**
 - **Objective:** hand-authored synthetic fixtures → **`_bulk` into Elastic** → the identical downstream
   pipeline (extraction → Observation → Evidence → technique ref → persist), per
   [03 replay mode](03-system-data-flow.md).
 - **Inputs:** synthetic fixtures (G0.4), G0.8.
-- **Outputs:** a replay loader; a reproducible end-to-end synthetic run.
+- **Delivered:**
+  - `src/attribution_platform/replay/` — a new top-level package (see the scope decision below): `errors.py`
+    (`ReplayError`), `fixtures.py` (`load_fixture_file()` — parses and validates the small, specific JSON
+    fixture format documented there and in `fixtures/README.md`, computing a SHA-256 content hash),
+    `pipeline.py` (`replay_fixture()` — pushes each scenario through, in order: **G0.4** `SourceAdapter`
+    (`SyntheticSourceAdapter`, completely unmodified) → **G0.5** `extract_observations` (re-deriving the
+    canonical Observation via the detection-match boundary, which is where the fixture's content-hash is
+    stamped into `SourceRef.dataset_ref` — see the scope note) → **G0.8** `persist_observation` → **G0.6**
+    `derive_evidence` (with the optional `AttackRef` validated against the pinned KB exactly as G0.6
+    defined) → **G0.8** `persist_evidence`).
+  - `fixtures/phase0_benign_scenarios.json` — one small, hand-authored, benign, deterministic fixture: two
+    scenarios (a PowerShell-execution scenario mapped to the real, pinned-KB technique T1059.001, and a
+    plain user-logon scenario with no technique mapping), sufficient to exercise every required hop.
+- **Scope decisions (per CLAUDE.md §12):**
+  1. **Fixture location: the existing top-level `fixtures/` directory, not `data/fixtures/`.** The turn's
+     instructions named `data/fixtures/`, but `fixtures/README.md` (written at G0.0, already accepted
+     architecture) explicitly designates the repo-root `fixtures/` directory for exactly this purpose
+     ("hand-authored... fixtures... first fixtures are added in G0.4... and used through G0.9"). Separately,
+     `.gitignore` ignores everything under `data/` except `data/attack/` (`/data/*` + `!/data/attack/`) — a
+     fixture placed at `data/fixtures/` would silently never be tracked by git without an unrequested
+     `.gitignore` change. Using the pre-existing, documented, already-tracked location avoids both the
+     architectural drift and the silent-gitignore trap; see `fixtures/README.md`'s updated note.
+  2. **No `_bulk` API usage**, continuing G0.8's own recorded scope decision: this gate persists one
+     Observation/Evidence pair per scenario via `persist_observation`/`persist_evidence` (id-addressed
+     `_doc` writes), not a bulk endpoint — there is no bulk-scale dataset at this gate to justify one.
+  3. **A new top-level `replay/` package**, not nested inside `sources`, `extraction`, or `dataplane`: it
+     is cross-cutting orchestration that composes all three without belonging to any one of them (mirrors
+     why `extraction` itself is a separate package rather than living inside `domain`). Documented in
+     `attribution_platform/__init__.py`'s package-layout docstring.
+  4. **Both G0.4's `SourceAdapter` and G0.5's `extract_observations` are used, not just one** (both were
+     named in the turn's requirements). `SyntheticSourceAdapter` performs the literal
+     "raw record → SourceAdapter → Observation" hop; that Observation's fields are then re-expressed as a
+     `MatchedEvent` and pushed through `extract_observations` to produce the **canonical** Observation that
+     is actually persisted and carried into Evidence derivation — because G0.4's adapter is deliberately
+     sparse (no `dataset_ref` on the `SourceRef` it builds) and this gate must not modify G0.1–G0.8 behavior
+     to add one, the G0.5 boundary is the seam used to attach the fixture's content-hash to provenance
+     instead. Full reasoning in `replay/pipeline.py`'s module docstring.
+- **Verify — environment limitation:** **no Docker/Elasticsearch runtime is available in the authoring
+  environment** (unchanged from G0.7/G0.8). The replay pipeline was verified end-to-end against
+  `FakeElasticClient` (G0.8's in-memory double), not a live cluster: 25 focused tests cover fixture
+  validation (well-formed load + every malformed-fixture rejection path), deterministic/repeatable replay
+  (identical canonical JSON across independent runs; idempotent re-replay into one client), the full
+  adapter→extraction→derivation flow against the real pinned v19.0 KB (incl. fail-closed rejection of an
+  `attack_ref` absent from it), provenance preservation (supplied ids/timestamps verbatim; content-hash in
+  `dataset_ref`; Evidence provenance pointing back at the replayed Observation), and persistence round-trip.
+  **A real bring-up + live end-to-end replay against the G0.7 stack remains outstanding.**
 - **Work:** dataset-relative (deterministic) ingestion; content-hash the fixture set.
-- **Tests/verify:** full synthetic run is reproducible (determinism hash stable); no Windows needed; CI-able.
-- **Acceptance:** the reproducible replay path works end-to-end on synthetic data.
+- **Tests/verify:** full synthetic run is reproducible (determinism hash stable); no Windows needed; CI-able
+  — all true and demonstrated via the fake client; live-Elasticsearch reproducibility is unverified pending
+  a Docker-capable environment.
+- **Acceptance:** the replay path is structurally sound, deterministic, and fail-closed, verified via a fake
+  Elastic client — **operational verification against a live Elasticsearch cluster is unverified pending a
+  Docker-capable environment** (same limitation as G0.7/G0.8).
+- **G0.1–G0.8 unchanged:** no prior source/test/artifact/compose files modified; only
+  `attribution_platform/__init__.py` (package-layout docstring), `fixtures/README.md`, and this doc touched
+  outside the new G0.9 files. **Not committed yet — awaiting review.**
 - **Depends:** G0.8, G0.6.
 - **Env:** **requires Elastic**; **validated entirely with synthetic data**; no Windows.
-- **NOT yet:** **no external dataset acquisition** (Security-Datasets/EVTX/CALDERA deferred — CL-3).
+- **NOT yet:** **no external dataset acquisition** (Security-Datasets/EVTX/CALDERA deferred — CL-3); no
+  `_bulk` ingestion; no real bring-up smoke test (Docker/Elasticsearch unavailable in this environment).
 
 ### G0.10 — API boundary (read-model)
 - **Objective:** a minimal **read-model API** exposing stored observations / evidence / technique-refs **with
