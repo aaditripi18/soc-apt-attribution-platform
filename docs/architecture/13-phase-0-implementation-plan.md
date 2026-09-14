@@ -1,15 +1,17 @@
 # 13 — Phase 0 Implementation Plan
 
-**Status: IN PROGRESS.** G0.0–G0.4 are **IMPLEMENTED/PASSED** (checkpointed); G0.5 and G0.6 are
-**IMPLEMENTED, AWAITING REVIEW** (not yet checkpointed/committed); G0.7 onward are still planning only.
+**Status: IN PROGRESS.** G0.0–G0.6 are **IMPLEMENTED/PASSED** (checkpointed); G0.7 is **IMPLEMENTED,
+AWAITING REVIEW** (validated statically only — no Docker runtime available in the authoring environment;
+not yet checkpointed/committed); G0.8 onward are still planning only.
 Translates the accepted architecture ([ADR-0001](adr/0001-evidence-graph-core-architecture.md),
 [ADR-0002](adr/0002-attribution-scoring-and-evidence-methodology.md),
 [C0.1 §11](11-attack-knowledge-versioning.md), [C0.2 §12](12-deployment-and-endpoint-scope.md)) into small,
 independently verifiable gates. Beyond G0.0 (repo scaffolding/CI), G0.1 (the pinned ATT&CK artifact + its
 offline integrity verifier), G0.2 (the deterministic runtime knowledge loader), G0.3 (the source-agnostic
 domain contracts), G0.4 (the SourceAdapter interface), G0.5 (the detection-match → Observation extraction
-boundary), and G0.6 (Observation → Evidence derivation + validated ATT&CK reference), no other code exists
-yet: no Dockerfiles, compose files, Elastic config, indexes, API, frontend, or dataset acquisition.
+boundary), G0.6 (Observation → Evidence derivation + validated ATT&CK reference), and G0.7 (the Compose
+platform-stack skeleton — Elasticsearch + Kibana, not yet brought up), no other code exists yet: no Elastic
+client/indexes, API, frontend, or dataset acquisition.
 
 **Authoritative constraints (carried verbatim into every gate):** no hard-coded ATT&CK vocabulary (all
 derived from the pinned v19.0 bundle); no live MITRE dependency at runtime; provenance on every derived
@@ -597,7 +599,7 @@ unchanged** (confirmed via `git diff --stat`). **No G0.5+ implementation:** `ext
 - **NOT yet:** **no** BehavioralFeature/Candidate/ACH/scoring/likelihood/confidence/attribution; no
   correlation, attack chains, alias resolution, or relationship traversal.
 
-### G0.7 — Reproducible local deployment (Compose)  *(platform bring-up; precedes Elastic integration)*
+### G0.7 — Reproducible local deployment (Compose) — **IMPLEMENTED (2026-09-14, awaiting review)**
 - **Objective:** a **Docker Compose** definition that brings up **single-node Elasticsearch + Kibana**
   (Basic tier, security on) on a WSL2/Docker-compatible runtime, per
   [C0.2 §E](12-deployment-and-endpoint-scope.md); pinned image versions; a **constrained 8 GB profile**
@@ -605,17 +607,63 @@ unchanged** (confirmed via `git diff --stat`). **No G0.5+ implementation:** `ext
   Attribution Engine + API service containers are **slotted into this same compose as they land (G0.8/G0.10)**
   — ES + Kibana come up first.
 - **Inputs:** G0.0 scaffolding; the accepted deployment shape ([C0.2](12-deployment-and-endpoint-scope.md)).
-- **Outputs:** compose definition(s) (ES + Kibana now; app services added later), pinned versions,
-  bring-up/tear-down docs.
-- **Work:** author compose with security on, modest ES heap, Kibana optional; no Docker-Desktop-specific
-  lock-in ([C0.2 §H](12-deployment-and-endpoint-scope.md)).
-- **Tests/verify:** one-command bring-up yields a reachable, authenticated ES; reproducible across a
-  compatible runtime.
-- **Acceptance:** the platform stack (ES + Kibana) comes up reproducibly on the accepted deployment shape.
+- **Delivered:**
+  - `docker-compose.yml` — three services: `setup` (one-shot: generates a self-signed CA + per-node TLS
+    certs into a shared named volume, then sets the `kibana_system` service-account password via the ES
+    security API — Elastic's own documented security-enabled Compose bring-up pattern, needing no manual
+    enrollment-token step), `es01` (single-node Elasticsearch, `discovery.type=single-node`,
+    `xpack.security.enabled=true` with TLS on **both** the HTTP and transport layers,
+    `xpack.license.self_generated.type=basic` — no paid tier), `kibana` (talks to `es01` over TLS as the
+    `kibana_system` service account). Both images are pinned via one shared `${STACK_VERSION}` (default
+    `8.15.3` in the env templates) — never `:latest`, never two different versions. `es01`/`kibana` each
+    declare a `healthcheck` (ES: probes for the expected "missing authentication credentials" response over
+    TLS; Kibana: probes for its login-redirect HTTP response); `setup` gates on its cert file existing.
+    Elasticsearch's data directory is the **named volume** `esdata01` (survives `down`; only `down -v`
+    removes it). The `version:` key is omitted (obsolete under the current Compose Specification).
+  - `.env.example` — the **normal** profile (≥16 GB host target, C0.2 §A.1.3): `ES_HEAP=4g`,
+    `ES_MEM_LIMIT=6g`, `KB_MEM_LIMIT=1g`.
+  - `.env.constrained.example` — the **8 GB fallback** profile: `ES_HEAP=1g`, `ES_MEM_LIMIT=2g`, with
+    guidance to bring up `setup`+`es01` only and add `kibana` solely when needed (C0.2 §I). Both templates
+    require `ELASTIC_PASSWORD`/`KIBANA_PASSWORD` to be set (Compose's `${VAR:?message}` interpolation makes
+    an unset/empty value a hard failure) — placeholder values only; `.env` itself stays gitignored (already
+    covered by the existing `.gitignore`), so no credential is ever committed.
+  - `scripts/validate_compose.py` — the static structural validator described below (not a pytest file — a
+    standalone script in the same style as `scripts/acquire_attack_bundle.py`, run directly, not part of
+    the pytest suite — avoids redundant testing infrastructure for an operational config file).
+  - README.md — new "Platform stack (Elasticsearch + Kibana)" section replacing the stale "no configuration
+    exists yet" note, with one-command bring-up/tear-down and both profiles documented.
+- **Scope decision — no Attribution Platform placeholder container:** doc 13's own G0.7 objective text says
+  the app-service containers are "slotted into this same compose as they land (G0.8/G0.10)". No such
+  container exists here — adding an empty placeholder would be application logic-free scaffolding purely to
+  "fill a container," which the gate instructions explicitly forbid. `dataplane/`/`api/` remain G0.0
+  scaffolding-only; they gain a client/endpoints in G0.8/G0.10, at which point their container is added to
+  this same compose file.
+- **Work:** authored compose with security on, TLS on both layers, modest/tunable ES heap via env vars,
+  Kibana bring-up-able independently for the constrained profile; depends only on Compose semantics — no
+  Docker-Desktop-specific lock-in ([C0.2 §H](12-deployment-and-endpoint-scope.md)).
+- **Verify — environment limitation:** **no Docker runtime is available in the authoring environment**
+  (`docker`/`docker compose` are not on PATH, and `C:\Program Files\Docker\Docker\Docker Desktop.exe` does
+  not exist — Docker Desktop is not installed here at all, not merely absent from PATH). A real
+  `docker compose up` bring-up + health-endpoint smoke test per the gate's "Tests/verify" acceptance
+  criterion was **not performed** and could not be. Per the gate instructions, the configuration was instead
+  **validated statically**: `python scripts/validate_compose.py` — **all 8 checks pass** (valid YAML;
+  exactly the three expected services and no other container; `es01`/`kibana` both have healthchecks;
+  Elasticsearch data is on the named `esdata01` volume; `es01` has security + TLS enabled on both layers;
+  Elasticsearch and Kibana pin the identical `${STACK_VERSION}`; no image floats to `:latest`; `.env` is
+  gitignored). `ruff format --check` + `ruff check` clean on `scripts/validate_compose.py`; **mypy strict**
+  clean (34 files, incl. `scripts/`). Full pytest suite unaffected: **124 passed** (unchanged from G0.6 — no
+  compose/env files are exercised by pytest). **A real bring-up smoke test on a host with Docker Desktop/WSL2
+  remains outstanding and should be run before this gate is treated as operationally proven**, not just
+  structurally sound.
+- **Acceptance:** the compose definition is structurally sound, pinned, security-enabled, and reviewed —
+  **operational reproducibility (one-command bring-up yielding a reachable, authenticated ES) is unverified
+  pending a Docker-capable environment.**
+- **G0.1–G0.6 unchanged:** no prior source/test/artifact files modified; only `README.md` and this doc
+  touched outside the new G0.7 files. **Not committed yet — awaiting review.**
 - **Depends:** G0.0. **(Must precede G0.8.)**
 - **Env:** this gate **is** the Elastic bring-up; no Windows.
-- **NOT yet:** no multi-node/HA; no frontend container (frontend not built); no paid tier; app-service
-  containers added in later gates.
+- **NOT yet:** no multi-node/HA; no frontend container (frontend not built); no paid tier; no app-service
+  containers (added in G0.8/G0.10); no real bring-up smoke test (Docker unavailable in this environment).
 
 ### G0.8 — Initial Elastic data-plane integration
 - **Objective:** a thin Elastic client against the running cluster: `_bulk` write + query; deterministic

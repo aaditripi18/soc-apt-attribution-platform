@@ -42,6 +42,9 @@ data/attack/enterprise/v19.0/
                      vendored, hash-verified MITRE ATT&CK v19.0 STIX 2.1
                      bundle + acquisition manifest + attribution NOTICE — G0.1
 docs/                research and architecture documentation
+docker-compose.yml   platform stack (Elasticsearch + Kibana) — G0.7
+.env.example / .env.constrained.example
+                     platform stack config templates (copy to .env) — G0.7
 ```
 
 Every submodule's `__init__.py` docstring names the Phase-0 gate that
@@ -109,8 +112,40 @@ MITRE ATT&CK and ATT&CK are registered trademarks of The MITRE Corporation.
 See [`data/attack/enterprise/v19.0/NOTICE.md`](data/attack/enterprise/v19.0/NOTICE.md)
 for the full attribution statement and acquisition record.
 
-## Configuration
+## Platform stack (Elasticsearch + Kibana) — G0.7
 
-No environment configuration exists yet — there is nothing to connect to
-(no Elasticsearch, no external services). A `.env.example` will be added
-once a gate actually requires configuration (starting around G0.7/G0.8).
+[`docker-compose.yml`](docker-compose.yml) brings up a single-node,
+security-enabled Elasticsearch + Kibana (self-managed Basic/free tier) on a
+Docker Compose-compatible runtime, per
+[C0.2](docs/architecture/12-deployment-and-endpoint-scope.md). It depends
+only on Compose semantics — Docker Desktop, Podman Compose, Rancher Desktop,
+or a native WSL2 Docker engine all work; no Docker-Desktop-specific
+configuration is required.
+
+```bash
+cp .env.example .env             # normal profile — targets a >=16 GB host
+# or: cp .env.constrained.example .env   # 8 GB fallback profile
+# then edit ELASTIC_PASSWORD / KIBANA_PASSWORD in .env
+
+docker compose up -d             # bring up setup + es01 + kibana
+docker compose ps                # check health status
+docker compose down              # stop (keeps the esdata01 volume)
+docker compose down -v           # stop AND delete Elasticsearch's data
+```
+
+On the constrained (8 GB) profile, bring up Elasticsearch alone and add
+Kibana only when needed: `docker compose up -d setup es01`, then
+`docker compose up -d kibana` later.
+
+`.env` (your real credentials) is gitignored; only the `.env.example` /
+`.env.constrained.example` templates are tracked. `python
+scripts/validate_compose.py` statically validates `docker-compose.yml`
+(pinned/matching image versions, healthchecks, named data volume, security +
+TLS settings) without needing Docker installed — see that script's docstring
+and the G0.7 entry in
+[docs/architecture/13-phase-0-implementation-plan.md](docs/architecture/13-phase-0-implementation-plan.md)
+for what has and has not been verified in a given environment.
+
+No Attribution Engine, API, or frontend container exists yet — those are
+added to this same compose file as they land (G0.8/G0.10). No Windows
+endpoint collector is ever containerized (it runs natively — G0.11).
