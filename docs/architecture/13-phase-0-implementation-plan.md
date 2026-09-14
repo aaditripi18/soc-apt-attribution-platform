@@ -1,11 +1,11 @@
 # 13 — Phase 0 Implementation Plan
 
-**Status: IN PROGRESS.** G0.0–G0.9 are **IMPLEMENTED/PASSED** (checkpointed; G0.7's compose stack, G0.8's
-persistence layer, and G0.9's replay pipeline are validated statically/via mocks/fakes only — no
-Docker/Elasticsearch runtime available in the authoring environment); G0.10 is **IMPLEMENTED, AWAITING
-REVIEW** (read-model API verified end-to-end, incl. real HTTP calls, against a fake Elastic client; no live
-Elasticsearch available to verify operationally, for the same reason — not yet checkpointed/committed);
-G0.11 onward are still planning only.
+**Status: IN PROGRESS.** G0.0–G0.10 are **IMPLEMENTED/PASSED** (checkpointed; G0.7's compose stack, G0.8's
+persistence layer, G0.9's replay pipeline, and G0.10's API are validated statically/via mocks/fakes only —
+no Docker/Elasticsearch runtime available in the authoring environment); G0.11 is **IMPLEMENTED, AWAITING
+REVIEW** (the Windows/Sysmon source adapter verified against deterministic synthetic Sysmon-shaped events —
+no real Windows Event Log collection performed, by design; not yet checkpointed/committed); G0.12 onward
+are still planning only.
 Translates the accepted architecture ([ADR-0001](adr/0001-evidence-graph-core-architecture.md),
 [ADR-0002](adr/0002-attribution-scoring-and-evidence-methodology.md),
 [C0.1 §11](11-attack-knowledge-versioning.md), [C0.2 §12](12-deployment-and-endpoint-scope.md)) into small,
@@ -15,8 +15,9 @@ domain contracts), G0.4 (the SourceAdapter interface), G0.5 (the detection-match
 boundary), G0.6 (Observation → Evidence derivation + validated ATT&CK reference), G0.7 (the Compose
 platform-stack skeleton — Elasticsearch + Kibana, not yet brought up), G0.8 (the Elastic persistence layer
 — ``dataplane/``, not yet exercised against a live cluster), G0.9 (the synthetic/replay ingestion path —
-``replay/`` + one hand-authored fixture file), and G0.10 (the read-model API — ``api/``, not yet exercised
-against a live cluster), no other code exists yet: no real telemetry-source adapter, frontend, or external
+``replay/`` + one hand-authored fixture file), G0.10 (the read-model API — ``api/``, not yet exercised
+against a live cluster), and G0.11 (the Windows/Sysmon source adapter — ``sources/sysmon.py``, not yet
+exercised against a real Windows endpoint), no other code exists yet: frontend or external
 dataset acquisition.
 
 **Authoritative constraints (carried verbatim into every gate):** no hard-coded ATT&CK vocabulary (all
@@ -865,22 +866,60 @@ unchanged** (confirmed via `git diff --stat`). **No G0.5+ implementation:** `ext
 - **Env:** **requires Elastic**; no Windows.
 - **NOT yet:** **no attribution endpoints**; **no frontend files** ([ADR-0001 D11](adr/0001-evidence-graph-core-architecture.md)).
 
-### G0.11 — Initial Windows telemetry ingestion path
+### G0.11 — Initial Windows telemetry ingestion path — **IMPLEMENTED (2026-09-14, awaiting review)**
 - **Objective:** a **native Windows collector** (Sysmon + Windows Event Logs via Elastic Agent *or*
   Winlogbeat — [C0.2 §F](12-deployment-and-endpoint-scope.md)) → ECS into Elastic → the same pipeline; prove
   Windows→ES across the WSL2 boundary.
 - **Inputs:** G0.8; a Windows endpoint (the dev host, benign activity only).
-- **Outputs:** a documented collector setup; a Windows→Elastic ingest proof; a Windows/Sysmon source adapter
-  (its specifics confined to layer 3).
+- **Delivered — the code-side ingestion boundary (see scope note for what this turn deliberately excluded):**
+  - `src/attribution_platform/sources/sysmon.py` — `SysmonSourceAdapter`, the first *real* `SourceAdapter`
+    implementation: a Winlogbeat/Elastic-Agent Sysmon-module JSON event (the shape a real native collector
+    emits, per [C0.2 §D.2](12-deployment-and-endpoint-scope.md)'s layer-3 mapping) -> `Observation`. v1
+    supports exactly two `winlog.event_id` values — Process Create (1) and Network Connection (3), chosen
+    to exercise two different G0.3 entity groups (`ProcessRef`, `NetworkInfo`) and prove the mapping
+    pattern generalizes; any other event id fails closed rather than being silently dropped or guessed at.
+    Every Sysmon/`winlog.*` field name is read *only* in this module — nothing above the `SourceAdapter`
+    boundary ever sees one (C0.2 §D.1.3's hard requirement). `load_ndjson_events()` is a small file-input
+    helper (NDJSON parsing only, no rule/Evidence/ATT&CK concept — deliberately *not* a second
+    fixture/replay framework; G0.9's `replay` package is reused unmodified downstream, by feeding this
+    adapter's Observations through the same G0.5/G0.6/G0.8 functions any other source uses).
+  - `fixtures/sysmon_sample_events.ndjson` — two small, hand-authored, benign, deterministic Sysmon-module
+    events (one of each supported type).
+- **Scope decision — no real Windows collector was installed or run:** this turn's instructions were
+  explicit ("Do not require Sysmon installation or modify the Windows host from the code") and the tests
+  had to run on non-Windows CI. So **only the code-side adapter/boundary was built and proven** — the
+  original G0.11 objective's "install Sysmon + collector natively; bind ES to a WSL2-reachable address;
+  ship a small sample of benign Windows telemetry" and "prove Windows→ES across the WSL2 boundary" are
+  **explicitly out of this turn's scope**, not silently dropped: they remain a genuine operational gap
+  (see the "Verify" note below) that a human with a real Windows endpoint + the G0.7 compose stack running
+  would need to close before this gate is "operationally proven," matching the same honest split already
+  recorded for G0.7/G0.8/G0.9/G0.10 (Docker unavailable there; here, no live Windows collector wired up by
+  design, plus Docker is still unavailable for the Elastic side regardless).
+- **Verify:** 23 focused tests, all against deterministic synthetic Sysmon-shaped JSON (no Windows APIs, no
+  Docker, no live Elasticsearch, no network — runs on non-Windows CI): valid conversion for both event
+  types; provenance preservation (`SourceRef.source_type == "sysmon"`, `source_event_id` = the Windows
+  Event Log record id); fail-closed rejection of malformed events, missing required fields, invalid
+  timestamps, bad-typed fields, and an unsupported event id; the NDJSON loader (valid/missing/blank-lines/
+  invalid-JSON/non-object/empty-file cases); **reuse of the identical G0.5 extraction / G0.6 derivation /
+  G0.8 persistence pipeline** with a real round-trip proof (no parallel ingestion path); source-agnosticism
+  (the produced Observation's serialized form contains zero Sysmon/`winlog.*` keys); and a new
+  dependency-direction guard (`extraction/` never imports `sources/`, alongside G0.4's existing
+  `domain/` guard, which already covers this new module since it lives under `sources/`).
 - **Work:** install Sysmon + collector natively; bind ES to a WSL2-reachable address; ship a small sample of
   **benign** Windows telemetry.
 - **Tests/verify:** real Windows events land as ECS and flow to Observations via the *same* extractor;
   source specifics stay in the adapter (guard).
-- **Acceptance:** Windows telemetry enters through the identical normalization boundary as synthetic data.
+- **Acceptance:** Windows telemetry enters through the identical normalization boundary as synthetic data —
+  demonstrated with deterministic synthetic Sysmon-shaped events; entry of *real* Windows telemetry through
+  this same boundary is unverified pending a Windows endpoint + running Elastic stack.
+- **G0.1–G0.10 unchanged:** no prior source/test/fixture/compose/API files modified; only
+  `sources/__init__.py` (gate-status docstring), `fixtures/README.md`, and this doc touched outside the new
+  G0.11 files. **Not committed yet — awaiting review.**
 - **Depends:** G0.8.
 - **Env:** **requires Elastic + a Windows endpoint.**
 - **NOT yet:** **no live adversary emulation** (isolated VM only, [C0.2 §J](12-deployment-and-endpoint-scope.md));
-  not on the first-slice critical path; collector choice may be finalized here.
+  not on the first-slice critical path; collector choice may be finalized here; no real Windows/Elastic
+  bring-up performed this turn (see scope decision above).
 
 ### G0.12 — Automated tests & validation gates (cross-cutting)
 - **Objective:** the standing verification suite: **determinism** tests, **provenance-integrity** tests

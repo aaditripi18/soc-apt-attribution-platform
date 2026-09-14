@@ -23,3 +23,13 @@ of benign scenarios (documented in
 (`attribution_platform.replay`) loads and pushes through
 `SourceAdapter -> extract_observations -> derive_evidence -> Elastic
 persistence` — the same pipeline a real telemetry source will use.
+
+**G0.11 (Windows/Sysmon ingestion boundary)** adds
+[`sysmon_sample_events.ndjson`](sysmon_sample_events.ndjson): two small,
+hand-authored, benign, deterministic Winlogbeat/Elastic-Agent Sysmon-module
+JSON events (one Process Create, one Network Connection — newline-delimited
+JSON, the shape a real capture export naturally takes), read by
+`attribution_platform.sources.sysmon.load_ndjson_events` and converted by
+`SysmonSourceAdapter` through the identical `SourceAdapter -> Observation`
+boundary as every other source. Not a live capture; not a second
+fixture/replay framework (see that module's docstring for why).
