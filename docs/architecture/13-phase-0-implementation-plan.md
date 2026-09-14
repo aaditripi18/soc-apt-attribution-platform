@@ -1,11 +1,13 @@
 # 13 — Phase 0 Implementation Plan
 
-**Status: IN PROGRESS.** G0.0–G0.10 are **IMPLEMENTED/PASSED** (checkpointed; G0.7's compose stack, G0.8's
-persistence layer, G0.9's replay pipeline, and G0.10's API are validated statically/via mocks/fakes only —
-no Docker/Elasticsearch runtime available in the authoring environment); G0.11 is **IMPLEMENTED, AWAITING
-REVIEW** (the Windows/Sysmon source adapter verified against deterministic synthetic Sysmon-shaped events —
-no real Windows Event Log collection performed, by design; not yet checkpointed/committed); G0.12 onward
-are still planning only.
+**Status: IN PROGRESS.** G0.0–G0.11 are **IMPLEMENTED/PASSED** (checkpointed; G0.7's compose stack, G0.8's
+persistence layer, G0.9's replay pipeline, G0.10's API, and G0.11's Sysmon adapter are validated
+statically/via mocks/fakes/synthetic data only — no Docker/Elasticsearch runtime or Windows endpoint
+available in the authoring environment); **G0.12 (Phase 0 validation/acceptance) is IMPLEMENTED, AWAITING
+REVIEW** — the full logical vertical slice, provenance, determinism/idempotency, ATT&CK artifact integrity,
+dependency-direction boundaries, and the "no attribution logic in Phase 0" guard were all verified green;
+see the G0.12 entry below for the acceptance summary. **Phase 1 may begin once this is reviewed and
+checkpointed.**
 Translates the accepted architecture ([ADR-0001](adr/0001-evidence-graph-core-architecture.md),
 [ADR-0002](adr/0002-attribution-scoring-and-evidence-methodology.md),
 [C0.1 §11](11-attack-knowledge-versioning.md), [C0.2 §12](12-deployment-and-endpoint-scope.md)) into small,
@@ -16,9 +18,9 @@ boundary), G0.6 (Observation → Evidence derivation + validated ATT&CK referenc
 platform-stack skeleton — Elasticsearch + Kibana, not yet brought up), G0.8 (the Elastic persistence layer
 — ``dataplane/``, not yet exercised against a live cluster), G0.9 (the synthetic/replay ingestion path —
 ``replay/`` + one hand-authored fixture file), G0.10 (the read-model API — ``api/``, not yet exercised
-against a live cluster), and G0.11 (the Windows/Sysmon source adapter — ``sources/sysmon.py``, not yet
-exercised against a real Windows endpoint), no other code exists yet: frontend or external
-dataset acquisition.
+against a live cluster), G0.11 (the Windows/Sysmon source adapter — ``sources/sysmon.py``, not yet
+exercised against a real Windows endpoint), and G0.12 (Phase 0 validation — one new integration test file,
+no other new code), no other code exists yet: frontend or external dataset acquisition.
 
 **Authoritative constraints (carried verbatim into every gate):** no hard-coded ATT&CK vocabulary (all
 derived from the pinned v19.0 bundle); no live MITRE dependency at runtime; provenance on every derived
@@ -921,21 +923,66 @@ unchanged** (confirmed via `git diff --stat`). **No G0.5+ implementation:** `ext
   not on the first-slice critical path; collector choice may be finalized here; no real Windows/Elastic
   bring-up performed this turn (see scope decision above).
 
-### G0.12 — Automated tests & validation gates (cross-cutting)
+### G0.12 — Phase 0 validation / acceptance — **IMPLEMENTED (2026-09-14, awaiting review)**
 - **Objective:** the standing verification suite: **determinism** tests, **provenance-integrity** tests
   (every derived object resolves to raw refs), the **no-hard-coded-ATT&CK** guard, the
   **source-agnosticism** guard (no source-native fields above the boundary; adapter dependency direction),
   schema validation, and the **headless replay** test for the first slice.
 - **Inputs:** all gates (each contributes its tests).
-- **Outputs:** a CI pipeline running the Elastic-free suite always, and Elastic-dependent tests via a
-  service container where feasible.
-- **Work:** assemble guards + determinism harness; wire CI.
+- **Delivered:** `tests/test_phase0_vertical_slice.py` — the one genuine gap found: no prior test drove data
+  through the *entire* declared First Vertical Slice in one place. 3 new tests reuse G0.9's checked-in
+  fixture/`replay_fixture`, G0.8's `FakeElasticClient`, and G0.10's `create_server`/real HTTP calls
+  unmodified — **no other new or changed production code was needed**. No architectural defect was found.
+- **Acceptance checks performed and result (all PASS):**
+  1. **Full vertical slice** (synthetic input → `SyntheticSourceAdapter` → `Observation` → `derive_evidence`
+     → validated `AttackRef` → `persist_observation`/`persist_evidence` → real HTTP `GET` on the G0.10 API)
+     — verified end-to-end in the new test, incl. the not-found path.
+  2. **Provenance survives the pipeline** — `source_observation_ids`, the replay dataset's content-hash in
+     `raw_reference.dataset_ref`, and the ATT&CK reference all present, correct, and unchanged in the API
+     response.
+  3. **Deterministic IDs/serialization + idempotent persistence** — replaying the fixture twice into one
+     client leaves the same two documents (not four); two fully independent client/server pairs replaying
+     the same fixture produce byte-identical canonical JSON.
+  4. **Pinned ATT&CK v19.0 artifact + integrity metadata unchanged** — `git status --short data/attack/
+     .gitattributes` is empty; `git log -- data/attack/` shows exactly one commit (the original G0.1
+     checkpoint); `tests/test_attack_artifact_integrity.py` — 21/21 passed.
+  5. **Domain dependency direction / source-API-dataplane boundaries** — a full cross-package import scan
+     (every `from attribution_platform.*` import in every `src/` package) confirms the actual graph exactly
+     matches the intended layering: `domain` imports nothing project-internal; `attack_knowledge`/`sources`/
+     `dataplane` import only `domain`; `extraction` imports `domain` + `attack_knowledge` (the documented
+     G0.6 exception, for ATT&CK-reference validation); `api` imports only `dataplane` + `domain` (its
+     `__main__.py` manual entrypoint is the sole, expected place a concrete client is named); `replay`
+     (orchestration) imports everything below it. The existing scattered AST guard tests (domain↛sources,
+     domain↛dataplane, domain↛api, extraction↛sources, api↛concrete-client) are consistent with this and
+     all still pass.
+  6. **No hard-coded APT actors / attribution scoring / correlation / attack-chain / candidate-generation
+     logic** — targeted search across `src/` for actor names (`APT\d+`, named groups) and for
+     scoring/correlation/candidate/attack-chain classes or functions: **zero matches**. The only literal
+     ATT&CK technique ids (`T1059`/`T1059.001`) anywhere in the repository are in `tests/` (contract-shape
+     examples, or resolved dynamically against the real KB) and `fixtures/` (hand-authored demo data) —
+     never in `src/` pipeline logic.
+  7. **Fixture/replay path does not bypass the normal pipeline** — `replay/pipeline.py` calls
+     `extraction.extract_observations`, `extraction.derive_evidence`, `dataplane.persist_observation`, and
+     `dataplane.persist_evidence` directly (confirmed by inspection); it defines no parallel
+     normalization/derivation/persistence logic of its own.
+  8. **Full suite / Ruff / mypy strict** — `pytest`: **216 passed** (213 prior + 3 new). `ruff format --check`
+     + `ruff check`: clean. `mypy` (strict): clean, **54 source files**. No new dependencies were introduced.
+- **Blocking issues found:** **none.** No defect required fixing at this gate.
+- **Env / operational gaps honestly unresolved (unchanged from G0.7–G0.11, not claimed as verified here):**
+  no Docker/Elasticsearch runtime is available in the authoring environment, so nothing in this platform has
+  ever been run against a real Elasticsearch cluster; no real Windows/Sysmon event collection has been
+  performed. Both remain open operational work for whoever next has that environment, before Phase 1 relies
+  on either.
+- **G0.1–G0.11 unchanged:** `git status --short` shows exactly one new file
+  (`tests/test_phase0_vertical_slice.py`) before this doc edit — no existing source, test, fixture, compose,
+  or artifact file was modified. **Not committed yet — awaiting review.**
 - **Tests/verify:** the suite fails loudly on a hard-coded ATT&CK id, a source-native field above the
   boundary, a broken provenance chain, or a non-deterministic result.
-- **Acceptance:** all constraint-guards are enforced automatically.
+- **Acceptance:** all constraint-guards are enforced automatically — confirmed.
 - **Depends:** threads through G0.0–G0.11.
-- **Env:** Elastic-free parts need nothing; integration tests require Elastic.
-- **NOT yet:** no attribution-correctness metrics (needs the corpus + calibration — Phase 3).
+- **Env:** Elastic-free parts need nothing; integration tests require Elastic (unverified live — see above).
+- **NOT yet:** no attribution-correctness metrics (needs the corpus + calibration — Phase 3); no live
+  Elastic/Windows integration test ran (environment limitation, not a design gap).
 
 ---
 
@@ -1044,6 +1091,14 @@ reproducible local deployment works (G0.7); (5) the **first vertical slice runs 
 through Elastic and the read-model API** (G0.8/G0.9/G0.10); (6) the full guard/determinism suite is green in
 CI (G0.12). G0.11 (Windows ingest) may trail the slice but should complete before Phase 1 relies on live
 Windows telemetry.
+
+**Status (G0.12 validation, 2026-09-14): criteria (1)–(6) are all MET against replay/synthetic data + a fake
+Elastic client** — see the G0.12 entry above for the checks performed. Criterion (5)'s "through Elastic"
+and (4)'s deployment are verified logically/structurally, not against a **live** Elasticsearch cluster —
+Docker/Elasticsearch has never been available in the authoring environment (G0.7 onward), and G0.11's
+Sysmon adapter has never seen a real Windows endpoint. Those two remain genuine, explicitly-tracked
+operational gaps for a human with that environment to close; they do not block Phase 1 logic/design work
+that does not itself require a live cluster or live Windows telemetry.
 
 ---
 
