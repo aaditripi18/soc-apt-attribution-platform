@@ -1,17 +1,20 @@
 # 13 — Phase 0 Implementation Plan
 
-**Status: IN PROGRESS.** G0.0–G0.6 are **IMPLEMENTED/PASSED** (checkpointed); G0.7 is **IMPLEMENTED,
-AWAITING REVIEW** (validated statically only — no Docker runtime available in the authoring environment;
-not yet checkpointed/committed); G0.8 onward are still planning only.
+**Status: IN PROGRESS.** G0.0–G0.7 are **IMPLEMENTED/PASSED** (checkpointed; G0.7's compose stack was
+validated statically only — no Docker runtime available in the authoring environment); G0.8 is
+**IMPLEMENTED, AWAITING REVIEW** (persistence logic verified via mocks/fakes; no live Elasticsearch
+available to verify operationally, for the same reason — not yet checkpointed/committed); G0.9 onward are
+still planning only.
 Translates the accepted architecture ([ADR-0001](adr/0001-evidence-graph-core-architecture.md),
 [ADR-0002](adr/0002-attribution-scoring-and-evidence-methodology.md),
 [C0.1 §11](11-attack-knowledge-versioning.md), [C0.2 §12](12-deployment-and-endpoint-scope.md)) into small,
 independently verifiable gates. Beyond G0.0 (repo scaffolding/CI), G0.1 (the pinned ATT&CK artifact + its
 offline integrity verifier), G0.2 (the deterministic runtime knowledge loader), G0.3 (the source-agnostic
 domain contracts), G0.4 (the SourceAdapter interface), G0.5 (the detection-match → Observation extraction
-boundary), G0.6 (Observation → Evidence derivation + validated ATT&CK reference), and G0.7 (the Compose
-platform-stack skeleton — Elasticsearch + Kibana, not yet brought up), no other code exists yet: no Elastic
-client/indexes, API, frontend, or dataset acquisition.
+boundary), G0.6 (Observation → Evidence derivation + validated ATT&CK reference), G0.7 (the Compose
+platform-stack skeleton — Elasticsearch + Kibana, not yet brought up), and G0.8 (the Elastic persistence
+layer — ``dataplane/``, not yet exercised against a live cluster), no other code exists yet: no replay
+ingestion, API, frontend, or dataset acquisition.
 
 **Authoritative constraints (carried verbatim into every gate):** no hard-coded ATT&CK vocabulary (all
 derived from the pinned v19.0 bundle); no live MITRE dependency at runtime; provenance on every derived
@@ -665,19 +668,79 @@ unchanged** (confirmed via `git diff --stat`). **No G0.5+ implementation:** `ext
 - **NOT yet:** no multi-node/HA; no frontend container (frontend not built); no paid tier; no app-service
   containers (added in G0.8/G0.10); no real bring-up smoke test (Docker unavailable in this environment).
 
-### G0.8 — Initial Elastic data-plane integration
+### G0.8 — Initial Elastic data-plane integration — **IMPLEMENTED (2026-09-14, awaiting review)**
 - **Objective:** a thin Elastic client against the running cluster: `_bulk` write + query; deterministic
   index mappings; persist normalized events / observations / evidence / technique-refs.
 - **Inputs:** G0.6 domain objects; **G0.7 (running ES + Kibana)**.
-- **Outputs:** ES client module; index mapping definitions; round-trip persistence.
-- **Work:** connect, create mappings idempotently, write/read domain objects; record Elastic `_index/_id` as
-  provenance ([03 stage 1](03-system-data-flow.md)).
+- **Delivered (`src/attribution_platform/dataplane/`):**
+  - `client.py` — the `ElasticClient` structural `Protocol` (`ensure_index`/`index_document`/
+    `get_document`): the one abstraction the Attribution Engine and every future caller depend on, never a
+    concrete client (mirrors G0.4's `SourceAdapter` Protocol pattern).
+  - `http_client.py` — `ElasticsearchHttpClient`, a thin, **stdlib-only** (`urllib`/`ssl`/`json`) REST
+    client. No new dependency: the official `elasticsearch` package was considered and deliberately not
+    added (see the scope decision below).
+  - `fake_client.py` — `FakeElasticClient`, an in-memory Protocol-conforming double for tests — no live
+    Elasticsearch, Docker, or network required.
+  - `mappings.py` — pinned, **schema-version-derived** index names (`attribution-platform-observations-v1`,
+    `attribution-platform-evidence-v1` — derived from G0.3's own `OBSERVATION_SCHEMA_VERSION`/
+    `EVIDENCE_SCHEMA_VERSION`, not a separately hand-maintained literal) and explicit field mappings for
+    every field this gate must preserve with correct types (ids as `keyword`, timestamps as `date`, the
+    `attack_ref`/`provenance` objects fully typed); the larger ECS-aligned entity groups
+    (host/user/process/network/file) are mapped as dynamic `object`s — hand-curating every leaf type there
+    is deferred until real query patterns exist to drive it.
+  - `persistence.py` — `persist_observation`/`load_observation`/`persist_evidence`/`load_evidence`. Writes
+    use the domain object's own id as the Elasticsearch document id (idempotent upsert by construction —
+    no separate dedup mechanism). Documents are exactly
+    `attribution_platform.domain.to_serializable(obj)` — **no second schema**. `load_*` reconstructs a
+    full domain object from the stored document (the explicit, typed inverse of `to_serializable` for the
+    Observation/Evidence shapes — new logic scoped to this layer, since `domain` stays Elastic-agnostic and
+    no prior gate needed a deserializer) and fails closed
+    (`ElasticIntegrationError`) on a non-domain-object input, a malformed stored document, or a stored
+    `schema_version` this gate does not recognize. `PersistResult(index, document_id)` is returned from
+    every write as the stage-1 provenance record ([03 stage 1](03-system-data-flow.md)) a later gate's
+    provenance manifest will consume.
+- **Scope decisions (per CLAUDE.md §12):**
+  1. **No `_bulk` API usage in this gate**, despite the objective text above mentioning it. Bulk-loading a
+     fixture/dataset into Elastic is explicitly G0.9's job ("hand-authored synthetic fixtures →`_bulk` into
+     Elastic" — G0.9's own objective, and this turn's instructions explicitly forbid implementing replay
+     ingestion now). G0.8 persists and loads **one domain object at a time** via `_doc/<id>` PUT/GET, which
+     is what "a thin Elastic client... persist normalized events/observations/evidence" requires without
+     reaching into G0.9's scope; `_bulk` ingestion is added when G0.9 needs it.
+  2. **No general query/search surface** — only id-addressed `get_document`. Search/query belongs to
+     G0.10's read-model API (or a later attribution-engine need), not to this persistence boundary; adding
+     an unused query capability now would be speculative.
+  3. **The official `elasticsearch` Python client was not added.** Considered and rejected: a hand-rolled,
+     stdlib-only `urllib` client is sufficient for the three REST calls a "thin client" needs, avoids
+     pinning/vendoring a second client whose major version must track the server's, and continues this
+     project's established precedent (G0.1/G0.2 read raw ATT&CK STIX JSON without `mitreattack-python`
+     despite pyproject's aspirational comment anticipating it). Documented in `http_client.py`'s module
+     docstring as a revisitable decision, not a permanent constraint.
+- **Verify — environment limitation:** **no Docker/Elasticsearch runtime is available in the authoring
+  environment** (confirmed unchanged from the G0.7 entry above). A real bring-up + persistence smoke test
+  against the G0.7 compose stack was **not performed** and could not be. Per the gate instructions, this was
+  verified instead with **mocks/fakes**: the full persistence contract (write→read round trip for every
+  Observation/Evidence field incl. entity groups, ATT&CK reference, and derivation provenance; idempotent
+  writes; pinned/explicit mappings; fail-closed rejection of bad input and of an unrecognized
+  `schema_version`; the `ElasticClient` abstraction accepting any conforming implementation) is exercised
+  against `FakeElasticClient`, and `ElasticsearchHttpClient`'s own request construction and error handling
+  (Basic-auth header, JSON body, 404→`None`, idempotent "already exists" on index creation, wrapped
+  transport/auth failures) is exercised against a patched `urllib.request.urlopen` — 21 tests, 0 requiring
+  a live cluster. **Real persistence against the G0.7 stack remains outstanding** and should be run before
+  this gate is treated as operationally proven, not just structurally/logically sound.
+- **Acceptance:** the persistence layer is structurally sound, deterministic, idempotent, and fail-closed,
+  verified by mocks/fakes — **operational verification against a live Elasticsearch cluster is unverified
+  pending a Docker-capable environment** (same limitation as G0.7; G0.8 depends on G0.7's stack actually
+  running).
+- **G0.1–G0.7 unchanged:** no prior source/test/artifact/compose files modified; only `dataplane/__init__.py`
+  (was G0.0 scaffolding-only) and this doc touched outside the new G0.8 files. **Not committed yet —
+  awaiting review.**
 - **Tests/verify:** write→read round-trip; mappings created reproducibly; provenance ids captured; runs
-  against the disposable single-node instance from G0.7.
-- **Acceptance:** domain objects persist to and load from Elastic deterministically on the Basic tier.
+  against the disposable single-node instance from G0.7 **when available** (see limitation above).
 - **Depends:** G0.6, G0.7.
 - **Env:** **requires Elastic**; no Windows.
-- **NOT yet:** no paid features; no detection-rule content (Q4/Phase 1); no attribution indexes.
+- **NOT yet:** no paid features; no detection-rule content (Q4/Phase 1); no attribution indexes; no `_bulk`
+  ingestion (G0.9); no query/search surface (G0.10); no real bring-up smoke test (Docker unavailable in
+  this environment).
 
 ### G0.9 — Synthetic / replay ingestion path
 - **Objective:** hand-authored synthetic fixtures → **`_bulk` into Elastic** → the identical downstream
