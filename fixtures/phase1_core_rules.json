@@ -31,6 +31,90 @@
       "technique_mappings": [],
       "evidence_type": "contextual",
       "rule_source": "platform-rules"
+    },
+    {
+      "rule_id": "platform-procdump-lsass-dump",
+      "rule_version": "1.0",
+      "conditions": [
+        { "field_path": "process.name", "operator": "equals", "value": "procdump.exe" },
+        { "field_path": "process.command_line", "operator": "contains", "value": "lsass" }
+      ],
+      "technique_mappings": [
+        {
+          "stix_id": "attack-pattern--65f2d882-3f41-4d48-8a06-29af77ec9f90",
+          "object_type": "attack-pattern",
+          "attack_kb_version": "enterprise-attack-19.0",
+          "external_id": "T1003.001",
+          "mapping_basis": "a process-dump utility invoked with the LSASS process as its named target is the classic single-event signature of LSASS memory credential dumping",
+          "mapping_source": "platform-rules"
+        }
+      ],
+      "evidence_type": "behavioral",
+      "rule_source": "platform-rules"
+    },
+    {
+      "rule_id": "platform-rundll32-javascript-proxy",
+      "rule_version": "1.0",
+      "conditions": [
+        { "field_path": "process.name", "operator": "equals", "value": "rundll32.exe" },
+        { "field_path": "process.command_line", "operator": "contains", "value": "javascript:" }
+      ],
+      "technique_mappings": [
+        {
+          "stix_id": "attack-pattern--045d0922-2310-4e60-b5e4-3302302cb3c5",
+          "object_type": "attack-pattern",
+          "attack_kb_version": "enterprise-attack-19.0",
+          "external_id": "T1218.011",
+          "mapping_basis": "rundll32.exe invoked with an embedded javascript: URI is a well-documented signed-binary proxy execution pattern with no ordinary legitimate use",
+          "mapping_source": "platform-rules"
+        }
+      ],
+      "evidence_type": "behavioral",
+      "rule_source": "platform-rules"
+    },
+    {
+      "rule_id": "platform-office-spawns-cmd-shell",
+      "rule_version": "1.0",
+      "conditions": [
+        {
+          "field_path": "process.parent_name",
+          "operator": "in",
+          "value": ["WINWORD.EXE", "EXCEL.EXE"]
+        },
+        { "field_path": "process.name", "operator": "equals", "value": "cmd.exe" }
+      ],
+      "technique_mappings": [
+        {
+          "stix_id": "attack-pattern--d1fcf083-a721-4223-aedf-bf8960798d62",
+          "object_type": "attack-pattern",
+          "attack_kb_version": "enterprise-attack-19.0",
+          "external_id": "T1059.003",
+          "mapping_basis": "a Microsoft Office application directly parenting a command-shell process is the canonical single-event indicator of macro/document-triggered command execution",
+          "mapping_source": "platform-rules"
+        }
+      ],
+      "evidence_type": "behavioral",
+      "rule_source": "platform-rules"
+    },
+    {
+      "rule_id": "platform-certutil-ingress-transfer",
+      "rule_version": "1.0",
+      "conditions": [
+        { "field_path": "process.name", "operator": "equals", "value": "certutil.exe" },
+        { "field_path": "process.command_line", "operator": "contains", "value": "urlcache" }
+      ],
+      "technique_mappings": [
+        {
+          "stix_id": "attack-pattern--e6919abc-99f9-4c6c-95a5-14761e7b2add",
+          "object_type": "attack-pattern",
+          "attack_kb_version": "enterprise-attack-19.0",
+          "external_id": "T1105",
+          "mapping_basis": "certutil.exe invoked with its URL-cache flag is a well-documented living-off-the-land technique for fetching a remote file via a trusted signed binary",
+          "mapping_source": "platform-rules"
+        }
+      ],
+      "evidence_type": "behavioral",
+      "rule_source": "platform-rules"
     }
   ]
 }

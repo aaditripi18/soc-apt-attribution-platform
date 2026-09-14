@@ -98,6 +98,14 @@ def test_the_checked_in_fixture_loads_and_is_well_formed() -> None:
         "encoded-powershell-matches-platform-rule",
         "interactive-logon-matches-contextual-rule",
         "benign-notepad-matches-no-rule",
+        "procdump-lsass-target-matches-credential-rule",
+        "procdump-non-lsass-target-does-not-match",
+        "rundll32-javascript-proxy-matches-rule",
+        "rundll32-benign-control-panel-invocation-does-not-match",
+        "cmd-spawned-by-word-matches-office-shell-rule",
+        "cmd-spawned-by-explorer-does-not-match-office-shell-rule",
+        "certutil-urlcache-download-matches-ingress-transfer-rule",
+        "certutil-hashfile-does-not-match-ingress-transfer-rule",
     ]
 
 
@@ -360,10 +368,11 @@ def test_replaying_the_same_fixture_twice_into_one_client_is_idempotent(
         fixture, client=client, engine=engine, knowledge=knowledge
     )  # replay again, same client
 
-    # 3 scenarios -> 3 Observations persisted regardless of replay count.
-    assert client.document_count(OBSERVATIONS_INDEX) == 3
-    # 2 of the 3 scenarios produce exactly one Evidence each.
-    assert client.document_count(EVIDENCE_INDEX) == 2
+    # 11 scenarios -> 11 Observations persisted regardless of replay count.
+    assert client.document_count(OBSERVATIONS_INDEX) == 11
+    # 6 of the 11 scenarios match a rule and produce exactly one Evidence
+    # each (the original 2 G1.0 matches + G1.3's 4 new matching scenarios).
+    assert client.document_count(EVIDENCE_INDEX) == 6
 
 
 def test_replaying_twice_produces_identical_detection_and_evidence_ids(
@@ -471,3 +480,154 @@ def test_detection_pipeline_actually_uses_the_engine_and_evidence_fanout() -> No
     source = DETECTION_PIPELINE_FILE.read_text(encoding="utf-8")
     assert "engine.evaluate(" in source
     assert "derive_evidence_from_detection(" in source
+
+
+# ===========================================================================
+# 12. G1.3: four new rules, replayed through the real engine end to end
+# ===========================================================================
+
+_G13_MATCHING_SCENARIOS = (
+    ("procdump-lsass-target-matches-credential-rule", "platform-procdump-lsass-dump", "T1003.001"),
+    ("rundll32-javascript-proxy-matches-rule", "platform-rundll32-javascript-proxy", "T1218.011"),
+    (
+        "cmd-spawned-by-word-matches-office-shell-rule",
+        "platform-office-spawns-cmd-shell",
+        "T1059.003",
+    ),
+    (
+        "certutil-urlcache-download-matches-ingress-transfer-rule",
+        "platform-certutil-ingress-transfer",
+        "T1105",
+    ),
+)
+_G13_NON_MATCHING_SCENARIOS = (
+    "procdump-non-lsass-target-does-not-match",
+    "rundll32-benign-control-panel-invocation-does-not-match",
+    "cmd-spawned-by-explorer-does-not-match-office-shell-rule",
+    "certutil-hashfile-does-not-match-ingress-transfer-rule",
+)
+
+
+@pytest.mark.parametrize(("scenario_id", "rule_id", "external_id"), _G13_MATCHING_SCENARIOS)
+def test_g13_matching_scenario_produces_detection_and_evidence_via_real_engine(
+    engine: DetectionEngine,
+    knowledge: AttackKnowledge,
+    scenario_id: str,
+    rule_id: str,
+    external_id: str,
+) -> None:
+    fixture = load_detection_replay_fixture_file(FIXTURE_PATH)
+    results = replay_fixture_through_detection_engine(
+        fixture, client=FakeElasticClient(), engine=engine, knowledge=knowledge
+    )
+    result = next(r for r in results if r.scenario_id == scenario_id)
+
+    assert len(result.detections) == 1
+    detection = result.detections[0]
+    assert detection.rule_ref.rule_id == rule_id
+
+    assert len(result.evidences) == 1
+    evidence = result.evidences[0]
+    assert evidence.attack_ref is not None
+    assert evidence.attack_ref.external_id == external_id
+    assert evidence.attack_ref.attack_kb_version == knowledge.attack_kb_version
+    assert evidence.evidence_type == EvidenceType.BEHAVIORAL
+
+
+@pytest.mark.parametrize("scenario_id", _G13_NON_MATCHING_SCENARIOS)
+def test_g13_non_matching_scenario_produces_no_detection_or_evidence(
+    engine: DetectionEngine, knowledge: AttackKnowledge, scenario_id: str
+) -> None:
+    fixture = load_detection_replay_fixture_file(FIXTURE_PATH)
+    results = replay_fixture_through_detection_engine(
+        fixture, client=FakeElasticClient(), engine=engine, knowledge=knowledge
+    )
+    result = next(r for r in results if r.scenario_id == scenario_id)
+    assert result.detections == ()
+    assert result.evidences == ()
+    # The relevant Observation content is still present -- only detection is
+    # absent, proving this is a genuine engine miss, not a fixture omission.
+    assert result.observation.process is not None
+
+
+@pytest.mark.parametrize(("scenario_id", "rule_id", "external_id"), _G13_MATCHING_SCENARIOS)
+def test_g13_provenance_reaches_raw_fixture_reference_for_each_new_rule(
+    engine: DetectionEngine,
+    knowledge: AttackKnowledge,
+    scenario_id: str,
+    rule_id: str,
+    external_id: str,
+) -> None:
+    fixture = load_detection_replay_fixture_file(FIXTURE_PATH)
+    results = replay_fixture_through_detection_engine(
+        fixture, client=FakeElasticClient(), engine=engine, knowledge=knowledge
+    )
+    result = next(r for r in results if r.scenario_id == scenario_id)
+
+    assert result.observation.raw_reference.dataset_ref == fixture.dataset_ref
+    assert result.observation.raw_reference.source_type == "synthetic"
+
+    evidence = result.evidences[0]
+    assert evidence.provenance.source_observation_ids == (result.observation.observation_id,)
+
+
+@pytest.mark.parametrize(("scenario_id", "rule_id", "external_id"), _G13_MATCHING_SCENARIOS)
+def test_g13_rule_pack_content_hash_preserved_for_each_new_rule(
+    engine: DetectionEngine,
+    knowledge: AttackKnowledge,
+    rule_pack: RulePack,
+    scenario_id: str,
+    rule_id: str,
+    external_id: str,
+) -> None:
+    fixture = load_detection_replay_fixture_file(FIXTURE_PATH)
+    results = replay_fixture_through_detection_engine(
+        fixture, client=FakeElasticClient(), engine=engine, knowledge=knowledge
+    )
+    result = next(r for r in results if r.scenario_id == scenario_id)
+
+    assert result.detections[0].rule_pack_content_hash == rule_pack.content_hash
+    assert result.evidences[0].provenance.method_content_hash == rule_pack.content_hash
+
+
+def test_g13_existing_two_scenarios_still_behave_identically_through_replay(
+    engine: DetectionEngine, knowledge: AttackKnowledge
+) -> None:
+    """The original two G1.0 replay scenarios (indices 0 and 1) must still
+    produce the same rule/technique outcome after the four new rules and
+    eight new scenarios were appended after them."""
+    fixture = load_detection_replay_fixture_file(FIXTURE_PATH)
+    results = replay_fixture_through_detection_engine(
+        fixture, client=FakeElasticClient(), engine=engine, knowledge=knowledge
+    )
+    assert results[0].scenario_id == "encoded-powershell-matches-platform-rule"
+    assert results[0].detections[0].rule_ref.rule_id == "platform-encoded-powershell"
+    powershell_attack_ref = results[0].evidences[0].attack_ref
+    assert powershell_attack_ref is not None
+    assert powershell_attack_ref.external_id == "T1059.001"
+
+    assert results[1].scenario_id == "interactive-logon-matches-contextual-rule"
+    assert results[1].detections[0].technique_mappings == ()
+    assert results[1].evidences[0].attack_ref is None
+
+
+def test_g13_new_rule_with_tampered_mapping_cannot_silently_pass_through_replay(
+    tmp_path: Path, knowledge: AttackKnowledge
+) -> None:
+    """End-to-end proof (replay path, not just load_rule_pack in isolation):
+    a tampered ATT&CK mapping on one of the new rules must prevent the whole
+    pack from ever being usable for replay -- it fails at load time, before
+    any Observation is evaluated."""
+    from attribution_platform.detection import DetectionError, load_rule_pack
+
+    data = json.loads(RULE_PACK_PATH.read_text(encoding="utf-8"))
+    for rule in data["rules"]:
+        if rule["rule_id"] == "platform-certutil-ingress-transfer":
+            rule["technique_mappings"][0]["stix_id"] = (
+                "attack-pattern--00000000-0000-0000-0000-000000000000"
+            )
+    tampered_path = tmp_path / "tampered_pack.json"
+    tampered_path.write_text(json.dumps(data), encoding="utf-8")
+
+    with pytest.raises(DetectionError, match="does not resolve"):
+        load_rule_pack(tampered_path, knowledge=knowledge)
