@@ -1,10 +1,11 @@
 # 13 — Phase 0 Implementation Plan
 
-**Status: IN PROGRESS.** G0.0–G0.8 are **IMPLEMENTED/PASSED** (checkpointed; G0.7's compose stack and
-G0.8's persistence layer are validated statically/via mocks only — no Docker/Elasticsearch runtime
-available in the authoring environment); G0.9 is **IMPLEMENTED, AWAITING REVIEW** (replay pipeline verified
-end-to-end against a fake Elastic client; no live Elasticsearch available to verify operationally, for the
-same reason — not yet checkpointed/committed); G0.10 onward are still planning only.
+**Status: IN PROGRESS.** G0.0–G0.9 are **IMPLEMENTED/PASSED** (checkpointed; G0.7's compose stack, G0.8's
+persistence layer, and G0.9's replay pipeline are validated statically/via mocks/fakes only — no
+Docker/Elasticsearch runtime available in the authoring environment); G0.10 is **IMPLEMENTED, AWAITING
+REVIEW** (read-model API verified end-to-end, incl. real HTTP calls, against a fake Elastic client; no live
+Elasticsearch available to verify operationally, for the same reason — not yet checkpointed/committed);
+G0.11 onward are still planning only.
 Translates the accepted architecture ([ADR-0001](adr/0001-evidence-graph-core-architecture.md),
 [ADR-0002](adr/0002-attribution-scoring-and-evidence-methodology.md),
 [C0.1 §11](11-attack-knowledge-versioning.md), [C0.2 §12](12-deployment-and-endpoint-scope.md)) into small,
@@ -13,9 +14,10 @@ offline integrity verifier), G0.2 (the deterministic runtime knowledge loader), 
 domain contracts), G0.4 (the SourceAdapter interface), G0.5 (the detection-match → Observation extraction
 boundary), G0.6 (Observation → Evidence derivation + validated ATT&CK reference), G0.7 (the Compose
 platform-stack skeleton — Elasticsearch + Kibana, not yet brought up), G0.8 (the Elastic persistence layer
-— ``dataplane/``, not yet exercised against a live cluster), and G0.9 (the synthetic/replay ingestion path
-— ``replay/`` + one hand-authored fixture file), no other code exists yet: no real telemetry-source
-adapter, API, frontend, or external dataset acquisition.
+— ``dataplane/``, not yet exercised against a live cluster), G0.9 (the synthetic/replay ingestion path —
+``replay/`` + one hand-authored fixture file), and G0.10 (the read-model API — ``api/``, not yet exercised
+against a live cluster), no other code exists yet: no real telemetry-source adapter, frontend, or external
+dataset acquisition.
 
 **Authoritative constraints (carried verbatim into every gate):** no hard-coded ATT&CK vocabulary (all
 derived from the pinned v19.0 bundle); no live MITRE dependency at runtime; provenance on every derived
@@ -809,16 +811,56 @@ unchanged** (confirmed via `git diff --stat`). **No G0.5+ implementation:** `ext
 - **NOT yet:** **no external dataset acquisition** (Security-Datasets/EVTX/CALDERA deferred — CL-3); no
   `_bulk` ingestion; no real bring-up smoke test (Docker/Elasticsearch unavailable in this environment).
 
-### G0.10 — API boundary (read-model)
+### G0.10 — API boundary (read-model) — **IMPLEMENTED (2026-09-14, awaiting review)**
 - **Objective:** a minimal **read-model API** exposing stored observations / evidence / technique-refs **with
   provenance** — the `L3 → L4` contract from [04](04-component-boundaries.md).
 - **Inputs:** G0.8 persistence.
-- **Outputs:** read endpoints returning JSON read models; provenance ids preserved so a consumer can drill to
-  raw events.
-- **Work:** thin API serving stored objects; **no computation in the API**.
+- **Delivered (`src/attribution_platform/api/`):**
+  - `errors.py` — `ApiError` hierarchy, each fixing one HTTP status:
+    `InvalidIdentifierError` (400), `NotFoundError` (404), `BackendError` (502 — covers both a malformed
+    stored document and a transport/auth/connectivity failure, since both surface from the dataplane as the
+    same `ElasticIntegrationError`).
+  - `read_model.py` — `get_observation`/`get_evidence`: the entire L3→L4 logic, depending only on the G0.8
+    `ElasticClient` abstraction (never a concrete client). Returns the stored **domain object itself** —
+    serialization is the HTTP layer's job, so no second read-model schema exists.
+  - `server.py` — a minimal, **stdlib-only** (`http.server`) HTTP surface: exactly
+    `GET /observations/<observation_id>` and `GET /evidence/<evidence_id>`, nothing else. A success body is
+    `to_canonical_json(domain_object)` (G0.3's existing deterministic serializer — provenance, timestamps,
+    `attack_ref`, `schema_version` all preserved verbatim). No mutation endpoints: `BaseHTTPRequestHandler`
+    returns 501 on its own for any method with no `do_<METHOD>` defined, so none needed to be written.
+  - `__main__.py` — an optional, explicitly-scoped manual entrypoint (`python -m attribution_platform.api`)
+    to run the API against a real Elasticsearch once one is available; not exercised by the automated suite.
+- **Scope decisions (per CLAUDE.md §12):**
+  1. **`http.server`, not FastAPI**, despite [doc 04](04-component-boundaries.md) originally naming FastAPI
+     for this layer. This turn's instructions were explicit ("avoid introducing a web framework unless
+     strictly necessary", "no new dependency unless genuinely required") and, for exactly two ID-addressed
+     GET routes with no query parameters or request body, the standard library is sufficient — continuing
+     the same precedent as G0.1/G0.2 (no `mitreattack-python`) and G0.8 (no `elasticsearch` client).
+     Revisit once this layer needs real routing/validation/OpenAPI ergonomics (search/filter/query is
+     explicitly deferred); documented in `server.py`'s module docstring as a revisitable choice, not
+     permanent.
+  2. **Errors returned as one of four fixed HTTP statuses**, collapsing "malformed stored data" and
+     "backend/transport failure" into the same 502: both already surface from G0.8 as the identical
+     `ElasticIntegrationError`, and guessing which occurred from a message string would be fragile; the API
+     layer treats both honestly as "the dataplane could not fulfill this read."
+- **Verify:** 20 focused tests — `read_model` functions against `FakeElasticClient` (success; invalid
+  identifier; not found; backend error via both a malformed stored document and a simulated transport
+  failure); deterministic response-body content (every required field preserved); the full HTTP surface
+  end-to-end via a real `ThreadingHTTPServer` on an OS-assigned port, driven with real `urllib.request`
+  calls (still no live Elasticsearch — only `FakeElasticClient` underneath); mutation methods correctly
+  rejected (501); two dependency-direction guards (`domain` never imports `api`; `api` never imports a
+  concrete Elastic client module, `__main__.py` excepted since that is its whole job). **No live
+  Elasticsearch runtime is available in the authoring environment** (unchanged from G0.7/G0.8/G0.9) — the
+  API has not been run against a real cluster; that remains outstanding.
+- **Work:** thin API serving stored objects; **no computation in the API** — confirmed: `server.py` and
+  `read_model.py` together contain routing, validation, and error-mapping only.
 - **Tests/verify:** endpoint returns a persisted evidence→technique record with full provenance; contract
   is stable and documented.
-- **Acceptance:** the future frontend's data contract exists and is serveable — **rendering only, no logic**.
+- **Acceptance:** the future frontend's data contract exists and is serveable — **rendering only, no logic**
+  — demonstrated against `FakeElasticClient`; serving from a real cluster is unverified pending a
+  Docker-capable environment.
+- **G0.1–G0.9 unchanged:** no prior source/test/fixture/compose files modified; only this doc touched
+  outside the new `api/` files and `tests/test_api.py`. **Not committed yet — awaiting review.**
 - **Depends:** G0.8.
 - **Env:** **requires Elastic**; no Windows.
 - **NOT yet:** **no attribution endpoints**; **no frontend files** ([ADR-0001 D11](adr/0001-evidence-graph-core-architecture.md)).
