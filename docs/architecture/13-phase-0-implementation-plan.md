@@ -1,13 +1,13 @@
 # 13 — Phase 0 Implementation Plan
 
-**Status: IN PROGRESS.** G0.0–G0.11 are **IMPLEMENTED/PASSED** (checkpointed; G0.7's compose stack, G0.8's
-persistence layer, G0.9's replay pipeline, G0.10's API, and G0.11's Sysmon adapter are validated
-statically/via mocks/fakes/synthetic data only — no Docker/Elasticsearch runtime or Windows endpoint
-available in the authoring environment); **G0.12 (Phase 0 validation/acceptance) is IMPLEMENTED, AWAITING
-REVIEW** — the full logical vertical slice, provenance, determinism/idempotency, ATT&CK artifact integrity,
-dependency-direction boundaries, and the "no attribution logic in Phase 0" guard were all verified green;
-see the G0.12 entry below for the acceptance summary. **Phase 1 may begin once this is reviewed and
-checkpointed.**
+**Status: IN PROGRESS.** G0.0–G0.12 are **IMPLEMENTED/PASSED** (all checkpointed). G0.7's compose stack,
+G0.8's persistence layer, G0.9's replay pipeline, and G0.10's API were implemented and initially verified
+statically/via mocks/fakes only, then **operationally confirmed live** against a real Docker-run
+Elasticsearch/Kibana stack — see "Live operational verification (2026-09-14)" at the end of this document.
+G0.11's Sysmon adapter remains verified only against deterministic synthetic events — no real Windows
+endpoint has been used. **Phase 1 may begin**; closing the remaining G0.11 Windows-endpoint gap is the one
+outstanding item before Phase 1 relies on live Windows telemetry (unchanged from the original exit
+criteria).
 Translates the accepted architecture ([ADR-0001](adr/0001-evidence-graph-core-architecture.md),
 [ADR-0002](adr/0002-attribution-scoring-and-evidence-methodology.md),
 [C0.1 §11](11-attack-knowledge-versioning.md), [C0.2 §12](12-deployment-and-endpoint-scope.md)) into small,
@@ -1092,13 +1092,13 @@ through Elastic and the read-model API** (G0.8/G0.9/G0.10); (6) the full guard/d
 CI (G0.12). G0.11 (Windows ingest) may trail the slice but should complete before Phase 1 relies on live
 Windows telemetry.
 
-**Status (G0.12 validation, 2026-09-14): criteria (1)–(6) are all MET against replay/synthetic data + a fake
-Elastic client** — see the G0.12 entry above for the checks performed. Criterion (5)'s "through Elastic"
-and (4)'s deployment are verified logically/structurally, not against a **live** Elasticsearch cluster —
-Docker/Elasticsearch has never been available in the authoring environment (G0.7 onward), and G0.11's
-Sysmon adapter has never seen a real Windows endpoint. Those two remain genuine, explicitly-tracked
-operational gaps for a human with that environment to close; they do not block Phase 1 logic/design work
-that does not itself require a live cluster or live Windows telemetry.
+**Status (G0.12 validation, 2026-09-14): criteria (1)–(6) are all MET**, initially against replay/synthetic
+data + a fake Elastic client (see the G0.12 entry above), then **criteria (4) and (5) were additionally
+confirmed against a real, Docker-run Elasticsearch/Kibana cluster** — see "Live operational verification
+(2026-09-14)" at the end of this document. **The one remaining operational gap is G0.11's Sysmon adapter,
+which has never seen a real Windows endpoint** — a genuine, explicitly-tracked gap for a human with that
+environment to close; it does not block Phase 1 logic/design work that does not itself require live Windows
+telemetry.
 
 ---
 
@@ -1159,3 +1159,48 @@ as-is for the record. Since then:
 - **Next gate (after G0.3 review): G0.4 — telemetry-source abstraction (adapter interface).**
 - All other Phase-0 gates (G0.4–G0.12) remain **not started**. No Dockerfiles, compose files, Elastic
   config, indexes, API, source adapters, or frontend exist. No ADR created or changed; C0.1/C0.2 unchanged.
+
+---
+
+## Live operational verification (2026-09-14): G0.7–G0.10 stack confirmed live
+
+G0.0–G0.12 are all checkpointed (commits `c6d31a3` through `34c4abe`); every gate's own entry above records
+that its Elastic/Docker-dependent parts were verified only statically or via mocks/fakes at implementation
+time, since no Docker runtime was available in the authoring environment. **That environment limitation is
+now partially closed.** With Docker Desktop running on the host, the existing G0.7–G0.10 artifacts were
+operationally verified live, unchanged, with no new functionality added:
+
+- **G0.7 (Compose):** `docker compose config` and the existing `scripts/validate_compose.py` both accept
+  `docker-compose.yml` as-is; `docker compose up -d` brought up `setup` (exited 0, CA + node cert generated,
+  `kibana_system` password set), `es01`, and `kibana` — both `Up (healthy)` per Docker's own healthchecks.
+- **Elasticsearch:** reachable and authenticated over the configured TLS endpoint — verified against the
+  real CA the `setup` container generated (not `-k`/skip-verify): unauthenticated request -> HTTP 401
+  `security_exception`; authenticated request -> HTTP 200 with real cluster info; `_cluster/health` ->
+  `"status": "green"`.
+- **Kibana:** `GET /api/status` -> HTTP 200, `"overall":{"level":"available"}`.
+- **G0.9 (replay) against the real `ElasticsearchHttpClient`, not `FakeElasticClient`:** the checked-in
+  `fixtures/phase0_benign_scenarios.json` was replayed unmodified via the existing `replay_fixture()`; both
+  scenarios' Observation and Evidence documents were confirmed **actually persisted** in Elasticsearch (a
+  direct `GET /attribution-platform-observations-v1/_doc/obs-0001` returned `found: true`; index
+  `_count`, taken after an explicit `_refresh`, matched the two persisted documents in each index).
+- **G0.10 (API) against that same real client:** the existing `create_server()` was started and queried with
+  real HTTP `GET` requests — `/observations/obs-0001`, `/evidence/ev-0001`, `/evidence/ev-0002` all returned
+  HTTP 200 with the expected bodies.
+- **Round-trip fidelity confirmed through real Elasticsearch + the real API:** `observation_id`/`evidence_id`,
+  `timestamp`, `raw_reference.dataset_ref` (the fixture's content-hash) and `source_type`, `schema_version`,
+  `provenance.source_observation_ids`, and the full `attack_ref` (`stix_id`, `external_id=T1059.001`,
+  `attack_kb_version`) all matched exactly what the fixture declared.
+- **Idempotency confirmed at the real Elasticsearch document-count level:** replaying the same fixture
+  produced canonical-JSON-identical Observation/Evidence objects each time; after an explicit `_refresh`,
+  document counts stayed at exactly 2/index across repeated replays (2 -> 2 -> 2, not 4 or 6) — no
+  duplicates. (An initial `_count` read taken *before* any refresh showed 0 — Elasticsearch's normal
+  near-real-time search lag, a query-timing artifact of the ad hoc verification script, not a persistence
+  defect; a direct `GET .../_doc/<id>` immediately after indexing already returned `found: true`.)
+- **No project functionality was added or changed** to perform this verification (a temporary, out-of-repo
+  script under this session's scratchpad directory drove the existing `replay_fixture`/`create_server`/
+  `ElasticsearchHttpClient` — nothing added to `src/`, `tests/`, or `docker-compose.yml`); the Docker stack
+  was left running and healthy throughout, and was not stopped for this checkpoint.
+
+**Still not live-verified (unchanged, not addressed by this session):** G0.11's Sysmon adapter has not been
+exercised against a real Windows endpoint — it remains verified only against deterministic synthetic
+Sysmon-shaped events, exactly as recorded in the G0.11 entry above.
