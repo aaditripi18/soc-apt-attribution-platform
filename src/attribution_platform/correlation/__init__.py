@@ -70,9 +70,29 @@ Gate status:
   in *this* package changed for G2.3: it is purely a caller of
   :func:`correlate_structurally`/:func:`contextualize`, exactly as G2.1/G2.2
   already were designed to be called.
-- **Not yet implemented:** ``BehavioralSequence`` + temporal configuration
-  (G2.4); an optional Elastic EQL input adapter (G2.5); anything
-  attribution-related (Phase 3, out of this package entirely).
+- **G2.4.0 (implemented, ADR-0004):** ``sequence`` — the behavioral-sequence
+  domain contracts: :class:`~attribution_platform.correlation.sequence.BehavioralStep`,
+  :class:`~attribution_platform.correlation.sequence.SequenceEdge`,
+  :class:`~attribution_platform.correlation.sequence.SequenceGap`,
+  :class:`~attribution_platform.correlation.sequence.SequenceParallelGroup`
+  (the accepted branch-partition design), and
+  :class:`~attribution_platform.correlation.sequence.BehavioralSequence` —
+  plus :class:`~attribution_platform.correlation.sequence.OrderingBasis`/
+  :class:`~attribution_platform.correlation.sequence.OrderingBasisKind`/
+  :class:`~attribution_platform.correlation.sequence.GapReason`, the
+  deterministic id-composition helpers, and the two sanctioned
+  cross-group-validating constructors
+  (:func:`~attribution_platform.correlation.sequence.build_behavioral_step`,
+  :func:`~attribution_platform.correlation.sequence.build_behavioral_sequence`).
+  **Contracts only** — no sequence-construction/ordering engine, no
+  ``SHARED_OBSERVATION``-collapse, no branch/convergence discovery, no
+  replay, no persistence, no ``TEMPORAL_PROXIMITY`` (see that module's own
+  docstring for the exact scope boundary).
+- **Not yet implemented:** the sequence-construction/ordering engine
+  (G2.4.1); golden corpus + replay + persistence for behavioral sequences
+  (G2.4.2); ``TEMPORAL_PROXIMITY`` (G2.4.3); an optional Elastic EQL input
+  adapter (G2.5); anything attribution-related (Phase 3, out of this
+  package entirely).
 """
 
 from __future__ import annotations
@@ -97,6 +117,28 @@ from attribution_platform.correlation.contracts import (
     compute_link_id,
 )
 from attribution_platform.correlation.errors import CorrelationError
+from attribution_platform.correlation.sequence import (
+    BEHAVIORAL_SEQUENCE_SCHEMA_VERSION,
+    BEHAVIORAL_STEP_SCHEMA_VERSION,
+    SEQUENCE_EDGE_SCHEMA_VERSION,
+    SEQUENCE_GAP_SCHEMA_VERSION,
+    SEQUENCE_PARALLEL_GROUP_SCHEMA_VERSION,
+    BehavioralSequence,
+    BehavioralStep,
+    GapReason,
+    OrderingBasis,
+    OrderingBasisKind,
+    SequenceEdge,
+    SequenceGap,
+    SequenceParallelGroup,
+    build_behavioral_sequence,
+    build_behavioral_step,
+    compute_sequence_edge_id,
+    compute_sequence_gap_id,
+    compute_sequence_id,
+    compute_sequence_parallel_group_id,
+    compute_step_id,
+)
 from attribution_platform.correlation.structural import (
     STRUCTURAL_CORRELATION_METHOD,
     STRUCTURAL_CORRELATION_METHOD_VERSION,
@@ -125,4 +167,24 @@ __all__ = [
     "ContextualCorrelationResult",
     "CONTEXTUAL_CORRELATION_METHOD",
     "CONTEXTUAL_CORRELATION_METHOD_VERSION",
+    "OrderingBasisKind",
+    "GapReason",
+    "OrderingBasis",
+    "BehavioralStep",
+    "SequenceEdge",
+    "SequenceGap",
+    "SequenceParallelGroup",
+    "BehavioralSequence",
+    "BEHAVIORAL_STEP_SCHEMA_VERSION",
+    "SEQUENCE_EDGE_SCHEMA_VERSION",
+    "SEQUENCE_GAP_SCHEMA_VERSION",
+    "SEQUENCE_PARALLEL_GROUP_SCHEMA_VERSION",
+    "BEHAVIORAL_SEQUENCE_SCHEMA_VERSION",
+    "build_behavioral_step",
+    "build_behavioral_sequence",
+    "compute_step_id",
+    "compute_sequence_id",
+    "compute_sequence_edge_id",
+    "compute_sequence_gap_id",
+    "compute_sequence_parallel_group_id",
 ]
