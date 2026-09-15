@@ -47,14 +47,35 @@ Gate status:
   correlation dimension. No contextual dimension, no temporal logic, no
   ATT&CK reasoning, and no scoring/attribution exists in this module (see
   that module's own docstring for the exact scope boundary).
-- **Not yet implemented:** the contextual-association engine (G2.2); replay
-  integration + golden corpus (G2.3); ``BehavioralSequence`` + temporal
-  configuration (G2.4); an optional Elastic EQL input adapter (G2.5);
-  anything attribution-related (Phase 3, out of this package entirely).
+- **G2.2 (implemented):** ``contextual`` —
+  :func:`~attribution_platform.correlation.contextual.contextualize`, the
+  engine computing exactly the five contextual dimensions
+  (``SAME_HOST_ID``, ``SAME_HOST_NAME``, ``SAME_USER_ID``,
+  ``SAME_USER_NAME``, ``SAME_DESTINATION_IP``) over caller-supplied
+  ``(Evidence, Observation)`` pairs and attaching them, as
+  ``contextual_link_ids``, to whichever *already-computed* structural
+  groups (from G2.1) they touch — never forming, merging, or creating a
+  group. Takes a ``StructuralCorrelationResult`` as input specifically so
+  no code path in this module can build a group from scratch. Each
+  contextual link carries an explicit, ADR-0003-derived ``uncertainty_note``
+  (plain language, never numeric). No G2.1 matching/connected-component
+  logic is imported or reimplemented; no temporal logic, no ATT&CK
+  reasoning, and no scoring/attribution exists in this module (see that
+  module's own docstring for the exact scope boundary).
+- **Not yet implemented:** replay integration + golden corpus (G2.3);
+  ``BehavioralSequence`` + temporal configuration (G2.4); an optional
+  Elastic EQL input adapter (G2.5); anything attribution-related (Phase 3,
+  out of this package entirely).
 """
 
 from __future__ import annotations
 
+from attribution_platform.correlation.contextual import (
+    CONTEXTUAL_CORRELATION_METHOD,
+    CONTEXTUAL_CORRELATION_METHOD_VERSION,
+    ContextualCorrelationResult,
+    contextualize,
+)
 from attribution_platform.correlation.contracts import (
     CONTEXTUAL_LINK_CLASSES,
     CORRELATION_GROUP_SCHEMA_VERSION,
@@ -93,4 +114,8 @@ __all__ = [
     "StructuralCorrelationResult",
     "STRUCTURAL_CORRELATION_METHOD",
     "STRUCTURAL_CORRELATION_METHOD_VERSION",
+    "contextualize",
+    "ContextualCorrelationResult",
+    "CONTEXTUAL_CORRELATION_METHOD",
+    "CONTEXTUAL_CORRELATION_METHOD_VERSION",
 ]

@@ -53,15 +53,19 @@ Package layout (each submodule states which Phase-0 gate implements it):
                          structural correlation engine — exactly
                          SHARED_OBSERVATION/SAME_PROCESS_ENTITY/
                          PROCESS_LINEAGE, host-scoped process identity, and
-                         connected-component CorrelationGroup formation. No
-                         contextual (host/user/destination) correlation, no
-                         temporal logic, and no ATT&CK-driven correlation
-                         exist yet.
+                         connected-component CorrelationGroup formation.
+                         **G2.2 (implemented):** the contextual engine —
+                         exactly SAME_HOST_ID/SAME_HOST_NAME/SAME_USER_ID/
+                         SAME_USER_NAME/SAME_DESTINATION_IP, attached as
+                         context to G2.1's existing groups, never forming or
+                         merging one. No temporal logic and no ATT&CK-driven
+                         correlation exist yet.
 
 This package intentionally contains no attribution or attack-chain logic
-yet, and no contextual/temporal/ATT&CK-driven correlation yet (G2.1 is
-structural-only) — see ADR-0001/ADR-0002/ADR-0003 and the Phase-0/Phase-2
-plans for why.
+yet, and no temporal/ATT&CK-driven correlation yet (G2.2 completes the
+structural + contextual correlation model; ``BehavioralSequence`` and
+temporal ordering are G2.4) — see ADR-0001/ADR-0002/ADR-0003 and the
+Phase-0/Phase-2 plans for why.
 """
 
 __version__ = "0.0.0"

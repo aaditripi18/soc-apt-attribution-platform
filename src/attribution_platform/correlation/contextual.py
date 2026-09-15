@@ -1,0 +1,483 @@
+"""The contextual correlation engine (gate G2.2).
+
+Implements exactly the five contextual, attach-only dimensions ADR-0003
+approved — ``SAME_HOST_ID``, ``SAME_HOST_NAME``, ``SAME_USER_ID``,
+``SAME_USER_NAME``, and ``SAME_DESTINATION_IP`` — and nothing else. This
+module is deliberately separate from, and structurally unable to affect,
+:mod:`attribution_platform.correlation.structural` (G2.1): it never calls,
+imports, or reimplements that module's connected-component algorithm, and
+its public entry point takes an *already-computed*
+:class:`~attribution_platform.correlation.structural.StructuralCorrelationResult`
+as input rather than raw Evidence/Observations — making it structurally
+impossible for a caller to accidentally treat a contextual link as
+group-forming, since :func:`contextualize` has no code path that builds a
+``CorrelationGroup`` from scratch at all.
+
+**What "contextual" means, operationally, here:** two Observations share an
+identical value in exactly one field — ``host.id``, ``host.name``,
+``user.id``, ``user.name``, or ``network.destination.ip`` — with no other
+inference. This is a fact about shared *environment, identity, or
+infrastructure*, never about shared *behavior*. Per ADR-0003's own
+correction (the reason G2.1 exists in its current, corrected form): a host
+is a container for unrelated activity, a user (especially an administrator
+or service account) performs an unbounded set of unrelated actions, and
+shared network infrastructure routinely produces identical destination
+endpoints for causally unrelated traffic. None of the five dimensions here
+may ever create or merge a ``CorrelationGroup`` — see "Attachment, never
+group formation" below.
+
+**Field semantics (exact-equality only, no inference):**
+
+- ``SAME_HOST_ID``: ``host.id`` equal, both present and non-blank.
+- ``SAME_HOST_NAME``: ``host.name`` equal, both present and non-blank.
+  Independent of ``SAME_HOST_ID`` — sharing one does not imply or require
+  sharing the other, and both may legitimately coexist as two distinct
+  links for the same pair.
+- ``SAME_USER_ID``: ``user.id`` equal, both present and non-blank.
+- ``SAME_USER_NAME``: ``user.name`` equal, both present and non-blank.
+  Independent of ``SAME_USER_ID``, for the same reason as host.
+- ``SAME_DESTINATION_IP``: ``network.destination.ip`` equal, both present
+  and non-blank.
+
+No dimension here ever substitutes for another (``host.name`` is never used
+when ``host.id`` is absent, and vice versa — unlike G2.1's internal
+host-*scoping* key, which deliberately does fall back, this module reports
+the two facts separately, because a contextual link's whole purpose is to
+preserve exactly which field actually matched). Comparison is exact-string
+equality after an existence-and-non-blank check — no case-folding, no alias
+resolution, no IP-format validation: this project's domain layer imposes
+none of those on ``HostRef``/``UserRef``/``NetworkEndpoint`` (they have no
+``__post_init__`` validation at all — see
+:mod:`attribution_platform.domain.entities`), so inventing a normalization
+layer here would be exactly the kind of business heuristic ADR-0003 warns
+against. This mirrors the one normalization convention that *does* already
+exist in this codebase — G2.1's own ``_host_scope_key``, which also does
+nothing beyond an existence-and-blank check before exact comparison.
+
+**Attachment, never group formation.** :func:`contextualize` never builds a
+``CorrelationGroup`` from nothing: it only ever takes the groups already
+present on the ``StructuralCorrelationResult`` it is given and, for each
+one, attaches whichever contextual links touch at least one of that group's
+existing members (ADR-0003's own rule: "attached to a group for every group
+that has at least one member touched by that contextual link — the same
+contextual link id may legitimately appear on multiple groups'
+``contextual_link_ids``, which is expected, not a defect"). A contextual
+link between two Evidence items that are in *different* structural groups
+is attached to *both* groups independently — it is never interpreted as
+relating those groups to each other, and it never merges them. A contextual
+link between two Evidence items where *neither* belongs to any structural
+group is still computed and returned in ``contextual_links``, but attaches
+to no group at all — contextual correlation alone cannot create one.
+
+**Group identity is untouched.** ``CorrelationGroup.group_id`` is computed
+(G2.0's ``compute_group_id``) from the sorted set of member Evidence ids
+alone — it takes no link information as input at all, structural or
+contextual. Every group this module returns keeps the *exact* ``group_id``
+it already had; this module never recomputes it. ``member_evidence_ids``,
+``member_observation_ids``, ``structural_link_ids``, and ``provenance`` are
+likewise carried through completely unchanged — only ``contextual_link_ids``
+is ever populated, via G2.0's own :func:`build_correlation_group`, which
+independently re-verifies every structural link is still structural and
+every contextual link is genuinely contextual (defense in depth, unchanged
+from G2.1's own usage of it).
+
+**Uncertainty is explicit, not numeric.** Every contextual link's
+``CorrelationBasis.uncertainty_note`` names, in plain language, why the
+match does not imply behavioral relatedness — see :data:`_UNCERTAINTY_NOTES`
+below, phrased directly from ADR-0003's own §"Contextual dimensions" and
+§"Explainability". No probability, confidence, weight, or numeric score is
+ever attached to a contextual link (G2.0's own ``CorrelationBasis`` already
+makes this structurally impossible — ``uncertainty_note`` is free text).
+
+**CR-1: contextual links are not corroborating evidence.** Nothing in this
+module counts, scores, or weights contextual links, and nothing here reads
+or writes any likelihood/confidence/attribution field — there are none on
+any correlation contract. Multiple contextual dimensions holding for the
+same pair (e.g. same host *and* same user *and* same destination) produce
+multiple, independent ``CorrelationLink`` objects, each recording its own
+single fact — never collapsed into one link, and never treated as three
+times the "strength" of one.
+
+**Multi-Observation Evidence.** Uses the exact same fail-closed
+single-Observation pairing boundary G2.1 established (an Evidence must have
+*exactly* the paired Observation as its sole ``source_observation_ids``
+entry) — reimplemented locally here (this module does not import G2.1's
+private ``_validate_nodes``/``_Node``, matching this project's established
+convention of each layer owning its own local validation rather than
+reaching into another module's private helpers — e.g.
+:mod:`attribution_platform.detection.contracts`'s own local
+``_require_nonempty_str`` instead of importing ``domain``'s), never relaxed.
+
+**Deterministic identity.** Every id here comes from G2.0's own
+``compute_link_id`` (unchanged, collision-safe) — no second id scheme. The
+``link_class`` (part of the id) makes ``SAME_HOST_ID`` and ``SAME_HOST_NAME``
+links for the same pair/value always produce different ids, so they can
+never collapse into one relationship. Group ``group_id`` values are reused
+verbatim from the input, never recomputed.
+
+**Source-agnostic, ATT&CK-free.** Imports only
+:mod:`attribution_platform.correlation` (its own package) and
+:mod:`attribution_platform.domain` — never ``sources``, ``dataplane``,
+``replay``, ``api``, or ``attack_knowledge`` (enforced by a guard test,
+mirroring ``structural.py``'s own).
+
+**Deliberately NOT here (forbidden this gate):** G2.1's structural matching
+or connected-component logic (untouched, unmodified, unimported for its
+private internals); ``TEMPORAL_PROXIMITY``; ``BehavioralSequence``; ATT&CK
+of any kind; Elastic/EQL; scoring, weighting, likelihood, confidence, or
+attribution of any kind.
+"""
+
+from __future__ import annotations
+
+from collections.abc import Callable, Sequence
+from dataclasses import dataclass
+from itertools import combinations
+
+from attribution_platform.correlation.contracts import (
+    CorrelationBasis,
+    CorrelationGroup,
+    CorrelationLink,
+    CorrelationProvenance,
+    LinkClass,
+    build_correlation_group,
+    compute_link_id,
+)
+from attribution_platform.correlation.errors import CorrelationError
+from attribution_platform.correlation.structural import StructuralCorrelationResult
+from attribution_platform.domain import Evidence, Observation
+
+#: Default ``CorrelationProvenance.method``/``method_version`` this engine
+#: stamps onto every contextual link it produces, unless the caller
+#: overrides them. Mirrors ``structural.py``'s own
+#: ``STRUCTURAL_CORRELATION_METHOD`` convention.
+CONTEXTUAL_CORRELATION_METHOD = "contextual-correlation"
+CONTEXTUAL_CORRELATION_METHOD_VERSION = "1.0"
+
+#: The exact, ADR-0003-derived uncertainty note for each contextual
+#: dimension -- plain language, never a numeric value. Distinct per
+#: dimension because the ADR itself treats them differently (user identity
+#: is explicitly called out as a *stronger* risk than host co-residence).
+_UNCERTAINTY_NOTES: dict[LinkClass, str] = {
+    LinkClass.SAME_HOST_ID: (
+        "same host.id indicates co-residence only; a host commonly runs many concurrent, "
+        "unrelated processes, so this does not imply the two observations are part of the "
+        "same behavior"
+    ),
+    LinkClass.SAME_HOST_NAME: (
+        "same host.name indicates co-residence only (a less stable identifier than host.id); "
+        "a host commonly runs many concurrent, unrelated processes, so this does not imply "
+        "the two observations are part of the same behavior"
+    ),
+    LinkClass.SAME_USER_ID: (
+        "same user.id indicates shared account identity only; shared/service and "
+        "administrator accounts routinely perform large, heterogeneous sets of unrelated "
+        "actions, so this does not imply a causal relationship"
+    ),
+    LinkClass.SAME_USER_NAME: (
+        "same user.name indicates shared account identity only (a less stable identifier "
+        "than user.id); shared/service and administrator accounts routinely perform large, "
+        "heterogeneous sets of unrelated actions, so this does not imply a causal relationship"
+    ),
+    LinkClass.SAME_DESTINATION_IP: (
+        "same network.destination.ip indicates shared network infrastructure only; CDNs, "
+        "NAT, and common egress points routinely produce identical destination endpoints "
+        "for causally unrelated traffic"
+    ),
+}
+
+#: field_path recorded on every contextual dimension's CorrelationBasis.
+_FIELD_PATHS: dict[LinkClass, str] = {
+    LinkClass.SAME_HOST_ID: "host.id",
+    LinkClass.SAME_HOST_NAME: "host.name",
+    LinkClass.SAME_USER_ID: "user.id",
+    LinkClass.SAME_USER_NAME: "user.name",
+    LinkClass.SAME_DESTINATION_IP: "network.destination.ip",
+}
+
+
+@dataclass(frozen=True)
+class ContextualCorrelationResult:
+    """What :func:`contextualize` produced: every contextual link found
+    (including any that touch no structural group at all), and the *same*
+    groups the input ``StructuralCorrelationResult`` had, now carrying
+    ``contextual_link_ids`` where applicable. Group identity, membership,
+    structural links, and provenance are otherwise byte-for-byte unchanged
+    from the input."""
+
+    contextual_links: tuple[CorrelationLink, ...]
+    groups: tuple[CorrelationGroup, ...]
+
+
+@dataclass(frozen=True)
+class _Node:
+    """One (Evidence, its supporting Observation) pair, validated at input.
+    Deliberately a local, private re-declaration of the identical shape
+    ``structural.py`` uses internally -- see the module docstring for why
+    this is duplicated rather than imported."""
+
+    evidence: Evidence
+    observation: Observation
+
+
+def _validate_nodes(items: Sequence[tuple[Evidence, Observation]]) -> tuple[_Node, ...]:
+    """The exact same fail-closed Evidence/Observation pairing boundary
+    G2.1 established: the Observation must be the Evidence's *sole* source
+    Observation (never a partial view of multi-Observation provenance), and
+    evidence ids must be unique across ``items``."""
+    seen_evidence_ids: set[str] = set()
+    nodes: list[_Node] = []
+    for i, (evidence, observation) in enumerate(items):
+        if not isinstance(evidence, Evidence):
+            raise CorrelationError(
+                f"contextualize: items[{i}][0] must be a domain Evidence, "
+                f"got {type(evidence).__name__}"
+            )
+        if not isinstance(observation, Observation):
+            raise CorrelationError(
+                f"contextualize: items[{i}][1] must be a domain Observation, "
+                f"got {type(observation).__name__}"
+            )
+        if evidence.provenance.source_observation_ids != (observation.observation_id,):
+            raise CorrelationError(
+                f"contextualize: items[{i}]: evidence {evidence.evidence_id!r} does not have "
+                f"exactly the supplied observation {observation.observation_id!r} as its sole "
+                f"source (source_observation_ids={evidence.provenance.source_observation_ids!r}"
+                f"). G2.2 requires single-Observation Evidence, matching G2.1's own scope; "
+                f"multi-Observation Evidence is not supported yet, and partial correlation "
+                f"against only one of several source Observations is rejected rather than "
+                f"silently dropping the rest of its provenance"
+            )
+        if evidence.evidence_id in seen_evidence_ids:
+            raise CorrelationError(
+                f"contextualize: duplicate evidence_id {evidence.evidence_id!r} in items"
+            )
+        seen_evidence_ids.add(evidence.evidence_id)
+        nodes.append(_Node(evidence=evidence, observation=observation))
+    return tuple(nodes)
+
+
+def _host_id(observation: Observation) -> str | None:
+    host = observation.host
+    if host is None or host.id is None or not host.id.strip():
+        return None
+    return host.id
+
+
+def _host_name(observation: Observation) -> str | None:
+    host = observation.host
+    if host is None or host.name is None or not host.name.strip():
+        return None
+    return host.name
+
+
+def _user_id(observation: Observation) -> str | None:
+    user = observation.user
+    if user is None or user.id is None or not user.id.strip():
+        return None
+    return user.id
+
+
+def _user_name(observation: Observation) -> str | None:
+    user = observation.user
+    if user is None or user.name is None or not user.name.strip():
+        return None
+    return user.name
+
+
+def _destination_ip(observation: Observation) -> str | None:
+    network = observation.network
+    if network is None or network.destination is None:
+        return None
+    ip = network.destination.ip
+    if ip is None or not ip.strip():
+        return None
+    return ip
+
+
+#: Which field-extractor feeds each contextual LinkClass. A single,
+#: explicit table -- adding a dimension means adding one entry here, never
+#: duplicating the matching loop.
+_DIMENSION_EXTRACTORS: dict[LinkClass, Callable[[Observation], str | None]] = {
+    LinkClass.SAME_HOST_ID: _host_id,
+    LinkClass.SAME_HOST_NAME: _host_name,
+    LinkClass.SAME_USER_ID: _user_id,
+    LinkClass.SAME_USER_NAME: _user_name,
+    LinkClass.SAME_DESTINATION_IP: _destination_ip,
+}
+
+
+def _make_contextual_link(
+    node_a: _Node,
+    node_b: _Node,
+    *,
+    link_class: LinkClass,
+    observed_value: str,
+    method: str,
+    method_version: str,
+    method_content_hash: str | None,
+) -> CorrelationLink:
+    link_id = compute_link_id(
+        link_class=link_class,
+        observed_value=observed_value,
+        anchor_a=node_a.evidence.evidence_id,
+        anchor_b=node_b.evidence.evidence_id,
+        method_content_hash=method_content_hash,
+    )
+    basis = CorrelationBasis(
+        link_class=link_class,
+        field_path=_FIELD_PATHS[link_class],
+        observed_value=observed_value,
+        observation_id_a=node_a.observation.observation_id,
+        observation_id_b=node_b.observation.observation_id,
+        uncertainty_note=_UNCERTAINTY_NOTES[link_class],
+    )
+    source_observation_ids = tuple(
+        {node_a.observation.observation_id, node_b.observation.observation_id}
+    )
+    provenance = CorrelationProvenance(
+        method=method,
+        method_version=method_version,
+        source_evidence_ids=(node_a.evidence.evidence_id, node_b.evidence.evidence_id),
+        source_observation_ids=source_observation_ids,
+        method_content_hash=method_content_hash,
+    )
+    return CorrelationLink(
+        link_id=link_id,
+        anchor_a=node_a.evidence.evidence_id,
+        anchor_b=node_b.evidence.evidence_id,
+        link_class=link_class,
+        basis=basis,
+        provenance=provenance,
+    )
+
+
+def _links_for_dimension(
+    nodes: Sequence[_Node],
+    *,
+    link_class: LinkClass,
+    method: str,
+    method_version: str,
+    method_content_hash: str | None,
+) -> dict[str, CorrelationLink]:
+    extractor = _DIMENSION_EXTRACTORS[link_class]
+    by_value: dict[str, list[_Node]] = {}
+    for node in nodes:
+        value = extractor(node.observation)
+        if value is None:
+            continue
+        by_value.setdefault(value, []).append(node)
+
+    links: dict[str, CorrelationLink] = {}
+    for value, group in by_value.items():
+        if len(group) < 2:
+            continue
+        ordered = sorted(group, key=lambda n: n.evidence.evidence_id)
+        for node_a, node_b in combinations(ordered, 2):
+            link = _make_contextual_link(
+                node_a,
+                node_b,
+                link_class=link_class,
+                observed_value=value,
+                method=method,
+                method_version=method_version,
+                method_content_hash=method_content_hash,
+            )
+            links[link.link_id] = link
+    return links
+
+
+def contextualize(
+    structural_result: StructuralCorrelationResult,
+    items: Sequence[tuple[Evidence, Observation]],
+    *,
+    method: str = CONTEXTUAL_CORRELATION_METHOD,
+    method_version: str = CONTEXTUAL_CORRELATION_METHOD_VERSION,
+    method_content_hash: str | None = None,
+) -> ContextualCorrelationResult:
+    """Compute every ``SAME_HOST_ID``/``SAME_HOST_NAME``/``SAME_USER_ID``/
+    ``SAME_USER_NAME``/``SAME_DESTINATION_IP`` link across ``items``, and
+    attach each one to every *existing* structural group (from
+    ``structural_result``) that has at least one member the link touches.
+
+    This function never forms, merges, or creates a ``CorrelationGroup``.
+    It takes ``structural_result.groups`` as fixed input and returns the
+    same groups, unchanged except that some may now carry
+    ``contextual_link_ids`` -- ``group_id``, ``member_evidence_ids``,
+    ``member_observation_ids``, ``structural_link_ids``, and ``provenance``
+    are always identical to the input. A contextual link between two
+    Evidence items in two *different* structural groups is attached to
+    *both* independently -- it never relates the groups to each other, and
+    two groups sharing a contextual link are never merged. A contextual
+    link where neither anchor belongs to any structural group is still
+    returned in ``contextual_links``, but attaches to no group.
+
+    ``items`` uses the exact same ``(Evidence, Observation)`` pairing shape
+    and fail-closed single-Observation validation G2.1's
+    ``correlate_structurally`` uses (see :func:`_validate_nodes`). It need
+    not be the same set of pairs that produced ``structural_result`` --
+    passing additional Evidence not part of any structural group is valid
+    and simply yields contextual links that attach to no group.
+
+    ``method``/``method_version``/``method_content_hash`` behave exactly as
+    they do in ``correlate_structurally``: defaults to this module's own
+    identity; the content hash is never fabricated.
+
+    Pure and deterministic: no I/O, no ATT&CK knowledge, no randomness, no
+    wall-clock.
+    """
+    if not isinstance(structural_result, StructuralCorrelationResult):
+        raise CorrelationError(
+            f"contextualize: structural_result must be a StructuralCorrelationResult, "
+            f"got {type(structural_result).__name__}"
+        )
+
+    nodes = _validate_nodes(items)
+
+    all_contextual_links: dict[str, CorrelationLink] = {}
+    for link_class in _DIMENSION_EXTRACTORS:
+        all_contextual_links.update(
+            _links_for_dimension(
+                nodes,
+                link_class=link_class,
+                method=method,
+                method_version=method_version,
+                method_content_hash=method_content_hash,
+            )
+        )
+    sorted_contextual_links = tuple(
+        sorted(all_contextual_links.values(), key=lambda link_: link_.link_id)
+    )
+
+    structural_links_by_id = {link.link_id: link for link in structural_result.links}
+
+    updated_groups: list[CorrelationGroup] = []
+    for group in structural_result.groups:
+        member_ids = set(group.member_evidence_ids)
+        touching = tuple(
+            link
+            for link in sorted_contextual_links
+            if link.anchor_a in member_ids or link.anchor_b in member_ids
+        )
+        if not touching:
+            updated_groups.append(group)
+            continue
+
+        original_structural_links = tuple(
+            structural_links_by_id[link_id] for link_id in group.structural_link_ids
+        )
+        updated_groups.append(
+            build_correlation_group(
+                group_id=group.group_id,
+                member_evidence_ids=group.member_evidence_ids,
+                member_observation_ids=group.member_observation_ids,
+                structural_links=original_structural_links,
+                provenance=group.provenance,
+                contextual_links=touching,
+            )
+        )
+
+    sorted_groups = tuple(sorted(updated_groups, key=lambda group_: group_.group_id))
+    return ContextualCorrelationResult(
+        contextual_links=sorted_contextual_links, groups=sorted_groups
+    )

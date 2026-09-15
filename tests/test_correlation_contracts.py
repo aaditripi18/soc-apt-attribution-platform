@@ -25,6 +25,7 @@ deterministic, no Elastic/Docker/Windows/network required.
 from __future__ import annotations
 
 import ast
+import dataclasses
 import json
 import re
 from pathlib import Path
@@ -648,6 +649,47 @@ def test_group_rejects_a_link_id_present_in_both_structural_and_contextual() -> 
             contextual_link_ids=(shared_id,),
             provenance=_provenance(),
         )
+
+
+def test_group_contract_has_no_group_to_group_relationship_field() -> None:
+    """Architectural regression protection (G2.2 audit finding): a
+    contextual link may attach to a CorrelationGroup, but two groups
+    sharing a contextual_link_id must never be interpreted as related
+    (ADR-0003 §"CorrelationGroup semantics" — "a contextual link touching
+    two different groups must never be interpreted as relating those
+    groups"). The only structural safeguard available at the contract
+    level is that no field on CorrelationGroup itself can express a
+    group-to-group relationship in the first place -- discovering that two
+    groups share a contextual link requires an external join
+    (`set(a.contextual_link_ids) & set(b.contextual_link_ids)`), never a
+    stored reference. This test pins the exact field set so a future
+    change cannot silently add one (e.g. ``related_group_ids``,
+    ``contextual_group_ids``, ``correlated_group_ids``, ``parent_group_id``,
+    ``child_group_ids``, or any equivalent) without this test failing and
+    forcing a deliberate architectural decision, not an accidental one."""
+    field_names = {f.name for f in dataclasses.fields(CorrelationGroup)}
+    assert field_names == {
+        "group_id",
+        "member_evidence_ids",
+        "member_observation_ids",
+        "structural_link_ids",
+        "contextual_link_ids",
+        "provenance",
+        "schema_version",
+    }
+
+    forbidden_group_relationship_fields = {
+        "related_group_ids",
+        "related_groups",
+        "contextual_group_ids",
+        "correlated_group_ids",
+        "correlated_groups",
+        "parent_group_id",
+        "child_group_ids",
+        "linked_group_ids",
+        "group_links",
+    }
+    assert field_names.isdisjoint(forbidden_group_relationship_fields)
 
 
 # ===========================================================================
