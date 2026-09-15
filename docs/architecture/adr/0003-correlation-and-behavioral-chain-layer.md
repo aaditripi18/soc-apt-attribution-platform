@@ -548,3 +548,14 @@ package code may still not be written yet: that gate is now G2.0's own start, a 
 ADR's acceptance (§Implementation gates), not a re-statement of pre-acceptance pending status. The docs/03 ·
 docs/06 "AttackChain" terminology synchronization (§Alternatives considered for a Phase-2 name) also remains
 outstanding and is not resolved by this acceptance.
+
+**G2.5 status (clarified 2026-09-16, after G2.0–G2.4.3 were all implemented and checkpointed):** G2.5 remains
+exactly as originally specified above — **"(Optional, later)"** — with that optionality now made explicit
+rather than merely implied: G2.5 is **deferred** (not scheduled as part of any currently active gate),
+**non-blocking for Phase 2 completion** (every other Phase 2 gate, G2.0–G2.4.3, is independent of it and does
+not require it), and **not a prerequisite for Phase 3** (the future attribution layer consumes
+`CorrelationGroup`/`BehavioralSequence` output regardless of which upstream mechanism produced the underlying
+`CorrelationLink`s — G2.5 would only ever be one additional, optional input signal alongside the existing
+telemetry sources, never a required one, per its own §Implementation gates text above). This is a
+confirmation of already-decided optionality, not a new decision; G2.5's scope, boundary, and Must-NOT list
+above are unchanged.

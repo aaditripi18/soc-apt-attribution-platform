@@ -783,3 +783,69 @@ audits recorded in the acceptance rationale above, exactly as ADR-0003's own D2 
 before *its* acceptance). [docs/architecture/README.md](../README.md)'s ADR table has been updated to
 ACCEPTED accordingly. G2.4 code may still not be written yet: gate G2.4.0 is now a separate, later step from
 this ADR's acceptance (§Implementation gates), not a re-statement of pre-acceptance pending status.
+
+## Post-acceptance clarifications
+
+These clarifications resolve two open-text/implementation questions identified during the Phase 2 completion
+audit (2026-09-16), after G2.4.0–G2.4.3 were all implemented and checkpointed. **Neither changes, reopens, or
+reinterprets any decision D1–D21 above.** Each documents how an already-accepted decision was in fact
+satisfied, or records a deliberate, bounded implementation choice made during the later G2.4 sub-gates. Dated
+and appended here, never merged into the original decision text above, matching this project's own
+established practice of never silently rewriting an accepted ADR (the same discipline this ADR's own
+pre-acceptance corrections and ADR-0003's D2 correction already followed).
+
+### Clarification 1 (2026-09-16) — ATT&CK tactic annotation
+
+ADR-0003's own §Implementation gates text for G2.4 states that G2.4 *"adds ATT&CK tactic annotation (never
+reordering)."* This is satisfied by the accepted design exactly as built — **no persisted tactic-phase field
+is required, and none is added:**
+
+- `BehavioralStep.technique_stix_ids` (D2, invariant 4, above) is already the authoritative,
+  mechanically-derived ATT&CK reference for each step: a deterministic projection of the real
+  `Evidence.attack_ref.stix_id` values already present on that step's own evidence, itself tied to a specific,
+  pinned ATT&CK KB version through that evidence's own provenance.
+- Tactic phase is a pure, deterministic function of `(technique_stix_id, pinned ATT&CK KB version)` — already
+  fully recoverable by any downstream consumer from `technique_stix_ids` alone, via a lookup against the
+  pinned knowledge bundle. It is **derived on read**, never persisted on `BehavioralStep` or any other
+  contract this ADR defines.
+- A separate, persisted `tactic_phase` field would duplicate information already recoverable from
+  `technique_stix_ids` and would itself become "an independent source of truth" for derived data — precisely
+  what D2 invariant 4 already forbids for `technique_stix_ids` itself. `BehavioralStep`'s field set is
+  therefore unchanged by this clarification.
+- Tactic annotation, wherever it is eventually computed (a future presentation/read-model layer, and/or
+  Phase 3's own diagnosticity computation), remains strictly presentation/diagnostic context — consistent
+  with ADR-0003's own §ATT&CK boundary framing ("the one permitted use... is annotating a resulting
+  behavioral structure... **for presentation**") and this ADR's own D16 invariants, unchanged: it **must
+  not** reorder steps, **must not** create a `SequenceEdge` or `SequenceGap`, **must not** establish or imply
+  causality, and **must not** participate in any Phase 2 attribution or scoring vocabulary — none of which
+  exists anywhere in this layer, with or without this clarification.
+- **No Phase 2 implementation or contract change is required.** `correlation/sequence.py`,
+  `correlation/sequence_engine.py`, and every G2.4.x gate's own acceptance stand exactly as already
+  checkpointed.
+
+### Clarification 2 (2026-09-16) — G2.4.2 golden-corpus coverage
+
+This ADR's §Implementation gates text for G2.4.2 states it *"Extends `fixtures/`..."* The accepted G2.4.2
+implementation intentionally retained `fixtures/phase2_correlation_scenarios.json` unchanged from its G2.3
+state, for a concrete, bounded reason recorded here:
+
+- That file is load-bearing for G2.3's own already-checkpointed regression tests
+  (`tests/test_replay_correlation.py`), which pin exact corpus-wide counts (scenario count, evidence count,
+  and per-group structural/contextual link counts). Extending it would have required also editing that
+  already-accepted G2.3 test file to keep those pinned counts true — reopening a frozen, already-checkpointed
+  gate to satisfy a later one, which this project's own gate-to-gate discipline has consistently avoided
+  (mirrored by G2.4.1 never touching G2.0–G2.3, and G2.4.2/G2.4.3 never touching G2.4.0/G2.4.1).
+- The five scenarios G2.4.2 needed beyond what the existing corpus already exercised — equal timestamps,
+  coarse precision tie, lineage/timestamp disagreement, genuine multi-parent convergence, and deeper
+  cross-branch parallelism — are internal ordering-engine edge cases (G2.4.1's own timestamp-comparison and
+  branch-partition semantics, D6–D9 above), not detection-rule-matching or ATT&CK-mapping-resolution
+  scenarios, which is what the raw-telemetry `DetectionReplayFixture` format exists to exercise.
+- All five are instead covered by deterministic, in-Python-constructed integration scenarios in
+  `tests/test_replay_behavioral_sequence.py`, each executing the real, unmodified G2.1/G2.2 structural/
+  contextual engines, the real G2.4.1 `construct_behavioral_sequence`, and the real G2.4.2 persistence path —
+  the identical production code path a JSON-fixture-driven scenario would exercise, differing only in
+  authoring surface (a Python literal rather than a JSON file), never in engine realism or rigor.
+- This approach preserves G2.3's existing fixture-count regression contract exactly, and alters neither the
+  `BehavioralSequence` contract nor the golden-corpus semantics established elsewhere in this ADR.
+- **No implementation change is required.** This clarification records the deviation and its rationale;
+  `fixtures/phase2_correlation_scenarios.json` remains exactly as committed at G2.3.
