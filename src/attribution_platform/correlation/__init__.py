@@ -88,11 +88,23 @@ Gate status:
   ``SHARED_OBSERVATION``-collapse, no branch/convergence discovery, no
   replay, no persistence, no ``TEMPORAL_PROXIMITY`` (see that module's own
   docstring for the exact scope boundary).
-- **Not yet implemented:** the sequence-construction/ordering engine
-  (G2.4.1); golden corpus + replay + persistence for behavioral sequences
-  (G2.4.2); ``TEMPORAL_PROXIMITY`` (G2.4.3); an optional Elastic EQL input
-  adapter (G2.5); anything attribution-related (Phase 3, out of this
-  package entirely).
+- **G2.4.1 (implemented, ADR-0004):** ``sequence_engine`` —
+  :func:`~attribution_platform.correlation.sequence_engine.construct_behavioral_sequence`,
+  the pure, deterministic engine reconstructing one
+  :class:`~attribution_platform.correlation.sequence.BehavioralSequence` from
+  an already-computed :class:`CorrelationGroup` and its real
+  ``(Evidence, Observation)`` pairs / structural / contextual
+  ``CorrelationLink``\\ s: ``SHARED_OBSERVATION`` collapse,
+  ``technique_stix_ids`` derivation from real ``Evidence.attack_ref``,
+  ``PROCESS_LINEAGE`` and ``TEMPORAL_SAME_ENTITY`` ordering (ADR-0004 D5–D8),
+  and ``SequenceParallelGroup`` construction (ADR-0004 D9). No I/O, no
+  ``TEMPORAL_PROXIMITY``, no attribution/scoring (see that module's own
+  docstring for the exact scope boundary, including a found architectural
+  ambiguity it handles fail-closed rather than silently resolving).
+- **Not yet implemented:** golden corpus + replay + persistence for
+  behavioral sequences (G2.4.2); ``TEMPORAL_PROXIMITY`` (G2.4.3); an
+  optional Elastic EQL input adapter (G2.5); anything attribution-related
+  (Phase 3, out of this package entirely).
 """
 
 from __future__ import annotations
@@ -138,6 +150,11 @@ from attribution_platform.correlation.sequence import (
     compute_sequence_id,
     compute_sequence_parallel_group_id,
     compute_step_id,
+)
+from attribution_platform.correlation.sequence_engine import (
+    SEQUENCE_ENGINE_METHOD,
+    SEQUENCE_ENGINE_METHOD_VERSION,
+    construct_behavioral_sequence,
 )
 from attribution_platform.correlation.structural import (
     STRUCTURAL_CORRELATION_METHOD,
@@ -187,4 +204,7 @@ __all__ = [
     "compute_sequence_edge_id",
     "compute_sequence_gap_id",
     "compute_sequence_parallel_group_id",
+    "construct_behavioral_sequence",
+    "SEQUENCE_ENGINE_METHOD",
+    "SEQUENCE_ENGINE_METHOD_VERSION",
 ]
