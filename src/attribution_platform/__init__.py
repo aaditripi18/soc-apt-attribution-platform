@@ -1,9 +1,9 @@
 """SOC APT Attribution Platform.
 
 An explainable, evidence-based APT attribution engine. See
-docs/architecture/ for the accepted architecture (ADR-0001, ADR-0002) and
-docs/architecture/13-phase-0-implementation-plan.md for the implementation
-roadmap this package structure follows.
+docs/architecture/ for the accepted architecture (ADR-0001, ADR-0002,
+ADR-0003) and docs/architecture/13-phase-0-implementation-plan.md for the
+implementation roadmap this package structure follows.
 
 Package layout (each submodule states which Phase-0 gate implements it):
 
@@ -43,9 +43,18 @@ Package layout (each submodule states which Phase-0 gate implements it):
                          ``detection`` — mirrors why ``replay`` is its own
                          package rather than living inside one of the layers
                          it composes). Implemented in G1.1.
+- ``correlation``      — Phase 2: multi-event correlation domain contracts
+                         (ADR-0003) — which Evidence items are structurally
+                         part of the same underlying behavior, distinct from
+                         merely-contextual shared environment/identity.
+                         Source-agnostic; imports nothing from ``sources``,
+                         ``dataplane``, or ``attack_knowledge`` at this gate.
+                         **G2.0 (implemented): contracts only** — no
+                         correlation is performed yet.
 
-This package intentionally contains no attribution, correlation, or
-attack-chain logic yet — see ADR-0001/ADR-0002 and the Phase-0 plan for why.
+This package intentionally contains no attribution or attack-chain logic
+yet, and no correlation *computation* yet (G2.0 is contracts only) — see
+ADR-0001/ADR-0002/ADR-0003 and the Phase-0/Phase-2 plans for why.
 """
 
 __version__ = "0.0.0"
