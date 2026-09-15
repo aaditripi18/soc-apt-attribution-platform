@@ -60,12 +60,35 @@ Gate status:
   a ``CorrelationError`` raised by ``construct_behavioral_sequence`` (in
   particular the G2.4.1-audited multi-link-grounding ambiguity) is never
   caught or suppressed here.
+- **G2.4.3 (implemented):** ``temporal_proximity_pipeline`` —
+  ``replay_fixture_through_temporal_proximity()``, which reuses G2.3's
+  ``replay_fixture_through_correlation`` unchanged to obtain a
+  ``CorrelationReplayResult``, enriches its groups via the real, unmodified
+  G2.4.3 ``compute_temporal_proximity`` (:mod:`attribution_platform.correlation`),
+  persists every new ``TEMPORAL_PROXIMITY`` link and every enriched group
+  via G2.3's own ``dataplane.persist_correlation_link``/
+  ``persist_correlation_group`` (unchanged, already generic over
+  ``LinkClass``), then, for each *enriched* group, filters exactly that
+  group's own ``(Evidence, Observation)`` pairs and structural/contextual
+  links and feeds them through the real, unmodified G2.4.1
+  ``construct_behavioral_sequence``, persisting every resulting
+  ``BehavioralSequence`` via G2.4.2's own ``dataplane.persist_behavioral_sequence``
+  (unchanged). Does not call ``replay_fixture_through_behavioral_sequences``
+  (it recomputes its own correlation result internally and has no
+  temporal-enrichment injection point) — composes the same lower-level
+  functions that orchestrator is itself built from. ``correlation_pipeline.py``
+  and ``behavioral_sequence_pipeline.py`` are both untouched by this gate.
+  This module hand-authors no ``CorrelationLink``/``CorrelationGroup``/
+  ``BehavioralSequence``/``BehavioralStep``/``SequenceEdge``/``SequenceGap``/
+  ``SequenceParallelGroup``/``Evidence`` — every one comes from calling the
+  real, unmodified engines; a ``CorrelationError`` raised by
+  ``construct_behavioral_sequence`` is never caught or suppressed here.
 - **Not yet implemented:** replaying a real telemetry-source adapter's
   output through this package (the Sysmon adapter itself was added at
   G0.11, but reads live/real telemetry, not fixtures — unrelated to and
-  untouched by this package); ``TEMPORAL_PROXIMITY`` (G2.4.3); ATT&CK-aware
-  correlation, attack-chain logic, or attribution; the read-model API
-  (G0.10); live adversary emulation (never automated — see
+  untouched by this package); ATT&CK-aware correlation, attack-chain logic,
+  or attribution; the read-model API (G0.10); live adversary emulation
+  (never automated — see
   docs/architecture/12-deployment-and-endpoint-scope.md §J).
 """
 
@@ -96,6 +119,10 @@ from attribution_platform.replay.fixtures import (
     load_fixture_file,
 )
 from attribution_platform.replay.pipeline import ScenarioResult, replay_fixture
+from attribution_platform.replay.temporal_proximity_pipeline import (
+    TemporalProximityReplayResult,
+    replay_fixture_through_temporal_proximity,
+)
 
 __all__ = [
     "ReplayError",
@@ -114,4 +141,6 @@ __all__ = [
     "replay_fixture_through_correlation",
     "BehavioralSequenceReplayResult",
     "replay_fixture_through_behavioral_sequences",
+    "TemporalProximityReplayResult",
+    "replay_fixture_through_temporal_proximity",
 ]

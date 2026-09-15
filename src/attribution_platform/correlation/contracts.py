@@ -10,14 +10,15 @@ never inside them.
 
 Five contracts, mirroring ADR-0003 §"Domain model":
 
-- :class:`LinkClass` — the closed, eight-value vocabulary of correlation
-  relationships ADR-0003 approved. Three values are **structural**
-  (group-forming): ``SHARED_OBSERVATION``, ``SAME_PROCESS_ENTITY``,
-  ``PROCESS_LINEAGE``. Five are **contextual** (attach-only, never
-  group-forming): ``SAME_HOST_ID``, ``SAME_HOST_NAME``, ``SAME_USER_ID``,
-  ``SAME_USER_NAME``, ``SAME_DESTINATION_IP``. The classification is a
-  single authoritative property (:attr:`LinkClass.is_structural`) backed by
-  one frozen set, not duplicated logic scattered across call sites — this is
+- :class:`LinkClass` — the closed, nine-value vocabulary of correlation
+  relationships ADR-0003/ADR-0004 D20 approved. Three values are
+  **structural** (group-forming): ``SHARED_OBSERVATION``,
+  ``SAME_PROCESS_ENTITY``, ``PROCESS_LINEAGE``. Six are **contextual**
+  (attach-only, never group-forming): ``SAME_HOST_ID``, ``SAME_HOST_NAME``,
+  ``SAME_USER_ID``, ``SAME_USER_NAME``, ``SAME_DESTINATION_IP``,
+  ``TEMPORAL_PROXIMITY`` (gate G2.4.3). The classification is a single
+  authoritative property (:attr:`LinkClass.is_structural`) backed by one
+  frozen set, not duplicated logic scattered across call sites — this is
   the one place "is this class allowed to form a group" can ever be asked.
 - :class:`CorrelationBasis` — the machine-readable explanation for one link:
   the matched field/value and the two Observation ids it was matched on,
@@ -120,11 +121,11 @@ def _sha256_hex(value: str) -> str:
 
 
 class LinkClass(Enum):
-    """The closed, eight-value correlation-relationship vocabulary ADR-0003
-    approved. Exactly three values are structural (group-forming); the
-    remaining five are contextual (attach-only). Membership is closed —
-    constructing ``LinkClass(x)`` with an unknown ``x`` raises ``ValueError``
-    (fail-closed enum validation), exactly like
+    """The closed, nine-value correlation-relationship vocabulary ADR-0003/
+    ADR-0004 D20 approved. Exactly three values are structural
+    (group-forming); the remaining six are contextual (attach-only).
+    Membership is closed — constructing ``LinkClass(x)`` with an unknown
+    ``x`` raises ``ValueError`` (fail-closed enum validation), exactly like
     :class:`attribution_platform.domain.enums.EvidenceType`.
 
     This single enum fulfills the role ADR-0003's domain-model section
@@ -153,6 +154,14 @@ class LinkClass(Enum):
     - ``SAME_USER_ID`` / ``SAME_USER_NAME`` — shared user/service identity
       (an unbounded-action actor, not a causal participant).
     - ``SAME_DESTINATION_IP`` — shared network infrastructure.
+    - ``TEMPORAL_PROXIMITY`` (gate G2.4.3, ADR-0004 D20) — two Observations'
+      timestamps fall within a versioned, content-hashed window of each
+      other. Closeness in time is a coincidental/environmental fact, not
+      instance-identity or causation — despite its name, it is exactly as
+      contextual as the other five, never a sixth structural dimension. It
+      may coexist with, and never substitutes for, ``SAME_PROCESS_ENTITY``
+      (which remains the only fact establishing "same running process
+      instance," unconditionally, regardless of any time gap).
 
     ADR-0003's own words on why host/user identity is never structural
     regardless of how reliable the identifier is: *"A stable identifier
@@ -161,7 +170,11 @@ class LinkClass(Enum):
     name-based counterparts — the two id-based members exist for
     explanatory precision (``CorrelationBasis.field_path`` records *which*
     field actually matched), not because id-based matches are ever allowed
-    to form a group.
+    to form a group. ``TEMPORAL_PROXIMITY`` is held to the identical
+    standard: a reliable-looking temporal signal is not automatically the
+    right semantic category for it (ADR-0004 D20's own explicit reservation
+    of this exact failure mode, made in advance of this dimension's own
+    implementation).
     """
 
     SHARED_OBSERVATION = "shared_observation"
@@ -172,6 +185,7 @@ class LinkClass(Enum):
     SAME_USER_ID = "same_user_id"
     SAME_USER_NAME = "same_user_name"
     SAME_DESTINATION_IP = "same_destination_ip"
+    TEMPORAL_PROXIMITY = "temporal_proximity"
 
     @property
     def is_structural(self) -> bool:

@@ -1,7 +1,8 @@
-"""Tests for gate G2.0: correlation domain contracts (ADR-0003).
+"""Tests for gate G2.0: correlation domain contracts (ADR-0003), updated at
+G2.4.3 (ADR-0004 D20) for the ninth ``LinkClass`` member.
 
-Covers: the closed eight-value ``LinkClass`` vocabulary (exactly three
-structural, exactly five contextual, no overlap/omission);
+Covers: the closed nine-value ``LinkClass`` vocabulary (exactly three
+structural, exactly six contextual, no overlap/omission);
 ``CorrelationBasis`` field preservation and its structural-basis-has-no-
 uncertainty-note invariant; ``CorrelationProvenance``'s non-empty,
 canonicalized id-set pattern (parallel to G0.3's ``DerivationProvenance``);
@@ -60,6 +61,7 @@ _CONTEXTUAL = (
     LinkClass.SAME_USER_ID,
     LinkClass.SAME_USER_NAME,
     LinkClass.SAME_DESTINATION_IP,
+    LinkClass.TEMPORAL_PROXIMITY,
 )
 
 
@@ -106,11 +108,11 @@ def _link(
 
 
 # ===========================================================================
-# 1. LinkClass: the closed eight-value vocabulary
+# 1. LinkClass: the closed nine-value vocabulary
 # ===========================================================================
 
 
-def test_all_eight_link_classes_exist() -> None:
+def test_all_nine_link_classes_exist() -> None:
     expected = {
         "SHARED_OBSERVATION",
         "SAME_PROCESS_ENTITY",
@@ -120,18 +122,20 @@ def test_all_eight_link_classes_exist() -> None:
         "SAME_USER_ID",
         "SAME_USER_NAME",
         "SAME_DESTINATION_IP",
+        "TEMPORAL_PROXIMITY",
     }
     assert {member.name for member in LinkClass} == expected
-    assert len(LinkClass) == 8
+    assert len(LinkClass) == 9
 
 
-def test_exactly_three_structural_and_five_contextual() -> None:
+def test_exactly_three_structural_and_six_contextual() -> None:
     structural = {member for member in LinkClass if member.is_structural}
     contextual = {member for member in LinkClass if not member.is_structural}
     assert structural == set(_STRUCTURAL)
     assert len(structural) == 3
     assert contextual == set(_CONTEXTUAL)
-    assert len(contextual) == 5
+    assert len(contextual) == 6
+    assert LinkClass.TEMPORAL_PROXIMITY in contextual
     assert contextual == CONTEXTUAL_LINK_CLASSES
 
 

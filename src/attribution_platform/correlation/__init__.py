@@ -15,8 +15,8 @@ Gate status:
 
 - **G2.0 (implemented):** ``errors`` — ``CorrelationError``; ``contracts`` —
   :class:`~attribution_platform.correlation.contracts.LinkClass` (the closed
-  eight-value vocabulary — three structural/group-forming, five
-  contextual/attach-only),
+  nine-value vocabulary — three structural/group-forming, six
+  contextual/attach-only, as of G2.4.3),
   :class:`~attribution_platform.correlation.contracts.CorrelationBasis` (the
   machine-readable *why*),
   :class:`~attribution_platform.correlation.contracts.CorrelationProvenance`
@@ -101,10 +101,41 @@ Gate status:
   ``TEMPORAL_PROXIMITY``, no attribution/scoring (see that module's own
   docstring for the exact scope boundary, including a found architectural
   ambiguity it handles fail-closed rather than silently resolving).
-- **Not yet implemented:** golden corpus + replay + persistence for
-  behavioral sequences (G2.4.2); ``TEMPORAL_PROXIMITY`` (G2.4.3); an
-  optional Elastic EQL input adapter (G2.5); anything attribution-related
-  (Phase 3, out of this package entirely).
+- **G2.4.2 (implemented, outside this package):** golden corpus + replay +
+  persistence for behavioral sequences — see
+  :func:`attribution_platform.replay.replay_fixture_through_behavioral_sequences`
+  and
+  :func:`attribution_platform.dataplane.persist_behavioral_sequence`/
+  :func:`~attribution_platform.dataplane.load_behavioral_sequence`. Nothing
+  in *this* package changed for G2.4.2: it is purely a caller of
+  :func:`construct_behavioral_sequence`, exactly as G2.3 already was of
+  :func:`correlate_structurally`/:func:`contextualize`.
+- **G2.4.3 (implemented, ADR-0004 D20):** ``temporal_proximity`` —
+  :func:`~attribution_platform.correlation.temporal_proximity.compute_temporal_proximity`,
+  the engine computing the one ``TEMPORAL_PROXIMITY`` contextual dimension
+  (two Observations' timestamps within a versioned, content-hashed window
+  of each other) over caller-supplied ``(Evidence, Observation)`` pairs and
+  attaching it, as an addition to ``contextual_link_ids`` (unioned with
+  whatever a group already carries, never a replacement), to whichever
+  *already-computed* groups (from G2.1/G2.2) it touches — never forming,
+  merging, or creating a group. Takes a ``StructuralCorrelationResult`` and
+  a ``ContextualCorrelationResult`` as input specifically so no code path
+  in this module can build a group from scratch, mirroring G2.2's own
+  isolation shape one layer further. Also
+  :class:`~attribution_platform.correlation.temporal_proximity.TemporalProximityConfig`
+  (the versioned, content-hashed window — the caller cannot fabricate an
+  arbitrary content hash; it is computed from the config's own fields) and
+  :class:`~attribution_platform.correlation.temporal_proximity.TemporalProximityResult`.
+  A sibling of ``contextual.py``, never an extension of it — ``contextual.py``
+  is untouched by this gate. No G2.1/G2.2 matching/connected-component
+  logic is imported or reimplemented; no ordering logic, no
+  ``SequenceEdge``/``SequenceGap``/``SequenceParallelGroup`` construction
+  (``sequence.py``/``sequence_engine.py`` are both untouched and not
+  imported by this module), no ATT&CK reasoning, and no scoring/attribution
+  exists in this module (see that module's own docstring for the exact
+  scope boundary).
+- **Not yet implemented:** an optional Elastic EQL input adapter (G2.5);
+  anything attribution-related (Phase 3, out of this package entirely).
 """
 
 from __future__ import annotations
@@ -162,6 +193,14 @@ from attribution_platform.correlation.structural import (
     StructuralCorrelationResult,
     correlate_structurally,
 )
+from attribution_platform.correlation.temporal_proximity import (
+    TEMPORAL_PROXIMITY_CONFIG_SCHEMA_VERSION,
+    TEMPORAL_PROXIMITY_METHOD,
+    TEMPORAL_PROXIMITY_METHOD_VERSION,
+    TemporalProximityConfig,
+    TemporalProximityResult,
+    compute_temporal_proximity,
+)
 
 __all__ = [
     "CorrelationError",
@@ -207,4 +246,10 @@ __all__ = [
     "construct_behavioral_sequence",
     "SEQUENCE_ENGINE_METHOD",
     "SEQUENCE_ENGINE_METHOD_VERSION",
+    "compute_temporal_proximity",
+    "TemporalProximityConfig",
+    "TemporalProximityResult",
+    "TEMPORAL_PROXIMITY_CONFIG_SCHEMA_VERSION",
+    "TEMPORAL_PROXIMITY_METHOD",
+    "TEMPORAL_PROXIMITY_METHOD_VERSION",
 ]
