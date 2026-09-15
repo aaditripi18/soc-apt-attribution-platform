@@ -42,6 +42,14 @@ Gate status:
   :mod:`attribution_platform.correlation` — a new but one-directional,
   non-cyclic, ADR-0003-anticipated dependency (see
   ``correlation_persistence``'s own docstring).
+- **G2.4.2 (implemented):** ``behavioral_sequence_persistence`` —
+  ``persist_behavioral_sequence``/``load_behavioral_sequence``, the same
+  typed, idempotent, fail-closed round trip additively extended to the
+  G2.4.0 ``BehavioralSequence`` contract (ADR-0004 D18: one document per
+  sequence, steps/edges/gaps/parallel_groups all embedded — never a
+  separate document per nested object); ``mappings`` gains
+  ``BEHAVIORAL_SEQUENCES_INDEX``/``BEHAVIORAL_SEQUENCES_MAPPING``, the same
+  schema-version-derived-index-name convention as every other entry.
 - **Not yet implemented:** replay/bulk ingestion orchestration (that
   cross-cutting logic lives in :mod:`attribution_platform.replay`, not
   here); the read-model API (G0.10); detection rules, EQL/ES|QL
@@ -51,6 +59,10 @@ Gate status:
 
 from __future__ import annotations
 
+from attribution_platform.dataplane.behavioral_sequence_persistence import (
+    load_behavioral_sequence,
+    persist_behavioral_sequence,
+)
 from attribution_platform.dataplane.client import ElasticClient
 from attribution_platform.dataplane.correlation_persistence import (
     load_correlation_group,
@@ -62,6 +74,8 @@ from attribution_platform.dataplane.errors import ElasticIntegrationError
 from attribution_platform.dataplane.fake_client import FakeElasticClient
 from attribution_platform.dataplane.http_client import ElasticsearchHttpClient
 from attribution_platform.dataplane.mappings import (
+    BEHAVIORAL_SEQUENCES_INDEX,
+    BEHAVIORAL_SEQUENCES_MAPPING,
     CORRELATION_GROUPS_INDEX,
     CORRELATION_GROUPS_MAPPING,
     CORRELATION_LINKS_INDEX,
@@ -92,6 +106,8 @@ __all__ = [
     "CORRELATION_LINKS_MAPPING",
     "CORRELATION_GROUPS_INDEX",
     "CORRELATION_GROUPS_MAPPING",
+    "BEHAVIORAL_SEQUENCES_INDEX",
+    "BEHAVIORAL_SEQUENCES_MAPPING",
     "PersistResult",
     "persist_observation",
     "load_observation",
@@ -101,4 +117,6 @@ __all__ = [
     "load_correlation_link",
     "persist_correlation_group",
     "load_correlation_group",
+    "persist_behavioral_sequence",
+    "load_behavioral_sequence",
 ]

@@ -39,6 +39,7 @@ from __future__ import annotations
 from typing import Any
 
 from attribution_platform.correlation import (
+    BEHAVIORAL_SEQUENCE_SCHEMA_VERSION,
     CORRELATION_GROUP_SCHEMA_VERSION,
     CORRELATION_LINK_SCHEMA_VERSION,
 )
@@ -59,6 +60,11 @@ EVIDENCE_INDEX = _index_name("evidence", EVIDENCE_SCHEMA_VERSION)
 #: correlation contracts — same convention as OBSERVATIONS_INDEX/EVIDENCE_INDEX.
 CORRELATION_LINKS_INDEX = _index_name("correlation-links", CORRELATION_LINK_SCHEMA_VERSION)
 CORRELATION_GROUPS_INDEX = _index_name("correlation-groups", CORRELATION_GROUP_SCHEMA_VERSION)
+
+#: G2.4.2: pinned, schema-version-derived index name for the G2.4.0
+#: BehavioralSequence contract — same convention, one document per sequence
+#: (ADR-0004 D18), never one per step/edge/gap/parallel-group.
+BEHAVIORAL_SEQUENCES_INDEX = _index_name("behavioral-sequences", BEHAVIORAL_SEQUENCE_SCHEMA_VERSION)
 
 #: Explicit field mappings for the Observation index (Elasticsearch "properties").
 OBSERVATIONS_MAPPING: dict[str, Any] = {
@@ -162,6 +168,37 @@ CORRELATION_GROUPS_MAPPING: dict[str, Any] = {
     "structural_link_ids": {"type": "keyword"},
     "contextual_link_ids": {"type": "keyword"},
     "schema_version": {"type": "keyword"},
+    "provenance": {
+        "properties": {
+            "method": {"type": "keyword"},
+            "method_version": {"type": "keyword"},
+            "source_evidence_ids": {"type": "keyword"},
+            "source_observation_ids": {"type": "keyword"},
+            "method_content_hash": {"type": "keyword"},
+        }
+    },
+}
+
+#: G2.4.2: explicit field mappings for the BehavioralSequence index
+#: (ADR-0004 D18 — one document per sequence, steps/edges/gaps/
+#: parallel_groups all embedded). Mirrors CORRELATION_GROUPS_MAPPING's
+#: convention: every top-level ``*_id``/schema-version field is ``keyword``,
+#: ``provenance`` gets the same hand-typed ``properties`` block every other
+#: index already uses for ``CorrelationProvenance``. ``steps``/``edges``/
+#: ``gaps``/``parallel_groups`` are left as dynamic ``object`` (mirroring how
+#: OBSERVATIONS_MAPPING leaves the larger, more variable entity groups
+#: dynamic) — hand-curating every leaf of four new nested shapes is a
+#: reasonable later refinement, not a G2.4.2 requirement; no
+#: likelihood/confidence/APT-candidate field exists on the underlying
+#: contracts to map.
+BEHAVIORAL_SEQUENCES_MAPPING: dict[str, Any] = {
+    "sequence_id": {"type": "keyword"},
+    "group_id": {"type": "keyword"},
+    "schema_version": {"type": "keyword"},
+    "steps": {"type": "object"},
+    "edges": {"type": "object"},
+    "gaps": {"type": "object"},
+    "parallel_groups": {"type": "object"},
     "provenance": {
         "properties": {
             "method": {"type": "keyword"},

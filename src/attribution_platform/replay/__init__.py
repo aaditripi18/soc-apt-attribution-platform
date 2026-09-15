@@ -45,17 +45,36 @@ Gate status:
   ``persist_correlation_group``. This module hand-authors no
   ``CorrelationGroup``/``CorrelationLink`` and no ``DetectionResult``/
   ``Evidence`` — every one comes from calling the real, unmodified engines.
+- **G2.4.2 (implemented):** ``behavioral_sequence_pipeline`` —
+  ``replay_fixture_through_behavioral_sequences()``, which reuses G2.3's
+  ``replay_fixture_through_correlation`` unchanged to obtain a
+  ``CorrelationReplayResult``, then, for each resulting ``CorrelationGroup``,
+  filters exactly that group's own ``(Evidence, Observation)`` pairs and
+  structural/contextual links and feeds them through the real, unmodified
+  G2.4.1 ``construct_behavioral_sequence`` (:mod:`attribution_platform.correlation`),
+  persisting every resulting ``BehavioralSequence`` via the new G2.4.2
+  ``dataplane.persist_behavioral_sequence``. This module hand-authors no
+  ``BehavioralSequence``/``BehavioralStep``/``SequenceEdge``/``SequenceGap``/
+  ``SequenceParallelGroup`` and no ``CorrelationGroup``/``CorrelationLink``/
+  ``Evidence`` — every one comes from calling the real, unmodified engines;
+  a ``CorrelationError`` raised by ``construct_behavioral_sequence`` (in
+  particular the G2.4.1-audited multi-link-grounding ambiguity) is never
+  caught or suppressed here.
 - **Not yet implemented:** replaying a real telemetry-source adapter's
   output through this package (the Sysmon adapter itself was added at
   G0.11, but reads live/real telemetry, not fixtures — unrelated to and
-  untouched by this package); ``BehavioralSequence``/temporal correlation
-  (G2.4); ATT&CK-aware correlation, attack-chain logic, or attribution; the
-  read-model API (G0.10); live adversary emulation (never automated — see
+  untouched by this package); ``TEMPORAL_PROXIMITY`` (G2.4.3); ATT&CK-aware
+  correlation, attack-chain logic, or attribution; the read-model API
+  (G0.10); live adversary emulation (never automated — see
   docs/architecture/12-deployment-and-endpoint-scope.md §J).
 """
 
 from __future__ import annotations
 
+from attribution_platform.replay.behavioral_sequence_pipeline import (
+    BehavioralSequenceReplayResult,
+    replay_fixture_through_behavioral_sequences,
+)
 from attribution_platform.replay.correlation_pipeline import (
     CorrelationReplayResult,
     replay_fixture_through_correlation,
@@ -93,4 +112,6 @@ __all__ = [
     "replay_fixture_through_detection_engine",
     "CorrelationReplayResult",
     "replay_fixture_through_correlation",
+    "BehavioralSequenceReplayResult",
+    "replay_fixture_through_behavioral_sequences",
 ]
