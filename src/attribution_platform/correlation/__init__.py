@@ -35,11 +35,22 @@ Gate status:
   structural/contextual matching, no temporal/ordering logic, no ATT&CK
   annotation, no persistence, no attribution (see that module's docstring
   for the exact scope boundary).
-- **Not yet implemented:** the structural correlation engine (G2.1); the
-  contextual-association engine (G2.2); replay integration + golden corpus
-  (G2.3); ``BehavioralSequence`` + temporal configuration (G2.4); an
-  optional Elastic EQL input adapter (G2.5); anything attribution-related
-  (Phase 3, out of this package entirely).
+- **G2.1 (implemented):** ``structural`` —
+  :func:`~attribution_platform.correlation.structural.correlate_structurally`,
+  the engine computing exactly the three structural dimensions
+  (``SHARED_OBSERVATION``, ``SAME_PROCESS_ENTITY``, ``PROCESS_LINEAGE``)
+  over caller-supplied ``(Evidence, Observation)`` pairs, and the
+  connected-component ``CorrelationGroup``s those links form (a small,
+  dedicated union-find — not a general graph framework). Process-entity
+  identity is host-scoped internally (prefers ``host.id``, falls back to
+  ``host.name``, fails closed otherwise) but host is never itself a
+  correlation dimension. No contextual dimension, no temporal logic, no
+  ATT&CK reasoning, and no scoring/attribution exists in this module (see
+  that module's own docstring for the exact scope boundary).
+- **Not yet implemented:** the contextual-association engine (G2.2); replay
+  integration + golden corpus (G2.3); ``BehavioralSequence`` + temporal
+  configuration (G2.4); an optional Elastic EQL input adapter (G2.5);
+  anything attribution-related (Phase 3, out of this package entirely).
 """
 
 from __future__ import annotations
@@ -58,6 +69,12 @@ from attribution_platform.correlation.contracts import (
     compute_link_id,
 )
 from attribution_platform.correlation.errors import CorrelationError
+from attribution_platform.correlation.structural import (
+    STRUCTURAL_CORRELATION_METHOD,
+    STRUCTURAL_CORRELATION_METHOD_VERSION,
+    StructuralCorrelationResult,
+    correlate_structurally,
+)
 
 __all__ = [
     "CorrelationError",
@@ -72,4 +89,8 @@ __all__ = [
     "compute_link_id",
     "compute_group_id",
     "build_correlation_group",
+    "correlate_structurally",
+    "StructuralCorrelationResult",
+    "STRUCTURAL_CORRELATION_METHOD",
+    "STRUCTURAL_CORRELATION_METHOD_VERSION",
 ]

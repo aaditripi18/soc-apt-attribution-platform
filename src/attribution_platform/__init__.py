@@ -43,18 +43,25 @@ Package layout (each submodule states which Phase-0 gate implements it):
                          ``detection`` — mirrors why ``replay`` is its own
                          package rather than living inside one of the layers
                          it composes). Implemented in G1.1.
-- ``correlation``      — Phase 2: multi-event correlation domain contracts
-                         (ADR-0003) — which Evidence items are structurally
-                         part of the same underlying behavior, distinct from
-                         merely-contextual shared environment/identity.
-                         Source-agnostic; imports nothing from ``sources``,
-                         ``dataplane``, or ``attack_knowledge`` at this gate.
-                         **G2.0 (implemented): contracts only** — no
-                         correlation is performed yet.
+- ``correlation``      — Phase 2: multi-event correlation (ADR-0003) — which
+                         Evidence items are structurally part of the same
+                         underlying behavior, distinct from merely-contextual
+                         shared environment/identity. Source-agnostic;
+                         imports nothing from ``sources``, ``dataplane``, or
+                         ``attack_knowledge``. **G2.0 (implemented):**
+                         domain contracts. **G2.1 (implemented):** the
+                         structural correlation engine — exactly
+                         SHARED_OBSERVATION/SAME_PROCESS_ENTITY/
+                         PROCESS_LINEAGE, host-scoped process identity, and
+                         connected-component CorrelationGroup formation. No
+                         contextual (host/user/destination) correlation, no
+                         temporal logic, and no ATT&CK-driven correlation
+                         exist yet.
 
 This package intentionally contains no attribution or attack-chain logic
-yet, and no correlation *computation* yet (G2.0 is contracts only) — see
-ADR-0001/ADR-0002/ADR-0003 and the Phase-0/Phase-2 plans for why.
+yet, and no contextual/temporal/ATT&CK-driven correlation yet (G2.1 is
+structural-only) — see ADR-0001/ADR-0002/ADR-0003 and the Phase-0/Phase-2
+plans for why.
 """
 
 __version__ = "0.0.0"

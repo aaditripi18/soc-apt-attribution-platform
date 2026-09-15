@@ -824,11 +824,16 @@ def test_correlation_package_never_imports_forbidden_layers() -> None:
 
 
 def test_correlation_g20_uses_no_external_project_dependency() -> None:
-    """G2.0 needs nothing beyond the stdlib -- confirms the contracts module
-    does not (yet) depend on domain/attack_knowledge/detection either,
-    which is stronger than ADR-0003 strictly requires but reflects the
-    genuinely minimal G2.0 scope."""
-    correlation_files = sorted(CORRELATION_DIR.glob("*.py"))
+    """G2.0's own files need nothing beyond the stdlib -- confirms
+    contracts.py/errors.py do not (yet) depend on domain/attack_knowledge/
+    detection either, which is stronger than ADR-0003 strictly requires but
+    reflects the genuinely minimal G2.0 scope. Deliberately scoped to just
+    the two G2.0 files (not every *.py in the package): G2.1's
+    structural.py legitimately imports ``domain`` (ADR-0003 D8 permits the
+    engine to depend on it) -- that dependency is covered by its own guard
+    in ``tests/test_correlation_structural.py``, not by this G2.0-specific
+    invariant."""
+    correlation_files = [CORRELATION_DIR / "contracts.py", CORRELATION_DIR / "errors.py"]
     offending: list[str] = []
     for path in correlation_files:
         tree = ast.parse(path.read_text(encoding="utf-8"), filename=str(path))
