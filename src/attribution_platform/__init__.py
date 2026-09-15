@@ -58,14 +58,23 @@ Package layout (each submodule states which Phase-0 gate implements it):
                          exactly SAME_HOST_ID/SAME_HOST_NAME/SAME_USER_ID/
                          SAME_USER_NAME/SAME_DESTINATION_IP, attached as
                          context to G2.1's existing groups, never forming or
-                         merging one. No temporal logic and no ATT&CK-driven
-                         correlation exist yet.
+                         merging one. **G2.3 (implemented):** golden-corpus
+                         replay integration
+                         (``replay.replay_fixture_through_correlation``,
+                         built on G1.2's detection replay unchanged) and
+                         persistence
+                         (``dataplane.persist_correlation_link``/
+                         ``persist_correlation_group``, extending G0.8's
+                         pattern) — no change to this package's own
+                         matching logic. No temporal logic and no
+                         ATT&CK-driven correlation exist yet.
 
 This package intentionally contains no attribution or attack-chain logic
 yet, and no temporal/ATT&CK-driven correlation yet (G2.2 completes the
-structural + contextual correlation model; ``BehavioralSequence`` and
-temporal ordering are G2.4) — see ADR-0001/ADR-0002/ADR-0003 and the
-Phase-0/Phase-2 plans for why.
+structural + contextual correlation model; G2.3 validates it end to end
+through real replay and persistence; ``BehavioralSequence`` and temporal
+ordering are G2.4) — see ADR-0001/ADR-0002/ADR-0003 and the Phase-0/Phase-2
+plans for why.
 """
 
 __version__ = "0.0.0"

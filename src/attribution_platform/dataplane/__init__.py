@@ -29,19 +29,43 @@ Gate status:
   (:mod:`attribution_platform.elastic_detections`) needs more than a
   known-id lookup. No mutation surface added; ``ensure_index``/
   ``index_document``/``get_document`` are unchanged.
-- **Not yet implemented:** replay/bulk ingestion (G0.9); the read-model API
-  (G0.10); detection rules, EQL/ES|QL correlation, attack-chain logic, or
-  attribution scoring (none of which belong in this package regardless of
-  gate).
+- **G2.3 (implemented):** ``correlation_persistence`` —
+  ``persist_correlation_link``/``load_correlation_link``/
+  ``persist_correlation_group``/``load_correlation_group``, the same typed,
+  idempotent, fail-closed round trip ``persistence`` already established,
+  additively extended to the two G2.0 correlation contracts
+  (:mod:`attribution_platform.correlation`); ``mappings`` gains
+  ``CORRELATION_LINKS_INDEX``/``CORRELATION_LINKS_MAPPING``/
+  ``CORRELATION_GROUPS_INDEX``/``CORRELATION_GROUPS_MAPPING``, the same
+  schema-version-derived-index-name convention as the Observation/Evidence
+  entries. This is the first gate this package imports
+  :mod:`attribution_platform.correlation` — a new but one-directional,
+  non-cyclic, ADR-0003-anticipated dependency (see
+  ``correlation_persistence``'s own docstring).
+- **Not yet implemented:** replay/bulk ingestion orchestration (that
+  cross-cutting logic lives in :mod:`attribution_platform.replay`, not
+  here); the read-model API (G0.10); detection rules, EQL/ES|QL
+  correlation, attack-chain logic, or attribution scoring (none of which
+  belong in this package regardless of gate).
 """
 
 from __future__ import annotations
 
 from attribution_platform.dataplane.client import ElasticClient
+from attribution_platform.dataplane.correlation_persistence import (
+    load_correlation_group,
+    load_correlation_link,
+    persist_correlation_group,
+    persist_correlation_link,
+)
 from attribution_platform.dataplane.errors import ElasticIntegrationError
 from attribution_platform.dataplane.fake_client import FakeElasticClient
 from attribution_platform.dataplane.http_client import ElasticsearchHttpClient
 from attribution_platform.dataplane.mappings import (
+    CORRELATION_GROUPS_INDEX,
+    CORRELATION_GROUPS_MAPPING,
+    CORRELATION_LINKS_INDEX,
+    CORRELATION_LINKS_MAPPING,
     EVIDENCE_INDEX,
     EVIDENCE_MAPPING,
     OBSERVATIONS_INDEX,
@@ -64,9 +88,17 @@ __all__ = [
     "OBSERVATIONS_MAPPING",
     "EVIDENCE_INDEX",
     "EVIDENCE_MAPPING",
+    "CORRELATION_LINKS_INDEX",
+    "CORRELATION_LINKS_MAPPING",
+    "CORRELATION_GROUPS_INDEX",
+    "CORRELATION_GROUPS_MAPPING",
     "PersistResult",
     "persist_observation",
     "load_observation",
     "persist_evidence",
     "load_evidence",
+    "persist_correlation_link",
+    "load_correlation_link",
+    "persist_correlation_group",
+    "load_correlation_group",
 ]

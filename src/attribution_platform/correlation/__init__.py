@@ -62,10 +62,17 @@ Gate status:
   logic is imported or reimplemented; no temporal logic, no ATT&CK
   reasoning, and no scoring/attribution exists in this module (see that
   module's own docstring for the exact scope boundary).
-- **Not yet implemented:** replay integration + golden corpus (G2.3);
-  ``BehavioralSequence`` + temporal configuration (G2.4); an optional
-  Elastic EQL input adapter (G2.5); anything attribution-related (Phase 3,
-  out of this package entirely).
+- **G2.3 (implemented, outside this package):** replay integration + golden
+  corpus + persistence — see
+  :func:`attribution_platform.replay.replay_fixture_through_correlation` and
+  :func:`attribution_platform.dataplane.persist_correlation_link`/
+  :func:`~attribution_platform.dataplane.persist_correlation_group`. Nothing
+  in *this* package changed for G2.3: it is purely a caller of
+  :func:`correlate_structurally`/:func:`contextualize`, exactly as G2.1/G2.2
+  already were designed to be called.
+- **Not yet implemented:** ``BehavioralSequence`` + temporal configuration
+  (G2.4); an optional Elastic EQL input adapter (G2.5); anything
+  attribution-related (Phase 3, out of this package entirely).
 """
 
 from __future__ import annotations

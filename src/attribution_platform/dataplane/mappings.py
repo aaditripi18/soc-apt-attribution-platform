@@ -38,6 +38,10 @@ from __future__ import annotations
 
 from typing import Any
 
+from attribution_platform.correlation import (
+    CORRELATION_GROUP_SCHEMA_VERSION,
+    CORRELATION_LINK_SCHEMA_VERSION,
+)
 from attribution_platform.domain import EVIDENCE_SCHEMA_VERSION, OBSERVATION_SCHEMA_VERSION
 
 
@@ -50,6 +54,11 @@ def _index_name(prefix: str, schema_version: str) -> str:
 #: Pinned, schema-version-derived index names (never hand-typed elsewhere).
 OBSERVATIONS_INDEX = _index_name("observations", OBSERVATION_SCHEMA_VERSION)
 EVIDENCE_INDEX = _index_name("evidence", EVIDENCE_SCHEMA_VERSION)
+
+#: G2.3: pinned, schema-version-derived index names for the two G2.0
+#: correlation contracts — same convention as OBSERVATIONS_INDEX/EVIDENCE_INDEX.
+CORRELATION_LINKS_INDEX = _index_name("correlation-links", CORRELATION_LINK_SCHEMA_VERSION)
+CORRELATION_GROUPS_INDEX = _index_name("correlation-groups", CORRELATION_GROUP_SCHEMA_VERSION)
 
 #: Explicit field mappings for the Observation index (Elasticsearch "properties").
 OBSERVATIONS_MAPPING: dict[str, Any] = {
@@ -106,4 +115,60 @@ EVIDENCE_MAPPING: dict[str, Any] = {
     },
     "host": {"type": "object"},
     "user": {"type": "object"},
+}
+
+#: G2.3: explicit field mappings for the CorrelationLink index. Mirrors
+#: EVIDENCE_MAPPING's convention exactly: every ``*_id``/enum-valued field is
+#: ``keyword``, the nested ``basis``/``provenance`` objects get their own
+#: hand-typed ``properties`` (the entire field set G2.0's ``CorrelationLink``/
+#: ``CorrelationBasis``/``CorrelationProvenance`` contracts define — nothing
+#: more, since this layer persists no attribution/likelihood/confidence
+#: field, and none exists on these contracts to omit).
+CORRELATION_LINKS_MAPPING: dict[str, Any] = {
+    "link_id": {"type": "keyword"},
+    "anchor_a": {"type": "keyword"},
+    "anchor_b": {"type": "keyword"},
+    "link_class": {"type": "keyword"},
+    "schema_version": {"type": "keyword"},
+    "basis": {
+        "properties": {
+            "link_class": {"type": "keyword"},
+            "field_path": {"type": "keyword"},
+            "observed_value": {"type": "keyword"},
+            "observation_id_a": {"type": "keyword"},
+            "observation_id_b": {"type": "keyword"},
+            "uncertainty_note": {"type": "text"},
+        }
+    },
+    "provenance": {
+        "properties": {
+            "method": {"type": "keyword"},
+            "method_version": {"type": "keyword"},
+            "source_evidence_ids": {"type": "keyword"},
+            "source_observation_ids": {"type": "keyword"},
+            "method_content_hash": {"type": "keyword"},
+        }
+    },
+}
+
+#: G2.3: explicit field mappings for the CorrelationGroup index — the entire
+#: field set G2.0's ``CorrelationGroup`` contract defines (see that module's
+#: docstring: group_id, member ids, link ids, provenance, schema_version —
+#: deliberately no likelihood/confidence/APT-candidate field exists to map).
+CORRELATION_GROUPS_MAPPING: dict[str, Any] = {
+    "group_id": {"type": "keyword"},
+    "member_evidence_ids": {"type": "keyword"},
+    "member_observation_ids": {"type": "keyword"},
+    "structural_link_ids": {"type": "keyword"},
+    "contextual_link_ids": {"type": "keyword"},
+    "schema_version": {"type": "keyword"},
+    "provenance": {
+        "properties": {
+            "method": {"type": "keyword"},
+            "method_version": {"type": "keyword"},
+            "source_evidence_ids": {"type": "keyword"},
+            "source_observation_ids": {"type": "keyword"},
+            "method_content_hash": {"type": "keyword"},
+        }
+    },
 }

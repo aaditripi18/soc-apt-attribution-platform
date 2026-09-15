@@ -35,17 +35,31 @@ Gate status:
   no fixture field anywhere asserts a rule id or ATT&CK mapping — the engine
   decides. G0.9's ``fixtures``/``pipeline`` modules are untouched by this
   gate.
+- **G2.3 (implemented):** ``correlation_pipeline`` —
+  ``replay_fixture_through_correlation()``, which reuses G1.2's
+  ``replay_fixture_through_detection_engine`` unchanged to obtain
+  ``(Evidence, Observation)`` pairs, feeds them through the real G2.1
+  ``correlate_structurally`` and G2.2 ``contextualize`` engines (unchanged),
+  and persists every resulting ``CorrelationLink``/``CorrelationGroup`` via
+  the new G2.3 ``dataplane.persist_correlation_link``/
+  ``persist_correlation_group``. This module hand-authors no
+  ``CorrelationGroup``/``CorrelationLink`` and no ``DetectionResult``/
+  ``Evidence`` — every one comes from calling the real, unmodified engines.
 - **Not yet implemented:** replaying a real telemetry-source adapter's
   output through this package (the Sysmon adapter itself was added at
   G0.11, but reads live/real telemetry, not fixtures — unrelated to and
-  untouched by this package); ATT&CK candidate generation, correlation,
-  attack-chain logic, or attribution; the read-model API (G0.10); live
-  adversary emulation (never automated — see
+  untouched by this package); ``BehavioralSequence``/temporal correlation
+  (G2.4); ATT&CK-aware correlation, attack-chain logic, or attribution; the
+  read-model API (G0.10); live adversary emulation (never automated — see
   docs/architecture/12-deployment-and-endpoint-scope.md §J).
 """
 
 from __future__ import annotations
 
+from attribution_platform.replay.correlation_pipeline import (
+    CorrelationReplayResult,
+    replay_fixture_through_correlation,
+)
 from attribution_platform.replay.detection_fixtures import (
     DetectionReplayFixture,
     DetectionReplayScenario,
@@ -77,4 +91,6 @@ __all__ = [
     "load_detection_replay_fixture_file",
     "DetectionReplayResult",
     "replay_fixture_through_detection_engine",
+    "CorrelationReplayResult",
+    "replay_fixture_through_correlation",
 ]
