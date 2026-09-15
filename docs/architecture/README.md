@@ -31,6 +31,7 @@ code exists. Read alongside [CLAUDE.md](../../CLAUDE.md).
 | [adr/0001-evidence-graph-core-architecture.md](adr/0001-evidence-graph-core-architecture.md) | Evidence-Graph Core architecture (Option B) | **ACCEPTED** (2026-09-11, D8 modified per M1) |
 | [adr/0002-attribution-scoring-and-evidence-methodology.md](adr/0002-attribution-scoring-and-evidence-methodology.md) | Attribution scoring & evidence methodology | **ACCEPTED** (2026-09-11, D22 modified per M2) |
 | [adr/0003-correlation-and-behavioral-chain-layer.md](adr/0003-correlation-and-behavioral-chain-layer.md) | Correlation and behavioral-chain layer (Phase 2) | **ACCEPTED** (2026-09-15, no decisions modified) |
+| [adr/0004-behavioral-sequence-reconstruction.md](adr/0004-behavioral-sequence-reconstruction.md) | Behavioral sequence reconstruction (Phase 2, gate G2.4) | **ACCEPTED** (2026-09-15, corrected twice during pre-acceptance review, no decisions modified at acceptance) |
 
 ## The one-paragraph summary
 
