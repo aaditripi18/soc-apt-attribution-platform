@@ -30,13 +30,32 @@ Gate status:
   **Set construction only** — no diagnosticity, no ACH, no likelihood/
   confidence, no abstention, no calibration. See that module's own
   docstring for the exact scope boundary.
-- **Not yet implemented:** ACH scoring, diagnosticity (`g(x)`/`D(x)`),
-  likelihood/confidence computation, abstention, calibration, next-evidence
-  guidance, persistence.
+- **G3.4 (implemented):** ``ach_matrix`` —
+  :func:`~attribution_platform.attribution.ach_matrix.build_ach_matrix`
+  (ADR-0005 §D4/§D8): deterministic ACH evidence-assessment / matrix
+  construction from a Gate 3.3
+  :class:`~attribution_platform.attribution.candidate_generation.CandidateGenerationResult`
+  — structured evidence × hypothesis assessment only, never a candidate
+  regeneration and never an attribution decision. The matrix is
+  deliberately sparse: only ``CONSISTENT``/``SUPPORTING`` cells are
+  materialized (see that module's own docstring for the proof that
+  ``INCONSISTENT`` is not reachable without the not-yet-implemented
+  ``CoverageProfile`` wiring). No diagnosticity (`g(x)`/`D(x)`), no ACH
+  scoring, no likelihood/confidence, no abstention, no calibration.
+- **Not yet implemented:** diagnosticity computation (`g(x)`/`D(x)`/`D(C)`),
+  `support(h)`, likelihood/confidence computation, abstention, calibration,
+  next-evidence guidance, persistence.
 """
 
 from __future__ import annotations
 
+from attribution_platform.attribution.ach_matrix import (
+    ACH_MATRIX_METHOD,
+    ACH_MATRIX_METHOD_VERSION,
+    ACHMatrix,
+    build_ach_matrix,
+    compute_diagnosticity_ref,
+)
 from attribution_platform.attribution.candidate_generation import (
     CANDIDATE_GENERATION_METHOD,
     CANDIDATE_GENERATION_METHOD_VERSION,
@@ -121,4 +140,9 @@ __all__ = [
     "CandidateGenerationResult",
     "CANDIDATE_GENERATION_METHOD",
     "CANDIDATE_GENERATION_METHOD_VERSION",
+    "build_ach_matrix",
+    "ACHMatrix",
+    "compute_diagnosticity_ref",
+    "ACH_MATRIX_METHOD",
+    "ACH_MATRIX_METHOD_VERSION",
 ]
