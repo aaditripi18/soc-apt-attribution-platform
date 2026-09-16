@@ -24,6 +24,13 @@ Gate status:
   bounded KB lookup validating a domain ``AttackRef`` against the loaded KB
   (exists + STIX type match + KB-version match). No alias resolution, no
   relationship traversal.
-- **Not yet implemented:** candidate generation / alias resolution /
-  relationship traversal, attribution.
+- **G3.1 (implemented):** ``traversal`` — ADR-0005 §D6's knowledge-traversal
+  layer: fail-closed entity resolution, alias resolution (with explicit
+  ambiguity failure, never an arbitrary choice), active/revoked/deprecated
+  filtering, forward/reverse ``uses``-relationship traversal, and
+  combination/profile population queries. Still no diagnosticity computation
+  (``g(x)``/``D(x)``), no candidate generation, no attribution — those
+  remain later Phase 3 gates.
+- **Not yet implemented:** candidate generation, ACH/likelihood/confidence,
+  calibration, attribution.
 """

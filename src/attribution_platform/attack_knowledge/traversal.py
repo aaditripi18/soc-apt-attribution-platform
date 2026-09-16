@@ -1,0 +1,468 @@
+"""Deterministic ATT&CK knowledge traversal and entity resolution (gate G3.1).
+
+Implements the knowledge-boundary capabilities ADR-0005 §D6 named as a Phase-3
+prerequisite ("extend ``attack_knowledge/``, additively") and the entity/alias/
+active-filtering/combination-query requirements Gate 3.1 adds on top of it.
+This module is pure, read-only knowledge infrastructure: it never creates or
+mutates a Phase 0-2 object, never generates a ``Candidate``, and never
+computes a diagnosticity value (``g(x)``/``D(x)``) — it only exposes the raw,
+authoritative queries a later Attribution Engine gate will use to compute
+those. See the module-level "Deliberately out of scope" note below.
+
+Built entirely on top of the existing, unmodified, frozen G0.2 loader
+(:mod:`attribution_platform.attack_knowledge.loader`) — this module adds a new
+sibling capability rather than reopening ``loader.py``, mirroring this
+project's own repeated "additive sibling module, never reopen a frozen gate"
+precedent (``structural.py`` -> ``contextual.py`` -> ... each Phase-2 gate).
+
+What this module provides:
+
+- **Entity resolution** (:func:`resolve_entity`): fail-closed lookup of a
+  canonical STIX id, optionally asserting the object's STIX type.
+- **Alias resolution** (:func:`aliases_for`, :func:`resolve_alias`): the
+  known alias strings for a canonical entity, and the reverse — resolving an
+  alias name back to exactly one canonical, *active* entity id, or failing
+  closed (:class:`UnknownAttackEntityError`) when none match, or
+  (:class:`AmbiguousAliasError`) when the alias is genuinely shared by two or
+  more distinct active entities. No identity is ever arbitrarily chosen.
+- **Active-object filtering** (:func:`is_active`, :func:`active_groups`,
+  :func:`active_campaigns`): distinguishes active from ``revoked``/
+  ``x_mitre_deprecated`` objects. Filtering is a read-time semantic view over
+  the same immutable, loaded bundle — nothing is deleted from it.
+- **Relationship traversal**: forward (:func:`group_profile`,
+  :func:`techniques_used_by`, :func:`software_used_by`) and reverse
+  (:func:`groups_using_technique`, :func:`campaigns_using_technique`,
+  :func:`groups_using_software`, :func:`campaigns_using_software`,
+  :func:`software_using_technique`) queries over real STIX ``uses``
+  relationships only — no relationship is inferred or fabricated.
+- **Combination/profile queries** (:func:`groups_using_all_techniques`,
+  :func:`campaigns_using_all_techniques`): "which active Group/Campaign
+  profiles are a superset of this technique/software id set" — the exact
+  population query ADR-0005 §D3's (not-yet-implemented) combination
+  diagnosticity will need, exposed here as a plain set query.
+
+Deliberately out of scope (see ADR-0005 and the Gate 3.1 task boundary —
+building any of this is a later gate's job, not this module's):
+
+- No ``g(x)``/``D(x)``/``g(C)``/``D(C)`` computation of any kind.
+- No ``Candidate``/``Hypothesis`` construction or candidate generation (D7).
+- No ACH matrix, likelihood, confidence, abstention, or calibration.
+- No TI enrichment, no live/network ATT&CK access, no campaign-attribution
+  (``attributed-to``) traversal — not required by this gate.
+
+Determinism: every function here operates only on the one pinned, already-
+verified, deeply-immutable :class:`~attribution_platform.attack_knowledge.loader.AttackKnowledge`
+passed in by the caller — never a version string, never a path, never a
+network call. Every returned collection of ids is a ``tuple[str, ...]``
+sorted by the ids themselves (never a bare ``frozenset`` iteration order,
+never insertion/dict order) — the same "sorted by id before returned"
+discipline ADR-0005 §D16 requires of the attribution layer, applied here one
+gate early since this is exactly the kind of collection that discipline
+exists to protect.
+"""
+
+from __future__ import annotations
+
+from attribution_platform.attack_knowledge.loader import AttackKnowledge, FrozenStixObject
+
+# STIX object "type" values this module reasons about. Each layer in this
+# codebase owns its own local type constants rather than importing another
+# submodule's private names (the same convention correlation/*.py already
+# established) — these deliberately duplicate loader.py's own private
+# _TYPE_* constants rather than importing them.
+_TYPE_GROUP = "intrusion-set"
+_TYPE_CAMPAIGN = "campaign"
+_TYPE_TECHNIQUE = "attack-pattern"
+_TYPE_MALWARE = "malware"
+_TYPE_TOOL = "tool"
+
+_SOFTWARE_TYPES: frozenset[str] = frozenset({_TYPE_MALWARE, _TYPE_TOOL})
+_ALIAS_BEARING_TYPES: frozenset[str] = frozenset(
+    {_TYPE_GROUP, _TYPE_CAMPAIGN, _TYPE_MALWARE, _TYPE_TOOL}
+)
+
+_RELATIONSHIP_USES = "uses"
+
+
+class UnknownAttackEntityError(LookupError):
+    """Raised when a STIX id (or alias, or object-type expectation) does not
+    resolve against the loaded ATT&CK knowledge base.
+
+    Fail-closed: this is never a signal to fabricate, guess, or silently
+    substitute a different object — callers must treat it as fatal for the
+    query being made.
+    """
+
+
+class AmbiguousAliasError(ValueError):
+    """Raised when an alias string resolves to more than one distinct
+    *active* ATT&CK entity.
+
+    Fail-closed: no identity is ever arbitrarily chosen between candidates —
+    this is a genuine data ambiguity (two active entities documented under
+    the same alias) that only a caller with additional context can resolve.
+    """
+
+
+class InvalidCombinationQueryError(ValueError):
+    """Raised when a combination/profile query is malformed (e.g. an empty
+    technique/software id set) — a caller-usage error, not a knowledge-base
+    gap.
+    """
+
+
+# ===========================================================================
+# A. Entity resolution
+# ===========================================================================
+
+
+def resolve_entity(
+    knowledge: AttackKnowledge, stix_id: str, *, expected_type: str | None = None
+) -> FrozenStixObject:
+    """Resolve ``stix_id`` to its pinned ATT&CK object, or fail closed.
+
+    Never fabricates an object for an unknown id — raises
+    :class:`UnknownAttackEntityError` instead. When ``expected_type`` is
+    given, the resolved object's own STIX ``type`` field must match it
+    exactly, or the same error is raised (never a silent type coercion).
+    """
+    obj = knowledge.get_by_id(stix_id)
+    if obj is None:
+        raise UnknownAttackEntityError(
+            f"{stix_id!r} does not exist in ATT&CK {knowledge.attack_kb_version}"
+        )
+    actual_type = obj.get("type")
+    if expected_type is not None and actual_type != expected_type:
+        raise UnknownAttackEntityError(
+            f"{stix_id!r} resolves to a {actual_type!r} object in "
+            f"{knowledge.attack_kb_version}, expected {expected_type!r}"
+        )
+    return obj
+
+
+# ===========================================================================
+# C. Active-object filtering
+# ===========================================================================
+
+
+def is_active(obj: FrozenStixObject) -> bool:
+    """True iff ``obj`` is neither ``revoked`` nor ``x_mitre_deprecated``.
+
+    Both STIX fields are optional/absent on most objects; per STIX
+    convention, absence (or any value other than the literal ``True``) means
+    the flag does not apply — only an explicit ``True`` marks an object
+    revoked/deprecated.
+    """
+    return obj.get("revoked") is not True and obj.get("x_mitre_deprecated") is not True
+
+
+def active_groups(knowledge: AttackKnowledge) -> tuple[FrozenStixObject, ...]:
+    """Every non-revoked, non-deprecated ``intrusion-set`` object, sorted by
+    STIX id. This is the exact "active Group" population ADR-0005 §D3's
+    (not computed here) prevalence denominator is defined over."""
+    return tuple(
+        sorted((g for g in knowledge.groups() if is_active(g)), key=lambda o: str(o["id"]))
+    )
+
+
+def active_campaigns(knowledge: AttackKnowledge) -> tuple[FrozenStixObject, ...]:
+    """Every non-revoked, non-deprecated ``campaign`` object, sorted by STIX id."""
+    return tuple(
+        sorted((c for c in knowledge.campaigns() if is_active(c)), key=lambda o: str(o["id"]))
+    )
+
+
+# ===========================================================================
+# B. Alias resolution
+# ===========================================================================
+
+
+def _alias_strings(obj: FrozenStixObject) -> frozenset[str]:
+    """The object's own ATT&CK name plus every string in its ``aliases``
+    (Group/Campaign) or ``x_mitre_aliases`` (Software) STIX field."""
+    names: set[str] = set()
+    name = obj.get("name")
+    if isinstance(name, str) and name:
+        names.add(name)
+    for field in ("aliases", "x_mitre_aliases"):
+        values = obj.get(field)
+        if isinstance(values, tuple):
+            for value in values:
+                if isinstance(value, str) and value:
+                    names.add(value)
+    return frozenset(names)
+
+
+def aliases_for(knowledge: AttackKnowledge, stix_id: str) -> frozenset[str]:
+    """The canonical ATT&CK name plus every known alias string for
+    ``stix_id`` — read directly from that object's own ``aliases``/
+    ``x_mitre_aliases`` STIX field. Fails closed on an unknown id.
+
+    This performs no cross-object collapsing beyond what the pinned bundle
+    itself already records: when MITRE merges one group's identity into
+    another's (a STIX ``revoked-by`` relationship), the surviving object's
+    own ``aliases`` field already carries the retired object's alias names —
+    this function reads that field as-is, never re-deriving or second-
+    guessing it.
+    """
+    obj = resolve_entity(knowledge, stix_id)
+    return _alias_strings(obj)
+
+
+def _normalize_alias(alias: str) -> str:
+    """Deterministic normalization key for alias comparison: trims
+    surrounding whitespace and case-folds. The same key for the same
+    logical alias, regardless of casing/incidental whitespace."""
+    return alias.strip().casefold()
+
+
+def resolve_alias(
+    knowledge: AttackKnowledge,
+    alias: str,
+    *,
+    object_types: frozenset[str] = _ALIAS_BEARING_TYPES,
+) -> str:
+    """Resolve an alias name (case/whitespace-insensitive) to exactly one
+    canonical STIX id among the *active* entities of ``object_types``.
+
+    Fails closed in both directions:
+
+    - :class:`UnknownAttackEntityError` if no active entity of the requested
+      types carries this alias.
+    - :class:`AmbiguousAliasError` if two or more *distinct* active entities
+      carry the identical normalized alias — this genuinely occurs in the
+      pinned v19.0 bundle (two different active Groups documented under the
+      same public alias); no identity is ever arbitrarily chosen.
+
+    Multiple alias strings belonging to the SAME STIX object always resolve
+    to that one object's id without ambiguity — this only raises when the
+    normalized alias is shared by *different* canonical entities.
+    """
+    normalized = _normalize_alias(alias)
+    if not normalized:
+        raise UnknownAttackEntityError("alias must be a non-empty string")
+
+    matches: set[str] = set()
+    for stix_type in object_types:
+        for obj in knowledge.objects_of_type(stix_type):
+            if not is_active(obj):
+                continue
+            if any(_normalize_alias(name) == normalized for name in _alias_strings(obj)):
+                matches.add(str(obj["id"]))
+
+    if not matches:
+        raise UnknownAttackEntityError(
+            f"alias {alias!r} does not resolve to any active ATT&CK entity "
+            f"in {knowledge.attack_kb_version}"
+        )
+    if len(matches) > 1:
+        raise AmbiguousAliasError(
+            f"alias {alias!r} is ambiguous across active entities in "
+            f"{knowledge.attack_kb_version}: {tuple(sorted(matches))!r}"
+        )
+    return next(iter(matches))
+
+
+# ===========================================================================
+# D. Relationship traversal (forward + reverse), over real STIX "uses" edges
+# ===========================================================================
+
+
+def _uses_index_by_source(knowledge: AttackKnowledge) -> dict[str, frozenset[str]]:
+    """``source_ref -> {target_ref, ...}`` over every ``uses`` relationship.
+
+    Built fresh from the loaded (already frozen, already verified)
+    relationship objects on every call — a pure function of ``knowledge``,
+    never cached/mutated global state, so repeated calls against the same
+    pinned artifact are always logically equivalent.
+    """
+    index: dict[str, set[str]] = {}
+    for rel in knowledge.relationships():
+        if rel.get("relationship_type") != _RELATIONSHIP_USES:
+            continue
+        source = rel.get("source_ref")
+        target = rel.get("target_ref")
+        if isinstance(source, str) and isinstance(target, str):
+            index.setdefault(source, set()).add(target)
+    return {key: frozenset(value) for key, value in index.items()}
+
+
+def _uses_index_by_target(knowledge: AttackKnowledge) -> dict[str, frozenset[str]]:
+    """``target_ref -> {source_ref, ...}`` over every ``uses`` relationship —
+    the reverse of :func:`_uses_index_by_source`."""
+    index: dict[str, set[str]] = {}
+    for rel in knowledge.relationships():
+        if rel.get("relationship_type") != _RELATIONSHIP_USES:
+            continue
+        source = rel.get("source_ref")
+        target = rel.get("target_ref")
+        if isinstance(source, str) and isinstance(target, str):
+            index.setdefault(target, set()).add(source)
+    return {key: frozenset(value) for key, value in index.items()}
+
+
+def _object_type(knowledge: AttackKnowledge, stix_id: str) -> str | None:
+    obj = knowledge.get_by_id(stix_id)
+    return str(obj["type"]) if obj is not None else None
+
+
+def _filter_by_type(
+    knowledge: AttackKnowledge, stix_ids: frozenset[str], stix_type: str
+) -> tuple[str, ...]:
+    return tuple(sorted(sid for sid in stix_ids if _object_type(knowledge, sid) == stix_type))
+
+
+def _filter_active_by_type(
+    knowledge: AttackKnowledge, stix_ids: frozenset[str], stix_type: str
+) -> tuple[str, ...]:
+    result = []
+    for sid in stix_ids:
+        obj = knowledge.get_by_id(sid)
+        if obj is not None and obj.get("type") == stix_type and is_active(obj):
+            result.append(sid)
+    return tuple(sorted(result))
+
+
+def group_profile(knowledge: AttackKnowledge, stix_id: str) -> tuple[str, ...]:
+    """The full technique+software ``uses`` set for one Group or Campaign,
+    sorted by STIX id — the exact population ADR-0005 §D3's (not computed
+    here) combination prevalence ``g(C)`` needs. Fails closed on an unknown
+    id or an id that is not a Group/Campaign."""
+    obj = resolve_entity(knowledge, stix_id)
+    if obj.get("type") not in (_TYPE_GROUP, _TYPE_CAMPAIGN):
+        raise UnknownAttackEntityError(
+            f"{stix_id!r} is a {obj.get('type')!r} object; group_profile() requires a "
+            f"{_TYPE_GROUP!r} or {_TYPE_CAMPAIGN!r}"
+        )
+    targets = _uses_index_by_source(knowledge).get(stix_id, frozenset())
+    return tuple(sorted(targets))
+
+
+def techniques_used_by(knowledge: AttackKnowledge, stix_id: str) -> tuple[str, ...]:
+    """The technique-only subset of this entity's ``uses`` profile (every
+    ``attack-pattern`` id it is recorded as using), sorted by id. Works for
+    any ``uses``-source entity (Group, Campaign, or Software). Fails closed
+    on an unknown id."""
+    resolve_entity(knowledge, stix_id)
+    targets = _uses_index_by_source(knowledge).get(stix_id, frozenset())
+    return _filter_by_type(knowledge, targets, _TYPE_TECHNIQUE)
+
+
+def software_used_by(knowledge: AttackKnowledge, stix_id: str) -> tuple[str, ...]:
+    """The software-only subset (``malware``/``tool``) of this entity's
+    ``uses`` profile, sorted by id. Fails closed on an unknown id."""
+    resolve_entity(knowledge, stix_id)
+    targets = _uses_index_by_source(knowledge).get(stix_id, frozenset())
+    return tuple(sorted(t for t in targets if _object_type(knowledge, t) in _SOFTWARE_TYPES))
+
+
+def groups_using_technique(knowledge: AttackKnowledge, technique_stix_id: str) -> tuple[str, ...]:
+    """Every *active* Group recorded as using this technique, sorted by id —
+    the reverse lookup ADR-0005 §D3's ``g(x)`` (not computed here) needs.
+    Fails closed on an unknown/non-technique id."""
+    resolve_entity(knowledge, technique_stix_id, expected_type=_TYPE_TECHNIQUE)
+    sources = _uses_index_by_target(knowledge).get(technique_stix_id, frozenset())
+    return _filter_active_by_type(knowledge, sources, _TYPE_GROUP)
+
+
+def campaigns_using_technique(
+    knowledge: AttackKnowledge, technique_stix_id: str
+) -> tuple[str, ...]:
+    """Every *active* Campaign recorded as using this technique, sorted by
+    id. Fails closed on an unknown/non-technique id."""
+    resolve_entity(knowledge, technique_stix_id, expected_type=_TYPE_TECHNIQUE)
+    sources = _uses_index_by_target(knowledge).get(technique_stix_id, frozenset())
+    return _filter_active_by_type(knowledge, sources, _TYPE_CAMPAIGN)
+
+
+def software_using_technique(knowledge: AttackKnowledge, technique_stix_id: str) -> tuple[str, ...]:
+    """Every Software (``malware``/``tool``) object related to this
+    technique via a real ``uses`` relationship, sorted by id — unfiltered by
+    active/revoked status (callers needing only active software may filter
+    the result with :func:`is_active` themselves; this query answers "which
+    Software objects are related to technique X", not "which active
+    Software"). Fails closed on an unknown/non-technique id."""
+    resolve_entity(knowledge, technique_stix_id, expected_type=_TYPE_TECHNIQUE)
+    sources = _uses_index_by_target(knowledge).get(technique_stix_id, frozenset())
+    result = [s for s in sources if _object_type(knowledge, s) in _SOFTWARE_TYPES]
+    return tuple(sorted(result))
+
+
+def groups_using_software(knowledge: AttackKnowledge, software_stix_id: str) -> tuple[str, ...]:
+    """Every *active* Group recorded as using this software, sorted by id —
+    the reverse lookup ADR-0005 §D3's software-extended ``g(x)`` (not
+    computed here) needs. Fails closed on an unknown/non-software id."""
+    obj = resolve_entity(knowledge, software_stix_id)
+    if obj.get("type") not in _SOFTWARE_TYPES:
+        raise UnknownAttackEntityError(
+            f"{software_stix_id!r} is a {obj.get('type')!r} object, expected "
+            f"{_TYPE_MALWARE!r} or {_TYPE_TOOL!r}"
+        )
+    sources = _uses_index_by_target(knowledge).get(software_stix_id, frozenset())
+    return _filter_active_by_type(knowledge, sources, _TYPE_GROUP)
+
+
+def campaigns_using_software(knowledge: AttackKnowledge, software_stix_id: str) -> tuple[str, ...]:
+    """Every *active* Campaign recorded as using this software, sorted by
+    id. Fails closed on an unknown/non-software id."""
+    obj = resolve_entity(knowledge, software_stix_id)
+    if obj.get("type") not in _SOFTWARE_TYPES:
+        raise UnknownAttackEntityError(
+            f"{software_stix_id!r} is a {obj.get('type')!r} object, expected "
+            f"{_TYPE_MALWARE!r} or {_TYPE_TOOL!r}"
+        )
+    sources = _uses_index_by_target(knowledge).get(software_stix_id, frozenset())
+    return _filter_active_by_type(knowledge, sources, _TYPE_CAMPAIGN)
+
+
+# ===========================================================================
+# Combination/profile queries — the population lookups ADR-0005 §D3's
+# combination diagnosticity (g(C)/D(C), NOT computed here) will consume.
+# ===========================================================================
+
+
+def groups_using_all_techniques(
+    knowledge: AttackKnowledge, technique_stix_ids: frozenset[str]
+) -> tuple[str, ...]:
+    """Every *active* Group whose ``uses`` profile is a superset of
+    ``technique_stix_ids``, sorted by id.
+
+    ``technique_stix_ids`` must be non-empty and every id must resolve to a
+    real ``attack-pattern`` in this KB — fails closed
+    (:class:`InvalidCombinationQueryError` / :class:`UnknownAttackEntityError`)
+    otherwise. Returns an empty tuple (not an error) when the combination is
+    well-formed but no active Group's profile satisfies it — that is a
+    legitimate, deterministic "no matches" result, not a failure.
+    """
+    if not technique_stix_ids:
+        raise InvalidCombinationQueryError("technique_stix_ids must be non-empty")
+    for technique_stix_id in technique_stix_ids:
+        resolve_entity(knowledge, technique_stix_id, expected_type=_TYPE_TECHNIQUE)
+
+    index = _uses_index_by_source(knowledge)
+    matches = [
+        str(group["id"])
+        for group in active_groups(knowledge)
+        if technique_stix_ids <= index.get(str(group["id"]), frozenset())
+    ]
+    return tuple(sorted(matches))
+
+
+def campaigns_using_all_techniques(
+    knowledge: AttackKnowledge, technique_stix_ids: frozenset[str]
+) -> tuple[str, ...]:
+    """Every *active* Campaign whose ``uses`` profile is a superset of
+    ``technique_stix_ids``, sorted by id. Same fail-closed/empty-result
+    contract as :func:`groups_using_all_techniques`."""
+    if not technique_stix_ids:
+        raise InvalidCombinationQueryError("technique_stix_ids must be non-empty")
+    for technique_stix_id in technique_stix_ids:
+        resolve_entity(knowledge, technique_stix_id, expected_type=_TYPE_TECHNIQUE)
+
+    index = _uses_index_by_source(knowledge)
+    matches = [
+        str(campaign["id"])
+        for campaign in active_campaigns(knowledge)
+        if technique_stix_ids <= index.get(str(campaign["id"]), frozenset())
+    ]
+    return tuple(sorted(matches))
