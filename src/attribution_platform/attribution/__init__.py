@@ -42,9 +42,21 @@ Gate status:
   ``INCONSISTENT`` is not reachable without the not-yet-implemented
   ``CoverageProfile`` wiring). No diagnosticity (`g(x)`/`D(x)`), no ACH
   scoring, no likelihood/confidence, no abstention, no calibration.
-- **Not yet implemented:** diagnosticity computation (`g(x)`/`D(x)`/`D(C)`),
-  `support(h)`, likelihood/confidence computation, abstention, calibration,
-  next-evidence guidance, persistence.
+- **G3.5 (implemented):** ``comparative_analysis`` —
+  :func:`~attribution_platform.attribution.comparative_analysis.compute_comparative_evidence`
+  (ADR-0005 §D3/§D4/§D8/§D9): deterministic `support(h)` comparative
+  evidence aggregation from a Gate 3.4 ``ACHMatrix`` — diagnosticity
+  (`g(x)`/`D(x)`/`g(C)`/`D(C)`, active-Group-population-relative,
+  candidate-type-invariant) and the deterministic combination-partition
+  selection rule, both per ADR-0005 §D3 exactly. **Internal comparative
+  aggregation only** — no likelihood/WEP, no confidence, no calibration, no
+  abstention, no winner/final attribution. See that module's own docstring
+  for the exact scope boundary and its explicitly-flagged interpretive
+  completions (the combination-partition *search* procedure, and the
+  currently-always-zero `contradiction_strength` term).
+- **Not yet implemented:** likelihood/WEP computation, confidence
+  computation, abstention, calibration, next-evidence guidance, final
+  attribution, persistence.
 """
 
 from __future__ import annotations
@@ -61,6 +73,15 @@ from attribution_platform.attribution.candidate_generation import (
     CANDIDATE_GENERATION_METHOD_VERSION,
     CandidateGenerationResult,
     generate_candidates,
+)
+from attribution_platform.attribution.comparative_analysis import (
+    COMPARATIVE_ANALYSIS_METHOD,
+    COMPARATIVE_ANALYSIS_METHOD_VERSION,
+    ComparativeEvidenceResult,
+    DiagnosticityOutcome,
+    EvidenceContribution,
+    HypothesisSupportSummary,
+    compute_comparative_evidence,
 )
 from attribution_platform.attribution.contracts import (
     ATTRIBUTION_ASSESSMENT_SCHEMA_VERSION,
@@ -145,4 +166,11 @@ __all__ = [
     "compute_diagnosticity_ref",
     "ACH_MATRIX_METHOD",
     "ACH_MATRIX_METHOD_VERSION",
+    "compute_comparative_evidence",
+    "ComparativeEvidenceResult",
+    "HypothesisSupportSummary",
+    "EvidenceContribution",
+    "DiagnosticityOutcome",
+    "COMPARATIVE_ANALYSIS_METHOD",
+    "COMPARATIVE_ANALYSIS_METHOD_VERSION",
 ]
