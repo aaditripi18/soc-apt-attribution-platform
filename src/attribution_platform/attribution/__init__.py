@@ -20,13 +20,29 @@ Gate status:
   no diagnosticity computation, no likelihood/confidence calculation, no
   abstention, no calibration, no next-evidence algorithm. See
   ``contracts``'s own module docstring for the exact scope boundary.
-- **Not yet implemented:** candidate generation, ACH scoring, likelihood/
-  confidence computation, abstention, calibration, next-evidence guidance,
-  persistence.
+- **G3.3 (implemented):** ``candidate_generation`` —
+  :func:`~attribution_platform.attribution.candidate_generation.generate_candidates`
+  (ADR-0005 §D7): the deterministic candidate/hypothesis SET construction
+  for one attribution unit (one ``CorrelationGroup`` + its
+  ``BehavioralSequence``), dynamically discovered from the pinned ATT&CK KB
+  via the Gate 3.1 traversal layer — always includes the explicit
+  Unattributed hypothesis, never a hard-coded actor list, never a score.
+  **Set construction only** — no diagnosticity, no ACH, no likelihood/
+  confidence, no abstention, no calibration. See that module's own
+  docstring for the exact scope boundary.
+- **Not yet implemented:** ACH scoring, diagnosticity (`g(x)`/`D(x)`),
+  likelihood/confidence computation, abstention, calibration, next-evidence
+  guidance, persistence.
 """
 
 from __future__ import annotations
 
+from attribution_platform.attribution.candidate_generation import (
+    CANDIDATE_GENERATION_METHOD,
+    CANDIDATE_GENERATION_METHOD_VERSION,
+    CandidateGenerationResult,
+    generate_candidates,
+)
 from attribution_platform.attribution.contracts import (
     ATTRIBUTION_ASSESSMENT_SCHEMA_VERSION,
     ATTRIBUTION_PROVENANCE_SCHEMA_VERSION,
@@ -101,4 +117,8 @@ __all__ = [
     "AttributionResult",
     "ATTRIBUTION_RESULT_SCHEMA_VERSION",
     "compute_attribution_result_id",
+    "generate_candidates",
+    "CandidateGenerationResult",
+    "CANDIDATE_GENERATION_METHOD",
+    "CANDIDATE_GENERATION_METHOD_VERSION",
 ]
