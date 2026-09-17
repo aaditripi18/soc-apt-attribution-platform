@@ -50,10 +50,21 @@ Gate status:
   **Corpus identity only** — this gate creates ``calibration_corpus_version``
   and **no** ``calibration_version``, **no** fitting, **no** split/leakage
   validation, **no** scoring.
-- **B1.4+ (deferred, not implemented):** scenario-family split / leakage
-  validation; provenance / license correctness validation; the read-only corpus
-  validation harness; and — much later — parameter fitting and
-  ``calibration_version``. No ``calibration_version`` and no fitting exist yet.
+- **B1.4 (implemented — this gate):** ``split_validation`` — the read-only
+  :func:`~attribution_platform.calibration.split_validation.validate_split`
+  (and :func:`~attribution_platform.calibration.split_validation.require_valid_split`)
+  producing a deterministic
+  :class:`~attribution_platform.calibration.split_validation.SplitValidationReport`
+  of :class:`~attribution_platform.calibration.split_validation.SplitValidationViolation`
+  objects (:class:`~attribution_platform.calibration.split_validation.SplitViolationType`).
+  Enforces scenario-family -> single-role disjointness and blind-actor-holdout
+  readiness (§D9/§D10). **Read-only, no ATT&CK, no ablation, no fitting, no
+  ``calibration_version``.**
+- **B1.5+ (deferred, not implemented):** provenance / license *correctness*
+  validation (B1.5); the corpus quality/coverage validation harness (B1.6); the
+  later blind-actor ATT&CK identity-ablation evaluation; and — much later —
+  parameter fitting and ``calibration_version``. No ``calibration_version`` and
+  no fitting exist yet.
 """
 
 from __future__ import annotations
@@ -82,6 +93,15 @@ from attribution_platform.calibration.manifest import (
     CorpusSourceEntry,
     compute_calibration_corpus_version,
 )
+from attribution_platform.calibration.split_validation import (
+    NO_MANIFEST_CORPUS_VERSION,
+    SPLIT_VALIDATION_SCHEMA_VERSION,
+    SplitValidationReport,
+    SplitValidationViolation,
+    SplitViolationType,
+    require_valid_split,
+    validate_split,
+)
 
 __all__ = [
     "CalibrationError",
@@ -104,4 +124,11 @@ __all__ = [
     "CALIBRATION_MANIFEST_SCHEMA_VERSION",
     "CALIBRATION_CORPUS_VERSION_PREFIX",
     "CORPUS_VERSION_INPUT_FIELDS",
+    "validate_split",
+    "require_valid_split",
+    "SplitValidationReport",
+    "SplitValidationViolation",
+    "SplitViolationType",
+    "SPLIT_VALIDATION_SCHEMA_VERSION",
+    "NO_MANIFEST_CORPUS_VERSION",
 ]
