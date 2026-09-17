@@ -31,12 +31,16 @@ from attribution_platform.attack_knowledge.loader import (
     _load_from_dir,
     load_attack_knowledge,
 )
-from attribution_platform.attack_knowledge.traversal import groups_using_technique
+from attribution_platform.attack_knowledge.traversal import group_profile, groups_using_technique
 from attribution_platform.attack_knowledge.verification import EXPECTED_ARTIFACT_FILENAME
 from attribution_platform.attribution import comparative_analysis as comparative_analysis_module
 from attribution_platform.attribution.ach_matrix import build_ach_matrix
-from attribution_platform.attribution.candidate_generation import generate_candidates
+from attribution_platform.attribution.candidate_generation import (
+    CandidateGenerationResult,
+    generate_candidates,
+)
 from attribution_platform.attribution.comparative_analysis import (
+    DEFAULT_MIN_PROFILE_FLOOR,
     ComparativeEvidenceResult,
     DiagnosticityOutcome,
     EvidenceContribution,
@@ -266,14 +270,32 @@ def _sequence_from_feature_lists(
     )
 
 
-def _analyze(
-    knowledge: AttackKnowledge, feature_lists: list[tuple[str, ...]]
-) -> ComparativeEvidenceResult:
+def _analyze_full(
+    knowledge: AttackKnowledge,
+    feature_lists: list[tuple[str, ...]],
+    *,
+    min_profile_floor: int = DEFAULT_MIN_PROFILE_FLOOR,
+) -> tuple[CandidateGenerationResult, ComparativeEvidenceResult]:
     group = _correlation_group()
     sequence = _sequence_from_feature_lists(group.group_id, feature_lists)
     candidate_result = generate_candidates(group, sequence, knowledge)
     matrix = build_ach_matrix(group, sequence, candidate_result, knowledge)
-    return compute_comparative_evidence(matrix, knowledge)
+    result = compute_comparative_evidence(
+        matrix, knowledge, candidate_result, min_profile_floor=min_profile_floor
+    )
+    return candidate_result, result
+
+
+def _analyze(
+    knowledge: AttackKnowledge,
+    feature_lists: list[tuple[str, ...]],
+    *,
+    min_profile_floor: int = DEFAULT_MIN_PROFILE_FLOOR,
+) -> ComparativeEvidenceResult:
+    _candidate_result, result = _analyze_full(
+        knowledge, feature_lists, min_profile_floor=min_profile_floor
+    )
+    return result
 
 
 def _summary_for(result: ComparativeEvidenceResult, group_stix_id: str) -> HypothesisSupportSummary:
@@ -295,6 +317,10 @@ def test_single_supporting_evidence(tmp_path: Path) -> None:
     )
     result = _analyze(kb, [(T_A,)])
     summary = _summary_for(result, _group(1))
+    # G1's profile is {T_A} -> ProfileBreadth = 1; support = raw / max(1, floor=1) = raw
+    assert summary.raw_support_value == pytest.approx(0.75)
+    assert summary.profile_breadth == 1
+    assert summary.profile_breadth_floor_applied is False
     assert summary.support_value == pytest.approx(0.75)
     assert len(summary.contributions) == 1
     assert summary.contributions[0].g_value == pytest.approx(0.25)
@@ -317,7 +343,10 @@ def test_multiple_supporting_evidence_items(tmp_path: Path) -> None:
     )
     result = _analyze(kb, [(T_A,), (T_B,)])
     summary = _summary_for(result, _group(1))
-    assert summary.support_value == pytest.approx(0.75 + 0.5)
+    # G1's profile is {T_A, T_B} -> ProfileBreadth = 2; raw = 0.75 + 0.5 = 1.25
+    assert summary.raw_support_value == pytest.approx(0.75 + 0.5)
+    assert summary.profile_breadth == 2
+    assert summary.support_value == pytest.approx((0.75 + 0.5) / 2)
     assert len(summary.contributions) == 2
 
 
@@ -528,7 +557,11 @@ def test_combination_diagnosticity_hand_verified(tmp_path: Path) -> None:
     assert combo.contribution_value == pytest.approx(0.7)  # combination contributes ONCE
     assert atomic_c.g_value == pytest.approx(0.1)
     assert atomic_c.d_value == pytest.approx(0.9)
-    assert summary.support_value == pytest.approx(0.7 + 0.9)
+    # raw = D(C={A,B}) + D(T_C) = 0.7 + 0.9 = 1.6, aggregated BEFORE normalization.
+    # G1's profile is {T_A, T_B, T_C} -> ProfileBreadth = 3.
+    assert summary.raw_support_value == pytest.approx(0.7 + 0.9)
+    assert summary.profile_breadth == 3
+    assert summary.support_value == pytest.approx((0.7 + 0.9) / 3)
 
 
 def test_combination_never_double_counts_component_atomics(tmp_path: Path) -> None:
@@ -744,9 +777,12 @@ def test_contradicting_cell_fails_closed_rather_than_fabricating_a_weight(
         hypotheses=(hyp,),
         assessments=(bad_assessment,),
     )
+    empty_candidates = CandidateGenerationResult(
+        group_id="group-1", attack_kb_version=kb.attack_kb_version
+    )
 
     with pytest.raises(AttributionError, match="CONTRADICTING"):
-        compute_comparative_evidence(matrix, kb)
+        compute_comparative_evidence(matrix, kb, empty_candidates)
 
 
 # ===========================================================================
@@ -946,12 +982,14 @@ def test_no_mutation_of_matrix_or_knowledge(tmp_path: Path) -> None:
     matrix = build_ach_matrix(group, sequence, candidate_result, kb)
 
     matrix_before = (matrix.assessments, matrix.hypotheses)
+    candidates_before = candidate_result.candidates
     fingerprint_before = kb.object_fingerprint
 
-    compute_comparative_evidence(matrix, kb)
+    compute_comparative_evidence(matrix, kb, candidate_result)
 
     assert (matrix.assessments, matrix.hypotheses) == matrix_before
     assert matrix.assessments is matrix_before[0]
+    assert candidate_result.candidates is candidates_before
     assert kb.object_fingerprint is fingerprint_before
 
 
@@ -1040,16 +1078,285 @@ def test_mismatched_kb_version_fails_closed(tmp_path: Path) -> None:
 
     kb = _build_kb(tmp_path, technique_ids={T_A}, group_techniques={_group(1): {T_A}})
     fake_matrix = ACHMatrix(group_id="group-1", attack_kb_version="enterprise-attack-99.9")
+    candidates = CandidateGenerationResult(
+        group_id="group-1", attack_kb_version=kb.attack_kb_version
+    )
     with pytest.raises(AttributionError, match="attack_kb_version"):
-        compute_comparative_evidence(fake_matrix, kb)
+        compute_comparative_evidence(fake_matrix, kb, candidates)
+
+
+def test_mismatched_candidate_result_group_id_fails_closed(tmp_path: Path) -> None:
+    from attribution_platform.attribution.ach_matrix import ACHMatrix
+
+    kb = _build_kb(tmp_path, technique_ids={T_A}, group_techniques={_group(1): {T_A}})
+    matrix = ACHMatrix(group_id="group-1", attack_kb_version=kb.attack_kb_version)
+    wrong_candidates = CandidateGenerationResult(
+        group_id="group-2", attack_kb_version=kb.attack_kb_version
+    )
+    with pytest.raises(AttributionError, match="candidate_result.group_id"):
+        compute_comparative_evidence(matrix, kb, wrong_candidates)
 
 
 def test_wrong_argument_types_rejected(tmp_path: Path) -> None:
-    kb = _build_kb(tmp_path, technique_ids={T_A}, group_techniques={_group(1): {T_A}})
-    with pytest.raises(AttributionError):
-        compute_comparative_evidence("not-a-matrix", kb)  # type: ignore[arg-type]
     from attribution_platform.attribution.ach_matrix import ACHMatrix
 
-    fake_matrix = ACHMatrix(group_id="group-1", attack_kb_version=kb.attack_kb_version)
+    kb = _build_kb(tmp_path, technique_ids={T_A}, group_techniques={_group(1): {T_A}})
+    valid_matrix = ACHMatrix(group_id="group-1", attack_kb_version=kb.attack_kb_version)
+    valid_candidates = CandidateGenerationResult(
+        group_id="group-1", attack_kb_version=kb.attack_kb_version
+    )
     with pytest.raises(AttributionError):
-        compute_comparative_evidence(fake_matrix, "not-a-knowledge")  # type: ignore[arg-type]
+        compute_comparative_evidence("not-a-matrix", kb, valid_candidates)  # type: ignore[arg-type]
+    with pytest.raises(AttributionError):
+        compute_comparative_evidence(valid_matrix, "not-a-knowledge", valid_candidates)  # type: ignore[arg-type]
+    with pytest.raises(AttributionError):
+        compute_comparative_evidence(valid_matrix, kb, "not-a-candidate-result")  # type: ignore[arg-type]
+    with pytest.raises(AttributionError, match="min_profile_floor"):
+        compute_comparative_evidence(valid_matrix, kb, valid_candidates, min_profile_floor=0)
+    with pytest.raises(AttributionError, match="min_profile_floor"):
+        compute_comparative_evidence(
+            valid_matrix,
+            kb,
+            valid_candidates,
+            min_profile_floor=1.5,  # type: ignore[arg-type]
+        )
+
+
+# ===========================================================================
+# Profile-breadth normalization (ADR-0005 Amendment A)
+# ===========================================================================
+
+
+def _candidate_stix_id(candidate_result: CandidateGenerationResult, candidate_id: str) -> str:
+    candidate = next(c for c in candidate_result.candidates if c.candidate_id == candidate_id)
+    stix = candidate.actor_ref if candidate.actor_ref is not None else candidate.campaign_ref
+    assert stix is not None
+    return stix
+
+
+def test_basic_profile_normalization(tmp_path: Path) -> None:
+    # G1 uses only {T_A} -> pb=1; g(T_A)=1/4=0.25, D=0.75; support=0.75/max(1,1)=0.75
+    kb = _build_kb(
+        tmp_path,
+        technique_ids={T_A},
+        group_techniques={_group(1): {T_A}, _group(2): set(), _group(3): set(), _group(4): set()},
+    )
+    result = _analyze(kb, [(T_A,)])
+    s = _summary_for(result, _group(1))
+    assert s.raw_support_value == pytest.approx(0.75)
+    assert s.profile_breadth == 1
+    assert s.support_value == pytest.approx(0.75 / 1)
+
+
+def test_same_evidence_different_profile_breadth_gives_different_support(tmp_path: Path) -> None:
+    # Both G1 (small) and G2 (big) use observed T_A -> identical D(T_A) and
+    # identical raw support; G2 additionally documents T_B/T_C (unobserved),
+    # so its profile is larger. Normalized support differs -- the richness
+    # artifact Amendment A exists to correct.
+    kb = _build_kb(
+        tmp_path,
+        technique_ids={T_A, T_B, T_C},
+        group_techniques={
+            _group(1): {T_A},
+            _group(2): {T_A, T_B, T_C},
+            _group(3): set(),
+            _group(4): set(),
+        },
+    )
+    result = _analyze(kb, [(T_A,)])
+    small = _summary_for(result, _group(1))
+    big = _summary_for(result, _group(2))
+    assert small.raw_support_value == pytest.approx(big.raw_support_value)
+    assert small.profile_breadth == 1
+    assert big.profile_breadth == 3
+    assert small.support_value == pytest.approx(small.raw_support_value / 1)
+    assert big.support_value == pytest.approx(big.raw_support_value / 3)
+    assert small.support_value > big.support_value
+
+
+def test_floor_clamping_when_profile_below_floor(tmp_path: Path) -> None:
+    kb = _build_kb(
+        tmp_path,
+        technique_ids={T_A, T_B},
+        group_techniques={
+            _group(1): {T_A, T_B},
+            _group(2): {T_B},
+            _group(3): set(),
+            _group(4): set(),
+        },
+    )
+    result = _analyze(kb, [(T_A,), (T_B,)], min_profile_floor=5)
+    s = _summary_for(result, _group(1))
+    assert s.profile_breadth == 2  # raw breadth is reported unclamped
+    assert s.profile_breadth_floor_applied is True
+    assert s.support_value == pytest.approx(s.raw_support_value / 5)  # divided by floor, not 2
+
+
+def test_profile_exactly_at_floor_not_clamped(tmp_path: Path) -> None:
+    kb = _build_kb(
+        tmp_path,
+        technique_ids={T_A, T_B, T_C},
+        group_techniques={_group(1): {T_A, T_B, T_C}, _group(2): set(), _group(3): set()},
+    )
+    result = _analyze(kb, [(T_A,), (T_B,), (T_C,)], min_profile_floor=3)
+    s = _summary_for(result, _group(1))
+    assert s.profile_breadth == 3
+    assert s.profile_breadth_floor_applied is False  # pb == floor is NOT below the floor
+    assert s.support_value == pytest.approx(s.raw_support_value / 3)
+
+
+def test_profile_above_floor_not_clamped(tmp_path: Path) -> None:
+    kb = _build_kb(
+        tmp_path,
+        technique_ids={T_A, T_B, T_C},
+        group_techniques={_group(1): {T_A, T_B, T_C}, _group(2): set(), _group(3): set()},
+    )
+    result = _analyze(kb, [(T_A,), (T_B,), (T_C,)], min_profile_floor=2)
+    s = _summary_for(result, _group(1))
+    assert s.profile_breadth == 3
+    assert s.profile_breadth_floor_applied is False
+    assert s.support_value == pytest.approx(s.raw_support_value / 3)
+
+
+def test_group_and_campaign_same_formula_natural_breadth_difference(tmp_path: Path) -> None:
+    kb = _build_kb(
+        tmp_path,
+        technique_ids={T_A, T_B},
+        group_techniques={_group(1): {T_A}, _group(2): set(), _group(3): set(), _group(4): set()},
+        campaign_techniques={_campaign(1): {T_A, T_B}},
+    )
+    result = _analyze(kb, [(T_A,)])
+    g = _summary_for(result, _group(1))
+    c_hyp_id = compute_hypothesis_id("group-1", compute_candidate_id(_campaign(1)))
+    c = next(s for s in result.hypothesis_summaries if s.hypothesis_id == c_hyp_id)
+    # Identical raw (same D(T_A)); identical FORMULA support=raw/pb; naturally different pb.
+    assert g.raw_support_value == pytest.approx(c.raw_support_value)
+    assert g.profile_breadth == 1
+    assert c.profile_breadth == 2
+    assert g.support_value == pytest.approx(g.raw_support_value / 1)
+    assert c.support_value == pytest.approx(c.raw_support_value / 2)
+
+
+def test_repeated_technique_multiplicity_summed_before_normalization(tmp_path: Path) -> None:
+    # G1 is the sole user of T_A among 10 groups -> g=0.1, D=0.9. Observed via
+    # THREE distinct steps -> raw = 3*0.9 = 2.7, aggregated BEFORE the single
+    # division by pb=1 (not normalized per occurrence).
+    groups: dict[str, set[str]] = {_group(i): set() for i in range(1, 11)}
+    groups[_group(1)] = {T_A}
+    kb = _build_kb(tmp_path, technique_ids={T_A}, group_techniques=groups)
+    result = _analyze(kb, [(T_A,), (T_A,), (T_A,)])
+    s = _summary_for(result, _group(1))
+    assert len(s.contributions) == 1
+    assert len(s.contributions[0].assessment_ids) == 3
+    assert s.raw_support_value == pytest.approx(3 * 0.9)
+    assert s.profile_breadth == 1
+    assert s.support_value == pytest.approx((3 * 0.9) / 1)
+
+
+def test_combination_plus_normalization(tmp_path: Path) -> None:
+    kb = _three_feature_combination_kb(tmp_path)
+    result = _analyze(kb, [(T_A,), (T_B,), (T_C,)])
+    s = _summary_for(result, _group(1))
+    # raw = D(C={A,B})=0.7 + D(T_C)=0.9 = 1.6, aggregated before one division by pb=3.
+    assert s.raw_support_value == pytest.approx(1.6)
+    assert s.profile_breadth == 3
+    assert s.support_value == pytest.approx(1.6 / 3)
+
+
+def test_unattributed_no_group_profile_no_division(tmp_path: Path) -> None:
+    kb = _build_kb(
+        tmp_path, technique_ids={T_A}, group_techniques={_group(1): {T_A}, _group(2): set()}
+    )
+    result = _analyze(kb, [(T_A,)])
+    u = next(s for s in result.hypothesis_summaries if s.candidate_id == UNATTRIBUTED_CANDIDATE_ID)
+    assert u.profile_breadth is None
+    assert u.profile_breadth_floor_applied is False
+    assert u.raw_support_value == 0.0
+    assert u.support_value == 0.0
+
+
+def test_support_may_exceed_one_and_is_not_clamped(tmp_path: Path) -> None:
+    groups: dict[str, set[str]] = {_group(i): set() for i in range(1, 11)}
+    groups[_group(1)] = {T_A}
+    kb = _build_kb(tmp_path, technique_ids={T_A}, group_techniques=groups)
+    result = _analyze(kb, [(T_A,), (T_A,), (T_A,)])  # raw = 3 * D(0.9) = 2.7, pb=1
+    s = _summary_for(result, _group(1))
+    assert s.support_value == pytest.approx(2.7)
+    assert s.support_value > 1.0  # permitted: support is an ordering statistic, never a probability
+
+
+def test_explainability_fields_present_and_consistent(tmp_path: Path) -> None:
+    kb = _build_kb(
+        tmp_path,
+        technique_ids={T_A, T_B},
+        group_techniques={
+            _group(1): {T_A, T_B},
+            _group(2): {T_B},
+            _group(3): set(),
+            _group(4): set(),
+        },
+    )
+    candidate_result, result = _analyze_full(kb, [(T_A,), (T_B,)])
+    s = _summary_for(result, _group(1))
+    # raw == sum of per-feature contribution values (contributions unchanged by Amendment A)
+    assert s.raw_support_value == pytest.approx(sum(c.contribution_value for c in s.contributions))
+    # profile_breadth resolved from the candidate's real STIX id (no hash reversal):
+    stix = _candidate_stix_id(candidate_result, s.candidate_id)
+    assert s.profile_breadth == len(group_profile(kb, stix))
+    assert s.support_value == pytest.approx(
+        s.raw_support_value / max(s.profile_breadth, DEFAULT_MIN_PROFILE_FLOOR)
+    )
+
+
+def test_small_profile_candidate_not_dropped(tmp_path: Path) -> None:
+    kb = _build_kb(
+        tmp_path, technique_ids={T_A}, group_techniques={_group(1): {T_A}, _group(2): set()}
+    )
+    result = _analyze(kb, [(T_A,)])
+    ids = {s.candidate_id for s in result.hypothesis_summaries}
+    assert compute_candidate_id(_group(1)) in ids  # not dropped for having a small profile
+    s = _summary_for(result, _group(1))
+    assert s.support_value > 0.0
+
+
+def test_zero_profile_breadth_is_scoreable_through_floor_contract() -> None:
+    # profile_breadth == 0 is unreachable for a real generated candidate, but
+    # the summary contract accepts it; the engine's max(pb, floor) keeps the
+    # denominator >= 1, so such a candidate is scored, never dropped.
+    s = HypothesisSupportSummary(
+        hypothesis_id="h-1",
+        candidate_id="candidate::x",
+        support_value=0.0,
+        raw_support_value=0.0,
+        profile_breadth=0,
+        profile_breadth_floor_applied=True,
+        contributions=(),
+    )
+    assert s.profile_breadth == 0
+    assert s.profile_breadth_floor_applied is True
+
+
+def test_new_summary_fields_are_not_probabilities() -> None:
+    import dataclasses
+
+    field_names = {f.name for f in dataclasses.fields(HypothesisSupportSummary)}
+    forbidden = {"probability", "percent", "percentage", "confidence", "likelihood", "wep_band"}
+    assert field_names.isdisjoint(forbidden)
+
+
+def test_normalization_determinism_repeated_and_independent_kb(tmp_path: Path) -> None:
+    kb_a = _build_kb(
+        tmp_path / "a",
+        technique_ids={T_A, T_B, T_C},
+        group_techniques={_group(1): {T_A, T_B, T_C}, _group(2): {T_A}, _group(3): set()},
+    )
+    kb_b = _build_kb(
+        tmp_path / "b",
+        technique_ids={T_A, T_B, T_C},
+        group_techniques={_group(1): {T_A, T_B, T_C}, _group(2): {T_A}, _group(3): set()},
+    )
+    r_a1 = _analyze(kb_a, [(T_A,), (T_B,), (T_C,)])
+    r_a2 = _analyze(kb_a, [(T_A,), (T_B,), (T_C,)])
+    r_b = _analyze(kb_b, [(T_A,), (T_B,), (T_C,)])
+    assert r_a1 == r_a2
+    assert r_a1.hypothesis_summaries == r_b.hypothesis_summaries

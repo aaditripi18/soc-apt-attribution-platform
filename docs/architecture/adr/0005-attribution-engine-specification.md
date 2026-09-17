@@ -272,6 +272,14 @@ technique → low discriminating weight") — never as a headline percentage, ne
 confidence score, and never the sole analyst-facing summary** (doc 07 §2.6 vs. §13, reconciled precisely: §2.6
 requires inspectability, §13 forbids headline-probability framing — both hold simultaneously under this rule).
 
+**[Amended 2026-09-17 — see Post-acceptance Amendment A]** `support(h)` additionally **normalizes the aggregate
+of these `D(x)`/`D(C)` contributions by candidate profile breadth** (operationalizing ADR-0002 D16, which this
+ADR applies rather than re-decides). The `g(x)`/`D(x)`/`g(C)`/`D(C)` definitions above, the active-Group
+population, combination admissibility, maximal-partition selection, and the deterministic tie-break are all
+**unchanged** by that amendment: profile-breadth normalization is a separate, *candidate-level* aggregation
+step applied **once** to `raw_support(h)`, never a change to *feature-level* diagnosticity. See
+[Post-acceptance Amendment A](#post-acceptance-amendments) for the full definition.
+
 ### D4 — Evidence independence
 
 Two related, both grounded in real Phase 2 objects, neither duplicating the correlation engine:
@@ -509,6 +517,13 @@ field of candidates, never a forced single leader when scores are close (doc 07 
 rule, unchanged). No threshold value is chosen in this ADR — `τ_separation` and every WEP-band cutoff remain
 `calibration_version` parameters (§D17).
 
+**[Amended 2026-09-17 — see Post-acceptance Amendment A]** The `support(h)` expression named here (`Σ supporting
+D·relevance − Σ contradicting D·contradiction_strength`) is `raw_support(h)`, the *pre-normalization* aggregate.
+Its complete, authoritative form applies one further step — division by `ProfileBreadth_effective(h)`,
+operationalizing ADR-0002 D16 — as defined in [Post-acceptance Amendment A](#post-acceptance-amendments). This
+is **not a competing formula**: §D9's expression is a named sub-expression of the amended `support(h)`, and the
+normalized value is likewise never displayed as a raw number or a probability.
+
 ### D10 — Confidence
 
 ```
@@ -638,6 +653,11 @@ once when a calibration procedure (doc 08 §4) freezes its fitted parameters.
 - WEP-band thresholds (§D9), confidence-band thresholds (§D10), `τ_separation`/`min_confidence`/`τ_margin`/the
   `Unattributed` null floor (§D13), the minimum-support threshold and neutral-prior value (§D3), and the
   sequence-order bonus cap (§D3).
+- **[Amended 2026-09-17 — see Post-acceptance Amendment A]** the numeric value of `min_profile_floor`, and any
+  later-fitted non-linear replacement of the baseline **linear** profile-breadth normalization (§D3 /
+  Amendment A). The `ProfileBreadth(h)` definition, the `max(…, min_profile_floor)` floor *structure*, the
+  aggregate-before-normalization placement, and the linear baseline itself are **structural** (fixed by the
+  amendment), not calibration-tunable.
 
 **Calibration MUST NOT determine or change:**
 
@@ -854,3 +874,144 @@ this ADR's own gates — C3.2/C3.3 remain hard blockers on any *scoring* code pa
 in §Implementation Gates) even after this ADR itself is accepted. If any Open Question above is resolved
 during review, record it here as a dated addendum, mirroring the practice already established for ADR-0004's
 own post-acceptance clarifications, never as a silent edit to the D1–D21 text.
+
+## Post-acceptance amendments
+
+Dated additions made after this ADR reached ACCEPTED status. Each is recorded here and cross-referenced from
+the decision it affects by a visible, dated marker; **the original D1–D21 decision text above is left intact
+and is never silently rewritten** — matching the practice this ADR's own §Follow-up established and ADR-0004's
+`## Post-acceptance clarifications` already demonstrated. An amendment that changes methodology (as Amendment A
+does — unlike ADR-0004's clarifications, which only recorded how an accepted decision was satisfied)
+additionally states its compatibility impact and what remains calibration-controlled or deferred.
+
+### Amendment A (2026-09-17) — Profile-breadth normalization of `support(h)`
+
+**What was missing.** ADR-0002 D16 (ACCEPTED) requires that `support(h)` (a) de-duplicates correlated evidence,
+(b) is dominated by high-`D` discriminating evidence, **and (c) is normalized by candidate profile breadth** —
+and that `support`/`D` are never shown as probabilities. This ADR's opening scope commits to *applying*
+ADR-0002's accepted decisions, not re-deciding them. §D3/§D8/§D9 as originally written operationalize (a) (via
+§D4's independence rules) and (b) (via the maximal-partition/combination machinery) but **never operationalize
+(c)** — no candidate-profile-breadth normalization appears in any original formula. §D10 and §D12 nevertheless
+already refer to "§D3's profile-breadth normalization" as an existing mechanism. This amendment supplies the
+missing operationalization, making §D3/§D9 internally consistent with ADR-0002 D16 and making §D10/§D12's
+existing references accurate. It reopens no other decision, in this ADR or in ADR-0002.
+
+**Sections amended:** §D3 (adds the profile-breadth-normalization definition below), §D9 (the authoritative
+`support(h)` is the normalized form below — §D9's existing `Σ supporting … − Σ contradicting …` expression is
+exactly `raw_support(h)`, a *named sub-expression* of it, not a competing formula), and §D17 (adds two
+calibration parameters below). §D10/§D12 need no wording change — their existing references become accurate
+once §D3 carries this mechanism.
+
+**Structural definitions (fixed here; not calibration).** Let `candidate_stix_id(h)` be the canonical
+intrusion-set (Group) or campaign STIX id the hypothesis `h` names (§D5/§D7). The `Unattributed` null
+hypothesis has **no** `candidate_stix_id` and is **outside this definition's domain**: it is never scored
+through ATT&CK `uses` relationships and receives no ATT&CK-derived support (§D3/§D7 unchanged); its support
+remains the neutral empty aggregate.
+
+```
+ProfileBreadth(h)           = | group_profile(knowledge, candidate_stix_id(h)) |
+ProfileBreadth_effective(h) = max( ProfileBreadth(h), min_profile_floor )
+
+raw_support(h) =
+      Σ  over atomic features x not covered by a chosen combination:  occurrence_count(x, h) · D(x)
+    + Σ  over combination features C in h's chosen maximal partition:  D(C)
+    − Σ  over contradicting evidence e (feature x_e):                  D(x_e) · contradiction_strength(x_e, h)
+
+support(h) = raw_support(h) / ProfileBreadth_effective(h)
+```
+
+- **`ProfileBreadth(h)`** is the number of **distinct ATT&CK technique/software STIX ids** in the candidate's
+  own full `uses` profile, read via the already-existing §D6 traversal capability (`group_profile(...)`, built
+  in Gate 3.1 — no new traversal mechanism is introduced). It reuses that function's own semantics exactly:
+  every STIX id counted atomically, with **no special parent/sub-technique de-duplication** (identical to how
+  `g(x)`/`D(x)` already treat base and sub-techniques), **no external statistic**, and **no separate
+  Group-vs-Campaign definition** (see below).
+- **`occurrence_count(x, h)`** is the number of distinct `BehavioralStep`s asserting technique/software `x`
+  that are `SUPPORTING`/`CONSISTENT` for `h` — the independent-repetition multiplicity §D4 already establishes,
+  **unchanged**. Multiplicity is summed into `raw_support(h)` **before** normalization (see aggregation
+  placement below); D4 is not modified.
+- **`D(x)`, `g(x)`, `D(C)`, `g(C)`**, combination admissibility, maximal-partition selection, and the
+  deterministic tie-break are all **unchanged**. `D(x)` is **not** redefined to include profile size; `g(x)`
+  remains computed over the **active-Group population** exactly as §D3 fixes; diagnosticity is **not** made
+  candidate-type-specific. Profile breadth is a *candidate-level* normalization quantity, kept mathematically
+  separate from *feature-level* discriminating diagnosticity.
+- **`contradiction_strength(x_e, h)`** remains an **explicit symbolic term with no defined numeric form** —
+  deferred, unchanged, to the later coverage/contradiction methodology. (Gate 3.4 currently produces no
+  `CONTRADICTING` cell; that is an implementation state, not a methodological decision. This amendment does
+  **not** define the term as zero and does **not** use profile normalization as a substitute for contradiction
+  handling.)
+
+**Group vs. Campaign — one identical rule, an acknowledged data-driven asymmetry.** The formula is applied
+**identically** to Group and Campaign candidates — no type multiplier, no type-specific denominator, no
+balancing constant. Because ATT&CK's object model scopes a `campaign` object (a bounded operation) more
+narrowly than an `intrusion-set` object (an actor's entire tracked history), Campaigns have structurally
+smaller `ProfileBreadth` on average than Groups (measured on the pinned v19.0 KB via the Gate 3.1 traversal
+layer: active Groups mean ≈ 32.7 / median 21.5 / max 149 over 174; active Campaigns mean ≈ 23.5 / median 20.0 /
+max 82 over 56). A uniform denominator therefore produces **different proportional effects** between the two
+candidate types. This is a documented, **data-driven property of ATT&CK's own documentation structure — not
+silently corrected here**, and not a violation of §D3's candidate-type-invariance rule, which fixes the
+invariance of the *feature-level* `g(x)`/`D(x)` basis (unchanged), a different quantity from this
+*candidate-level* normalization.
+
+**Small-profile floor.** The `max( …, min_profile_floor )` **structure** is fixed here — it bounds the
+amplification a single coincidental match against a tiny profile could otherwise produce (a small denominator
+would inflate one match's weight). The **numeric value** of `min_profile_floor` is **not chosen here**; it is a
+`calibration_version` parameter (§D17 addition). A small-profile candidate is **never dropped from scoring**
+and is **never** marked `OUTSIDE_CALIBRATED_REGIME` merely for having a small profile — that flag remains
+reserved for the §D3 undefined/zero-active-match `g` fallback, unchanged.
+
+**Baseline transform.** Linear division is the **structural baseline**, mirroring §D3's own "`1 − g(x)` is the
+zero-hand-tuning baseline" discipline for `D`. Calibration **MAY** later replace it with a different
+monotonically-decreasing transform of `ProfileBreadth_effective(h)` if corpus evidence supports one — never a
+differently-*shaped* claim, never chosen here. No log scaling is introduced now.
+
+**Aggregation placement (no double normalization).** Normalization is applied **exactly once**, to the
+aggregate `raw_support(h)`, **after** all atomic (including §D4 multiplicity) and combination contributions are
+summed. **Individual per-feature contributions are not normalized.** The intended flow is:
+
+```
+per-feature / per-combination diagnosticity contribution
+      ↓  (summed, D4 multiplicity preserved)
+raw_support(h)
+      ↓  (single division by ProfileBreadth_effective(h))
+support(h)
+```
+
+**Not a probability.** `support(h)`, `raw_support(h)`, `D`, and `ProfileBreadth(h)` are all internal,
+documentation-relative construction quantities. None is a probability; the normalized `support(h)` **must not**
+be presented to an analyst as a probability, percentage, or confidence; and this amendment introduces **no**
+arbitrary point system (§D3's central "documentation-relative, never a probability" framing is preserved
+unchanged).
+
+**Explainability (a requirement on the eventual result — not implemented by this documentation amendment).**
+When Gate 3.5's implementation is later updated to apply this amendment, the per-hypothesis support summary
+must retain enough to explain normalization end to end: `raw_support_value` (the pre-normalization aggregate),
+`support_value` (the post-normalization result), `profile_breadth` (the raw `ProfileBreadth(h)`), and
+`profile_breadth_floor_applied` (whether `min_profile_floor` changed the effective denominator) — audit and
+explainability fields, never probabilities. Per-feature `EvidenceContribution` fields
+(`g_value`/`d_value`/`contribution_value`/`assessment_ids`) are **unchanged**.
+
+**Calibration boundary (extends §D17).** Added to §D17's "Calibration MAY determine" list: (i) the numeric
+value of `min_profile_floor`; (ii) any later-fitted non-linear replacement of the baseline linear
+profile-breadth normalization defined here. Everything else this amendment defines — the `ProfileBreadth`
+definition, the `max(…)` floor structure, the aggregate-before-normalization placement, and the linear baseline
+itself — is **structural**, not calibration-tunable.
+
+**Backward-compatibility impact.**
+
+- The `EvidenceContribution` contract and its `contribution_value` are **unchanged**; per-feature diagnosticity
+  is **unchanged**.
+- The semantic meaning of the aggregate `HypothesisSupportSummary.support_value` changes from *raw* aggregate
+  support to *profile-breadth-normalized* support. `raw_support(h)` is preserved as a distinct, additionally
+  retained value (`raw_support_value`).
+- The Gate 3.5 *implementation* (`comparative_analysis.py`) is **not changed by this documentation amendment**.
+  When it is later updated, its `_summarize_hypothesis` / `HypothesisSupportSummary` aggregation gains the
+  single normalization step and the four explainability fields above, and existing Gate 3.5 tests that assert
+  aggregate `support_value` numbers will need updated expectations (per-feature `EvidenceContribution`
+  assertions will not).
+
+**Explicitly out of scope of this amendment (unchanged status).** The `>8`-distinct-feature combination-search
+computational bound (an implementation-only limit tracked separately; this ADR still specifies no maximum
+combination size); the numeric definition of `contradiction_strength` (deferred to the coverage/contradiction
+methodology); Gate 3.6's likelihood/WEP ranking (which, once Gate 3.5 applies this amendment, may consume the
+normalized `support(h)`); and every already-established calibration numeric value.

@@ -14,15 +14,40 @@ Gate 3.4's own post-implementation audit found ``Hypothesis.evidence_assessment_
 is never populated (Gate 3.4 preserves Gate 3.3's hypotheses unchanged).
 This module therefore consumes :attr:`ACHMatrix.assessments` directly,
 grouping/filtering by ``hypothesis_id`` — it never reads
-``Hypothesis.evidence_assessment_ids``. It takes only
-``(ACHMatrix, AttackKnowledge)`` as input: everything else (``group_id``,
-``attack_kb_version``, the full hypothesis set) is already carried on the
-matrix.
+``Hypothesis.evidence_assessment_ids``. Beyond ``(ACHMatrix, AttackKnowledge)``
+it also takes the Gate 3.3 ``CandidateGenerationResult`` — required only so
+that ADR-0005 Amendment A's `ProfileBreadth(h)` can reach each candidate's
+canonical ATT&CK STIX id (`actor_ref`/`campaign_ref`), which a ``Hypothesis``
+does not carry (its ``candidate_id`` is an irreversible hash) and which
+``ACHMatrix`` does not forward. That mapping is read explicitly; no hash is
+ever reversed and candidates are never re-generated. Everything else
+(``group_id``, ``attack_kb_version``, the full hypothesis set) is already
+carried on the matrix.
 
-**`support(h)` — ADR-0005 §D9's own formula, implemented exactly, term by
-term:**
+**`support(h)` — ADR-0005 §D9's formula, profile-breadth-normalized per
+Amendment A, implemented exactly.** The pre-normalization aggregate is:
 
-    support(h) = Σ_supporting (D · relevance) − Σ_contradicting (D · contradiction_strength)
+    raw_support(h) = Σ_supporting (D · relevance) − Σ_contradicting (D · contradiction_strength)
+
+and the reported support is normalized **once** by candidate profile breadth
+(ADR-0002 D16, operationalized in ADR-0005 Amendment A):
+
+    ProfileBreadth(h)           = len(group_profile(knowledge, candidate_stix_id(h)))
+    ProfileBreadth_effective(h) = max(ProfileBreadth(h), min_profile_floor)
+    support(h)                  = raw_support(h) / ProfileBreadth_effective(h)
+
+Normalization is applied exactly once, to the aggregate, **after** all
+per-feature / combination / multiplicity contributions are summed — the
+per-feature ``EvidenceContribution.contribution_value``\\ s are unchanged
+(they remain *raw* `D`-based values), so `raw_support(h)` is exactly their
+sum. The ``Unattributed`` sentinel has no candidate STIX id and is outside
+the normalization domain: its support is left the neutral, un-normalized
+aggregate (`0.0`), with no ``group_profile`` lookup and no division.
+`support(h)` is **never bounded to `[0, 1]`** and is never a probability.
+`min_profile_floor`'s numeric value is a `calibration_version` parameter
+(Amendment A / §D17), defaulted to a documented placeholder here
+(:data:`DEFAULT_MIN_PROFILE_FLOOR`), never a claimed calibrated value. The
+per-term breakdown of `raw_support(h)` below is unchanged by Amendment A:
 
 - **`Σ_contradicting (D · contradiction_strength)` is always exactly `0`
   today, and this module enforces that rather than assumes it.** Gate 3.4's
@@ -170,17 +195,33 @@ from enum import Enum
 from attribution_platform.attack_knowledge.loader import AttackKnowledge
 from attribution_platform.attack_knowledge.traversal import (
     active_groups,
+    group_profile,
     groups_using_all_techniques,
     groups_using_technique,
 )
 from attribution_platform.attribution.ach_matrix import ACHMatrix
-from attribution_platform.attribution.contracts import EvidenceRole
+from attribution_platform.attribution.candidate_generation import CandidateGenerationResult
+from attribution_platform.attribution.contracts import UNATTRIBUTED_CANDIDATE_ID, EvidenceRole
 from attribution_platform.attribution.errors import AttributionError
 
 #: Method identity for this engine, mirroring every prior gate's own
 #: constant-pair convention.
 COMPARATIVE_ANALYSIS_METHOD = "comparative-ach-analysis"
 COMPARATIVE_ANALYSIS_METHOD_VERSION = "1.0"
+
+#: Placeholder value for ADR-0005 Amendment A's `min_profile_floor`
+#: (`ProfileBreadth_effective(h) = max(ProfileBreadth(h), min_profile_floor)`).
+#: **This is NOT the eventual calibrated value.** Amendment A fixes the
+#: `max(…)` floor *structure* as structural methodology but leaves the
+#: numeric floor a `calibration_version` parameter, and no `calibration_version`
+#: artifact exists in this codebase yet (§D17). ``1`` is the smallest
+#: deterministic, division-safe default: it guarantees a denominator of at
+#: least 1 (so `support(h)` is always well-defined, even for the degenerate
+#: zero-profile case a real generated candidate cannot actually reach), while
+#: being the identity floor for every candidate with a non-empty profile. A
+#: later calibration round MAY raise it to dampen small-profile amplification;
+#: callers (and tests) may pass an explicit ``min_profile_floor`` to override.
+DEFAULT_MIN_PROFILE_FLOOR = 1
 
 #: Safety bound on exhaustive combination-partition search (see the module
 #: docstring's "Architectural note"). Bell(8) = 4140 set-partitions, with
@@ -300,13 +341,37 @@ class EvidenceContribution:
 @dataclass(frozen=True)
 class HypothesisSupportSummary:
     """`support(h)` and its itemized contributions for one hypothesis
-    (ADR-0005 §D8/§D9) — an internal comparative evidence aggregate, never
-    an analyst-facing verdict, never a likelihood/confidence/probability.
+    (ADR-0005 §D8/§D9, profile-breadth-normalized per Amendment A) — an
+    internal comparative evidence aggregate, never an analyst-facing
+    verdict, never a likelihood/confidence/probability/percentage.
+
+    - ``support_value``: the **profile-breadth-normalized** support (ADR-0005
+      Amendment A) — `raw_support_value / max(profile_breadth,
+      min_profile_floor)`. Not bounded to `[0, 1]` (it is an ordering
+      statistic, never a probability): repeated-technique multiplicity and
+      multiple high-`D` contributions can legitimately produce values above
+      `1`.
+    - ``raw_support_value``: the pre-normalization aggregate (`Σ` atomic +
+      combination − contradicting contributions) — exactly the sum of the
+      per-feature ``EvidenceContribution.contribution_value``\\ s, which are
+      themselves unchanged by Amendment A.
+    - ``profile_breadth``: the raw `ProfileBreadth(h)` — the count of distinct
+      technique/software STIX ids in the candidate's own `uses` profile
+      (`len(group_profile(...))`). ``None`` iff this hypothesis names the
+      `Unattributed` sentinel, which has no candidate STIX id and is outside
+      the normalization domain (Amendment A) — its support is left the
+      neutral, un-normalized aggregate.
+    - ``profile_breadth_floor_applied``: ``True`` iff `profile_breadth <
+      min_profile_floor` (so the effective denominator was clamped up to the
+      floor). Always ``False`` when ``profile_breadth`` is ``None``.
     """
 
     hypothesis_id: str
     candidate_id: str
     support_value: float
+    raw_support_value: float
+    profile_breadth: int | None
+    profile_breadth_floor_applied: bool
     contributions: tuple[EvidenceContribution, ...] = ()
 
     def __post_init__(self) -> None:
@@ -316,6 +381,32 @@ class HypothesisSupportSummary:
             raise AttributionError(
                 f"HypothesisSupportSummary.support_value must be >= 0, "
                 f"got {self.support_value!r}"
+            )
+        if self.raw_support_value < 0.0:
+            raise AttributionError(
+                f"HypothesisSupportSummary.raw_support_value must be >= 0, "
+                f"got {self.raw_support_value!r}"
+            )
+        if self.profile_breadth is not None:
+            if isinstance(self.profile_breadth, bool) or not isinstance(self.profile_breadth, int):
+                raise AttributionError(
+                    "HypothesisSupportSummary.profile_breadth must be an int or None, got "
+                    f"{type(self.profile_breadth).__name__}"
+                )
+            if self.profile_breadth < 0:
+                raise AttributionError(
+                    f"HypothesisSupportSummary.profile_breadth must be >= 0, "
+                    f"got {self.profile_breadth!r}"
+                )
+        if not isinstance(self.profile_breadth_floor_applied, bool):
+            raise AttributionError(
+                "HypothesisSupportSummary.profile_breadth_floor_applied must be a bool, got "
+                f"{type(self.profile_breadth_floor_applied).__name__}"
+            )
+        if self.profile_breadth is None and self.profile_breadth_floor_applied:
+            raise AttributionError(
+                "HypothesisSupportSummary: profile_breadth_floor_applied must be False when "
+                "profile_breadth is None (the Unattributed / outside-normalization-domain case)"
             )
         for contribution in self.contributions:
             if not isinstance(contribution, EvidenceContribution):
@@ -464,18 +555,74 @@ def _find_combination_partition(
     return tuple(sorted(best, key=lambda b: tuple(sorted(b))))
 
 
+def _make_hypothesis_summary(
+    *,
+    hypothesis_id: str,
+    candidate_id: str,
+    raw_support_value: float,
+    contributions: tuple[EvidenceContribution, ...],
+    profile_breadth: int | None,
+    min_profile_floor: int,
+) -> HypothesisSupportSummary:
+    """Apply ADR-0005 Amendment A profile-breadth normalization **once** to
+    the already-aggregated ``raw_support_value``, and assemble the summary.
+
+    ``profile_breadth is None`` marks the Unattributed / outside-normalization-
+    domain case (Amendment A): no ``group_profile`` lookup and no division —
+    ``support_value`` is left equal to ``raw_support_value`` (the neutral
+    aggregate). Otherwise ``support(h) = raw_support(h) /
+    max(profile_breadth, min_profile_floor)`` — division only, applied once,
+    never per-contribution (the per-feature ``EvidenceContribution`` values
+    are already summed into ``raw_support_value`` unchanged).
+    """
+    if profile_breadth is None:
+        return HypothesisSupportSummary(
+            hypothesis_id=hypothesis_id,
+            candidate_id=candidate_id,
+            support_value=raw_support_value,
+            raw_support_value=raw_support_value,
+            profile_breadth=None,
+            profile_breadth_floor_applied=False,
+            contributions=contributions,
+        )
+    effective_breadth = max(profile_breadth, min_profile_floor)
+    floor_applied = profile_breadth < min_profile_floor
+    support_value = raw_support_value / effective_breadth
+    return HypothesisSupportSummary(
+        hypothesis_id=hypothesis_id,
+        candidate_id=candidate_id,
+        support_value=support_value,
+        raw_support_value=raw_support_value,
+        profile_breadth=profile_breadth,
+        profile_breadth_floor_applied=floor_applied,
+        contributions=contributions,
+    )
+
+
 def _summarize_hypothesis(
     hypothesis_id: str,
     candidate_id: str,
     cells: tuple[tuple[str, str], ...],
     g_of: Callable[[frozenset[str]], float | None],
+    profile_breadth: int | None,
+    min_profile_floor: int,
 ) -> HypothesisSupportSummary:
     """``cells`` is a tuple of ``(technique_stix_id, assessment_id)`` pairs
     for this one hypothesis's SUPPORTING cells only (CONTRADICTING is
-    rejected by the caller before this function is ever reached)."""
+    rejected by the caller before this function is ever reached).
+
+    Computes the raw per-feature/per-combination contributions and their
+    aggregate ``raw_support(h)`` exactly as before (unchanged by Amendment
+    A), then delegates the single profile-breadth normalization step to
+    :func:`_make_hypothesis_summary`."""
     if not cells:
-        return HypothesisSupportSummary(
-            hypothesis_id=hypothesis_id, candidate_id=candidate_id, support_value=0.0
+        return _make_hypothesis_summary(
+            hypothesis_id=hypothesis_id,
+            candidate_id=candidate_id,
+            raw_support_value=0.0,
+            contributions=(),
+            profile_breadth=profile_breadth,
+            min_profile_floor=min_profile_floor,
         )
 
     assessment_ids_by_feature: dict[str, list[str]] = {}
@@ -552,26 +699,49 @@ def _summarize_hypothesis(
                 )
             )
 
-    support_value = sum(c.contribution_value for c in contributions)
-    return HypothesisSupportSummary(
+    raw_support_value = sum(c.contribution_value for c in contributions)
+    return _make_hypothesis_summary(
         hypothesis_id=hypothesis_id,
         candidate_id=candidate_id,
-        support_value=support_value,
+        raw_support_value=raw_support_value,
         contributions=tuple(contributions),
+        profile_breadth=profile_breadth,
+        min_profile_floor=min_profile_floor,
     )
 
 
 def compute_comparative_evidence(
-    matrix: ACHMatrix, knowledge: AttackKnowledge
+    matrix: ACHMatrix,
+    knowledge: AttackKnowledge,
+    candidate_result: CandidateGenerationResult,
+    *,
+    min_profile_floor: int = DEFAULT_MIN_PROFILE_FLOOR,
 ) -> ComparativeEvidenceResult:
-    """Compute the deterministic `support(h)` comparative evidence
-    aggregate for every hypothesis in ``matrix`` (ADR-0005 §D3/§D4/§D8/§D9)
-    — comparative evidence aggregation only, no attribution decision.
+    """Compute the deterministic, profile-breadth-normalized `support(h)`
+    comparative evidence aggregate for every hypothesis in ``matrix``
+    (ADR-0005 §D3/§D4/§D8/§D9, normalized per Amendment A) — comparative
+    evidence aggregation only, no attribution decision.
 
-    Fails closed on a structural mismatch between ``matrix`` and
-    ``knowledge``, and on encountering a `CONTRADICTING` cell (see the
-    module docstring — `contradiction_strength` is not yet defined by the
-    accepted architecture).
+    ``candidate_result`` is the Gate 3.3
+    :class:`~attribution_platform.attribution.candidate_generation.CandidateGenerationResult`
+    that produced ``matrix``'s hypotheses. It is required because
+    ``ProfileBreadth(h)`` needs the candidate's canonical ATT&CK STIX id
+    (`actor_ref`/`campaign_ref`), which lives on the ``Candidate`` objects
+    here and is **not** recoverable from a ``Hypothesis`` (whose
+    ``candidate_id`` is an irreversible hash) or from ``ACHMatrix``. This
+    reads the mapping explicitly; it never reverses a hash, never
+    re-generates candidates, and never mutates any input.
+
+    ``min_profile_floor`` is ADR-0005 Amendment A's calibration-deferred
+    floor (see :data:`DEFAULT_MIN_PROFILE_FLOOR`) — the numeric value is a
+    ``calibration_version`` parameter, exposed here so a future calibrated
+    value (or a test) can supply it explicitly.
+
+    Fails closed on a structural mismatch between ``matrix``,
+    ``candidate_result`` and ``knowledge``, on an out-of-range
+    ``min_profile_floor``, and on encountering a `CONTRADICTING` cell (see
+    the module docstring — `contradiction_strength` is not yet defined by
+    the accepted architecture).
     """
     if not isinstance(matrix, ACHMatrix):
         raise AttributionError(
@@ -583,12 +753,53 @@ def compute_comparative_evidence(
             "compute_comparative_evidence: knowledge must be an AttackKnowledge, "
             f"got {type(knowledge).__name__}"
         )
+    if not isinstance(candidate_result, CandidateGenerationResult):
+        raise AttributionError(
+            "compute_comparative_evidence: candidate_result must be a "
+            f"CandidateGenerationResult, got {type(candidate_result).__name__}"
+        )
+    if isinstance(min_profile_floor, bool) or not isinstance(min_profile_floor, int):
+        raise AttributionError(
+            "compute_comparative_evidence: min_profile_floor must be an int, got "
+            f"{type(min_profile_floor).__name__}"
+        )
+    if min_profile_floor < 1:
+        raise AttributionError(
+            "compute_comparative_evidence: min_profile_floor must be >= 1 (a support "
+            f"denominator), got {min_profile_floor!r}"
+        )
     if matrix.attack_kb_version != knowledge.attack_kb_version:
         raise AttributionError(
             f"compute_comparative_evidence: matrix.attack_kb_version "
             f"{matrix.attack_kb_version!r} does not match the loaded "
             f"knowledge.attack_kb_version {knowledge.attack_kb_version!r}"
         )
+    if candidate_result.group_id != matrix.group_id:
+        raise AttributionError(
+            f"compute_comparative_evidence: candidate_result.group_id "
+            f"{candidate_result.group_id!r} does not match matrix.group_id "
+            f"{matrix.group_id!r}"
+        )
+    if candidate_result.attack_kb_version != matrix.attack_kb_version:
+        raise AttributionError(
+            "compute_comparative_evidence: candidate_result.attack_kb_version "
+            f"{candidate_result.attack_kb_version!r} does not match matrix.attack_kb_version "
+            f"{matrix.attack_kb_version!r}"
+        )
+
+    # candidate_id -> the candidate's canonical ATT&CK STIX id (actor_ref for a
+    # Group, campaign_ref for a Campaign). Exactly one is set (Candidate's own
+    # invariant). The Unattributed sentinel is deliberately absent from this
+    # map — it names no ATT&CK entity and is outside the normalization domain.
+    candidate_stix_by_id: dict[str, str] = {}
+    for candidate in candidate_result.candidates:
+        stix_id = candidate.actor_ref if candidate.actor_ref is not None else candidate.campaign_ref
+        if stix_id is None:  # pragma: no cover - Candidate guarantees exactly one is set
+            raise AttributionError(
+                f"compute_comparative_evidence: candidate {candidate.candidate_id!r} has "
+                "neither actor_ref nor campaign_ref set"
+            )
+        candidate_stix_by_id[candidate.candidate_id] = stix_id
 
     cells_by_hypothesis: dict[str, list[tuple[str, str]]] = {}
     for assessment in matrix.assessments:
@@ -622,12 +833,36 @@ def compute_comparative_evidence(
         g_cache[features] = result
         return result
 
+    profile_breadth_cache: dict[str, int] = {}
+
+    def profile_breadth_of(candidate_id: str) -> int | None:
+        """`ProfileBreadth(h)` (Amendment A) — `len(group_profile(...))` for a
+        real candidate, or ``None`` for the Unattributed sentinel (outside the
+        normalization domain). Deterministic and memoized; never reverses a
+        hash and never mutates the KB."""
+        if candidate_id == UNATTRIBUTED_CANDIDATE_ID:
+            return None
+        if candidate_id in profile_breadth_cache:
+            return profile_breadth_cache[candidate_id]
+        stix_id = candidate_stix_by_id.get(candidate_id)
+        if stix_id is None:
+            raise AttributionError(
+                f"compute_comparative_evidence: hypothesis candidate_id {candidate_id!r} is "
+                "not the Unattributed sentinel and has no matching Candidate in "
+                "candidate_result — cannot resolve its ATT&CK profile breadth"
+            )
+        breadth = len(group_profile(knowledge, stix_id))
+        profile_breadth_cache[candidate_id] = breadth
+        return breadth
+
     summaries = tuple(
         _summarize_hypothesis(
             hypothesis.hypothesis_id,
             hypothesis.candidate_id,
             tuple(cells_by_hypothesis.get(hypothesis.hypothesis_id, ())),
             g_of,
+            profile_breadth_of(hypothesis.candidate_id),
+            min_profile_floor,
         )
         for hypothesis in matrix.hypotheses
     )

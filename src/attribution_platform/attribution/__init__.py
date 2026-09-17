@@ -77,6 +77,7 @@ from attribution_platform.attribution.candidate_generation import (
 from attribution_platform.attribution.comparative_analysis import (
     COMPARATIVE_ANALYSIS_METHOD,
     COMPARATIVE_ANALYSIS_METHOD_VERSION,
+    DEFAULT_MIN_PROFILE_FLOOR,
     ComparativeEvidenceResult,
     DiagnosticityOutcome,
     EvidenceContribution,
@@ -173,4 +174,5 @@ __all__ = [
     "DiagnosticityOutcome",
     "COMPARATIVE_ANALYSIS_METHOD",
     "COMPARATIVE_ANALYSIS_METHOD_VERSION",
+    "DEFAULT_MIN_PROFILE_FLOOR",
 ]
