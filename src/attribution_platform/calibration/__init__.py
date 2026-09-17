@@ -60,11 +60,21 @@ Gate status:
   Enforces scenario-family -> single-role disjointness and blind-actor-holdout
   readiness (§D9/§D10). **Read-only, no ATT&CK, no ablation, no fitting, no
   ``calibration_version``.**
-- **B1.5+ (deferred, not implemented):** provenance / license *correctness*
-  validation (B1.5); the corpus quality/coverage validation harness (B1.6); the
-  later blind-actor ATT&CK identity-ablation evaluation; and — much later —
-  parameter fitting and ``calibration_version``. No ``calibration_version`` and
-  no fitting exist yet.
+- **B1.5 (implemented — this gate):** ``provenance_validation`` — the read-only
+  :func:`~attribution_platform.calibration.provenance_validation.validate_provenance`
+  (and :func:`~attribution_platform.calibration.provenance_validation.require_valid_provenance`)
+  producing a deterministic
+  :class:`~attribution_platform.calibration.provenance_validation.ProvenanceValidationReport`
+  of ``ProvenanceValidationViolation`` objects (``ProvenanceViolationType``).
+  Validates, over the manifest alone, the correctness layer above B1.3: SPDX
+  license membership (``SPDX_LICENSE_ALLOWLIST``), orphan-source detection, and
+  structural provenance adequacy (§D13/§D15).
+  **Read-only, manifest-only, no ATT&CK, no network, no redistribution field, no
+  ``calibration_version``.**
+- **B1.6+ (deferred, not implemented):** the corpus quality/coverage validation
+  harness (B1.6); the later blind-actor ATT&CK identity-ablation evaluation; and
+  — much later — parameter fitting and ``calibration_version``. No
+  ``calibration_version`` and no fitting exist yet.
 """
 
 from __future__ import annotations
@@ -92,6 +102,15 @@ from attribution_platform.calibration.manifest import (
     CorpusCaseEntry,
     CorpusSourceEntry,
     compute_calibration_corpus_version,
+)
+from attribution_platform.calibration.provenance_validation import (
+    PROVENANCE_VALIDATION_SCHEMA_VERSION,
+    SPDX_LICENSE_ALLOWLIST,
+    ProvenanceValidationReport,
+    ProvenanceValidationViolation,
+    ProvenanceViolationType,
+    require_valid_provenance,
+    validate_provenance,
 )
 from attribution_platform.calibration.split_validation import (
     NO_MANIFEST_CORPUS_VERSION,
@@ -131,4 +150,11 @@ __all__ = [
     "SplitViolationType",
     "SPLIT_VALIDATION_SCHEMA_VERSION",
     "NO_MANIFEST_CORPUS_VERSION",
+    "validate_provenance",
+    "require_valid_provenance",
+    "ProvenanceValidationReport",
+    "ProvenanceValidationViolation",
+    "ProvenanceViolationType",
+    "PROVENANCE_VALIDATION_SCHEMA_VERSION",
+    "SPDX_LICENSE_ALLOWLIST",
 ]
