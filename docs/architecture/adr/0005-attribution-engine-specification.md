@@ -1015,3 +1015,605 @@ computational bound (an implementation-only limit tracked separately; this ADR s
 combination size); the numeric definition of `contradiction_strength` (deferred to the coverage/contradiction
 methodology); Gate 3.6's likelihood/WEP ranking (which, once Gate 3.5 applies this amendment, may consume the
 normalized `support(h)`); and every already-established calibration numeric value.
+
+### Amendment B (2026-09-17) — Coincidental-overlap null, distinctiveness-vs-repetition, and actor/campaign separation
+
+**A post-acceptance additive clarification/extension**, recorded in the same dated style Amendment A and
+ADR-0004's `## Post-acceptance clarifications` already established; **the original D1–D21 decision text above
+is left byte-for-byte intact and is never silently rewritten.** Like Amendment A, this amendment changes
+methodology (not merely records how an accepted decision was satisfied), so it additionally states its
+compatibility impact and what remains calibration-controlled or deferred (see the §Compatibility and §Calibration
+subsections below).
+
+**Why Amendment B is required.** The Pre-G3.6 methodology audit found three defects that would otherwise be
+carried into the (not-yet-built) Gate 3.6 likelihood/confidence/abstention layer:
+
+- **B2 — the `Unattributed` null is trivially beaten.** §D9 already speaks of "separation from the
+  `Unattributed` floor," and doc 07 §5 / ADR-0002 CR-2 require that floor to be a **non-zero absolute
+  coincidental-overlap level**. The Gate 3.5 *implementation* left `support(Unattributed) = 0.0` (an
+  implementation choice, never an ADR decision), so **any** candidate with a single supporting cell trivially
+  "beats the null." The CR-2 defense against forcing a known label onto an absent/under-represented actor
+  (doc 09 Scenario 8 — "the single most dangerous failure this project must avoid") is therefore currently
+  inert. This amendment fixes the floor's *structural form*; it does not change §D9's already-accepted "floor"
+  wording.
+- **B5 — repetition can substitute for distinctiveness.** §D4 (ACCEPTED) deliberately treats distinct
+  `BehavioralStep`s asserting one technique as independent acts, and Gate 3.5 sums them as
+  `D(x)·occurrence_count(x)`. §D4 itself states this "can never, by itself, escape D20's single-technique
+  guard," deferring the bound to the abstention layer — but §D13's guard alone does not catch separation
+  *dominated* by one repeated (or one high-`D` atomic, or one single-source) contributor *among several*. This
+  amendment defines how the likelihood layer consumes support so that repetition cannot substitute for
+  distinctive behavioral diversity, and freezes a concentration mechanism — **without modifying §D4**.
+- **B6 — Group and Campaign supports live on different scales yet were to be ranked together.** Amendment A's
+  profile-breadth normalization divides by the candidate's own profile size; because ATT&CK scopes a `campaign`
+  more narrowly than an `intrusion-set` (Amendment A's own measured asymmetry: active Groups median ≈ 21.5,
+  Campaigns median ≈ 20.0, but different means/maxima and different proportional effects), ranking Groups and
+  Campaigns in one actor-likelihood space compares different scales. This amendment resolves **Open Question #2**
+  by separating actor attribution (Groups) from campaign contextualization (Campaigns), rather than inventing a
+  cross-type normalization.
+
+**What Amendment B does not do.** It resolves **B2, B5 and B6** at the *structural-methodology* level only. It
+**does not invalidate any D1–D21 decision** (see §Compatibility with D1–D21 below — every apparent interaction
+was checked and none is contradicted); it **does not select any numeric value** (every threshold it names
+remains a `calibration_version` parameter); it **does not build the calibration corpus, freeze a
+`calibration_version`, implement Gate 3.6, modify any contract, or modify the Gate 3.5 implementation**. It
+requires a **`methodology_version` bump** (§Methodology versioning). **G3.6 remains blocked** until a frozen
+`calibration_version` exists (C3.2, §D19 hard-fail) **and** the coverage-construction (B3) and
+`evidence_type`-plumbing (B4) prerequisites are met — Amendment B does not clear any of those.
+
+Neutral note (no legal claim): Amendment B defines a **more precise computational mechanism** coupling a
+candidate-independent ATT&CK-derived coincidence baseline, profile-normalized comparative actor evidence, a
+distinct-feature decision basis, composition-aware concentration control, an explicit repetition/persistence
+separation, actor/campaign separation, coverage-aware abstention, and provenance/version determinism. Its
+**novelty relative to prior art remains undetermined** and is out of scope here; no patentability claim is made.
+
+**Revision 2 (2026-09-17, pre-acceptance).** This still-**unaccepted** DRAFT was revised after a hostile
+pre-acceptance audit to place the entire Gate 3.6 decision path on a **single, consistent distinct-feature
+basis** (the subsection immediately below) and to tighten the null framing, the persistence-vs-corroboration and
+diversity-vs-independence language, the combination-dominance corroboration condition, and the
+campaign-contextualization anti-circularity/multi-attribution rules. The revision edits **only** this
+unaccepted Amendment B text; **D1–D21 and Amendment A remain byte-for-byte unchanged**, and no previously
+*accepted* decision is rewritten. Where a paragraph below supersedes earlier Revision-1 wording of this same
+amendment, it says so explicitly.
+
+**Revision 3 (2026-09-17, pre-acceptance).** A second hostile pre-acceptance audit found four surgical
+precision defects, corrected here (still editing **only** this unaccepted DRAFT; D1–D21 and Amendment A remain
+byte-for-byte unchanged): (1) the decision path uses **two explicitly-assigned forms** of decision support
+(un-normalized and profile-breadth-normalized), not "one basis"; (2) the concentration denominator is renamed
+`contributor_separation(h)` and is stated to be a **different quantity** from `separation_from_null(h)`;
+(3) `ProfileBreadth` and every G3.6 prevalence/traversal quantity **must count active ATT&CK targets only** (a
+G3.6 traversal prerequisite; the Gate 3.1 layer is **not** modified now); (4) the combination-dominance
+independent-corroboration exemption **fails closed** (denied) when independence cannot be established. Where a
+paragraph below supersedes earlier Revision-1/Revision-2 wording of this same amendment, it says so explicitly.
+
+#### Decision-path scale: two assigned forms of one distinct-feature decision-support family
+
+Two distinct aggregates are defined here and are **never interchangeable**; every later B2/B5 rule names which
+one it uses.
+
+- **RAW SUPPORT** — the multiplicity-preserving *explanatory/provenance* aggregate. This is exactly Amendment A's
+  `raw_support(h)` (`Σ` atomic `D(x)·occurrence_count(x)` `+ Σ` combination `D(C) − Σ` contradicting …),
+  **unchanged** (D4/Amendment A intact). It is retained on every hypothesis for explanation and provenance, and
+  as the *source* of a **bounded persistence signal** for confidence (§B5) — it is **never** consumed by the
+  likelihood / separation-from-null / concentration / abstention decision.
+- **DECISION SUPPORT** `decision_support(h)` — the *distinct-feature* aggregate the Gate 3.6 decision path
+  consumes:
+
+  ```
+  decision_support(h) = Σ over h's distinct decision contributors:  contribution(contributor)
+  ```
+
+  where each **distinct atomic feature** `x` contributes `contribution(x) = D(x)` **at most once** (repeated
+  occurrences of an already-counted technique add **no** additional decision support), each **admissible
+  combination** `C` contributes `contribution(C) = D(C)` **once**, a combination's member features are **not**
+  separately counted (§D3 maximal partition, unchanged), and a feature whose `g` is undefined contributes `0`
+  (the §D3 `OUTSIDE_CALIBRATED_REGIME` fallback, unchanged). Any diminishing-returns softening of "count once"
+  is a `calibration_version` curve, never chosen here.
+
+**Two explicitly-assigned FORMS of the one distinct-feature decision-support family (supersedes any earlier
+"one basis" wording).** DECISION SUPPORT exists in two mathematically distinct but related forms of the **same**
+distinct-feature family:
+
+- **A. UN-NORMALIZED** `decision_support(h)` — the distinct-feature decision support defined above, **before**
+  profile-breadth normalization.
+- **B. NORMALIZED** `decision_support_norm(h) = decision_support(h) / ProfileBreadth_effective(h)` — the
+  cross-Group comparative quantity, using Amendment A's identical Group `ProfileBreadth_effective` mechanism.
+
+**The decision path uses this one distinct-feature decision-support family in two explicitly assigned forms;
+each downstream decision quantity MUST consume the form specified here, and no downstream operation may
+substitute one form for another:**
+
+- **UN-NORMALIZED `decision_support` MUST be used for:** `separation_from_null(h)`; the concentration contributor
+  decomposition; and concentration's own `contributor_separation(h)` quantity (§B5).
+- **NORMALIZED `decision_support_norm` MUST be used for:** cross-Group likelihood comparison/ranking;
+  `separation_from_next`; and the margin from the next hypothesis.
+
+**These two quantities answer different questions and are NOT interchangeable:** `separation_from_null(h)` (on
+the un-normalized form) asks whether the candidate's observed distinct-feature support clears the
+candidate-independent coincidence baseline; `decision_support_norm(h)` compares candidates *after* accounting
+for profile breadth. No sentence in this amendment may be read as making `decision_support_norm(h)` directly
+comparable to `decision_support(Unattributed)`.
+
+**Leader definition (unambiguous).** The **leader** is the eligible **Group** actor hypothesis with the highest
+`decision_support_norm(h)`. Being top-ranked does **not** by itself qualify for attribution: the leader MUST
+**also** independently clear the un-normalized `separation_from_null` requirement and every other §D13 condition
+(§Abstention below). Ranking and null-clearance are on deliberately different forms and are evaluated
+separately.
+
+**Unattributed has no profile breadth.** The `Unattributed` hypothesis names no actor and has no candidate
+profile breadth; it is represented solely by its **un-normalized, candidate-independent null baseline**
+(`decision_support(Unattributed)`, §B2) and **MUST NOT** be divided by any actor profile breadth or given a
+`decision_support_norm`.
+
+**RAW SUPPORT and Amendment A's `support_value` remain valid explainability/intermediate quantities**, retained
+on every hypothesis, but are **never** substituted for either DECISION SUPPORT form in a decision. **This
+subsection supersedes every Revision-1 phrase computing separation/concentration on `raw_support(h)` and every
+Revision-2 "one basis" phrase.**
+
+**Active-target policy for `ProfileBreadth` and every prevalence/traversal quantity (G3.6 traversal
+prerequisite; binding).** The Gate 3.1 `group_profile()` implementation currently returns the raw `uses` target
+set **without** active-filtering the target technique/software, so revoked/deprecated targets currently inflate a
+profile. For G3.6 this is resolved, not deferred: **`ProfileBreadth` MUST count only *active* ATT&CK target
+objects** (revoked/deprecated target techniques/software MUST NOT contribute), and **every ATT&CK
+prevalence/traversal quantity the G3.6 decision methodology consumes** (`g(x)`, `g(C)`, `group_profile`,
+combination superset checks, and `attributed-to` resolution) **MUST apply the same active-object policy
+consistently**, deterministically, pinned to ATT&CK v19.0. This is a **G3.6 traversal prerequisite**: the Gate
+3.1 traversal layer MUST be extended/adjusted to provide active-target behavior **before** G3.6 implementation.
+**This amendment does not modify Gate 3.1 source now** — it specifies the requirement for the appropriate later
+gate.
+
+#### B2 — Coincidental-overlap null baseline
+
+**Structural rule (fixed here; not calibration).** The `Unattributed` null hypothesis's DECISION SUPPORT is no
+longer `0`. It is an explicit, **candidate-independent** baseline computed on the **same distinct-feature
+DECISION basis** as every candidate (above), over the *case's own* observed decision features:
+
+```
+decision_support(Unattributed) = Σ over the case's distinct observed decision features f:  contribution(f) · g(f)
+```
+
+where, using the **same** feature/combination partitioning §D3 and the DECISION SUPPORT rule above already fix
+for a real candidate (never a new or parallel scheme, never multiplicity):
+
+- the case's observed feature set is partitioned **once** by the existing deterministic maximal-partition rule
+  (§D3) into distinct atomic features and admissible combination blocks;
+- for a **distinct atomic** feature `x` (not absorbed into a combination), `contribution(x) = D(x)` (**once**,
+  no `occurrence_count` — repetition is not part of the decision basis, §B5) weighted by its coincidental-match
+  base rate `g(x)`;
+- for a **combination** `C`, `contribution(C) = D(C)` weighted by `g(C)`; its member features are **not**
+  separately counted (no double-counting);
+- a feature whose `g` is undefined/zero-active-match (the §D3 `OUTSIDE_CALIBRATED_REGIME` fallback) contributes
+  `0` to the null exactly as it already contributes `0` to a candidate's decision support — unchanged.
+
+`g(f)` is the already-defined §D3 base rate (fraction of active Groups whose `uses` profile contains `f`).
+
+**This is a deterministic heuristic expected-overlap baseline under a feature-independence approximation — not a
+validated statistical claim.** `contribution(f)·g(f)` reads as "this feature's decision contribution, times the
+documented base rate at which a tracked Group carries it," but the sum treats features as independent, which they
+are **not** (ATT&CK `uses` profiles are correlated). The baseline is therefore an **approximation**, and this
+amendment explicitly does **not** claim it is a statistical expectation, a probability, a statistical
+significance test, a calibrated p-value, or a claim about real-world prevalence. It is an internal,
+**documentation-relative construction value** (documentation-relative precisely because `g(x)` is, §D3/D18/CR-4),
+never presented to an analyst as a probability or percentage. Because the null and a candidate's decision support
+are both built from the same `g`, they share the same documentation bias and it partially cancels in the
+*separation*.
+
+**Requirements this baseline satisfies (all structural):** candidate-independent (a pure function of the observed
+decision features and the pinned KB, never of any candidate); deterministic and closed-form (no random sampling,
+no permutation, no RNG — respecting §D16); computed over the **same** pinned `AttackKnowledge`; using the **same**
+distinct-feature partitioning; on the **same DECISION SUPPORT scale** as a real candidate's `decision_support(h)`;
+reproducible; and introducing **no arbitrary constant** and **no candidate-relative circularity** (the null is an
+evidence-set baseline, never the top of the candidate field).
+
+**Behaviour by prevalence, explicitly (since `D(f)·g(f) = (1−g(f))·g(f)`):**
+
+- **Rare** features (`g→0`): near-zero coincidental expectation — a random Group is unlikely to carry them, so
+  a genuine rare-feature match is *not* coincidental (its diagnostic weight is realized in the candidate's
+  support, not in the null).
+- **Moderately prevalent** features (`g≈0.5`): the largest contribution to the null — exactly the features a
+  random Group is *both* reasonably likely to share *and* that still carry non-trivial `D`; the coincidental-
+  overlap risk the null exists to model.
+- **Common** features (`g→1`, and the endpoint `g=1` exactly): `D→0` (or `D=0`), so their contribution to the
+  null →0 (or `0`) — they carry no discrimination for anyone, consistent with §D3/§D12's "common tooling cannot
+  dominate." The endpoint `g=0` (exactly zero active matches) is the *undefined* case and contributes `0` via
+  the §D3 fallback above — never `D=1`. No endpoint requires an arbitrary constant.
+
+**Separation-from-null and the calibrated margin.** `separation_from_null(h)` is the leader's **UN-NORMALIZED
+decision support relative to this baseline** — `decision_support(h) − decision_support(Unattributed)`, **both on
+the un-normalized decision-support form** (never `decision_support_norm`, never `raw_support`) — and the
+calibrated `τ_separation` (§D13 condition 1) is the **margin the leader must clear *above* this non-zero
+baseline**, not a threshold above `0`. Because the null and a candidate's decision support are both built from
+the same `g`, they share the same documentation bias and it partially cancels in the *separation*. This is a
+**separate** abstention criterion from cross-Group ranking, which uses `decision_support_norm` (above).
+
+**Critical scope note — B2 is necessary but not sufficient.** In doc 09 Scenario 8 (true actor absent; famous
+Groups match a *fraction* of a distinctive combination) the partial atomic matches can still exceed this
+coincidental floor; what prevents the false named attribution there is that no tracked Group holds the full
+distinctive **combination** `D(C)`, *together with* the B5 distinctive-basis/concentration guard below. B2
+guards against winning on accumulated moderate overlap; B5 guards against winning on a single/partial/repeated
+contributor. Both are required, and they are consumed jointly by §D13's decision rule.
+
+#### B5 — Distinctiveness, repetition, and concentration
+
+**`raw_support(h)` is unchanged and still retains occurrence multiplicity.** §D4's independence rule and
+Amendment A's `raw_support(h)` aggregate (`Σ` atomic `D(x)·occurrence_count(x)` `+ Σ` combination `D(C) − Σ`
+contradicting …) remain exactly as accepted — repeated `BehavioralStep`s remain independent acts and remain
+fully explainable via the per-feature `EvidenceContribution` values. **§D4 is not modified.**
+
+**Likelihood consumption (the new rule, defined in an existing methodology gap).** Gate 3.6's likelihood
+construction — which §D9 leaves to implementation and this ADR has not previously specified — **MUST NOT** let
+unbounded repetition of one technique substitute for distinctive behavioral diversity. It therefore consumes
+**DECISION SUPPORT** (the single distinct-feature basis above), never `raw_support`. Concretely: `100` occurrences
+of technique `A` do **not** produce `100×` the diagnostic likelihood of `A`; they produce **one** distinct-feature
+decision contribution `D(A)`, with the multiplicity retained only in `raw_support` for explanation and as a
+bounded persistence signal for confidence (below). This is explicitly a **G3.6 likelihood-*consumption* rule in
+a previously-unspecified gap, not a contradiction of §D4**: §D4 governs `raw_support`'s independence units
+(unchanged); §D4 itself already states repetition "can never, by itself, escape D20's single-technique guard,"
+i.e. it always anticipated a downstream bound — this amendment supplies that bound.
+
+**Persistence vs. corroboration — kept strictly distinct; diversity is not independence.** Two different
+confidence signals must never be conflated (and neither is ever likelihood):
+
+- **PERSISTENCE** = repetition of substantially the same behavior/evidence pattern (the `raw_support`
+  multiplicity). It may feed confidence **only** through a **bounded** persistence treatment whose transform is a
+  `calibration_version` parameter (never chosen here) — it must **never** become a disguised second likelihood
+  score, and repetition of a non-distinctive behavior must not lift confidence for a lead with no distinctive
+  decision support.
+- **CORROBORATION** = agreement across **genuinely distinct** evidence. **Evidence-type diversity is *not*
+  statistical independence**: two evidence types drawn from the **same `Observation`**, or correlated detections
+  of the same underlying event, are **not** independent corroboration and must not be counted as such. Whether
+  corroboration qualifies as independent is decided at the **confidence/provenance layer** (distinct
+  `Observation`s, genuinely distinct evidence types), not asserted merely because `EvidenceType` values differ.
+  This amendment makes no independence claim from type-difference alone.
+
+**Concentration mechanism (structural definition on the DECISION basis; threshold calibration-controlled).**
+Concentration is computed **entirely on DECISION SUPPORT**, never on `raw_support` — this supersedes the
+Revision-1 `raw_support`-based definition. Each of the leader's own decision contributors (one distinct atomic
+feature, or one admissible combination block — repeated occurrences add **no** contributor, and a combination's
+members are not separately counted) has a **net-of-coincidence** decision share:
+
+```
+net(contributor)       = contribution(contributor) · ( 1 − g(contributor) )      # = D(f)·(1−g(f)); ≥ 0
+contributor_separation(h) = Σ over h's own valid decision contributors:  net(contributor)
+concentration(h)       = max_contributor[ net(contributor) ]  /  contributor_separation(h)
+```
+
+using the **un-normalized** decision-support form (never `decision_support_norm`, never `raw_support`), the same
+distinct-feature basis and §D3 admissible-combination partitioning, with combination members never separately
+counted.
+
+- **`contributor_separation(h)` is NOT `separation_from_null(h)` (renamed and distinguished, per the audit).**
+  They are **different quantities** and this amendment does not force them to be equal:
+  `separation_from_null(h) = decision_support(h) − decision_support(Unattributed)` (§B2) is the **abstention**
+  criterion against the **candidate-independent global** null built over the *entire* observed decision-feature
+  universe; `contributor_separation(h)` is the **concentration** denominator built **only over the candidate's
+  own matched decision contributors** (each net of its own coincidence, `D·(1−g)`). Their feature partitions
+  differ — the candidate covers its matched features, while `Unattributed` is a global baseline over the observed
+  decision-feature universe — so the two are deliberately distinct and are used for distinct decisions.
+- **Same decomposition for numerator and denominator (so `concentration(h) ∈ [0, 1]` is guaranteed):** the
+  denominator `contributor_separation(h)` is the sum of the very per-contributor `net(·)` terms the numerator
+  takes the maximum of, and every `net ≥ 0` (since `0 ≤ g ≤ 1`). This `[0,1]` guarantee applies to concentration
+  built on `contributor_separation(h)`, **not** to `separation_from_null(h)`.
+- **Domain — evaluated only when `contributor_separation(h) > 0`.** If `contributor_separation(h) ≤ 0`,
+  concentration is **undefined / not eligible**, and the attribution path **fails closed** to insufficient
+  evidence via §D13 — concentration never divides by zero and never goes out of range.
+- **Coincidence-discounting is automatic:** `net = D·(1−g) = D²`, so a **common** repeated feature (`g→1`)
+  contributes `≈0` to both numerator and denominator and can never dominate concentration; a **rare** distinctive
+  feature (`g→0`) contributes near its full `D`. **Repeated occurrences of one technique are a single
+  contributor** (repetition remains raw-support/persistence information only, never an extra concentration
+  contributor), so repetition cannot inflate concentration into a false dominance — and a case whose only
+  decision contributor is one repeated technique is a **single-distinct-feature** case caught by §D13 condition 4
+  directly.
+
+**The load-bearing structural distinction:** a **legitimate distinctive combination** dominating is *acceptable*
+(§D3/§D6 want distinctive combinations to dominate); a **single atomic feature, a repeated technique, or a
+single evidence source** dominating is *not*. Concretely:
+
+- A hypothesis whose `contributor_separation(h)` is dominated (concentration above `τ_concentration`) by a
+  **single atomic / repeated-technique / single-source** contributor **cannot** satisfy §D13's
+  distinctive-evidence condition (D13 condition 4) merely through that dominance or through repetition.
+- A hypothesis whose `contributor_separation(h)` is dominated by a genuinely **admissible distinctive
+  combination** (`g(C) < min g(x)`, §D3) **may** satisfy it **only when that combination is independently
+  corroborated** — and, per §B5, "independently corroborated" here **requires** corroborating evidence from
+  **distinct `Observation`s** and genuinely distinct evidence types, **not** duplicated/correlated detections of
+  the same underlying event and **not** same-`Observation` evidence types. The confidence/provenance layer
+  (§D10/§D4), not this metric, determines whether that condition is met. **Fail-closed independence rule
+  (binding):** if independence **cannot be established** from the available provenance/evidence metadata, the
+  independent-corroboration exemption **MUST be DENIED** — the candidate is then treated as **failing** the
+  exemption and follows the normal concentration/abstention path (unknown independence ≠ independent
+  corroboration; this is abstain-safe). This amendment does **not** define the future independence algorithm;
+  that is the confidence/provenance gate's job. **Caveat retained (§D6/CR-5):** an admissible combination is a
+  **profile-union approximation** — a superset match over group profiles does **not** establish that the
+  techniques co-occurred within a single real intrusion; the exemption inherits that low-weight/flagged caveat.
+
+`τ_concentration` — the fraction above which a non-combination-dominated separation is treated as
+over-concentrated — is a **`calibration_version` parameter, not chosen here.** No numeric value is selected.
+
+**Contract note.** This amendment **does not modify any Gate 3.2 contract** (`EvidenceAssessment`,
+`HypothesisSupportSummary`, etc.); the concentration mechanism and its fields are defined here as a G3.6
+computation over already-available data. The explainability fields it will require on the eventual result are
+listed in §Explainability requirements below.
+
+#### B6 — Actor attribution and campaign contextualization
+
+**Structural rule (fixed here; not calibration).** Group candidates and the `Unattributed` null form the
+**actor-attribution hypothesis space** — the only space in which likelihood, separation-from-null,
+separation-from-next, confidence, and abstention are computed. **Campaign candidates are contextualization, not
+actor hypotheses**, and **MUST NOT be directly ranked against Groups as competing actors**.
+
+- Where the pinned KB provides a valid `attributed-to` relationship **Campaign → Group**, the campaign may
+  **reinforce contextual corroboration**, **explain operational context**, and **appear in the analyst
+  explanation** for the corresponding Group — feeding the Group's **confidence/corroboration** (§D10/§D4), but
+  **never independently increasing that Group's actor *likelihood*** (§D9), and never manufacturing a likelihood
+  the Group's own evidence did not earn.
+- Where **no** `attributed-to` Group exists, the campaign is surfaced as **known-operation / contextual evidence
+  with the actor unresolved** — never promoted into the actor-likelihood space, never collapsed onto the nearest
+  Group.
+
+**Anti-circularity rule (binding).** A `Campaign → Group` `attributed-to` edge is **ATT&CK knowledge context,
+never case-specific proof** that this telemetry belongs to that Group. A campaign matched using the **same**
+evidence already consumed by a Group's actor likelihood **MUST NOT** re-inject that evidence into the Group's
+confidence — the following chain is explicitly **forbidden**: *campaign matched by TTPs → `attributed-to` Group →
+Group confidence boost → the same TTP evidence counted again.* Campaign context may influence a Group's confidence
+**only** through genuinely **independent contextual evidence** (e.g. campaign timing/victimology) **not already
+counted** in that Group's actor-likelihood basis; the confidence/provenance layer enforces the non-overlap.
+
+**Multi-attributed campaigns (binding).** A campaign with more than one `attributed-to` Group — `Campaign C →
+Group A` *and* `Campaign C → Group B` — matched by the case evidence does **not** increase the likelihood of `A`,
+does **not** increase the likelihood of `B`, does **not** split or duplicate confidence between them, does
+**not** equalize them, and does **not** by itself create actor evidence for either. It is reported as
+context: *"activity consistent with Campaign C, which ATT&CK associates with {A, B}; the actor is unresolved by
+this evidence."* Each of `A` and `B` must independently earn any actor likelihood from its own Group-level
+decision support, exactly as any other Group candidate.
+
+**What is unchanged.** The dynamic candidate universe (§D7/D15/CR-3), campaign candidate *generation* (§D7),
+and the ACH candidate *columns* including campaigns (§D8) all remain intact — campaign candidates are still
+generated and still materialize ACH cells. **Amendment B changes only how campaign hypotheses are *consumed* by
+the likelihood/assessment layer.** This is a decision in the previously-unspecified Gate 3.6 consumption layer,
+consistent with §D3's candidate-type-invariance (which it does not touch: `g`/`D` remain Group-population-
+relative and identical for all feature computations) and with §D3's own explicit statement that candidate type
+"affects only which `Candidate`/`Hypothesis` rows the resulting `D` value is joined against." It **resolves Open
+Question #2** (see §Open questions resolved).
+
+#### Abstention decision (explicit decision-scale assignment)
+
+Restates §D13 for this amendment's two-form model — no D13 threshold is chosen here; every numeric floor remains
+calibration-controlled. The leading Group actor hypothesis is the one with the highest **`decision_support_norm(h)`**
+(§Decision-path scale). Identifying the leader does **not** select a winner: the leader is emitted as a
+non-`Unattributed` attribution **only if it independently satisfies every applicable condition**, each on its
+assigned form and **never combined into a single score**:
+
+1. **Separation from null** — `separation_from_null(h) = decision_support(h) − decision_support(Unattributed)`
+   (un-normalized form, §B2) exceeds the calibrated `τ_separation`.
+2. **Margin / separation-from-next** — `decision_support_norm(h)` exceeds the next Group hypothesis by the
+   calibrated `τ_margin`, **or** the result is reported as a competing set (§D13.3).
+3. **Confidence** — meets the calibrated `min_confidence` floor (§D10; coverage/persistence/corroboration).
+4. **Concentration** — `concentration(h)` (on `contributor_separation(h)`) is within `τ_concentration`, **or**
+   the dominant contributor is an admissible distinctive combination that clears the **fail-closed**
+   independent-corroboration exemption (§B5).
+5. **Distinctive-combination / independent-corroboration** where applicable, and the **single-technique guard**
+   (§D13.4), and every other §D13 condition.
+
+If **any** required condition fails (including unknown independence, which fails closed), the outcome is
+`Unattributed` + **"Insufficient evidence for attribution."** No premature actor ranking, numeric confidence
+score, probability, or point total is produced; "insufficient evidence" is always a valid outcome.
+
+#### Calibration boundary
+
+This amendment fixes **structure** and defers **every numeric value**, mirroring §D17 and Amendment A's own
+discipline.
+
+**Structural (fixed by Amendment B, not calibration-tunable):**
+
+- the RAW-SUPPORT vs DECISION-SUPPORT distinction and the **two explicitly-assigned forms** — un-normalized
+  `decision_support` and profile-breadth-normalized `decision_support_norm` — with each downstream operation's
+  assigned form (Decision-path scale);
+- the candidate-independent, un-normalized coincidental-overlap null `decision_support(Unattributed) =
+  Σ contribution(f)·g(f)`, deterministic, a heuristic expected-overlap baseline (B2);
+- the distinct-feature likelihood-consumption basis, the preservation of multiplicity in `raw_support`, and the
+  persistence-vs-corroboration separation (B5);
+- `contributor_separation(h)` and the concentration *definition* on it (`net = D·(1−g)`, domain `> 0`, range
+  `[0,1]`), its distinctness from `separation_from_null`, and the combination-vs-single-contributor distinction
+  with its distinct-`Observation`/distinct-type, **fail-closed** independent-corroboration condition (B5);
+- **active-target `ProfileBreadth`** and the consistent active-object policy for every prevalence/traversal
+  quantity (Decision-path scale);
+- the **fail-closed unknown-independence** rule (B5);
+- the Group-only actor-likelihood space, Campaign contextualization, the anti-circularity rule, and
+  multi-attributed-campaign semantics, including `attributed-to` reinforcement semantics (B6).
+
+**Calibration-controlled (`calibration_version` parameters; no value chosen here):** `τ_separation` (now the
+margin above the non-zero null), `τ_margin`, `τ_concentration`, `min_profile_floor`, any later-validated fitted
+replacement of the linear null baseline, WEP-band cutoffs, confidence-band cutoffs, the §D3 minimum-support
+count, and any diminishing-returns multiplicity curve (if ever justified on corpus evidence). No numeric value
+is selected in this amendment.
+
+#### ATT&CK attributed-to traversal prerequisite
+
+B6 requires a **deterministic** ATT&CK traversal capability, additive to `attack_knowledge/` in the same
+Option-A style §D6 already established (the current Gate 3.1 traversal layer deliberately omits it —
+"no campaign-attribution (`attributed-to`) traversal ... not required by this gate"):
+
+```
+Campaign  --attributed-to-->  Group
+```
+
+Requirements: operates over the **one pinned, already-loaded `AttackKnowledge`** only (no network, no "latest"
+resolution — §D16); the **`attributed-to` relationship object itself must be active** (non-revoked/
+non-deprecated) **and the target Group must itself be active** (§D3/§D6 filtering applied to both the edge and
+its target); **real STIX `relationship` objects only** (`relationship_type == "attributed-to"` with matching
+`source_ref`/`target_ref`), **never an inferred, heuristic, or fabricated relationship, and never any
+case-specific attribution implied** by the edge; **deterministic ordering** (sorted-by-id, §D16). **This
+amendment does not implement the traversal** — it records it as a **Gate 3.6 prerequisite** to be built as
+implementation work under §Implementation Gates.
+
+#### Explainability requirements
+
+When Gate 3.6 is later implemented against this amendment, the per-hypothesis attribution summary must retain
+enough to explain the B2/B5 mechanisms end to end — **audit/explainability fields, never probabilities** (this
+documentation amendment implements none of them):
+
+- `decision_support_value` — the leader's **un-normalized** `decision_support(h)` (distinct-feature,
+  B5/Decision-path scale);
+- `decision_support_norm_value` — the **profile-breadth-normalized** `decision_support_norm(h)` used for
+  cross-Group ranking/margin (Decision-path scale);
+- `support_unattributed` — the computed non-zero coincidental-overlap baseline, `decision_support(Unattributed)`
+  (B2, un-normalized; the null has no profile breadth);
+- `separation_from_null` — `decision_support(h) − decision_support(Unattributed)` (un-normalized form, B2);
+- `contributor_separation` — `Σ net(contributor)` over the candidate's own decision contributors (B5), **not**
+  equal to `separation_from_null`;
+- `separation_top_contributor_fraction` — `concentration(h) = max net / contributor_separation(h)`, in `[0, 1]`
+  (B5);
+- `dominant_contributor_is_combination` — whether the dominant contributor is an admissible distinctive
+  combination (B5, the exemption condition);
+- `distinct_feature_count` — the number of distinct atomic features underlying the decision basis (B5);
+- `max_occurrence_count` — the largest single-technique repetition observed (B5, the **persistence** signal that
+  feeds confidence, never likelihood);
+- `separation_survives_lowD_removal` — whether the separation persists when low-`D` terms are removed (doc 07 §4).
+
+These extend, and do not replace, Amendment A's four already-required support-explainability fields
+(`raw_support_value`, `support_value`, `profile_breadth`, `profile_breadth_floor_applied`), which remain valid
+explanation/provenance quantities (RAW SUPPORT and Amendment A's normalized `support_value`) alongside the
+DECISION SUPPORT fields above — the two are recorded separately and never conflated.
+
+#### Compatibility with D1–D21
+
+Every D1–D21 decision was checked for contradiction; **none is contradicted.** No apparent contradiction was
+found that would require stopping.
+
+- **D1 — intact.** One `CorrelationGroup` remains exactly one attribution unit; nothing here merges groups or
+  changes the unit. B6 operates on the one unit's candidate columns.
+- **D3 — intact.** `g(x)`/`D(x)` remain **Group-population-relative** and candidate-type-invariant; B2's null
+  reuses the identical `g`, and B6 introduces **no** campaign-relative population or campaign prior (Open Q2's
+  explicit constraint is honored).
+- **D4 — clarified, not contradicted.** `raw_support`'s occurrence multiplicity is preserved verbatim; the new
+  DECISION SUPPORT / distinct-feature basis is a *likelihood-consumption* rule in a gap §D4 itself anticipated
+  ("can never, by itself, escape" the guard), not a redefinition of §D4's independence units. RAW SUPPORT and
+  DECISION SUPPORT are held separately and never conflated.
+- **D5 — intact.** The `UNATTRIBUTED_CANDIDATE_ID` sentinel *representation* is unchanged; only its **computed
+  support value** moves from the implementation's `0.0` to the B2 baseline. `Candidate`/`Hypothesis`/
+  `EvidenceAssessment` contracts are unchanged. **D6 — intact:** combination/`uses` semantics and the additive
+  traversal-extension pattern are reused, not altered; the `attributed-to` capability is a new additive sibling,
+  exactly as §D6 permits.
+- **D7/D8 — intact.** Dynamic full-universe candidate generation and the ACH matrix (including campaign columns)
+  are unchanged; only campaign *consumption* by the later likelihood layer changes.
+- **D9 — clarified.** `raw_support(h)`/Amendment A's `support(h)` remain the internal evidence aggregate and a
+  valid explainability quantity; §D9's existing "separation from the `Unattributed` floor" wording is honored —
+  Amendment B specifies that the *likelihood ranking* consumes **DECISION SUPPORT** (distinct-feature,
+  breadth-normalized), supplies the floor's structural value, and adds the concentration consumption, never a
+  competing formula and never a probability.
+- **D10 — clarified.** Confidence, coverage, and the imitation cap remain a separate axis; **persistence**
+  (repetition) and **corroboration** (distinct-`Observation`, distinct-type evidence) feed confidence here — kept
+  strictly distinct, bounded, and never likelihood; evidence-type diversity is explicitly not treated as
+  statistical independence — reinforcing, not weakening, the two-axis separation.
+- **D11 — intact.** Contradiction remains coverage-dependent and `contradiction_strength` remains deferred;
+  Amendment B introduces no contradiction handling and does not use the null as a contradiction substitute.
+- **D13 — intact and strengthened.** Abstention is made *harder to trivially avoid* by the non-zero null
+  (condition 1 now measures against a real baseline) and by the concentration condition supplementing condition 4
+  (single-technique guard); no D13 threshold is chosen.
+- **D15 — intact.** No numeric uncertainty value is introduced; provenance obligations are unchanged (the new
+  explainability fields are categorical/audit values, not fabricated scores).
+- **D16 — intact.** The null, the concentration metric, and the `attributed-to` traversal are all deterministic,
+  closed-form, sorted-by-id, and free of RNG/wall-clock/live-lookup.
+- **D18/D19 — intact.** Tier-1/Tier-2 validation separation, blind-actor holdout, and the **hard
+  `calibration_version` prerequisite** all still bind; Amendment B does not create a `calibration_version` and
+  does not relax §D19's hard-fail.
+- **D20 — intact, with a required bump.** Six version identities remain; Amendment B is a methodology change and
+  therefore **requires a new `methodology_version`** (below) and revalidation on acceptance.
+- **D21 — intact.** No new prohibition is weakened: no ML, no live OSINT, no posterior probabilities, no
+  analyst-facing numeric score, no single-technique attribution, no cross-group campaign merging — B6's campaign
+  contextualization is explicitly *not* a cross-`CorrelationGroup` merge (it stays within the one unit).
+- **Open Question #2 — resolved** (see §Open questions resolved).
+
+**Compatibility with Amendment A (explicit).** Amendment A established `support(h) =
+raw_support(h) / ProfileBreadth_effective(h)` as the authoritative ordering statistic and stated G3.6 *may*
+consume it. Amendment B **does not erase Amendment A's terminology or change `raw_support(h)`/`support_value`**:
+those remain valid explainability/intermediate quantities on every hypothesis. It **clarifies** that G3.6 actor
+likelihood consumes a **DECISION SUPPORT** family (distinct-feature, multiplicity-bounded) in two forms, of which
+the normalized `decision_support_norm(h) = decision_support(h) / ProfileBreadth_effective(h)` reuses **the
+identical Group `ProfileBreadth_effective` mechanism** Amendment A defined — so Amendment A's normalization
+machinery is reused, not replaced. **`decision_support_norm(h)` is a new G3.6 decision-path quantity, NOT a
+silent rewrite of Amendment A's `support_value`** (`raw_support(h) / ProfileBreadth_effective(h)`): the two
+differ in their numerator (distinct-feature decision support vs. multiplicity-preserving raw support) and both
+are retained separately. This is a permitted clarification of *how* G3.6 consumes the existing support machinery
+(Amendment A wrote "may consume"), not a contradiction of Amendment A or of D1–D21.
+The behavioral change (likelihood no longer multiplicity-driven; a non-zero null) is the reason for the
+`methodology_version` bump below.
+
+#### Methodology versioning
+
+Amendment B changes methodology (the `Unattributed` support value, the likelihood-consumption basis, and campaign
+consumption all change observable results and therefore `determinism_hash`), so per §D20 it **requires a new
+`methodology_version`** and full revalidation on acceptance, and — per §D17 — a **new `calibration_version`** once
+calibration exists. The repository establishes **no concrete `methodology_version` string literal** anywhere yet
+(none exists in code; Amendment A likewise bumped methodology without pinning a literal), so **the exact
+`methodology_version` identifier must be assigned at acceptance**, distinct from and superseding both the original
+ADR-0005 acceptance and the Amendment A revision. This amendment does not invent one.
+
+#### Preconditions for G3.6
+
+Unchanged by drafting this amendment; restated so the gate is unambiguous. G3.6 (likelihood/separation +
+confidence + abstention + result emission) may proceed only when **all** hold:
+
+1. **Amendment B ACCEPTED** (dated) with the `methodology_version` assigned — resolves B2/B5/B6 structurally.
+2. **B1** — the golden corpus is built and the first `calibration_version` is frozen (C3.2); §D19 hard-fails any
+   scoring path without it. This unblocks `τ_separation`, `τ_concentration`, `min_profile_floor`, and the band
+   cutoffs.
+3. **B3** — a `CoverageProfile` construction path exists (§D2), *or* G3.6 explicitly scopes confidence to fail
+   closed on absent coverage — required for §D10/§D11.
+4. **B4** — `evidence_type` (and the backing `Evidence`/`Observation` ids) are threaded into the G3.6 input
+   contract — required for §D4/§D10/§D12 (the imitation defense) and for provenance.
+5. **`attributed-to` traversal** implemented (§ATT&CK attributed-to traversal prerequisite) — required for B6.
+6. **Active-target traversal** — the Gate 3.1 traversal layer extended so `ProfileBreadth`, `g(x)`, `g(C)`,
+   `group_profile`, and combination superset checks count only **active** ATT&CK target objects
+   (§Decision-path scale). Required before any normalized/decision-support quantity is computed.
+7. **Fail-closed independence semantics** — G3.6 treats unknown independence as *not* independent corroboration
+   (§B5), so the combination-dominance exemption denies by default; the operational independence check itself is
+   deferred to the confidence/provenance gate. These dependencies do **not** exist in the codebase yet.
+
+#### Open questions resolved
+
+- **Open Question #2 (campaign-specific scoring treatment beyond diagnosticity) — RESOLVED.** Campaign candidates
+  are **not** ranked in the actor-likelihood space; they are consumed as contextualization and, via
+  `attributed-to`, as confidence/corroboration reinforcement of the corresponding Group, never as independent
+  actor likelihood. No campaign-relative diagnosticity population and no campaign prior is introduced (§D3
+  unchanged). The narrower calibration-boundary sub-question Open Q2 left open — whether a *stricter*
+  per-candidate-type `τ_separation`/`min_confidence` is ever fitted — remains a `calibration_version` question,
+  now moot for actor ranking since Campaigns no longer occupy that space.
+
+#### Remaining deferred questions
+
+Unchanged and still deferred (Amendment B resolves none of these): the numeric definition of
+`contradiction_strength` (coverage/contradiction methodology); the `ti_kb_version`/TI-enrichment and Admiralty
+source-reliability layer (Open Q3); `D`'s calibrated non-baseline functional shape (Open Q4); the minimum-support
+threshold and neutral-prior value (Open Q5); the `>8`-distinct-feature combination-search computational bound; the
+software-evidence reachability question (Open Q1); and **every calibration numeric value** named above.
+
+Newly named by Amendment B but deferred to the confidence/provenance methodology (not resolved here): the
+**bounded persistence-to-confidence transform** (structurally required to be bounded and calibration-controlled,
+B5) and the **operational independence check** that decides when corroboration counts as independent — i.e. the
+concrete "distinct `Observation`s / distinct evidence types / not correlated detections" test that gates both the
+confidence corroboration factor and the combination-dominance exemption (B5/B6). Amendment B fixes the
+*principle* (diversity ≠ independence; same-`Observation` agreement does not qualify) and defers the *mechanism*
+to the confidence/provenance layer and its own later gate.
+
+#### Amendment B status
+
+**Status: ACCEPTED** (2026-09-17)
+
+**Acceptance record.** Amendment B — as it stands at **Revision 3** — is **formally accepted on 2026-09-17**,
+following the final hostile pre-acceptance audit (verdict: PASS WITH NON-BLOCKING FINDINGS). The Revision 1 /
+Revision 2 / Revision 3 history above is preserved intact as the record of how this amendment reached its
+accepted form; the accepted technical content is the Revision-3 text and no Revision-3 methodology was rewritten
+at acceptance. The three non-blocking findings (N-1 "likelihood consumption" form wording, N-2 "valid
+contributor" definition, N-3 explicit concentration-vs-normalization purpose sentence) are recorded as
+non-blocking and are **not** applied here — they may be polished in a future dated clarification without
+reopening the accepted methodology.
+
+Per §D20 this acceptance carries a `methodology_version` bump; the exact identifier is assigned per
+§Methodology versioning (no literal convention exists in the repository yet).
+
+**Acceptance of this methodology is NOT authorization to begin G3.6 implementation.** G3.6 remains blocked by its
+stated prerequisites, each an independent hard gate: the calibration corpus and a frozen `calibration_version`
+(C3.2, §D19 hard-fail); the active-target ATT&CK traversal extension; `CoverageProfile` construction (B3);
+`evidence_type` / `Observation` provenance plumbing (B4); the `attributed-to` traversal; and the confidence-layer
+requirements. None of these is satisfied by accepting the methodology, and none may be bypassed on the strength
+of this acceptance.
