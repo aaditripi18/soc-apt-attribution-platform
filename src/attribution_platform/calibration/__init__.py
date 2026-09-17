@@ -40,10 +40,20 @@ Gate status:
   the deterministic-id function
   :func:`~attribution_platform.calibration.contracts.compute_calibration_case_id`.
   **Contract only** — no corpus, no versioning, no scoring.
-- **B1.3+ (deferred, not implemented):** the corpus manifest and
-  ``calibration_corpus_version``; scenario-family split / leakage validation;
-  provenance / license validation; the read-only corpus validation harness. No
-  corpus data, no manifest, no ``calibration_version``, and no fitting exist yet.
+- **B1.3 (implemented — this gate):** ``manifest`` — the frozen
+  :class:`~attribution_platform.calibration.manifest.CalibrationCorpusManifest`
+  and its entries
+  (:class:`~attribution_platform.calibration.manifest.CorpusCaseEntry`,
+  :class:`~attribution_platform.calibration.manifest.CorpusSourceEntry`), plus
+  the deterministic corpus identity
+  :func:`~attribution_platform.calibration.manifest.compute_calibration_corpus_version`.
+  **Corpus identity only** — this gate creates ``calibration_corpus_version``
+  and **no** ``calibration_version``, **no** fitting, **no** split/leakage
+  validation, **no** scoring.
+- **B1.4+ (deferred, not implemented):** scenario-family split / leakage
+  validation; provenance / license correctness validation; the read-only corpus
+  validation harness; and — much later — parameter fitting and
+  ``calibration_version``. No ``calibration_version`` and no fitting exist yet.
 """
 
 from __future__ import annotations
@@ -63,6 +73,15 @@ from attribution_platform.calibration.contracts import (
     compute_calibration_case_id,
 )
 from attribution_platform.calibration.errors import CalibrationError
+from attribution_platform.calibration.manifest import (
+    CALIBRATION_CORPUS_VERSION_PREFIX,
+    CALIBRATION_MANIFEST_SCHEMA_VERSION,
+    CORPUS_VERSION_INPUT_FIELDS,
+    CalibrationCorpusManifest,
+    CorpusCaseEntry,
+    CorpusSourceEntry,
+    compute_calibration_corpus_version,
+)
 
 __all__ = [
     "CalibrationError",
@@ -78,4 +97,11 @@ __all__ = [
     "compute_calibration_case_id",
     "CALIBRATION_CASE_SCHEMA_VERSION",
     "CASE_ID_INPUT_FIELDS",
+    "CalibrationCorpusManifest",
+    "CorpusCaseEntry",
+    "CorpusSourceEntry",
+    "compute_calibration_corpus_version",
+    "CALIBRATION_MANIFEST_SCHEMA_VERSION",
+    "CALIBRATION_CORPUS_VERSION_PREFIX",
+    "CORPUS_VERSION_INPUT_FIELDS",
 ]
