@@ -555,3 +555,111 @@ Recorded alongside the coverage-model methodology lock (ADR-0005 Amendment C, 20
 6. **No schema change.** `CalibrationCase.coverage_assumptions` remains the existing `tuple[str, ...]` field
    (§D6, B1.2); this clarification pins the **meaning** of its values, not its shape. `case_id` inputs
    (`CASE_ID_INPUT_FIELDS`) are unchanged.
+
+### Clarification (2026-09-21) — B1-M fitting-methodology and corpus-construction lock (resolves F-1 / F-3 / Q4)
+
+Ratifies the B1-M methodology lock. This is an **additive** dated clarification recording the resolutions of the
+open questions **F-1**, **F-3**, and **Q4** (§Open Questions) **within the structural bounds already accepted
+above** (§D3/§D4/§D16/§D17/§D18). It changes **no** accepted decision text, selects **no numeric parameter value**,
+and creates no corpus, fitting code, or `calibration_version` artifact. Per §"B1 gate definition", parameter
+selection remains a later fitting sub-gate; this clarification only fixes the **form**, **procedure**, and
+**corpus strategy** that sub-gate will execute.
+
+**F-1 — persistence / diminishing-return functional form → LOCKED: bounded geometric saturation.**
+For a repetition/multiplicity count `n` (integer `≥ 0`):
+
+```
+p(n) = 1 − (1 − α)^n ,     α ∈ (0, 1]   (exactly one fitted parameter per application)
+```
+
+Within §D4's structural bounds: `p(0) = 0`; non-decreasing (marginal `Δp(n) = α·(1−α)^{n−1} > 0`); strictly
+concave (diminishing returns); bounded in `[0, 1)` (asymptote 1, never unbounded); `α = 1` is valid and degenerates
+to hard any-occurrence saturation (`p(n)=1` for `n ≥ 1`); an invalid `n` (negative / non-integer / undefined)
+**fails closed** (contribution 0). The **persistence** transform (§D2 pathway 4) feeds **confidence only** and
+never becomes a likelihood signal (§D4 / ADR-0005 Amendment B §B5). The **same functional family** may optionally
+soften the distinct-feature "count once" (Decision-path scale), but its **default is strict count-once** — the
+Amendment B count-once rule is preserved; softening is an optional bounded-concave refinement, never a second
+likelihood signal. `α` (and any count-softening parameter) is calibration-fitted within `(0, 1]`, one scalar each.
+
+**F-3 — fitting objective and deterministic search → LOCKED: deterministic bounded grid search + lexicographic
+constrained objective + fail-closed held-out gate.**
+
+- **Fit on the CALIBRATION split only** (corpus Type B, §D8); populations disjoint by `scenario_family_id`
+  (§D5/§D9); held-out (Type C), blind-actor (Type D) and final-test data **never tune** any parameter.
+- **Objective — lexicographic, no weighted scalar composite** (§D18; doc 08 §4 "reject any change that improves
+  ranking but worsens calibration"): (1) **minimize** corpus false-attribution rate / abstention error (§D18's
+  most-important metric); then (2) **maximize** ranking retention; then (3) **maximize** WEP/confidence
+  reliability. A single combined objective scalar is **forbidden**.
+- **Hard guardrails at every grid point:** all §D16 structural bounds; the §D16 pathway-2 **coherent-fit coupling**
+  (`min_profile_floor`, `τ_margin`, WEP band cutoffs fit jointly); reliability **monotonicity must not invert**.
+- **Search:** a **deterministic bounded grid** over the §D16 bounds — **no RNG** (§D17); canonical `case_id`
+  ordering; stable serialization/summation; PYTHONHASHSEED-independent.
+- **Tie-break:** among grid points equal under the full lexicographic metric vector, select the **canonically
+  smallest parameter vector** under sorted-tuple ordering — fully deterministic.
+- **Held-out acceptance — fail-closed:** the selected vector is accepted **iff**, on the disjoint held-out split,
+  (a) all structural bounds hold, (b) no reliability-monotonicity inversion occurs, and (c) the held-out
+  false-attribution rate does **not** exceed the calibration false-attribution rate **beyond one case's
+  granularity** (a data-relative comparison, not a numeric constant). Otherwise **no fit is accepted and no
+  `calibration_version` is frozen**.
+- **Overfitting controls:** a fixed, coarse, documented grid; lexicographic (non-weighted) selection; the disjoint
+  held-out gate; blind-actor exclusion (§D10); immutable ATT&CK relationships (§D11); no tuning on
+  held-out/test/blind data.
+- **Insufficient-data behavior — fail-closed:** if the calibration split lacks any §D19/§D8 required category
+  (repetition, deliberate-imitation, campaign-contextualization, positive/negative/ambiguous/unknown-abstention),
+  or has too few independent `scenario_family_id`s per fold, **no fit is produced and no `calibration_version` is
+  frozen**.
+
+**`fitting_procedure_version` contents (§D12/§D16).** The identity of the fitting spec comprises: the locked F-1
+functional form; the locked F-3 objective, lexicographic priority, guardrails, search method, tie-break, and
+held-out acceptance rule; and the **reproducibility-frozen numeric inputs** — the per-parameter grid ranges and
+resolution (bounded by §D16) and the held-out granularity rule. Those numeric inputs are **not** methodology
+decisions; they are documented, deterministic implementation inputs, chosen and **hashed into
+`fitting_procedure_version`** at the fitting sub-gate.
+
+**Q4 — golden-corpus construction → LOCKED: emulation-labeled replay Tier-1 corpus; real data Tier-2-only.**
+
+- **Tier-1 (machinery) corpus** = controlled **adversary emulation** (CALDERA / Atomic Red Team / equivalent):
+  each scenario is executed/captured and **replayed through the pinned production pipeline** (deterministic
+  Observations → Evidence → CorrelationGroup → BehavioralSequence). Ground-truth actor/technique/evidence-type/
+  coverage labels originate from **emulation-plan provenance** (§D6), **never** from ATT&CK `uses` inference
+  (§D9/§D11 source #3).
+- **Populations** (§D8/§D9), all disjoint by `scenario_family_id` (§D5): **B** calibration, **C** held-out
+  validation, **D** blind-actor holdout, and the final-test population. Validation/test/blind never tune
+  parameters.
+- **Tier-2** = real-incident data — **accuracy validation only, never fits parameters** (§D8 Type E); its scarcity
+  (Q3) is an **acknowledged limitation** handled by the §D11 documentation-relative ceiling and Tier-1/Tier-2
+  separation; it gates accuracy claims, not the architecture.
+- **Synthetic/generated data** — permitted **only** for controlled negative/ambiguous/null constructions with a
+  declared **template + seed** provenance (§D5 priority 3); it cannot establish real-world accuracy (§D14).
+- **Required diversity** (§D19/§D8): repetition categories; deliberate imitation; campaign contextualization
+  (§D8 required); positive / negative / ambiguous / unknown-abstention cases; evidence-type diversity; per-case
+  `coverage_assumptions` in the canonical data-component vocabulary (Post-acceptance Clarification, 2026-09-21).
+- **Blind-actor holdout** (§D10): whole emulated **actors** withheld from all fitting; the validation-only
+  KB-ablation must **fail closed** if the held-out actor cannot be cleanly ablated from every identity route
+  without altering unrelated ATT&CK semantics.
+
+**`calibration_version` (unchanged — §D12).** This clarification does **not** redesign it. It is the accepted §D12
+composite `hash(calibration_corpus_version, split_definition, fitting_procedure_version, fitted_parameter_set,
+attack_kb_version, methodology_version, engine_version, seed_if_allowed)`. Because the locked F-3 fitting is
+**deterministic**, `seed_if_allowed` is **absent**. Canonical serialization + sort-before-hash apply (§D17,
+reusing the B1.3 `calibration_corpus_version` discipline); it is distinct from `calibration_corpus_version` (§D13).
+**Same corpus + split + procedure + versions ⇒ identical `fitted_parameter_set` ⇒ identical `calibration_version`.**
+
+**Anti-leakage (restated as binding).** Fitting **must not** consume: held-out (C), blind-actor (D), or
+final-test data; Tier-2 real-incident data; blind-actor identity; ATT&CK-uses inference as labels; or **any G3.6
+output** (likelihood, confidence, WEP band, abstention decision, `AttributionResult`, ranking outcome) as a
+fitting target. ATT&CK relationships stay immutable during fitting (§D11). The fitting optimizes corpus **metrics**,
+never a produced attribution result.
+
+**Reproducibility (restated).** Canonical `case_id` ordering; PYTHONHASHSEED independence (sort-before-hash
+everywhere, §D17); deterministic grid search (no RNG); fixed documented bounds/resolution frozen into
+`fitting_procedure_version`; fixed lexicographic selection + canonical tie-break; fixed held-out acceptance rule;
+content-hashed frozen corpus and frozen `fitted_parameter_set`.
+
+**Status.** F-1, F-3, and Q4 are now **LOCKED** methodology; §Open Questions F-1/F-3 are resolved and Q4 is
+resolved. **Out of scope of this clarification** (deferred to later gates, unchanged): corpus construction /
+corpus-data creation (C3.2); `fitting.py`; `calibration/version.py`; the numeric grid ranges/resolution
+selection (a reproducibility-frozen implementation input, no longer a methodology decision); calibration
+execution; and all of G3.6 — likelihood, confidence, WEP, abstention, scoring, candidate generation, ACH,
+comparative analysis, CoverageProfile, `evidence_type` implementation, telemetry, and frontend. This clarification
+does not itself implement any of them.
