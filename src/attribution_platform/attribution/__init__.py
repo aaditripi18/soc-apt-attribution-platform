@@ -54,6 +54,18 @@ Gate status:
   for the exact scope boundary and its explicitly-flagged interpretive
   completions (the combination-partition *search* procedure, and the
   currently-always-zero `contradiction_strength` term).
+- **B3 (implemented):** ``coverage`` —
+  :func:`~attribution_platform.attribution.coverage.build_coverage_profile`
+  (ADR-0005 §D2 as clarified by Amendment C (2026-09-21);
+  ``docs/architecture/11-coverage-model.md``): deterministic construction of
+  the ``CoverageProfile`` contract for one ``(CorrelationGroup, technique)``
+  pair, from the pinned ATT&CK v19 detection graph
+  (:func:`~attribution_platform.attack_knowledge.traversal.required_data_components`)
+  and caller-supplied observation-presence + telemetry availability. **Construction
+  only** — no coverage *consumption*, no scoring, no likelihood/confidence,
+  no abstention, no calibration, no G3.6, and no telemetry-to-ATT&CK mapping
+  (production availability fails closed with ``available=()``). See that
+  module's own docstring for the exact scope and anti-circularity boundary.
 - **Not yet implemented:** likelihood/WEP computation, confidence
   computation, abstention, calibration, next-evidence guidance, final
   attribution, persistence.
@@ -120,6 +132,11 @@ from attribution_platform.attribution.contracts import (
     compute_next_evidence_id,
     is_unattributed_hypothesis,
 )
+from attribution_platform.attribution.coverage import (
+    COVERAGE_CONSTRUCTION_METHOD,
+    COVERAGE_CONSTRUCTION_METHOD_VERSION,
+    build_coverage_profile,
+)
 from attribution_platform.attribution.errors import AttributionError
 
 __all__ = [
@@ -175,4 +192,7 @@ __all__ = [
     "COMPARATIVE_ANALYSIS_METHOD",
     "COMPARATIVE_ANALYSIS_METHOD_VERSION",
     "DEFAULT_MIN_PROFILE_FLOOR",
+    "build_coverage_profile",
+    "COVERAGE_CONSTRUCTION_METHOD",
+    "COVERAGE_CONSTRUCTION_METHOD_VERSION",
 ]

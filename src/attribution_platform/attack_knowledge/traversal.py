@@ -68,6 +68,8 @@ exists to protect.
 
 from __future__ import annotations
 
+from types import MappingProxyType
+
 from attribution_platform.attack_knowledge.loader import AttackKnowledge, FrozenStixObject
 
 # STIX object "type" values this module reasons about. Each layer in this
@@ -88,6 +90,17 @@ _ALIAS_BEARING_TYPES: frozenset[str] = frozenset(
 
 _RELATIONSHIP_USES = "uses"
 _RELATIONSHIP_ATTRIBUTED_TO = "attributed-to"
+_RELATIONSHIP_DETECTS = "detects"
+
+# ATT&CK v19 detection-graph object types (the "detections overhaul" model,
+# ATT&CK ≥ v17): a technique's telemetry requirement is reached through
+# detection-strategy -> analytic -> log-source-reference -> data-component,
+# not the legacy per-technique `x_mitre_data_sources` field (absent in the
+# pinned enterprise-attack-19.0 bundle). See ADR-0005 Amendment C (2026-09-21)
+# and docs/architecture/11-coverage-model.md.
+_TYPE_DETECTION_STRATEGY = "x-mitre-detection-strategy"
+_TYPE_ANALYTIC = "x-mitre-analytic"
+_TYPE_DATA_COMPONENT = "x-mitre-data-component"
 
 
 class UnknownAttackEntityError(LookupError):
@@ -566,3 +579,110 @@ def campaigns_using_all_techniques(
         if technique_stix_ids <= index.get(str(campaign["id"]), frozenset())
     ]
     return tuple(sorted(matches))
+
+
+# ===========================================================================
+# F. Coverage-required derivation, over the ATT&CK v19 detection graph
+#    (ADR-0005 §D2 as clarified by Amendment C (2026-09-21);
+#     docs/architecture/11-coverage-model.md — Phase-3 prerequisite B3).
+#
+#    STIX direction:  detection-strategy --detects--> attack-pattern
+#    Forward refs:     detection-strategy.x_mitre_analytic_refs -> analytic
+#                      analytic.x_mitre_log_source_references[]
+#                          .x_mitre_data_component_ref -> x-mitre-data-component
+#    Required value:   the active data-component's `name`.
+# ===========================================================================
+
+
+def _detection_strategies_by_technique(knowledge: AttackKnowledge) -> dict[str, frozenset[str]]:
+    """``technique target_ref -> {detection-strategy source_ref, ...}`` over
+    every *active* ``detects`` relationship (STIX direction:
+    ``detection-strategy --detects--> attack-pattern``).
+
+    Edge activeness is part of this query's contract (like the
+    ``attributed-to`` index, unlike the ``uses`` indexes): a revoked/deprecated
+    ``detects`` relationship contributes nothing. Built fresh from the loaded
+    relationships on every call (a pure function of ``knowledge``; no cached or
+    global state)."""
+    index: dict[str, set[str]] = {}
+    for rel in knowledge.relationships():
+        if rel.get("relationship_type") != _RELATIONSHIP_DETECTS or not is_active(rel):
+            continue
+        source = rel.get("source_ref")
+        target = rel.get("target_ref")
+        if isinstance(source, str) and isinstance(target, str):
+            index.setdefault(target, set()).add(source)
+    return {key: frozenset(value) for key, value in index.items()}
+
+
+def required_data_components(knowledge: AttackKnowledge, technique_stix_id: str) -> tuple[str, ...]:
+    """The **active** ``x-mitre-data-component`` NAMES required to observe a
+    technique, sorted-unique — the ADR-0005 §D2 ``data_sources_required`` set
+    under the pinned ATT&CK v19 detection graph (Amendment C (2026-09-21);
+    ``docs/architecture/11-coverage-model.md`` — Phase-3 prerequisite B3).
+
+    Derivation (pinned ``AttackKnowledge`` only; no network): every active
+    ``x-mitre-data-component`` reachable via ``technique ← active detects ←
+    active detection-strategy → active analytic →
+    x_mitre_log_source_references[].x_mitre_data_component_ref → active
+    data-component``. Active filtering (:func:`is_active`, the accepted P2
+    active-object policy) is applied at **every** hop; a revoked/deprecated
+    object at any hop, or a dangling/unresolved/malformed reference, contributes
+    nothing (fail closed, never raises for a missing hop, never fabricates).
+
+    Fails closed (:class:`UnknownAttackEntityError`) on an unknown id or an id
+    that is not an ``attack-pattern``. An **inactive** technique, or an active
+    technique with no resolvable active data-component (≈7% of active
+    techniques — predominantly Reconnaissance/Resource-Development), yields an
+    **empty** tuple; per §D2/doc 11 the caller maps that to
+    :attr:`~attribution_platform.attribution.contracts.CoverageState.UNKNOWN`.
+    This function computes only the required set; it makes no coverage-state
+    decision and reads no attribution output. Deterministic and
+    ``PYTHONHASHSEED``-independent; never mutates ``knowledge``."""
+    technique = resolve_entity(knowledge, technique_stix_id, expected_type=_TYPE_TECHNIQUE)
+    if not is_active(technique):
+        return ()
+
+    strategy_ids = _detection_strategies_by_technique(knowledge).get(technique_stix_id, frozenset())
+    names: set[str] = set()
+    for strategy_id in strategy_ids:
+        strategy = knowledge.get_by_id(strategy_id)
+        if (
+            strategy is None
+            or strategy.get("type") != _TYPE_DETECTION_STRATEGY
+            or not is_active(strategy)
+        ):
+            continue
+        analytic_refs = strategy.get("x_mitre_analytic_refs", ())
+        if not isinstance(analytic_refs, tuple):
+            continue
+        for analytic_id in analytic_refs:
+            if not isinstance(analytic_id, str):
+                continue
+            analytic = knowledge.get_by_id(analytic_id)
+            if (
+                analytic is None
+                or analytic.get("type") != _TYPE_ANALYTIC
+                or not is_active(analytic)
+            ):
+                continue
+            log_source_refs = analytic.get("x_mitre_log_source_references", ())
+            if not isinstance(log_source_refs, tuple):
+                continue
+            for ref in log_source_refs:
+                if not isinstance(ref, MappingProxyType):
+                    continue
+                component_id = ref.get("x_mitre_data_component_ref")
+                if not isinstance(component_id, str):
+                    continue
+                component = knowledge.get_by_id(component_id)
+                if (
+                    component is None
+                    or component.get("type") != _TYPE_DATA_COMPONENT
+                    or not is_active(component)
+                ):
+                    continue
+                name = component.get("name")
+                if isinstance(name, str) and name:
+                    names.add(name)
+    return tuple(sorted(names))

@@ -1617,3 +1617,75 @@ stated prerequisites, each an independent hard gate: the calibration corpus and 
 `evidence_type` / `Observation` provenance plumbing (B4); the `attributed-to` traversal; and the confidence-layer
 requirements. None of these is satisfied by accepting the methodology, and none may be bypassed on the strength
 of this acceptance.
+
+### Amendment C (2026-09-21) — Coverage model under pinned ATT&CK v19 (`CoverageProfile` construction, B3)
+
+**What this amends, and what it preserves.** This amendment records the implementation-facing interpretation of
+**§D2 (Coverage model)** under the pinned knowledge base `enterprise-attack-19.0`. It is **additive**: §D2's
+original decision text — including its prose that the required data-source/component requirement is "already
+present on the raw `attack-pattern` STIX objects `AttackKnowledge` loads" — is **left intact above and is not
+rewritten or erased**. That original wording is retained as the historical record of what §D2 assumed at
+acceptance. This amendment states, dated, the current pinned-v19 interpretation that supersedes only that one
+mechanistic assumption; every other §D2 decision (the four-value `CoverageState`, the fail-closed `UNKNOWN`
+default, the §D11 state→consequence wiring, `compute_coverage_profile_id`, `attack_kb_version` stamping) is
+**unchanged**.
+
+**What was missing / factually superseded.** §D2 was written against a pre-v17 ATT&CK data model in which each
+`attack-pattern` carried an `x_mitre_data_sources` string list. The repository pins `enterprise-attack-19.0`, in
+which: (a) **no** technique carries `x_mitre_data_sources` (or any `data_source*`/`data_component*`) field;
+(b) the 38 `x-mitre-data-source` catalog objects are **orphaned** — not reachable from any technique by any
+relationship or reference; and (c) per-technique detection information is expressed through the newer
+detection-strategy / analytic / log-source / data-component graph. §D2's original derivation mechanism therefore
+cannot be applied to the pinned data. The final-architecture review (doc 10, milestone **M3** / checklist
+**C2.1**) had already flagged the coverage model as load-bearing but underspecified and required a dedicated
+mini-spec before Phase 2/3; that mini-spec did not previously exist.
+
+**Canonical coverage vocabulary (locked).** `data_sources_required`, `data_sources_available`, and (via ADR-0006)
+`CalibrationCase.coverage_assumptions` use the **active `x-mitre-data-component` object name** vocabulary. This is
+the only technique-linked, telemetry-granularity ATT&CK vocabulary reachable in the pinned v19 graph; ATT&CK
+data-source catalog objects are orphaned, and analytic log-source `name`/`channel` values are collector-specific.
+No new ontology is introduced — this selects an existing ATT&CK object type's `name`.
+
+**Required-side derivation (locked).** For a technique `T`, `required(T)` is the set of active data-component
+names reachable via `T ← active detects ← active detection-strategy → active analytic →
+x_mitre_log_source_references[].x_mitre_data_component_ref → active data-component`. Pinned `AttackKnowledge`
+only; active filtering at every hop (the accepted active-object policy); dangling references skipped fail-closed;
+deterministic sorted-unique output; no KB mutation; an empty result is valid and drives `UNKNOWN`.
+
+**Available-side (locked).** `data_sources_available` is an explicit caller-supplied tuple of canonical
+data-component names — never inferred inside construction. Production passes `available = ()`; calibration passes
+the case's declared `coverage_assumptions`.
+
+**Four-state coverage rule (locked; no thresholds).** With `observed` = the group has an active `Evidence` whose
+`attack_ref` resolves to `T`:
+
+| `observed` | `required` | `required ∩ available` | `CoverageState` |
+|:----------:|:----------:|:----------------------:|:----------------|
+| present    | (any)      | (any)                  | `OBSERVED_PRESENT` |
+| not present| `≠ ∅`      | `≠ ∅`                  | `OBSERVED_ABSENT_WITH_ADEQUATE_COVERAGE` |
+| not present| `≠ ∅`      | `= ∅`                  | `NOT_OBSERVABLE` |
+| not present| `= ∅`      | (n/a)                  | `UNKNOWN` |
+| not present| indeterminate / malformed / unresolved availability | (n/a) | `UNKNOWN` |
+
+"Adequate coverage" is binary (`required ≠ ∅` and `required ∩ available ≠ ∅`) — **no thresholds, percentages,
+weights, or per-technique exceptions**, consistent with §D2's deliberate exclusion of a continuous coverage
+percentage. The §D11 state→consequence wiring is unchanged.
+
+**Production fail-closed availability (locked).** Production currently constructs coverage with `available = ()`.
+`SourceRef.source_type` is opaque by architecture (G0.3), so no heuristic `source_type`/ECS → ATT&CK mapping is
+permitted in B3 and no availability is inferred. Because `required ∩ available` is then always empty, production
+**never** emits `OBSERVED_ABSENT_WITH_ADEQUATE_COVERAGE` and coverage never lowers likelihood in production —
+satisfying this amendment set's own §"Preconditions for G3.6" item 3 ("a `CoverageProfile` construction path
+exists (§D2), *or* G3.6 explicitly scopes confidence to fail closed on absent coverage"). A future
+telemetry-to-ATT&CK availability mapping is a separate, independently-accepted research/data-artifact task and is
+not created by B3.
+
+**Anti-circularity (restated as binding).** `CoverageProfile` construction may read only the pinned ATT&CK
+detection graph, the technique identity, technique observation presence, and caller-supplied telemetry
+availability. It must not read candidate generation, `g(x)`, `g(C)`, `D(x)`, ACH results, hypotheses, likelihood,
+confidence, WEP, abstention, or `AttributionResult`. Coverage is an independent observability/contradiction
+input, never an additional attribution signal.
+
+**Authoritative specification.** The full implementation-facing methodology is
+`docs/architecture/11-coverage-model.md`. This amendment is a dated additive clarification; it does not erase the
+historical §D2 text and reopens no other decision in this ADR.

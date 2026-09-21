@@ -516,3 +516,42 @@ parameter, or to create a `calibration_version`. Those remain independent later 
 traversal, `CoverageProfile` construction (B3), `evidence_type`/`Observation` provenance plumbing (B4), the
 confidence-layer requirements, and the resolution of open questions F-1/F-3 before the fitting sub-gate. **No
 numeric calibration parameter value is selected by this ADR or by its acceptance.**
+
+## Post-acceptance clarifications
+
+Dated additive clarifications made after this ADR reached ACCEPTED status, recorded here without rewriting the
+original decision text above (matching ADR-0004's own `## Post-acceptance clarifications` practice). Each records
+how an accepted decision is interpreted; none changes a schema or an accepted decision.
+
+### Clarification (2026-09-21) — `coverage_assumptions` vocabulary and calibration/production separation
+
+Recorded alongside the coverage-model methodology lock (ADR-0005 Amendment C, 2026-09-21;
+`docs/architecture/11-coverage-model.md`). This clarifies §D6's `coverage_assumptions` field; it changes **no**
+`CalibrationCase` schema and reopens no decision.
+
+1. **Vocabulary.** `CalibrationCase.coverage_assumptions` is interpreted as a tuple of **canonical active ATT&CK
+   v19 `x-mitre-data-component` names** — the same vocabulary the `CoverageProfile` required-side derivation
+   produces (ADR-0005 Amendment C; doc 11 §2). This makes a case's declared availability directly comparable to
+   the pinned-KB required set, so a `CoverageProfile` state can be computed for calibration cases.
+
+2. **Calibration-only.** These declarations are a **calibration-path input only**: they supply
+   `available_data_components` when a `CoverageProfile` is constructed for a labeled calibration case.
+
+3. **Production does not consume calibration declarations.** Production inference never reads a
+   `CalibrationCase.coverage_assumptions` value. Because `available_data_components` is a caller-supplied argument
+   and production callers pass the empty tuple, there is no path by which a declared calibration value reaches a
+   production `CoverageProfile`.
+
+4. **Production availability is currently empty (fail-closed).** Until an independently approved
+   telemetry-to-ATT&CK availability mapping exists, production passes `available = ()` and coverage fails closed
+   (only `OBSERVED_PRESENT` / `NOT_OBSERVABLE` / `UNKNOWN` are reachable; adequate-absence, and therefore any
+   coverage-driven contradiction, is never produced in production). This uses ADR-0005 Amendment B's accepted
+   fail-closed allowance. `SourceRef.source_type` is opaque by architecture (G0.3); no heuristic
+   `source_type`/ECS → ATT&CK mapping is introduced here.
+
+5. **Coverage methodology reference.** The full construction methodology is
+   `docs/architecture/11-coverage-model.md`.
+
+6. **No schema change.** `CalibrationCase.coverage_assumptions` remains the existing `tuple[str, ...]` field
+   (§D6, B1.2); this clarification pins the **meaning** of its values, not its shape. `case_id` inputs
+   (`CASE_ID_INPUT_FIELDS`) are unchanged.
