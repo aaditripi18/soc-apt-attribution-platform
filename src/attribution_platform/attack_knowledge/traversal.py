@@ -40,6 +40,12 @@ What this module provides:
   profiles are a superset of this technique/software id set" — the exact
   population query ADR-0005 §D3's (not-yet-implemented) combination
   diagnosticity will need, exposed here as a plain set query.
+- **Campaign attribution traversal** (:func:`groups_attributed_to_campaign`,
+  :func:`campaigns_attributed_to_group`): the additive ADR-0005 Amendment B
+  prerequisite — deterministic lookup over real STIX ``attributed-to``
+  relationships (``Campaign --attributed-to--> Group``), where the edge
+  itself and the target Group must both be active. Read-only knowledge
+  context: it never infers, scores, or implies a case-specific attribution.
 
 Deliberately out of scope (see ADR-0005 and the Gate 3.1 task boundary —
 building any of this is a later gate's job, not this module's):
@@ -47,8 +53,7 @@ building any of this is a later gate's job, not this module's):
 - No ``g(x)``/``D(x)``/``g(C)``/``D(C)`` computation of any kind.
 - No ``Candidate``/``Hypothesis`` construction or candidate generation (D7).
 - No ACH matrix, likelihood, confidence, abstention, or calibration.
-- No TI enrichment, no live/network ATT&CK access, no campaign-attribution
-  (``attributed-to``) traversal — not required by this gate.
+- No TI enrichment, no live/network ATT&CK access.
 
 Determinism: every function here operates only on the one pinned, already-
 verified, deeply-immutable :class:`~attribution_platform.attack_knowledge.loader.AttackKnowledge`
@@ -82,6 +87,7 @@ _ALIAS_BEARING_TYPES: frozenset[str] = frozenset(
 )
 
 _RELATIONSHIP_USES = "uses"
+_RELATIONSHIP_ATTRIBUTED_TO = "attributed-to"
 
 
 class UnknownAttackEntityError(LookupError):
@@ -413,6 +419,72 @@ def campaigns_using_software(knowledge: AttackKnowledge, software_stix_id: str) 
         )
     sources = _uses_index_by_target(knowledge).get(software_stix_id, frozenset())
     return _filter_active_by_type(knowledge, sources, _TYPE_CAMPAIGN)
+
+
+# ===========================================================================
+# E. Campaign attribution traversal, over real STIX "attributed-to" edges
+#    (ADR-0005 Amendment B "ATT&CK attributed-to traversal prerequisite")
+# ===========================================================================
+
+
+def _active_attributed_to_index(
+    knowledge: AttackKnowledge, *, by_target: bool
+) -> dict[str, frozenset[str]]:
+    """Index over every *active* ``attributed-to`` relationship object
+    (``Campaign --attributed-to--> Group``): ``source_ref -> {target_ref}``,
+    or the reverse (``target_ref -> {source_ref}``) when ``by_target``.
+
+    A revoked/deprecated relationship object is skipped here — unlike the
+    ``uses`` indexes, edge activeness is part of this query's contract. Built
+    fresh from the loaded relationships on every call (a pure function of
+    ``knowledge``; no cached or global state)."""
+    index: dict[str, set[str]] = {}
+    for rel in knowledge.relationships():
+        if rel.get("relationship_type") != _RELATIONSHIP_ATTRIBUTED_TO or not is_active(rel):
+            continue
+        source = rel.get("source_ref")
+        target = rel.get("target_ref")
+        if isinstance(source, str) and isinstance(target, str):
+            key, value = (target, source) if by_target else (source, target)
+            index.setdefault(key, set()).add(value)
+    return {key: frozenset(value) for key, value in index.items()}
+
+
+def groups_attributed_to_campaign(
+    knowledge: AttackKnowledge, campaign_stix_id: str
+) -> tuple[str, ...]:
+    """Every *active* Group this Campaign is recorded as attributed to via a
+    real, *active* STIX ``attributed-to`` relationship, sorted by id.
+
+    ADR-0005 Amendment B B6 context only: this is ATT&CK knowledge context,
+    never case-specific proof. Fails closed
+    (:class:`UnknownAttackEntityError`) on an unknown or non-``campaign`` id;
+    returns an empty tuple (not an error) when no active edge to an active
+    Group exists."""
+    resolve_entity(knowledge, campaign_stix_id, expected_type=_TYPE_CAMPAIGN)
+    targets = _active_attributed_to_index(knowledge, by_target=False).get(
+        campaign_stix_id, frozenset()
+    )
+    return _filter_active_by_type(knowledge, targets, _TYPE_GROUP)
+
+
+def campaigns_attributed_to_group(
+    knowledge: AttackKnowledge, group_stix_id: str
+) -> tuple[str, ...]:
+    """Every Campaign recorded as attributed to this Group via a real,
+    *active* STIX ``attributed-to`` relationship, sorted by id (the reverse of
+    :func:`groups_attributed_to_campaign`; STIX direction is
+    ``Campaign --attributed-to--> Group``).
+
+    The target Group must itself be active: an edge to a revoked/deprecated
+    Group never qualifies, so querying an inactive Group returns an empty
+    tuple. Fails closed (:class:`UnknownAttackEntityError`) on an unknown or
+    non-``intrusion-set`` id."""
+    group = resolve_entity(knowledge, group_stix_id, expected_type=_TYPE_GROUP)
+    if not is_active(group):
+        return ()
+    sources = _active_attributed_to_index(knowledge, by_target=True).get(group_stix_id, frozenset())
+    return _filter_by_type(knowledge, sources, _TYPE_CAMPAIGN)
 
 
 # ===========================================================================
