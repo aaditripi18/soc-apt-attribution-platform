@@ -1,0 +1,26 @@
+{
+  "scenario_family_id": "syn-charlie-office-proxy-seed2026c",
+  "case_role": "held_out_validation",
+  "source_kind": "synthetic",
+  "source_ref": "epitaxy-seed-corpus@0.1",
+  "license": "MIT",
+  "acquisition_provenance": "Hand-authored declared-provenance synthetic scenarios for the C3.2 first-slice seed corpus; per-family template and seed are recorded in each scenarios/*.fixture.json description. Tier-1 machinery only, no real-world capture.",
+  "transformation_provenance": "Replayed through the pinned production pipeline (detection G1.0 through behavioral-sequence reconstruction G2.4.1), unmodified; no manual editing of derived Observations/Evidence/CorrelationGroup/BehavioralSequence objects.",
+  "coverage_assumptions": ["Process Creation"],
+  "ground_truth": {
+    "actor_label_source": "unknown",
+    "label_semantics": "unknown",
+    "label_confidence": "unknown",
+    "actor_label": null,
+    "campaign_context": []
+  },
+  "expected_output_shape": {
+    "outcome": "insufficient_evidence",
+    "authorship_provenance": "Authored from the synthetic scenario's declared intent (deliberately under-specified activity with no legitimately-sourced actor); NOT derived from ATT&CK Group->uses relationships. Exercises the abstention/insufficient-evidence shape.",
+    "expected_likelihood_band": null,
+    "expected_confidence_band": "AUTHORED-LOW",
+    "discriminating_evidence": [],
+    "expected_contradiction": [],
+    "expected_next_evidence": []
+  }
+}

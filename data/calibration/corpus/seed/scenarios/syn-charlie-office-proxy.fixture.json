@@ -1,0 +1,18 @@
+{
+  "fixture_id": "syn-charlie-office-proxy",
+  "description": "Declared-provenance SYNTHETIC seed scenario (template=office-then-proxy-exec, seed=charlie-2026c). Tier-1 machinery only; NOT real-world accuracy evidence. Raw telemetry only; labels live in annotations/. Distinct technique-combination signature; authored as an abstention/insufficient-evidence case.",
+  "scenarios": [
+    {
+      "scenario_id": "charlie-cmd",
+      "raw_record": { "record_id": "evt-charlie-cmd", "timestamp": "2026-05-03T12:00:00+00:00", "observation_id": "obs-charlie-cmd" },
+      "process": { "name": "cmd.exe", "parent_name": "EXCEL.EXE", "entity_id": "charlie-cmd" },
+      "host": { "id": "host-charlie" }
+    },
+    {
+      "scenario_id": "charlie-rundll32",
+      "raw_record": { "record_id": "evt-charlie-rundll32", "timestamp": "2026-05-03T12:00:01+00:00", "observation_id": "obs-charlie-rundll32" },
+      "process": { "name": "rundll32.exe", "command_line": "rundll32.exe javascript:\"\\..\\mshtml,RunHTMLApplication \";y()", "parent_entity_id": "charlie-cmd", "entity_id": "charlie-rundll32" },
+      "host": { "id": "host-charlie" }
+    }
+  ]
+}

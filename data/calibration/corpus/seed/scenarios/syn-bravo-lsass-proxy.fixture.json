@@ -1,0 +1,18 @@
+{
+  "fixture_id": "syn-bravo-lsass-proxy",
+  "description": "Declared-provenance SYNTHETIC seed scenario (template=lsass-dump-then-proxy-exec, seed=bravo-2026b). Tier-1 machinery only; NOT real-world accuracy evidence. Raw telemetry only; labels live in annotations/. Distinct technique-combination signature from the other seed families.",
+  "scenarios": [
+    {
+      "scenario_id": "bravo-procdump",
+      "raw_record": { "record_id": "evt-bravo-procdump", "timestamp": "2026-05-02T11:00:00+00:00", "observation_id": "obs-bravo-procdump" },
+      "process": { "name": "procdump.exe", "command_line": "procdump.exe -ma lsass.exe C:\\temp\\lsass.dmp", "entity_id": "bravo-procdump" },
+      "host": { "id": "host-bravo" }
+    },
+    {
+      "scenario_id": "bravo-rundll32",
+      "raw_record": { "record_id": "evt-bravo-rundll32", "timestamp": "2026-05-02T11:00:01+00:00", "observation_id": "obs-bravo-rundll32" },
+      "process": { "name": "rundll32.exe", "command_line": "rundll32.exe javascript:\"\\..\\mshtml,RunHTMLApplication \";x()", "parent_entity_id": "bravo-procdump", "entity_id": "bravo-rundll32" },
+      "host": { "id": "host-bravo" }
+    }
+  ]
+}

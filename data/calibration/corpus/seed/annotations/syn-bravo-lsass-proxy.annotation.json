@@ -1,0 +1,26 @@
+{
+  "scenario_family_id": "syn-bravo-lsass-proxy-seed2026b",
+  "case_role": "calibration",
+  "source_kind": "synthetic",
+  "source_ref": "epitaxy-seed-corpus@0.1",
+  "license": "MIT",
+  "acquisition_provenance": "Hand-authored declared-provenance synthetic scenarios for the C3.2 first-slice seed corpus; per-family template and seed are recorded in each scenarios/*.fixture.json description. Tier-1 machinery only, no real-world capture.",
+  "transformation_provenance": "Replayed through the pinned production pipeline (detection G1.0 through behavioral-sequence reconstruction G2.4.1), unmodified; no manual editing of derived Observations/Evidence/CorrelationGroup/BehavioralSequence objects.",
+  "coverage_assumptions": ["Command Execution", "Process Creation"],
+  "ground_truth": {
+    "actor_label_source": "dataset-annotation",
+    "label_semantics": "attributable",
+    "label_confidence": "high",
+    "actor_label": "EMU-BRAVO",
+    "campaign_context": []
+  },
+  "expected_output_shape": {
+    "outcome": "leading_hypothesis",
+    "authorship_provenance": "Authored from the synthetic scenario's declared intent (EMU-BRAVO credential-dump-then-proxy plan); NOT derived from ATT&CK Group->uses relationships.",
+    "expected_likelihood_band": "AUTHORED-LEADING",
+    "expected_confidence_band": "AUTHORED-HIGH",
+    "discriminating_evidence": [],
+    "expected_contradiction": [],
+    "expected_next_evidence": []
+  }
+}
