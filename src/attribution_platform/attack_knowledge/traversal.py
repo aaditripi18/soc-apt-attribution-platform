@@ -329,36 +329,64 @@ def _filter_active_by_type(
     return tuple(sorted(result))
 
 
+def _active_uses_targets(knowledge: AttackKnowledge, stix_id: str) -> frozenset[str]:
+    """The one authoritative **active-target** view of a source's ``uses``
+    profile: its ``uses`` target ids filtered to *active* (non-``revoked``,
+    non-``x_mitre_deprecated``) objects only, using the existing :func:`is_active`
+    semantics — never a second definition of "active".
+
+    This enforces the accepted active-target policy (ADR-0005 Amendment B
+    "Active-target policy for ``ProfileBreadth`` and every prevalence/traversal
+    quantity"; ADR-0006 §Decision-path scale): revoked/deprecated **target**
+    techniques/software MUST NOT contribute to a profile (and therefore not to
+    profile breadth). A target id that does not resolve in the pinned KB (a
+    dangling ``uses`` edge) is excluded fail-closed. Reverse lookups
+    (:func:`groups_using_technique` etc.) and the combination superset queries
+    (:func:`groups_using_all_techniques`) already restrict the **source**
+    population to active Groups/Campaigns via :func:`_filter_active_by_type` /
+    :func:`active_groups`, so only these forward-profile helpers needed the
+    target-side filter added here."""
+    return frozenset(
+        target
+        for target in _uses_index_by_source(knowledge).get(stix_id, frozenset())
+        if (obj := knowledge.get_by_id(target)) is not None and is_active(obj)
+    )
+
+
 def group_profile(knowledge: AttackKnowledge, stix_id: str) -> tuple[str, ...]:
-    """The full technique+software ``uses`` set for one Group or Campaign,
-    sorted by STIX id — the exact population ADR-0005 §D3's (not computed
-    here) combination prevalence ``g(C)`` needs. Fails closed on an unknown
-    id or an id that is not a Group/Campaign."""
+    """The full **active** technique+software ``uses`` set for one Group or
+    Campaign, sorted by STIX id — revoked/deprecated target techniques/software
+    are excluded (active-target policy, via :func:`_active_uses_targets`). This
+    is the exact set ``len(group_profile(...))`` = ``ProfileBreadth`` consumes
+    (ADR-0005 Amendment B). Fails closed on an unknown id or an id that is not a
+    Group/Campaign."""
     obj = resolve_entity(knowledge, stix_id)
     if obj.get("type") not in (_TYPE_GROUP, _TYPE_CAMPAIGN):
         raise UnknownAttackEntityError(
             f"{stix_id!r} is a {obj.get('type')!r} object; group_profile() requires a "
             f"{_TYPE_GROUP!r} or {_TYPE_CAMPAIGN!r}"
         )
-    targets = _uses_index_by_source(knowledge).get(stix_id, frozenset())
-    return tuple(sorted(targets))
+    return tuple(sorted(_active_uses_targets(knowledge, stix_id)))
 
 
 def techniques_used_by(knowledge: AttackKnowledge, stix_id: str) -> tuple[str, ...]:
-    """The technique-only subset of this entity's ``uses`` profile (every
-    ``attack-pattern`` id it is recorded as using), sorted by id. Works for
-    any ``uses``-source entity (Group, Campaign, or Software). Fails closed
-    on an unknown id."""
+    """The **active** technique-only subset of this entity's ``uses`` profile
+    (every *active* ``attack-pattern`` id it is recorded as using), sorted by id.
+    Works for any ``uses``-source entity (Group, Campaign, or Software). Applies
+    the same active-target policy as :func:`group_profile`, so the invariant
+    ``group_profile == techniques_used_by ∪ software_used_by`` is preserved.
+    Fails closed on an unknown id."""
     resolve_entity(knowledge, stix_id)
-    targets = _uses_index_by_source(knowledge).get(stix_id, frozenset())
-    return _filter_by_type(knowledge, targets, _TYPE_TECHNIQUE)
+    return _filter_by_type(knowledge, _active_uses_targets(knowledge, stix_id), _TYPE_TECHNIQUE)
 
 
 def software_used_by(knowledge: AttackKnowledge, stix_id: str) -> tuple[str, ...]:
-    """The software-only subset (``malware``/``tool``) of this entity's
-    ``uses`` profile, sorted by id. Fails closed on an unknown id."""
+    """The **active** software-only subset (``malware``/``tool``) of this
+    entity's ``uses`` profile, sorted by id — revoked/deprecated target software
+    excluded (active-target policy, via :func:`_active_uses_targets`). Fails
+    closed on an unknown id."""
     resolve_entity(knowledge, stix_id)
-    targets = _uses_index_by_source(knowledge).get(stix_id, frozenset())
+    targets = _active_uses_targets(knowledge, stix_id)
     return tuple(sorted(t for t in targets if _object_type(knowledge, t) in _SOFTWARE_TYPES))
 
 
