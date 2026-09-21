@@ -71,14 +71,27 @@ Gate status:
   structural provenance adequacy (§D13/§D15).
   **Read-only, manifest-only, no ATT&CK, no network, no redistribution field, no
   ``calibration_version``.**
-- **B1.6+ (deferred, not implemented):** the corpus quality/coverage validation
-  harness (B1.6); the later blind-actor ATT&CK identity-ablation evaluation; and
-  — much later — parameter fitting and ``calibration_version``. No
-  ``calibration_version`` and no fitting exist yet.
+- **B1.6 (implemented — this gate):** ``composition`` — the read-only,
+  descriptive
+  :func:`~attribution_platform.calibration.composition.describe_corpus_composition`
+  producing a deterministic
+  :class:`~attribution_platform.calibration.composition.CorpusCompositionReport`
+  of raw, canonically-sorted counts over ``(manifest, cases)``. **Descriptive
+  only — no ``is_valid``, no violations, no pass/fail, no score/ratio/
+  concentration/threshold, no ATT&CK, no new identity, no
+  ``calibration_version``.**
+- **B1.7+ (deferred, not implemented):** the later blind-actor ATT&CK
+  identity-ablation evaluation; and — much later — parameter fitting and
+  ``calibration_version``. No ``calibration_version`` and no fitting exist yet.
 """
 
 from __future__ import annotations
 
+from attribution_platform.calibration.composition import (
+    COMPOSITION_SCHEMA_VERSION,
+    CorpusCompositionReport,
+    describe_corpus_composition,
+)
 from attribution_platform.calibration.contracts import (
     CALIBRATION_CASE_SCHEMA_VERSION,
     CASE_ID_INPUT_FIELDS,
@@ -157,4 +170,7 @@ __all__ = [
     "ProvenanceViolationType",
     "PROVENANCE_VALIDATION_SCHEMA_VERSION",
     "SPDX_LICENSE_ALLOWLIST",
+    "describe_corpus_composition",
+    "CorpusCompositionReport",
+    "COMPOSITION_SCHEMA_VERSION",
 ]
