@@ -214,6 +214,40 @@ def test_behavioral_step_technique_stix_ids_default_empty() -> None:
     assert _step().technique_stix_ids == ()
 
 
+def test_behavioral_step_evidence_types_canonicalized_sorted_unique() -> None:
+    step = _step(evidence_types=("procedural", "behavioral", "behavioral"))
+    assert step.evidence_types == ("behavioral", "procedural")
+
+
+def test_behavioral_step_evidence_types_default_empty() -> None:
+    assert _step().evidence_types == ()
+
+
+def test_behavioral_step_rejects_empty_evidence_type_value() -> None:
+    with pytest.raises(CorrelationError):
+        _step(evidence_types=("behavioral", ""))
+
+
+def test_evidence_types_do_not_participate_in_step_id() -> None:
+    # step identity is compute_step_id(group_id, evidence_ids) only; the same
+    # (group, evidence) with different evidence_types is the same step_id.
+    step_id = compute_step_id("group-1", ["ev-1"])
+    a = _step(step_id=step_id, evidence_types=())
+    b = _step(step_id=step_id, evidence_types=("behavioral", "procedural"))
+    assert a.step_id == b.step_id == compute_step_id("group-1", ["ev-1"])
+
+
+def test_evidence_types_do_not_participate_in_sequence_id() -> None:
+    # sequence identity is compute_sequence_id(group_id, step_ids); since
+    # step_ids are invariant to evidence_types, so is sequence_id.
+    step_id = compute_step_id("group-1", ["ev-1"])
+    a = _step(step_id=step_id, evidence_types=())
+    b = _step(step_id=step_id, evidence_types=("behavioral",))
+    assert compute_sequence_id("group-1", [a.step_id]) == compute_sequence_id(
+        "group-1", [b.step_id]
+    )
+
+
 def test_behavioral_step_contextual_annotations_canonicalized_sorted_unique() -> None:
     step = _step(contextual_annotations=("corr::b", "corr::a", "corr::a"))
     assert step.contextual_annotations == ("corr::a", "corr::b")
@@ -231,6 +265,9 @@ def test_behavioral_step_field_set_pinned_no_attribution_fields() -> None:
         "evidence_ids",
         "observation_id",
         "technique_stix_ids",
+        # B4 (2026-09-21): carry-forward provenance of member Evidence.evidence_type;
+        # NOT a likelihood/confidence/actor/score field — the guard's intent holds.
+        "evidence_types",
         "contextual_annotations",
         "schema_version",
     }

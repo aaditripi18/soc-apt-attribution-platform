@@ -236,6 +236,10 @@ def _behavioral_step_from_dict(d: Mapping[str, Any]) -> BehavioralStep:
         evidence_ids=tuple(d["evidence_ids"]),
         observation_id=d["observation_id"],
         technique_stix_ids=tuple(d.get("technique_stix_ids", ())),
+        # B4: tolerant default so a pre-``behavioral-step/2`` document (no
+        # evidence_types key) round-trips as ``()`` — same pattern as
+        # technique_stix_ids above; no migration required.
+        evidence_types=tuple(d.get("evidence_types", ())),
         contextual_annotations=tuple(d.get("contextual_annotations", ())),
         schema_version=d.get("schema_version", BEHAVIORAL_STEP_SCHEMA_VERSION),
     )

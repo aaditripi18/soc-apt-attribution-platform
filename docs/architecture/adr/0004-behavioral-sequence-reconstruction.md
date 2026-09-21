@@ -849,3 +849,45 @@ state, for a concrete, bounded reason recorded here:
   `BehavioralSequence` contract nor the golden-corpus semantics established elsewhere in this ADR.
 - **No implementation change is required.** This clarification records the deviation and its rationale;
   `fixtures/phase2_correlation_scenarios.json` remains exactly as committed at G2.3.
+
+### Clarification 3 (2026-09-21) — B4 `evidence_type` carry-forward on `BehavioralStep`
+
+Records the accepted carrier for the Phase-3 prerequisite **B4** (`evidence_type` plumbing, ADR-0005 Amendment B
+"Preconditions for G3.6" item 4; methodology locked in P4-M, 2026-09-21). This is an **additive** clarification: it
+records how an existing fact is carried forward and does **not** rewrite any accepted D1–D21 decision or the
+`BehavioralStep`/`BehavioralSequence` contracts above.
+
+**B4 `evidence_type` carry-forward.**
+
+- `Evidence.evidence_type` (a Phase-0 fact, the existing closed `EvidenceType` vocabulary) is the **authoritative
+  source**. It is never inferred or re-derived — not from `event_type`, `source_type`, ATT&CK technique, IOC,
+  alert severity, correlation patterns, candidate generation, or any attribution output.
+- The canonical carrier is a new **additive** field **`BehavioralStep.evidence_types`**, populated by the
+  sequence engine (G2.4.1) as it constructs each step — the identical "read a value off the step's own member
+  `Evidence`" carry-forward the existing `BehavioralStep.technique_stix_ids` field already uses (it is mechanically
+  read off each step's Evidence's `attack_ref`). **No new correlation logic** is introduced.
+- Granularity is **per `BehavioralStep`**: the sorted, de-duplicated set of the `evidence_type` values across the
+  step's member `Evidence`, represented as a `tuple[str, ...]` over the existing closed `EvidenceType` vocabulary.
+  No new taxonomy is introduced. Provenance is preserved because the step already pairs this with its
+  `evidence_ids`.
+- `evidence_types` is **carry-forward provenance only** and is **not part of step identity**:
+  `compute_step_id(group_id, evidence_ids)` and `compute_sequence_id(group_id, step_ids)` (D13) are unchanged, so
+  every existing `step_id`/`sequence_id` remains identical. The DAG invariant (D14) is preserved — the value flows
+  strictly forward from a Phase-0 fact and depends on no Phase-3/attribution output.
+- The **Phase-2 → Phase-3 boundary is unchanged**: Phase 3 continues to receive only `CorrelationGroup` +
+  `BehavioralSequence`; no raw `Evidence` is introduced into candidate generation or ACH.
+
+**Schema / persistence implications (recorded, not implemented here).**
+
+- `BEHAVIORAL_STEP_SCHEMA_VERSION` becomes `behavioral-step/2` (a deliberate additive contract-shape change).
+- `BEHAVIORAL_SEQUENCE_SCHEMA_VERSION` remains **unchanged**: the `BehavioralSequence` field set is unchanged,
+  `sequence_id` is unaffected, and holding it fixed avoids renaming the derived persistence index and rejecting
+  previously-stored sequences.
+- Persistence will serialize `evidence_types`; older persisted `BehavioralStep` records lacking the field load
+  with `evidence_types=()` via the existing tolerant deserialization (default-on-absent). No migration is required
+  solely for this additive field.
+
+**Scope boundary.** B4 only makes the already-existing `EvidenceType` fact **available** at the future G3.6 input
+boundary (reachable from an ACH cell via the existing `EvidenceAssessment.step_id`). B4 does **not** implement any
+G3.6 behaviour — no confidence, evidence-diversity/independence scoring, imitation defense (ADR-0005 §D12), WEP,
+likelihood, or abstention. Those remain later, separately-gated work.

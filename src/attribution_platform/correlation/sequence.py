@@ -96,7 +96,13 @@ from attribution_platform.correlation.errors import CorrelationError
 
 #: Version of each new G2.4.0 contract's own schema, mirroring G2.0's
 #: ``"<slug>/<version>"`` convention exactly.
-BEHAVIORAL_STEP_SCHEMA_VERSION = "behavioral-step/1"
+#: ``behavioral-step/2`` (bumped from ``/1``) additively adds the B4
+#: ``evidence_types`` carry-forward field (ADR-0004 Post-acceptance
+#: Clarification 3, 2026-09-21; ADR-0005 Amendment D). The bump is confined to
+#: this step contract — ``BEHAVIORAL_SEQUENCE_SCHEMA_VERSION`` stays ``/1`` (the
+#: sequence's own field set is unchanged and its persistence index name derives
+#: from it), and ``compute_step_id``/``compute_sequence_id`` are unchanged.
+BEHAVIORAL_STEP_SCHEMA_VERSION = "behavioral-step/2"
 SEQUENCE_EDGE_SCHEMA_VERSION = "sequence-edge/1"
 SEQUENCE_GAP_SCHEMA_VERSION = "sequence-gap/1"
 SEQUENCE_PARALLEL_GROUP_SCHEMA_VERSION = "sequence-parallel-group/1"
@@ -206,6 +212,16 @@ class BehavioralStep:
       exactly as this module never imports ``domain`` at all); it only
       validates the *shape* of whatever the caller supplies. ``Evidence``
       remains the sole authority for any technique mapping.
+    - ``evidence_types``: optional, canonicalized sorted-unique — the B4
+      carry-forward of this step's member ``Evidence.evidence_type`` values
+      (the existing closed ``EvidenceType`` vocabulary), for future G3.6
+      evidence-diversity/independence/imitation consumption (ADR-0004
+      Post-acceptance Clarification 3, 2026-09-21; ADR-0005 Amendment D).
+      Like ``technique_stix_ids`` this is **mechanically-derived provenance
+      only**, never re-derived or inferred; the actual read off real
+      ``Evidence`` is G2.4.1's job and this contract validates only the
+      *shape*. It is **not** part of :func:`compute_step_id` — step identity
+      is unchanged by its presence.
     - ``contextual_annotations``: optional, canonicalized sorted-unique —
       the subset of the originating group's own ``contextual_link_ids``
       that touch this step (ADR-0004 D10). Purely informational: nothing in
@@ -218,6 +234,7 @@ class BehavioralStep:
     evidence_ids: tuple[str, ...]
     observation_id: str
     technique_stix_ids: tuple[str, ...] = ()
+    evidence_types: tuple[str, ...] = ()
     contextual_annotations: tuple[str, ...] = ()
     schema_version: str = field(default=BEHAVIORAL_STEP_SCHEMA_VERSION)
 
@@ -236,6 +253,10 @@ class BehavioralStep:
         for stix_id in self.technique_stix_ids:
             _require_nonempty_str(stix_id, "BehavioralStep.technique_stix_ids[]")
         object.__setattr__(self, "technique_stix_ids", tuple(sorted(set(self.technique_stix_ids))))
+
+        for evidence_type in self.evidence_types:
+            _require_nonempty_str(evidence_type, "BehavioralStep.evidence_types[]")
+        object.__setattr__(self, "evidence_types", tuple(sorted(set(self.evidence_types))))
 
         for annotation_id in self.contextual_annotations:
             _require_nonempty_str(annotation_id, "BehavioralStep.contextual_annotations[]")

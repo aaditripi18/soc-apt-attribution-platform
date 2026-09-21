@@ -379,6 +379,13 @@ def _build_steps(
                 }
             )
         )
+        # B4 carry-forward: the distinct EvidenceType values of this step's own
+        # member Evidence, read directly off Evidence.evidence_type (the closed
+        # vocabulary) — never inferred or re-derived (ADR-0004 Post-acceptance
+        # Clarification 3, 2026-09-21; ADR-0005 Amendment D).
+        evidence_types = tuple(
+            sorted({evidence.evidence_type.value for evidence in step_evidences})
+        )
         contextual_annotations = tuple(
             sorted(
                 link.link_id
@@ -394,6 +401,7 @@ def _build_steps(
             evidence_ids=evidence_ids,
             observation_id=observation_id,
             technique_stix_ids=technique_stix_ids,
+            evidence_types=evidence_types,
             contextual_annotations=contextual_annotations,
         )
         steps[step_id] = _Step(step=step, observation=observation_by_id[observation_id])

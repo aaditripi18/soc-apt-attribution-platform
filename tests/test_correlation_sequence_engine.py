@@ -211,6 +211,99 @@ def test_step_technique_stix_ids_empty_when_no_attack_ref() -> None:
     assert all(step.technique_stix_ids == () for step in sequence.steps)
 
 
+# ---------------------------------------------------------------------------
+# B4: evidence_type carry-forward onto BehavioralStep.evidence_types
+# ---------------------------------------------------------------------------
+
+
+def test_step_evidence_types_carried_forward_sorted_and_deduplicated() -> None:
+    # Two Evidence sharing one Observation collapse into one step; their
+    # distinct evidence_type values are carried forward, sorted-unique.
+    obs = _obs("obs-1", host=HostRef(id="H1"), process=ProcessRef(entity_id="{A}"))
+    items = [
+        _pair("ev-1", obs, evidence_type=EvidenceType.PROCEDURAL),
+        _pair("ev-2", obs, evidence_type=EvidenceType.BEHAVIORAL),
+    ]
+    group, structural_links, contextual_links = _build(items)
+
+    sequence = construct_behavioral_sequence(group, items, structural_links, contextual_links)
+
+    assert len(sequence.steps) == 1
+    assert sequence.steps[0].evidence_types == ("behavioral", "procedural")
+
+
+def test_step_evidence_types_deduplicated_when_same_type() -> None:
+    obs = _obs("obs-1", host=HostRef(id="H1"), process=ProcessRef(entity_id="{A}"))
+    items = [
+        _pair("ev-1", obs, evidence_type=EvidenceType.BEHAVIORAL),
+        _pair("ev-2", obs, evidence_type=EvidenceType.BEHAVIORAL),
+    ]
+    group, structural_links, contextual_links = _build(items)
+
+    sequence = construct_behavioral_sequence(group, items, structural_links, contextual_links)
+
+    assert sequence.steps[0].evidence_types == ("behavioral",)
+
+
+def test_step_evidence_types_values_come_from_the_closed_vocabulary() -> None:
+    # Every carried value is exactly an EvidenceType member value (no inference).
+    obs = _obs("obs-1", host=HostRef(id="H1"), process=ProcessRef(entity_id="{A}"))
+    items = [
+        _pair("ev-1", obs, evidence_type=EvidenceType.EVIDENTIARY),
+        _pair("ev-2", obs, evidence_type=EvidenceType.CONTEXTUAL),
+    ]
+    group, structural_links, contextual_links = _build(items)
+
+    sequence = construct_behavioral_sequence(group, items, structural_links, contextual_links)
+
+    valid = {member.value for member in EvidenceType}
+    for step in sequence.steps:
+        assert set(step.evidence_types) <= valid
+    assert sequence.steps[0].evidence_types == ("contextual", "evidentiary")
+
+
+def test_step_construction_does_not_mutate_source_evidence() -> None:
+    obs = _obs("obs-1", host=HostRef(id="H1"), process=ProcessRef(entity_id="{A}"))
+    ev1, _ = _pair("ev-1", obs, evidence_type=EvidenceType.BEHAVIORAL)
+    ev2, _ = _pair("ev-2", obs, evidence_type=EvidenceType.PROCEDURAL)
+    items = [(ev1, obs), (ev2, obs)]
+    group, structural_links, contextual_links = _build(items)
+
+    construct_behavioral_sequence(group, items, structural_links, contextual_links)
+
+    # the carry-forward reads Evidence.evidence_type; it never mutates it
+    assert ev1.evidence_type is EvidenceType.BEHAVIORAL
+    assert ev2.evidence_type is EvidenceType.PROCEDURAL
+
+
+def test_step_evidence_types_pythonhashseed_independent() -> None:
+    import subprocess
+    import sys
+
+    script = """
+from attribution_platform.correlation.sequence import BehavioralStep, compute_step_id
+s = BehavioralStep(
+    step_id=compute_step_id("g", ["e1"]),
+    group_id="g",
+    evidence_ids=("e1",),
+    observation_id="o",
+    evidence_types=("procedural", "behavioral", "contextual", "behavioral"),
+)
+print(",".join(s.evidence_types))
+"""
+    outs = {
+        subprocess.run(
+            [sys.executable, "-c", script],
+            capture_output=True,
+            text=True,
+            env={"PYTHONHASHSEED": seed, "PYTHONPATH": "src"},
+            check=True,
+        ).stdout.strip()
+        for seed in ("0", "1", "424242")
+    }
+    assert outs == {"behavioral,contextual,procedural"}
+
+
 def test_step_contextual_annotations_derived_from_contextual_links() -> None:
     host = HostRef(id="H1")
     obs_p = _obs("obs-p", host=host, process=ProcessRef(entity_id="{P}"))

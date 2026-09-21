@@ -1689,3 +1689,30 @@ input, never an additional attribution signal.
 **Authoritative specification.** The full implementation-facing methodology is
 `docs/architecture/11-coverage-model.md`. This amendment is a dated additive clarification; it does not erase the
 historical §D2 text and reopens no other decision in this ADR.
+
+### Amendment D (2026-09-21) — B4 `evidence_type` plumbing carrier (`BehavioralStep.evidence_types`)
+
+**What this records, and what it preserves.** This amendment records that the Phase-3 prerequisite **B4** — the
+`evidence_type` plumbing named in this amendment set's own §"Preconditions for G3.6" item 4 — is now
+architecturally resolved (methodology locked in P4-M, 2026-09-21). It is **additive** and records *how* that
+precondition will be satisfied; it does **not** rewrite Amendment B, the "Preconditions for G3.6" list, or any
+D1–D21 / §D4 / §D10 / §D12 text above, and reopens no accepted decision.
+
+**Resolution.**
+
+- The canonical carrier is a new **additive** field **`BehavioralStep.evidence_types`** (owned by ADR-0004; see
+  that ADR's Post-acceptance Clarification 3, 2026-09-21, for the correlation-contract detail).
+- The value originates from `Evidence.evidence_type` (the existing closed `EvidenceType` vocabulary) and is
+  **carried forward** by the sequence engine as it builds each step — never inferred or re-derived (§D10's "from
+  `Evidence.evidence_type`, never a re-derivation" is honoured).
+- **Phase 3 continues to receive `CorrelationGroup` + `BehavioralSequence`** only; **no raw `Evidence`** is
+  introduced into candidate generation (§D7) or ACH construction (§D8). The field is **not** read or used by
+  candidate generation, `g(x)`/`g(C)`/`D(x)`, ACH, or any scoring — it is inert Phase-3 provenance carried on the
+  step and reachable from an `EvidenceAssessment` (§D5) via its existing `step_id` reference.
+- It is intended for **future G3.6 consumption only** (the §D4 de-duplication, §D10 confidence-corroboration
+  diversity, and §D12 imitation-defense inputs). The G3.6 independence/diversity/imitation/confidence **logic
+  remains outside B4** and is unchanged by this amendment.
+
+**This amendment does not itself implement B4.** It records the locked carrier so the later, separately-gated B4
+implementation and G3.6 gate are unambiguous. The remaining G3.6 preconditions (B1 corpus + frozen
+`calibration_version`, and the confidence-layer requirements) are unaffected and still bind.

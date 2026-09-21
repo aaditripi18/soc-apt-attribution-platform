@@ -184,6 +184,41 @@ def test_branching_sequence_round_trip_preserves_every_field(knowledge: AttackKn
     assert loaded == original
 
 
+def test_round_trip_preserves_step_evidence_types(knowledge: AttackKnowledge) -> None:
+    # B4: every engine-built step carries its member Evidence.evidence_type
+    # (default BEHAVIORAL here); the write->read round trip preserves it.
+    client = FakeElasticClient()
+    original = _branching_sequence(knowledge)
+    assert original.steps and all(step.evidence_types == ("behavioral",) for step in original.steps)
+    persist_behavioral_sequence(client, original)
+    loaded = load_behavioral_sequence(client, original.sequence_id)
+    assert loaded is not None
+    assert [s.evidence_types for s in loaded.steps] == [s.evidence_types for s in original.steps]
+
+
+def test_legacy_step_document_without_evidence_types_loads_as_empty_tuple(
+    knowledge: AttackKnowledge,
+) -> None:
+    # A pre-``behavioral-step/2`` document has no evidence_types key on its
+    # steps; it must load with evidence_types == () (tolerant default, no
+    # migration) rather than failing.
+    client = FakeElasticClient()
+    original = _branching_sequence(knowledge)
+    persist_behavioral_sequence(client, original)
+    stored = client.get_document(BEHAVIORAL_SEQUENCES_INDEX, original.sequence_id)
+    assert stored is not None
+    legacy = {
+        **stored,
+        "steps": [
+            {k: v for k, v in step.items() if k != "evidence_types"} for step in stored["steps"]
+        ],
+    }
+    client.index_document(BEHAVIORAL_SEQUENCES_INDEX, original.sequence_id, legacy)
+    loaded = load_behavioral_sequence(client, original.sequence_id)
+    assert loaded is not None
+    assert loaded.steps and all(step.evidence_types == () for step in loaded.steps)
+
+
 def test_nested_parallel_group_branches_round_trip_as_tuple_of_tuples(
     knowledge: AttackKnowledge,
 ) -> None:
