@@ -1,0 +1,26 @@
+{
+  "pack_id": "calibration-evidence-type-rules",
+  "description": "C3.2 calibration/test detection content (NOT a Type-A structural fixture; ADR-0006 §D8 Type-B). Adds two rules that emit the EVIDENTIARY and PROCEDURAL evidence types the core pack (fixtures/phase1_core_rules.json, unmodified) does not, so the C3.2 corpus can exercise all four EvidenceType values through the real, unmodified detection/evidence pipeline. Tier-1 machinery only; no real-world detection-efficacy claim. Deterministic, single-Observation rules; no technique mapping (EVIDENTIARY = corroborating IOC/infrastructure artifact, PROCEDURAL = a specific procedure-level detail).",
+  "rules": [
+    {
+      "rule_id": "calibration-evidentiary-c2-infrastructure-ip",
+      "rule_version": "1.0",
+      "conditions": [
+        { "field_path": "network.destination.ip", "operator": "equals", "value": "203.0.113.66" }
+      ],
+      "technique_mappings": [],
+      "evidence_type": "evidentiary",
+      "rule_source": "calibration-rules"
+    },
+    {
+      "rule_id": "calibration-procedural-downloadstring-cradle",
+      "rule_version": "1.0",
+      "conditions": [
+        { "field_path": "process.command_line", "operator": "contains", "value": "DownloadString" }
+      ],
+      "technique_mappings": [],
+      "evidence_type": "procedural",
+      "rule_source": "calibration-rules"
+    }
+  ]
+}
