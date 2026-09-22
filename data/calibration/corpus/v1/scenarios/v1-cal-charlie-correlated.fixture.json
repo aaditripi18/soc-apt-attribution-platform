@@ -1,0 +1,62 @@
+{
+  "fixture_id": "v1-cal-charlie-correlated",
+  "description": "Declared-provenance SYNTHETIC v1 scenario for family 'v1-cal-charlie-correlated' (role=calibration). Tier-1 machinery only; NOT real-world accuracy evidence. Raw telemetry only; labels live in annotations/. Replays via fixtures/phase1_core_rules.json (unmodified) + the Stage 2 calibration evidence-type rule pack to one attribution unit.",
+  "scenarios": [
+    {
+      "scenario_id": "cc1",
+      "raw_record": {
+        "record_id": "rec-cc1",
+        "timestamp": "2026-09-01T09:00:00+00:00",
+        "observation_id": "obs-cc1"
+      },
+      "process": {
+        "name": "cmd.exe",
+        "entity_id": "cc1",
+        "parent_name": "WINWORD.EXE"
+      },
+      "host": {
+        "id": "host-cal-charlie"
+      }
+    },
+    {
+      "scenario_id": "cc2",
+      "raw_record": {
+        "record_id": "rec-cc2",
+        "timestamp": "2026-09-01T09:00:05+00:00",
+        "observation_id": "obs-cc2"
+      },
+      "process": {
+        "name": "svchost.exe",
+        "entity_id": "cc2",
+        "parent_entity_id": "cc1"
+      },
+      "host": {
+        "id": "host-cal-charlie"
+      },
+      "network": {
+        "destination": {
+          "ip": "203.0.113.66"
+        }
+      }
+    },
+    {
+      "scenario_id": "cc3",
+      "raw_record": {
+        "record_id": "rec-cc3",
+        "timestamp": "2026-09-01T09:00:10+00:00",
+        "observation_id": "obs-cc3"
+      },
+      "process": {
+        "name": "explorer.exe",
+        "entity_id": "cc3",
+        "parent_entity_id": "cc2"
+      },
+      "host": {
+        "id": "host-cal-charlie"
+      },
+      "event": {
+        "action": "logon"
+      }
+    }
+  ]
+}

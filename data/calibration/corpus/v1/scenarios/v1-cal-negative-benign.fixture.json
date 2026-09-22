@@ -1,0 +1,43 @@
+{
+  "fixture_id": "v1-cal-negative-benign",
+  "description": "Declared-provenance SYNTHETIC v1 scenario for family 'v1-cal-negative-benign' (role=calibration). Tier-1 machinery only; NOT real-world accuracy evidence. Raw telemetry only; labels live in annotations/. Replays via fixtures/phase1_core_rules.json (unmodified) + the Stage 2 calibration evidence-type rule pack to one attribution unit.",
+  "scenarios": [
+    {
+      "scenario_id": "cn1",
+      "raw_record": {
+        "record_id": "rec-cn1",
+        "timestamp": "2026-09-01T09:00:00+00:00",
+        "observation_id": "obs-cn1"
+      },
+      "process": {
+        "name": "explorer.exe",
+        "entity_id": "cn1"
+      },
+      "host": {
+        "id": "host-cal-negative"
+      },
+      "event": {
+        "action": "logon"
+      }
+    },
+    {
+      "scenario_id": "cn2",
+      "raw_record": {
+        "record_id": "rec-cn2",
+        "timestamp": "2026-09-01T09:00:05+00:00",
+        "observation_id": "obs-cn2"
+      },
+      "process": {
+        "name": "explorer.exe",
+        "entity_id": "cn2",
+        "parent_entity_id": "cn1"
+      },
+      "host": {
+        "id": "host-cal-negative"
+      },
+      "event": {
+        "action": "logon"
+      }
+    }
+  ]
+}

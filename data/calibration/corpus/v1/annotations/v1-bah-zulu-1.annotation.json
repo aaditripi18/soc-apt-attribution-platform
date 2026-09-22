@@ -1,0 +1,32 @@
+{
+  "scenario_family_id": "v1-bah-zulu-1",
+  "case_role": "blind_actor_holdout",
+  "source_kind": "synthetic",
+  "source_ref": "epitaxy-v1-corpus@1.0",
+  "license": "MIT",
+  "acquisition_provenance": "Hand-authored declared-provenance SYNTHETIC scenarios for the C3.2 v1 corpus (Tier-1 machinery only; no real-world capture, no live emulation). Each family's template/actor-plan is recorded in this file's own scenario description below.",
+  "transformation_provenance": "Replayed through the pinned production pipeline (detection G1.0 through behavioral-sequence reconstruction G2.4.1) using the unmodified core rule pack (fixtures/phase1_core_rules.json) plus the C3.2 Stage 2 calibration evidence-type extension pack (data/calibration/rules/calibration_evidence_type_rules.json, ADR-0006 \u00a7D8 Type-B); no manual editing of derived Observations/Evidence/CorrelationGroup/BehavioralSequence objects.",
+  "coverage_assumptions": [
+    "File Creation",
+    "Module Load",
+    "Process Access",
+    "Process Creation",
+    "Script Execution",
+    "User Account Metadata",
+    "Windows Registry Key Modification"
+  ],
+  "ground_truth": {
+    "actor_label_source": "emulation-plan",
+    "label_semantics": "attributable",
+    "label_confidence": "high",
+    "actor_label": "EMU-ZULU",
+    "campaign_context": []
+  },
+  "expected_output_shape": {
+    "outcome": "leading_hypothesis",
+    "authorship_provenance": "Authored from EMU-ZULU's synthetic emulation plan (macro-exec + LSASS dump); NOT ATT&CK-derived.",
+    "expected_likelihood_band": "AUTHORED-LEADING",
+    "expected_confidence_band": "AUTHORED-HIGH"
+  },
+  "categories": []
+}

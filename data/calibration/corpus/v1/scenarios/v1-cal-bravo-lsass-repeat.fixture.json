@@ -1,0 +1,56 @@
+{
+  "fixture_id": "v1-cal-bravo-lsass-repeat",
+  "description": "Declared-provenance SYNTHETIC v1 scenario for family 'v1-cal-bravo-lsass-repeat' (role=calibration). Tier-1 machinery only; NOT real-world accuracy evidence. Raw telemetry only; labels live in annotations/. Replays via fixtures/phase1_core_rules.json (unmodified) + the Stage 2 calibration evidence-type rule pack to one attribution unit.",
+  "scenarios": [
+    {
+      "scenario_id": "cb1",
+      "raw_record": {
+        "record_id": "rec-cb1",
+        "timestamp": "2026-09-01T09:00:00+00:00",
+        "observation_id": "obs-cb1"
+      },
+      "process": {
+        "name": "procdump.exe",
+        "entity_id": "cb1",
+        "command_line": "procdump.exe -ma lsass.exe lsassa.dmp"
+      },
+      "host": {
+        "id": "host-cal-bravo"
+      }
+    },
+    {
+      "scenario_id": "cb2",
+      "raw_record": {
+        "record_id": "rec-cb2",
+        "timestamp": "2026-09-01T09:00:30+00:00",
+        "observation_id": "obs-cb2"
+      },
+      "process": {
+        "name": "procdump.exe",
+        "entity_id": "cb2",
+        "command_line": "procdump.exe -ma lsass.exe lsassb.dmp",
+        "parent_entity_id": "cb1"
+      },
+      "host": {
+        "id": "host-cal-bravo"
+      }
+    },
+    {
+      "scenario_id": "cb3",
+      "raw_record": {
+        "record_id": "rec-cb3",
+        "timestamp": "2026-09-01T09:01:30+00:00",
+        "observation_id": "obs-cb3"
+      },
+      "process": {
+        "name": "procdump.exe",
+        "entity_id": "cb3",
+        "command_line": "procdump.exe -ma lsass.exe lsassc.dmp",
+        "parent_entity_id": "cb2"
+      },
+      "host": {
+        "id": "host-cal-bravo"
+      }
+    }
+  ]
+}

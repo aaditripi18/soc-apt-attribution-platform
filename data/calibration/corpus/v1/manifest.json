@@ -1,0 +1,221 @@
+{
+  "_generated_by": "Stage 4 authoring script; snapshot of CalibrationCorpusManifest",
+  "_note": "Not a second identity mechanism -- calibration_corpus_version below IS compute_calibration_corpus_version's own output (via CalibrationCorpusManifest.from_cases), persisted here for readability. Rebuild via build_corpus_from_dir(data/calibration/corpus/v1) to independently verify.",
+  "manifest_schema_version": "calibration-corpus-manifest/1",
+  "corpus_schema_version": "calibration-case/1",
+  "attack_kb_version": "enterprise-attack-19.0",
+  "calibration_corpus_version": "calibration-corpus-version::35dabc5e715528e214992c12f0c966e5fa1b67bf9c717c3086743d88b2243aa3",
+  "case_entries": [
+    {
+      "case_id": "calibration-case::01a957b0cc0f52604e3401afbe2d5fb19021a5225f09bafedff0f7a60013e435",
+      "scenario_family_id": "v1-hov-delta-correlated",
+      "case_role": "held_out_validation",
+      "attack_kb_version": "enterprise-attack-19.0",
+      "source_ref": "epitaxy-v1-corpus@1.0",
+      "source_kind": "synthetic",
+      "license": "MIT"
+    },
+    {
+      "case_id": "calibration-case::174c6a9a5263ecbe7eda2e6ebaa96d23c2d37a8b0305809c944d4d1180f9dfc7",
+      "scenario_family_id": "v1-hov-negative-benign",
+      "case_role": "held_out_validation",
+      "attack_kb_version": "enterprise-attack-19.0",
+      "source_ref": "epitaxy-v1-corpus@1.0",
+      "source_kind": "synthetic",
+      "license": "MIT"
+    },
+    {
+      "case_id": "calibration-case::2d55525a12b85e28c43c7b02fc70506ad8a72cd7ea1ceec9d9082faac4a0bedb",
+      "scenario_family_id": "v1-hov-unresolved-actor",
+      "case_role": "held_out_validation",
+      "attack_kb_version": "enterprise-attack-19.0",
+      "source_ref": "epitaxy-v1-corpus@1.0",
+      "source_kind": "synthetic",
+      "license": "MIT"
+    },
+    {
+      "case_id": "calibration-case::2e1b25a50b39ff8e47915322abaa5796bf114200f5cca45195c3aff69de41b3f",
+      "scenario_family_id": "v1-cal-negative-benign",
+      "case_role": "calibration",
+      "attack_kb_version": "enterprise-attack-19.0",
+      "source_ref": "epitaxy-v1-corpus@1.0",
+      "source_kind": "synthetic",
+      "license": "MIT"
+    },
+    {
+      "case_id": "calibration-case::3154c57ea00963bad36748e898ec0fce60f9f9c7f684f3dadbb82d41c8264d9b",
+      "scenario_family_id": "v1-exc-negative-reserved",
+      "case_role": "excluded",
+      "attack_kb_version": "enterprise-attack-19.0",
+      "source_ref": "epitaxy-v1-corpus@1.0",
+      "source_kind": "synthetic",
+      "license": "MIT"
+    },
+    {
+      "case_id": "calibration-case::316ca0fa284c6329d32fad7fd216319d84065a72e54c0c249e3923af6f111200",
+      "scenario_family_id": "v1-hov-foxtrot-repeat",
+      "case_role": "held_out_validation",
+      "attack_kb_version": "enterprise-attack-19.0",
+      "source_ref": "epitaxy-v1-corpus@1.0",
+      "source_kind": "synthetic",
+      "license": "MIT"
+    },
+    {
+      "case_id": "calibration-case::32fc23126033405d86d9e19819c7be8842d88ba6c75dfe2e53235b0ae7a30a6a",
+      "scenario_family_id": "v1-cal-disputed-campaign",
+      "case_role": "calibration",
+      "attack_kb_version": "enterprise-attack-19.0",
+      "source_ref": "epitaxy-v1-corpus@1.0",
+      "source_kind": "synthetic",
+      "license": "MIT"
+    },
+    {
+      "case_id": "calibration-case::33e15bcafae80f342699339c22734c06a82ef84b97c349634260697c2cb51459",
+      "scenario_family_id": "v1-bah-zulu-1",
+      "case_role": "blind_actor_holdout",
+      "attack_kb_version": "enterprise-attack-19.0",
+      "source_ref": "epitaxy-v1-corpus@1.0",
+      "source_kind": "synthetic",
+      "license": "MIT"
+    },
+    {
+      "case_id": "calibration-case::37ac942ff20cda999b0b8197609a44ba3c913f1f941f2d559b55036ecd32056a",
+      "scenario_family_id": "v1-exc-golf-reserved",
+      "case_role": "excluded",
+      "attack_kb_version": "enterprise-attack-19.0",
+      "source_ref": "epitaxy-v1-corpus@1.0",
+      "source_kind": "synthetic",
+      "license": "MIT"
+    },
+    {
+      "case_id": "calibration-case::4ada5d3324bd3b428ca1117017c19dfeada370a04b87f67cab5850b3c84b355e",
+      "scenario_family_id": "v1-cal-alpha-ingress",
+      "case_role": "calibration",
+      "attack_kb_version": "enterprise-attack-19.0",
+      "source_ref": "epitaxy-v1-corpus@1.0",
+      "source_kind": "synthetic",
+      "license": "MIT"
+    },
+    {
+      "case_id": "calibration-case::7c03f0300543bf9708bd208f7e1ff3ab4167b7c522c96c7d5aea798ffb5c495a",
+      "scenario_family_id": "v1-cal-echo-imitates-alpha",
+      "case_role": "calibration",
+      "attack_kb_version": "enterprise-attack-19.0",
+      "source_ref": "epitaxy-v1-corpus@1.0",
+      "source_kind": "synthetic",
+      "license": "MIT"
+    },
+    {
+      "case_id": "calibration-case::95cca5f888d27d89d3bb95dd5b8184bf68bc1967a1a374d19baa429bc2e54817",
+      "scenario_family_id": "v1-cal-charlie-correlated",
+      "case_role": "calibration",
+      "attack_kb_version": "enterprise-attack-19.0",
+      "source_ref": "epitaxy-v1-corpus@1.0",
+      "source_kind": "synthetic",
+      "license": "MIT"
+    },
+    {
+      "case_id": "calibration-case::a87fcb5bcb46f1769efa2dcaccd9faece7f8d4eb8c30b7faf2741dc8c3cb7e72",
+      "scenario_family_id": "v1-bah-zulu-2",
+      "case_role": "blind_actor_holdout",
+      "attack_kb_version": "enterprise-attack-19.0",
+      "source_ref": "epitaxy-v1-corpus@1.0",
+      "source_kind": "synthetic",
+      "license": "MIT"
+    },
+    {
+      "case_id": "calibration-case::ae7e70a1eec2b6f98c1f59a01fe408c19aba8cde79341daaf1c363cceea38f6e",
+      "scenario_family_id": "v1-hov-bravo-ingress",
+      "case_role": "held_out_validation",
+      "attack_kb_version": "enterprise-attack-19.0",
+      "source_ref": "epitaxy-v1-corpus@1.0",
+      "source_kind": "synthetic",
+      "license": "MIT"
+    },
+    {
+      "case_id": "calibration-case::b3a7fb5df23235eaf78872d6ae12654f35f06451becbfd3327e1e1fff39350da",
+      "scenario_family_id": "v1-cal-unresolved-actor",
+      "case_role": "calibration",
+      "attack_kb_version": "enterprise-attack-19.0",
+      "source_ref": "epitaxy-v1-corpus@1.0",
+      "source_kind": "synthetic",
+      "license": "MIT"
+    },
+    {
+      "case_id": "calibration-case::cd636c44c207e68407fa8ef1de6e259e8031758e1f6cb8f5642f3036de8f98d1",
+      "scenario_family_id": "v1-hov-disputed-campaign",
+      "case_role": "held_out_validation",
+      "attack_kb_version": "enterprise-attack-19.0",
+      "source_ref": "epitaxy-v1-corpus@1.0",
+      "source_kind": "synthetic",
+      "license": "MIT"
+    },
+    {
+      "case_id": "calibration-case::e4c112ab07ab4411d964b52542238acc2db192f51d638c46cfdef57f9d848006",
+      "scenario_family_id": "v1-hov-echo-imitates-alpha",
+      "case_role": "held_out_validation",
+      "attack_kb_version": "enterprise-attack-19.0",
+      "source_ref": "epitaxy-v1-corpus@1.0",
+      "source_kind": "synthetic",
+      "license": "MIT"
+    },
+    {
+      "case_id": "calibration-case::f8309d41465c811e4870c5143dcbcacbbb8584d7553b66bea927cd114b38cbd4",
+      "scenario_family_id": "v1-cal-bravo-lsass-repeat",
+      "case_role": "calibration",
+      "attack_kb_version": "enterprise-attack-19.0",
+      "source_ref": "epitaxy-v1-corpus@1.0",
+      "source_kind": "synthetic",
+      "license": "MIT"
+    }
+  ],
+  "source_entries": [
+    {
+      "source_ref": "epitaxy-v1-corpus@1.0",
+      "source_kind": "synthetic",
+      "license": "MIT",
+      "acquisition_provenance": "Hand-authored declared-provenance SYNTHETIC scenarios for the C3.2 v1 corpus (Tier-1 machinery only; no real-world capture, no live emulation). Each family's template/actor-plan is recorded in this file's own scenario description below.",
+      "transformation_provenance": "Replayed through the pinned production pipeline (detection G1.0 through behavioral-sequence reconstruction G2.4.1) using the unmodified core rule pack (fixtures/phase1_core_rules.json) plus the C3.2 Stage 2 calibration evidence-type extension pack (data/calibration/rules/calibration_evidence_type_rules.json, ADR-0006 \u00a7D8 Type-B); no manual editing of derived Observations/Evidence/CorrelationGroup/BehavioralSequence objects."
+    }
+  ],
+  "split_assignment": [
+    {
+      "case_role": "blind_actor_holdout",
+      "scenario_family_ids": [
+        "v1-bah-zulu-1",
+        "v1-bah-zulu-2"
+      ]
+    },
+    {
+      "case_role": "calibration",
+      "scenario_family_ids": [
+        "v1-cal-alpha-ingress",
+        "v1-cal-bravo-lsass-repeat",
+        "v1-cal-charlie-correlated",
+        "v1-cal-disputed-campaign",
+        "v1-cal-echo-imitates-alpha",
+        "v1-cal-negative-benign",
+        "v1-cal-unresolved-actor"
+      ]
+    },
+    {
+      "case_role": "excluded",
+      "scenario_family_ids": [
+        "v1-exc-golf-reserved",
+        "v1-exc-negative-reserved"
+      ]
+    },
+    {
+      "case_role": "held_out_validation",
+      "scenario_family_ids": [
+        "v1-hov-bravo-ingress",
+        "v1-hov-delta-correlated",
+        "v1-hov-disputed-campaign",
+        "v1-hov-echo-imitates-alpha",
+        "v1-hov-foxtrot-repeat",
+        "v1-hov-negative-benign",
+        "v1-hov-unresolved-actor"
+      ]
+    }
+  ]
+}

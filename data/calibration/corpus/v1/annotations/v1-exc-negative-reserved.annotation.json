@@ -1,0 +1,22 @@
+{
+  "scenario_family_id": "v1-exc-negative-reserved",
+  "case_role": "excluded",
+  "source_kind": "synthetic",
+  "source_ref": "epitaxy-v1-corpus@1.0",
+  "license": "MIT",
+  "acquisition_provenance": "Hand-authored declared-provenance SYNTHETIC scenarios for the C3.2 v1 corpus (Tier-1 machinery only; no real-world capture, no live emulation). Each family's template/actor-plan is recorded in this file's own scenario description below.",
+  "transformation_provenance": "Replayed through the pinned production pipeline (detection G1.0 through behavioral-sequence reconstruction G2.4.1) using the unmodified core rule pack (fixtures/phase1_core_rules.json) plus the C3.2 Stage 2 calibration evidence-type extension pack (data/calibration/rules/calibration_evidence_type_rules.json, ADR-0006 \u00a7D8 Type-B); no manual editing of derived Observations/Evidence/CorrelationGroup/BehavioralSequence objects.",
+  "coverage_assumptions": [],
+  "ground_truth": {
+    "actor_label_source": "emulation-plan",
+    "label_semantics": "unattributable_by_design",
+    "label_confidence": "high",
+    "actor_label": null,
+    "campaign_context": []
+  },
+  "expected_output_shape": {
+    "outcome": "insufficient_evidence",
+    "authorship_provenance": "Authored as a third, independent designed negative, reserved for one-time final evaluation (case_role=excluded); NOT ATT&CK-derived."
+  },
+  "categories": []
+}

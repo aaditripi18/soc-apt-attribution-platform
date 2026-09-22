@@ -1,0 +1,39 @@
+{
+  "fixture_id": "v1-bah-zulu-1",
+  "description": "Declared-provenance SYNTHETIC v1 scenario for family 'v1-bah-zulu-1' (role=blind_actor_holdout). Tier-1 machinery only; NOT real-world accuracy evidence. Raw telemetry only; labels live in annotations/. Replays via fixtures/phase1_core_rules.json (unmodified) + the Stage 2 calibration evidence-type rule pack to one attribution unit.",
+  "scenarios": [
+    {
+      "scenario_id": "bz1",
+      "raw_record": {
+        "record_id": "rec-bz1",
+        "timestamp": "2026-09-01T09:00:00+00:00",
+        "observation_id": "obs-bz1"
+      },
+      "process": {
+        "name": "cmd.exe",
+        "entity_id": "bz1",
+        "parent_name": "WINWORD.EXE"
+      },
+      "host": {
+        "id": "host-bah-zulu1"
+      }
+    },
+    {
+      "scenario_id": "bz2",
+      "raw_record": {
+        "record_id": "rec-bz2",
+        "timestamp": "2026-09-01T09:00:05+00:00",
+        "observation_id": "obs-bz2"
+      },
+      "process": {
+        "name": "procdump.exe",
+        "entity_id": "bz2",
+        "command_line": "procdump.exe -ma lsass.exe lsassz1.dmp",
+        "parent_entity_id": "bz1"
+      },
+      "host": {
+        "id": "host-bah-zulu1"
+      }
+    }
+  ]
+}

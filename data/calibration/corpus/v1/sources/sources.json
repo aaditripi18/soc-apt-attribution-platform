@@ -1,0 +1,13 @@
+{
+  "_generated_by": "Stage 4 authoring script; snapshot of CalibrationCorpusManifest.source_entries",
+  "_note": "Not a second source of truth -- the source registry is derived from annotations/ at build time by build_corpus_from_dir. This file is a human-readable export only.",
+  "sources": [
+    {
+      "source_ref": "epitaxy-v1-corpus@1.0",
+      "source_kind": "synthetic",
+      "license": "MIT",
+      "acquisition_provenance": "Hand-authored declared-provenance SYNTHETIC scenarios for the C3.2 v1 corpus (Tier-1 machinery only; no real-world capture, no live emulation). Each family's template/actor-plan is recorded in this file's own scenario description below.",
+      "transformation_provenance": "Replayed through the pinned production pipeline (detection G1.0 through behavioral-sequence reconstruction G2.4.1) using the unmodified core rule pack (fixtures/phase1_core_rules.json) plus the C3.2 Stage 2 calibration evidence-type extension pack (data/calibration/rules/calibration_evidence_type_rules.json, ADR-0006 \u00a7D8 Type-B); no manual editing of derived Observations/Evidence/CorrelationGroup/BehavioralSequence objects."
+    }
+  ]
+}
