@@ -51,6 +51,7 @@ output through the same G0.5/G0.6/G0.8 functions any other adapter uses.
 from __future__ import annotations
 
 import json
+import ntpath
 from collections.abc import Mapping
 from datetime import datetime
 from pathlib import Path
@@ -62,6 +63,7 @@ from attribution_platform.domain import (
     NetworkEndpoint,
     NetworkInfo,
     Observation,
+    PeInfo,
     ProcessRef,
     SourceRef,
     UserRef,
@@ -152,6 +154,37 @@ def _user_ref(record: Mapping[str, Any]) -> UserRef | None:
     return UserRef(name=name, domain=domain)
 
 
+def _event_data_or_ecs(record: Mapping[str, Any], event_data_key: str, *ecs_path: str) -> Any:
+    """Sysmon's own ``winlog.event_data`` value when present, else the ECS
+    field the collector mapped it to. Sysmon's EventData names are exactly the
+    field names Windows detection content (Sigma) is written against, so the
+    raw value is the faithful one; the ECS path covers collectors that only
+    emit ECS. ``ecs_path`` may be empty (no ECS equivalent exists)."""
+    value = _get(record, "winlog", "event_data", event_data_key)
+    if value is None and ecs_path:
+        value = _get(record, *ecs_path)
+    return value
+
+
+def _basename(path: Any) -> Any:
+    """The file name of a Windows path (``ntpath`` semantics), else ``None``."""
+    if not isinstance(path, str) or not path.strip():
+        return None
+    return ntpath.basename(path) or None
+
+
+def _pe_info(record: Mapping[str, Any]) -> PeInfo | None:
+    pe = PeInfo(
+        original_file_name=_event_data_or_ecs(
+            record, "OriginalFileName", "process", "pe", "original_file_name"
+        ),
+        description=_event_data_or_ecs(record, "Description", "process", "pe", "description"),
+        product=_event_data_or_ecs(record, "Product", "process", "pe", "product"),
+        company=_event_data_or_ecs(record, "Company", "process", "pe", "company"),
+    )
+    return None if pe == PeInfo() else pe
+
+
 def _process_ref(record: Mapping[str, Any]) -> ProcessRef | None:
     pid = _get(record, "process", "pid")
     executable = _get(record, "process", "executable")
@@ -159,9 +192,10 @@ def _process_ref(record: Mapping[str, Any]) -> ProcessRef | None:
     command_line = _get(record, "process", "command_line")
     entity_id = _get(record, "process", "entity_id")
     parent_pid = _get(record, "process", "parent", "pid")
-    parent_name = _get(record, "process", "parent", "name") or _get(
-        record, "process", "parent", "executable"
-    )
+    parent_executable = _event_data_or_ecs(record, "ParentImage", "process", "parent", "executable")
+    # ECS process.parent.name is the bare file name; derive it from the parent
+    # executable only when the collector did not supply it (never a full path).
+    parent_name = _get(record, "process", "parent", "name") or _basename(parent_executable)
     parent_entity_id = _get(record, "process", "parent", "entity_id")
 
     if pid is None and executable is None and name is None:
@@ -176,6 +210,16 @@ def _process_ref(record: Mapping[str, Any]) -> ProcessRef | None:
         parent_pid=_as_int(parent_pid, "process.parent.pid") if parent_pid is not None else None,
         parent_name=parent_name,
         parent_entity_id=parent_entity_id,
+        parent_executable=parent_executable,
+        parent_command_line=_event_data_or_ecs(
+            record, "ParentCommandLine", "process", "parent", "command_line"
+        ),
+        working_directory=_event_data_or_ecs(
+            record, "CurrentDirectory", "process", "working_directory"
+        ),
+        # No ECS field exists for Sysmon's IntegrityLevel; only the raw value.
+        integrity_level=_event_data_or_ecs(record, "IntegrityLevel"),
+        pe=_pe_info(record),
     )
 
 

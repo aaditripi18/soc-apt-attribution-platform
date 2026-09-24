@@ -134,9 +134,7 @@ class ProvenanceValidationViolation:
         object.__setattr__(
             self,
             "source_refs",
-            _canonical_source_refs(
-                self.source_refs, "ProvenanceValidationViolation.source_refs"
-            ),
+            _canonical_source_refs(self.source_refs, "ProvenanceValidationViolation.source_refs"),
         )
         if not isinstance(self.reason, str) or not self.reason.strip():
             raise CalibrationError(

@@ -137,9 +137,7 @@ class SplitValidationViolation:
             self, "roles", _canonical_tuple(self.roles, "SplitValidationViolation.roles")
         )
         if not isinstance(self.reason, str) or not self.reason.strip():
-            raise CalibrationError(
-                "SplitValidationViolation.reason must be a non-empty string"
-            )
+            raise CalibrationError("SplitValidationViolation.reason must be a non-empty string")
         if self.actor_label is not None and (
             not isinstance(self.actor_label, str) or not self.actor_label.strip()
         ):

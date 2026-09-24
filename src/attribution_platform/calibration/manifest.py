@@ -235,9 +235,7 @@ def compute_calibration_corpus_version(
             for role, families in split_assignment
         ],
     }
-    return "::".join(
-        [CALIBRATION_CORPUS_VERSION_PREFIX, _sha256_hex(to_canonical_json(identity))]
-    )
+    return "::".join([CALIBRATION_CORPUS_VERSION_PREFIX, _sha256_hex(to_canonical_json(identity))])
 
 
 # ===========================================================================
@@ -285,9 +283,7 @@ class CalibrationCorpusManifest:
         _require_nonempty_str(
             self.corpus_schema_version, "CalibrationCorpusManifest.corpus_schema_version"
         )
-        _require_nonempty_str(
-            self.attack_kb_version, "CalibrationCorpusManifest.attack_kb_version"
-        )
+        _require_nonempty_str(self.attack_kb_version, "CalibrationCorpusManifest.attack_kb_version")
 
         for entry in self.case_entries:
             if not isinstance(entry, CorpusCaseEntry):
@@ -372,8 +368,7 @@ class CalibrationCorpusManifest:
         for entry in self.case_entries:
             families_by_role.setdefault(entry.case_role.value, set()).add(entry.scenario_family_id)
         split_assignment = tuple(
-            (role, tuple(sorted(families_by_role[role])))
-            for role in sorted(families_by_role)
+            (role, tuple(sorted(families_by_role[role]))) for role in sorted(families_by_role)
         )
         object.__setattr__(self, "split_assignment", split_assignment)
 

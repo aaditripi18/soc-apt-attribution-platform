@@ -43,12 +43,31 @@ class FileRef:
 
 
 @dataclass(frozen=True)
+class PeInfo:
+    """Portable-Executable version-info metadata of a process image (all
+    optional) — ECS ``process.pe.*``. Values are the image's own embedded
+    resource strings as the source reported them, never inferred."""
+
+    original_file_name: str | None = None
+    description: str | None = None
+    product: str | None = None
+    company: str | None = None
+
+
+@dataclass(frozen=True)
 class ProcessRef:
     """A process and its immediate parent lineage (all optional).
 
     ``entity_id``/``parent_entity_id`` are stable per-process identifiers
     where a source provides them (e.g. an ECS ``process.entity_id``); they
     are the source's identifiers, not values this layer invents.
+
+    ``name``/``parent_name`` are **bare file names** (ECS ``process.name`` /
+    ``process.parent.name``); full paths belong in ``executable`` /
+    ``parent_executable``. Fields added by ADR-0007 D10 step 1 (parent
+    executable and command line, working directory, integrity level, PE
+    metadata) let detection content match the process-creation fields
+    endpoint sources actually report.
     """
 
     pid: int | None = None
@@ -59,6 +78,11 @@ class ProcessRef:
     parent_pid: int | None = None
     parent_name: str | None = None
     parent_entity_id: str | None = None
+    parent_executable: str | None = None
+    parent_command_line: str | None = None
+    working_directory: str | None = None
+    integrity_level: str | None = None
+    pe: PeInfo | None = None
 
 
 @dataclass(frozen=True)

@@ -1,8 +1,15 @@
-"""``sigma-field-map/1`` — Sigma logsource/field → our ECS-aligned Observation
-fields (ADR-0007 D5). Pure data; no pySigma import.
+"""Sigma logsource/field → our ECS-aligned Observation fields (ADR-0007 D5),
+versioned as :data:`FIELD_MAP_VERSION`. Pure data; no pySigma import.
 
 A mapping is listed **only** when it is exact for every source adapter that
 produces that Observation kind today (``sources/sysmon.py``, ``sources/synthetic.py``).
+The Sysmon adapter fills these fields from Sysmon's own ``winlog.event_data``
+values — the very names Sigma's Windows fields use — so the mapping is 1:1.
+
+Version history: ``/1`` Image, CommandLine (+ network fields). ``/2`` (ADR-0007
+D10 step 1) adds ParentImage, ParentCommandLine, CurrentDirectory,
+IntegrityLevel, OriginalFileName, Description, Product, Company.
+
 Anything else is a *telemetry gap*, reported per rule by the importer — never
 approximated. ``UNMAPPED_FIELD_REASONS`` records why the most frequent
 unmapped Sigma fields are not mapped, so the gap is explained rather than
@@ -17,7 +24,7 @@ from __future__ import annotations
 
 from types import MappingProxyType
 
-FIELD_MAP_VERSION = "sigma-field-map/1"
+FIELD_MAP_VERSION = "sigma-field-map/2"
 
 #: ``(product, category)`` → the ``(field_path, element)`` scope conditions an
 #: Observation must satisfy to be the kind of event the Sigma rule describes.
@@ -41,6 +48,14 @@ FIELD_MAPS: MappingProxyType[tuple[str, str], MappingProxyType[str, str]] = Mapp
             {
                 "Image": "process.executable",
                 "CommandLine": "process.command_line",
+                "ParentImage": "process.parent_executable",
+                "ParentCommandLine": "process.parent_command_line",
+                "CurrentDirectory": "process.working_directory",
+                "IntegrityLevel": "process.integrity_level",
+                "OriginalFileName": "process.pe.original_file_name",
+                "Description": "process.pe.description",
+                "Product": "process.pe.product",
+                "Company": "process.pe.company",
             }
         ),
         ("windows", "network_connection"): MappingProxyType(
@@ -59,19 +74,12 @@ FIELD_MAPS: MappingProxyType[tuple[str, str], MappingProxyType[str, str]] = Mapp
 #: Why notable Sigma fields are deliberately unmapped (report text only).
 UNMAPPED_FIELD_REASONS: MappingProxyType[str, str] = MappingProxyType(
     {
-        "ParentImage": (
-            "ProcessRef.parent_name holds a basename or a full path depending on the source "
-            "record, so no single predicate reproduces Sigma's full-path semantics exactly"
+        "Hashes": (
+            "Sigma matches Sysmon's combined 'SHA1=..,MD5=..,IMPHASH=..' string (often "
+            "IMPHASH, which no adapter captures); no exact mapping onto structured hashes"
         ),
-        "OriginalFileName": "PE version-info metadata is not captured by any adapter",
-        "Description": "PE version-info metadata is not captured by any adapter",
-        "Product": "PE version-info metadata is not captured by any adapter",
-        "Company": "PE version-info metadata is not captured by any adapter",
-        "Hashes": "file hashes are not captured on ProcessRef",
-        "ParentCommandLine": "parent command line is not captured on ProcessRef",
         "User": "UserRef splits domain and name; Sigma matches the combined 'DOMAIN\\user' string",
-        "IntegrityLevel": "process integrity level is not captured",
-        "CurrentDirectory": "process working directory is not captured",
+        "ParentUser": "the parent process's user is not captured",
         "DestinationHostname": "destination hostname is not captured on NetworkInfo",
         "Initiated": "Sysmon 'Initiated' → ECS network.direction mapping is not verified",
     }

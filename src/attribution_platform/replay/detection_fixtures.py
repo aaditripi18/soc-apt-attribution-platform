@@ -69,6 +69,7 @@ from attribution_platform.domain import (
     HostRef,
     NetworkEndpoint,
     NetworkInfo,
+    PeInfo,
     ProcessRef,
     UserRef,
 )
@@ -257,6 +258,23 @@ def _process_ref_from_dict(d: Any, *, where: str) -> ProcessRef | None:
         parent_pid=parsed.get("parent_pid"),
         parent_name=parsed.get("parent_name"),
         parent_entity_id=parsed.get("parent_entity_id"),
+        parent_executable=parsed.get("parent_executable"),
+        parent_command_line=parsed.get("parent_command_line"),
+        working_directory=parsed.get("working_directory"),
+        integrity_level=parsed.get("integrity_level"),
+        pe=_pe_info_from_dict(parsed.get("pe"), where=f"{where}.pe"),
+    )
+
+
+def _pe_info_from_dict(d: Any, *, where: str) -> PeInfo | None:
+    parsed = _require_dict(d, where=where)
+    if parsed is None:
+        return None
+    return PeInfo(
+        original_file_name=parsed.get("original_file_name"),
+        description=parsed.get("description"),
+        product=parsed.get("product"),
+        company=parsed.get("company"),
     )
 
 

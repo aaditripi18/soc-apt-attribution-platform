@@ -9,8 +9,8 @@ Counts only — not detection-efficacy or attribution-accuracy claims.
 
 | Status | All active techniques | Used by ≥ 1 active Group |
 |---|---|---|
-| `covered` | 202 | 177 |
-| `telemetry_gap` | 168 | 118 |
+| `covered` | 217 | 188 |
+| `telemetry_gap` | 153 | 107 |
 | `translation_gap` | 3 | 3 |
 | `not_endpoint_observable` | 160 | 88 |
 | `no_sigma_rule` | 164 | 106 |
@@ -19,27 +19,27 @@ Counts only — not detection-efficacy or attribution-accuracy claims.
 ## Groups
 
 - Active Groups: 174
-- With 0 covered techniques: 9 (of which 4 have no active techniques in ATT&CK at all, so no detection work can cover them)
-- With ≥ 2 covered (necessary, not sufficient, to attribute): 157
-- With ≥ 5 covered: 133
-- With ≥ 10 covered: 97
+- With 0 covered techniques: 8 (of which 4 have no active techniques in ATT&CK at all, so no detection work can cover them)
+- With ≥ 2 covered (necessary, not sufficient, to attribute): 159
+- With ≥ 5 covered: 137
+- With ≥ 10 covered: 102
 
 ## Top 15 telemetry blockers (upper bounds; v1 = Windows endpoint)
 
 | Blocker | v1 scope | Techniques | Group-used techniques | Groups touched |
 |---|---|---|---|---|
-| `logsource:windows/ps_script` | yes | 22 | 20 | 82 |
-| `logsource:linux/process_creation` | no | 21 | 18 | 66 |
-| `logsource:aws/cloudtrail` | no | 20 | 17 | 101 |
-| `logsource:windows/security` | yes | 20 | 16 | 91 |
-| `logsource:macos/process_creation` | no | 19 | 15 | 110 |
-| `logsource:linux/auditd` | no | 16 | 12 | 55 |
-| `logsource:windows/file_event` | yes | 16 | 12 | 58 |
-| `logsource:windows/registry_set` | yes | 16 | 12 | 108 |
-| `field:ParentImage` | yes | 11 | 8 | 85 |
-| `logsource:azure/activitylogs` | no | 11 | 8 | 50 |
-| `logsource:azure/auditlogs` | no | 9 | 8 | 49 |
+| `logsource:windows/ps_script` | yes | 21 | 19 | 78 |
+| `logsource:aws/cloudtrail` | no | 18 | 15 | 92 |
+| `logsource:linux/process_creation` | no | 18 | 15 | 32 |
+| `logsource:windows/security` | yes | 17 | 14 | 79 |
+| `logsource:macos/process_creation` | no | 17 | 13 | 108 |
+| `logsource:linux/auditd` | no | 15 | 11 | 50 |
+| `logsource:windows/file_event` | yes | 12 | 9 | 22 |
+| `logsource:windows/registry_set` | yes | 12 | 8 | 24 |
+| `logsource:azure/activitylogs` | no | 10 | 7 | 50 |
 | `logsource:github/audit` | no | 8 | 7 | 19 |
-| `logsource:okta/okta` | no | 7 | 7 | 13 |
-| `logsource:/proxy` | no | 8 | 6 | 73 |
-| `logsource:gcp/gcp.audit` | no | 7 | 6 | 46 |
+| `logsource:azure/auditlogs` | no | 7 | 6 | 49 |
+| `logsource:okta/okta` | no | 6 | 6 | 12 |
+| `logsource:/proxy` | no | 7 | 5 | 43 |
+| `logsource:cisco/aaa` | no | 8 | 4 | 7 |
+| `field:Initiated` | yes | 6 | 4 | 35 |

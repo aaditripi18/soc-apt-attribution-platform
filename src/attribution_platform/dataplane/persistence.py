@@ -86,6 +86,7 @@ from attribution_platform.domain import (
     NetworkEndpoint,
     NetworkInfo,
     Observation,
+    PeInfo,
     ProcessRef,
     SourceRef,
     TimePrecision,
@@ -316,6 +317,22 @@ def _process_ref_from_dict(d: Mapping[str, Any] | None) -> ProcessRef | None:
         parent_pid=d.get("parent_pid"),
         parent_name=d.get("parent_name"),
         parent_entity_id=d.get("parent_entity_id"),
+        parent_executable=d.get("parent_executable"),
+        parent_command_line=d.get("parent_command_line"),
+        working_directory=d.get("working_directory"),
+        integrity_level=d.get("integrity_level"),
+        pe=_pe_info_from_dict(d.get("pe")),
+    )
+
+
+def _pe_info_from_dict(d: Mapping[str, Any] | None) -> PeInfo | None:
+    if d is None:
+        return None
+    return PeInfo(
+        original_file_name=d.get("original_file_name"),
+        description=d.get("description"),
+        product=d.get("product"),
+        company=d.get("company"),
     )
 
 

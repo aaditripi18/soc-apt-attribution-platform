@@ -291,7 +291,7 @@ def test_unmapped_field_in_or_branch_gives_partial_import(
             r"""
             sel:
               - Image|endswith: '\whoami.exe'
-              - OriginalFileName: 'whoami.exe'
+              - Hashes|contains: 'IMPHASH=0123456789ABCDEF'
             condition: sel
             """
         ),
@@ -302,7 +302,7 @@ def test_unmapped_field_in_or_branch_gives_partial_import(
     row = _outcome(result)
     assert row["status"] == "partial"
     assert (row["conjuncts_imported"], row["conjuncts_total"]) == (1, 2)
-    assert row["gap_reasons"] == {"telemetry_gap:field:OriginalFileName": 1}
+    assert row["gap_reasons"] == {"telemetry_gap:field:Hashes": 1}
 
 
 def test_unmapped_field_in_negated_filter_never_broadens(
@@ -318,7 +318,7 @@ def test_unmapped_field_in_negated_filter_never_broadens(
             sel:
               Image|endswith: '\rundll32.exe'
             filter:
-              ParentImage|endswith: '\explorer.exe'
+              User|contains: 'SYSTEM'
             condition: sel and not filter
             """
         ),

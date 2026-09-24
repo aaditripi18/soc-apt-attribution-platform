@@ -305,3 +305,25 @@ without changing detection results:
   rule per family) on the real core + Sigma packs; results are identical. Measured on 400 mixed process/network
   Observations: **36.6 → 8.0 ms per Observation**.
 
+
+**D10 step 1 — completed process-creation telemetry (2026-09-24).** Contract change, decided here as D5
+required (not assumed): `ProcessRef` gains `parent_executable`, `parent_command_line`, `working_directory`,
+`integrity_level` and `pe: PeInfo` (`original_file_name`, `description`, `product`, `company`; ECS
+`process.pe.*`). `parent_name` is now always a bare file name (ECS `process.parent.name`, else the basename of
+the parent executable) — fixing the step-2 ambiguity where it could hold a full path. The Sysmon adapter reads
+each value from Sysmon's own `winlog.event_data` (`ParentImage`, `OriginalFileName`, `IntegrityLevel`, …, the
+exact names Sigma's Windows fields use) and falls back to the ECS field; `IntegrityLevel` has no ECS
+equivalent. Replay fixtures and persistence carry the new fields; correlation is unaffected (it links on
+entity ids, never on names).
+
+`sigma-field-map/2` maps `ParentImage`, `ParentCommandLine`, `CurrentDirectory`, `IntegrityLevel`,
+`OriginalFileName`, `Description`, `Product`, `Company`. Still unmapped, by design: `Hashes` (Sigma matches
+Sysmon's combined string, mostly IMPHASH), `User` (combined `DOMAIN\user` string), `ParentUser`.
+
+| Measure | Before | After |
+|---|---|---|
+| Sigma rules imported fully / partially | 267 / 400 | 819 / 42 |
+| Generated rules | 4,078 | 7,830 |
+| Group-used techniques covered (of 492) | 177 | 188 |
+| Groups with ≥ 2 / ≥ 5 / ≥ 10 covered | 157 / 133 / 97 | 159 / 137 / 102 |
+| Engine cost per Observation (400 mixed) | 8.0 ms | 13.3 ms (more rules) |
