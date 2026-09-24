@@ -69,7 +69,7 @@ from attribution_platform.detection_content.sigma_field_map import (
 )
 
 IMPORTER_METHOD = "sigma-importer"
-IMPORTER_VERSION = "1.1"
+IMPORTER_VERSION = "1.2"
 
 #: ADR-0007 D6: maximum DNF conjuncts per Sigma rule. A documented,
 #: reproducibility-frozen importer input — rules above it are rejected whole.
@@ -446,7 +446,7 @@ def _import_rule(
 
     outcome.conjuncts_total = len(conjuncts)
     scope_literals = [
-        Literal(path_, "has_element", element, False, False) for path_, element in scope
+        Literal(path_, operator, value, False, False) for path_, operator, value in scope
     ]
     technique_mappings = [
         {

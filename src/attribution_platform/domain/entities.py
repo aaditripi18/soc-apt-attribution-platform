@@ -92,6 +92,41 @@ class RegistryRef:
 
 
 @dataclass(frozen=True)
+class ProcessAccessRef:
+    """One process opening a handle to another (all optional). The acting
+    process is the Observation's ``process``; the accessed one is its
+    ``target_process``. ``granted_access`` is the access mask as the source
+    rendered it (e.g. ``0x1010``); ``call_trace`` is the source's stack
+    string."""
+
+    granted_access: str | None = None
+    call_trace: str | None = None
+
+
+@dataclass(frozen=True)
+class RemoteThreadRef:
+    """A thread created by one process inside another (all optional). The
+    creating process is the Observation's ``process``; the one receiving the
+    thread is its ``target_process``."""
+
+    start_address: str | None = None
+    start_module: str | None = None
+    start_function: str | None = None
+
+
+@dataclass(frozen=True)
+class DnsRef:
+    """A DNS lookup made by a process (all optional). ``question_name`` is the
+    queried name (ECS ``dns.question.name``); ``query_status`` is the source's
+    status code as a string (Sysmon ``QueryStatus``, a Win32 status, ``0`` =
+    success); ``results`` is the source's raw answer string."""
+
+    question_name: str | None = None
+    query_status: str | None = None
+    results: str | None = None
+
+
+@dataclass(frozen=True)
 class ProcessRef:
     """A process and its immediate parent lineage (all optional).
 

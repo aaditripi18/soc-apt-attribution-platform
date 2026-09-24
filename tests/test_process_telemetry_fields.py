@@ -25,14 +25,17 @@ from attribution_platform.detection_content.sigma_field_map import FIELD_MAPS
 from attribution_platform.domain import (
     CodeSignature,
     DllRef,
+    DnsRef,
     EventMetadata,
     FileRef,
     NetworkEndpoint,
     NetworkInfo,
     Observation,
     PeInfo,
+    ProcessAccessRef,
     ProcessRef,
     RegistryRef,
+    RemoteThreadRef,
     SourceRef,
 )
 from attribution_platform.replay.detection_fixtures import _process_ref_from_dict
@@ -209,6 +212,10 @@ def _full_observation() -> Observation:
             code_signature=CodeSignature(signed=True, subject_name="a", status="a"),
         ),
         registry=RegistryRef(path="a", data="a"),
+        target_process=ProcessRef(executable="a"),
+        process_access=ProcessAccessRef(granted_access="a", call_trace="a"),
+        remote_thread=RemoteThreadRef(start_address="a", start_module="a", start_function="a"),
+        dns=DnsRef(question_name="a", query_status="a", results="a"),
         process=ProcessRef(
             executable="a",
             command_line="a",

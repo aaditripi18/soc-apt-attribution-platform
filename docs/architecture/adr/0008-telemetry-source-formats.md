@@ -196,3 +196,37 @@ and PowerShell after real 4103/4104 samples are found. D1's list is otherwise un
   real samples; 16.7 ms on the process/network benchmark with 9,955 rules — to watch as rules grow).
 - *Not yet supported, refused explicitly:* Sysmon 8, 9, 10, 22, 24 in the samples (next batch), and all
   Security/System records (D1 item 3).
+
+**Batch B — Sysmon 8 (remote thread), 10 (process access), 22 (DNS) (2026-09-25).**
+
+- *Scope rule applied:* only event types with **both** real samples and detection content. Samples in hand
+  cover 8 (1 record), 10 (309), 22 (3); Sigma has 11, 22 and 18 rules for them. Sysmon 9 (raw disk read) and
+  24 (clipboard) have samples but no detection content and stay unsupported; 6, 15, 17/18, 19–21, 23/26, 25
+  have no samples yet and stay unsupported until they do.
+- *Domain (D5):* `target_process: ProcessRef` (the process **acted upon**; `process` stays the actor),
+  `ProcessAccessRef` (granted access, call trace), `RemoteThreadRef` (start address/module/function),
+  `DnsRef` (question name, query status, results). Carried through extraction, replay fixtures, persistence and
+  index mappings.
+- *Real-data quirks handled exactly:* for 8 and 10 the actor is `Source*`, not `Image`; Sysmon spells the GUID
+  field `SourceProcessGuid` in event 8 but `SourceProcessGUID` in event 10 — each event reads its own spelling.
+  DNS events carry no `connection` type, so network-connection content never applies to a lookup.
+- *Detection wiring:* `sigma-field-map/4` adds `process_access`, `create_remote_thread`, `dns_query`; scopes
+  are now `(field, operator, value)` triples and `create_remote_thread` also requires an exact `event.action`
+  (importer 1.2). Sigma import 1,229 + 54 partial (was 1,193 + 53), 10,118 rules; coverage **210 of 498
+  Group-used techniques** (was 207).
+- *Real-data results:* the injection chain is fully identified — mavinject's process start (`…d310…`) is the
+  remote thread's source and Notepad's start (`…d210…`) its target, starting at `KERNEL32!LoadLibraryW`; DNS
+  shows the dataset fetching from `github.com` / `raw.githubusercontent.com`. The production pack still raises
+  exactly the two mavinject detections; the 309 process-access events add no false positives.
+- *Gap stated:* the samples contain **no LSASS access**, so credential-access detection (T1003.001) is proven
+  only on a hand-built record (rundll32 + `comsvcs.dll` MiniDump → "Lsass Memory Dump via Comsvcs DLL"), not on
+  real telemetry yet. A real LSASS-access sample is wanted.
+- *Performance (D2.8):* process-access events share the `process` category with ~3,900 process-creation rules;
+  the engine index now also filters on a second-condition `event.type has_element` (exact for the same reason
+  as the category index: membership tests on tuple fields never raise). Real samples: 14 → **1.1 ms/obs**; the
+  all-process-start benchmark stays ~17.7 ms/obs (genuine rule cost; field-level indexing is the future lever).
+- *Finding for the correlation layer (not changed here):* a remote thread or process access is a
+  collector-asserted interaction between two process instances, but ADR-0003's structural dimensions (same
+  observation, same process entity, parent→child lineage) do not include "acted upon". So the injected Notepad's
+  own events are not linked to the injector's group through this event. Whether to add a process-interaction
+  structural dimension is an ADR-0003 amendment for the owner to decide — recorded here so it is not lost.

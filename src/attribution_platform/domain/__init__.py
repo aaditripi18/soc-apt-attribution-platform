@@ -39,6 +39,7 @@ from attribution_platform.domain.attack import AttackRef
 from attribution_platform.domain.entities import (
     CodeSignature,
     DllRef,
+    DnsRef,
     EventMetadata,
     FileRef,
     HashSet,
@@ -46,8 +47,10 @@ from attribution_platform.domain.entities import (
     NetworkEndpoint,
     NetworkInfo,
     PeInfo,
+    ProcessAccessRef,
     ProcessRef,
     RegistryRef,
+    RemoteThreadRef,
     TimeSpan,
     UserRef,
 )
@@ -78,6 +81,9 @@ __all__ = [
     "CodeSignature",
     "DllRef",
     "RegistryRef",
+    "ProcessAccessRef",
+    "RemoteThreadRef",
+    "DnsRef",
     "HostRef",
     "UserRef",
     "NetworkEndpoint",

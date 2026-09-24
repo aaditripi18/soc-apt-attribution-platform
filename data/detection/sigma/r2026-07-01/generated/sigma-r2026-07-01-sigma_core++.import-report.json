@@ -1,11 +1,11 @@
 {
  "provenance": {
-  "importer": "sigma-importer/1.1",
+  "importer": "sigma-importer/1.2",
   "sigma_release": "r2026-07-01",
   "sigma_archive": "sigma_core++.zip",
   "sigma_archive_sha256": "469d83e1d1bbdb4d7876466ff1a728550fae5a20115b91339d58d20e894e7477",
   "pysigma_version": "1.5.1",
-  "field_map_version": "sigma-field-map/3",
+  "field_map_version": "sigma-field-map/4",
   "attack_kb_version": "enterprise-attack-19.2",
   "dnf_bound": 64,
   "license": "Sigma rules: Detection Rule License (DRL) 1.1 — see NOTICE.md"
@@ -13,31 +13,31 @@
  "summary": {
   "sigma_rules_total": 2842,
   "by_status": {
-   "imported": 1193,
-   "partial": 53,
-   "rejected": 1596
+   "imported": 1229,
+   "partial": 54,
+   "rejected": 1559
   },
   "rejected_by_reason": {
    "no_attack_mapping": 318,
-   "telemetry_gap": 1078,
-   "translation_gap": 200
+   "telemetry_gap": 1028,
+   "translation_gap": 213
   },
-  "generated_rules": 9955,
-  "attack_ids_with_imported_rule": 253,
+  "generated_rules": 10118,
+  "attack_ids_with_imported_rule": 259,
   "group_tags_ignored": 12
  },
  "gap_reasons": {
-  "translation_gap:interior_wildcard_or_empty": 281,
+  "translation_gap:interior_wildcard_or_empty": 283,
   "telemetry_gap:field:Hashes": 212,
   "telemetry_gap:field:Initiated": 173,
-  "dnf_bound_exceeded:>64": 136,
+  "dnf_bound_exceeded:>64": 147,
   "logsource:windows/ps_script": 130,
   "logsource:windows/security": 122,
   "telemetry_gap:field:CommandLine": 92,
   "translation_gap:value_type:SigmaCIDRExpression": 83,
   "logsource:linux/process_creation": 78,
+  "translation_gap:value_type:SigmaRegularExpression": 78,
   "translation_gap:single_char_wildcard": 77,
-  "translation_gap:value_type:SigmaRegularExpression": 76,
   "telemetry_gap:field:ParentImage": 70,
   "telemetry_gap:field:DestinationHostname": 59,
   "logsource:windows/system": 51,
@@ -50,10 +50,8 @@
   "logsource:windows/ps_module": 26,
   "logsource:opencanary/application": 24,
   "logsource:azure/activitylogs": 23,
-  "logsource:windows/process_access": 22,
   "logsource:azure/signinlogs": 20,
   "logsource:azure/riskdetection": 19,
-  "logsource:windows/dns_query": 18,
   "logsource:windows/pipe_created": 15,
   "logsource:windows/windefend": 14,
   "logsource:/webserver": 13,
@@ -62,7 +60,6 @@
   "logsource:linux/": 11,
   "logsource:cisco/aaa": 10,
   "logsource:m365/threat_management": 10,
-  "logsource:windows/create_remote_thread": 10,
   "logsource:windows/file_delete": 10,
   "logsource:github/audit": 9,
   "logsource:okta/okta": 9,
@@ -157,9 +154,13 @@
   "Hashes": "Sigma matches Sysmon's combined 'SHA1=..,MD5=..,IMPHASH=..' string (often IMPHASH, which no adapter captures); no exact mapping onto structured hashes",
   "Initiated": "Sysmon 'Initiated' → ECS network.direction mapping is not verified",
   "ParentUser": "the parent process's user is not captured",
+  "SourceCommandLine": "Sysmon 8 carries no source command line",
+  "SourceParentImage": "Sysmon 8 carries no source-parent image",
+  "SourceUser": "the acting process's user is not captured for process access",
   "User": "UserRef splits domain and name; Sigma matches the combined 'DOMAIN\\user' string"
  },
  "attack_ids_with_imported_rule": [
+  "S0002",
   "S0005",
   "S0029",
   "S0040",
@@ -167,6 +168,7 @@
   "S0108",
   "S0111",
   "S0190",
+  "S0349",
   "S0404",
   "S0592",
   "T1001.003",
@@ -213,6 +215,7 @@
   "T1053.005",
   "T1055",
   "T1055.001",
+  "T1055.003",
   "T1055.012",
   "T1056.002",
   "T1057",
@@ -366,15 +369,18 @@
   "T1553",
   "T1553.003",
   "T1553.004",
+  "T1554",
   "T1555",
   "T1555.003",
   "T1555.004",
+  "T1555.005",
   "T1556",
   "T1556.002",
   "T1557",
   "T1557.001",
   "T1558",
   "T1558.003",
+  "T1559.001",
   "T1559.002",
   "T1560.001",
   "T1563.002",
@@ -937,11 +943,11 @@
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/create_remote_thread/create_remote_thread_win_susp_relevant_source_image.yml",
    "logsource": "windows/create_remote_thread",
    "status": "rejected",
-   "rejection": "telemetry_gap",
+   "rejection": "translation_gap",
    "conjuncts_total": 0,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "logsource:windows/create_remote_thread": 1
+    "dnf_bound_exceeded:>64": 1
    },
    "attack_ids": [
     "T1055"
@@ -1656,13 +1662,11 @@
    "path": "rules/windows/dns_query/dns_query_win_anonymfiles_com.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/dns_query/dns_query_win_anonymfiles_com.yml",
    "logsource": "windows/dns_query",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:windows/dns_query": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 1,
+   "conjuncts_imported": 1,
+   "gap_reasons": {},
    "attack_ids": [
     "T1567.002"
    ],
@@ -2307,11 +2311,11 @@
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/process_access/proc_access_win_hktl_cobaltstrike_bof_injection_pattern.yml",
    "logsource": "windows/process_access",
    "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
+   "rejection": "translation_gap",
+   "conjuncts_total": 2,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "logsource:windows/process_access": 1
+    "translation_gap:value_type:SigmaRegularExpression": 2
    },
    "attack_ids": [
     "T1106",
@@ -4934,13 +4938,11 @@
    "path": "rules/windows/process_access/proc_access_win_svchost_susp_access_request.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/process_access/proc_access_win_svchost_susp_access_request.yml",
    "logsource": "windows/process_access",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:windows/process_access": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 3,
+   "conjuncts_imported": 3,
+   "gap_reasons": {},
    "attack_ids": [
     "T1685.001"
    ],
@@ -5131,13 +5133,11 @@
    "path": "rules/windows/process_access/proc_access_win_svchost_credential_dumping.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/process_access/proc_access_win_svchost_credential_dumping.yml",
    "logsource": "windows/process_access",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:windows/process_access": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 1,
+   "conjuncts_imported": 1,
+   "gap_reasons": {},
    "attack_ids": [
     "T1548"
    ],
@@ -6407,13 +6407,11 @@
    "path": "rules/windows/dns_query/dns_query_win_devtunnels_communication.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/dns_query/dns_query_win_devtunnels_communication.yml",
    "logsource": "windows/dns_query",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:windows/dns_query": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 1,
+   "conjuncts_imported": 1,
+   "gap_reasons": {},
    "attack_ids": [
     "T1572",
     "T1071.001"
@@ -7148,13 +7146,11 @@
    "path": "rules/windows/dns_query/dns_query_win_gup_query_to_uncommon_domains.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/dns_query/dns_query_win_gup_query_to_uncommon_domains.yml",
    "logsource": "windows/dns_query",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:windows/dns_query": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 1,
+   "conjuncts_imported": 1,
+   "gap_reasons": {},
    "attack_ids": [
     "T1557",
     "T1195.002"
@@ -9709,13 +9705,11 @@
    "path": "rules/windows/create_remote_thread/create_remote_thread_win_hktl_cactustorch.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/create_remote_thread/create_remote_thread_win_hktl_cactustorch.yml",
    "logsource": "windows/create_remote_thread",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:windows/create_remote_thread": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 5,
+   "conjuncts_imported": 5,
+   "gap_reasons": {},
    "attack_ids": [
     "T1059.007",
     "T1218.005",
@@ -11461,13 +11455,11 @@
    "path": "rules/windows/dns_query/dns_query_win_regsvr32_dns_query.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/dns_query/dns_query_win_regsvr32_dns_query.yml",
    "logsource": "windows/dns_query",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:windows/dns_query": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 1,
+   "conjuncts_imported": 1,
+   "gap_reasons": {},
    "attack_ids": [
     "T1559.001",
     "T1218.010"
@@ -11708,13 +11700,11 @@
    "path": "rules/windows/process_access/proc_access_win_werfaultsecure_msmpeng_access.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/process_access/proc_access_win_werfaultsecure_msmpeng_access.yml",
    "logsource": "windows/process_access",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:windows/process_access": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 2,
+   "conjuncts_imported": 2,
+   "gap_reasons": {},
    "attack_ids": [
     "T1685"
    ],
@@ -12318,13 +12308,11 @@
    "path": "rules/windows/process_access/proc_access_win_cmstp_execution_by_access.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/process_access/proc_access_win_cmstp_execution_by_access.yml",
    "logsource": "windows/process_access",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:windows/process_access": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 1,
+   "conjuncts_imported": 1,
+   "gap_reasons": {},
    "attack_ids": [
     "T1559.001",
     "T1218.003"
@@ -12818,11 +12806,11 @@
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/process_access/proc_access_win_susp_direct_ntopenprocess_call.yml",
    "logsource": "windows/process_access",
    "status": "rejected",
-   "rejection": "telemetry_gap",
+   "rejection": "translation_gap",
    "conjuncts_total": 0,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "logsource:windows/process_access": 1
+    "dnf_bound_exceeded:>64": 1
    },
    "attack_ids": [
     "T1106"
@@ -14286,13 +14274,11 @@
    "path": "rules/windows/process_access/proc_access_win_lsass_seclogon_access.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/process_access/proc_access_win_lsass_seclogon_access.yml",
    "logsource": "windows/process_access",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:windows/process_access": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 1,
+   "conjuncts_imported": 1,
+   "gap_reasons": {},
    "attack_ids": [
     "T1003.001"
    ],
@@ -15433,11 +15419,11 @@
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/process_access/proc_access_win_lsass_whitelisted_process_names.yml",
    "logsource": "windows/process_access",
    "status": "rejected",
-   "rejection": "telemetry_gap",
+   "rejection": "translation_gap",
    "conjuncts_total": 0,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "logsource:windows/process_access": 1
+    "dnf_bound_exceeded:>64": 1
    },
    "attack_ids": [
     "T1003.001",
@@ -15672,11 +15658,11 @@
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/dns_query/dns_query_win_remote_access_software_domains_non_browsers.yml",
    "logsource": "windows/dns_query",
    "status": "rejected",
-   "rejection": "telemetry_gap",
+   "rejection": "translation_gap",
    "conjuncts_total": 0,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "logsource:windows/dns_query": 1
+    "dnf_bound_exceeded:>64": 1
    },
    "attack_ids": [
     "T1219.002"
@@ -16068,13 +16054,11 @@
    "path": "rules/windows/process_access/proc_access_win_uac_bypass_wow64_logger.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/process_access/proc_access_win_uac_bypass_wow64_logger.yml",
    "logsource": "windows/process_access",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:windows/process_access": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 1,
+   "conjuncts_imported": 1,
+   "gap_reasons": {},
    "attack_ids": [
     "T1548.002"
    ],
@@ -19140,11 +19124,11 @@
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/process_access/proc_access_win_lsass_memdump.yml",
    "logsource": "windows/process_access",
    "status": "rejected",
-   "rejection": "telemetry_gap",
+   "rejection": "translation_gap",
    "conjuncts_total": 0,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "logsource:windows/process_access": 1
+    "dnf_bound_exceeded:>64": 1
    },
    "attack_ids": [
     "T1003.001",
@@ -19571,13 +19555,11 @@
    "path": "rules/windows/dns_query/dns_query_win_mega_nz.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/dns_query/dns_query_win_mega_nz.yml",
    "logsource": "windows/dns_query",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:windows/dns_query": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 1,
+   "conjuncts_imported": 1,
+   "gap_reasons": {},
    "attack_ids": [
     "T1567.002"
    ],
@@ -19787,13 +19769,11 @@
    "path": "rules/windows/create_remote_thread/create_remote_thread_win_hktl_cobaltstrike.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/create_remote_thread/create_remote_thread_win_hktl_cobaltstrike.yml",
    "logsource": "windows/create_remote_thread",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:windows/create_remote_thread": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 3,
+   "conjuncts_imported": 3,
+   "gap_reasons": {},
    "attack_ids": [
     "T1055.001"
    ],
@@ -20548,11 +20528,11 @@
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/create_remote_thread/create_remote_thread_win_susp_uncommon_source_image.yml",
    "logsource": "windows/create_remote_thread",
    "status": "rejected",
-   "rejection": "telemetry_gap",
+   "rejection": "translation_gap",
    "conjuncts_total": 0,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "logsource:windows/create_remote_thread": 1
+    "dnf_bound_exceeded:>64": 1
    },
    "attack_ids": [
     "T1055"
@@ -23819,13 +23799,11 @@
    "path": "rules/windows/create_remote_thread/create_remote_thread_win_keepass.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/create_remote_thread/create_remote_thread_win_keepass.yml",
    "logsource": "windows/create_remote_thread",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:windows/create_remote_thread": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 1,
+   "conjuncts_imported": 1,
+   "gap_reasons": {},
    "attack_ids": [
     "T1555.005"
    ],
@@ -23855,13 +23833,11 @@
    "path": "rules/windows/dns_query/dns_query_win_teamviewer_domain_query_by_uncommon_app.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/dns_query/dns_query_win_teamviewer_domain_query_by_uncommon_app.yml",
    "logsource": "windows/dns_query",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:windows/dns_query": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 2,
+   "conjuncts_imported": 2,
+   "gap_reasons": {},
    "attack_ids": [
     "T1219.002"
    ],
@@ -24792,13 +24768,11 @@
    "path": "rules/windows/dns_query/dns_query_win_hybridconnectionmgr_servicebus.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/dns_query/dns_query_win_hybridconnectionmgr_servicebus.yml",
    "logsource": "windows/dns_query",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:windows/dns_query": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 1,
+   "conjuncts_imported": 1,
+   "gap_reasons": {},
    "attack_ids": [
     "T1554"
    ],
@@ -24811,13 +24785,11 @@
    "path": "rules/windows/process_access/proc_access_win_hktl_littlecorporal_generated_maldoc.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/process_access/proc_access_win_hktl_littlecorporal_generated_maldoc.yml",
    "logsource": "windows/process_access",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:windows/process_access": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 1,
+   "conjuncts_imported": 1,
+   "gap_reasons": {},
    "attack_ids": [
     "T1204.002",
     "T1055.003"
@@ -24996,13 +24968,11 @@
    "path": "rules/windows/dns_query/dns_query_win_appinstaller.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/dns_query/dns_query_win_appinstaller.yml",
    "logsource": "windows/dns_query",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:windows/dns_query": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 1,
+   "conjuncts_imported": 1,
+   "gap_reasons": {},
    "attack_ids": [
     "T1105"
    ],
@@ -31077,13 +31047,11 @@
    "path": "rules/windows/create_remote_thread/create_remote_thread_win_powershell_susp_targets.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/create_remote_thread/create_remote_thread_win_powershell_susp_targets.yml",
    "logsource": "windows/create_remote_thread",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:windows/create_remote_thread": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 4,
+   "conjuncts_imported": 4,
+   "gap_reasons": {},
    "attack_ids": [
     "T1218.011",
     "T1059.001"
@@ -31560,13 +31528,11 @@
    "path": "rules/windows/process_access/proc_access_win_lsass_dump_keyword_image.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/process_access/proc_access_win_lsass_dump_keyword_image.yml",
    "logsource": "windows/process_access",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:windows/process_access": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 26,
+   "conjuncts_imported": 26,
+   "gap_reasons": {},
    "attack_ids": [
     "T1003.001",
     "S0002"
@@ -32492,13 +32458,11 @@
    "path": "rules/windows/process_access/proc_access_win_susp_dbgcore_dbghelp_load.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/process_access/proc_access_win_susp_dbgcore_dbghelp_load.yml",
    "logsource": "windows/process_access",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:windows/process_access": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 36,
+   "conjuncts_imported": 36,
+   "gap_reasons": {},
    "attack_ids": [
     "T1003.001",
     "T1685"
@@ -33005,11 +32969,11 @@
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/process_access/proc_access_win_lsass_susp_access_flag.yml",
    "logsource": "windows/process_access",
    "status": "rejected",
-   "rejection": "telemetry_gap",
+   "rejection": "translation_gap",
    "conjuncts_total": 0,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "logsource:windows/process_access": 1
+    "dnf_bound_exceeded:>64": 1
    },
    "attack_ids": [
     "T1003.001",
@@ -33061,11 +33025,11 @@
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/create_remote_thread/create_remote_thread_win_susp_uncommon_target_image.yml",
    "logsource": "windows/create_remote_thread",
    "status": "rejected",
-   "rejection": "telemetry_gap",
+   "rejection": "translation_gap",
    "conjuncts_total": 0,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "logsource:windows/create_remote_thread": 1
+    "dnf_bound_exceeded:>64": 1
    },
    "attack_ids": [
     "T1055.003"
@@ -33130,13 +33094,11 @@
    "path": "rules/windows/dns_query/dns_query_win_cloudflared_communication.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/dns_query/dns_query_win_cloudflared_communication.yml",
    "logsource": "windows/dns_query",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:windows/dns_query": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 4,
+   "conjuncts_imported": 4,
+   "gap_reasons": {},
    "attack_ids": [
     "T1572",
     "T1071.001"
@@ -33614,13 +33576,11 @@
    "path": "rules/windows/process_access/proc_access_win_lsass_dump_comsvcs_dll.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/process_access/proc_access_win_lsass_dump_comsvcs_dll.yml",
    "logsource": "windows/process_access",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:windows/process_access": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 1,
+   "conjuncts_imported": 1,
+   "gap_reasons": {},
    "attack_ids": [
     "T1003.001"
    ],
@@ -34639,13 +34599,11 @@
    "path": "rules/windows/process_access/proc_access_win_lsass_remote_access_trough_winrm.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/process_access/proc_access_win_lsass_remote_access_trough_winrm.yml",
    "logsource": "windows/process_access",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:windows/process_access": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 1,
+   "conjuncts_imported": 1,
+   "gap_reasons": {},
    "attack_ids": [
     "T1021.006",
     "T1003.001",
@@ -36100,13 +36058,11 @@
    "path": "rules/windows/process_access/proc_access_win_hktl_handlekatz_lsass_access.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/process_access/proc_access_win_hktl_handlekatz_lsass_access.yml",
    "logsource": "windows/process_access",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:windows/process_access": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 1,
+   "conjuncts_imported": 1,
+   "gap_reasons": {},
    "attack_ids": [
     "T1106",
     "T1003.001"
@@ -36644,13 +36600,11 @@
    "path": "rules/windows/dns_query/dns_query_win_vscode_tunnel_communication.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/dns_query/dns_query_win_vscode_tunnel_communication.yml",
    "logsource": "windows/dns_query",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:windows/dns_query": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 1,
+   "conjuncts_imported": 1,
+   "gap_reasons": {},
    "attack_ids": [
     "T1071.001"
    ],
@@ -36883,13 +36837,11 @@
    "path": "rules/windows/dns_query/dns_query_win_tor_onion_domain_query.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/dns_query/dns_query_win_tor_onion_domain_query.yml",
    "logsource": "windows/dns_query",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:windows/dns_query": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 36,
+   "conjuncts_imported": 36,
+   "gap_reasons": {},
    "attack_ids": [
     "T1090.003"
    ],
@@ -39138,13 +39090,11 @@
    "path": "rules/windows/dns_query/dns_query_win_finger.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/dns_query/dns_query_win_finger.yml",
    "logsource": "windows/dns_query",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:windows/dns_query": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 1,
+   "conjuncts_imported": 1,
+   "gap_reasons": {},
    "attack_ids": [
     "T1071.004",
     "T1059.003"
@@ -39354,13 +39304,11 @@
    "path": "rules/windows/create_remote_thread/create_remote_thread_win_ttdinjec.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/create_remote_thread/create_remote_thread_win_ttdinjec.yml",
    "logsource": "windows/create_remote_thread",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:windows/create_remote_thread": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 1,
+   "conjuncts_imported": 1,
+   "gap_reasons": {},
    "attack_ids": [
     "T1127"
    ],
@@ -42525,11 +42473,11 @@
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/process_access/proc_access_win_hktl_generic_access.yml",
    "logsource": "windows/process_access",
    "status": "rejected",
-   "rejection": "telemetry_gap",
+   "rejection": "translation_gap",
    "conjuncts_total": 0,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "logsource:windows/process_access": 1
+    "dnf_bound_exceeded:>64": 1
    },
    "attack_ids": [
     "T1003.001",
@@ -42809,13 +42757,11 @@
    "path": "rules/windows/process_access/proc_access_win_hktl_sysmonente.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/process_access/proc_access_win_hktl_sysmonente.yml",
    "logsource": "windows/process_access",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:windows/process_access": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 7,
+   "conjuncts_imported": 7,
+   "gap_reasons": {},
    "attack_ids": [
     "T1685.001"
    ],
@@ -45299,11 +45245,11 @@
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/dns_query/dns_query_win_domain_azurewebsites.yml",
    "logsource": "windows/dns_query",
    "status": "rejected",
-   "rejection": "telemetry_gap",
+   "rejection": "translation_gap",
    "conjuncts_total": 0,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "logsource:windows/dns_query": 1
+    "dnf_bound_exceeded:>64": 1
    },
    "attack_ids": [
     "T1219.002"
@@ -46519,13 +46465,11 @@
    "path": "rules/windows/process_access/proc_access_win_lsass_werfault.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/process_access/proc_access_win_lsass_werfault.yml",
    "logsource": "windows/process_access",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:windows/process_access": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 1,
+   "conjuncts_imported": 1,
+   "gap_reasons": {},
    "attack_ids": [
     "T1003.001",
     "S0002"
@@ -46840,13 +46784,11 @@
    "path": "rules/windows/dns_query/dns_query_win_kerberos_coercion_via_dns_object_spoofing.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/dns_query/dns_query_win_kerberos_coercion_via_dns_object_spoofing.yml",
    "logsource": "windows/dns_query",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:windows/dns_query": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 1,
+   "conjuncts_imported": 1,
+   "gap_reasons": {},
    "attack_ids": [
     "T1557.001",
     "T1187"
@@ -47802,11 +47744,11 @@
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/dns_query/dns_query_win_susp_external_ip_lookup.yml",
    "logsource": "windows/dns_query",
    "status": "rejected",
-   "rejection": "telemetry_gap",
+   "rejection": "translation_gap",
    "conjuncts_total": 0,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "logsource:windows/dns_query": 1
+    "dnf_bound_exceeded:>64": 1
    },
    "attack_ids": [
     "T1590"
@@ -48929,11 +48871,11 @@
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/create_remote_thread/create_remote_thread_win_susp_password_dumper_lsass.yml",
    "logsource": "windows/create_remote_thread",
    "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
+   "rejection": "translation_gap",
+   "conjuncts_total": 1,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "logsource:windows/create_remote_thread": 1
+    "translation_gap:interior_wildcard_or_empty": 1
    },
    "attack_ids": [
     "T1003.001",
@@ -49182,13 +49124,11 @@
    "path": "rules/windows/dns_query/dns_query_win_mal_cobaltstrike.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/dns_query/dns_query_win_mal_cobaltstrike.yml",
    "logsource": "windows/dns_query",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:windows/dns_query": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 3,
+   "conjuncts_imported": 3,
+   "gap_reasons": {},
    "attack_ids": [
     "T1071.004"
    ],
@@ -50395,12 +50335,12 @@
    "path": "rules/windows/process_access/proc_access_win_lsass_python_based_tool.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/process_access/proc_access_win_lsass_python_based_tool.yml",
    "logsource": "windows/process_access",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
+   "status": "partial",
+   "rejection": null,
+   "conjuncts_total": 2,
+   "conjuncts_imported": 1,
    "gap_reasons": {
-    "logsource:windows/process_access": 1
+    "translation_gap:interior_wildcard_or_empty": 1
    },
    "attack_ids": [
     "T1003.001",
@@ -50415,13 +50355,11 @@
    "path": "rules/windows/dns_query/dns_query_win_common_malware_hosting_services.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/dns_query/dns_query_win_common_malware_hosting_services.yml",
    "logsource": "windows/dns_query",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:windows/dns_query": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 7,
+   "conjuncts_imported": 7,
+   "gap_reasons": {},
    "attack_ids": [
     "T1071.004"
    ],
@@ -50886,13 +50824,11 @@
    "path": "rules/windows/process_access/proc_access_win_uac_bypass_editionupgrademanagerobj.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/process_access/proc_access_win_uac_bypass_editionupgrademanagerobj.yml",
    "logsource": "windows/process_access",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:windows/process_access": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 1,
+   "conjuncts_imported": 1,
+   "gap_reasons": {},
    "attack_ids": [
     "T1548.002"
    ],
@@ -50939,13 +50875,11 @@
    "path": "rules/windows/create_remote_thread/create_remote_thread_win_powershell_lsass.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/create_remote_thread/create_remote_thread_win_powershell_lsass.yml",
    "logsource": "windows/create_remote_thread",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:windows/create_remote_thread": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 2,
+   "conjuncts_imported": 2,
+   "gap_reasons": {},
    "attack_ids": [
     "T1003.001"
    ],

@@ -31,7 +31,9 @@ from attribution_platform.domain import (
     NetworkEndpoint,
     NetworkInfo,
     Observation,
+    ProcessAccessRef,
     ProcessRef,
+    RemoteThreadRef,
     SourceRef,
 )
 from attribution_platform.extraction import RuleRef
@@ -153,6 +155,31 @@ def _mixed_observations() -> list[Observation]:
                 executable="C:\\Windows\\System32\\whoami.exe", command_line="whoami /all"
             ),
         ),
+        # process events of other types: the second-level (event.type) filter
+        _obs(
+            "process-access",
+            event=EventMetadata(kind="event", category=("process",), type=("access",)),
+            process=ProcessRef(executable="C:\\Windows\\System32\\rundll32.exe"),
+            target_process=ProcessRef(executable="C:\\Windows\\system32\\lsass.exe"),
+            process_access=ProcessAccessRef(granted_access="0x1fffff", call_trace="comsvcs.dll"),
+        ),
+        _obs(
+            "remote-thread",
+            event=EventMetadata(
+                kind="event",
+                category=("process",),
+                type=("change",),
+                action="create_remote_thread",
+            ),
+            process=ProcessRef(executable="C:\\Windows\\System32\\mavinject.exe"),
+            target_process=ProcessRef(executable="C:\\Windows\\System32\\notepad.exe"),
+            remote_thread=RemoteThreadRef(start_function="LoadLibraryW"),
+        ),
+        _obs(
+            "upper-type",
+            event=EventMetadata(kind="event", category=("process",), type=("START",)),
+            process=ProcessRef(executable="C:\\Windows\\System32\\whoami.exe"),
+        ),
     ]
 
 
@@ -168,7 +195,7 @@ def test_indexed_engine_equals_reference_on_real_packs(
     fast = DetectionEngine(rules=all_rules).evaluate(observations)
     assert fast == _reference_evaluate(all_rules, observations)
     fired = {r.supporting_observation_ids[0] for r in fast}
-    assert {"whoami", "encoded-ps", "certutil"} <= fired  # the check is not vacuous
+    assert {"whoami", "encoded-ps", "certutil", "process-access"} <= fired  # not vacuous
     assert "benign" not in fired
 
 

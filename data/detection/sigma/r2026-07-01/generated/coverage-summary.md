@@ -9,8 +9,8 @@ Counts only — not detection-efficacy or attribution-accuracy claims.
 
 | Status | All active techniques | Used by ≥ 1 active Group |
 |---|---|---|
-| `covered` | 244 | 207 |
-| `telemetry_gap` | 126 | 89 |
+| `covered` | 248 | 210 |
+| `telemetry_gap` | 122 | 86 |
 | `translation_gap` | 3 | 3 |
 | `not_endpoint_observable` | 160 | 91 |
 | `no_sigma_rule` | 164 | 108 |
@@ -33,7 +33,7 @@ Counts only — not detection-efficacy or attribution-accuracy claims.
 | `logsource:macos/process_creation` | no | 16 | 12 | 110 |
 | `logsource:windows/ps_script` | yes | 14 | 12 | 73 |
 | `logsource:linux/auditd` | no | 15 | 11 | 51 |
-| `logsource:windows/security` | yes | 12 | 9 | 78 |
+| `logsource:windows/security` | yes | 11 | 8 | 77 |
 | `logsource:azure/activitylogs` | no | 10 | 7 | 52 |
 | `logsource:github/audit` | no | 6 | 6 | 20 |
 | `logsource:okta/okta` | no | 6 | 6 | 14 |

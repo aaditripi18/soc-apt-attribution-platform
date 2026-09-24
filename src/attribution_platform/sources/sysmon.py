@@ -24,9 +24,10 @@ arrives, unlike G0.4's ``SyntheticRecord`` (which invented a fictional
 minimal shape because the synthetic source has no real one).
 
 **Scope — a growing, explicit set of Sysmon event types (ADR-0008 Wave 1):**
-Event IDs 1 (Process Create), 3 (Network Connection), 7 (Image Load), 11
-(File Create), 12 (Registry key/value create or delete) and 13 (Registry
-value set). Both real-world record shapes are accepted: collector records
+Event IDs 1 (Process Create), 3 (Network Connection), 7 (Image Load), 8
+(CreateRemoteThread), 10 (Process Access), 11 (File Create), 12 (Registry
+key/value create or delete), 13 (Registry value set) and 22 (DNS query).
+Both real-world record shapes are accepted: collector records
 (ECS + ``winlog`` envelope) and flat Windows-EventData records (e.g. OTRF).
 The original G0.11 scope was Event ID 1 (Process Create) and Event ID 3
 (Network Connection).
@@ -66,6 +67,7 @@ from typing import Any
 from attribution_platform.domain import (
     CodeSignature,
     DllRef,
+    DnsRef,
     EventMetadata,
     FileRef,
     HostRef,
@@ -73,8 +75,10 @@ from attribution_platform.domain import (
     NetworkInfo,
     Observation,
     PeInfo,
+    ProcessAccessRef,
     ProcessRef,
     RegistryRef,
+    RemoteThreadRef,
     SourceRef,
     UserRef,
 )
@@ -89,19 +93,35 @@ SYSMON_CHANNEL = "Microsoft-Windows-Sysmon/Operational"
 PROCESS_CREATE_EVENT_ID = 1
 NETWORK_CONNECT_EVENT_ID = 3
 IMAGE_LOAD_EVENT_ID = 7
+CREATE_REMOTE_THREAD_EVENT_ID = 8
+PROCESS_ACCESS_EVENT_ID = 10
 FILE_CREATE_EVENT_ID = 11
 REGISTRY_OBJECT_EVENT_ID = 12  # key/value created or deleted
 REGISTRY_VALUE_SET_EVENT_ID = 13
+DNS_QUERY_EVENT_ID = 22
 
 #: The Sysmon event IDs this adapter understands; anything else fails closed.
 _SUPPORTED_EVENT_IDS = (
     PROCESS_CREATE_EVENT_ID,
     NETWORK_CONNECT_EVENT_ID,
     IMAGE_LOAD_EVENT_ID,
+    CREATE_REMOTE_THREAD_EVENT_ID,
+    PROCESS_ACCESS_EVENT_ID,
     FILE_CREATE_EVENT_ID,
     REGISTRY_OBJECT_EVENT_ID,
     REGISTRY_VALUE_SET_EVENT_ID,
+    DNS_QUERY_EVENT_ID,
 )
+
+#: Neutral ``event.action`` tokens for event types whose detection scope needs
+#: an exact action (the collector's own action text varies by collector).
+CREATE_REMOTE_THREAD_ACTION = "create_remote_thread"
+PROCESS_ACCESS_ACTION = "process_access"
+DNS_QUERY_ACTION = "dns_query"
+
+#: The process-GUID EventData names differ by event type in real Sysmon output:
+#: event 8 writes ``SourceProcessGuid``, event 10 ``SourceProcessGUID``.
+_GUID_SUFFIX = {CREATE_REMOTE_THREAD_EVENT_ID: "Guid", PROCESS_ACCESS_EVENT_ID: "GUID"}
 
 #: Sysmon registry ``EventType`` -> ECS ``event.type``, per event ID.
 _REGISTRY_EVENT_TYPES: Mapping[int, Mapping[str, str]] = {
@@ -386,6 +406,53 @@ def _network_info(record: Mapping[str, Any]) -> NetworkInfo | None:
     )
 
 
+def _actor_and_target(
+    record: Mapping[str, Any], event_id: int
+) -> tuple[ProcessRef | None, ProcessRef]:
+    """Source (acting) and target processes of a process-access or
+    remote-thread event, from Sysmon's ``Source*``/``Target*`` EventData (with
+    the event type's own GUID spelling). The acting process falls back to the
+    collector's ECS ``process.*``; the target has no ECS equivalent."""
+    guid = _GUID_SUFFIX[event_id]
+
+    def process(prefix: str, ecs: bool) -> ProcessRef | None:
+        path = ("process",) if ecs else ()
+        pid = _event_data_or_ecs(record, f"{prefix}ProcessId", *path, *(("pid",) if ecs else ()))
+        executable = _event_data_or_ecs(
+            record, f"{prefix}Image", *path, *(("executable",) if ecs else ())
+        )
+        entity_id = _event_data_or_ecs(
+            record, f"{prefix}Process{guid}", *path, *(("entity_id",) if ecs else ())
+        )
+        if pid is None and executable is None and entity_id is None:
+            return None
+        return ProcessRef(
+            pid=_as_int(pid, f"{prefix}ProcessId") if pid is not None else None,
+            name=_basename(executable),
+            executable=executable,
+            entity_id=entity_id,
+        )
+
+    target = process("Target", ecs=False)
+    if target is None:
+        raise SourceAdapterError(
+            f"SysmonSourceAdapter: event {event_id} without any target process field"
+        )
+    return process("Source", ecs=True), target
+
+
+def _dns_ref(record: Mapping[str, Any]) -> DnsRef:
+    name = _event_data_or_ecs(record, "QueryName", "dns", "question", "name")
+    if not isinstance(name, str) or not name.strip():
+        raise SourceAdapterError("SysmonSourceAdapter: DNS query event without QueryName")
+    status = _get(record, "winlog", "event_data", "QueryStatus")
+    return DnsRef(
+        question_name=name,
+        query_status=str(status) if status is not None else None,
+        results=_get(record, "winlog", "event_data", "QueryResults"),
+    )
+
+
 def _signed(raw: Any) -> bool | None:
     if raw is None:
         return None
@@ -516,6 +583,41 @@ class SysmonSourceAdapter:
                 action=default_action or "Image loaded (rule: ImageLoad)",
             )
             entities["dll"] = _dll_ref(record)
+        elif event_id in (CREATE_REMOTE_THREAD_EVENT_ID, PROCESS_ACCESS_EVENT_ID):
+            entities["process"], entities["target_process"] = _actor_and_target(record, event_id)
+            if event_id == PROCESS_ACCESS_EVENT_ID:
+                event = EventMetadata(
+                    kind="event",
+                    category=("process",),
+                    type=("access",),
+                    action=PROCESS_ACCESS_ACTION,
+                )
+                entities["process_access"] = ProcessAccessRef(
+                    granted_access=_get(record, "winlog", "event_data", "GrantedAccess"),
+                    call_trace=_get(record, "winlog", "event_data", "CallTrace"),
+                )
+            else:
+                event = EventMetadata(
+                    kind="event",
+                    category=("process",),
+                    type=("change",),
+                    action=CREATE_REMOTE_THREAD_ACTION,
+                )
+                entities["remote_thread"] = RemoteThreadRef(
+                    start_address=_get(record, "winlog", "event_data", "StartAddress"),
+                    start_module=_get(record, "winlog", "event_data", "StartModule"),
+                    start_function=_get(record, "winlog", "event_data", "StartFunction"),
+                )
+        elif event_id == DNS_QUERY_EVENT_ID:
+            # Deliberately no "connection" type: a lookup is not a connection, so
+            # network_connection detection content never applies to it.
+            event = EventMetadata(
+                kind="event",
+                category=("network",),
+                type=("protocol", "info"),
+                action=DNS_QUERY_ACTION,
+            )
+            entities["dns"] = _dns_ref(record)
         elif event_id == FILE_CREATE_EVENT_ID:
             event = EventMetadata(
                 kind="event",

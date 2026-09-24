@@ -36,12 +36,15 @@ from datetime import datetime
 
 from attribution_platform.domain.entities import (
     DllRef,
+    DnsRef,
     EventMetadata,
     FileRef,
     HostRef,
     NetworkInfo,
+    ProcessAccessRef,
     ProcessRef,
     RegistryRef,
+    RemoteThreadRef,
     UserRef,
 )
 from attribution_platform.domain.enums import TimePrecision
@@ -69,8 +72,10 @@ class Observation:
     - ``timestamp_precision`` — declared precision of ``timestamp``.
     - ``event`` — ECS-style event category/type/action metadata.
     - ``host`` / ``user`` / ``process`` / ``network`` / ``file`` / ``dll`` /
-      ``registry`` — entity groups (``dll``/``registry`` added by ADR-0008
-      Wave 1: image-load and registry events).
+      ``registry`` / ``target_process`` / ``process_access`` / ``remote_thread``
+      / ``dns`` — entity groups (added by ADR-0008 Wave 1 for image-load,
+      registry, process-access, remote-thread and DNS events;
+      ``target_process`` is the process *acted upon*, ``process`` the actor).
 
     ``schema_version`` defaults to the current contract version (a static
     fact about this code, not fabricated data).
@@ -88,6 +93,10 @@ class Observation:
     file: FileRef | None = None
     dll: DllRef | None = None
     registry: RegistryRef | None = None
+    target_process: ProcessRef | None = None
+    process_access: ProcessAccessRef | None = None
+    remote_thread: RemoteThreadRef | None = None
+    dns: DnsRef | None = None
     schema_version: str = field(default=OBSERVATION_SCHEMA_VERSION)
 
     def __post_init__(self) -> None:

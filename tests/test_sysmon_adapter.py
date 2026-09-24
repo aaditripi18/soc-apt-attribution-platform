@@ -176,8 +176,8 @@ def test_missing_or_malformed_required_fields_rejected(
 
 def test_unsupported_event_id_fails_closed() -> None:
     adapter = SysmonSourceAdapter()
-    # Event 10 (process access) is not supported yet (ADR-0008 Wave 1, next batch).
-    event = _process_create_event(winlog={"event_id": 10, "record_id": 1, "computer_name": "H"})
+    # Event 9 (raw disk read) is deliberately unsupported: no detection content uses it.
+    event = _process_create_event(winlog={"event_id": 9, "record_id": 1, "computer_name": "H"})
     with pytest.raises(SourceAdapterError, match="unsupported winlog.event_id"):
         adapter.to_observations(event)
 

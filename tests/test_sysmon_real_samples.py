@@ -92,7 +92,7 @@ def test_sample_matches_pinned_hash(entry: dict[str, Any]) -> None:
 
 
 def test_every_supported_sysmon_record_converts_and_the_rest_are_refused() -> None:
-    supported = (1, 3, 7, 11, 12, 13)
+    supported = (1, 3, 7, 8, 10, 11, 12, 13, 22)
     converted: collections.Counter[int] = collections.Counter()
     refusals: collections.Counter[str] = collections.Counter()
     for path in (HTTPLISTENER, MAVINJECT):
@@ -105,9 +105,9 @@ def test_every_supported_sysmon_record_converts_and_the_rest_are_refused() -> No
         ]
         assert len(observations) == len(expected)  # nothing supported is lost
         converted.update(r["EventID"] for r in expected)
-    assert converted == {7: 108, 12: 85, 13: 52, 11: 4, 1: 2, 3: 2}
+    assert converted == {10: 309, 7: 108, 12: 85, 13: 52, 11: 4, 22: 3, 1: 2, 3: 2, 8: 1}
     sysmon_refusals = {k for k in refusals if k.startswith("Microsoft-Windows-Sysmon")}
-    assert {k.split(":")[1] for k in sysmon_refusals} == {"8", "9", "10", "22", "24"}
+    assert {k.split(":")[1] for k in sysmon_refusals} == {"9", "24"}
     for key in sysmon_refusals:
         assert key.endswith("unsupported winlog.event_id " + key.split(":")[1])
     other = {k for k in refusals if not k.startswith("Microsoft-Windows-Sysmon")}
@@ -208,11 +208,11 @@ def test_derived_record_ids_are_deterministic_and_unique() -> None:
             o.raw_reference.source_event_id for o in again
         ]
         ids += [o.observation_id for o in observations]
-    # Flat records carry no record id: byte-identical records (here 21 repeated
-    # Sysmon 12 CreateKey records) are indistinguishable and share one id, i.e.
+    # Flat records carry no record id: byte-identical records (here 26 repeated
+    # Sysmon 12/10 records) are indistinguishable and share one id, i.e.
     # they are one observation. Repetition never changes the decision basis
     # (distinct features, ADR-0005 Amendment B); this is recorded in ADR-0008.
-    assert (len(ids), len(set(ids))) == (253, 232)
+    assert (len(ids), len(set(ids))) == (566, 540)
     assert all(i.startswith("sysmon:WORKSTATION5:sha256:") for i in ids)
 
 
@@ -342,3 +342,108 @@ def test_production_sigma_pack_detects_the_documented_injection(
     assert len(fired_on) == 1
     listener, _ = _convert_all(HTTPLISTENER)
     assert engine.evaluate(listener) == ()
+
+
+# ===========================================================================
+# Batch B — process access (10), remote thread (8), DNS (22)
+# ===========================================================================
+
+
+def test_remote_thread_golden_fields_and_injection_chain() -> None:
+    record = _first(MAVINJECT, 8)
+    (obs,) = ADAPTER.to_observations(record)
+    assert obs.process is not None and obs.target_process is not None
+    assert obs.process.executable == "C:\\Windows\\System32\\mavinject.exe"
+    assert obs.process.entity_id == "{39e4a257-e328-5f90-d310-000000000700}"  # Source*Guid
+    assert obs.target_process.executable == "C:\\Windows\\System32\\notepad.exe"
+    assert obs.target_process.entity_id == "{39e4a257-e321-5f90-d210-000000000700}"
+    assert obs.remote_thread is not None
+    assert obs.remote_thread.start_function == "LoadLibraryW"
+    assert obs.remote_thread.start_module == "C:\\windows\\System32\\KERNEL32.DLL"
+    assert obs.event is not None
+    assert (obs.event.category, obs.event.type, obs.event.action) == (
+        ("process",),
+        ("change",),
+        "create_remote_thread",
+    )
+    # Both ends are the same process instances their own process-start events describe.
+    starts = {
+        o.process.executable: o.process.entity_id
+        for o in _convert_all(MAVINJECT)[0]
+        if o.event is not None
+        and o.event.category == ("process",)
+        and o.event.type == ("start",)
+        and o.process is not None
+    }
+    assert starts["C:\\Windows\\System32\\mavinject.exe"] == obs.process.entity_id
+    assert starts["C:\\Windows\\System32\\notepad.exe"] == obs.target_process.entity_id
+
+
+def test_process_access_golden_fields_use_event_10_guid_spelling() -> None:
+    record = _first(HTTPLISTENER, 10)
+    assert "SourceProcessGUID" in record and "SourceProcessGuid" not in record
+    (obs,) = ADAPTER.to_observations(record)
+    assert obs.process is not None and obs.target_process is not None
+    assert obs.process.entity_id == record["SourceProcessGUID"]
+    assert obs.target_process.entity_id == record["TargetProcessGUID"]
+    assert obs.process.pid == int(record["SourceProcessId"])
+    assert obs.target_process.executable == record["TargetImage"]
+    assert obs.process_access is not None
+    assert obs.process_access.granted_access == record["GrantedAccess"]
+    assert obs.process_access.call_trace == record["CallTrace"]
+    assert obs.event is not None and obs.event.type == ("access",)
+
+
+def test_dns_query_golden_fields() -> None:
+    names = sorted(
+        o.dns.question_name
+        for path in (HTTPLISTENER, MAVINJECT)
+        for o in _convert_all(path)[0]
+        if o.dns is not None and o.dns.question_name is not None
+    )
+    assert names == ["WORKSTATION5", "github.com", "raw.githubusercontent.com"]
+    record = _first(HTTPLISTENER, 22)
+    (obs,) = ADAPTER.to_observations(record)
+    assert obs.dns is not None
+    assert (obs.dns.query_status, obs.dns.results) == ("0", record["QueryResults"])
+    assert obs.event is not None
+    assert "connection" not in obs.event.type  # a lookup is not a network connection
+
+
+@pytest.mark.parametrize(
+    ("record", "match"),
+    [
+        (_flat(10, SourceImage="C:\\a.exe", SourceProcessId="1"), "without any target process"),
+        (_flat(8, SourceImage="C:\\a.exe", SourceProcessId="1"), "without any target process"),
+        (_flat(22), "without QueryName"),
+    ],
+)
+def test_batch_b_fail_closed(record: dict[str, Any], match: str) -> None:
+    with pytest.raises(SourceAdapterError, match=match):
+        ADAPTER.to_observations(record)
+
+
+def test_lsass_dump_via_comsvcs_is_detected(knowledge: AttackKnowledge) -> None:
+    """Hand-built (the OTRF samples contain no LSASS access): a flat Sysmon 10
+    record of rundll32 reading LSASS through comsvcs.dll MiniDump — a common
+    real-world credential-theft procedure — must fire the real Sigma rule
+    'Lsass Memory Dump via Comsvcs DLL' and map to T1003.001."""
+    record = _flat(
+        10,
+        SourceImage="C:\\Windows\\System32\\rundll32.exe",
+        SourceProcessId="4242",
+        SourceProcessGUID="{00000000-0000-0000-0000-000000004242}",
+        TargetImage="C:\\Windows\\system32\\lsass.exe",
+        TargetProcessId="700",
+        TargetProcessGUID="{00000000-0000-0000-0000-000000000700}",
+        GrantedAccess="0x1fffff",
+        CallTrace="C:\\Windows\\SYSTEM32\\ntdll.dll+9d234|C:\\Windows\\System32\\comsvcs.dll+3c3f5",
+    )
+    (obs,) = ADAPTER.to_observations(record)
+    pack = load_rule_pack(SIGMA_PACK, knowledge=knowledge)
+    family = "sigma:a49fa4d5-11db-418c-8473-1e014a8dd462"
+    engine = DetectionEngine(rules=tuple(r for r in pack.rules if r.rule_family == family))
+    (detection,) = engine.evaluate([obs])
+    assert [m.attack_ref.external_id for m in detection.technique_mappings] == ["T1003.001"]
+    benign = {**record, "CallTrace": "C:\\Windows\\SYSTEM32\\ntdll.dll+9d234"}
+    assert engine.evaluate(ADAPTER.to_observations(benign)) == ()

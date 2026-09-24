@@ -77,6 +77,7 @@ from attribution_platform.domain import (
     CodeSignature,
     DerivationProvenance,
     DllRef,
+    DnsRef,
     DomainContractError,
     EventMetadata,
     Evidence,
@@ -89,8 +90,10 @@ from attribution_platform.domain import (
     NetworkInfo,
     Observation,
     PeInfo,
+    ProcessAccessRef,
     ProcessRef,
     RegistryRef,
+    RemoteThreadRef,
     SourceRef,
     TimePrecision,
     TimeSpan,
@@ -177,6 +180,10 @@ def _observation_from_document(doc: Mapping[str, Any]) -> Observation:
             file=_file_ref_from_dict(doc.get("file")),
             dll=_dll_ref_from_dict(doc.get("dll")),
             registry=_registry_ref_from_dict(doc.get("registry")),
+            target_process=_process_ref_from_dict(doc.get("target_process")),
+            process_access=_process_access_from_dict(doc.get("process_access")),
+            remote_thread=_remote_thread_from_dict(doc.get("remote_thread")),
+            dns=_dns_ref_from_dict(doc.get("dns")),
             schema_version=schema_version,
         )
     except ElasticIntegrationError:
@@ -364,6 +371,32 @@ def _dll_ref_from_dict(d: Mapping[str, Any] | None) -> DllRef | None:
             if signature is not None
             else None
         ),
+    )
+
+
+def _process_access_from_dict(d: Mapping[str, Any] | None) -> ProcessAccessRef | None:
+    if d is None:
+        return None
+    return ProcessAccessRef(granted_access=d.get("granted_access"), call_trace=d.get("call_trace"))
+
+
+def _remote_thread_from_dict(d: Mapping[str, Any] | None) -> RemoteThreadRef | None:
+    if d is None:
+        return None
+    return RemoteThreadRef(
+        start_address=d.get("start_address"),
+        start_module=d.get("start_module"),
+        start_function=d.get("start_function"),
+    )
+
+
+def _dns_ref_from_dict(d: Mapping[str, Any] | None) -> DnsRef | None:
+    if d is None:
+        return None
+    return DnsRef(
+        question_name=d.get("question_name"),
+        query_status=d.get("query_status"),
+        results=d.get("results"),
     )
 
 

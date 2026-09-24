@@ -37,12 +37,15 @@ from datetime import datetime
 
 from attribution_platform.domain import (
     DllRef,
+    DnsRef,
     EventMetadata,
     FileRef,
     HostRef,
     NetworkInfo,
+    ProcessAccessRef,
     ProcessRef,
     RegistryRef,
+    RemoteThreadRef,
     SourceRef,
     TimePrecision,
     UserRef,
@@ -101,6 +104,10 @@ class MatchedEvent:
     file: FileRef | None = None
     dll: DllRef | None = None
     registry: RegistryRef | None = None
+    target_process: ProcessRef | None = None
+    process_access: ProcessAccessRef | None = None
+    remote_thread: RemoteThreadRef | None = None
+    dns: DnsRef | None = None
 
     def __post_init__(self) -> None:
         _require_nonempty_str(self.observation_id, "MatchedEvent.observation_id")

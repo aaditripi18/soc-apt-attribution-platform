@@ -65,6 +65,7 @@ from typing import Any
 from attribution_platform.domain import (
     CodeSignature,
     DllRef,
+    DnsRef,
     EventMetadata,
     FileRef,
     HashSet,
@@ -72,8 +73,10 @@ from attribution_platform.domain import (
     NetworkEndpoint,
     NetworkInfo,
     PeInfo,
+    ProcessAccessRef,
     ProcessRef,
     RegistryRef,
+    RemoteThreadRef,
     UserRef,
 )
 from attribution_platform.replay.errors import ReplayError
@@ -89,6 +92,10 @@ _OPTIONAL_ENTITY_FIELDS = (
     "file",
     "dll",
     "registry",
+    "target_process",
+    "process_access",
+    "remote_thread",
+    "dns",
 )
 
 
@@ -108,6 +115,10 @@ class DetectionReplayScenario:
     file: FileRef | None = None
     dll: DllRef | None = None
     registry: RegistryRef | None = None
+    target_process: ProcessRef | None = None
+    process_access: ProcessAccessRef | None = None
+    remote_thread: RemoteThreadRef | None = None
+    dns: DnsRef | None = None
 
 
 @dataclass(frozen=True)
@@ -196,6 +207,16 @@ def _scenario_from_dict(s: Any, *, index: int, source: str) -> DetectionReplaySc
         file=_file_ref_from_dict(s.get("file"), where=f"{where}.file"),
         dll=_dll_ref_from_dict(s.get("dll"), where=f"{where}.dll"),
         registry=_registry_ref_from_dict(s.get("registry"), where=f"{where}.registry"),
+        target_process=_process_ref_from_dict(
+            s.get("target_process"), where=f"{where}.target_process"
+        ),
+        process_access=_process_access_from_dict(
+            s.get("process_access"), where=f"{where}.process_access"
+        ),
+        remote_thread=_remote_thread_from_dict(
+            s.get("remote_thread"), where=f"{where}.remote_thread"
+        ),
+        dns=_dns_ref_from_dict(s.get("dns"), where=f"{where}.dns"),
     )
 
 
@@ -341,6 +362,37 @@ def _dll_ref_from_dict(d: Any, *, where: str) -> DllRef | None:
             if signature is not None
             else None
         ),
+    )
+
+
+def _process_access_from_dict(d: Any, *, where: str) -> ProcessAccessRef | None:
+    parsed = _require_dict(d, where=where)
+    if parsed is None:
+        return None
+    return ProcessAccessRef(
+        granted_access=parsed.get("granted_access"), call_trace=parsed.get("call_trace")
+    )
+
+
+def _remote_thread_from_dict(d: Any, *, where: str) -> RemoteThreadRef | None:
+    parsed = _require_dict(d, where=where)
+    if parsed is None:
+        return None
+    return RemoteThreadRef(
+        start_address=parsed.get("start_address"),
+        start_module=parsed.get("start_module"),
+        start_function=parsed.get("start_function"),
+    )
+
+
+def _dns_ref_from_dict(d: Any, *, where: str) -> DnsRef | None:
+    parsed = _require_dict(d, where=where)
+    if parsed is None:
+        return None
+    return DnsRef(
+        question_name=parsed.get("question_name"),
+        query_status=parsed.get("query_status"),
+        results=parsed.get("results"),
     )
 
 

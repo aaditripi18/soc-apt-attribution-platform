@@ -109,7 +109,20 @@ from attribution_platform.extraction.detection_match import RuleRef
 #: mistake (a wrong entity-group name entirely) without requiring full
 #: dataclass-field introspection for every nested type.
 _ALLOWED_TOP_LEVEL_FIELDS = frozenset(
-    {"event", "host", "user", "process", "network", "file", "dll", "registry"}
+    {
+        "event",
+        "host",
+        "user",
+        "process",
+        "network",
+        "file",
+        "dll",
+        "registry",
+        "target_process",
+        "process_access",
+        "remote_thread",
+        "dns",
+    }
 )
 
 _OPERATORS_REQUIRING_VALUE = frozenset({"equals", "contains", "in"})
@@ -455,11 +468,36 @@ def _scope_key(rule: DetectionRule) -> tuple[str, bool] | None:
     return None
 
 
+#: The array field of the optional second-level scope condition.
+_TYPE_SCOPE_FIELD = "event.type"
+
+
+def _type_requirement(rule: DetectionRule) -> tuple[str, bool] | None:
+    """For a category-scoped rule, ``(value, case_insensitive)`` when its
+    **second** condition is a non-negated ``has_element`` on ``event.type``.
+
+    Skipping on it is exact for the same reason as :func:`_scope_key`: the rule
+    already passes its first condition (it is in the observation's category
+    bucket), and ``has_element`` over a tuple/absent field never raises — so a
+    failing second condition is a clean non-match either way."""
+    if len(rule.conditions) < 2 or _scope_key(rule) is None:
+        return None
+    second = rule.conditions[1]
+    if (
+        second.operator == "has_element"
+        and second.field_path == _TYPE_SCOPE_FIELD
+        and not second.negate
+    ):
+        return cast(str, second.value), second.case_insensitive
+    return None
+
+
 @dataclass(frozen=True)
 class _RuleIndex:
     unscoped: tuple[int, ...]
     exact: MappingProxyType[str, tuple[int, ...]]
     folded: MappingProxyType[str, tuple[int, ...]]
+    type_requirements: tuple[tuple[str, bool] | None, ...]
 
 
 def _build_index(rules: tuple[DetectionRule, ...]) -> _RuleIndex:
@@ -478,6 +516,7 @@ def _build_index(rules: tuple[DetectionRule, ...]) -> _RuleIndex:
         unscoped=tuple(unscoped),
         exact=MappingProxyType({k: tuple(v) for k, v in exact.items()}),
         folded=MappingProxyType({k: tuple(v) for k, v in folded.items()}),
+        type_requirements=tuple(_type_requirement(rule) for rule in rules),
     )
 
 
@@ -514,12 +553,26 @@ class DetectionEngine:
         if not isinstance(categories, tuple):
             return range(len(self.rules))  # unexpected shape: evaluate everything
         index = self._index
-        positions = set(index.unscoped)
+        scoped: set[int] = set()
         for element in categories:
             text = str(element)
-            positions.update(index.exact.get(text, ()))
-            positions.update(index.folded.get(text.casefold(), ()))
-        return sorted(positions)
+            scoped.update(index.exact.get(text, ()))
+            scoped.update(index.folded.get(text.casefold(), ()))
+        types = observation.event.type if observation.event is not None else ()
+        if isinstance(types, tuple):
+            exact_types = {str(t) for t in types}
+            folded_types = {t.casefold() for t in exact_types}
+
+            def type_ok(requirement: tuple[str, bool] | None) -> bool:
+                if requirement is None:
+                    return True
+                value, case_insensitive = requirement
+                if case_insensitive:
+                    return value.casefold() in folded_types
+                return value in exact_types
+
+            scoped = {p for p in scoped if type_ok(index.type_requirements[p])}
+        return sorted(scoped.union(index.unscoped))
 
     def evaluate(self, observations: Sequence[Observation]) -> tuple[DetectionResult, ...]:
         results: list[DetectionResult] = []
