@@ -65,7 +65,7 @@ def check_yaml_syntax(text: str) -> list[str]:
     happens to be present in the environment, not a requirement.
     """
     try:
-        import yaml  # type: ignore[import-untyped]
+        import yaml
     except ImportError:
         print("SKIP: YAML syntax check (PyYAML not installed in this environment)")
         return []

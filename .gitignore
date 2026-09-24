@@ -43,10 +43,14 @@ Thumbs.db
 #     (G0.1 — docs/architecture/11-attack-knowledge-versioning.md), and the
 #     versioned calibration corpus under data/calibration/, which is a
 #     deliberately-tracked, provenance-first data artifact
-#     (C3.2 — docs/architecture/14-c3.2-corpus-build.md; ADR-0006 §D13). ---
+#     (C3.2 — docs/architecture/14-c3.2-corpus-build.md; ADR-0006 §D13).
+#     The pinned SigmaHQ release archive and the rule pack/report generated
+#     from it under data/detection/ are tracked for the same reason
+#     (ADR-0007 D7 — detection content is a versioned, hash-pinned input). ---
 /data/*
 !/data/attack/
 !/data/calibration/
+!/data/detection/
 
 # Interrupted-download temp file from scripts/acquire_attack_bundle.py's
 # atomic-write step — must never be committed even if a download fails.

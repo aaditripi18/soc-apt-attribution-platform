@@ -1,0 +1,29 @@
+{
+  "sigma_release": "r2026-07-01",
+  "package": "sigma_core++.zip",
+  "artifact": {
+    "filename": "sigma_core++.zip",
+    "relative_path": "data/detection/sigma/r2026-07-01/sigma_core++.zip",
+    "size_bytes": 2728028,
+    "sha256": "469d83e1d1bbdb4d7876466ff1a728550fae5a20115b91339d58d20e894e7477"
+  },
+  "archive_contents": {
+    "members": 2843,
+    "yaml_rule_files": 2842
+  },
+  "source": {
+    "repository": "SigmaHQ/sigma",
+    "release_tag": "r2026-07-01",
+    "download_url": "https://github.com/SigmaHQ/sigma/releases/download/r2026-07-01/sigma_core++.zip",
+    "github_release_url": "https://github.com/SigmaHQ/sigma/releases/tag/r2026-07-01"
+  },
+  "acquisition": {
+    "retrieved_at_utc": "2026-09-24T15:49:52Z",
+    "method": "scripts/acquire_sigma_release.py (urllib, tag-pinned release asset)"
+  },
+  "license": {
+    "rules": "Detection Rule License (DRL) 1.1",
+    "license_url": "https://github.com/SigmaHQ/Detection-Rule-License",
+    "notice_file": "data/detection/sigma/r2026-07-01/NOTICE.md"
+  }
+}

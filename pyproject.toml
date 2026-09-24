@@ -24,6 +24,9 @@ dev = [
     "ruff==0.8.4",
     "mypy==1.13.0",
     "pytest==8.3.4",
+    # Build-time Sigma parsing for the ADR-0007 importer (detection_content/).
+    # Never imported by runtime detection; LGPL-2.1, used unmodified.
+    "pySigma==1.5.1",
 ]
 
 [tool.setuptools.packages.find]

@@ -5,3 +5,9 @@
 # platform or local git config, so a checkout can never silently change the
 # artifact's bytes and invalidate the recorded hash.
 data/attack/**/*.json binary
+
+# --- Sigma detection content (ADR-0007 D7): the vendored release archive is
+# SHA-256-pinned and the generated pack/report must regenerate byte-for-byte
+# (tests/test_sigma_import.py), so no line-ending conversion either. ---
+data/detection/**/*.zip binary
+data/detection/**/*.json binary
