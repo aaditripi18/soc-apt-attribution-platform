@@ -36,11 +36,13 @@ from dataclasses import dataclass, field
 from datetime import datetime
 
 from attribution_platform.domain import (
+    DllRef,
     EventMetadata,
     FileRef,
     HostRef,
     NetworkInfo,
     ProcessRef,
+    RegistryRef,
     SourceRef,
     TimePrecision,
     UserRef,
@@ -97,6 +99,8 @@ class MatchedEvent:
     process: ProcessRef | None = None
     network: NetworkInfo | None = None
     file: FileRef | None = None
+    dll: DllRef | None = None
+    registry: RegistryRef | None = None
 
     def __post_init__(self) -> None:
         _require_nonempty_str(self.observation_id, "MatchedEvent.observation_id")

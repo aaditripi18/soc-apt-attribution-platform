@@ -63,6 +63,8 @@ from pathlib import Path
 from typing import Any
 
 from attribution_platform.domain import (
+    CodeSignature,
+    DllRef,
     EventMetadata,
     FileRef,
     HashSet,
@@ -71,13 +73,23 @@ from attribution_platform.domain import (
     NetworkInfo,
     PeInfo,
     ProcessRef,
+    RegistryRef,
     UserRef,
 )
 from attribution_platform.replay.errors import ReplayError
 from attribution_platform.sources.synthetic import SyntheticRecord
 
 _REQUIRED_SCENARIO_FIELDS = ("scenario_id", "raw_record")
-_OPTIONAL_ENTITY_FIELDS = ("event", "host", "user", "process", "network", "file")
+_OPTIONAL_ENTITY_FIELDS = (
+    "event",
+    "host",
+    "user",
+    "process",
+    "network",
+    "file",
+    "dll",
+    "registry",
+)
 
 
 @dataclass(frozen=True)
@@ -94,6 +106,8 @@ class DetectionReplayScenario:
     process: ProcessRef | None = None
     network: NetworkInfo | None = None
     file: FileRef | None = None
+    dll: DllRef | None = None
+    registry: RegistryRef | None = None
 
 
 @dataclass(frozen=True)
@@ -180,6 +194,8 @@ def _scenario_from_dict(s: Any, *, index: int, source: str) -> DetectionReplaySc
         process=_process_ref_from_dict(s.get("process"), where=f"{where}.process"),
         network=_network_info_from_dict(s.get("network"), where=f"{where}.network"),
         file=_file_ref_from_dict(s.get("file"), where=f"{where}.file"),
+        dll=_dll_ref_from_dict(s.get("dll"), where=f"{where}.dll"),
+        registry=_registry_ref_from_dict(s.get("registry"), where=f"{where}.registry"),
     )
 
 
@@ -305,6 +321,34 @@ def _hash_set_from_dict(d: Any, *, where: str) -> HashSet | None:
     if parsed is None:
         return None
     return HashSet(md5=parsed.get("md5"), sha1=parsed.get("sha1"), sha256=parsed.get("sha256"))
+
+
+def _dll_ref_from_dict(d: Any, *, where: str) -> DllRef | None:
+    parsed = _require_dict(d, where=where)
+    if parsed is None:
+        return None
+    signature = _require_dict(parsed.get("code_signature"), where=f"{where}.code_signature")
+    return DllRef(
+        path=parsed.get("path"),
+        name=parsed.get("name"),
+        pe=_pe_info_from_dict(parsed.get("pe"), where=f"{where}.pe"),
+        code_signature=(
+            CodeSignature(
+                signed=signature.get("signed"),
+                subject_name=signature.get("subject_name"),
+                status=signature.get("status"),
+            )
+            if signature is not None
+            else None
+        ),
+    )
+
+
+def _registry_ref_from_dict(d: Any, *, where: str) -> RegistryRef | None:
+    parsed = _require_dict(d, where=where)
+    if parsed is None:
+        return None
+    return RegistryRef(path=parsed.get("path"), data=parsed.get("data"))
 
 
 def _file_ref_from_dict(d: Any, *, where: str) -> FileRef | None:

@@ -152,3 +152,47 @@ the precedence declaration adds a deployment configuration step; Wave 2 is expli
 2. Accept the overlap policy (D3): one authoritative source per observation kind per host, with visible
    suppression counts?
 3. Accept the Wave-1 order (D1): PowerShell → remaining Sysmon event types → Windows Event Logs?
+
+## Implementation record
+
+**Wave-1 order change (owner, 2026-09-24).** The first real samples acquired for PowerShell
+(`data/telemetry-samples/otrf`, OTRF Security-Datasets, MIT, commit `d9d40ef1`) turned out to contain no
+PowerShell/Operational events. The owner chose to do **remaining Sysmon event types first** (samples in hand)
+and PowerShell after real 4103/4104 samples are found. D1's list is otherwise unchanged.
+
+**Batch A — Sysmon flat format + event IDs 7, 11, 12, 13 (2026-09-24).**
+
+- *Real-sample facts that shaped the design (D2.3):* OTRF records are **flat Windows EventData JSON**
+  (`EventID`, `Channel`, `Image`, `ProcessGuid` … at top level), not ECS; they carry **no record id**; and the
+  collector's `@timestamp`/`TimeCreated` disagree with Sysmon's own `UtcTime` by 5 h and 16 h in the two files.
+  The same process start appears as Sysmon 1 (GUID `{39e4a257-e321-…}`, pid 3440) and Security 4688 (pid
+  `0xd70`, no GUID) — the D3 overlap case, confirmed on real data. Sysmon reports integrity `High` where 4688
+  reports `S-1-16-12288`.
+- *Adapter:* `SysmonSourceAdapter` accepts both collector (ECS + `winlog`) and flat records; a flat record is
+  re-enveloped so one code path reads every field "raw Sysmon EventData name first, ECS fallback". Flat
+  records: channel must be Sysmon's (else refused); time = `UtcTime`; record id = `EventRecordID` or a
+  deterministic content address `sha256:<hex>`. New event types: 7 image load → `dll` (path, name, PE info,
+  code signature — of the **loaded library**, not the process), 11 file create → `file`, 12/13 registry →
+  `registry` with Sysmon's `EventType` as `event.action` and `event.type` creation/deletion/change (unknown or
+  mismatched `EventType` refused). Supported IDs: 1, 3, 7, 11, 12, 13; anything else refused with its ID.
+- *Domain (D5):* `DllRef`, `CodeSignature`, `RegistryRef` (ECS `dll.*`, `registry.*`) added to
+  `Observation`, extraction, replay fixtures, persistence and index mappings.
+- *Known limitation (recorded):* flat records without a record id cannot distinguish a genuine same-millisecond
+  repeat from a collector duplicate; byte-identical records share one id and are one observation. In the OTRF
+  samples this is 21 of 253 supported records (all Sysmon 12 `CreateKey`). Decision support counts distinct
+  features, so this never changes a decision; it can only lower raw repetition counts.
+- *Detection wiring (D2.6):* `sigma-field-map/3` adds `image_load`, `file_event`, `registry_add`,
+  `registry_delete`, `registry_set`, `registry_event`. Sigma import: 1,193 fully + 53 partially imported
+  (was 819 + 42), 9,955 rules; coverage: **207 of 498 Group-used techniques** (was 188), 105 Groups with
+  ≥ 10 covered.
+- *Real-data result:* on the mavinject sample the production Sigma pack raises exactly two detections, both on
+  the mavinject process start, mapping to **T1218.013** and **T1055.001** — the documented behaviour; one of
+  them ("Renamed Mavinject.EXE Execution") fires because Windows 10's `mavinject.exe` embeds the original name
+  `mavinject64.exe`, which is that community rule's own logic, faithfully translated. The HTTP-listener sample
+  raises nothing (its PowerShell activity was not logged).
+- *Acceptance checklist (D2):* exact mapping ✓, fail-closed ✓, real-sample golden tests ✓ (25 tests),
+  source-agnostic output ✓, correlation facts ✓ (the DLL-writing PowerShell process is the parent entity of the
+  mavinject process), Sigma wiring ✓, evidence type (behavioral) ✓, performance ✓ (2.0 ms/observation on the
+  real samples; 16.7 ms on the process/network benchmark with 9,955 rules — to watch as rules grow).
+- *Not yet supported, refused explicitly:* Sysmon 8, 9, 10, 22, 24 in the samples (next batch), and all
+  Security/System records (D1 item 3).

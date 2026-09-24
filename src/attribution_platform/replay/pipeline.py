@@ -142,6 +142,8 @@ def _replay_scenario(
             process=obs.process,
             network=obs.network,
             file=obs.file,
+            dll=obs.dll,
+            registry=obs.registry,
         )
         for obs in adapter_observations
     )

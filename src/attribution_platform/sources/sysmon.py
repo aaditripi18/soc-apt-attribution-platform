@@ -23,8 +23,13 @@ new dataclass shape — mirroring how a real collector's output naturally
 arrives, unlike G0.4's ``SyntheticRecord`` (which invented a fictional
 minimal shape because the synthetic source has no real one).
 
-**Deliberately narrow v1 scope — two Sysmon event types, not a full
-parser:** Event ID 1 (Process Create) and Event ID 3 (Network Connection).
+**Scope — a growing, explicit set of Sysmon event types (ADR-0008 Wave 1):**
+Event IDs 1 (Process Create), 3 (Network Connection), 7 (Image Load), 11
+(File Create), 12 (Registry key/value create or delete) and 13 (Registry
+value set). Both real-world record shapes are accepted: collector records
+(ECS + ``winlog`` envelope) and flat Windows-EventData records (e.g. OTRF).
+The original G0.11 scope was Event ID 1 (Process Create) and Event ID 3
+(Network Connection).
 These are chosen because they are the two most fundamental Sysmon events
 for endpoint behavioral visibility and because they exercise two different
 G0.3 entity groups (``ProcessRef`` and ``NetworkInfo``), proving the mapping
@@ -50,21 +55,26 @@ output through the same G0.5/G0.6/G0.8 functions any other adapter uses.
 
 from __future__ import annotations
 
+import hashlib
 import json
 import ntpath
 from collections.abc import Mapping
-from datetime import datetime
+from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
 from attribution_platform.domain import (
+    CodeSignature,
+    DllRef,
     EventMetadata,
+    FileRef,
     HostRef,
     NetworkEndpoint,
     NetworkInfo,
     Observation,
     PeInfo,
     ProcessRef,
+    RegistryRef,
     SourceRef,
     UserRef,
 )
@@ -73,10 +83,53 @@ from attribution_platform.sources.errors import SourceAdapterError
 #: This adapter's stable source identifier.
 SYSMON_SOURCE_TYPE = "sysmon"
 
-#: The only two ``winlog.event_id`` values this v1 adapter understands.
+#: The Windows event channel Sysmon writes to (checked for flat records).
+SYSMON_CHANNEL = "Microsoft-Windows-Sysmon/Operational"
+
 PROCESS_CREATE_EVENT_ID = 1
 NETWORK_CONNECT_EVENT_ID = 3
-_SUPPORTED_EVENT_IDS = (PROCESS_CREATE_EVENT_ID, NETWORK_CONNECT_EVENT_ID)
+IMAGE_LOAD_EVENT_ID = 7
+FILE_CREATE_EVENT_ID = 11
+REGISTRY_OBJECT_EVENT_ID = 12  # key/value created or deleted
+REGISTRY_VALUE_SET_EVENT_ID = 13
+
+#: The Sysmon event IDs this adapter understands; anything else fails closed.
+_SUPPORTED_EVENT_IDS = (
+    PROCESS_CREATE_EVENT_ID,
+    NETWORK_CONNECT_EVENT_ID,
+    IMAGE_LOAD_EVENT_ID,
+    FILE_CREATE_EVENT_ID,
+    REGISTRY_OBJECT_EVENT_ID,
+    REGISTRY_VALUE_SET_EVENT_ID,
+)
+
+#: Sysmon registry ``EventType`` -> ECS ``event.type``, per event ID.
+_REGISTRY_EVENT_TYPES: Mapping[int, Mapping[str, str]] = {
+    REGISTRY_OBJECT_EVENT_ID: {
+        "CreateKey": "creation",
+        "DeleteKey": "deletion",
+        "DeleteValue": "deletion",
+    },
+    REGISTRY_VALUE_SET_EVENT_ID: {"SetValue": "change"},
+}
+
+#: Envelope fields of a flat record (the event's own data is everything else).
+_FLAT_ENVELOPE_FIELDS = frozenset(
+    {
+        "@timestamp",
+        "Channel",
+        "EventID",
+        "EventRecordID",
+        "Hostname",
+        "Keywords",
+        "Level",
+        "Message",
+        "ProviderGuid",
+        "SourceName",
+        "Task",
+        "TimeCreated",
+    }
+)
 
 
 def _get(record: Mapping[str, Any], *path: str) -> Any:
@@ -97,6 +150,59 @@ def _as_int(value: Any, field: str) -> int:
         raise SourceAdapterError(
             f"SysmonSourceAdapter: {field} {value!r} is not an integer"
         ) from exc
+
+
+def _is_flat(record: Mapping[str, Any]) -> bool:
+    """A flat Windows-EventData record (e.g. OTRF/NXLog JSON): ``EventID`` and
+    ``Channel`` at top level and no ``winlog`` envelope."""
+    return "winlog" not in record and "EventID" in record and "Channel" in record
+
+
+def _parse_sysmon_utc(raw: Any) -> datetime:
+    """Sysmon's own ``UtcTime`` (``YYYY-MM-DD HH:MM:SS.fff``, always UTC)."""
+    if not isinstance(raw, str):
+        raise SourceAdapterError(f"SysmonSourceAdapter: UtcTime {raw!r} is not a string")
+    try:
+        parsed = datetime.fromisoformat(raw.strip())
+    except ValueError as exc:
+        raise SourceAdapterError(f"SysmonSourceAdapter: UtcTime {raw!r} is not valid") from exc
+    if parsed.tzinfo is not None:
+        raise SourceAdapterError(f"SysmonSourceAdapter: UtcTime {raw!r} must not carry an offset")
+    return parsed.replace(tzinfo=UTC)
+
+
+def _normalize_flat(record: Mapping[str, Any]) -> dict[str, Any]:
+    """Re-envelope a flat record so the rest of the adapter reads it exactly
+    like a collector record: its event fields become ``winlog.event_data``.
+
+    - **Time:** Sysmon's own ``UtcTime`` — never the collector's
+      ``@timestamp``/``TimeCreated``, which in real OTRF samples disagree with
+      ``UtcTime`` by hours (a collector time-zone artefact).
+    - **Record id:** ``EventRecordID`` when present; otherwise a deterministic
+      content address ``sha256:<hex>`` of the record's canonical JSON (the
+      source provides no identifier; this is derived, never random).
+    """
+    channel = record.get("Channel")
+    if channel != SYSMON_CHANNEL:
+        raise SourceAdapterError(
+            f"SysmonSourceAdapter: flat record channel {channel!r} is not {SYSMON_CHANNEL!r}"
+        )
+    record_id = record.get("EventRecordID")
+    if record_id is None:
+        canonical = json.dumps(record, sort_keys=True, separators=(",", ":"), ensure_ascii=False)
+        record_id = "sha256:" + hashlib.sha256(canonical.encode("utf-8")).hexdigest()
+    if "UtcTime" not in record:
+        raise SourceAdapterError("SysmonSourceAdapter: flat record missing required field UtcTime")
+    return {
+        "@timestamp": _parse_sysmon_utc(record["UtcTime"]).isoformat(),
+        "winlog": {
+            "event_id": record["EventID"],
+            "record_id": record_id,
+            "computer_name": record.get("Hostname"),
+            "channel": channel,
+            "event_data": {k: v for k, v in record.items() if k not in _FLAT_ENVELOPE_FIELDS},
+        },
+    }
 
 
 def _require_event_id(record: Mapping[str, Any]) -> int:
@@ -146,14 +252,6 @@ def _host_ref(record: Mapping[str, Any], computer_name: str) -> HostRef:
     return HostRef(name=computer_name, ip=ip)
 
 
-def _user_ref(record: Mapping[str, Any]) -> UserRef | None:
-    name = _get(record, "user", "name")
-    domain = _get(record, "user", "domain")
-    if name is None and domain is None:
-        return None
-    return UserRef(name=name, domain=domain)
-
-
 def _event_data_or_ecs(record: Mapping[str, Any], event_data_key: str, *ecs_path: str) -> Any:
     """Sysmon's own ``winlog.event_data`` value when present, else the ECS
     field the collector mapped it to. Sysmon's EventData names are exactly the
@@ -166,6 +264,23 @@ def _event_data_or_ecs(record: Mapping[str, Any], event_data_key: str, *ecs_path
     return value
 
 
+def _user_ref(record: Mapping[str, Any]) -> UserRef | None:
+    name = _get(record, "user", "name")
+    domain = _get(record, "user", "domain")
+    if name is None and domain is None:
+        # Sysmon's raw ``User`` is ``DOMAIN\name``; split on the first backslash.
+        raw = _get(record, "winlog", "event_data", "User")
+        if isinstance(raw, str) and raw.strip():
+            domain_part, sep, name_part = raw.partition("\\")
+            if sep:
+                domain, name = domain_part or None, name_part or None
+            else:
+                name = raw
+    if name is None and domain is None:
+        return None
+    return UserRef(name=name, domain=domain)
+
+
 def _basename(path: Any) -> Any:
     """The file name of a Windows path (``ntpath`` semantics), else ``None``."""
     if not isinstance(path, str) or not path.strip():
@@ -173,43 +288,54 @@ def _basename(path: Any) -> Any:
     return ntpath.basename(path) or None
 
 
-def _pe_info(record: Mapping[str, Any]) -> PeInfo | None:
+def _pe_info(record: Mapping[str, Any], ecs_owner: str) -> PeInfo | None:
+    """PE version info from Sysmon's EventData (``OriginalFileName``, …) or the
+    ECS ``<ecs_owner>.pe.*`` fields. ``ecs_owner`` is ``process`` for process
+    creation and ``dll`` for image load — the same EventData names describe
+    different binaries in different event types."""
     pe = PeInfo(
         original_file_name=_event_data_or_ecs(
-            record, "OriginalFileName", "process", "pe", "original_file_name"
+            record, "OriginalFileName", ecs_owner, "pe", "original_file_name"
         ),
-        description=_event_data_or_ecs(record, "Description", "process", "pe", "description"),
-        product=_event_data_or_ecs(record, "Product", "process", "pe", "product"),
-        company=_event_data_or_ecs(record, "Company", "process", "pe", "company"),
+        description=_event_data_or_ecs(record, "Description", ecs_owner, "pe", "description"),
+        product=_event_data_or_ecs(record, "Product", ecs_owner, "pe", "product"),
+        company=_event_data_or_ecs(record, "Company", ecs_owner, "pe", "company"),
     )
     return None if pe == PeInfo() else pe
 
 
-def _process_ref(record: Mapping[str, Any]) -> ProcessRef | None:
-    pid = _get(record, "process", "pid")
-    executable = _get(record, "process", "executable")
-    name = _get(record, "process", "name")
-    command_line = _get(record, "process", "command_line")
-    entity_id = _get(record, "process", "entity_id")
-    parent_pid = _get(record, "process", "parent", "pid")
-    parent_executable = _event_data_or_ecs(record, "ParentImage", "process", "parent", "executable")
-    # ECS process.parent.name is the bare file name; derive it from the parent
-    # executable only when the collector did not supply it (never a full path).
-    parent_name = _get(record, "process", "parent", "name") or _basename(parent_executable)
-    parent_entity_id = _get(record, "process", "parent", "entity_id")
+def _process_ref(record: Mapping[str, Any], *, creation: bool) -> ProcessRef | None:
+    """The acting process. ``creation`` (Process Create only) adds the fields
+    that event alone carries — parent lineage details, working directory,
+    integrity level and the image's PE metadata."""
+    pid = _event_data_or_ecs(record, "ProcessId", "process", "pid")
+    executable = _event_data_or_ecs(record, "Image", "process", "executable")
+    name = _get(record, "process", "name") or _basename(executable)
+    entity_id = _event_data_or_ecs(record, "ProcessGuid", "process", "entity_id")
 
     if pid is None and executable is None and name is None:
         return None
+    base: dict[str, Any] = {
+        "pid": _as_int(pid, "process.pid") if pid is not None else None,
+        "name": name,
+        "executable": executable,
+        "entity_id": entity_id,
+    }
+    if not creation:
+        return ProcessRef(**base)
 
+    parent_pid = _event_data_or_ecs(record, "ParentProcessId", "process", "parent", "pid")
+    parent_executable = _event_data_or_ecs(record, "ParentImage", "process", "parent", "executable")
     return ProcessRef(
-        pid=_as_int(pid, "process.pid") if pid is not None else None,
-        name=name,
-        executable=executable,
-        command_line=command_line,
-        entity_id=entity_id,
+        **base,
+        command_line=_event_data_or_ecs(record, "CommandLine", "process", "command_line"),
         parent_pid=_as_int(parent_pid, "process.parent.pid") if parent_pid is not None else None,
-        parent_name=parent_name,
-        parent_entity_id=parent_entity_id,
+        # ECS process.parent.name is the bare file name; derive it from the parent
+        # executable only when the collector did not supply it (never a full path).
+        parent_name=_get(record, "process", "parent", "name") or _basename(parent_executable),
+        parent_entity_id=_event_data_or_ecs(
+            record, "ParentProcessGuid", "process", "parent", "entity_id"
+        ),
         parent_executable=parent_executable,
         parent_command_line=_event_data_or_ecs(
             record, "ParentCommandLine", "process", "parent", "command_line"
@@ -219,16 +345,17 @@ def _process_ref(record: Mapping[str, Any]) -> ProcessRef | None:
         ),
         # No ECS field exists for Sysmon's IntegrityLevel; only the raw value.
         integrity_level=_event_data_or_ecs(record, "IntegrityLevel"),
-        pe=_pe_info(record),
+        pe=_pe_info(record, "process"),
     )
 
 
 def _network_info(record: Mapping[str, Any]) -> NetworkInfo | None:
-    source_ip = _get(record, "source", "ip")
-    source_port = _get(record, "source", "port")
-    dest_ip = _get(record, "destination", "ip")
-    dest_port = _get(record, "destination", "port")
-    transport = _get(record, "network", "transport")
+    source_ip = _event_data_or_ecs(record, "SourceIp", "source", "ip")
+    source_port = _event_data_or_ecs(record, "SourcePort", "source", "port")
+    dest_ip = _event_data_or_ecs(record, "DestinationIp", "destination", "ip")
+    dest_port = _event_data_or_ecs(record, "DestinationPort", "destination", "port")
+    transport = _event_data_or_ecs(record, "Protocol", "network", "transport")
+    # Sysmon's ``Initiated`` -> ECS direction is not verified; ECS value only.
     direction = _get(record, "network", "direction")
 
     if source_ip is None and dest_ip is None:
@@ -259,12 +386,74 @@ def _network_info(record: Mapping[str, Any]) -> NetworkInfo | None:
     )
 
 
-class SysmonSourceAdapter:
-    """Reference Windows/Sysmon ``SourceAdapter``: a Winlogbeat/Elastic-Agent
-    Sysmon-module JSON event -> ``Observation``.
+def _signed(raw: Any) -> bool | None:
+    if raw is None:
+        return None
+    if isinstance(raw, bool):
+        return raw
+    if isinstance(raw, str) and raw.strip().lower() in ("true", "false"):
+        return raw.strip().lower() == "true"
+    raise SourceAdapterError(f"SysmonSourceAdapter: Signed {raw!r} is not true/false")
 
-    Supports exactly two ``winlog.event_id`` values (see module docstring);
-    any other value fails closed with :class:`SourceAdapterError`.
+
+def _dll_ref(record: Mapping[str, Any]) -> DllRef:
+    path = _event_data_or_ecs(record, "ImageLoaded", "dll", "path")
+    if not isinstance(path, str) or not path.strip():
+        raise SourceAdapterError("SysmonSourceAdapter: image load event without ImageLoaded")
+    signature = CodeSignature(
+        signed=_signed(_event_data_or_ecs(record, "Signed", "dll", "code_signature", "exists")),
+        subject_name=_event_data_or_ecs(
+            record, "Signature", "dll", "code_signature", "subject_name"
+        ),
+        status=_event_data_or_ecs(record, "SignatureStatus", "dll", "code_signature", "status"),
+    )
+    return DllRef(
+        path=path,
+        name=_basename(path),
+        pe=_pe_info(record, "dll"),
+        code_signature=None if signature == CodeSignature() else signature,
+    )
+
+
+def _file_ref(record: Mapping[str, Any]) -> FileRef:
+    path = _event_data_or_ecs(record, "TargetFilename", "file", "path")
+    if not isinstance(path, str) or not path.strip():
+        raise SourceAdapterError("SysmonSourceAdapter: file create event without TargetFilename")
+    return FileRef(path=path, name=_basename(path), directory=ntpath.dirname(path) or None)
+
+
+def _registry_event(record: Mapping[str, Any], event_id: int) -> tuple[EventMetadata, RegistryRef]:
+    """Registry events require Sysmon's own ``EventType`` (it decides the
+    operation); an absent or unexpected value fails closed — never guessed."""
+    event_type = _get(record, "winlog", "event_data", "EventType")
+    ecs_type = _REGISTRY_EVENT_TYPES[event_id].get(event_type) if event_type else None
+    if ecs_type is None:
+        raise SourceAdapterError(
+            f"SysmonSourceAdapter: registry event {event_id} has EventType {event_type!r}; "
+            f"expected one of {sorted(_REGISTRY_EVENT_TYPES[event_id])}"
+        )
+    path = _event_data_or_ecs(record, "TargetObject", "registry", "path")
+    if not isinstance(path, str) or not path.strip():
+        raise SourceAdapterError("SysmonSourceAdapter: registry event without TargetObject")
+    data = (
+        _get(record, "winlog", "event_data", "Details")
+        if event_id == REGISTRY_VALUE_SET_EVENT_ID
+        else None
+    )
+    event = EventMetadata(
+        kind="event", category=("registry",), type=(ecs_type,), action=str(event_type)
+    )
+    return event, RegistryRef(path=path, data=data)
+
+
+class SysmonSourceAdapter:
+    """Windows/Sysmon ``SourceAdapter``: one Sysmon event -> one ``Observation``.
+
+    Accepts both real-world record shapes (ADR-0008 D4): a collector record
+    (Winlogbeat/Elastic Agent: ECS fields + ``winlog`` envelope) and a flat
+    Windows-EventData record (e.g. OTRF/NXLog JSON). Supports the event IDs in
+    ``_SUPPORTED_EVENT_IDS``; any other ID, channel, or malformed record fails
+    closed with :class:`SourceAdapterError`.
     """
 
     @property
@@ -277,11 +466,19 @@ class SysmonSourceAdapter:
                 f"SysmonSourceAdapter expects a Mapping (a parsed Sysmon-module JSON event), "
                 f"got {type(raw_record).__name__}"
             )
+        record: Mapping[str, Any] = (
+            _normalize_flat(raw_record) if _is_flat(raw_record) else raw_record
+        )
 
-        event_id = _require_event_id(raw_record)
-        timestamp = _require_timestamp(raw_record)
-        record_id = _require_record_id(raw_record)
-        computer_name = _require_computer_name(raw_record)
+        event_id = _require_event_id(record)
+        if event_id not in _SUPPORTED_EVENT_IDS:
+            raise SourceAdapterError(
+                f"SysmonSourceAdapter: unsupported winlog.event_id {event_id!r} "
+                f"(supported: {_SUPPORTED_EVENT_IDS})"
+            )
+        timestamp = _require_timestamp(record)
+        record_id = _require_record_id(record)
+        computer_name = _require_computer_name(record)
 
         supplied_observation_id = raw_record.get("observation_id")
         observation_id = (
@@ -290,11 +487,12 @@ class SysmonSourceAdapter:
             else f"sysmon:{computer_name}:{record_id}"
         )
 
-        host = _host_ref(raw_record, computer_name)
-        user = _user_ref(raw_record)
-        process = _process_ref(raw_record)
-        default_action = _get(raw_record, "event", "action")
-
+        default_action = _get(record, "event", "action")
+        entities: dict[str, Any] = {
+            "host": _host_ref(record, computer_name),
+            "user": _user_ref(record),
+            "process": _process_ref(record, creation=event_id == PROCESS_CREATE_EVENT_ID),
+        }
         if event_id == PROCESS_CREATE_EVENT_ID:
             event = EventMetadata(
                 kind="event",
@@ -302,7 +500,6 @@ class SysmonSourceAdapter:
                 type=("start",),
                 action=default_action or "Process Create (rule: ProcessCreate)",
             )
-            network = None
         elif event_id == NETWORK_CONNECT_EVENT_ID:
             event = EventMetadata(
                 kind="event",
@@ -310,13 +507,25 @@ class SysmonSourceAdapter:
                 type=("connection", "start"),
                 action=default_action or "Network connection detected (rule: NetworkConnect)",
             )
-            network = _network_info(raw_record)
-        else:
-            raise SourceAdapterError(
-                f"SysmonSourceAdapter: unsupported winlog.event_id {event_id!r} "
-                f"(this v1 adapter supports only {_SUPPORTED_EVENT_IDS} — "
-                "Process Create and Network Connect)"
+            entities["network"] = _network_info(record)
+        elif event_id == IMAGE_LOAD_EVENT_ID:
+            event = EventMetadata(
+                kind="event",
+                category=("library",),
+                type=("start",),
+                action=default_action or "Image loaded (rule: ImageLoad)",
             )
+            entities["dll"] = _dll_ref(record)
+        elif event_id == FILE_CREATE_EVENT_ID:
+            event = EventMetadata(
+                kind="event",
+                category=("file",),
+                type=("creation",),
+                action=default_action or "File created (rule: FileCreate)",
+            )
+            entities["file"] = _file_ref(record)
+        else:  # REGISTRY_OBJECT_EVENT_ID / REGISTRY_VALUE_SET_EVENT_ID
+            event, entities["registry"] = _registry_event(record, event_id)
 
         return (
             Observation(
@@ -324,10 +533,7 @@ class SysmonSourceAdapter:
                 timestamp=timestamp,
                 raw_reference=SourceRef(source_type=self.source_type, source_event_id=record_id),
                 event=event,
-                host=host,
-                user=user,
-                process=process,
-                network=network,
+                **entities,
             ),
         )
 

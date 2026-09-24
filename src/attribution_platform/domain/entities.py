@@ -55,6 +55,43 @@ class PeInfo:
 
 
 @dataclass(frozen=True)
+class CodeSignature:
+    """Code-signing facts about a binary as the source reported them (all
+    optional) — ECS ``*.code_signature.*``. ``signed`` is whether a signature
+    was present; ``status`` is the source's verification result (e.g.
+    ``Valid``); ``subject_name`` is the signer."""
+
+    signed: bool | None = None
+    subject_name: str | None = None
+    status: str | None = None
+
+
+@dataclass(frozen=True)
+class DllRef:
+    """A library loaded into a process (all optional) — ECS ``dll.*``.
+
+    ``pe``/``code_signature`` describe the **loaded library**, not the
+    loading process (which is the Observation's ``process``)."""
+
+    path: str | None = None
+    name: str | None = None
+    pe: PeInfo | None = None
+    code_signature: CodeSignature | None = None
+
+
+@dataclass(frozen=True)
+class RegistryRef:
+    """A Windows registry key or value touched by an event (all optional) —
+    ECS ``registry.*``. ``path`` is the full path as the source reported it
+    (a key path, or key path plus value name); ``data`` is the value data as
+    the source rendered it as a string (e.g. Sysmon's ``Details``). The kind of
+    operation lives on the Observation's ``event`` (``type``/``action``)."""
+
+    path: str | None = None
+    data: str | None = None
+
+
+@dataclass(frozen=True)
 class ProcessRef:
     """A process and its immediate parent lineage (all optional).
 

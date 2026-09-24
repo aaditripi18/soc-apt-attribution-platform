@@ -37,6 +37,8 @@ from __future__ import annotations
 
 from attribution_platform.domain.attack import AttackRef
 from attribution_platform.domain.entities import (
+    CodeSignature,
+    DllRef,
     EventMetadata,
     FileRef,
     HashSet,
@@ -45,6 +47,7 @@ from attribution_platform.domain.entities import (
     NetworkInfo,
     PeInfo,
     ProcessRef,
+    RegistryRef,
     TimeSpan,
     UserRef,
 )
@@ -72,6 +75,9 @@ __all__ = [
     "FileRef",
     "ProcessRef",
     "PeInfo",
+    "CodeSignature",
+    "DllRef",
+    "RegistryRef",
     "HostRef",
     "UserRef",
     "NetworkEndpoint",

@@ -74,7 +74,9 @@ from attribution_platform.domain import (
     EVIDENCE_SCHEMA_VERSION,
     OBSERVATION_SCHEMA_VERSION,
     AttackRef,
+    CodeSignature,
     DerivationProvenance,
+    DllRef,
     DomainContractError,
     EventMetadata,
     Evidence,
@@ -88,6 +90,7 @@ from attribution_platform.domain import (
     Observation,
     PeInfo,
     ProcessRef,
+    RegistryRef,
     SourceRef,
     TimePrecision,
     TimeSpan,
@@ -172,6 +175,8 @@ def _observation_from_document(doc: Mapping[str, Any]) -> Observation:
             process=_process_ref_from_dict(doc.get("process")),
             network=_network_info_from_dict(doc.get("network")),
             file=_file_ref_from_dict(doc.get("file")),
+            dll=_dll_ref_from_dict(doc.get("dll")),
+            registry=_registry_ref_from_dict(doc.get("registry")),
             schema_version=schema_version,
         )
     except ElasticIntegrationError:
@@ -340,6 +345,32 @@ def _hash_set_from_dict(d: Mapping[str, Any] | None) -> HashSet | None:
     if d is None:
         return None
     return HashSet(md5=d.get("md5"), sha1=d.get("sha1"), sha256=d.get("sha256"))
+
+
+def _dll_ref_from_dict(d: Mapping[str, Any] | None) -> DllRef | None:
+    if d is None:
+        return None
+    signature = d.get("code_signature")
+    return DllRef(
+        path=d.get("path"),
+        name=d.get("name"),
+        pe=_pe_info_from_dict(d.get("pe")),
+        code_signature=(
+            CodeSignature(
+                signed=signature.get("signed"),
+                subject_name=signature.get("subject_name"),
+                status=signature.get("status"),
+            )
+            if signature is not None
+            else None
+        ),
+    )
+
+
+def _registry_ref_from_dict(d: Mapping[str, Any] | None) -> RegistryRef | None:
+    if d is None:
+        return None
+    return RegistryRef(path=d.get("path"), data=d.get("data"))
 
 
 def _file_ref_from_dict(d: Mapping[str, Any] | None) -> FileRef | None:

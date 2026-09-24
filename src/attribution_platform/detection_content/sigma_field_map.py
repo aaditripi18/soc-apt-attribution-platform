@@ -8,7 +8,10 @@ values — the very names Sigma's Windows fields use — so the mapping is 1:1.
 
 Version history: ``/1`` Image, CommandLine (+ network fields). ``/2`` (ADR-0007
 D10 step 1) adds ParentImage, ParentCommandLine, CurrentDirectory,
-IntegrityLevel, OriginalFileName, Description, Product, Company.
+IntegrityLevel, OriginalFileName, Description, Product, Company. ``/3``
+(ADR-0008 Wave 1) adds the ``image_load``, ``file_event`` and ``registry_*``
+logsources (Sysmon events 7, 11, 12, 13). Field names are per logsource: in
+``image_load`` ``OriginalFileName`` etc. describe the loaded DLL, not the process.
 
 Anything else is a *telemetry gap*, reported per rule by the importer — never
 approximated. ``UNMAPPED_FIELD_REASONS`` records why the most frequent
@@ -24,7 +27,7 @@ from __future__ import annotations
 
 from types import MappingProxyType
 
-FIELD_MAP_VERSION = "sigma-field-map/2"
+FIELD_MAP_VERSION = "sigma-field-map/3"
 
 #: ``(product, category)`` → the ``(field_path, element)`` scope conditions an
 #: Observation must satisfy to be the kind of event the Sigma rule describes.
@@ -38,6 +41,42 @@ LOGSOURCE_SCOPES: MappingProxyType[tuple[str, str], tuple[tuple[str, str], ...]]
             ("event.category", "network"),
             ("event.type", "connection"),
         ),
+        ("windows", "image_load"): (
+            ("event.category", "library"),
+            ("event.type", "start"),
+        ),
+        ("windows", "file_event"): (
+            ("event.category", "file"),
+            ("event.type", "creation"),
+        ),
+        # Sigma's registry_* categories over Sysmon 12/13 (14, rename, is not
+        # supported yet): add = CreateKey, delete = DeleteKey/DeleteValue,
+        # set = SetValue, event = any registry event.
+        ("windows", "registry_add"): (
+            ("event.category", "registry"),
+            ("event.type", "creation"),
+        ),
+        ("windows", "registry_delete"): (
+            ("event.category", "registry"),
+            ("event.type", "deletion"),
+        ),
+        ("windows", "registry_set"): (
+            ("event.category", "registry"),
+            ("event.type", "change"),
+        ),
+        ("windows", "registry_event"): (("event.category", "registry"),),
+    }
+)
+
+#: Registry fields shared by every ``registry_*`` logsource. ``EventType`` is
+#: Sysmon's own value (CreateKey/DeleteKey/DeleteValue/SetValue), which the
+#: adapter records verbatim as ``event.action``.
+_REGISTRY_FIELDS: MappingProxyType[str, str] = MappingProxyType(
+    {
+        "Image": "process.executable",
+        "TargetObject": "registry.path",
+        "Details": "registry.data",
+        "EventType": "event.action",
     }
 )
 
@@ -68,6 +107,29 @@ FIELD_MAPS: MappingProxyType[tuple[str, str], MappingProxyType[str, str]] = Mapp
                 "Protocol": "network.transport",
             }
         ),
+        ("windows", "image_load"): MappingProxyType(
+            {
+                "Image": "process.executable",
+                "ImageLoaded": "dll.path",
+                "OriginalFileName": "dll.pe.original_file_name",
+                "Description": "dll.pe.description",
+                "Product": "dll.pe.product",
+                "Company": "dll.pe.company",
+                "Signed": "dll.code_signature.signed",
+                "Signature": "dll.code_signature.subject_name",
+                "SignatureStatus": "dll.code_signature.status",
+            }
+        ),
+        ("windows", "file_event"): MappingProxyType(
+            {
+                "Image": "process.executable",
+                "TargetFilename": "file.path",
+            }
+        ),
+        ("windows", "registry_add"): _REGISTRY_FIELDS,
+        ("windows", "registry_delete"): _REGISTRY_FIELDS,
+        ("windows", "registry_set"): _REGISTRY_FIELDS,
+        ("windows", "registry_event"): _REGISTRY_FIELDS,
     }
 )
 

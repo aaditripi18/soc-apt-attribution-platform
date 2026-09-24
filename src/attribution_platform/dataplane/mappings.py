@@ -88,6 +88,8 @@ OBSERVATIONS_MAPPING: dict[str, Any] = {
     "process": {"type": "object"},
     "network": {"type": "object"},
     "file": {"type": "object"},
+    "dll": {"type": "object"},
+    "registry": {"type": "object"},
 }
 
 #: Explicit field mappings for the Evidence index (Elasticsearch "properties").

@@ -108,7 +108,9 @@ from attribution_platform.extraction.detection_match import RuleRef
 #: against a fixed, closed set, catching the most likely rule-authoring
 #: mistake (a wrong entity-group name entirely) without requiring full
 #: dataclass-field introspection for every nested type.
-_ALLOWED_TOP_LEVEL_FIELDS = frozenset({"event", "host", "user", "process", "network", "file"})
+_ALLOWED_TOP_LEVEL_FIELDS = frozenset(
+    {"event", "host", "user", "process", "network", "file", "dll", "registry"}
+)
 
 _OPERATORS_REQUIRING_VALUE = frozenset({"equals", "contains", "in"})
 

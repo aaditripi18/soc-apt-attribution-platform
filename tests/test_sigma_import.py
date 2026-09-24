@@ -373,7 +373,7 @@ def test_unsupported_logsource_is_telemetry_gap(tmp_path: Path, knowledge: Attac
     result = _import(
         tmp_path,
         knowledge,
-        _rule_yaml("sel:\n  TargetObject|contains: 'Run'\ncondition: sel", category="registry_set"),
+        _rule_yaml("sel:\n  PipeName|contains: 'msagent'\ncondition: sel", category="pipe_created"),
         _rule_yaml(
             "sel:\n  Image|endswith: '/bash'\ncondition: sel",
             rule_id="22222222-2222-2222-2222-222222222222",

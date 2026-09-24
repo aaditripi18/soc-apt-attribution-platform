@@ -23,12 +23,16 @@ from attribution_platform.detection import DetectionEngine, load_rule_pack
 from attribution_platform.detection.rules import _resolve_field
 from attribution_platform.detection_content.sigma_field_map import FIELD_MAPS
 from attribution_platform.domain import (
+    CodeSignature,
+    DllRef,
     EventMetadata,
+    FileRef,
     NetworkEndpoint,
     NetworkInfo,
     Observation,
     PeInfo,
     ProcessRef,
+    RegistryRef,
     SourceRef,
 )
 from attribution_platform.replay.detection_fixtures import _process_ref_from_dict
@@ -197,7 +201,14 @@ def _full_observation() -> Observation:
         observation_id="o",
         timestamp=datetime(2026, 1, 1, tzinfo=UTC),
         raw_reference=SourceRef(source_type="synthetic", source_event_id="r"),
-        event=EventMetadata(kind="event", category=("process",), type=("start",)),
+        event=EventMetadata(kind="event", category=("process",), type=("start",), action="a"),
+        file=FileRef(path="a"),
+        dll=DllRef(
+            path="a",
+            pe=PeInfo(original_file_name="a", description="a", product="a", company="a"),
+            code_signature=CodeSignature(signed=True, subject_name="a", status="a"),
+        ),
+        registry=RegistryRef(path="a", data="a"),
         process=ProcessRef(
             executable="a",
             command_line="a",
