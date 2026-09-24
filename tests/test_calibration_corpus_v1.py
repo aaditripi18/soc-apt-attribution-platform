@@ -42,6 +42,9 @@ from attribution_platform.domain.enums import EvidenceType
 from attribution_platform.replay import replay_fixture_through_behavioral_sequences
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
+#: The fixture rule packs, Phase-0 scenarios and calibration corpus v1 used here are
+#: frozen against this ATT&CK release (doc 11 §0 upgrade record); they load it by name.
+FIXTURE_ATTACK_KB = "enterprise-attack-19.0"
 CORE_PACK = REPO_ROOT / "fixtures" / "phase1_core_rules.json"
 CALIBRATION_PACK = (
     REPO_ROOT / "data" / "calibration" / "rules" / "calibration_evidence_type_rules.json"
@@ -51,7 +54,7 @@ V1_ROOT = REPO_ROOT / "data" / "calibration" / "corpus" / "v1"
 
 @pytest.fixture(scope="module")
 def knowledge() -> AttackKnowledge:
-    return load_attack_knowledge()
+    return load_attack_knowledge(FIXTURE_ATTACK_KB)
 
 
 @pytest.fixture()
@@ -272,7 +275,7 @@ from attribution_platform.attack_knowledge.loader import load_attack_knowledge
 from attribution_platform.dataplane import FakeElasticClient
 from attribution_platform.detection import DetectionEngine, load_rule_pack
 from attribution_platform.calibration.corpus_builder import build_corpus_from_dir
-kb = load_attack_knowledge()
+kb = load_attack_knowledge("enterprise-attack-19.0")  # corpus frozen against it
 core = load_rule_pack(Path("fixtures/phase1_core_rules.json"), knowledge=kb)
 calib_path = Path("data/calibration/rules/calibration_evidence_type_rules.json")
 calib = load_rule_pack(calib_path, knowledge=kb)

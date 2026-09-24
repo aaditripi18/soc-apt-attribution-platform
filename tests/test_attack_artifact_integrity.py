@@ -28,6 +28,7 @@ from attribution_platform.attack_knowledge.verification import (
     EXPECTED_ATTACK_DOMAIN,
     EXPECTED_ATTACK_KB_VERSION,
     EXPECTED_STIX_SPEC,
+    VENDORED_ATTACK_ARTIFACTS,
     ArtifactIntegrityError,
     compute_object_fingerprint,
     compute_sha256,
@@ -37,95 +38,90 @@ from attribution_platform.attack_knowledge.verification import (
 )
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
-VENDORED_ARTIFACT_DIR = REPO_ROOT / "data" / "attack" / "enterprise" / "v19.0"
-VENDORED_ARTIFACT_PATH = VENDORED_ARTIFACT_DIR / EXPECTED_ARTIFACT_FILENAME
-VENDORED_MANIFEST_PATH = VENDORED_ARTIFACT_DIR / "manifest.json"
+ATTACK_DATA_DIR = REPO_ROOT / "data" / "attack" / "enterprise"
+
+#: Every vendored release is verified, not only the current pin: artifacts
+#: frozen against an older release (calibration corpus v1, fixture rule
+#: packs) depend on it staying intact (doc 11 §G retained bundles).
+VENDORED = sorted(VENDORED_ATTACK_ARTIFACTS.items())
+
+
+def _paths(version: str, filename: str) -> tuple[Path, Path, Path]:
+    artifact_dir = ATTACK_DATA_DIR / f"v{version.removeprefix('enterprise-attack-')}"
+    return artifact_dir, artifact_dir / filename, artifact_dir / "manifest.json"
 
 
 # ===========================================================================
-# Group 1 — the real, vendored v19.0 artifact
+# Group 1 — the real, vendored artifacts (every registered release)
 # ===========================================================================
 
 
-def test_1_vendored_artifact_exists_at_expected_project_path() -> None:
-    """(1) The artifact exists at the expected, explicit project path."""
-    assert VENDORED_ARTIFACT_PATH.is_file(), f"missing: {VENDORED_ARTIFACT_PATH}"
-    assert VENDORED_MANIFEST_PATH.is_file(), f"missing: {VENDORED_MANIFEST_PATH}"
-    assert (VENDORED_ARTIFACT_DIR / "NOTICE.md").is_file(), "missing ATT&CK attribution NOTICE"
+def test_current_pin_is_a_vendored_release() -> None:
+    assert EXPECTED_ATTACK_KB_VERSION in VENDORED_ATTACK_ARTIFACTS
+    assert VENDORED_ATTACK_ARTIFACTS[EXPECTED_ATTACK_KB_VERSION] == EXPECTED_ARTIFACT_FILENAME
 
 
-def test_2_sha256_matches_recorded_hash_independently() -> None:
-    """(2) A freshly recomputed SHA-256 matches the manifest's recorded hash.
-
-    Reads the manifest's raw JSON directly (bypassing verify_artifact's own
-    comparison) as an independent double-check that the recorded value is
-    not simply being echoed back by the code under test.
-    """
-    manifest_data = json.loads(VENDORED_MANIFEST_PATH.read_text(encoding="utf-8"))
-    recorded_sha256 = manifest_data["artifact"]["sha256"]
-    assert compute_sha256(VENDORED_ARTIFACT_PATH) == recorded_sha256
-    # Recomputing twice must be deterministic.
-    assert compute_sha256(VENDORED_ARTIFACT_PATH) == compute_sha256(VENDORED_ARTIFACT_PATH)
+@pytest.mark.parametrize(("version", "filename"), VENDORED)
+def test_1_vendored_artifact_exists_at_expected_project_path(version: str, filename: str) -> None:
+    """(1) The artifact, its manifest and its attribution NOTICE exist."""
+    artifact_dir, artifact_path, manifest_path = _paths(version, filename)
+    assert artifact_path.is_file(), f"missing: {artifact_path}"
+    assert manifest_path.is_file(), f"missing: {manifest_path}"
+    assert (artifact_dir / "NOTICE.md").is_file(), "missing ATT&CK attribution NOTICE"
 
 
-def test_3_bundle_parses_successfully_as_stix() -> None:
-    """(3) The STIX bundle parses successfully (safe json.load only)."""
-    objects = load_bundle_objects(VENDORED_ARTIFACT_PATH)
-    assert len(objects) > 0
-    assert any(o.get("type") == "x-mitre-collection" for o in objects)
+@pytest.mark.parametrize(("version", "filename"), VENDORED)
+def test_2_sha256_matches_recorded_hash_independently(version: str, filename: str) -> None:
+    """(2) A freshly recomputed SHA-256 matches the manifest's recorded hash,
+    read from the raw manifest JSON (not echoed back by the code under test)."""
+    _, artifact_path, manifest_path = _paths(version, filename)
+    manifest_data = json.loads(manifest_path.read_text(encoding="utf-8"))
+    assert compute_sha256(artifact_path) == manifest_data["artifact"]["sha256"]
 
 
-def test_4_collection_metadata_is_enterprise_v19_0() -> None:
-    """(4) The expected Enterprise ATT&CK v19.0 collection/version metadata is present."""
-    objects = load_bundle_objects(VENDORED_ARTIFACT_PATH)
-    collection = extract_collection_info(objects)
+@pytest.mark.parametrize(("version", "filename"), VENDORED)
+def test_4_collection_metadata_matches_release(version: str, filename: str) -> None:
+    """(3)(4) The bundle parses and carries its own release's collection metadata."""
+    _, artifact_path, _ = _paths(version, filename)
+    collection = extract_collection_info(load_bundle_objects(artifact_path))
     assert collection.name == "Enterprise ATT&CK"
-    assert collection.x_mitre_version == "19.0"
+    assert collection.x_mitre_version == version.removeprefix("enterprise-attack-")
     assert collection.spec_version == "2.1"
 
 
-def test_5_artifact_is_not_the_floating_latest_bundle() -> None:
-    """(5) The vendored file is the versioned filename, never the floating
+@pytest.mark.parametrize(("version", "filename"), VENDORED)
+def test_5_artifact_is_not_the_floating_latest_bundle(version: str, filename: str) -> None:
+    """(5) Only the versioned filename is vendored, never the floating
     unversioned `enterprise-attack.json` that always tracks "latest"."""
-    filenames = {p.name for p in VENDORED_ARTIFACT_DIR.iterdir() if p.is_file()}
-    assert (
-        "enterprise-attack.json" not in filenames
-    ), "the floating/unversioned bundle must never be vendored alongside the pinned artifact"
-    assert EXPECTED_ARTIFACT_FILENAME in filenames
-    assert EXPECTED_ARTIFACT_FILENAME != "enterprise-attack.json"
+    artifact_dir, _, _ = _paths(version, filename)
+    filenames = {p.name for p in artifact_dir.iterdir() if p.is_file()}
+    assert "enterprise-attack.json" not in filenames
+    assert filename in filenames and filename != "enterprise-attack.json"
 
 
-def test_6_object_fingerprint_is_reproducible() -> None:
-    """(6) The recorded object-count/fingerprint is reproducible from the raw file."""
-    objects = load_bundle_objects(VENDORED_ARTIFACT_PATH)
-    fingerprint_a = compute_object_fingerprint(objects)
-    fingerprint_b = compute_object_fingerprint(objects)
-    assert fingerprint_a == fingerprint_b, "fingerprint computation must be deterministic"
-
-    manifest_data = json.loads(VENDORED_MANIFEST_PATH.read_text(encoding="utf-8"))
-    recorded = manifest_data["object_fingerprint"]
-    assert fingerprint_a.total_objects == recorded["total_objects"]
-    assert fingerprint_a.tactics == recorded["tactics"]
-    assert fingerprint_a.techniques == recorded["techniques"]
-    assert fingerprint_a.sub_techniques == recorded["sub_techniques"]
-    assert fingerprint_a.groups == recorded["groups"]
-    assert fingerprint_a.relationships == recorded["relationships"]
+@pytest.mark.parametrize(("version", "filename"), VENDORED)
+def test_6_object_fingerprint_is_reproducible(version: str, filename: str) -> None:
+    """(6) The recorded object fingerprint is reproducible from the raw file."""
+    _, artifact_path, manifest_path = _paths(version, filename)
+    fingerprint = compute_object_fingerprint(load_bundle_objects(artifact_path))
+    recorded = json.loads(manifest_path.read_text(encoding="utf-8"))["object_fingerprint"]
+    assert fingerprint.total_objects == recorded["total_objects"]
+    assert fingerprint.techniques == recorded["techniques"]
+    assert fingerprint.sub_techniques == recorded["sub_techniques"]
+    assert fingerprint.groups == recorded["groups"]
+    assert fingerprint.relationships == recorded["relationships"]
 
 
-def test_full_verify_artifact_passes_end_to_end() -> None:
-    """The complete, ordered verification pipeline succeeds on the real artifact."""
-    manifest = verify_artifact(VENDORED_ARTIFACT_DIR)
-    assert manifest.attack_kb_version == EXPECTED_ATTACK_KB_VERSION
+@pytest.mark.parametrize(("version", "filename"), VENDORED)
+def test_full_verify_artifact_passes_end_to_end(version: str, filename: str) -> None:
+    """The complete, ordered verification pipeline succeeds on each real artifact."""
+    artifact_dir, _, _ = _paths(version, filename)
+    manifest = verify_artifact(artifact_dir)
+    assert manifest.attack_kb_version == version
     assert manifest.attack_domain == EXPECTED_ATTACK_DOMAIN
     assert manifest.stix_spec == EXPECTED_STIX_SPEC
-    assert manifest.artifact_filename == EXPECTED_ARTIFACT_FILENAME
-
-
-def test_verify_artifact_is_deterministic() -> None:
-    """Running verification twice on the same artifact yields an identical result."""
-    m1 = verify_artifact(VENDORED_ARTIFACT_DIR)
-    m2 = verify_artifact(VENDORED_ARTIFACT_DIR)
-    assert m1 == m2
+    assert manifest.artifact_filename == filename
+    assert verify_artifact(artifact_dir) == manifest  # deterministic
 
 
 # ===========================================================================
@@ -272,9 +268,9 @@ def test_7_fails_closed_on_wrong_attack_kb_version(tmp_path: Path) -> None:
     artifact_dir = _build_self_consistent_fixture(tmp_path)
     manifest_path = artifact_dir / "manifest.json"
     data = json.loads(manifest_path.read_text(encoding="utf-8"))
-    data["attack_kb_version"] = "enterprise-attack-19.1"
+    data["attack_kb_version"] = "enterprise-attack-19.1"  # a real release, but not vendored
     manifest_path.write_text(json.dumps(data), encoding="utf-8")
-    with pytest.raises(ArtifactIntegrityError, match="does not match the pinned baseline"):
+    with pytest.raises(ArtifactIntegrityError, match="is not a vendored release"):
         verify_artifact(artifact_dir)
 
 

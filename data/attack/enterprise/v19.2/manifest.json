@@ -1,0 +1,50 @@
+{
+  "attack_kb_version": "enterprise-attack-19.2",
+  "attack_domain": "enterprise",
+  "stix_spec": "2.1",
+  "artifact": {
+    "filename": "enterprise-attack-19.2.json",
+    "relative_path": "data/attack/enterprise/v19.2/enterprise-attack-19.2.json",
+    "size_bytes": 53835637,
+    "sha256": "dc1639caa5501d720e280cf1cbd8fbe009884a0c9b3e6e9ed9d0c25166c3d8f4"
+  },
+  "stix_collection": {
+    "id": "x-mitre-collection--1f5f1533-f617-4ca8-9ab4-6a02367fa019",
+    "name": "Enterprise ATT&CK",
+    "x_mitre_version": "19.2",
+    "spec_version": "2.1",
+    "created": "2018-01-17T12:56:55.080Z",
+    "modified": "2026-08-05T21:33:58.496Z"
+  },
+  "object_fingerprint": {
+    "total_objects": 26086,
+    "tactics": 15,
+    "techniques": 365,
+    "sub_techniques": 493,
+    "groups": 191,
+    "software_malware": 733,
+    "software_tool": 95,
+    "campaigns": 56,
+    "relationships": 21262,
+    "mitigations": 268,
+    "data_sources": 38,
+    "data_components": 109,
+    "marking_definitions": 1,
+    "identity": 1
+  },
+  "source": {
+    "repository": "mitre-attack/attack-stix-data",
+    "release_tag": "v19.2",
+    "repo_path": "enterprise-attack/enterprise-attack-19.2.json",
+    "download_url": "https://raw.githubusercontent.com/mitre-attack/attack-stix-data/v19.2/enterprise-attack/enterprise-attack-19.2.json",
+    "github_release_url": "https://github.com/mitre-attack/attack-stix-data/releases/tag/v19.2"
+  },
+  "acquisition": {
+    "retrieved_at_utc": "2026-09-24T17:23:45Z",
+    "method": "scripts/acquire_attack_bundle.py (urllib, tag-pinned raw URL)"
+  },
+  "attribution": {
+    "terms_of_use_url": "https://attack.mitre.org/resources/terms-of-use/",
+    "notice_file": "data/attack/enterprise/v19.2/NOTICE.md"
+  }
+}

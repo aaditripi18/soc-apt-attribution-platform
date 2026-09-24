@@ -28,18 +28,33 @@ import json
 from collections import Counter
 from dataclasses import dataclass
 from pathlib import Path
+from types import MappingProxyType
 from typing import Any
 
-#: The ATT&CK knowledge-base version this codebase is pinned to (C0.1,
-#: ACCEPTED). Changing this is a deliberate upgrade decision, never a
+#: Every ATT&CK release vendored in this repository, as
+#: ``attack_kb_version -> versioned artifact filename``. A bundle is trusted
+#: only if its manifest names one of these exact pairs — never the floating
+#: unversioned ``enterprise-attack.json``. Older releases stay registered so
+#: artifacts frozen against them (e.g. calibration corpus v1, the Phase-0/1
+#: fixture rule packs) remain reproducible (doc 11 §G: retained bundles).
+VENDORED_ATTACK_ARTIFACTS: MappingProxyType[str, str] = MappingProxyType(
+    {
+        "enterprise-attack-19.0": "enterprise-attack-19.0.json",
+        "enterprise-attack-19.2": "enterprise-attack-19.2.json",
+    }
+)
+
+#: The ATT&CK knowledge-base version this platform is pinned to — what
+#: :func:`~attribution_platform.attack_knowledge.loader.load_attack_knowledge`
+#: loads by default. v19.0 (C0.1) → v19.2 on 2026-09-24 (doc 11 §0 upgrade
+#: record). Changing this is a deliberate upgrade decision, never a
 #: silent/automatic one — see docs/architecture/11-attack-knowledge-versioning.md §G.
-EXPECTED_ATTACK_KB_VERSION = "enterprise-attack-19.0"
+EXPECTED_ATTACK_KB_VERSION = "enterprise-attack-19.2"
 EXPECTED_ATTACK_DOMAIN = "enterprise"
 EXPECTED_STIX_SPEC = "2.1"
 
-#: The versioned (non-floating) artifact filename we require. Guards against
-#: ever accidentally loading the unversioned "latest" bundle under this path.
-EXPECTED_ARTIFACT_FILENAME = "enterprise-attack-19.0.json"
+#: The versioned (non-floating) artifact filename of the current pin.
+EXPECTED_ARTIFACT_FILENAME = VENDORED_ATTACK_ARTIFACTS[EXPECTED_ATTACK_KB_VERSION]
 
 _ARTIFACT_TYPE_TAG = "attack-pattern"
 
@@ -245,10 +260,11 @@ def verify_artifact(artifact_dir: Path) -> ArtifactManifest:
     message on the first failure):
 
     1. the manifest and the artifact file both exist at the expected paths;
-    2. the manifest's recorded ``attack_kb_version``/``attack_domain``/
-       ``stix_spec`` match the pinned baseline this codebase expects;
-    3. the artifact filename is the *versioned* filename (never the floating
-       unversioned bundle);
+    2. the manifest's recorded ``attack_kb_version`` is a vendored release
+       (:data:`VENDORED_ATTACK_ARTIFACTS`) and ``attack_domain``/``stix_spec``
+       match what this codebase expects;
+    3. the artifact filename is that release's *versioned* filename (never the
+       floating unversioned bundle);
     4. the artifact's actual size matches the manifest;
     5. the artifact's freshly recomputed SHA-256 matches the manifest;
     6. the artifact parses as a valid STIX 2.1 bundle (safe ``json.load`` only);
@@ -261,10 +277,11 @@ def verify_artifact(artifact_dir: Path) -> ArtifactManifest:
     manifest_path = artifact_dir / "manifest.json"
     manifest = load_manifest(manifest_path)
 
-    if manifest.attack_kb_version != EXPECTED_ATTACK_KB_VERSION:
+    expected_filename = VENDORED_ATTACK_ARTIFACTS.get(manifest.attack_kb_version)
+    if expected_filename is None:
         raise ArtifactIntegrityError(
-            f"manifest attack_kb_version={manifest.attack_kb_version!r} does not match "
-            f"the pinned baseline {EXPECTED_ATTACK_KB_VERSION!r} this codebase expects"
+            f"manifest attack_kb_version={manifest.attack_kb_version!r} is not a vendored "
+            f"release this codebase trusts ({sorted(VENDORED_ATTACK_ARTIFACTS)})"
         )
     if manifest.attack_domain != EXPECTED_ATTACK_DOMAIN:
         raise ArtifactIntegrityError(
@@ -274,10 +291,10 @@ def verify_artifact(artifact_dir: Path) -> ArtifactManifest:
         raise ArtifactIntegrityError(
             f"manifest stix_spec={manifest.stix_spec!r} != {EXPECTED_STIX_SPEC!r}"
         )
-    if manifest.artifact_filename != EXPECTED_ARTIFACT_FILENAME:
+    if manifest.artifact_filename != expected_filename:
         raise ArtifactIntegrityError(
             f"manifest artifact_filename={manifest.artifact_filename!r} is not the expected "
-            f"versioned filename {EXPECTED_ARTIFACT_FILENAME!r} — refusing to trust an "
+            f"versioned filename {expected_filename!r} — refusing to trust an "
             "unversioned/floating bundle under this path"
         )
 

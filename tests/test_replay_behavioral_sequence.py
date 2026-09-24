@@ -76,6 +76,9 @@ from attribution_platform.replay import (
 from attribution_platform.sources.synthetic import SyntheticRecord
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
+#: The fixture rule packs, Phase-0 scenarios and calibration corpus v1 used here are
+#: frozen against this ATT&CK release (doc 11 §0 upgrade record); they load it by name.
+FIXTURE_ATTACK_KB = "enterprise-attack-19.0"
 FIXTURE_PATH = REPO_ROOT / "fixtures" / "phase2_correlation_scenarios.json"
 RULE_PACK_PATH = REPO_ROOT / "fixtures" / "phase1_core_rules.json"
 BEHAVIORAL_SEQUENCE_PIPELINE_FILE = (
@@ -87,7 +90,7 @@ T0 = datetime(2026, 1, 1, 12, 0, 0, tzinfo=UTC)
 
 @pytest.fixture(scope="module")
 def knowledge() -> AttackKnowledge:
-    return load_attack_knowledge()
+    return load_attack_knowledge(FIXTURE_ATTACK_KB)
 
 
 @pytest.fixture()

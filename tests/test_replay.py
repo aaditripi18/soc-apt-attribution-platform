@@ -32,6 +32,9 @@ from attribution_platform.replay import ReplayError, load_fixture_file, replay_f
 from attribution_platform.sources.errors import SourceAdapterError
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
+#: The fixture rule packs, Phase-0 scenarios and calibration corpus v1 used here are
+#: frozen against this ATT&CK release (doc 11 §0 upgrade record); they load it by name.
+FIXTURE_ATTACK_KB = "enterprise-attack-19.0"
 FIXTURE_PATH = REPO_ROOT / "fixtures" / "phase0_benign_scenarios.json"
 
 
@@ -165,7 +168,7 @@ def test_malformed_attack_ref_rejected(tmp_path: Path) -> None:
 
 def test_replay_is_deterministic_across_independent_runs() -> None:
     fixture = load_fixture_file(FIXTURE_PATH)
-    knowledge = load_attack_knowledge()
+    knowledge = load_attack_knowledge(FIXTURE_ATTACK_KB)
 
     results_a = replay_fixture(fixture, client=FakeElasticClient(), knowledge=knowledge)
     results_b = replay_fixture(fixture, client=FakeElasticClient(), knowledge=knowledge)
@@ -181,7 +184,7 @@ def test_replay_is_deterministic_across_independent_runs() -> None:
 
 def test_replaying_the_same_fixture_twice_into_one_client_is_idempotent() -> None:
     fixture = load_fixture_file(FIXTURE_PATH)
-    knowledge = load_attack_knowledge()
+    knowledge = load_attack_knowledge(FIXTURE_ATTACK_KB)
     client = FakeElasticClient()
 
     replay_fixture(fixture, client=client, knowledge=knowledge)
@@ -200,7 +203,7 @@ def test_replaying_the_same_fixture_twice_into_one_client_is_idempotent() -> Non
 
 def test_replay_fixture_runs_full_pipeline_with_attack_ref() -> None:
     fixture = load_fixture_file(FIXTURE_PATH)
-    knowledge = load_attack_knowledge()
+    knowledge = load_attack_knowledge(FIXTURE_ATTACK_KB)
     client = FakeElasticClient()
 
     results = replay_fixture(fixture, client=client, knowledge=knowledge)
@@ -232,7 +235,7 @@ def test_attack_ref_absent_from_kb_fails_closed(tmp_path: Path) -> None:
     )
     path = _write_fixture(tmp_path, {"fixture_id": "f1", "scenarios": [scenario]})
     fixture = load_fixture_file(path)
-    knowledge = load_attack_knowledge()
+    knowledge = load_attack_knowledge(FIXTURE_ATTACK_KB)
 
     from attribution_platform.attack_knowledge.resolution import AttackReferenceError
 
@@ -247,7 +250,7 @@ def test_attack_ref_absent_from_kb_fails_closed(tmp_path: Path) -> None:
 
 def test_supplied_ids_and_timestamps_are_preserved_verbatim() -> None:
     fixture = load_fixture_file(FIXTURE_PATH)
-    knowledge = load_attack_knowledge()
+    knowledge = load_attack_knowledge(FIXTURE_ATTACK_KB)
     results = replay_fixture(fixture, client=FakeElasticClient(), knowledge=knowledge)
 
     first = results[0]
@@ -258,7 +261,7 @@ def test_supplied_ids_and_timestamps_are_preserved_verbatim() -> None:
 
 def test_dataset_content_hash_lands_in_provenance() -> None:
     fixture = load_fixture_file(FIXTURE_PATH)
-    knowledge = load_attack_knowledge()
+    knowledge = load_attack_knowledge(FIXTURE_ATTACK_KB)
     results = replay_fixture(fixture, client=FakeElasticClient(), knowledge=knowledge)
 
     for result in results:
@@ -268,7 +271,7 @@ def test_dataset_content_hash_lands_in_provenance() -> None:
 
 def test_evidence_provenance_points_back_to_the_replayed_observation() -> None:
     fixture = load_fixture_file(FIXTURE_PATH)
-    knowledge = load_attack_knowledge()
+    knowledge = load_attack_knowledge(FIXTURE_ATTACK_KB)
     results = replay_fixture(fixture, client=FakeElasticClient(), knowledge=knowledge)
 
     for result in results:
@@ -287,7 +290,7 @@ def test_evidence_provenance_points_back_to_the_replayed_observation() -> None:
 
 def test_replayed_observations_and_evidence_round_trip_through_persistence() -> None:
     fixture = load_fixture_file(FIXTURE_PATH)
-    knowledge = load_attack_knowledge()
+    knowledge = load_attack_knowledge(FIXTURE_ATTACK_KB)
     client = FakeElasticClient()
 
     results = replay_fixture(fixture, client=client, knowledge=knowledge)

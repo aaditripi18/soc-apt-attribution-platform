@@ -57,6 +57,9 @@ from attribution_platform.replay import (
 from attribution_platform.sources.synthetic import SyntheticRecord
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
+#: The fixture rule packs, Phase-0 scenarios and calibration corpus v1 used here are
+#: frozen against this ATT&CK release (doc 11 §0 upgrade record); they load it by name.
+FIXTURE_ATTACK_KB = "enterprise-attack-19.0"
 RULE_PACK_PATH = REPO_ROOT / "fixtures" / "phase1_core_rules.json"
 SEED_ROOT = REPO_ROOT / "data" / "calibration" / "corpus" / "seed"
 T0 = datetime(2026, 7, 1, 9, 0, 0, tzinfo=UTC)
@@ -64,7 +67,7 @@ T0 = datetime(2026, 7, 1, 9, 0, 0, tzinfo=UTC)
 
 @pytest.fixture(scope="module")
 def knowledge() -> AttackKnowledge:
-    return load_attack_knowledge()
+    return load_attack_knowledge(FIXTURE_ATTACK_KB)
 
 
 @pytest.fixture()
@@ -187,7 +190,7 @@ from attribution_platform.attack_knowledge.loader import load_attack_knowledge
 from attribution_platform.dataplane import FakeElasticClient
 from attribution_platform.detection import DetectionEngine, load_rule_pack
 from attribution_platform.calibration.corpus_builder import build_corpus_from_dir
-kb = load_attack_knowledge()
+kb = load_attack_knowledge("enterprise-attack-19.0")  # corpus frozen against it
 pack = load_rule_pack(Path("fixtures/phase1_core_rules.json"), knowledge=kb)
 eng = DetectionEngine(rules=pack.rules)
 res = build_corpus_from_dir(

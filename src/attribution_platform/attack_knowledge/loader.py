@@ -73,6 +73,9 @@ from types import MappingProxyType
 from typing import Any
 
 from attribution_platform.attack_knowledge.verification import (
+    EXPECTED_ATTACK_KB_VERSION,
+    VENDORED_ATTACK_ARTIFACTS,
+    ArtifactIntegrityError,
     ArtifactManifest,
     ObjectFingerprint,
     StixCollectionInfo,
@@ -80,13 +83,30 @@ from attribution_platform.attack_knowledge.verification import (
     verify_artifact,
 )
 
-#: The one true pinned artifact location, resolved relative to this module's
-#: own location on disk. This works for an editable/dev install run from
+#: Vendored artifact locations are resolved relative to this module's own
+#: location on disk. This works for an editable/dev install run from
 #: within the repository (the only supported mode at this gate); it is not
 #: designed for a built/installed distribution, which is out of scope for
 #: Phase 0.
 _REPO_ROOT = Path(__file__).resolve().parents[3]
-DEFAULT_ATTACK_ARTIFACT_DIR = _REPO_ROOT / "data" / "attack" / "enterprise" / "v19.0"
+_ATTACK_DATA_DIR = _REPO_ROOT / "data" / "attack" / "enterprise"
+
+
+def attack_artifact_dir(attack_kb_version: str) -> Path:
+    """The vendored directory of a registered ATT&CK release (e.g.
+    ``enterprise-attack-19.2`` → ``data/attack/enterprise/v19.2``). Fails closed
+    for any version not in
+    :data:`~attribution_platform.attack_knowledge.verification.VENDORED_ATTACK_ARTIFACTS`."""
+    if attack_kb_version not in VENDORED_ATTACK_ARTIFACTS:
+        raise ArtifactIntegrityError(
+            f"{attack_kb_version!r} is not a vendored ATT&CK release "
+            f"({sorted(VENDORED_ATTACK_ARTIFACTS)})"
+        )
+    return _ATTACK_DATA_DIR / f"v{attack_kb_version.removeprefix('enterprise-attack-')}"
+
+
+#: The current pin's directory (what :func:`load_attack_knowledge` loads by default).
+DEFAULT_ATTACK_ARTIFACT_DIR = attack_artifact_dir(EXPECTED_ATTACK_KB_VERSION)
 
 # STIX object "type" values that carry ATT&CK content, grouped the same way
 # verification.compute_object_fingerprint() already categorizes them, so the
@@ -259,15 +279,24 @@ def _load_from_dir(artifact_dir: Path) -> AttackKnowledge:
     )
 
 
-def load_attack_knowledge() -> AttackKnowledge:
-    """Load the one pinned, verified MITRE ATT&CK v19.0 bundle.
+def load_attack_knowledge(attack_kb_version: str | None = None) -> AttackKnowledge:
+    """Load a vendored, verified MITRE ATT&CK bundle.
 
-    This is the runtime entrypoint: it takes no arguments and always
-    resolves to :data:`DEFAULT_ATTACK_ARTIFACT_DIR` — there is no way to
-    redirect it to a different artifact, a different version, or a live
-    service. Integrity is verified before any object is returned; on
-    failure this raises
+    With no argument this loads the platform's current pin
+    (:data:`~attribution_platform.attack_knowledge.verification.EXPECTED_ATTACK_KB_VERSION`).
+    ``attack_kb_version`` selects another **vendored** release — only for
+    artifacts frozen against it (e.g. calibration corpus v1 pinned to
+    ``enterprise-attack-19.0``). There is still no way to load an arbitrary
+    path, an unregistered version, or a live service. Integrity is verified
+    before any object is returned; on failure this raises
     :class:`~attribution_platform.attack_knowledge.verification.ArtifactIntegrityError`
     and returns nothing.
     """
-    return _load_from_dir(DEFAULT_ATTACK_ARTIFACT_DIR)
+    version = EXPECTED_ATTACK_KB_VERSION if attack_kb_version is None else attack_kb_version
+    knowledge = _load_from_dir(attack_artifact_dir(version))
+    if knowledge.attack_kb_version != version:
+        raise ArtifactIntegrityError(
+            f"requested {version!r} but the vendored directory holds "
+            f"{knowledge.attack_kb_version!r}"
+        )
+    return knowledge

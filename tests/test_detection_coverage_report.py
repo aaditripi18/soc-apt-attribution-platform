@@ -20,6 +20,7 @@ from attribution_platform.attack_knowledge.traversal import (
     is_active,
     techniques_used_by,
 )
+from attribution_platform.attack_knowledge.verification import EXPECTED_ATTACK_KB_VERSION
 from attribution_platform.detection import RulePack, load_rule_pack
 from attribution_platform.detection_content.coverage_report import (
     TechniqueStatus,
@@ -33,7 +34,6 @@ SIGMA_PACK = GENERATED / "sigma-r2026-07-01-sigma_core++.rules.json"
 SIGMA_REPORT = GENERATED / "sigma-r2026-07-01-sigma_core++.import-report.json"
 COVERAGE_JSON = GENERATED / "coverage-report.json"
 COVERAGE_MD = GENERATED / "coverage-summary.md"
-CORE_PACK = REPO_ROOT / "fixtures" / "phase1_core_rules.json"
 
 
 @pytest.fixture(scope="module")
@@ -43,10 +43,8 @@ def knowledge() -> AttackKnowledge:
 
 @pytest.fixture(scope="module")
 def real_packs(knowledge: AttackKnowledge) -> list[RulePack]:
-    return [
-        load_rule_pack(CORE_PACK, knowledge=knowledge),
-        load_rule_pack(SIGMA_PACK, knowledge=knowledge),
-    ]
+    """Production detection content, exactly as scripts/build_coverage_report.py loads it."""
+    return [load_rule_pack(SIGMA_PACK, knowledge=knowledge)]
 
 
 @pytest.fixture(scope="module")
@@ -217,6 +215,6 @@ def test_committed_report_and_summary_regenerate_byte_identically(
 
 def test_provenance_pins_every_input(report: dict[str, Any], real_packs: list[RulePack]) -> None:
     prov = report["provenance"]
-    assert prov["attack_kb_version"] == "enterprise-attack-19.0"
+    assert prov["attack_kb_version"] == EXPECTED_ATTACK_KB_VERSION
     assert {p["content_hash"] for p in prov["rule_packs"]} == {p.content_hash for p in real_packs}
     assert prov["sigma_import"]["sigma_archive_sha256"]

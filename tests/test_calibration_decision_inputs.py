@@ -39,6 +39,9 @@ from attribution_platform.replay import (
 )
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
+#: The fixture rule packs, Phase-0 scenarios and calibration corpus v1 used here are
+#: frozen against this ATT&CK release (doc 11 §0 upgrade record); they load it by name.
+FIXTURE_ATTACK_KB = "enterprise-attack-19.0"
 CORE_PACK = REPO_ROOT / "fixtures" / "phase1_core_rules.json"
 CALIBRATION_PACK = (
     REPO_ROOT / "data" / "calibration" / "rules" / "calibration_evidence_type_rules.json"
@@ -56,7 +59,7 @@ Entries = tuple[tuple[CorpusScenarioAnnotation, DetectionReplayFixture], ...]
 
 @pytest.fixture(scope="module")
 def knowledge() -> AttackKnowledge:
-    return load_attack_knowledge()
+    return load_attack_knowledge(FIXTURE_ATTACK_KB)
 
 
 @pytest.fixture(scope="module")

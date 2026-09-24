@@ -53,6 +53,56 @@ content (the same place the `attack_kb_version` is shown). No ATT&CK content is 
 
 ---
 
+## 0.1 Upgrade record — v19.0 → v19.2 (2026-09-24, owner-approved)
+
+**Why now.** MITRE shipped two Agile releases after the v19.0 baseline: v19.1 (2026-05-12) and v19.2
+(2026-08-05). The owner requires the platform to cover the Groups and techniques current in industry. No
+`calibration_version` has been fitted yet, so upgrading before corpus v2 and fitting avoids a forced re-fit
+(§G step 3, §I governance rule).
+
+**What was done, per §G:**
+
+1. **Acquire + verify** — `enterprise-attack-19.2.json` from `mitre-attack/attack-stix-data` tag `v19.2`,
+   53,835,637 bytes, SHA-256 `dc1639caa5501d720e280cf1cbd8fbe009884a0c9b3e6e9ed9d0c25166c3d8f4`
+   (`data/attack/enterprise/v19.2/manifest.json`, with `NOTICE.md`). Stored **alongside** v19.0, which is
+   retained unchanged.
+2. **KB-diff report** — `scripts/diff_attack_versions.py` →
+   `data/attack/enterprise/v19.2/changes-from-enterprise-attack-19.0.{json,md}` (regenerated
+   byte-identically by a test). Active objects: Groups 174 → 176 (**added G1056 TeamPCP, G1057
+   ShinyHunters**; none retired), techniques 697 → 697 (none added or retired; no tactic change), software
+   821 → 825 (+4), campaigns 56 → 56. **No existing Group's technique profile changed.** The large
+   "modified" counts are STIX `modified` timestamp changes, including metadata-only edits.
+3. **Recompute `D`** — automatic: `g`/`D`, candidate universe and profile breadth are derived from the loaded
+   bundle at run time, never stored. **Re-fit calibration: not applicable** — no `calibration_version`
+   exists yet.
+4. **A/B on the frozen corpus: not applicable** — calibration corpus v1 is frozen against v19.0 and its
+   harness fails closed on a KB mismatch (doc 14 Stage 5), by design. Corpus v2 will be built on v19.2.
+5. **Version bump** — `EXPECTED_ATTACK_KB_VERSION = "enterprise-attack-19.2"` in
+   `attack_knowledge/verification.py`.
+
+**Mechanism change (recorded, not silent).** `load_attack_knowledge()` previously took no argument and
+could only load v19.0. It now takes an optional **version name** from a registry of vendored releases
+(`VENDORED_ATTACK_ARTIFACTS`): no argument = the current pin (v19.2); a registered name loads that retained
+release (needed by artifacts frozen against it). A path, an unregistered release, the floating
+`enterprise-attack` bundle, or a service URL are still refused (tested). Every vendored release is
+integrity-verified by the test suite, not only the current pin.
+
+**What stays on v19.0 (frozen artifacts, loaded by name):** calibration corpus v1 and its seed, the Phase-1
+structural rule pack `fixtures/phase1_core_rules.json`, and the Phase-0 scenarios
+`fixtures/phase0_benign_scenarios.json`. Their tests load `enterprise-attack-19.0` explicitly.
+
+**What moved to v19.2:** the default KB, the generated Sigma rule pack/import report (tags re-resolved
+against v19.2), and the coverage report. Production detection content is now the Sigma pack alone — the five
+v19.0-stamped structural rules are not production content (all five techniques are covered by Sigma).
+
+**Effect (coverage report, Windows-endpoint v1 scope):** active Groups 176; Group-used techniques 498 (the
+two new Groups use 6 techniques no other Group did); 188 covered; Groups with ≥ 2 covered techniques
+159 → 161, ≥ 10 covered 102 → 104. TeamPCP and ShinyHunters are profiled mostly on cloud/SaaS/identity
+platforms, so much of their profile is outside v1 endpoint scope — shown per Group in the report, not
+hidden.
+
+---
+
 ## A. Requirements (restated, with how the strategy must satisfy each)
 
 | # | Requirement | Must be satisfied by |

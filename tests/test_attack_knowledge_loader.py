@@ -39,11 +39,12 @@ from attribution_platform.attack_knowledge.verification import (
     EXPECTED_ATTACK_DOMAIN,
     EXPECTED_ATTACK_KB_VERSION,
     EXPECTED_STIX_SPEC,
+    VENDORED_ATTACK_ARTIFACTS,
     ArtifactIntegrityError,
 )
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
-VENDORED_ARTIFACT_DIR = REPO_ROOT / "data" / "attack" / "enterprise" / "v19.0"
+VENDORED_ARTIFACT_DIR = REPO_ROOT / "data" / "attack" / "enterprise" / "v19.2"
 VENDORED_MANIFEST_PATH = VENDORED_ARTIFACT_DIR / "manifest.json"
 
 
@@ -65,13 +66,30 @@ def test_load_attack_knowledge_succeeds() -> None:
     assert kb.object_fingerprint.total_objects > 0
 
 
-def test_load_attack_knowledge_takes_no_path_argument() -> None:
-    """(constraint 2) The public entrypoint cannot be redirected to an arbitrary bundle."""
+def test_load_attack_knowledge_accepts_only_a_vendored_version_name() -> None:
+    """(constraint 2) The public entrypoint takes at most a *version name* from
+    the vendored registry — never a path, an unregistered release, or a service."""
     sig = inspect.signature(load_attack_knowledge)
-    assert len(sig.parameters) == 0, (
-        "load_attack_knowledge() must accept no arguments — callers must not be able to "
-        "point the runtime loader at an arbitrary external bundle path"
-    )
+    assert list(sig.parameters) == ["attack_kb_version"]
+    for bad in (
+        "enterprise-attack-19.1",  # a real release that is not vendored
+        "enterprise-attack",  # the floating "latest" name
+        str(VENDORED_ARTIFACT_DIR),  # a path
+        "https://attack-taxii.mitre.org",
+    ):
+        with pytest.raises(ArtifactIntegrityError):
+            load_attack_knowledge(bad)
+
+
+@pytest.mark.parametrize("version", sorted(VENDORED_ATTACK_ARTIFACTS))
+def test_every_vendored_version_loads_by_name(version: str) -> None:
+    kb = load_attack_knowledge(version)
+    assert kb.attack_kb_version == version
+    assert kb.stix_collection.x_mitre_version == version.removeprefix("enterprise-attack-")
+
+
+def test_default_is_the_current_pin() -> None:
+    assert load_attack_knowledge().attack_kb_version == EXPECTED_ATTACK_KB_VERSION
 
 
 # ===========================================================================
@@ -93,10 +111,12 @@ def test_loaded_knowledge_sha256_matches_the_manifest_on_disk() -> None:
     assert kb.attack_kb_sha256 == manifest_data["artifact"]["sha256"]
 
 
-def test_loaded_knowledge_collection_metadata_is_enterprise_v19_0() -> None:
+def test_loaded_knowledge_collection_metadata_is_the_current_pin() -> None:
     kb = load_attack_knowledge()
     assert kb.stix_collection.name == "Enterprise ATT&CK"
-    assert kb.stix_collection.x_mitre_version == "19.0"
+    assert kb.stix_collection.x_mitre_version == (
+        EXPECTED_ATTACK_KB_VERSION.removeprefix("enterprise-attack-")
+    )
     assert kb.stix_collection.spec_version == "2.1"
 
 
@@ -519,10 +539,10 @@ def test_loader_fails_closed_on_wrong_pinned_version(tmp_path: Path) -> None:
     artifact_dir = _write_tiny_valid_fixture(tmp_path)
     manifest_path = artifact_dir / "manifest.json"
     data = json.loads(manifest_path.read_text(encoding="utf-8"))
-    data["attack_kb_version"] = "enterprise-attack-19.1"
+    data["attack_kb_version"] = "enterprise-attack-19.1"  # a real release, but not vendored
     manifest_path.write_text(json.dumps(data), encoding="utf-8")
 
-    with pytest.raises(ArtifactIntegrityError, match="does not match the pinned baseline"):
+    with pytest.raises(ArtifactIntegrityError, match="is not a vendored release"):
         _load_from_dir(artifact_dir)
 
 

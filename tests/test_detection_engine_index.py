@@ -56,9 +56,19 @@ def knowledge() -> AttackKnowledge:
 
 
 @pytest.fixture(scope="module")
-def all_rules(knowledge: AttackKnowledge) -> tuple[DetectionRule, ...]:
+def fixture_knowledge() -> AttackKnowledge:
+    # fixtures/phase1_core_rules.json is frozen against this ATT&CK release.
+    return load_attack_knowledge("enterprise-attack-19.0")
+
+
+@pytest.fixture(scope="module")
+def all_rules(
+    knowledge: AttackKnowledge, fixture_knowledge: AttackKnowledge
+) -> tuple[DetectionRule, ...]:
+    # The engine is ATT&CK-version agnostic; the core rules (unscoped, no
+    # family) and the Sigma rules (scoped, families) exercise every index path.
     return (
-        load_rule_pack(CORE_PACK, knowledge=knowledge).rules
+        load_rule_pack(CORE_PACK, knowledge=fixture_knowledge).rules
         + load_rule_pack(SIGMA_PACK, knowledge=knowledge).rules
     )
 
@@ -228,10 +238,12 @@ def test_real_sigma_siblings_collapse_to_one_detection(
     assert len(DetectionEngine(rules=whoami).evaluate([obs])) == 1  # ...one detection
 
 
-def test_generated_sigma_rules_carry_family_equal_to_source(knowledge: AttackKnowledge) -> None:
+def test_generated_sigma_rules_carry_family_equal_to_source(
+    knowledge: AttackKnowledge, fixture_knowledge: AttackKnowledge
+) -> None:
     pack = load_rule_pack(SIGMA_PACK, knowledge=knowledge)
     assert all(r.rule_family == r.rule_source for r in pack.rules)
-    core = load_rule_pack(CORE_PACK, knowledge=knowledge)
+    core = load_rule_pack(CORE_PACK, knowledge=fixture_knowledge)
     assert all(r.rule_family is None for r in core.rules)
 
 

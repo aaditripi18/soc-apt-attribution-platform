@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """Generate the full-universe detection coverage report (ADR-0007 D9/D10).
 
-Loads the pinned ATT&CK KB, every runtime rule pack, and the Sigma import
-report, and writes (next to the generated Sigma pack):
+Loads the pinned ATT&CK KB, the production rule pack (Sigma, generated
+against that KB), and the Sigma import report, and writes (next to the generated Sigma pack):
 
   coverage-report.json   every active technique + every active Group
   coverage-summary.md    a short human-readable view
@@ -28,7 +28,6 @@ from attribution_platform.detection_content.coverage_report import (
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_TAG = "r2026-07-01"
-CORE_PACK = REPO_ROOT / "fixtures" / "phase1_core_rules.json"
 
 
 def main() -> int:
@@ -40,11 +39,12 @@ def main() -> int:
     sigma_pack = next(generated.glob("*.rules.json"))
     sigma_report = next(generated.glob("*.import-report.json"))
 
+    # Production detection content = the Sigma pack generated against the
+    # current ATT&CK pin. fixtures/phase1_core_rules.json is a Phase-1
+    # structural fixture frozen against enterprise-attack-19.0 (its five
+    # techniques are all covered by Sigma), so it is not production content.
     knowledge = load_attack_knowledge()
-    packs = [
-        load_rule_pack(CORE_PACK, knowledge=knowledge),
-        load_rule_pack(sigma_pack, knowledge=knowledge),
-    ]
+    packs = [load_rule_pack(sigma_pack, knowledge=knowledge)]
     report = build_coverage_report(
         knowledge, packs, json.loads(sigma_report.read_text(encoding="utf-8"))
     )

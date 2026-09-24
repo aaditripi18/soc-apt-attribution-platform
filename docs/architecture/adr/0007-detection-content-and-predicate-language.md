@@ -327,3 +327,10 @@ Sysmon's combined string, mostly IMPHASH), `User` (combined `DOMAIN\user` string
 | Group-used techniques covered (of 492) | 177 | 188 |
 | Groups with ≥ 2 / ≥ 5 / ≥ 10 covered | 157 / 133 / 97 | 159 / 137 / 102 |
 | Engine cost per Observation (400 mixed) | 8.0 ms | 13.3 ms (more rules) |
+
+**ATT&CK v19.2 upgrade (2026-09-24).** The Sigma pack, import report and coverage report were regenerated
+against `enterprise-attack-19.2` (doc 11 §0.1). Production detection content is now the Sigma pack alone;
+`fixtures/phase1_core_rules.json` remains a structural fixture frozen against v19.0 (its five techniques are
+all covered by Sigma). Coverage: 176 active Groups, 188 of 498 Group-used techniques covered, 161 Groups with
+≥ 2 covered techniques.
+

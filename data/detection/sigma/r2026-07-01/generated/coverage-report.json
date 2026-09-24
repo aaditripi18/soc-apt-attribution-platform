@@ -1,16 +1,12 @@
 {
  "report_version": "coverage-report/1",
  "provenance": {
-  "attack_kb_version": "enterprise-attack-19.0",
-  "attack_kb_sha256": "df520ea0775a57db7bff760145b02fed89290802913e056b7ed5970b02f3626a",
+  "attack_kb_version": "enterprise-attack-19.2",
+  "attack_kb_sha256": "dc1639caa5501d720e280cf1cbd8fbe009884a0c9b3e6e9ed9d0c25166c3d8f4",
   "rule_packs": [
    {
-    "pack_id": "phase1-core-rules",
-    "content_hash": "f62d095898aeb0aacfe8265bb6208a047fe5a75cdf0749655c946d3b69d5cfc3"
-   },
-   {
     "pack_id": "sigma-r2026-07-01-sigma_core++",
-    "content_hash": "2abe96c983ee92cb20b559a3baf423c505d60a92cabc275aea0aee1c84a3edc5"
+    "content_hash": "6700015ffa2726d96712a9834f2cecf96e3a2fb4b6e08e2a1168b6be63786ed2"
    }
   ],
   "sigma_import": {
@@ -20,7 +16,7 @@
    "sigma_archive_sha256": "469d83e1d1bbdb4d7876466ff1a728550fae5a20115b91339d58d20e894e7477",
    "pysigma_version": "1.5.1",
    "field_map_version": "sigma-field-map/2",
-   "attack_kb_version": "enterprise-attack-19.0",
+   "attack_kb_version": "enterprise-attack-19.2",
    "dnf_bound": 64,
    "license": "Sigma rules: Detection Rule License (DRL) 1.1 — see NOTICE.md"
   },
@@ -34,8 +30,8 @@
  ],
  "summary": {
   "active_techniques": 697,
-  "group_used_techniques": 492,
-  "active_groups": 174,
+  "group_used_techniques": 498,
+  "active_groups": 176,
   "techniques_by_status": {
    "covered": 217,
    "telemetry_gap": 153,
@@ -45,16 +41,16 @@
   },
   "group_used_techniques_by_status": {
    "covered": 188,
-   "telemetry_gap": 107,
+   "telemetry_gap": 108,
    "translation_gap": 3,
-   "not_endpoint_observable": 88,
-   "no_sigma_rule": 106
+   "not_endpoint_observable": 91,
+   "no_sigma_rule": 108
   },
   "groups_with_empty_technique_profile": 4,
   "groups_with_zero_covered": 8,
-  "groups_with_at_least_2_covered": 159,
-  "groups_with_at_least_5_covered": 137,
-  "groups_with_at_least_10_covered": 102
+  "groups_with_at_least_2_covered": 161,
+  "groups_with_at_least_5_covered": 139,
+  "groups_with_at_least_10_covered": 104
  },
  "gap_ranking": [
   {
@@ -69,42 +65,42 @@
    "in_v1_scope": false,
    "techniques_upper_bound": 18,
    "group_used_techniques_upper_bound": 15,
-   "groups_touched_upper_bound": 92
+   "groups_touched_upper_bound": 94
   },
   {
    "blocker": "logsource:linux/process_creation",
    "in_v1_scope": false,
    "techniques_upper_bound": 18,
    "group_used_techniques_upper_bound": 15,
-   "groups_touched_upper_bound": 32
+   "groups_touched_upper_bound": 34
   },
   {
    "blocker": "logsource:windows/security",
    "in_v1_scope": true,
    "techniques_upper_bound": 17,
    "group_used_techniques_upper_bound": 14,
-   "groups_touched_upper_bound": 79
+   "groups_touched_upper_bound": 81
   },
   {
    "blocker": "logsource:macos/process_creation",
    "in_v1_scope": false,
    "techniques_upper_bound": 17,
    "group_used_techniques_upper_bound": 13,
-   "groups_touched_upper_bound": 108
+   "groups_touched_upper_bound": 110
   },
   {
    "blocker": "logsource:linux/auditd",
    "in_v1_scope": false,
    "techniques_upper_bound": 15,
    "group_used_techniques_upper_bound": 11,
-   "groups_touched_upper_bound": 50
+   "groups_touched_upper_bound": 51
   },
   {
    "blocker": "logsource:windows/file_event",
    "in_v1_scope": true,
    "techniques_upper_bound": 12,
-   "group_used_techniques_upper_bound": 9,
-   "groups_touched_upper_bound": 22
+   "group_used_techniques_upper_bound": 10,
+   "groups_touched_upper_bound": 24
   },
   {
    "blocker": "logsource:windows/registry_set",
@@ -114,32 +110,32 @@
    "groups_touched_upper_bound": 24
   },
   {
+   "blocker": "logsource:github/audit",
+   "in_v1_scope": false,
+   "techniques_upper_bound": 8,
+   "group_used_techniques_upper_bound": 8,
+   "groups_touched_upper_bound": 21
+  },
+  {
    "blocker": "logsource:azure/activitylogs",
    "in_v1_scope": false,
    "techniques_upper_bound": 10,
    "group_used_techniques_upper_bound": 7,
-   "groups_touched_upper_bound": 50
-  },
-  {
-   "blocker": "logsource:github/audit",
-   "in_v1_scope": false,
-   "techniques_upper_bound": 8,
-   "group_used_techniques_upper_bound": 7,
-   "groups_touched_upper_bound": 19
+   "groups_touched_upper_bound": 52
   },
   {
    "blocker": "logsource:azure/auditlogs",
    "in_v1_scope": false,
    "techniques_upper_bound": 7,
    "group_used_techniques_upper_bound": 6,
-   "groups_touched_upper_bound": 49
+   "groups_touched_upper_bound": 51
   },
   {
    "blocker": "logsource:okta/okta",
    "in_v1_scope": false,
    "techniques_upper_bound": 6,
    "group_used_techniques_upper_bound": 6,
-   "groups_touched_upper_bound": 12
+   "groups_touched_upper_bound": 14
   },
   {
    "blocker": "logsource:/proxy",
@@ -167,42 +163,42 @@
    "in_v1_scope": false,
    "techniques_upper_bound": 5,
    "group_used_techniques_upper_bound": 4,
-   "groups_touched_upper_bound": 14
+   "groups_touched_upper_bound": 16
   },
   {
    "blocker": "logsource:gcp/gcp.audit",
    "in_v1_scope": false,
    "techniques_upper_bound": 5,
    "group_used_techniques_upper_bound": 4,
-   "groups_touched_upper_bound": 46
+   "groups_touched_upper_bound": 48
   },
   {
    "blocker": "logsource:azure/signinlogs",
    "in_v1_scope": false,
    "techniques_upper_bound": 4,
    "group_used_techniques_upper_bound": 4,
-   "groups_touched_upper_bound": 48
+   "groups_touched_upper_bound": 50
   },
   {
    "blocker": "logsource:m365/audit",
    "in_v1_scope": false,
    "techniques_upper_bound": 4,
    "group_used_techniques_upper_bound": 4,
-   "groups_touched_upper_bound": 81
+   "groups_touched_upper_bound": 83
   },
   {
    "blocker": "logsource:m365/threat_management",
    "in_v1_scope": false,
    "techniques_upper_bound": 4,
    "group_used_techniques_upper_bound": 4,
-   "groups_touched_upper_bound": 52
+   "groups_touched_upper_bound": 54
   },
   {
    "blocker": "logsource:opencanary/application",
    "in_v1_scope": false,
    "techniques_upper_bound": 4,
    "group_used_techniques_upper_bound": 4,
-   "groups_touched_upper_bound": 61
+   "groups_touched_upper_bound": 63
   },
   {
    "blocker": "logsource:windows/registry_event",
@@ -223,35 +219,35 @@
    "in_v1_scope": false,
    "techniques_upper_bound": 4,
    "group_used_techniques_upper_bound": 3,
-   "groups_touched_upper_bound": 51
+   "groups_touched_upper_bound": 53
   },
   {
    "blocker": "logsource:kubernetes/audit",
    "in_v1_scope": false,
    "techniques_upper_bound": 4,
    "group_used_techniques_upper_bound": 3,
-   "groups_touched_upper_bound": 46
+   "groups_touched_upper_bound": 48
   },
   {
    "blocker": "logsource:gcp/google_workspace.login",
    "in_v1_scope": false,
    "techniques_upper_bound": 3,
    "group_used_techniques_upper_bound": 3,
-   "groups_touched_upper_bound": 49
+   "groups_touched_upper_bound": 51
   },
   {
    "blocker": "logsource:linux/",
    "in_v1_scope": false,
    "techniques_upper_bound": 3,
    "group_used_techniques_upper_bound": 3,
-   "groups_touched_upper_bound": 11
+   "groups_touched_upper_bound": 12
   },
   {
    "blocker": "logsource:linux/network_connection",
    "in_v1_scope": false,
    "techniques_upper_bound": 3,
    "group_used_techniques_upper_bound": 3,
-   "groups_touched_upper_bound": 25
+   "groups_touched_upper_bound": 26
   },
   {
    "blocker": "logsource:windows/dns_query",
@@ -265,14 +261,14 @@
    "in_v1_scope": true,
    "techniques_upper_bound": 3,
    "group_used_techniques_upper_bound": 3,
-   "groups_touched_upper_bound": 60
+   "groups_touched_upper_bound": 62
   },
   {
    "blocker": "logsource:linux/file_event",
    "in_v1_scope": false,
    "techniques_upper_bound": 3,
    "group_used_techniques_upper_bound": 2,
-   "groups_touched_upper_bound": 12
+   "groups_touched_upper_bound": 13
   },
   {
    "blocker": "logsource:windows/system",
@@ -321,14 +317,14 @@
    "in_v1_scope": false,
    "techniques_upper_bound": 1,
    "group_used_techniques_upper_bound": 1,
-   "groups_touched_upper_bound": 14
+   "groups_touched_upper_bound": 15
   },
   {
    "blocker": "logsource:azure/pim",
    "in_v1_scope": false,
    "techniques_upper_bound": 1,
    "group_used_techniques_upper_bound": 1,
-   "groups_touched_upper_bound": 45
+   "groups_touched_upper_bound": 47
   },
   {
    "blocker": "logsource:fortigate/event",
@@ -9314,6 +9310,220 @@
      "status": "no_sigma_rule"
     }
    ]
+  },
+  {
+   "attack_id": "G1056",
+   "name": "TeamPCP",
+   "profile_techniques": 36,
+   "covered": 15,
+   "by_status": {
+    "covered": 15,
+    "telemetry_gap": 7,
+    "translation_gap": 0,
+    "not_endpoint_observable": 10,
+    "no_sigma_rule": 4
+   },
+   "uncovered": [
+    {
+     "attack_id": "T1059.004",
+     "status": "telemetry_gap"
+    },
+    {
+     "attack_id": "T1059.013",
+     "status": "not_endpoint_observable"
+    },
+    {
+     "attack_id": "T1078",
+     "status": "telemetry_gap"
+    },
+    {
+     "attack_id": "T1078.004",
+     "status": "telemetry_gap"
+    },
+    {
+     "attack_id": "T1176.002",
+     "status": "no_sigma_rule"
+    },
+    {
+     "attack_id": "T1195.001",
+     "status": "telemetry_gap"
+    },
+    {
+     "attack_id": "T1543.002",
+     "status": "telemetry_gap"
+    },
+    {
+     "attack_id": "T1546.016",
+     "status": "no_sigma_rule"
+    },
+    {
+     "attack_id": "T1550.001",
+     "status": "telemetry_gap"
+    },
+    {
+     "attack_id": "T1553.002",
+     "status": "telemetry_gap"
+    },
+    {
+     "attack_id": "T1555.006",
+     "status": "not_endpoint_observable"
+    },
+    {
+     "attack_id": "T1583",
+     "status": "not_endpoint_observable"
+    },
+    {
+     "attack_id": "T1583.001",
+     "status": "not_endpoint_observable"
+    },
+    {
+     "attack_id": "T1583.004",
+     "status": "not_endpoint_observable"
+    },
+    {
+     "attack_id": "T1583.006",
+     "status": "not_endpoint_observable"
+    },
+    {
+     "attack_id": "T1585.001",
+     "status": "not_endpoint_observable"
+    },
+    {
+     "attack_id": "T1608.001",
+     "status": "not_endpoint_observable"
+    },
+    {
+     "attack_id": "T1657",
+     "status": "no_sigma_rule"
+    },
+    {
+     "attack_id": "T1677",
+     "status": "not_endpoint_observable"
+    },
+    {
+     "attack_id": "T1683.001",
+     "status": "not_endpoint_observable"
+    },
+    {
+     "attack_id": "T1684.001",
+     "status": "no_sigma_rule"
+    }
+   ]
+  },
+  {
+   "attack_id": "G1057",
+   "name": "ShinyHunters",
+   "profile_techniques": 46,
+   "covered": 21,
+   "by_status": {
+    "covered": 21,
+    "telemetry_gap": 8,
+    "translation_gap": 0,
+    "not_endpoint_observable": 12,
+    "no_sigma_rule": 5
+   },
+   "uncovered": [
+    {
+     "attack_id": "T1059.009",
+     "status": "telemetry_gap"
+    },
+    {
+     "attack_id": "T1069.003",
+     "status": "not_endpoint_observable"
+    },
+    {
+     "attack_id": "T1078",
+     "status": "telemetry_gap"
+    },
+    {
+     "attack_id": "T1078.004",
+     "status": "telemetry_gap"
+    },
+    {
+     "attack_id": "T1195.001",
+     "status": "telemetry_gap"
+    },
+    {
+     "attack_id": "T1213.003",
+     "status": "telemetry_gap"
+    },
+    {
+     "attack_id": "T1213.006",
+     "status": "no_sigma_rule"
+    },
+    {
+     "attack_id": "T1530",
+     "status": "not_endpoint_observable"
+    },
+    {
+     "attack_id": "T1550.001",
+     "status": "telemetry_gap"
+    },
+    {
+     "attack_id": "T1560.002",
+     "status": "no_sigma_rule"
+    },
+    {
+     "attack_id": "T1573.002",
+     "status": "no_sigma_rule"
+    },
+    {
+     "attack_id": "T1580",
+     "status": "not_endpoint_observable"
+    },
+    {
+     "attack_id": "T1583.001",
+     "status": "not_endpoint_observable"
+    },
+    {
+     "attack_id": "T1583.004",
+     "status": "not_endpoint_observable"
+    },
+    {
+     "attack_id": "T1585.002",
+     "status": "not_endpoint_observable"
+    },
+    {
+     "attack_id": "T1587.004",
+     "status": "not_endpoint_observable"
+    },
+    {
+     "attack_id": "T1588.007",
+     "status": "not_endpoint_observable"
+    },
+    {
+     "attack_id": "T1589.001",
+     "status": "not_endpoint_observable"
+    },
+    {
+     "attack_id": "T1593.003",
+     "status": "telemetry_gap"
+    },
+    {
+     "attack_id": "T1595.002",
+     "status": "telemetry_gap"
+    },
+    {
+     "attack_id": "T1598",
+     "status": "not_endpoint_observable"
+    },
+    {
+     "attack_id": "T1598.003",
+     "status": "not_endpoint_observable"
+    },
+    {
+     "attack_id": "T1619",
+     "status": "not_endpoint_observable"
+    },
+    {
+     "attack_id": "T1657",
+     "status": "no_sigma_rule"
+    },
+    {
+     "attack_id": "T1684",
+     "status": "no_sigma_rule"
+    }
+   ]
   }
  ],
  "techniques": [
@@ -9381,7 +9591,7 @@
    "attack_id": "T1003.001",
    "name": "LSASS Memory",
    "status": "covered",
-   "rule_sources": 29,
+   "rule_sources": 28,
    "rejected_rules_blocked_by": [
     "field:ParentUser",
     "field:User",
@@ -10638,7 +10848,7 @@
    "attack_id": "T1059.001",
    "name": "PowerShell",
    "status": "covered",
-   "rule_sources": 59,
+   "rule_sources": 58,
    "rejected_rules_blocked_by": [
     "field:Initiated",
     "field:SourceIsIpv6",
@@ -10676,7 +10886,7 @@
    "attack_id": "T1059.003",
    "name": "Windows Command Shell",
    "status": "covered",
-   "rule_sources": 19,
+   "rule_sources": 18,
    "rejected_rules_blocked_by": [
     "field:Initiated",
     "logsource:aws/cloudtrail",
@@ -11519,7 +11729,7 @@
    "attack_id": "T1105",
    "name": "Ingress Tool Transfer",
    "status": "covered",
-   "rule_sources": 30,
+   "rule_sources": 29,
    "rejected_rules_blocked_by": [
     "field:DestinationHostname",
     "field:Initiated",
@@ -12651,7 +12861,7 @@
    "attack_id": "T1218.011",
    "name": "Rundll32",
    "status": "covered",
-   "rule_sources": 16,
+   "rule_sources": 15,
    "rejected_rules_blocked_by": [
     "logsource:windows/create_remote_thread",
     "logsource:windows/file_event",

@@ -1,0 +1,2988 @@
+{
+ "diff_version": "attack-diff/1",
+ "from": {
+  "attack_kb_version": "enterprise-attack-19.0",
+  "sha256": "df520ea0775a57db7bff760145b02fed89290802913e056b7ed5970b02f3626a"
+ },
+ "to": {
+  "attack_kb_version": "enterprise-attack-19.2",
+  "sha256": "dc1639caa5501d720e280cf1cbd8fbe009884a0c9b3e6e9ed9d0c25166c3d8f4"
+ },
+ "kinds": {
+  "groups": {
+   "active_before": 174,
+   "active_after": 176,
+   "added": [
+    {
+     "attack_id": "G1056",
+     "name": "TeamPCP"
+    },
+    {
+     "attack_id": "G1057",
+     "name": "ShinyHunters"
+    }
+   ],
+   "retired": [],
+   "modified": [
+    {
+     "attack_id": "G0001",
+     "name": "Axiom"
+    },
+    {
+     "attack_id": "G0002",
+     "name": "Moafee"
+    },
+    {
+     "attack_id": "G0003",
+     "name": "Cleaver"
+    },
+    {
+     "attack_id": "G0004",
+     "name": "Ke3chang"
+    },
+    {
+     "attack_id": "G0005",
+     "name": "APT12"
+    },
+    {
+     "attack_id": "G0006",
+     "name": "APT1"
+    },
+    {
+     "attack_id": "G0007",
+     "name": "APT28"
+    },
+    {
+     "attack_id": "G0008",
+     "name": "Carbanak"
+    },
+    {
+     "attack_id": "G0009",
+     "name": "Deep Panda"
+    },
+    {
+     "attack_id": "G0010",
+     "name": "Turla"
+    },
+    {
+     "attack_id": "G0011",
+     "name": "PittyTiger"
+    },
+    {
+     "attack_id": "G0012",
+     "name": "Darkhotel"
+    },
+    {
+     "attack_id": "G0013",
+     "name": "APT30"
+    },
+    {
+     "attack_id": "G0016",
+     "name": "APT29"
+    },
+    {
+     "attack_id": "G0017",
+     "name": "DragonOK"
+    },
+    {
+     "attack_id": "G0018",
+     "name": "admin@338"
+    },
+    {
+     "attack_id": "G0019",
+     "name": "Naikon"
+    },
+    {
+     "attack_id": "G0020",
+     "name": "Equation"
+    },
+    {
+     "attack_id": "G0021",
+     "name": "Molerats"
+    },
+    {
+     "attack_id": "G0022",
+     "name": "APT3"
+    },
+    {
+     "attack_id": "G0023",
+     "name": "APT16"
+    },
+    {
+     "attack_id": "G0024",
+     "name": "Putter Panda"
+    },
+    {
+     "attack_id": "G0025",
+     "name": "APT17"
+    },
+    {
+     "attack_id": "G0026",
+     "name": "APT18"
+    },
+    {
+     "attack_id": "G0027",
+     "name": "Threat Group-3390"
+    },
+    {
+     "attack_id": "G0028",
+     "name": "Threat Group-1314"
+    },
+    {
+     "attack_id": "G0029",
+     "name": "Scarlet Mimic"
+    },
+    {
+     "attack_id": "G0030",
+     "name": "Lotus Blossom"
+    },
+    {
+     "attack_id": "G0032",
+     "name": "Lazarus Group"
+    },
+    {
+     "attack_id": "G0033",
+     "name": "Poseidon Group"
+    },
+    {
+     "attack_id": "G0034",
+     "name": "Sandworm Team"
+    },
+    {
+     "attack_id": "G0035",
+     "name": "Dragonfly"
+    },
+    {
+     "attack_id": "G0036",
+     "name": "GCMAN"
+    },
+    {
+     "attack_id": "G0037",
+     "name": "FIN6"
+    },
+    {
+     "attack_id": "G0038",
+     "name": "Stealth Falcon"
+    },
+    {
+     "attack_id": "G0039",
+     "name": "Suckfly"
+    },
+    {
+     "attack_id": "G0040",
+     "name": "Patchwork"
+    },
+    {
+     "attack_id": "G0041",
+     "name": "Strider"
+    },
+    {
+     "attack_id": "G0043",
+     "name": "Group5"
+    },
+    {
+     "attack_id": "G0044",
+     "name": "Winnti Group"
+    },
+    {
+     "attack_id": "G0045",
+     "name": "menuPass"
+    },
+    {
+     "attack_id": "G0046",
+     "name": "FIN7"
+    },
+    {
+     "attack_id": "G0047",
+     "name": "Gamaredon Group"
+    },
+    {
+     "attack_id": "G0048",
+     "name": "RTM"
+    },
+    {
+     "attack_id": "G0049",
+     "name": "OilRig"
+    },
+    {
+     "attack_id": "G0050",
+     "name": "APT32"
+    },
+    {
+     "attack_id": "G0051",
+     "name": "FIN10"
+    },
+    {
+     "attack_id": "G0052",
+     "name": "CopyKittens"
+    },
+    {
+     "attack_id": "G0053",
+     "name": "FIN5"
+    },
+    {
+     "attack_id": "G0054",
+     "name": "Sowbug"
+    },
+    {
+     "attack_id": "G0055",
+     "name": "NEODYMIUM"
+    },
+    {
+     "attack_id": "G0056",
+     "name": "PROMETHIUM"
+    },
+    {
+     "attack_id": "G0059",
+     "name": "Magic Hound"
+    },
+    {
+     "attack_id": "G0060",
+     "name": "BRONZE BUTLER"
+    },
+    {
+     "attack_id": "G0061",
+     "name": "FIN8"
+    },
+    {
+     "attack_id": "G0062",
+     "name": "TA459"
+    },
+    {
+     "attack_id": "G0063",
+     "name": "BlackOasis"
+    },
+    {
+     "attack_id": "G0064",
+     "name": "APT33"
+    },
+    {
+     "attack_id": "G0065",
+     "name": "Leviathan"
+    },
+    {
+     "attack_id": "G0066",
+     "name": "Elderwood"
+    },
+    {
+     "attack_id": "G0067",
+     "name": "APT37"
+    },
+    {
+     "attack_id": "G0068",
+     "name": "PLATINUM"
+    },
+    {
+     "attack_id": "G0069",
+     "name": "MuddyWater"
+    },
+    {
+     "attack_id": "G0070",
+     "name": "Dark Caracal"
+    },
+    {
+     "attack_id": "G0071",
+     "name": "Orangeworm"
+    },
+    {
+     "attack_id": "G0073",
+     "name": "APT19"
+    },
+    {
+     "attack_id": "G0075",
+     "name": "Rancor"
+    },
+    {
+     "attack_id": "G0076",
+     "name": "Thrip"
+    },
+    {
+     "attack_id": "G0077",
+     "name": "Leafminer"
+    },
+    {
+     "attack_id": "G0078",
+     "name": "Gorgon Group"
+    },
+    {
+     "attack_id": "G0079",
+     "name": "DarkHydrus"
+    },
+    {
+     "attack_id": "G0080",
+     "name": "Cobalt Group"
+    },
+    {
+     "attack_id": "G0081",
+     "name": "Tropic Trooper"
+    },
+    {
+     "attack_id": "G0082",
+     "name": "APT38"
+    },
+    {
+     "attack_id": "G0083",
+     "name": "SilverTerrier"
+    },
+    {
+     "attack_id": "G0084",
+     "name": "Gallmaker"
+    },
+    {
+     "attack_id": "G0085",
+     "name": "FIN4"
+    },
+    {
+     "attack_id": "G0087",
+     "name": "APT39"
+    },
+    {
+     "attack_id": "G0088",
+     "name": "TEMP.Veles"
+    },
+    {
+     "attack_id": "G0089",
+     "name": "The White Company"
+    },
+    {
+     "attack_id": "G0090",
+     "name": "WIRTE"
+    },
+    {
+     "attack_id": "G0091",
+     "name": "Silence"
+    },
+    {
+     "attack_id": "G0092",
+     "name": "TA505"
+    },
+    {
+     "attack_id": "G0093",
+     "name": "GALLIUM"
+    },
+    {
+     "attack_id": "G0094",
+     "name": "Kimsuky"
+    },
+    {
+     "attack_id": "G0095",
+     "name": "Machete"
+    },
+    {
+     "attack_id": "G0096",
+     "name": "APT41"
+    },
+    {
+     "attack_id": "G0098",
+     "name": "BlackTech"
+    },
+    {
+     "attack_id": "G0099",
+     "name": "APT-C-36"
+    },
+    {
+     "attack_id": "G0100",
+     "name": "Inception"
+    },
+    {
+     "attack_id": "G0102",
+     "name": "Wizard Spider"
+    },
+    {
+     "attack_id": "G0103",
+     "name": "Mofang"
+    },
+    {
+     "attack_id": "G0105",
+     "name": "DarkVishnya"
+    },
+    {
+     "attack_id": "G0106",
+     "name": "Rocke"
+    },
+    {
+     "attack_id": "G0107",
+     "name": "Whitefly"
+    },
+    {
+     "attack_id": "G0108",
+     "name": "Blue Mockingbird"
+    },
+    {
+     "attack_id": "G0112",
+     "name": "Windshift"
+    },
+    {
+     "attack_id": "G0114",
+     "name": "Chimera"
+    },
+    {
+     "attack_id": "G0115",
+     "name": "GOLD SOUTHFIELD"
+    },
+    {
+     "attack_id": "G0117",
+     "name": "Fox Kitten"
+    },
+    {
+     "attack_id": "G0119",
+     "name": "Indrik Spider"
+    },
+    {
+     "attack_id": "G0120",
+     "name": "Evilnum"
+    },
+    {
+     "attack_id": "G0121",
+     "name": "Sidewinder"
+    },
+    {
+     "attack_id": "G0122",
+     "name": "Silent Librarian"
+    },
+    {
+     "attack_id": "G0123",
+     "name": "Volatile Cedar"
+    },
+    {
+     "attack_id": "G0124",
+     "name": "Windigo"
+    },
+    {
+     "attack_id": "G0125",
+     "name": "HAFNIUM"
+    },
+    {
+     "attack_id": "G0126",
+     "name": "Higaisa"
+    },
+    {
+     "attack_id": "G0127",
+     "name": "TA551"
+    },
+    {
+     "attack_id": "G0128",
+     "name": "ZIRCONIUM"
+    },
+    {
+     "attack_id": "G0129",
+     "name": "Mustang Panda"
+    },
+    {
+     "attack_id": "G0130",
+     "name": "Ajax Security Team"
+    },
+    {
+     "attack_id": "G0131",
+     "name": "Tonto Team"
+    },
+    {
+     "attack_id": "G0133",
+     "name": "Nomadic Octopus"
+    },
+    {
+     "attack_id": "G0134",
+     "name": "Transparent Tribe"
+    },
+    {
+     "attack_id": "G0135",
+     "name": "BackdoorDiplomacy"
+    },
+    {
+     "attack_id": "G0136",
+     "name": "IndigoZebra"
+    },
+    {
+     "attack_id": "G0137",
+     "name": "Ferocious Kitten"
+    },
+    {
+     "attack_id": "G0138",
+     "name": "Andariel"
+    },
+    {
+     "attack_id": "G0139",
+     "name": "TeamTNT"
+    },
+    {
+     "attack_id": "G0140",
+     "name": "LazyScripter"
+    },
+    {
+     "attack_id": "G0142",
+     "name": "Confucius"
+    },
+    {
+     "attack_id": "G0143",
+     "name": "Aquatic Panda"
+    },
+    {
+     "attack_id": "G1001",
+     "name": "HEXANE"
+    },
+    {
+     "attack_id": "G1002",
+     "name": "BITTER"
+    },
+    {
+     "attack_id": "G1003",
+     "name": "Ember Bear"
+    },
+    {
+     "attack_id": "G1004",
+     "name": "LAPSUS$"
+    },
+    {
+     "attack_id": "G1005",
+     "name": "POLONIUM"
+    },
+    {
+     "attack_id": "G1006",
+     "name": "Earth Lusca"
+    },
+    {
+     "attack_id": "G1007",
+     "name": "Aoqin Dragon"
+    },
+    {
+     "attack_id": "G1008",
+     "name": "SideCopy"
+    },
+    {
+     "attack_id": "G1009",
+     "name": "Moses Staff"
+    },
+    {
+     "attack_id": "G1011",
+     "name": "EXOTIC LILY"
+    },
+    {
+     "attack_id": "G1012",
+     "name": "CURIUM"
+    },
+    {
+     "attack_id": "G1013",
+     "name": "Metador"
+    },
+    {
+     "attack_id": "G1014",
+     "name": "LuminousMoth"
+    },
+    {
+     "attack_id": "G1015",
+     "name": "Scattered Spider"
+    },
+    {
+     "attack_id": "G1016",
+     "name": "FIN13"
+    },
+    {
+     "attack_id": "G1017",
+     "name": "Volt Typhoon"
+    },
+    {
+     "attack_id": "G1018",
+     "name": "TA2541"
+    },
+    {
+     "attack_id": "G1019",
+     "name": "MoustachedBouncer"
+    },
+    {
+     "attack_id": "G1020",
+     "name": "Mustard Tempest"
+    },
+    {
+     "attack_id": "G1021",
+     "name": "Cinnamon Tempest"
+    },
+    {
+     "attack_id": "G1022",
+     "name": "ToddyCat"
+    },
+    {
+     "attack_id": "G1023",
+     "name": "APT5"
+    },
+    {
+     "attack_id": "G1024",
+     "name": "Akira"
+    },
+    {
+     "attack_id": "G1026",
+     "name": "Malteiro"
+    },
+    {
+     "attack_id": "G1028",
+     "name": "APT-C-23"
+    },
+    {
+     "attack_id": "G1030",
+     "name": "Agrius"
+    },
+    {
+     "attack_id": "G1031",
+     "name": "Saint Bear"
+    },
+    {
+     "attack_id": "G1032",
+     "name": "INC Ransom"
+    },
+    {
+     "attack_id": "G1033",
+     "name": "Star Blizzard"
+    },
+    {
+     "attack_id": "G1034",
+     "name": "Daggerfly"
+    },
+    {
+     "attack_id": "G1035",
+     "name": "Winter Vivern"
+    },
+    {
+     "attack_id": "G1036",
+     "name": "Moonstone Sleet"
+    },
+    {
+     "attack_id": "G1037",
+     "name": "TA577"
+    },
+    {
+     "attack_id": "G1038",
+     "name": "TA578"
+    },
+    {
+     "attack_id": "G1039",
+     "name": "RedCurl"
+    },
+    {
+     "attack_id": "G1040",
+     "name": "Play"
+    },
+    {
+     "attack_id": "G1041",
+     "name": "Sea Turtle"
+    },
+    {
+     "attack_id": "G1042",
+     "name": "RedEcho"
+    },
+    {
+     "attack_id": "G1043",
+     "name": "BlackByte"
+    },
+    {
+     "attack_id": "G1044",
+     "name": "APT42"
+    },
+    {
+     "attack_id": "G1045",
+     "name": "Salt Typhoon"
+    },
+    {
+     "attack_id": "G1046",
+     "name": "Storm-1811"
+    },
+    {
+     "attack_id": "G1047",
+     "name": "Velvet Ant"
+    },
+    {
+     "attack_id": "G1048",
+     "name": "UNC3886"
+    },
+    {
+     "attack_id": "G1049",
+     "name": "AppleJeus"
+    },
+    {
+     "attack_id": "G1050",
+     "name": "Water Galura"
+    },
+    {
+     "attack_id": "G1051",
+     "name": "Medusa Group"
+    },
+    {
+     "attack_id": "G1052",
+     "name": "Contagious Interview"
+    },
+    {
+     "attack_id": "G1053",
+     "name": "Storm-0501"
+    },
+    {
+     "attack_id": "G1054",
+     "name": "MirrorFace"
+    },
+    {
+     "attack_id": "G1055",
+     "name": "VOID MANTICORE"
+    }
+   ]
+  },
+  "techniques": {
+   "active_before": 697,
+   "active_after": 697,
+   "added": [],
+   "retired": [],
+   "modified": [
+    {
+     "attack_id": "T1001",
+     "name": "Data Obfuscation"
+    },
+    {
+     "attack_id": "T1001.001",
+     "name": "Junk Data"
+    },
+    {
+     "attack_id": "T1001.003",
+     "name": "Protocol or Service Impersonation"
+    },
+    {
+     "attack_id": "T1003.001",
+     "name": "LSASS Memory"
+    },
+    {
+     "attack_id": "T1003.002",
+     "name": "Security Account Manager"
+    },
+    {
+     "attack_id": "T1003.003",
+     "name": "NTDS"
+    },
+    {
+     "attack_id": "T1005",
+     "name": "Data from Local System"
+    },
+    {
+     "attack_id": "T1006",
+     "name": "Direct Volume Access"
+    },
+    {
+     "attack_id": "T1007",
+     "name": "System Service Discovery"
+    },
+    {
+     "attack_id": "T1008",
+     "name": "Fallback Channels"
+    },
+    {
+     "attack_id": "T1010",
+     "name": "Application Window Discovery"
+    },
+    {
+     "attack_id": "T1012",
+     "name": "Query Registry"
+    },
+    {
+     "attack_id": "T1014",
+     "name": "Rootkit"
+    },
+    {
+     "attack_id": "T1016",
+     "name": "System Network Configuration Discovery"
+    },
+    {
+     "attack_id": "T1018",
+     "name": "Remote System Discovery"
+    },
+    {
+     "attack_id": "T1020",
+     "name": "Automated Exfiltration"
+    },
+    {
+     "attack_id": "T1021.001",
+     "name": "Remote Desktop Protocol"
+    },
+    {
+     "attack_id": "T1021.002",
+     "name": "SMB/Windows Admin Shares"
+    },
+    {
+     "attack_id": "T1021.004",
+     "name": "SSH"
+    },
+    {
+     "attack_id": "T1027",
+     "name": "Obfuscated Files or Information"
+    },
+    {
+     "attack_id": "T1027.001",
+     "name": "Binary Padding"
+    },
+    {
+     "attack_id": "T1027.002",
+     "name": "Software Packing"
+    },
+    {
+     "attack_id": "T1027.003",
+     "name": "Steganography"
+    },
+    {
+     "attack_id": "T1027.004",
+     "name": "Compile After Delivery"
+    },
+    {
+     "attack_id": "T1027.005",
+     "name": "Indicator Removal from Tools"
+    },
+    {
+     "attack_id": "T1027.006",
+     "name": "HTML Smuggling"
+    },
+    {
+     "attack_id": "T1027.007",
+     "name": "Dynamic API Resolution"
+    },
+    {
+     "attack_id": "T1027.008",
+     "name": "Stripped Payloads"
+    },
+    {
+     "attack_id": "T1027.009",
+     "name": "Embedded Payloads"
+    },
+    {
+     "attack_id": "T1027.010",
+     "name": "Command Obfuscation"
+    },
+    {
+     "attack_id": "T1027.011",
+     "name": "Fileless Storage"
+    },
+    {
+     "attack_id": "T1027.012",
+     "name": "LNK Icon Smuggling"
+    },
+    {
+     "attack_id": "T1027.013",
+     "name": "Encrypted/Encoded File"
+    },
+    {
+     "attack_id": "T1027.014",
+     "name": "Polymorphic Code"
+    },
+    {
+     "attack_id": "T1027.015",
+     "name": "Compression"
+    },
+    {
+     "attack_id": "T1027.016",
+     "name": "Junk Code Insertion"
+    },
+    {
+     "attack_id": "T1027.017",
+     "name": "SVG Smuggling"
+    },
+    {
+     "attack_id": "T1027.018",
+     "name": "Invisible Unicode"
+    },
+    {
+     "attack_id": "T1033",
+     "name": "System Owner/User Discovery"
+    },
+    {
+     "attack_id": "T1036",
+     "name": "Masquerading"
+    },
+    {
+     "attack_id": "T1036.001",
+     "name": "Invalid Code Signature"
+    },
+    {
+     "attack_id": "T1036.002",
+     "name": "Right-to-Left Override"
+    },
+    {
+     "attack_id": "T1036.003",
+     "name": "Rename Legitimate Utilities"
+    },
+    {
+     "attack_id": "T1036.004",
+     "name": "Masquerade Task or Service"
+    },
+    {
+     "attack_id": "T1036.005",
+     "name": "Match Legitimate Resource Name or Location"
+    },
+    {
+     "attack_id": "T1036.006",
+     "name": "Space after Filename"
+    },
+    {
+     "attack_id": "T1036.007",
+     "name": "Double File Extension"
+    },
+    {
+     "attack_id": "T1036.008",
+     "name": "Masquerade File Type"
+    },
+    {
+     "attack_id": "T1036.009",
+     "name": "Break Process Trees"
+    },
+    {
+     "attack_id": "T1036.010",
+     "name": "Masquerade Account Name"
+    },
+    {
+     "attack_id": "T1036.011",
+     "name": "Overwrite Process Arguments"
+    },
+    {
+     "attack_id": "T1036.012",
+     "name": "Browser Fingerprint"
+    },
+    {
+     "attack_id": "T1037",
+     "name": "Boot or Logon Initialization Scripts"
+    },
+    {
+     "attack_id": "T1040",
+     "name": "Network Sniffing"
+    },
+    {
+     "attack_id": "T1041",
+     "name": "Exfiltration Over C2 Channel"
+    },
+    {
+     "attack_id": "T1046",
+     "name": "Network Service Discovery"
+    },
+    {
+     "attack_id": "T1047",
+     "name": "Windows Management Instrumentation"
+    },
+    {
+     "attack_id": "T1048.002",
+     "name": "Exfiltration Over Asymmetric Encrypted Non-C2 Protocol"
+    },
+    {
+     "attack_id": "T1048.003",
+     "name": "Exfiltration Over Unencrypted Non-C2 Protocol"
+    },
+    {
+     "attack_id": "T1049",
+     "name": "System Network Connections Discovery"
+    },
+    {
+     "attack_id": "T1053",
+     "name": "Scheduled Task/Job"
+    },
+    {
+     "attack_id": "T1053.005",
+     "name": "Scheduled Task"
+    },
+    {
+     "attack_id": "T1055",
+     "name": "Process Injection"
+    },
+    {
+     "attack_id": "T1055.001",
+     "name": "Dynamic-link Library Injection"
+    },
+    {
+     "attack_id": "T1055.002",
+     "name": "Portable Executable Injection"
+    },
+    {
+     "attack_id": "T1055.003",
+     "name": "Thread Execution Hijacking"
+    },
+    {
+     "attack_id": "T1055.004",
+     "name": "Asynchronous Procedure Call"
+    },
+    {
+     "attack_id": "T1055.005",
+     "name": "Thread Local Storage"
+    },
+    {
+     "attack_id": "T1055.008",
+     "name": "Ptrace System Calls"
+    },
+    {
+     "attack_id": "T1055.009",
+     "name": "Proc Memory"
+    },
+    {
+     "attack_id": "T1055.011",
+     "name": "Extra Window Memory Injection"
+    },
+    {
+     "attack_id": "T1055.012",
+     "name": "Process Hollowing"
+    },
+    {
+     "attack_id": "T1055.013",
+     "name": "Process Doppelgänging"
+    },
+    {
+     "attack_id": "T1055.014",
+     "name": "VDSO Hijacking"
+    },
+    {
+     "attack_id": "T1055.015",
+     "name": "ListPlanting"
+    },
+    {
+     "attack_id": "T1056.001",
+     "name": "Keylogging"
+    },
+    {
+     "attack_id": "T1056.002",
+     "name": "GUI Input Capture"
+    },
+    {
+     "attack_id": "T1056.003",
+     "name": "Web Portal Capture"
+    },
+    {
+     "attack_id": "T1057",
+     "name": "Process Discovery"
+    },
+    {
+     "attack_id": "T1059",
+     "name": "Command and Scripting Interpreter"
+    },
+    {
+     "attack_id": "T1059.001",
+     "name": "PowerShell"
+    },
+    {
+     "attack_id": "T1059.002",
+     "name": "AppleScript"
+    },
+    {
+     "attack_id": "T1059.003",
+     "name": "Windows Command Shell"
+    },
+    {
+     "attack_id": "T1059.004",
+     "name": "Unix Shell"
+    },
+    {
+     "attack_id": "T1059.005",
+     "name": "Visual Basic"
+    },
+    {
+     "attack_id": "T1059.006",
+     "name": "Python"
+    },
+    {
+     "attack_id": "T1059.007",
+     "name": "JavaScript"
+    },
+    {
+     "attack_id": "T1059.008",
+     "name": "Network Device CLI"
+    },
+    {
+     "attack_id": "T1059.009",
+     "name": "Cloud API"
+    },
+    {
+     "attack_id": "T1069.001",
+     "name": "Local Groups"
+    },
+    {
+     "attack_id": "T1069.002",
+     "name": "Domain Groups"
+    },
+    {
+     "attack_id": "T1069.003",
+     "name": "Cloud Groups"
+    },
+    {
+     "attack_id": "T1070",
+     "name": "Indicator Removal"
+    },
+    {
+     "attack_id": "T1070.003",
+     "name": "Clear Command History"
+    },
+    {
+     "attack_id": "T1070.004",
+     "name": "File Deletion"
+    },
+    {
+     "attack_id": "T1070.005",
+     "name": "Network Share Connection Removal"
+    },
+    {
+     "attack_id": "T1070.006",
+     "name": "Timestomp"
+    },
+    {
+     "attack_id": "T1070.007",
+     "name": "Clear Network Connection History and Configurations"
+    },
+    {
+     "attack_id": "T1070.008",
+     "name": "Clear Mailbox Data"
+    },
+    {
+     "attack_id": "T1070.009",
+     "name": "Clear Persistence"
+    },
+    {
+     "attack_id": "T1070.010",
+     "name": "Relocate Malware"
+    },
+    {
+     "attack_id": "T1071.001",
+     "name": "Web Protocols"
+    },
+    {
+     "attack_id": "T1071.002",
+     "name": "File Transfer Protocols"
+    },
+    {
+     "attack_id": "T1071.004",
+     "name": "DNS"
+    },
+    {
+     "attack_id": "T1072",
+     "name": "Software Deployment Tools"
+    },
+    {
+     "attack_id": "T1074",
+     "name": "Data Staged"
+    },
+    {
+     "attack_id": "T1074.001",
+     "name": "Local Data Staging"
+    },
+    {
+     "attack_id": "T1074.002",
+     "name": "Remote Data Staging"
+    },
+    {
+     "attack_id": "T1078",
+     "name": "Valid Accounts"
+    },
+    {
+     "attack_id": "T1078.001",
+     "name": "Default Accounts"
+    },
+    {
+     "attack_id": "T1078.002",
+     "name": "Domain Accounts"
+    },
+    {
+     "attack_id": "T1078.003",
+     "name": "Local Accounts"
+    },
+    {
+     "attack_id": "T1078.004",
+     "name": "Cloud Accounts"
+    },
+    {
+     "attack_id": "T1082",
+     "name": "System Information Discovery"
+    },
+    {
+     "attack_id": "T1083",
+     "name": "File and Directory Discovery"
+    },
+    {
+     "attack_id": "T1087",
+     "name": "Account Discovery"
+    },
+    {
+     "attack_id": "T1087.001",
+     "name": "Local Account"
+    },
+    {
+     "attack_id": "T1087.002",
+     "name": "Domain Account"
+    },
+    {
+     "attack_id": "T1087.003",
+     "name": "Email Account"
+    },
+    {
+     "attack_id": "T1090",
+     "name": "Proxy"
+    },
+    {
+     "attack_id": "T1090.001",
+     "name": "Internal Proxy"
+    },
+    {
+     "attack_id": "T1090.002",
+     "name": "External Proxy"
+    },
+    {
+     "attack_id": "T1090.003",
+     "name": "Multi-hop Proxy"
+    },
+    {
+     "attack_id": "T1095",
+     "name": "Non-Application Layer Protocol"
+    },
+    {
+     "attack_id": "T1098",
+     "name": "Account Manipulation"
+    },
+    {
+     "attack_id": "T1098.004",
+     "name": "SSH Authorized Keys"
+    },
+    {
+     "attack_id": "T1102",
+     "name": "Web Service"
+    },
+    {
+     "attack_id": "T1102.001",
+     "name": "Dead Drop Resolver"
+    },
+    {
+     "attack_id": "T1102.002",
+     "name": "Bidirectional Communication"
+    },
+    {
+     "attack_id": "T1105",
+     "name": "Ingress Tool Transfer"
+    },
+    {
+     "attack_id": "T1106",
+     "name": "Native API"
+    },
+    {
+     "attack_id": "T1110",
+     "name": "Brute Force"
+    },
+    {
+     "attack_id": "T1110.001",
+     "name": "Password Guessing"
+    },
+    {
+     "attack_id": "T1110.002",
+     "name": "Password Cracking"
+    },
+    {
+     "attack_id": "T1110.004",
+     "name": "Credential Stuffing"
+    },
+    {
+     "attack_id": "T1111",
+     "name": "Multi-Factor Authentication Interception"
+    },
+    {
+     "attack_id": "T1112",
+     "name": "Modify Registry"
+    },
+    {
+     "attack_id": "T1113",
+     "name": "Screen Capture"
+    },
+    {
+     "attack_id": "T1114.001",
+     "name": "Local Email Collection"
+    },
+    {
+     "attack_id": "T1114.002",
+     "name": "Remote Email Collection"
+    },
+    {
+     "attack_id": "T1115",
+     "name": "Clipboard Data"
+    },
+    {
+     "attack_id": "T1119",
+     "name": "Automated Collection"
+    },
+    {
+     "attack_id": "T1120",
+     "name": "Peripheral Device Discovery"
+    },
+    {
+     "attack_id": "T1123",
+     "name": "Audio Capture"
+    },
+    {
+     "attack_id": "T1124",
+     "name": "System Time Discovery"
+    },
+    {
+     "attack_id": "T1125",
+     "name": "Video Capture"
+    },
+    {
+     "attack_id": "T1127",
+     "name": "Trusted Developer Utilities Proxy Execution"
+    },
+    {
+     "attack_id": "T1127.001",
+     "name": "MSBuild"
+    },
+    {
+     "attack_id": "T1127.002",
+     "name": "ClickOnce"
+    },
+    {
+     "attack_id": "T1127.003",
+     "name": "JamPlus"
+    },
+    {
+     "attack_id": "T1132",
+     "name": "Data Encoding"
+    },
+    {
+     "attack_id": "T1132.001",
+     "name": "Standard Encoding"
+    },
+    {
+     "attack_id": "T1132.002",
+     "name": "Non-Standard Encoding"
+    },
+    {
+     "attack_id": "T1133",
+     "name": "External Remote Services"
+    },
+    {
+     "attack_id": "T1134",
+     "name": "Access Token Manipulation"
+    },
+    {
+     "attack_id": "T1134.001",
+     "name": "Token Impersonation/Theft"
+    },
+    {
+     "attack_id": "T1134.002",
+     "name": "Create Process with Token"
+    },
+    {
+     "attack_id": "T1134.003",
+     "name": "Make and Impersonate Token"
+    },
+    {
+     "attack_id": "T1134.004",
+     "name": "Parent PID Spoofing"
+    },
+    {
+     "attack_id": "T1134.005",
+     "name": "SID-History Injection"
+    },
+    {
+     "attack_id": "T1136.001",
+     "name": "Local Account"
+    },
+    {
+     "attack_id": "T1137.001",
+     "name": "Office Template Macros"
+    },
+    {
+     "attack_id": "T1140",
+     "name": "Deobfuscate/Decode Files or Information"
+    },
+    {
+     "attack_id": "T1185",
+     "name": "Browser Session Hijacking"
+    },
+    {
+     "attack_id": "T1190",
+     "name": "Exploit Public-Facing Application"
+    },
+    {
+     "attack_id": "T1195.001",
+     "name": "Compromise Software Dependencies and Development Tools"
+    },
+    {
+     "attack_id": "T1197",
+     "name": "BITS Jobs"
+    },
+    {
+     "attack_id": "T1199",
+     "name": "Trusted Relationship"
+    },
+    {
+     "attack_id": "T1202",
+     "name": "Indirect Command Execution"
+    },
+    {
+     "attack_id": "T1204.001",
+     "name": "Malicious Link"
+    },
+    {
+     "attack_id": "T1204.002",
+     "name": "Malicious File"
+    },
+    {
+     "attack_id": "T1204.004",
+     "name": "Malicious Copy and Paste"
+    },
+    {
+     "attack_id": "T1205",
+     "name": "Traffic Signaling"
+    },
+    {
+     "attack_id": "T1205.001",
+     "name": "Port Knocking"
+    },
+    {
+     "attack_id": "T1205.002",
+     "name": "Socket Filters"
+    },
+    {
+     "attack_id": "T1207",
+     "name": "Rogue Domain Controller"
+    },
+    {
+     "attack_id": "T1210",
+     "name": "Exploitation of Remote Services"
+    },
+    {
+     "attack_id": "T1211",
+     "name": "Exploitation for Stealth"
+    },
+    {
+     "attack_id": "T1213.001",
+     "name": "Confluence"
+    },
+    {
+     "attack_id": "T1213.002",
+     "name": "Sharepoint"
+    },
+    {
+     "attack_id": "T1213.003",
+     "name": "Code Repositories"
+    },
+    {
+     "attack_id": "T1213.005",
+     "name": "Messaging Applications"
+    },
+    {
+     "attack_id": "T1213.006",
+     "name": "Databases"
+    },
+    {
+     "attack_id": "T1216",
+     "name": "System Script Proxy Execution"
+    },
+    {
+     "attack_id": "T1216.001",
+     "name": "PubPrn"
+    },
+    {
+     "attack_id": "T1216.002",
+     "name": "SyncAppvPublishingServer"
+    },
+    {
+     "attack_id": "T1217",
+     "name": "Browser Information Discovery"
+    },
+    {
+     "attack_id": "T1218",
+     "name": "System Binary Proxy Execution"
+    },
+    {
+     "attack_id": "T1218.001",
+     "name": "Compiled HTML File"
+    },
+    {
+     "attack_id": "T1218.002",
+     "name": "Control Panel"
+    },
+    {
+     "attack_id": "T1218.003",
+     "name": "CMSTP"
+    },
+    {
+     "attack_id": "T1218.004",
+     "name": "InstallUtil"
+    },
+    {
+     "attack_id": "T1218.005",
+     "name": "Mshta"
+    },
+    {
+     "attack_id": "T1218.007",
+     "name": "Msiexec"
+    },
+    {
+     "attack_id": "T1218.008",
+     "name": "Odbcconf"
+    },
+    {
+     "attack_id": "T1218.009",
+     "name": "Regsvcs/Regasm"
+    },
+    {
+     "attack_id": "T1218.010",
+     "name": "Regsvr32"
+    },
+    {
+     "attack_id": "T1218.011",
+     "name": "Rundll32"
+    },
+    {
+     "attack_id": "T1218.012",
+     "name": "Verclsid"
+    },
+    {
+     "attack_id": "T1218.013",
+     "name": "Mavinject"
+    },
+    {
+     "attack_id": "T1218.014",
+     "name": "MMC"
+    },
+    {
+     "attack_id": "T1218.015",
+     "name": "Electron Applications"
+    },
+    {
+     "attack_id": "T1219",
+     "name": "Remote Access Tools"
+    },
+    {
+     "attack_id": "T1219.001",
+     "name": "IDE Tunneling"
+    },
+    {
+     "attack_id": "T1219.002",
+     "name": "Remote Desktop Software"
+    },
+    {
+     "attack_id": "T1220",
+     "name": "XSL Script Processing"
+    },
+    {
+     "attack_id": "T1221",
+     "name": "Template Injection"
+    },
+    {
+     "attack_id": "T1222",
+     "name": "File and Directory Permissions Modification"
+    },
+    {
+     "attack_id": "T1222.001",
+     "name": "Windows Permissions"
+    },
+    {
+     "attack_id": "T1222.002",
+     "name": "Linux and Mac Permissions"
+    },
+    {
+     "attack_id": "T1480",
+     "name": "Execution Guardrails"
+    },
+    {
+     "attack_id": "T1480.001",
+     "name": "Environmental Keying"
+    },
+    {
+     "attack_id": "T1480.002",
+     "name": "Mutual Exclusion"
+    },
+    {
+     "attack_id": "T1482",
+     "name": "Domain Trust Discovery"
+    },
+    {
+     "attack_id": "T1484",
+     "name": "Domain or Tenant Policy Modification"
+    },
+    {
+     "attack_id": "T1484.001",
+     "name": "Group Policy Modification"
+    },
+    {
+     "attack_id": "T1484.002",
+     "name": "Trust Modification"
+    },
+    {
+     "attack_id": "T1485",
+     "name": "Data Destruction"
+    },
+    {
+     "attack_id": "T1486",
+     "name": "Data Encrypted for Impact"
+    },
+    {
+     "attack_id": "T1489",
+     "name": "Service Stop"
+    },
+    {
+     "attack_id": "T1490",
+     "name": "Inhibit System Recovery"
+    },
+    {
+     "attack_id": "T1491.001",
+     "name": "Internal Defacement"
+    },
+    {
+     "attack_id": "T1495",
+     "name": "Firmware Corruption"
+    },
+    {
+     "attack_id": "T1497",
+     "name": "Virtualization/Sandbox Evasion"
+    },
+    {
+     "attack_id": "T1497.001",
+     "name": "System Checks"
+    },
+    {
+     "attack_id": "T1497.002",
+     "name": "User Activity Based Checks"
+    },
+    {
+     "attack_id": "T1497.003",
+     "name": "Time Based Checks"
+    },
+    {
+     "attack_id": "T1505.003",
+     "name": "Web Shell"
+    },
+    {
+     "attack_id": "T1518",
+     "name": "Software Discovery"
+    },
+    {
+     "attack_id": "T1518.001",
+     "name": "Security Software Discovery"
+    },
+    {
+     "attack_id": "T1526",
+     "name": "Cloud Service Discovery"
+    },
+    {
+     "attack_id": "T1528",
+     "name": "Steal Application Access Token"
+    },
+    {
+     "attack_id": "T1529",
+     "name": "System Shutdown/Reboot"
+    },
+    {
+     "attack_id": "T1530",
+     "name": "Data from Cloud Storage"
+    },
+    {
+     "attack_id": "T1534",
+     "name": "Internal Spearphishing"
+    },
+    {
+     "attack_id": "T1535",
+     "name": "Unused/Unsupported Cloud Regions"
+    },
+    {
+     "attack_id": "T1539",
+     "name": "Steal Web Session Cookie"
+    },
+    {
+     "attack_id": "T1542",
+     "name": "Pre-OS Boot"
+    },
+    {
+     "attack_id": "T1542.001",
+     "name": "System Firmware"
+    },
+    {
+     "attack_id": "T1542.002",
+     "name": "Component Firmware"
+    },
+    {
+     "attack_id": "T1542.003",
+     "name": "Bootkit"
+    },
+    {
+     "attack_id": "T1542.004",
+     "name": "ROMMONkit"
+    },
+    {
+     "attack_id": "T1542.005",
+     "name": "TFTP Boot"
+    },
+    {
+     "attack_id": "T1543",
+     "name": "Create or Modify System Process"
+    },
+    {
+     "attack_id": "T1543.001",
+     "name": "Launch Agent"
+    },
+    {
+     "attack_id": "T1543.002",
+     "name": "Systemd Service"
+    },
+    {
+     "attack_id": "T1543.003",
+     "name": "Windows Service"
+    },
+    {
+     "attack_id": "T1546",
+     "name": "Event Triggered Execution"
+    },
+    {
+     "attack_id": "T1546.004",
+     "name": "Unix Shell Configuration Modification"
+    },
+    {
+     "attack_id": "T1546.012",
+     "name": "Image File Execution Options Injection"
+    },
+    {
+     "attack_id": "T1546.016",
+     "name": "Installer Packages"
+    },
+    {
+     "attack_id": "T1547.001",
+     "name": "Registry Run Keys / Startup Folder"
+    },
+    {
+     "attack_id": "T1548",
+     "name": "Abuse Elevation Control Mechanism"
+    },
+    {
+     "attack_id": "T1548.001",
+     "name": "Setuid and Setgid"
+    },
+    {
+     "attack_id": "T1548.002",
+     "name": "Bypass User Account Control"
+    },
+    {
+     "attack_id": "T1548.003",
+     "name": "Sudo and Sudo Caching"
+    },
+    {
+     "attack_id": "T1548.004",
+     "name": "Elevated Execution with Prompt"
+    },
+    {
+     "attack_id": "T1548.005",
+     "name": "Temporary Elevated Cloud Access"
+    },
+    {
+     "attack_id": "T1548.006",
+     "name": "TCC Manipulation"
+    },
+    {
+     "attack_id": "T1550",
+     "name": "Use Alternate Authentication Material"
+    },
+    {
+     "attack_id": "T1550.001",
+     "name": "Application Access Token"
+    },
+    {
+     "attack_id": "T1550.002",
+     "name": "Pass the Hash"
+    },
+    {
+     "attack_id": "T1550.003",
+     "name": "Pass the Ticket"
+    },
+    {
+     "attack_id": "T1550.004",
+     "name": "Web Session Cookie"
+    },
+    {
+     "attack_id": "T1552.001",
+     "name": "Credentials In Files"
+    },
+    {
+     "attack_id": "T1552.002",
+     "name": "Credentials in Registry"
+    },
+    {
+     "attack_id": "T1552.004",
+     "name": "Private Keys"
+    },
+    {
+     "attack_id": "T1552.005",
+     "name": "Cloud Instance Metadata API"
+    },
+    {
+     "attack_id": "T1552.006",
+     "name": "Group Policy Preferences"
+    },
+    {
+     "attack_id": "T1553",
+     "name": "Subvert Trust Controls"
+    },
+    {
+     "attack_id": "T1553.001",
+     "name": "Gatekeeper Bypass"
+    },
+    {
+     "attack_id": "T1553.002",
+     "name": "Code Signing"
+    },
+    {
+     "attack_id": "T1553.003",
+     "name": "SIP and Trust Provider Hijacking"
+    },
+    {
+     "attack_id": "T1553.004",
+     "name": "Install Root Certificate"
+    },
+    {
+     "attack_id": "T1553.005",
+     "name": "Mark-of-the-Web Bypass"
+    },
+    {
+     "attack_id": "T1553.006",
+     "name": "Code Signing Policy Modification"
+    },
+    {
+     "attack_id": "T1554",
+     "name": "Compromise Host Software Binary"
+    },
+    {
+     "attack_id": "T1555",
+     "name": "Credentials from Password Stores"
+    },
+    {
+     "attack_id": "T1555.001",
+     "name": "Keychain"
+    },
+    {
+     "attack_id": "T1555.003",
+     "name": "Credentials from Web Browsers"
+    },
+    {
+     "attack_id": "T1555.006",
+     "name": "Cloud Secrets Management Stores"
+    },
+    {
+     "attack_id": "T1556",
+     "name": "Modify Authentication Process"
+    },
+    {
+     "attack_id": "T1556.001",
+     "name": "Domain Controller Authentication"
+    },
+    {
+     "attack_id": "T1556.002",
+     "name": "Password Filter DLL"
+    },
+    {
+     "attack_id": "T1556.003",
+     "name": "Pluggable Authentication Modules"
+    },
+    {
+     "attack_id": "T1556.004",
+     "name": "Network Device Authentication"
+    },
+    {
+     "attack_id": "T1556.005",
+     "name": "Reversible Encryption"
+    },
+    {
+     "attack_id": "T1556.006",
+     "name": "Multi-Factor Authentication"
+    },
+    {
+     "attack_id": "T1556.007",
+     "name": "Hybrid Identity"
+    },
+    {
+     "attack_id": "T1556.008",
+     "name": "Network Provider DLL"
+    },
+    {
+     "attack_id": "T1556.009",
+     "name": "Conditional Access Policies"
+    },
+    {
+     "attack_id": "T1557",
+     "name": "Adversary-in-the-Middle"
+    },
+    {
+     "attack_id": "T1557.001",
+     "name": "Name Resolution Poisoning and SMB Relay"
+    },
+    {
+     "attack_id": "T1558",
+     "name": "Steal or Forge Kerberos Tickets"
+    },
+    {
+     "attack_id": "T1559",
+     "name": "Inter-Process Communication"
+    },
+    {
+     "attack_id": "T1559.001",
+     "name": "Component Object Model"
+    },
+    {
+     "attack_id": "T1560",
+     "name": "Archive Collected Data"
+    },
+    {
+     "attack_id": "T1560.001",
+     "name": "Archive via Utility"
+    },
+    {
+     "attack_id": "T1561.001",
+     "name": "Disk Content Wipe"
+    },
+    {
+     "attack_id": "T1561.002",
+     "name": "Disk Structure Wipe"
+    },
+    {
+     "attack_id": "T1564",
+     "name": "Hide Artifacts"
+    },
+    {
+     "attack_id": "T1564.001",
+     "name": "Hidden Files and Directories"
+    },
+    {
+     "attack_id": "T1564.002",
+     "name": "Hidden Users"
+    },
+    {
+     "attack_id": "T1564.003",
+     "name": "Hidden Window"
+    },
+    {
+     "attack_id": "T1564.004",
+     "name": "NTFS File Attributes"
+    },
+    {
+     "attack_id": "T1564.005",
+     "name": "Hidden File System"
+    },
+    {
+     "attack_id": "T1564.006",
+     "name": "Run Virtual Instance"
+    },
+    {
+     "attack_id": "T1564.007",
+     "name": "VBA Stomping"
+    },
+    {
+     "attack_id": "T1564.008",
+     "name": "Email Hiding Rules"
+    },
+    {
+     "attack_id": "T1564.009",
+     "name": "Resource Forking"
+    },
+    {
+     "attack_id": "T1564.010",
+     "name": "Process Argument Spoofing"
+    },
+    {
+     "attack_id": "T1564.011",
+     "name": "Ignore Process Interrupts"
+    },
+    {
+     "attack_id": "T1564.012",
+     "name": "File/Path Exclusions"
+    },
+    {
+     "attack_id": "T1564.013",
+     "name": "Bind Mounts"
+    },
+    {
+     "attack_id": "T1564.014",
+     "name": "Extended Attributes"
+    },
+    {
+     "attack_id": "T1565",
+     "name": "Data Manipulation"
+    },
+    {
+     "attack_id": "T1565.002",
+     "name": "Transmitted Data Manipulation"
+    },
+    {
+     "attack_id": "T1566",
+     "name": "Phishing"
+    },
+    {
+     "attack_id": "T1566.001",
+     "name": "Spearphishing Attachment"
+    },
+    {
+     "attack_id": "T1566.002",
+     "name": "Spearphishing Link"
+    },
+    {
+     "attack_id": "T1566.004",
+     "name": "Spearphishing Voice"
+    },
+    {
+     "attack_id": "T1567",
+     "name": "Exfiltration Over Web Service"
+    },
+    {
+     "attack_id": "T1567.001",
+     "name": "Exfiltration to Code Repository"
+    },
+    {
+     "attack_id": "T1567.002",
+     "name": "Exfiltration to Cloud Storage"
+    },
+    {
+     "attack_id": "T1567.004",
+     "name": "Exfiltration Over Webhook"
+    },
+    {
+     "attack_id": "T1568",
+     "name": "Dynamic Resolution"
+    },
+    {
+     "attack_id": "T1568.002",
+     "name": "Domain Generation Algorithms"
+    },
+    {
+     "attack_id": "T1568.003",
+     "name": "DNS Calculation"
+    },
+    {
+     "attack_id": "T1569.002",
+     "name": "Service Execution"
+    },
+    {
+     "attack_id": "T1570",
+     "name": "Lateral Tool Transfer"
+    },
+    {
+     "attack_id": "T1571",
+     "name": "Non-Standard Port"
+    },
+    {
+     "attack_id": "T1572",
+     "name": "Protocol Tunneling"
+    },
+    {
+     "attack_id": "T1573.001",
+     "name": "Symmetric Cryptography"
+    },
+    {
+     "attack_id": "T1573.002",
+     "name": "Asymmetric Cryptography"
+    },
+    {
+     "attack_id": "T1574",
+     "name": "Hijack Execution Flow"
+    },
+    {
+     "attack_id": "T1574.001",
+     "name": "DLL"
+    },
+    {
+     "attack_id": "T1574.004",
+     "name": "Dylib Hijacking"
+    },
+    {
+     "attack_id": "T1574.005",
+     "name": "Executable Installer File Permissions Weakness"
+    },
+    {
+     "attack_id": "T1574.006",
+     "name": "Dynamic Linker Hijacking"
+    },
+    {
+     "attack_id": "T1574.007",
+     "name": "Path Interception by PATH Environment Variable"
+    },
+    {
+     "attack_id": "T1574.008",
+     "name": "Path Interception by Search Order Hijacking"
+    },
+    {
+     "attack_id": "T1574.009",
+     "name": "Path Interception by Unquoted Path"
+    },
+    {
+     "attack_id": "T1574.010",
+     "name": "Services File Permissions Weakness"
+    },
+    {
+     "attack_id": "T1574.011",
+     "name": "Services Registry Permissions Weakness"
+    },
+    {
+     "attack_id": "T1574.012",
+     "name": "COR_PROFILER"
+    },
+    {
+     "attack_id": "T1574.013",
+     "name": "KernelCallbackTable"
+    },
+    {
+     "attack_id": "T1574.014",
+     "name": "AppDomainManager"
+    },
+    {
+     "attack_id": "T1578",
+     "name": "Modify Cloud Compute Infrastructure"
+    },
+    {
+     "attack_id": "T1578.001",
+     "name": "Create Snapshot"
+    },
+    {
+     "attack_id": "T1578.002",
+     "name": "Create Cloud Instance"
+    },
+    {
+     "attack_id": "T1578.003",
+     "name": "Delete Cloud Instance"
+    },
+    {
+     "attack_id": "T1578.004",
+     "name": "Revert Cloud Instance"
+    },
+    {
+     "attack_id": "T1578.005",
+     "name": "Modify Cloud Compute Configurations"
+    },
+    {
+     "attack_id": "T1580",
+     "name": "Cloud Infrastructure Discovery"
+    },
+    {
+     "attack_id": "T1583.001",
+     "name": "Domains"
+    },
+    {
+     "attack_id": "T1583.003",
+     "name": "Virtual Private Server"
+    },
+    {
+     "attack_id": "T1583.004",
+     "name": "Server"
+    },
+    {
+     "attack_id": "T1583.006",
+     "name": "Web Services"
+    },
+    {
+     "attack_id": "T1584.001",
+     "name": "Domains"
+    },
+    {
+     "attack_id": "T1584.003",
+     "name": "Virtual Private Server"
+    },
+    {
+     "attack_id": "T1584.004",
+     "name": "Server"
+    },
+    {
+     "attack_id": "T1584.005",
+     "name": "Botnet"
+    },
+    {
+     "attack_id": "T1584.008",
+     "name": "Network Devices"
+    },
+    {
+     "attack_id": "T1585",
+     "name": "Establish Accounts"
+    },
+    {
+     "attack_id": "T1585.001",
+     "name": "Social Media Accounts"
+    },
+    {
+     "attack_id": "T1585.002",
+     "name": "Email Accounts"
+    },
+    {
+     "attack_id": "T1585.003",
+     "name": "Cloud Accounts"
+    },
+    {
+     "attack_id": "T1586.002",
+     "name": "Email Accounts"
+    },
+    {
+     "attack_id": "T1586.003",
+     "name": "Cloud Accounts"
+    },
+    {
+     "attack_id": "T1587.001",
+     "name": "Malware"
+    },
+    {
+     "attack_id": "T1587.004",
+     "name": "Exploits"
+    },
+    {
+     "attack_id": "T1588.001",
+     "name": "Malware"
+    },
+    {
+     "attack_id": "T1588.002",
+     "name": "Tool"
+    },
+    {
+     "attack_id": "T1588.007",
+     "name": "Artificial Intelligence"
+    },
+    {
+     "attack_id": "T1589",
+     "name": "Gather Victim Identity Information"
+    },
+    {
+     "attack_id": "T1589.002",
+     "name": "Email Addresses"
+    },
+    {
+     "attack_id": "T1590.004",
+     "name": "Network Topology"
+    },
+    {
+     "attack_id": "T1590.006",
+     "name": "Network Security Appliances"
+    },
+    {
+     "attack_id": "T1591",
+     "name": "Gather Victim Org Information"
+    },
+    {
+     "attack_id": "T1592.002",
+     "name": "Software"
+    },
+    {
+     "attack_id": "T1592.004",
+     "name": "Client Configurations"
+    },
+    {
+     "attack_id": "T1593",
+     "name": "Search Open Websites/Domains"
+    },
+    {
+     "attack_id": "T1593.003",
+     "name": "Code Repositories"
+    },
+    {
+     "attack_id": "T1595.001",
+     "name": "Scanning IP Blocks"
+    },
+    {
+     "attack_id": "T1595.002",
+     "name": "Vulnerability Scanning"
+    },
+    {
+     "attack_id": "T1598",
+     "name": "Phishing for Information"
+    },
+    {
+     "attack_id": "T1598.003",
+     "name": "Spearphishing Link"
+    },
+    {
+     "attack_id": "T1598.004",
+     "name": "Spearphishing Voice"
+    },
+    {
+     "attack_id": "T1599",
+     "name": "Network Boundary Bridging"
+    },
+    {
+     "attack_id": "T1599.001",
+     "name": "Network Address Translation Traversal"
+    },
+    {
+     "attack_id": "T1600",
+     "name": "Weaken Encryption"
+    },
+    {
+     "attack_id": "T1600.001",
+     "name": "Reduce Key Space"
+    },
+    {
+     "attack_id": "T1600.002",
+     "name": "Disable Crypto Hardware"
+    },
+    {
+     "attack_id": "T1601",
+     "name": "Modify System Image"
+    },
+    {
+     "attack_id": "T1601.001",
+     "name": "Patch System Image"
+    },
+    {
+     "attack_id": "T1601.002",
+     "name": "Downgrade System Image"
+    },
+    {
+     "attack_id": "T1602.002",
+     "name": "Network Device Configuration Dump"
+    },
+    {
+     "attack_id": "T1608.001",
+     "name": "Upload Malware"
+    },
+    {
+     "attack_id": "T1608.002",
+     "name": "Upload Tool"
+    },
+    {
+     "attack_id": "T1608.005",
+     "name": "Link Target"
+    },
+    {
+     "attack_id": "T1610",
+     "name": "Deploy Container"
+    },
+    {
+     "attack_id": "T1612",
+     "name": "Build Image on Host"
+    },
+    {
+     "attack_id": "T1614",
+     "name": "System Location Discovery"
+    },
+    {
+     "attack_id": "T1614.001",
+     "name": "System Language Discovery"
+    },
+    {
+     "attack_id": "T1619",
+     "name": "Cloud Storage Object Discovery"
+    },
+    {
+     "attack_id": "T1620",
+     "name": "Reflective Code Loading"
+    },
+    {
+     "attack_id": "T1622",
+     "name": "Debugger Evasion"
+    },
+    {
+     "attack_id": "T1647",
+     "name": "Plist File Modification"
+    },
+    {
+     "attack_id": "T1649",
+     "name": "Steal or Forge Authentication Certificates"
+    },
+    {
+     "attack_id": "T1651",
+     "name": "Cloud Administration Command"
+    },
+    {
+     "attack_id": "T1657",
+     "name": "Financial Theft"
+    },
+    {
+     "attack_id": "T1665",
+     "name": "Hide Infrastructure"
+    },
+    {
+     "attack_id": "T1666",
+     "name": "Modify Cloud Resource Hierarchy"
+    },
+    {
+     "attack_id": "T1673",
+     "name": "Virtual Machine Discovery"
+    },
+    {
+     "attack_id": "T1677",
+     "name": "Poisoned Pipeline Execution"
+    },
+    {
+     "attack_id": "T1678",
+     "name": "Delay Execution"
+    },
+    {
+     "attack_id": "T1679",
+     "name": "Selective Exclusion"
+    },
+    {
+     "attack_id": "T1680",
+     "name": "Local Storage Discovery"
+    },
+    {
+     "attack_id": "T1682",
+     "name": "Query Public AI Services"
+    },
+    {
+     "attack_id": "T1683",
+     "name": "Generate Content"
+    },
+    {
+     "attack_id": "T1683.001",
+     "name": "Written Content"
+    },
+    {
+     "attack_id": "T1683.002",
+     "name": "Audio-Visual Content"
+    },
+    {
+     "attack_id": "T1684",
+     "name": "Social Engineering"
+    },
+    {
+     "attack_id": "T1684.001",
+     "name": "Impersonation"
+    },
+    {
+     "attack_id": "T1684.002",
+     "name": "Email Spoofing"
+    },
+    {
+     "attack_id": "T1685",
+     "name": "Disable or Modify Tools"
+    },
+    {
+     "attack_id": "T1685.001",
+     "name": "Disable or Modify Windows Event Log"
+    },
+    {
+     "attack_id": "T1685.002",
+     "name": "Disable or Modify Cloud Log"
+    },
+    {
+     "attack_id": "T1685.003",
+     "name": "Modify or Spoof Tool UI"
+    },
+    {
+     "attack_id": "T1685.004",
+     "name": "Disable or Modify Linux Audit System Log"
+    },
+    {
+     "attack_id": "T1685.005",
+     "name": "Clear Windows Event Logs"
+    },
+    {
+     "attack_id": "T1685.006",
+     "name": "Clear Linux or Mac System Logs"
+    },
+    {
+     "attack_id": "T1686",
+     "name": "Disable or Modify System Firewall"
+    },
+    {
+     "attack_id": "T1686.001",
+     "name": "Cloud Firewall"
+    },
+    {
+     "attack_id": "T1686.002",
+     "name": "Network Device Firewall"
+    },
+    {
+     "attack_id": "T1686.003",
+     "name": "Windows Host Firewall"
+    },
+    {
+     "attack_id": "T1687",
+     "name": "Exploitation for Defense Impairment"
+    },
+    {
+     "attack_id": "T1688",
+     "name": "Safe Mode Boot"
+    },
+    {
+     "attack_id": "T1689",
+     "name": "Downgrade Attack"
+    },
+    {
+     "attack_id": "T1690",
+     "name": "Prevent Command History Logging"
+    }
+   ]
+  },
+  "software": {
+   "active_before": 821,
+   "active_after": 825,
+   "added": [
+    {
+     "attack_id": "S9041",
+     "name": "TeamPCP Cloud Stealer"
+    },
+    {
+     "attack_id": "S9042",
+     "name": "CanisterWorm"
+    },
+    {
+     "attack_id": "S9043",
+     "name": "Mini Shai-Hulud"
+    },
+    {
+     "attack_id": "S9044",
+     "name": "Kali365"
+    }
+   ],
+   "retired": [],
+   "modified": [
+    {
+     "attack_id": "S0002",
+     "name": "Mimikatz"
+    },
+    {
+     "attack_id": "S0013",
+     "name": "PlugX"
+    },
+    {
+     "attack_id": "S0029",
+     "name": "PsExec"
+    },
+    {
+     "attack_id": "S0032",
+     "name": "gh0st RAT"
+    },
+    {
+     "attack_id": "S0039",
+     "name": "Net"
+    },
+    {
+     "attack_id": "S0057",
+     "name": "Tasklist"
+    },
+    {
+     "attack_id": "S0097",
+     "name": "Ping"
+    },
+    {
+     "attack_id": "S0099",
+     "name": "Arp"
+    },
+    {
+     "attack_id": "S0100",
+     "name": "ipconfig"
+    },
+    {
+     "attack_id": "S0102",
+     "name": "nbtstat"
+    },
+    {
+     "attack_id": "S0104",
+     "name": "netstat"
+    },
+    {
+     "attack_id": "S0125",
+     "name": "Remsec"
+    },
+    {
+     "attack_id": "S0132",
+     "name": "H1N1"
+    },
+    {
+     "attack_id": "S0160",
+     "name": "certutil"
+    },
+    {
+     "attack_id": "S0183",
+     "name": "Tor"
+    },
+    {
+     "attack_id": "S0190",
+     "name": "BITSAdmin"
+    },
+    {
+     "attack_id": "S0225",
+     "name": "sqlmap"
+    },
+    {
+     "attack_id": "S0245",
+     "name": "BADCALL"
+    },
+    {
+     "attack_id": "S0246",
+     "name": "HARDRAIN"
+    },
+    {
+     "attack_id": "S0262",
+     "name": "QuasarRAT"
+    },
+    {
+     "attack_id": "S0263",
+     "name": "TYPEFRAME"
+    },
+    {
+     "attack_id": "S0275",
+     "name": "UPPERCUT"
+    },
+    {
+     "attack_id": "S0334",
+     "name": "DarkComet"
+    },
+    {
+     "attack_id": "S0357",
+     "name": "Impacket"
+    },
+    {
+     "attack_id": "S0359",
+     "name": "Nltest"
+    },
+    {
+     "attack_id": "S0372",
+     "name": "LockerGoga"
+    },
+    {
+     "attack_id": "S0385",
+     "name": "njRAT"
+    },
+    {
+     "attack_id": "S0414",
+     "name": "BabyShark"
+    },
+    {
+     "attack_id": "S0500",
+     "name": "MCMD"
+    },
+    {
+     "attack_id": "S0604",
+     "name": "Industroyer"
+    },
+    {
+     "attack_id": "S0645",
+     "name": "Wevtutil"
+    },
+    {
+     "attack_id": "S0687",
+     "name": "Cyclops Blink"
+    },
+    {
+     "attack_id": "S1025",
+     "name": "Amadey"
+    },
+    {
+     "attack_id": "S1040",
+     "name": "Rclone"
+    },
+    {
+     "attack_id": "S1071",
+     "name": "Rubeus"
+    },
+    {
+     "attack_id": "S1087",
+     "name": "AsyncRAT"
+    },
+    {
+     "attack_id": "S1111",
+     "name": "DarkGate"
+    },
+    {
+     "attack_id": "S1144",
+     "name": "FRP"
+    },
+    {
+     "attack_id": "S1161",
+     "name": "BPFDoor"
+    },
+    {
+     "attack_id": "S1178",
+     "name": "ShrinkLocker"
+    },
+    {
+     "attack_id": "S1181",
+     "name": "BlackByte 2.0 Ransomware"
+    },
+    {
+     "attack_id": "S1228",
+     "name": "PUBLOAD"
+    },
+    {
+     "attack_id": "S1229",
+     "name": "Havoc"
+    },
+    {
+     "attack_id": "S1239",
+     "name": "TONESHELL"
+    },
+    {
+     "attack_id": "S9014",
+     "name": "PHASEJAM"
+    },
+    {
+     "attack_id": "S9016",
+     "name": "Caminho"
+    },
+    {
+     "attack_id": "S9017",
+     "name": "DCRAT"
+    },
+    {
+     "attack_id": "S9020",
+     "name": "LODEINFO"
+    },
+    {
+     "attack_id": "S9023",
+     "name": "HiddenFace"
+    },
+    {
+     "attack_id": "S9025",
+     "name": "NOOPLDR"
+    },
+    {
+     "attack_id": "S9026",
+     "name": "ROAMINGHOUSE"
+    },
+    {
+     "attack_id": "S9028",
+     "name": "PHPsert"
+    },
+    {
+     "attack_id": "S9029",
+     "name": "IronWind"
+    },
+    {
+     "attack_id": "S9030",
+     "name": "SameCoin"
+    },
+    {
+     "attack_id": "S9031",
+     "name": "AshTag"
+    },
+    {
+     "attack_id": "S9034",
+     "name": "Tsundere Botnet"
+    },
+    {
+     "attack_id": "S9035",
+     "name": "LAMEHUG"
+    },
+    {
+     "attack_id": "S9037",
+     "name": "RustyWater"
+    },
+    {
+     "attack_id": "S9039",
+     "name": "LazyWiper"
+    }
+   ]
+  },
+  "campaigns": {
+   "active_before": 56,
+   "active_after": 56,
+   "added": [],
+   "retired": [],
+   "modified": [
+    {
+     "attack_id": "C0001",
+     "name": "Frankenstein"
+    },
+    {
+     "attack_id": "C0002",
+     "name": "Night Dragon"
+    },
+    {
+     "attack_id": "C0004",
+     "name": "CostaRicto"
+    },
+    {
+     "attack_id": "C0005",
+     "name": "Operation Spalax"
+    },
+    {
+     "attack_id": "C0006",
+     "name": "Operation Honeybee"
+    },
+    {
+     "attack_id": "C0007",
+     "name": "FunnyDream"
+    },
+    {
+     "attack_id": "C0010",
+     "name": "C0010"
+    },
+    {
+     "attack_id": "C0011",
+     "name": "C0011"
+    },
+    {
+     "attack_id": "C0012",
+     "name": "Operation CuckooBees"
+    },
+    {
+     "attack_id": "C0013",
+     "name": "Operation Sharpshooter"
+    },
+    {
+     "attack_id": "C0014",
+     "name": "Operation Wocao"
+    },
+    {
+     "attack_id": "C0015",
+     "name": "C0015"
+    },
+    {
+     "attack_id": "C0016",
+     "name": "Operation Dust Storm"
+    },
+    {
+     "attack_id": "C0017",
+     "name": "C0017"
+    },
+    {
+     "attack_id": "C0018",
+     "name": "C0018"
+    },
+    {
+     "attack_id": "C0021",
+     "name": "C0021"
+    },
+    {
+     "attack_id": "C0022",
+     "name": "Operation Dream Job"
+    },
+    {
+     "attack_id": "C0023",
+     "name": "Operation Ghost"
+    },
+    {
+     "attack_id": "C0024",
+     "name": "SolarWinds Compromise"
+    },
+    {
+     "attack_id": "C0025",
+     "name": "2016 Ukraine Electric Power Attack"
+    },
+    {
+     "attack_id": "C0026",
+     "name": "C0026"
+    },
+    {
+     "attack_id": "C0027",
+     "name": "C0027"
+    },
+    {
+     "attack_id": "C0028",
+     "name": "2015 Ukraine Electric Power Attack"
+    },
+    {
+     "attack_id": "C0029",
+     "name": "Cutting Edge"
+    },
+    {
+     "attack_id": "C0030",
+     "name": "Triton Safety Instrumented System Attack"
+    },
+    {
+     "attack_id": "C0032",
+     "name": "C0032"
+    },
+    {
+     "attack_id": "C0033",
+     "name": "C0033"
+    },
+    {
+     "attack_id": "C0034",
+     "name": "2022 Ukraine Electric Power Attack"
+    },
+    {
+     "attack_id": "C0035",
+     "name": "KV Botnet Activity"
+    },
+    {
+     "attack_id": "C0036",
+     "name": "Pikabot Distribution February 2024"
+    },
+    {
+     "attack_id": "C0037",
+     "name": "Water Curupira Pikabot Distribution"
+    },
+    {
+     "attack_id": "C0038",
+     "name": "HomeLand Justice"
+    },
+    {
+     "attack_id": "C0039",
+     "name": "Versa Director Zero Day Exploitation"
+    },
+    {
+     "attack_id": "C0040",
+     "name": "APT41 DUST"
+    },
+    {
+     "attack_id": "C0041",
+     "name": "FrostyGoop Incident"
+    },
+    {
+     "attack_id": "C0042",
+     "name": "Outer Space"
+    },
+    {
+     "attack_id": "C0043",
+     "name": "Indian Critical Infrastructure Intrusions"
+    },
+    {
+     "attack_id": "C0044",
+     "name": "Juicy Mix"
+    },
+    {
+     "attack_id": "C0045",
+     "name": "ShadowRay"
+    },
+    {
+     "attack_id": "C0046",
+     "name": "ArcaneDoor"
+    },
+    {
+     "attack_id": "C0047",
+     "name": "RedDelta Modified PlugX Infection Chain Operations"
+    },
+    {
+     "attack_id": "C0048",
+     "name": "Operation MidnightEclipse"
+    },
+    {
+     "attack_id": "C0049",
+     "name": "Leviathan Australian Intrusions"
+    },
+    {
+     "attack_id": "C0050",
+     "name": "J-magic Campaign"
+    },
+    {
+     "attack_id": "C0051",
+     "name": "APT28 Nearest Neighbor Campaign"
+    },
+    {
+     "attack_id": "C0052",
+     "name": "SPACEHOP Activity"
+    },
+    {
+     "attack_id": "C0053",
+     "name": "FLORAHOX Activity"
+    },
+    {
+     "attack_id": "C0055",
+     "name": "Quad7 Activity"
+    },
+    {
+     "attack_id": "C0056",
+     "name": "RedPenguin"
+    },
+    {
+     "attack_id": "C0057",
+     "name": "3CX Supply Chain Attack"
+    },
+    {
+     "attack_id": "C0058",
+     "name": "SharePoint ToolShell Exploitation"
+    },
+    {
+     "attack_id": "C0059",
+     "name": "Salesforce Data Exfiltration"
+    },
+    {
+     "attack_id": "C0060",
+     "name": "Operation AkaiRyū"
+    },
+    {
+     "attack_id": "C0061",
+     "name": "Operation Digital Eye"
+    },
+    {
+     "attack_id": "C0062",
+     "name": "Anthropic AI-orchestrated Campaign"
+    },
+    {
+     "attack_id": "C0063",
+     "name": "2025 Poland Wiper Attacks"
+    }
+   ]
+  }
+ },
+ "group_profile_changes": []
+}

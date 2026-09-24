@@ -46,6 +46,9 @@ from attribution_platform.dataplane import EVIDENCE_INDEX, OBSERVATIONS_INDEX, F
 from attribution_platform.replay import load_fixture_file, replay_fixture
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
+#: The fixture rule packs, Phase-0 scenarios and calibration corpus v1 used here are
+#: frozen against this ATT&CK release (doc 11 §0 upgrade record); they load it by name.
+FIXTURE_ATTACK_KB = "enterprise-attack-19.0"
 FIXTURE_PATH = REPO_ROOT / "fixtures" / "phase0_benign_scenarios.json"
 
 
@@ -82,7 +85,7 @@ def test_full_slice_replay_input_to_api_read_model(
     """synthetic input -> SourceAdapter -> Observation -> Evidence ->
     ATT&CK reference -> Elastic persistence -> API read model, in one run."""
     base_url, client = slice_env
-    knowledge = load_attack_knowledge()
+    knowledge = load_attack_knowledge(FIXTURE_ATTACK_KB)
     fixture = load_fixture_file(FIXTURE_PATH)
 
     results = replay_fixture(fixture, client=client, knowledge=knowledge)
@@ -124,7 +127,7 @@ def test_replaying_the_fixture_twice_is_idempotent_through_the_api(
     slice_env: tuple[str, FakeElasticClient],
 ) -> None:
     base_url, client = slice_env
-    knowledge = load_attack_knowledge()
+    knowledge = load_attack_knowledge(FIXTURE_ATTACK_KB)
     fixture = load_fixture_file(FIXTURE_PATH)
 
     replay_fixture(fixture, client=client, knowledge=knowledge)
@@ -141,7 +144,7 @@ def test_replaying_the_fixture_twice_is_idempotent_through_the_api(
 
 
 def test_slice_is_deterministic_across_independent_client_and_server_instances() -> None:
-    knowledge = load_attack_knowledge()
+    knowledge = load_attack_knowledge(FIXTURE_ATTACK_KB)
     fixture = load_fixture_file(FIXTURE_PATH)
 
     client_a = FakeElasticClient()
