@@ -1,0 +1,41 @@
+{
+  "source": "OTRF Security-Datasets",
+  "license": "MIT",
+  "license_url": "https://github.com/OTRF/Security-Datasets/blob/d9d40ef123d2c87d5d3df28c96bcab4f0faccc87/LICENSE",
+  "retrieved_at_utc": "2026-09-24T17:56:00Z",
+  "method": "scripts/acquire_telemetry_samples.py (urllib, commit-pinned raw URLs)",
+  "samples": [
+    {
+      "filename": "psh_powershell_httplistener.zip",
+      "relative_path": "data/telemetry-samples/otrf/psh_powershell_httplistener.zip",
+      "size_bytes": 10491,
+      "sha256": "506ba862fd76e0f8d43396e705ec6eebb7a01a5a2954bd70c9f47802d32f4843",
+      "members": [
+        {
+          "name": "psh_powershell_httplistener_2020-11-0204130683.json",
+          "size_bytes": 213202
+        }
+      ],
+      "source_repository": "OTRF/Security-Datasets",
+      "source_commit": "d9d40ef123d2c87d5d3df28c96bcab4f0faccc87",
+      "source_path": "datasets/atomic/windows/execution/host/psh_powershell_httplistener.zip",
+      "download_url": "https://raw.githubusercontent.com/OTRF/Security-Datasets/d9d40ef123d2c87d5d3df28c96bcab4f0faccc87/datasets/atomic/windows/execution/host/psh_powershell_httplistener.zip"
+    },
+    {
+      "filename": "psh_mavinject_dll_notepad.zip",
+      "relative_path": "data/telemetry-samples/otrf/psh_mavinject_dll_notepad.zip",
+      "size_bytes": 53452,
+      "sha256": "262680222316edb2dc0d7dca380dfe75191fb96779b8dacc8aac8a1d8bdc046b",
+      "members": [
+        {
+          "name": "psh_mavinject_dll_notepad_2020-10-2121410529.json",
+          "size_bytes": 965744
+        }
+      ],
+      "source_repository": "OTRF/Security-Datasets",
+      "source_commit": "d9d40ef123d2c87d5d3df28c96bcab4f0faccc87",
+      "source_path": "datasets/atomic/windows/defense_evasion/host/psh_mavinject_dll_notepad.zip",
+      "download_url": "https://raw.githubusercontent.com/OTRF/Security-Datasets/d9d40ef123d2c87d5d3df28c96bcab4f0faccc87/datasets/atomic/windows/defense_evasion/host/psh_mavinject_dll_notepad.zip"
+    }
+  ]
+}

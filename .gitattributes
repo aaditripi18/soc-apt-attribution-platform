@@ -11,3 +11,7 @@ data/attack/**/*.json binary
 # (tests/test_sigma_import.py), so no line-ending conversion either. ---
 data/detection/**/*.zip binary
 data/detection/**/*.json binary
+
+# --- Real telemetry samples (ADR-0008 D2.3): SHA-256-pinned, byte-for-byte. ---
+data/telemetry-samples/**/*.zip binary
+data/telemetry-samples/**/*.json binary

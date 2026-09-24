@@ -46,11 +46,14 @@ Thumbs.db
 #     (C3.2 — docs/architecture/14-c3.2-corpus-build.md; ADR-0006 §D13).
 #     The pinned SigmaHQ release archive and the rule pack/report generated
 #     from it under data/detection/ are tracked for the same reason
-#     (ADR-0007 D7 — detection content is a versioned, hash-pinned input). ---
+#     (ADR-0007 D7 — detection content is a versioned, hash-pinned input), and the
+#     commit-pinned real telemetry samples under data/telemetry-samples/ used by
+#     adapter golden tests (ADR-0008 D2.3). ---
 /data/*
 !/data/attack/
 !/data/calibration/
 !/data/detection/
+!/data/telemetry-samples/
 
 # Interrupted-download temp file from scripts/acquire_attack_bundle.py's
 # atomic-write step — must never be committed even if a download fails.
