@@ -1,7 +1,7 @@
 # ADR-0007 — Detection Content (Sigma import) & Predicate-Language Extension
 
-- **Status:** PROPOSED (2026-09-24)
-- **Date:** 2026-09-24 (proposed)
+- **Status:** ACCEPTED (2026-09-24)
+- **Date:** 2026-09-24 (proposed) · 2026-09-24 (accepted)
 - **Deciders:** project owner
 - **Supersedes / superseded by:** —
 - **Resolves:** open question **Q4** (detection-content strategy & conversion, [05](../05-architecture-open-questions.md)),
@@ -11,7 +11,9 @@
   [11 coverage model](../11-coverage-model.md) · [12 deployment & endpoint scope](../12-deployment-and-endpoint-scope.md) ·
   [15 corpus v2 design](../15-corpus-v2-design.md) · [research 03 detection engineering](../../research/03-detection-engineering.md)
 
-> PROPOSED. Records how detection content enters the platform and how the rule predicate language grows to
+> **ACCEPTED (2026-09-24)** by the owner, all four open questions answered yes, with the owner's condition
+> restated as binding: the platform must account for **every** ATT&CK technique and **every** active Group
+> in the pinned KB (D1), with coverage measured and reported (D9). Records how detection content enters the platform and how the rule predicate language grows to
 > express it. Creates no code, rules, or packs. ADR-0001..0006 are unchanged; ADR-0001 D12 (license split) is
 > implemented, not reopened.
 

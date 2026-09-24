@@ -42,7 +42,7 @@ demand a DB. Avoids premature infra (research doc 05).
 **Resolves when:** Phase 2's actual traversal/query needs are written down and measured against embedded
 performance.
 
-### Q4 — Detection-content strategy & conversion  *(gates Phase 1)*
+### Q4 — Detection-content strategy & conversion  *(gates Phase 1)* — **RESOLVED 2026-09-24 by [ADR-0007](adr/0007-detection-content-and-predicate-language.md)** (SigmaHQ generic rules via build-time importer; Elastic rules fallback)
 **Question:** Sigma (permissive) vs Elastic prebuilt rules (ELv2, internal) vs both; and pySigma vs
 STIX-shifter vs native execution.
 **Proposed lean:** **both under a license split** — Elastic prebuilt rules for internal coverage, Sigma via

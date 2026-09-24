@@ -1,7 +1,7 @@
 # 15 — Calibration corpus v2 design (resolves Stage-5 findings F5-1..F5-4)
 
-**Status:** PROPOSED (2026-09-24) — design only. DC-1 is now specified in full by
-[ADR-0007](adr/0007-detection-content-and-predicate-language.md) (PROPOSED), which supersedes DC-1's scope
+**Status:** ACCEPTED (2026-09-24, owner accepted all §8 decisions as proposed, DC-1 as superseded by ADR-0007) — design only. DC-1 is now specified in full by
+[ADR-0007](adr/0007-detection-content-and-predicate-language.md) (ACCEPTED), which supersedes DC-1's scope
 bullet; wherever DC-1 below and ADR-0007 differ (scope, revoked-ID handling, operators), ADR-0007 governs. No code, rules, fixtures, datasets, or ADR changes are made by
 this note. Owner decisions are listed in §8. Corpus v1 (`data/calibration/corpus/v1/`) stays frozen and unmodified.
 

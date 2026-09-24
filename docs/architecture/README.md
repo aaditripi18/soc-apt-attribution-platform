@@ -24,7 +24,7 @@ code exists. Read alongside [CLAUDE.md](../../CLAUDE.md).
 | [12-deployment-and-endpoint-scope.md](12-deployment-and-endpoint-scope.md) | Phase-0 gate C0.2 (**ACCEPTED**): hybrid deployment (containerized platform stack on WSL2/Docker-compatible runtime + **native Windows collector**), Windows-first endpoint scope (Linux architecture-only), **telemetry-source agnosticism (not Sysmon-only) + the source→collector→normalization→Observation→Evidence→Engine layering**, synthetic/replay path, portability, resources, isolation |
 | [13-phase-0-implementation-plan.md](13-phase-0-implementation-plan.md) | **Phase 0 plan (IN PROGRESS — G0.0/G0.1/G0.2 IMPLEMENTED/PASSED; G0.3 IMPLEMENTED, AWAITING REVIEW)**: gates G0.0–G0.12 with dependency order, the Elastic-free logic core, the first attribution-free vertical slice (synthetic → Elastic → Observation → Evidence → ATT&CK technique ref → provenance → API), environment matrix, and what must NOT be built yet |
 | [14-c3.2-corpus-build.md](14-c3.2-corpus-build.md) | C3.2 calibration corpus build: seed slice, evidence-type rules, category validator, frozen v1 corpus, and the Stage-5 corpus→decision-quantity harness with its findings F5-1..F5-4 |
-| [15-corpus-v2-design.md](15-corpus-v2-design.md) | **PROPOSED**: corpus v2 design — root cause (detection maps only 5 common techniques), Sigma-import detection content (resolves Q4), real-Group emulation-plan labels, S1/S2/S3 sources, APT29 blind actor, fitting-readiness gate, task order T1–T9 |
+| [15-corpus-v2-design.md](15-corpus-v2-design.md) | **ACCEPTED**: corpus v2 design — root cause (detection maps only 5 common techniques), Sigma-import detection content (resolves Q4), real-Group emulation-plan labels, S1/S2/S3 sources, APT29 blind actor, fitting-readiness gate, task order T1–T9 |
 
 ## Architecture Decision Records
 
@@ -34,7 +34,7 @@ code exists. Read alongside [CLAUDE.md](../../CLAUDE.md).
 | [adr/0002-attribution-scoring-and-evidence-methodology.md](adr/0002-attribution-scoring-and-evidence-methodology.md) | Attribution scoring & evidence methodology | **ACCEPTED** (2026-09-11, D22 modified per M2) |
 | [adr/0003-correlation-and-behavioral-chain-layer.md](adr/0003-correlation-and-behavioral-chain-layer.md) | Correlation and behavioral-chain layer (Phase 2) | **ACCEPTED** (2026-09-15, no decisions modified) |
 | [adr/0004-behavioral-sequence-reconstruction.md](adr/0004-behavioral-sequence-reconstruction.md) | Behavioral sequence reconstruction (Phase 2, gate G2.4) | **ACCEPTED** (2026-09-15, corrected twice during pre-acceptance review, no decisions modified at acceptance) |
-| [adr/0007-detection-content-and-predicate-language.md](adr/0007-detection-content-and-predicate-language.md) | Detection content (pinned SigmaHQ generic rules via build-time importer) & predicate-language extension; full-universe scope principle and coverage report; resolves Q4 | **PROPOSED** (2026-09-24) |
+| [adr/0007-detection-content-and-predicate-language.md](adr/0007-detection-content-and-predicate-language.md) | Detection content (pinned SigmaHQ generic rules via build-time importer) & predicate-language extension; full-universe scope principle and coverage report; resolves Q4 | **ACCEPTED** (2026-09-24) |
 
 ## The one-paragraph summary
 
