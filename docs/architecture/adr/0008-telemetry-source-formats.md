@@ -1,7 +1,7 @@
 # ADR-0008 — Telemetry Source Formats: Acceptance Standard, Overlap Policy, and Order
 
-- **Status:** PROPOSED (2026-09-24)
-- **Date:** 2026-09-24 (proposed)
+- **Status:** ACCEPTED (2026-09-24)
+- **Date:** 2026-09-24 (proposed) · 2026-09-24 (accepted)
 - **Deciders:** project owner
 - **Supersedes / superseded by:** — (extends doc 12 C0.2 §D.1/§D.2 and ADR-0007 D10)
 - **Related:** [ADR-0003](0003-correlation-and-behavioral-chain-layer.md) (structural correlation) ·
@@ -9,7 +9,8 @@
   D5/D9/D10 · [12 deployment & endpoint scope](../12-deployment-and-endpoint-scope.md) ·
   [11 coverage model](../11-coverage-model.md) · [15 corpus v2 design](../15-corpus-v2-design.md)
 
-> PROPOSED. Decides how new telemetry formats enter the platform without degrading attribution quality: one
+> **ACCEPTED (2026-09-24)** by the owner: acceptance standard (D2), overlap policy (D3) and Wave-1 order
+> (D1) all accepted as proposed. Decides how new telemetry formats enter the platform without degrading attribution quality: one
 > acceptance standard every format must pass, a policy for sources that observe the same activity, a reusable
 > adapter pattern for ECS-normalized input, and the build order. Creates no code. The owner chose **Option A**
 > on 2026-09-24: complete Windows endpoint telemetry first; network, Linux, macOS and cloud as a second wave.
