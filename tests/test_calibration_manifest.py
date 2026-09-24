@@ -115,9 +115,7 @@ def _manifest(
         cases = [_case()]
     if sources is None:
         sources = [_source()]
-    return CalibrationCorpusManifest.from_cases(
-        cases, sources, attack_kb_version=attack_kb_version
-    )
+    return CalibrationCorpusManifest.from_cases(cases, sources, attack_kb_version=attack_kb_version)
 
 
 # --- construction + version shape -----------------------------------------

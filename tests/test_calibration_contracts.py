@@ -142,9 +142,7 @@ def test_attributable_requires_known_source() -> None:
 
 def test_unattributable_by_design_forbids_actor_label() -> None:
     with pytest.raises(CalibrationError, match="must have actor_label=None"):
-        _ground_truth(
-            label_semantics=LabelSemantics.UNATTRIBUTABLE_BY_DESIGN, actor_label="APT-X"
-        )
+        _ground_truth(label_semantics=LabelSemantics.UNATTRIBUTABLE_BY_DESIGN, actor_label="APT-X")
 
 
 def test_disputed_and_unknown_do_not_coerce_to_negative() -> None:
@@ -187,9 +185,7 @@ def test_insufficient_outcome_forbids_likelihood_band() -> None:
 
 def test_leading_hypothesis_requires_likelihood_band() -> None:
     with pytest.raises(CalibrationError, match="LEADING_HYPOTHESIS requires"):
-        _expected_shape(
-            outcome=ExpectedOutcome.LEADING_HYPOTHESIS, expected_likelihood_band=None
-        )
+        _expected_shape(outcome=ExpectedOutcome.LEADING_HYPOTHESIS, expected_likelihood_band=None)
 
 
 def test_insufficient_outcome_shape_is_valid_without_band() -> None:

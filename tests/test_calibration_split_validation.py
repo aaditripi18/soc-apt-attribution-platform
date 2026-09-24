@@ -102,9 +102,7 @@ def _case(
 def test_valid_split_is_valid() -> None:
     cases = (
         _case(family="fam-cal", role=CaseRole.CALIBRATION, telemetry=("observation::o1",)),
-        _case(
-            family="fam-val", role=CaseRole.HELD_OUT_VALIDATION, telemetry=("observation::o2",)
-        ),
+        _case(family="fam-val", role=CaseRole.HELD_OUT_VALIDATION, telemetry=("observation::o2",)),
     )
     report = validate_split(cases)
     assert report.is_valid
@@ -150,9 +148,7 @@ def test_family_split_across_roles_violates(role_a: CaseRole, role_b: CaseRole) 
     types = {v.violation_type for v in report.violations}
     assert SplitViolationType.FAMILY_ROLE_LEAKAGE in types
     fam_violation = next(
-        v
-        for v in report.violations
-        if v.violation_type is SplitViolationType.FAMILY_ROLE_LEAKAGE
+        v for v in report.violations if v.violation_type is SplitViolationType.FAMILY_ROLE_LEAKAGE
     )
     assert fam_violation.scenario_family_ids == ("fam-x",)
     assert set(fam_violation.roles) == {role_a.value, role_b.value}
@@ -315,9 +311,7 @@ def test_non_attributable_calibration_cases_allowed(
 
 def test_input_order_does_not_change_report() -> None:
     a = _case(family="fam-cal", role=CaseRole.CALIBRATION, telemetry=("observation::o1",))
-    b = _case(
-        family="fam-val", role=CaseRole.HELD_OUT_VALIDATION, telemetry=("observation::o2",)
-    )
+    b = _case(family="fam-val", role=CaseRole.HELD_OUT_VALIDATION, telemetry=("observation::o2",))
     r1 = validate_split((a, b))
     r2 = validate_split((b, a))
     assert r1 == r2
