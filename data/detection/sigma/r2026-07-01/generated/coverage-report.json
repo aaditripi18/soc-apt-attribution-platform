@@ -10,11 +10,11 @@
    },
    {
     "pack_id": "sigma-r2026-07-01-sigma_core++",
-    "content_hash": "29a25abb790da5b13fcaaca0bdf293b274b3ae3035cde681fd8a15e193c6cb08"
+    "content_hash": "886a3ac1875b2d4c59a7ca3f56ee089057ea471d108abca228d8c85f1b57a4dc"
    }
   ],
   "sigma_import": {
-   "importer": "sigma-importer/1.0",
+   "importer": "sigma-importer/1.1",
    "sigma_release": "r2026-07-01",
    "sigma_archive": "sigma_core++.zip",
    "sigma_archive_sha256": "469d83e1d1bbdb4d7876466ff1a728550fae5a20115b91339d58d20e894e7477",

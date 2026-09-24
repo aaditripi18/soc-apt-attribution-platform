@@ -1,6 +1,6 @@
 {
  "provenance": {
-  "importer": "sigma-importer/1.0",
+  "importer": "sigma-importer/1.1",
   "sigma_release": "r2026-07-01",
   "sigma_archive": "sigma_core++.zip",
   "sigma_archive_sha256": "469d83e1d1bbdb4d7876466ff1a728550fae5a20115b91339d58d20e894e7477",

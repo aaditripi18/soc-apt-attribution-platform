@@ -258,7 +258,7 @@ adapter (`registry_set`, `ps_script`, `file_event`, Security log, `image_load`).
 mostly blocked by `Initiated` (Sysmon → ECS `network.direction` mapping unverified). These feed step 3 (D9
 coverage report) and step 4 (D10 adapter order).
 
-**Findings for later tasks (recorded, not fixed here):**
+**Findings for later tasks (recorded at step 2; both resolved 2026-09-24, see "Engine follow-up" below):**
 
 - **Evaluation cost.** The engine evaluates every rule against every Observation: ~60 ms per Observation with
   4,078 rules (500 Observations in 30 s). Adequate for the corpus, too slow for a full-day replay (e.g. OTRF
@@ -288,3 +288,20 @@ have ≥ 5, 97 have ≥ 10; 9 have none, 4 of which have no active technique in 
 D10 adapter order from the ranking (v1-scope blockers, by Group-used techniques they block, upper bounds):
 PowerShell script block `ps_script` (20), Windows Security log (16), `file_event` (12), `registry_set` (12),
 `ParentImage` field (8), `Initiated` field (5), `OriginalFileName` field (4), `dns_query` (4).
+
+**Engine follow-up — evaluation cost and sibling conjuncts (2026-09-24, T4.5).** Both step-2 findings resolved
+without changing detection results:
+
+- `DetectionRule` gains an optional `rule_family` (pack key `rule_family`; importer 1.1 sets it to
+  `sigma:<id>`). `DetectionEngine` emits at most one detection per family per Observation — the first firing
+  branch in rule order — so one Sigma rule matching once is one Evidence item. Rules without a family (all
+  hand-authored platform rules) are unaffected; their ids and Evidence are unchanged.
+- `DetectionEngine` indexes rules by a first-condition `event.category has_element` scope. Using only the
+  first condition makes skipping a rule exactly equivalent to evaluating it (evaluation stops at the first
+  non-match, so a skipped rule could neither fire nor raise).
+- `DetectionRule.evaluate` decides with `FieldCondition.matches()` and builds `MatchedField` explanations only
+  for rules that fire (same decisions, same fail-closed errors).
+- Proof: a test compares the engine with a plain reference implementation (every rule in order, first firing
+  rule per family) on the real core + Sigma packs; results are identical. Measured on 400 mixed process/network
+  Observations: **36.6 → 8.0 ms per Observation**.
+

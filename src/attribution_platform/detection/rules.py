@@ -74,8 +74,9 @@ from __future__ import annotations
 import hashlib
 import json
 from collections.abc import Sequence
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from pathlib import Path
+from types import MappingProxyType
 from typing import Any, cast
 
 from attribution_platform.attack_knowledge.loader import AttackKnowledge
@@ -225,10 +226,9 @@ class FieldCondition:
             f"unreachable: unhandled operator {self.operator!r}"
         )  # pragma: no cover
 
-    def evaluate(self, observation: Observation) -> MatchedField | None:
-        """Return the ``MatchedField`` if this condition matches, else ``None``."""
+    def _resolve_checked(self, observation: Observation) -> Any:
+        """Resolve the field and apply the array/scalar fail-closed checks."""
         resolved = _resolve_field(observation, self.field_path)
-
         if self.operator == "has_element":
             if resolved is not None and not isinstance(resolved, tuple):
                 raise DetectionError(
@@ -244,7 +244,18 @@ class FieldCondition:
                 f"FieldCondition.field_path {self.field_path!r} resolves to an array-typed "
                 f"field ({resolved!r}); only operator 'has_element' supports array fields"
             )
+        return resolved
 
+    def matches(self, observation: Observation) -> bool:
+        """Whether this condition matches -- the same decision (and the same
+        fail-closed errors) as :meth:`evaluate`, without building the
+        explanation. Used by :meth:`DetectionRule.evaluate` so explanations are
+        only built for rules that actually fire."""
+        return self._positive_match(self._resolve_checked(observation)) != self.negate
+
+    def evaluate(self, observation: Observation) -> MatchedField | None:
+        """Return the ``MatchedField`` if this condition matches, else ``None``."""
+        resolved = self._resolve_checked(observation)
         if self._positive_match(resolved) == self.negate:
             return None
 
@@ -298,6 +309,13 @@ class DetectionRule:
       :func:`load_rule_pack`), stamped onto every ``DetectionResult`` this
       rule produces. ``None`` when the rule was constructed directly rather
       than loaded from a rule pack.
+    - ``rule_family``: optional identity shared by rules that are branches of
+      one source detection (e.g. the DNF conjuncts of one Sigma rule, ADR-0007
+      D6). :class:`DetectionEngine` emits at most one detection per family per
+      Observation -- the first firing branch in rule order -- so one source rule
+      matching once never becomes several Evidence items. ``None`` (the
+      default, and every hand-authored platform rule) means the rule stands
+      alone.
     """
 
     rule_ref: RuleRef
@@ -306,6 +324,7 @@ class DetectionRule:
     evidence_type: EvidenceType = EvidenceType.BEHAVIORAL
     rule_source: str = "platform-rules"
     content_hash: str | None = None
+    rule_family: str | None = None
 
     def __post_init__(self) -> None:
         if not isinstance(self.rule_ref, RuleRef):
@@ -345,6 +364,10 @@ class DetectionRule:
             not isinstance(self.content_hash, str) or not self.content_hash.strip()
         ):
             raise DetectionError("DetectionRule.content_hash must be a non-empty string if present")
+        if self.rule_family is not None and (
+            not isinstance(self.rule_family, str) or not self.rule_family.strip()
+        ):
+            raise DetectionError("DetectionRule.rule_family must be a non-empty string if present")
 
     def evaluate(self, observation: Observation) -> DetectionResult | None:
         """Return the ``DetectionResult`` if every condition matches this
@@ -369,12 +392,14 @@ class DetectionRule:
                 f"DetectionRule.evaluate requires a domain Observation, "
                 f"got {type(observation).__name__}"
             )
-        matched: list[MatchedField] = []
         for condition in self.conditions:
-            result = condition.evaluate(observation)
-            if result is None:
+            if not condition.matches(observation):
                 return None  # AND semantics: any non-match rejects the whole rule
-            matched.append(result)
+        # The rule fired: now build the explanation (pure, so re-evaluating
+        # each condition yields exactly the MatchedField it would have).
+        matched = [
+            cast(MatchedField, condition.evaluate(observation)) for condition in self.conditions
+        ]
 
         if self.content_hash is not None:
             detection_id = (
@@ -409,19 +434,90 @@ class RulePack:
     rules: tuple[DetectionRule, ...]
 
 
+#: The array field whose ``has_element`` scope condition the engine indexes on.
+_SCOPE_FIELD = "event.category"
+
+
+def _scope_key(rule: DetectionRule) -> tuple[str, bool] | None:
+    """``(value, case_insensitive)`` when the rule's **first** condition is a
+    non-negated ``has_element`` on ``event.category``, else ``None``.
+
+    Only the first condition is used so that skipping a rule is exactly
+    equivalent to evaluating it: conditions run in order and stop at the first
+    non-match, so a rule whose first condition fails can neither fire nor
+    reach (and raise on) any later condition.
+    """
+    first = rule.conditions[0]
+    if first.operator == "has_element" and first.field_path == _SCOPE_FIELD and not first.negate:
+        return cast(str, first.value), first.case_insensitive
+    return None
+
+
+@dataclass(frozen=True)
+class _RuleIndex:
+    unscoped: tuple[int, ...]
+    exact: MappingProxyType[str, tuple[int, ...]]
+    folded: MappingProxyType[str, tuple[int, ...]]
+
+
+def _build_index(rules: tuple[DetectionRule, ...]) -> _RuleIndex:
+    unscoped: list[int] = []
+    exact: dict[str, list[int]] = {}
+    folded: dict[str, list[int]] = {}
+    for position, rule in enumerate(rules):
+        key = _scope_key(rule)
+        if key is None:
+            unscoped.append(position)
+        elif key[1]:
+            folded.setdefault(key[0].casefold(), []).append(position)
+        else:
+            exact.setdefault(key[0], []).append(position)
+    return _RuleIndex(
+        unscoped=tuple(unscoped),
+        exact=MappingProxyType({k: tuple(v) for k, v in exact.items()}),
+        folded=MappingProxyType({k: tuple(v) for k, v in folded.items()}),
+    )
+
+
 @dataclass(frozen=True)
 class DetectionEngine:
     """A pure, deterministic rule evaluator.
 
     ``evaluate(observations)`` applies every rule to every Observation
-    independently (single-Observation scope — see module docstring) and
+    independently (single-Observation scope -- see module docstring) and
     returns every firing, in a fixed, reproducible order: Observations in
     the order given, rules in rule-pack order. No I/O, no ATT&CK KB access,
-    no randomness, no wall-clock — a pure function of ``self.rules`` and the
+    no randomness, no wall-clock -- a pure function of ``self.rules`` and the
     ``observations`` argument.
+
+    **Scope index (performance only, ADR-0007 follow-up).** Rules whose first
+    condition is ``event.category has_element X`` are only tried against
+    Observations whose ``event.category`` contains ``X``; see
+    :func:`_scope_key` for why this is exactly equivalent to trying them all.
+
+    **Rule families.** Among rules sharing a non-``None``
+    :attr:`DetectionRule.rule_family`, at most one detection is emitted per
+    Observation: the first firing rule in rule order (later siblings are not
+    evaluated for that Observation).
     """
 
     rules: tuple[DetectionRule, ...]
+    _index: _RuleIndex = field(init=False, repr=False, compare=False)
+
+    def __post_init__(self) -> None:
+        object.__setattr__(self, "_index", _build_index(self.rules))
+
+    def _candidates(self, observation: Observation) -> Sequence[int]:
+        categories = observation.event.category if observation.event is not None else ()
+        if not isinstance(categories, tuple):
+            return range(len(self.rules))  # unexpected shape: evaluate everything
+        index = self._index
+        positions = set(index.unscoped)
+        for element in categories:
+            text = str(element)
+            positions.update(index.exact.get(text, ()))
+            positions.update(index.folded.get(text.casefold(), ()))
+        return sorted(positions)
 
     def evaluate(self, observations: Sequence[Observation]) -> tuple[DetectionResult, ...]:
         results: list[DetectionResult] = []
@@ -431,10 +527,16 @@ class DetectionEngine:
                     f"DetectionEngine.evaluate requires domain Observations, "
                     f"got {type(observation).__name__}"
                 )
-            for rule in self.rules:
+            fired_families: set[str] = set()
+            for position in self._candidates(observation):
+                rule = self.rules[position]
+                if rule.rule_family is not None and rule.rule_family in fired_families:
+                    continue
                 result = rule.evaluate(observation)
                 if result is not None:
                     results.append(result)
+                    if rule.rule_family is not None:
+                        fired_families.add(rule.rule_family)
         return tuple(results)
 
 
@@ -559,6 +661,10 @@ def _rule_from_dict(
     if not isinstance(rule_source, str) or not rule_source.strip():
         raise DetectionError(f"{where}: 'rule_source' must be a non-empty string if present")
 
+    rule_family = d.get("rule_family")
+    if rule_family is not None and (not isinstance(rule_family, str) or not rule_family.strip()):
+        raise DetectionError(f"{where}: 'rule_family' must be a non-empty string if present")
+
     return DetectionRule(
         rule_ref=rule_ref,
         conditions=conditions,
@@ -566,6 +672,7 @@ def _rule_from_dict(
         evidence_type=evidence_type,
         rule_source=rule_source,
         content_hash=content_hash,
+        rule_family=rule_family,
     )
 
 
