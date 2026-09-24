@@ -66,7 +66,8 @@ DETECTION_RESULT_SCHEMA_VERSION = "detection-result/1"
 #: The closed set of predicate operators a MatchedField may record — kept in
 #: sync with, but not imported from, rules.py (contracts must not depend on
 #: the rule-evaluation module; rules.py imports this constant instead).
-MATCH_OPERATORS = ("equals", "contains", "in", "exists")
+#: ``startswith``/``endswith``/``has_element`` added by ADR-0007 D4.
+MATCH_OPERATORS = ("equals", "contains", "in", "exists", "startswith", "endswith", "has_element")
 
 
 def _require_nonempty_str(value: object, field_name: str) -> str:
@@ -93,12 +94,21 @@ class MatchedField:
       Observation is inspected separately.
     - ``expected``: the rule's own reference value, where the operator has
       one (``None`` for ``exists``, which has no comparison value).
+    - ``negated`` / ``case_insensitive``: the condition's ADR-0007 D4 flags,
+      recorded so the *why* states exactly which predicate matched (e.g.
+      "``process.executable`` not endswith ``explorer.exe``").
+    - ``field_present``: ``False`` only for a negated condition that matched
+      because the field was absent (Sigma semantics, ADR-0007 D4); then
+      ``observed`` is ``""``. A non-negated match always has the field.
     """
 
     field_path: str
     operator: str
     observed: str
     expected: str | None = None
+    negated: bool = False
+    case_insensitive: bool = False
+    field_present: bool = True
 
     def __post_init__(self) -> None:
         _require_nonempty_str(self.field_path, "MatchedField.field_path")
@@ -113,6 +123,16 @@ class MatchedField:
             )
         if self.expected is not None:
             _require_nonempty_str(self.expected, "MatchedField.expected")
+        for flag_name in ("negated", "case_insensitive", "field_present"):
+            if not isinstance(getattr(self, flag_name), bool):
+                raise DetectionError(f"MatchedField.{flag_name} must be a bool")
+        if not self.field_present:
+            if not self.negated:
+                raise DetectionError(
+                    "MatchedField.field_present=False is only valid for a negated condition"
+                )
+            if self.observed != "":
+                raise DetectionError("MatchedField.observed must be '' when field_present is False")
 
 
 @dataclass(frozen=True)

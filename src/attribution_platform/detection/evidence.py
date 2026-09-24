@@ -29,20 +29,34 @@ module never has to guard against it here).
 from __future__ import annotations
 
 from attribution_platform.attack_knowledge.loader import AttackKnowledge
-from attribution_platform.detection.contracts import DetectionResult
+from attribution_platform.detection.contracts import DetectionResult, MatchedField
 from attribution_platform.detection.errors import DetectionError
 from attribution_platform.domain import Evidence, Observation
 from attribution_platform.extraction import derive_evidence
+
+
+def _describe_matched_field(mf: MatchedField) -> str:
+    """One matched predicate in words. The ADR-0007 D4 markers ("not",
+    "(case-insensitive)", "(field absent)") appear only when set, so claims
+    from conditions that do not use them are byte-identical to before."""
+    operator = f"not {mf.operator}" if mf.negated else mf.operator
+    text = (
+        f"{mf.field_path} {operator} {mf.expected!r}"
+        if mf.expected is not None
+        else f"{mf.field_path} {operator}"
+    )
+    if mf.case_insensitive:
+        text += " (case-insensitive)"
+    if not mf.field_present:
+        text += " (field absent)"
+    return text
 
 
 def _compose_claim(detection: DetectionResult) -> str:
     """A deterministic, human-readable summary of *why* the rule fired,
     built only from the DetectionResult's own fields — never fabricated."""
     field_summary = "; ".join(
-        f"{mf.field_path} {mf.operator} {mf.expected!r}"
-        if mf.expected is not None
-        else f"{mf.field_path} {mf.operator}"
-        for mf in detection.match_basis.matched_fields
+        _describe_matched_field(mf) for mf in detection.match_basis.matched_fields
     )
     return (
         f"rule {detection.rule_ref.rule_id} v{detection.rule_ref.rule_version} "

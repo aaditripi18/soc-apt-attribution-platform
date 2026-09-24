@@ -8,8 +8,12 @@ just a design intent. Rules are authored as JSON (a *rule pack*, loaded by
 
 **Predicate language (deliberately minimal — extend later, never
 speculatively, exactly the discipline G0.4's ``SyntheticRecord`` and G0.11's
-Sysmon adapter already established):** four operators —
-``equals`` / ``contains`` / ``in`` / ``exists`` — over a dotted
+Sysmon adapter already established):** originally four operators —
+``equals`` / ``contains`` / ``in`` / ``exists`` — extended by ADR-0007 D4
+(for faithful Sigma translation) with ``startswith`` / ``endswith`` /
+``has_element`` and two per-condition flags, ``case_insensitive`` and
+``negate`` (see :class:`FieldCondition`; both default off, so the text below
+describes every condition that does not set them) — over a dotted
 ``field_path`` into an Observation's ECS-aligned entity groups
 (``event`` / ``host`` / ``user`` / ``process`` / ``network`` / ``file``).
 All comparisons are case-sensitive string comparisons (even for a numeric
@@ -17,12 +21,11 @@ Observation field, both sides are compared as ``str``) — the simplest,
 least-ambiguous semantics for a v1 engine. A rule's conditions are combined
 with AND (all must match); there is no OR/NOT — a behavior needing that is
 better expressed as two separate rules mapping to the same technique.
-**Array-typed ECS fields are out of scope** (``event.category``,
-``event.type``, ``host.ip``): a ``field_path`` that resolves to a tuple
-fails closed with :class:`~attribution_platform.detection.errors.DetectionError`
-rather than silently comparing against Python's tuple ``repr()`` — an
-element-membership predicate mode is a deliberate future extension, not
-implemented here.
+**Array-typed ECS fields** (``event.category``, ``event.type``,
+``host.ip``) are addressable only by the ``has_element`` membership
+operator (ADR-0007 D4); any other operator on a tuple-valued field fails
+closed with :class:`~attribution_platform.detection.errors.DetectionError`
+rather than silently comparing against Python's tuple ``repr()``.
 
 **Strictly single-Observation (Phase 1 boundary, not a temporary
 limitation):** :meth:`DetectionEngine.evaluate` takes a sequence of
@@ -138,14 +141,27 @@ class FieldCondition:
     - ``field_path``: dotted path, e.g. ``"process.command_line"``.
     - ``operator``: one of :data:`~attribution_platform.detection.contracts.MATCH_OPERATORS`.
     - ``value``: the rule's reference value. Required (a non-empty ``str``
-      for ``equals``/``contains``, a non-empty ``tuple[str, ...]`` for
-      ``in``) for every operator except ``exists``, which must leave it
-      ``None`` (there is nothing to compare against).
+      for ``equals``/``contains``/``startswith``/``endswith``/``has_element``,
+      a non-empty ``tuple[str, ...]`` for ``in``) for every operator except
+      ``exists``, which must leave it ``None`` (there is nothing to compare
+      against).
+    - ``case_insensitive`` (ADR-0007 D4): compare ``casefold()``-ed strings.
+      Invalid with ``exists`` (nothing is compared).
+    - ``negate`` (ADR-0007 D4): the condition matches iff the positive
+      predicate does **not**. A negated condition on an **absent** field
+      matches (Sigma semantics: the positive match is false).
+
+    ``has_element`` is the only operator valid on array-typed fields
+    (``event.category``/``event.type``, ``host.ip``): true iff one element
+    equals ``value``. It fails closed on a scalar field, and every other
+    operator still fails closed on an array field.
     """
 
     field_path: str
     operator: str
     value: str | tuple[str, ...] | None = None
+    case_insensitive: bool = False
+    negate: bool = False
 
     def __post_init__(self) -> None:
         if not isinstance(self.field_path, str) or not self.field_path.strip():
@@ -154,9 +170,16 @@ class FieldCondition:
             raise DetectionError(
                 f"FieldCondition.operator {self.operator!r} is not one of {MATCH_OPERATORS}"
             )
+        for flag_name in ("case_insensitive", "negate"):
+            if not isinstance(getattr(self, flag_name), bool):
+                raise DetectionError(f"FieldCondition.{flag_name} must be a bool")
         if self.operator == "exists":
             if self.value is not None:
                 raise DetectionError("FieldCondition.value must be None for operator 'exists'")
+            if self.case_insensitive:
+                raise DetectionError(
+                    "FieldCondition.case_insensitive is meaningless for operator 'exists'"
+                )
         elif self.operator == "in":
             if not isinstance(self.value, tuple) or not self.value:
                 raise DetectionError(
@@ -165,77 +188,87 @@ class FieldCondition:
             for v in self.value:
                 if not isinstance(v, str) or not v.strip():
                     raise DetectionError("FieldCondition.value entries must be non-empty strings")
-        else:  # equals / contains
+        else:  # equals / contains / startswith / endswith / has_element
             if not isinstance(self.value, str) or not self.value.strip():
                 raise DetectionError(
                     f"FieldCondition.value must be a non-empty string for operator "
                     f"{self.operator!r}"
                 )
 
+    def _fold(self, text: str) -> str:
+        return text.casefold() if self.case_insensitive else text
+
+    def _positive_match(self, resolved: Any) -> bool:
+        """The un-negated predicate. ``resolved`` is ``None`` (absent), a
+        tuple (array field -- ``has_element`` only), or a scalar."""
+        if self.operator == "exists":
+            return resolved is not None
+        if resolved is None:
+            return False  # every remaining operator requires a value to compare
+        if self.operator == "has_element":
+            wanted = self._fold(cast(str, self.value))
+            return any(self._fold(str(element)) == wanted for element in resolved)
+        observed = self._fold(str(resolved))
+        if self.operator == "in":
+            # __post_init__ guarantees tuple[str, ...] for this operator
+            return observed in {self._fold(v) for v in cast("tuple[str, ...]", self.value)}
+        expected = self._fold(cast(str, self.value))
+        if self.operator == "equals":
+            return observed == expected
+        if self.operator == "contains":
+            return expected in observed
+        if self.operator == "startswith":
+            return observed.startswith(expected)
+        if self.operator == "endswith":
+            return observed.endswith(expected)
+        raise DetectionError(
+            f"unreachable: unhandled operator {self.operator!r}"
+        )  # pragma: no cover
+
     def evaluate(self, observation: Observation) -> MatchedField | None:
         """Return the ``MatchedField`` if this condition matches, else ``None``."""
         resolved = _resolve_field(observation, self.field_path)
 
-        if isinstance(resolved, tuple):
-            # Array-typed ECS fields (event.category/type, host.ip, ...) have
-            # no defined semantics in this v1 predicate language — stringifying
-            # the tuple would make 'contains' silently match on Python's repr
-            # punctuation rather than element membership. Fail closed rather
-            # than risk a subtly-wrong match; extend deliberately (an
-            # element-membership mode) if a rule genuinely needs this later.
+        if self.operator == "has_element":
+            if resolved is not None and not isinstance(resolved, tuple):
+                raise DetectionError(
+                    f"FieldCondition.field_path {self.field_path!r} resolves to a scalar "
+                    f"({resolved!r}); operator 'has_element' requires an array-typed field"
+                )
+        elif isinstance(resolved, tuple):
+            # Array-typed ECS fields have no defined semantics for scalar
+            # operators -- stringifying the tuple would make 'contains' match
+            # on Python's repr punctuation rather than element membership.
+            # Fail closed; 'has_element' is the element-membership operator.
             raise DetectionError(
                 f"FieldCondition.field_path {self.field_path!r} resolves to an array-typed "
-                f"field ({resolved!r}); this predicate language does not support array fields yet"
+                f"field ({resolved!r}); only operator 'has_element' supports array fields"
             )
 
-        if self.operator == "exists":
-            if resolved is None:
-                return None
-            return MatchedField(
-                field_path=self.field_path, operator="exists", observed=str(resolved)
-            )
+        if self._positive_match(resolved) == self.negate:
+            return None
 
         if resolved is None:
-            return None  # every remaining operator requires a value to compare
-        observed_str = str(resolved)
-
-        if self.operator == "equals":
-            expected_str = cast(str, self.value)  # __post_init__ guarantees str for this operator
-            if observed_str != expected_str:
-                return None
-            return MatchedField(
-                field_path=self.field_path,
-                operator="equals",
-                observed=observed_str,
-                expected=expected_str,
-            )
-
-        if self.operator == "contains":
-            expected_str = cast(str, self.value)  # __post_init__ guarantees str for this operator
-            if expected_str not in observed_str:
-                return None
-            return MatchedField(
-                field_path=self.field_path,
-                operator="contains",
-                observed=observed_str,
-                expected=expected_str,
-            )
-
-        if self.operator == "in":
-            # __post_init__ guarantees tuple[str, ...] for this operator
-            expected_values = cast("tuple[str, ...]", self.value)
-            if observed_str not in expected_values:
-                return None
-            return MatchedField(
-                field_path=self.field_path,
-                operator="in",
-                observed=observed_str,
-                expected=",".join(expected_values),
-            )
-
-        raise DetectionError(
-            f"unreachable: unhandled operator {self.operator!r}"
-        )  # pragma: no cover
+            observed = ""
+        elif isinstance(resolved, tuple):
+            observed = ",".join(str(element) for element in resolved)
+        else:
+            observed = str(resolved)
+        if self.operator == "exists":
+            expected: str | None = None
+        elif self.operator == "in":
+            expected = ",".join(cast("tuple[str, ...]", self.value))
+        else:
+            expected = cast(str, self.value)
+        return MatchedField(
+            field_path=self.field_path,
+            operator=self.operator,
+            observed=observed,
+            expected=expected,
+            negated=self.negate,
+            case_insensitive=self.case_insensitive,
+            field_present=resolved is not None,
+        )
 
 
 @dataclass(frozen=True)
@@ -430,8 +463,16 @@ def _condition_from_dict(d: Any, *, where: str) -> FieldCondition:
         value = tuple(raw_value)
     else:
         value = raw_value
+    # ADR-0007 D4 flags: optional JSON booleans; absent means the original
+    # (case-sensitive, non-negated) semantics, so existing packs are unchanged.
+    flags: dict[str, bool] = {}
+    for flag_name in ("case_insensitive", "negate"):
+        raw_flag = d.get(flag_name, False)
+        if not isinstance(raw_flag, bool):
+            raise DetectionError(f"{where}: {flag_name!r} must be a JSON boolean if present")
+        flags[flag_name] = raw_flag
     try:
-        return FieldCondition(field_path=field_path, operator=operator, value=value)
+        return FieldCondition(field_path=field_path, operator=operator, value=value, **flags)
     except DetectionError as exc:
         raise DetectionError(f"{where}: {exc}") from exc
 
