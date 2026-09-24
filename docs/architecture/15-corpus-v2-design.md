@@ -1,6 +1,8 @@
 # 15 — Calibration corpus v2 design (resolves Stage-5 findings F5-1..F5-4)
 
-**Status:** PROPOSED (2026-09-24) — design only. No code, rules, fixtures, datasets, or ADR changes are made by
+**Status:** PROPOSED (2026-09-24) — design only. DC-1 is now specified in full by
+[ADR-0007](adr/0007-detection-content-and-predicate-language.md) (PROPOSED), which supersedes DC-1's scope
+bullet; wherever DC-1 below and ADR-0007 differ (scope, revoked-ID handling, operators), ADR-0007 governs. No code, rules, fixtures, datasets, or ADR changes are made by
 this note. Owner decisions are listed in §8. Corpus v1 (`data/calibration/corpus/v1/`) stays frozen and unmodified.
 
 **Why this exists.** The Stage-5 harness ([14 §Stage 5](14-c3.2-corpus-build.md)) ran v1 through the real engine
@@ -65,9 +67,11 @@ fail-closed importer**. Elastic prebuilt rules (ELv2, EQL/KQL) stay the fallback
   field → rule rejected. Known gap (fact): our `Process` entity has `parent_name` but no parent executable
   path, so `ParentImage|endswith: '\x.exe'` maps only when the value reduces to a bare basename; anything else
   is rejected until a deliberate `Process` contract extension (decided in ADR-0007, not assumed here).
-- **Scope.** Not "all of Sigma". Import only rules whose tagged techniques appear in the emulation plans chosen
-  in §4, plus rules for the hard-negative behaviors (§4 S3). An import report lists accepted/rejected counts and
-  reasons.
+- **Scope — SUPERSEDED by ADR-0007 D1 (2026-09-24, owner: the platform must handle all ATT&CK Groups and
+  techniques).** The earlier "import only rules the chosen plans need" is withdrawn: the **whole eligible
+  generic Sigma set** is imported for production detection, and a per-technique / per-Group coverage report
+  measures full-universe reach. The corpus uses whatever subset its scenarios exercise; corpus work never
+  narrows production detection.
 
 **Prerequisite: predicate-language extension.** Sigma needs `startswith`, `endswith`, and case-insensitive
 matching; our four operators (`equals`/`contains`/`in`/`exists`, case-sensitive) cannot express it faithfully.
@@ -158,10 +162,10 @@ unless it passes. **The numbers below are proposed minimums for the owner to con
 
 | # | Task | Output |
 |---|---|---|
-| T1 | ADR-0007: detection content (Sigma import) + predicate-language extension | ADR, owner acceptance |
-| T2 | Predicate extension (`startswith`, `endswith`, per-condition case-insensitive) | code + tests |
-| T3 | Sigma importer (restricted subset, DNF expansion, field map, tag→v19.0 resolution) + pinned SigmaHQ release + NOTICE | code + tests + import report |
-| T4 | Choose plans/scenarios; import only the Sigma rules they need; coverage report (techniques reachable per plan) | pack + report |
+| T1 | ADR-0007: detection content (Sigma import) + predicate-language extension — **drafted** | ADR, owner acceptance |
+| T2 | Predicate extension (`startswith`, `endswith`, `case_insensitive`, `negate`, `has_element`) | code + tests |
+| T3 | Sigma importer (full eligible generic set, DNF expansion, field map, tag→v19.0 resolution) + pinned SigmaHQ release + NOTICE | code + tests + import report |
+| T4 | Full-universe coverage report (all 697 techniques, all 174 Groups); then choose plans/scenarios against it | report + plan selection |
 | T5 | Builder: multiple units per family; cross-split identity + fitting-readiness validators | code + tests |
 | T6 | Author S1 plan fixtures (several turns, a few plans each) | fixtures + annotations |
 | T7 | Author S3 hard negatives | fixtures + annotations |

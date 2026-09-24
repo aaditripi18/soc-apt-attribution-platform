@@ -34,6 +34,7 @@ code exists. Read alongside [CLAUDE.md](../../CLAUDE.md).
 | [adr/0002-attribution-scoring-and-evidence-methodology.md](adr/0002-attribution-scoring-and-evidence-methodology.md) | Attribution scoring & evidence methodology | **ACCEPTED** (2026-09-11, D22 modified per M2) |
 | [adr/0003-correlation-and-behavioral-chain-layer.md](adr/0003-correlation-and-behavioral-chain-layer.md) | Correlation and behavioral-chain layer (Phase 2) | **ACCEPTED** (2026-09-15, no decisions modified) |
 | [adr/0004-behavioral-sequence-reconstruction.md](adr/0004-behavioral-sequence-reconstruction.md) | Behavioral sequence reconstruction (Phase 2, gate G2.4) | **ACCEPTED** (2026-09-15, corrected twice during pre-acceptance review, no decisions modified at acceptance) |
+| [adr/0007-detection-content-and-predicate-language.md](adr/0007-detection-content-and-predicate-language.md) | Detection content (pinned SigmaHQ generic rules via build-time importer) & predicate-language extension; full-universe scope principle and coverage report; resolves Q4 | **PROPOSED** (2026-09-24) |
 
 ## The one-paragraph summary
 
