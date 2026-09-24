@@ -710,6 +710,135 @@ def _summarize_hypothesis(
     )
 
 
+def _make_g_of(knowledge: AttackKnowledge) -> Callable[[frozenset[str]], float | None]:
+    """The single authoritative ADR-0005 §D3 base rate ``g`` — the fraction of
+    the pinned KB's **active Groups** whose ``uses`` profile contains a
+    feature/combination — memoized per returned closure. ``None`` when no active
+    Group matches (the §D3 ``OUTSIDE_CALIBRATED_REGIME`` fallback) or when there
+    are no active Groups.
+
+    Extracted here (a behavior-preserving refactor of the closure that previously
+    lived inside :func:`compute_comparative_evidence`) so that function **and**
+    :func:`compute_unattributed_decision_support` share exactly **one** ``g``
+    implementation — never a second definition. Read-only over ``knowledge``;
+    never mutates it."""
+    active_group_count = len(active_groups(knowledge))
+    g_cache: dict[frozenset[str], float | None] = {}
+
+    def g_of(features: frozenset[str]) -> float | None:
+        if features in g_cache:
+            return g_cache[features]
+        if active_group_count == 0:
+            result: float | None = None
+        elif len(features) == 1:
+            (feature_id,) = features
+            matching = groups_using_technique(knowledge, feature_id)
+            result = (len(matching) / active_group_count) if matching else None
+        else:
+            matching = groups_using_all_techniques(knowledge, features)
+            result = (len(matching) / active_group_count) if matching else None
+        g_cache[features] = result
+        return result
+
+    return g_of
+
+
+@dataclass(frozen=True)
+class UnattributedBaseline:
+    """The ADR-0005 Amendment B §B2 candidate-independent coincidental-overlap
+    baseline for one attribution unit — ``decision_support(Unattributed)`` and
+    the observed-feature count it was computed over. Carries the source
+    ``ACHMatrix``'s ``group_id``/``attack_kb_version`` identity so a consumer can
+    verify it belongs to the same case."""
+
+    group_id: str
+    attack_kb_version: str
+    decision_support: float
+    observed_feature_count: int
+
+
+def compute_unattributed_decision_support(
+    matrix: ACHMatrix, knowledge: AttackKnowledge
+) -> UnattributedBaseline:
+    """The ADR-0005 Amendment B §B2 **candidate-independent** null baseline:
+
+    ``decision_support(Unattributed) = Σ over the case's distinct observed
+    decision features f:  D(f) · g(f)`` on the same distinct-feature DECISION
+    basis as a real candidate, with the observed feature set partitioned **once**
+    by §D3 candidate-independently.
+
+    Reuses the **single authoritative** §D3 partition
+    (:func:`_find_combination_partition`) and base rate (:func:`_make_g_of`), and
+    the same ``D = 1 − g`` the per-hypothesis path uses — never a second
+    partition/``g``/``D`` definition. A feature whose ``g`` is undefined (the §D3
+    ``OUTSIDE_CALIBRATED_REGIME`` fallback) contributes ``0`` (§B2). The
+    ``Unattributed`` hypothesis's own empty ``support_value`` is **never** used as
+    this baseline — that would incorrectly yield ``0`` (see the module note).
+
+    The observed feature set is the distinct techniques materialized as
+    **SUPPORTING** cells in ``matrix`` (``CONTRADICTING`` is rejected exactly as
+    in :func:`compute_comparative_evidence`). This is the complete non-zero
+    baseline population: a feature with no active-Group user has ``g`` undefined
+    (contributing ``0``) and can never join an admissible combination, so omitting
+    it changes neither the partition of the remaining features nor the sum.
+
+    Read-only and deterministic (features sorted before partition/summation;
+    ``PYTHONHASHSEED``-independent); never mutates ``matrix``/``knowledge``.
+    """
+    if not isinstance(matrix, ACHMatrix):
+        raise AttributionError(
+            f"compute_unattributed_decision_support: matrix must be an ACHMatrix, "
+            f"got {type(matrix).__name__}"
+        )
+    if not isinstance(knowledge, AttackKnowledge):
+        raise AttributionError(
+            "compute_unattributed_decision_support: knowledge must be an AttackKnowledge, "
+            f"got {type(knowledge).__name__}"
+        )
+    if matrix.attack_kb_version != knowledge.attack_kb_version:
+        raise AttributionError(
+            f"compute_unattributed_decision_support: matrix.attack_kb_version "
+            f"{matrix.attack_kb_version!r} does not match the loaded "
+            f"knowledge.attack_kb_version {knowledge.attack_kb_version!r}"
+        )
+
+    observed: set[str] = set()
+    for assessment in matrix.assessments:
+        if assessment.role is EvidenceRole.CONTRADICTING:
+            raise AttributionError(
+                f"compute_unattributed_decision_support: encountered a CONTRADICTING "
+                f"EvidenceAssessment ({assessment.assessment_id!r}) — ADR-0005's "
+                "'contradiction_strength' term is not yet defined by the accepted "
+                "architecture; refusing to fabricate a weight rather than guess one"
+            )
+        observed.add(assessment.technique_stix_id)
+    observed_features = tuple(sorted(observed))
+
+    g_of = _make_g_of(knowledge)
+    combination_blocks = (
+        _find_combination_partition(observed_features, g_of) if len(observed_features) >= 2 else ()
+    )
+    covered: set[str] = set()
+    for block in combination_blocks:
+        covered |= set(block)
+    blocks: list[frozenset[str]] = list(combination_blocks) + [
+        frozenset({feature_id}) for feature_id in observed_features if feature_id not in covered
+    ]
+
+    total = 0.0
+    for block in blocks:
+        g_value = g_of(block)
+        if g_value is not None:
+            total += (1.0 - g_value) * g_value
+
+    return UnattributedBaseline(
+        group_id=matrix.group_id,
+        attack_kb_version=matrix.attack_kb_version,
+        decision_support=total,
+        observed_feature_count=len(observed_features),
+    )
+
+
 def compute_comparative_evidence(
     matrix: ACHMatrix,
     knowledge: AttackKnowledge,
@@ -815,23 +944,7 @@ def compute_comparative_evidence(
             (assessment.technique_stix_id, assessment.assessment_id)
         )
 
-    active_group_count = len(active_groups(knowledge))
-    g_cache: dict[frozenset[str], float | None] = {}
-
-    def g_of(features: frozenset[str]) -> float | None:
-        if features in g_cache:
-            return g_cache[features]
-        if active_group_count == 0:
-            result: float | None = None
-        elif len(features) == 1:
-            (feature_id,) = features
-            matching = groups_using_technique(knowledge, feature_id)
-            result = (len(matching) / active_group_count) if matching else None
-        else:
-            matching = groups_using_all_techniques(knowledge, features)
-            result = (len(matching) / active_group_count) if matching else None
-        g_cache[features] = result
-        return result
+    g_of = _make_g_of(knowledge)
 
     profile_breadth_cache: dict[str, int] = {}
 

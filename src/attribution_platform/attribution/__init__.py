@@ -94,7 +94,9 @@ from attribution_platform.attribution.comparative_analysis import (
     DiagnosticityOutcome,
     EvidenceContribution,
     HypothesisSupportSummary,
+    UnattributedBaseline,
     compute_comparative_evidence,
+    compute_unattributed_decision_support,
 )
 from attribution_platform.attribution.contracts import (
     ATTRIBUTION_ASSESSMENT_SCHEMA_VERSION,
@@ -185,9 +187,11 @@ __all__ = [
     "ACH_MATRIX_METHOD",
     "ACH_MATRIX_METHOD_VERSION",
     "compute_comparative_evidence",
+    "compute_unattributed_decision_support",
     "ComparativeEvidenceResult",
     "HypothesisSupportSummary",
     "EvidenceContribution",
+    "UnattributedBaseline",
     "DiagnosticityOutcome",
     "COMPARATIVE_ANALYSIS_METHOD",
     "COMPARATIVE_ANALYSIS_METHOD_VERSION",
