@@ -200,6 +200,10 @@ def _replay_scenario_through_engine(
         pipe=scenario.pipe,
         wmi=scenario.wmi,
         powershell=scenario.powershell,
+        target_user=scenario.target_user,
+        logon=scenario.logon,
+        object_access=scenario.object_access,
+        share=scenario.share,
     )
     record = DetectionMatchRecord(rule_ref=_RAW_TELEMETRY_RULE_REF, matched_events=(matched_event,))
     (observation,) = extract_observations(record)

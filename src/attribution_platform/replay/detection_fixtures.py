@@ -71,8 +71,10 @@ from attribution_platform.domain import (
     FileStreamRef,
     HashSet,
     HostRef,
+    LogonRef,
     NetworkEndpoint,
     NetworkInfo,
+    ObjectAccessRef,
     PeInfo,
     PipeRef,
     PowerShellRef,
@@ -80,6 +82,7 @@ from attribution_platform.domain import (
     ProcessRef,
     RegistryRef,
     RemoteThreadRef,
+    ShareRef,
     UserRef,
     WmiRef,
 )
@@ -104,6 +107,10 @@ _OPTIONAL_ENTITY_FIELDS = (
     "pipe",
     "wmi",
     "powershell",
+    "target_user",
+    "logon",
+    "object_access",
+    "share",
 )
 
 
@@ -131,6 +138,10 @@ class DetectionReplayScenario:
     pipe: PipeRef | None = None
     wmi: WmiRef | None = None
     powershell: PowerShellRef | None = None
+    target_user: UserRef | None = None
+    logon: LogonRef | None = None
+    object_access: ObjectAccessRef | None = None
+    share: ShareRef | None = None
 
 
 @dataclass(frozen=True)
@@ -233,6 +244,15 @@ def _scenario_from_dict(s: Any, *, index: int, source: str) -> DetectionReplaySc
         pipe=_pipe_ref_from_dict(s.get("pipe"), where=f"{where}.pipe"),
         wmi=_wmi_ref_from_dict(s.get("wmi"), where=f"{where}.wmi"),
         powershell=_powershell_ref_from_dict(s.get("powershell"), where=f"{where}.powershell"),
+        target_user=_user_ref_from_dict(s.get("target_user"), where=f"{where}.target_user"),
+        logon=_flat_ref(LogonRef, _LOGON_FIELDS, s.get("logon"), where=f"{where}.logon"),
+        object_access=_flat_ref(
+            ObjectAccessRef,
+            _OBJECT_ACCESS_FIELDS,
+            s.get("object_access"),
+            where=f"{where}.object_access",
+        ),
+        share=_flat_ref(ShareRef, _SHARE_FIELDS, s.get("share"), where=f"{where}.share"),
     )
 
 
@@ -281,6 +301,9 @@ def _event_metadata_from_dict(d: Any, *, where: str) -> EventMetadata | None:
         type=tuple(parsed.get("type", ())),
         action=parsed.get("action"),
         outcome=parsed.get("outcome"),
+        provider=parsed.get("provider"),
+        code=parsed.get("code"),
+        dataset=parsed.get("dataset"),
     )
 
 
@@ -441,6 +464,48 @@ def _wmi_ref_from_dict(d: Any, *, where: str) -> WmiRef | None:
         "consumer",
     )
     return WmiRef(**{f: parsed.get(f) for f in fields})
+
+
+_LOGON_FIELDS = (
+    "logon_type",
+    "logon_process",
+    "authentication_package",
+    "package_name",
+    "lm_package",
+    "key_length",
+    "impersonation_level",
+    "elevated_token",
+    "logon_id",
+    "workstation_name",
+    "workstation",
+    "status",
+    "sub_status",
+    "target_outbound_user_name",
+)
+
+_OBJECT_ACCESS_FIELDS = (
+    "server",
+    "type",
+    "name",
+    "handle_id",
+    "access_mask",
+    "access_list",
+    "value_name",
+    "new_value",
+)
+
+_SHARE_FIELDS = (
+    "name",
+    "local_path",
+    "relative_target_name",
+)
+
+
+def _flat_ref(cls: Any, fields: tuple[str, ...], d: Any, *, where: str) -> Any:
+    parsed = _require_dict(d, where=where)
+    if parsed is None:
+        return None
+    return cls(**{f: parsed.get(f) for f in fields})
 
 
 def _powershell_ref_from_dict(d: Any, *, where: str) -> PowerShellRef | None:

@@ -6,23 +6,25 @@
   "rule_packs": [
    {
     "pack_id": "sigma-r2026-07-01-sigma_core++",
-    "content_hash": "d92d554903f085f709030e096bd8612e01fc4c706f82fa3ec752b635e6fdb749"
+    "content_hash": "38fbf68b85d635cda1efff3a751d5295cf06a987121cabf2114cb80f17beeb08"
    }
   ],
   "sigma_import": {
-   "importer": "sigma-importer/1.5",
+   "importer": "sigma-importer/1.6",
    "sigma_release": "r2026-07-01",
    "sigma_archive": "sigma_core++.zip",
    "sigma_archive_sha256": "469d83e1d1bbdb4d7876466ff1a728550fae5a20115b91339d58d20e894e7477",
    "pysigma_version": "1.5.1",
-   "field_map_version": "sigma-field-map/6",
+   "field_map_version": "sigma-field-map/7",
    "attack_kb_version": "enterprise-attack-19.2",
    "dnf_bound": 64,
    "software_tag_review": {
     "file": "software-tag-review.json",
-    "sha256": "da251ce071a15ed2fc8efd7218bd34e81e45922d3f81b12e80d6c589cb8ffe00",
+    "sha256": "335a914ab78b4bfec8328947c8d2068f1513138aa5fb77a118b9eb6cd52798cb",
     "accepted": [
+     "1de68c67-af5c-4097-9c85-fe5578e09e67:attack.s0005",
      "304afd73-55a5-4bb9-8c21-0b1fc84ea9e4:attack.s0029",
+     "39a80702-d7ca-4a83-b776-525b1f86a36d:attack.s0195",
      "41504465-5e3a-4a5b-a5b4-2a0baadd4463:attack.s0029",
      "56321594-9087-49d9-bf10-524fe8479452:attack.s0108",
      "56c217c3-2de2-479b-990f-5c109ba8458f:attack.s0111",
@@ -50,15 +52,15 @@
   "group_used_techniques": 498,
   "active_groups": 176,
   "techniques_by_status": {
-   "covered": 260,
-   "telemetry_gap": 108,
+   "covered": 263,
+   "telemetry_gap": 105,
    "translation_gap": 5,
    "not_endpoint_observable": 160,
    "no_sigma_rule": 164
   },
   "group_used_techniques_by_status": {
-   "covered": 220,
-   "telemetry_gap": 74,
+   "covered": 223,
+   "telemetry_gap": 71,
    "translation_gap": 5,
    "not_endpoint_observable": 91,
    "no_sigma_rule": 108
@@ -66,7 +68,7 @@
   "groups_with_empty_technique_profile": 4,
   "groups_with_zero_covered": 8,
   "groups_with_at_least_2_covered": 163,
-  "groups_with_at_least_5_covered": 141,
+  "groups_with_at_least_5_covered": 143,
   "groups_with_at_least_10_covered": 108
  },
  "gap_ranking": [
@@ -97,13 +99,6 @@
    "techniques_upper_bound": 13,
    "group_used_techniques_upper_bound": 9,
    "groups_touched_upper_bound": 82
-  },
-  {
-   "blocker": "logsource:windows/security",
-   "in_v1_scope": true,
-   "techniques_upper_bound": 10,
-   "group_used_techniques_upper_bound": 7,
-   "groups_touched_upper_bound": 51
   },
   {
    "blocker": "logsource:azure/activitylogs",
@@ -225,13 +220,6 @@
    "groups_touched_upper_bound": 13
   },
   {
-   "blocker": "logsource:windows/system",
-   "in_v1_scope": true,
-   "techniques_upper_bound": 3,
-   "group_used_techniques_upper_bound": 2,
-   "groups_touched_upper_bound": 12
-  },
-  {
    "blocker": "logsource:/webserver",
    "in_v1_scope": false,
    "techniques_upper_bound": 2,
@@ -265,6 +253,83 @@
    "techniques_upper_bound": 2,
    "group_used_techniques_upper_bound": 1,
    "groups_touched_upper_bound": 5
+  },
+  {
+   "blocker": "logsource:windows/system",
+   "in_v1_scope": true,
+   "techniques_upper_bound": 2,
+   "group_used_techniques_upper_bound": 1,
+   "groups_touched_upper_bound": 1
+  },
+  {
+   "blocker": "event_code:6423",
+   "in_v1_scope": false,
+   "techniques_upper_bound": 1,
+   "group_used_techniques_upper_bound": 1,
+   "groups_touched_upper_bound": 1
+  },
+  {
+   "blocker": "field:Application",
+   "in_v1_scope": true,
+   "techniques_upper_bound": 1,
+   "group_used_techniques_upper_bound": 1,
+   "groups_touched_upper_bound": 11
+  },
+  {
+   "blocker": "field:DestAddress",
+   "in_v1_scope": true,
+   "techniques_upper_bound": 1,
+   "group_used_techniques_upper_bound": 1,
+   "groups_touched_upper_bound": 11
+  },
+  {
+   "blocker": "field:DestPort",
+   "in_v1_scope": true,
+   "techniques_upper_bound": 1,
+   "group_used_techniques_upper_bound": 1,
+   "groups_touched_upper_bound": 11
+  },
+  {
+   "blocker": "field:FilterName",
+   "in_v1_scope": true,
+   "techniques_upper_bound": 1,
+   "group_used_techniques_upper_bound": 1,
+   "groups_touched_upper_bound": 3
+  },
+  {
+   "blocker": "field:FilterOrigin",
+   "in_v1_scope": true,
+   "techniques_upper_bound": 1,
+   "group_used_techniques_upper_bound": 1,
+   "groups_touched_upper_bound": 11
+  },
+  {
+   "blocker": "field:ProviderContextName",
+   "in_v1_scope": true,
+   "techniques_upper_bound": 1,
+   "group_used_techniques_upper_bound": 1,
+   "groups_touched_upper_bound": 3
+  },
+  {
+   "blocker": "field:SourceAddress",
+   "in_v1_scope": true,
+   "techniques_upper_bound": 1,
+   "group_used_techniques_upper_bound": 1,
+   "groups_touched_upper_bound": 11
+  },
+  {
+   "blocker": "field:SourcePort",
+   "in_v1_scope": true,
+   "techniques_upper_bound": 1,
+   "group_used_techniques_upper_bound": 1,
+   "groups_touched_upper_bound": 11
+  },
+  {
+   "blocker": "field:SubjectLogonId",
+   "in_v1_scope": true,
+   "techniques_upper_bound": 1,
+   "group_used_techniques_upper_bound": 1,
+   "groups_touched_upper_bound": 3
   },
   {
    "blocker": "logsource:/dns",
@@ -335,6 +400,69 @@
    "techniques_upper_bound": 1,
    "group_used_techniques_upper_bound": 1,
    "groups_touched_upper_bound": 28
+  },
+  {
+   "blocker": "event_code:4765",
+   "in_v1_scope": false,
+   "techniques_upper_bound": 1,
+   "group_used_techniques_upper_bound": 0,
+   "groups_touched_upper_bound": 0
+  },
+  {
+   "blocker": "event_code:4766",
+   "in_v1_scope": false,
+   "techniques_upper_bound": 1,
+   "group_used_techniques_upper_bound": 0,
+   "groups_touched_upper_bound": 0
+  },
+  {
+   "blocker": "field:AdditionalInfo",
+   "in_v1_scope": true,
+   "techniques_upper_bound": 1,
+   "group_used_techniques_upper_bound": 0,
+   "groups_touched_upper_bound": 0
+  },
+  {
+   "blocker": "field:AttributeLDAPDisplayName",
+   "in_v1_scope": true,
+   "techniques_upper_bound": 1,
+   "group_used_techniques_upper_bound": 0,
+   "groups_touched_upper_bound": 0
+  },
+  {
+   "blocker": "field:AttributeValue",
+   "in_v1_scope": true,
+   "techniques_upper_bound": 1,
+   "group_used_techniques_upper_bound": 0,
+   "groups_touched_upper_bound": 0
+  },
+  {
+   "blocker": "field:ObjectClass",
+   "in_v1_scope": true,
+   "techniques_upper_bound": 1,
+   "group_used_techniques_upper_bound": 0,
+   "groups_touched_upper_bound": 0
+  },
+  {
+   "blocker": "field:ObjectDN",
+   "in_v1_scope": true,
+   "techniques_upper_bound": 1,
+   "group_used_techniques_upper_bound": 0,
+   "groups_touched_upper_bound": 0
+  },
+  {
+   "blocker": "field:ServicePrincipalNames",
+   "in_v1_scope": true,
+   "techniques_upper_bound": 1,
+   "group_used_techniques_upper_bound": 0,
+   "groups_touched_upper_bound": 0
+  },
+  {
+   "blocker": "field:SidHistory",
+   "in_v1_scope": true,
+   "techniques_upper_bound": 1,
+   "group_used_techniques_upper_bound": 0,
+   "groups_touched_upper_bound": 0
   },
   {
    "blocker": "logsource:/antivirus",
@@ -538,10 +666,10 @@
    "attack_id": "G0006",
    "name": "APT1",
    "profile_techniques": 23,
-   "covered": 15,
+   "covered": 16,
    "by_status": {
-    "covered": 15,
-    "telemetry_gap": 3,
+    "covered": 16,
+    "telemetry_gap": 2,
     "translation_gap": 1,
     "not_endpoint_observable": 3,
     "no_sigma_rule": 1
@@ -554,10 +682,6 @@
     {
      "attack_id": "T1114.002",
      "status": "no_sigma_rule"
-    },
-    {
-     "attack_id": "T1550.002",
-     "status": "telemetry_gap"
     },
     {
      "attack_id": "T1566.002",
@@ -585,10 +709,10 @@
    "attack_id": "G0007",
    "name": "APT28",
    "profile_techniques": 93,
-   "covered": 49,
+   "covered": 51,
    "by_status": {
-    "covered": 49,
-    "telemetry_gap": 14,
+    "covered": 51,
+    "telemetry_gap": 12,
     "translation_gap": 0,
     "not_endpoint_observable": 12,
     "no_sigma_rule": 18
@@ -613,10 +737,6 @@
     {
      "attack_id": "T1030",
      "status": "no_sigma_rule"
-    },
-    {
-     "attack_id": "T1039",
-     "status": "telemetry_gap"
     },
     {
      "attack_id": "T1048.002",
@@ -696,10 +816,6 @@
     },
     {
      "attack_id": "T1550.001",
-     "status": "telemetry_gap"
-    },
-    {
-     "attack_id": "T1550.002",
      "status": "telemetry_gap"
     },
     {
@@ -910,10 +1026,10 @@
    "attack_id": "G0012",
    "name": "Darkhotel",
    "profile_techniques": 24,
-   "covered": 16,
+   "covered": 17,
    "by_status": {
-    "covered": 16,
-    "telemetry_gap": 2,
+    "covered": 17,
+    "telemetry_gap": 1,
     "translation_gap": 0,
     "not_endpoint_observable": 0,
     "no_sigma_rule": 6
@@ -942,10 +1058,6 @@
     {
      "attack_id": "T1497.002",
      "status": "no_sigma_rule"
-    },
-    {
-     "attack_id": "T1553.002",
-     "status": "telemetry_gap"
     },
     {
      "attack_id": "T1573.001",
@@ -1201,10 +1313,10 @@
    "attack_id": "G0021",
    "name": "Molerats",
    "profile_techniques": 16,
-   "covered": 13,
+   "covered": 14,
    "by_status": {
-    "covered": 13,
-    "telemetry_gap": 2,
+    "covered": 14,
+    "telemetry_gap": 1,
     "translation_gap": 0,
     "not_endpoint_observable": 0,
     "no_sigma_rule": 1
@@ -1213,10 +1325,6 @@
     {
      "attack_id": "T1027.015",
      "status": "no_sigma_rule"
-    },
-    {
-     "attack_id": "T1553.002",
-     "status": "telemetry_gap"
     },
     {
      "attack_id": "T1566.002",
@@ -1501,10 +1609,10 @@
    "attack_id": "G0032",
    "name": "Lazarus Group",
    "profile_techniques": 93,
-   "covered": 62,
+   "covered": 63,
    "by_status": {
-    "covered": 62,
-    "telemetry_gap": 9,
+    "covered": 63,
+    "telemetry_gap": 8,
     "translation_gap": 4,
     "not_endpoint_observable": 7,
     "no_sigma_rule": 11
@@ -1556,10 +1664,6 @@
     },
     {
      "attack_id": "T1189",
-     "status": "telemetry_gap"
-    },
-    {
-     "attack_id": "T1553.002",
      "status": "telemetry_gap"
     },
     {
@@ -1879,10 +1983,10 @@
    "attack_id": "G0037",
    "name": "FIN6",
    "profile_techniques": 40,
-   "covered": 31,
+   "covered": 32,
    "by_status": {
-    "covered": 31,
-    "telemetry_gap": 2,
+    "covered": 32,
+    "telemetry_gap": 1,
     "translation_gap": 1,
     "not_endpoint_observable": 0,
     "no_sigma_rule": 6
@@ -1903,10 +2007,6 @@
     {
      "attack_id": "T1213.006",
      "status": "no_sigma_rule"
-    },
-    {
-     "attack_id": "T1553.002",
-     "status": "telemetry_gap"
     },
     {
      "attack_id": "T1560",
@@ -1953,29 +2053,24 @@
    "attack_id": "G0039",
    "name": "Suckfly",
    "profile_techniques": 5,
-   "covered": 4,
+   "covered": 5,
    "by_status": {
-    "covered": 4,
-    "telemetry_gap": 1,
+    "covered": 5,
+    "telemetry_gap": 0,
     "translation_gap": 0,
     "not_endpoint_observable": 0,
     "no_sigma_rule": 0
    },
-   "uncovered": [
-    {
-     "attack_id": "T1553.002",
-     "status": "telemetry_gap"
-    }
-   ]
+   "uncovered": []
   },
   {
    "attack_id": "G0040",
    "name": "Patchwork",
    "profile_techniques": 41,
-   "covered": 30,
+   "covered": 31,
    "by_status": {
-    "covered": 30,
-    "telemetry_gap": 6,
+    "covered": 31,
+    "telemetry_gap": 5,
     "translation_gap": 0,
     "not_endpoint_observable": 2,
     "no_sigma_rule": 3
@@ -1999,10 +2094,6 @@
     },
     {
      "attack_id": "T1189",
-     "status": "telemetry_gap"
-    },
-    {
-     "attack_id": "T1553.002",
      "status": "telemetry_gap"
     },
     {
@@ -2069,10 +2160,10 @@
    "attack_id": "G0044",
    "name": "Winnti Group",
    "profile_techniques": 6,
-   "covered": 3,
+   "covered": 4,
    "by_status": {
-    "covered": 3,
-    "telemetry_gap": 2,
+    "covered": 4,
+    "telemetry_gap": 1,
     "translation_gap": 0,
     "not_endpoint_observable": 1,
     "no_sigma_rule": 0
@@ -2080,10 +2171,6 @@
    "uncovered": [
     {
      "attack_id": "T1014",
-     "status": "telemetry_gap"
-    },
-    {
-     "attack_id": "T1553.002",
      "status": "telemetry_gap"
     },
     {
@@ -2096,10 +2183,10 @@
    "attack_id": "G0045",
    "name": "menuPass",
    "profile_techniques": 46,
-   "covered": 34,
+   "covered": 36,
    "by_status": {
-    "covered": 34,
-    "telemetry_gap": 5,
+    "covered": 36,
+    "telemetry_gap": 3,
     "translation_gap": 1,
     "not_endpoint_observable": 1,
     "no_sigma_rule": 5
@@ -2108,10 +2195,6 @@
     {
      "attack_id": "T1027.013",
      "status": "no_sigma_rule"
-    },
-    {
-     "attack_id": "T1039",
-     "status": "telemetry_gap"
     },
     {
      "attack_id": "T1049",
@@ -2138,10 +2221,6 @@
      "status": "no_sigma_rule"
     },
     {
-     "attack_id": "T1553.002",
-     "status": "telemetry_gap"
-    },
-    {
      "attack_id": "T1560",
      "status": "no_sigma_rule"
     },
@@ -2159,10 +2238,10 @@
    "attack_id": "G0046",
    "name": "FIN7",
    "profile_techniques": 67,
-   "covered": 51,
+   "covered": 52,
    "by_status": {
-    "covered": 51,
-    "telemetry_gap": 5,
+    "covered": 52,
+    "telemetry_gap": 4,
     "translation_gap": 1,
     "not_endpoint_observable": 6,
     "no_sigma_rule": 4
@@ -2187,10 +2266,6 @@
     {
      "attack_id": "T1497.002",
      "status": "no_sigma_rule"
-    },
-    {
-     "attack_id": "T1553.002",
-     "status": "telemetry_gap"
     },
     {
      "attack_id": "T1566.002",
@@ -2238,10 +2313,10 @@
    "attack_id": "G0047",
    "name": "Gamaredon Group",
    "profile_techniques": 70,
-   "covered": 47,
+   "covered": 48,
    "by_status": {
-    "covered": 47,
-    "telemetry_gap": 6,
+    "covered": 48,
+    "telemetry_gap": 5,
     "translation_gap": 0,
     "not_endpoint_observable": 5,
     "no_sigma_rule": 12
@@ -2270,10 +2345,6 @@
     {
      "attack_id": "T1027.016",
      "status": "no_sigma_rule"
-    },
-    {
-     "attack_id": "T1039",
-     "status": "telemetry_gap"
     },
     {
      "attack_id": "T1041",
@@ -2368,10 +2439,10 @@
    "attack_id": "G0049",
    "name": "OilRig",
    "profile_techniques": 76,
-   "covered": 63,
+   "covered": 64,
    "by_status": {
-    "covered": 63,
-    "telemetry_gap": 2,
+    "covered": 64,
+    "telemetry_gap": 1,
     "translation_gap": 1,
     "not_endpoint_observable": 4,
     "no_sigma_rule": 6
@@ -2396,10 +2467,6 @@
     {
      "attack_id": "T1137.004",
      "status": "no_sigma_rule"
-    },
-    {
-     "attack_id": "T1553.002",
-     "status": "telemetry_gap"
     },
     {
      "attack_id": "T1566.002",
@@ -2435,10 +2502,10 @@
    "attack_id": "G0050",
    "name": "APT32",
    "profile_techniques": 78,
-   "covered": 57,
+   "covered": 58,
    "by_status": {
-    "covered": 57,
-    "telemetry_gap": 8,
+    "covered": 58,
+    "telemetry_gap": 7,
     "translation_gap": 3,
     "not_endpoint_observable": 6,
     "no_sigma_rule": 4
@@ -2482,10 +2549,6 @@
     },
     {
      "attack_id": "T1222.002",
-     "status": "telemetry_gap"
-    },
-    {
-     "attack_id": "T1550.002",
      "status": "telemetry_gap"
     },
     {
@@ -2553,19 +2616,15 @@
    "attack_id": "G0052",
    "name": "CopyKittens",
    "profile_techniques": 8,
-   "covered": 6,
+   "covered": 7,
    "by_status": {
-    "covered": 6,
-    "telemetry_gap": 1,
+    "covered": 7,
+    "telemetry_gap": 0,
     "translation_gap": 0,
     "not_endpoint_observable": 0,
     "no_sigma_rule": 1
    },
    "uncovered": [
-    {
-     "attack_id": "T1553.002",
-     "status": "telemetry_gap"
-    },
     {
      "attack_id": "T1560.003",
      "status": "no_sigma_rule"
@@ -2599,20 +2658,15 @@
    "attack_id": "G0054",
    "name": "Sowbug",
    "profile_techniques": 9,
-   "covered": 8,
+   "covered": 9,
    "by_status": {
-    "covered": 8,
-    "telemetry_gap": 1,
+    "covered": 9,
+    "telemetry_gap": 0,
     "translation_gap": 0,
     "not_endpoint_observable": 0,
     "no_sigma_rule": 0
    },
-   "uncovered": [
-    {
-     "attack_id": "T1039",
-     "status": "telemetry_gap"
-    }
-   ]
+   "uncovered": []
   },
   {
    "attack_id": "G0055",
@@ -2632,10 +2686,10 @@
    "attack_id": "G0056",
    "name": "PROMETHIUM",
    "profile_techniques": 11,
-   "covered": 4,
+   "covered": 5,
    "by_status": {
-    "covered": 4,
-    "telemetry_gap": 3,
+    "covered": 5,
+    "telemetry_gap": 2,
     "translation_gap": 1,
     "not_endpoint_observable": 2,
     "no_sigma_rule": 1
@@ -2656,10 +2710,6 @@
     {
      "attack_id": "T1205.001",
      "status": "no_sigma_rule"
-    },
-    {
-     "attack_id": "T1553.002",
-     "status": "telemetry_gap"
     },
     {
      "attack_id": "T1587.002",
@@ -2806,10 +2856,10 @@
    "attack_id": "G0060",
    "name": "BRONZE BUTLER",
    "profile_techniques": 40,
-   "covered": 34,
+   "covered": 35,
    "by_status": {
-    "covered": 34,
-    "telemetry_gap": 4,
+    "covered": 35,
+    "telemetry_gap": 3,
     "translation_gap": 0,
     "not_endpoint_observable": 0,
     "no_sigma_rule": 2
@@ -2817,10 +2867,6 @@
    "uncovered": [
     {
      "attack_id": "T1027.001",
-     "status": "telemetry_gap"
-    },
-    {
-     "attack_id": "T1039",
      "status": "telemetry_gap"
     },
     {
@@ -2947,10 +2993,10 @@
    "attack_id": "G0065",
    "name": "Leviathan",
    "profile_techniques": 50,
-   "covered": 28,
+   "covered": 29,
    "by_status": {
-    "covered": 28,
-    "telemetry_gap": 8,
+    "covered": 29,
+    "telemetry_gap": 7,
     "translation_gap": 0,
     "not_endpoint_observable": 9,
     "no_sigma_rule": 5
@@ -2991,10 +3037,6 @@
     {
      "attack_id": "T1534",
      "status": "no_sigma_rule"
-    },
-    {
-     "attack_id": "T1553.002",
-     "status": "telemetry_gap"
     },
     {
      "attack_id": "T1560",
@@ -3719,10 +3761,10 @@
    "attack_id": "G0091",
    "name": "Silence",
    "profile_techniques": 28,
-   "covered": 26,
+   "covered": 27,
    "by_status": {
-    "covered": 26,
-    "telemetry_gap": 2,
+    "covered": 27,
+    "telemetry_gap": 1,
     "translation_gap": 0,
     "not_endpoint_observable": 0,
     "no_sigma_rule": 0
@@ -3731,10 +3773,6 @@
     {
      "attack_id": "T1090.002",
      "status": "telemetry_gap"
-    },
-    {
-     "attack_id": "T1553.002",
-     "status": "telemetry_gap"
     }
    ]
   },
@@ -3742,10 +3780,10 @@
    "attack_id": "G0092",
    "name": "TA505",
    "profile_techniques": 34,
-   "covered": 24,
+   "covered": 25,
    "by_status": {
-    "covered": 24,
-    "telemetry_gap": 3,
+    "covered": 25,
+    "telemetry_gap": 2,
     "translation_gap": 1,
     "not_endpoint_observable": 2,
     "no_sigma_rule": 4
@@ -3766,10 +3804,6 @@
     {
      "attack_id": "T1087.003",
      "status": "no_sigma_rule"
-    },
-    {
-     "attack_id": "T1553.002",
-     "status": "telemetry_gap"
     },
     {
      "attack_id": "T1566.002",
@@ -3797,10 +3831,10 @@
    "attack_id": "G0093",
    "name": "GALLIUM",
    "profile_techniques": 31,
-   "covered": 23,
+   "covered": 25,
    "by_status": {
-    "covered": 23,
-    "telemetry_gap": 5,
+    "covered": 25,
+    "telemetry_gap": 3,
     "translation_gap": 1,
     "not_endpoint_observable": 1,
     "no_sigma_rule": 1
@@ -3827,14 +3861,6 @@
      "status": "telemetry_gap"
     },
     {
-     "attack_id": "T1550.002",
-     "status": "telemetry_gap"
-    },
-    {
-     "attack_id": "T1553.002",
-     "status": "telemetry_gap"
-    },
-    {
      "attack_id": "T1583.004",
      "status": "not_endpoint_observable"
     }
@@ -3844,10 +3870,10 @@
    "attack_id": "G0094",
    "name": "Kimsuky",
    "profile_techniques": 130,
-   "covered": 73,
+   "covered": 75,
    "by_status": {
-    "covered": 73,
-    "telemetry_gap": 11,
+    "covered": 75,
+    "telemetry_gap": 9,
     "translation_gap": 2,
     "not_endpoint_observable": 21,
     "no_sigma_rule": 23
@@ -3948,14 +3974,6 @@
     {
      "attack_id": "T1534",
      "status": "no_sigma_rule"
-    },
-    {
-     "attack_id": "T1550.002",
-     "status": "telemetry_gap"
-    },
-    {
-     "attack_id": "T1553.002",
-     "status": "telemetry_gap"
     },
     {
      "attack_id": "T1560.003",
@@ -4110,10 +4128,10 @@
    "attack_id": "G0096",
    "name": "APT41",
    "profile_techniques": 82,
-   "covered": 58,
+   "covered": 60,
    "by_status": {
-    "covered": 58,
-    "telemetry_gap": 9,
+    "covered": 60,
+    "telemetry_gap": 7,
     "translation_gap": 3,
     "not_endpoint_observable": 3,
     "no_sigma_rule": 9
@@ -4178,14 +4196,6 @@
     {
      "attack_id": "T1496.001",
      "status": "no_sigma_rule"
-    },
-    {
-     "attack_id": "T1550.002",
-     "status": "telemetry_gap"
-    },
-    {
-     "attack_id": "T1553.002",
-     "status": "telemetry_gap"
     },
     {
      "attack_id": "T1568.002",
@@ -4366,10 +4376,10 @@
    "attack_id": "G0102",
    "name": "Wizard Spider",
    "profile_techniques": 64,
-   "covered": 54,
+   "covered": 56,
    "by_status": {
-    "covered": 54,
-    "telemetry_gap": 6,
+    "covered": 56,
+    "telemetry_gap": 4,
     "translation_gap": 1,
     "not_endpoint_observable": 2,
     "no_sigma_rule": 1
@@ -4394,14 +4404,6 @@
     {
      "attack_id": "T1518.002",
      "status": "no_sigma_rule"
-    },
-    {
-     "attack_id": "T1550.002",
-     "status": "telemetry_gap"
-    },
-    {
-     "attack_id": "T1553.002",
-     "status": "telemetry_gap"
     },
     {
      "attack_id": "T1566.002",
@@ -4611,19 +4613,15 @@
    "attack_id": "G0114",
    "name": "Chimera",
    "profile_techniques": 59,
-   "covered": 44,
+   "covered": 46,
    "by_status": {
-    "covered": 44,
-    "telemetry_gap": 4,
+    "covered": 46,
+    "telemetry_gap": 2,
     "translation_gap": 1,
     "not_endpoint_observable": 1,
     "no_sigma_rule": 9
    },
    "uncovered": [
-    {
-     "attack_id": "T1039",
-     "status": "telemetry_gap"
-    },
     {
      "attack_id": "T1041",
      "status": "telemetry_gap"
@@ -4665,10 +4663,6 @@
      "status": "no_sigma_rule"
     },
     {
-     "attack_id": "T1550.002",
-     "status": "telemetry_gap"
-    },
-    {
      "attack_id": "T1556.001",
      "status": "no_sigma_rule"
     },
@@ -4705,10 +4699,10 @@
    "attack_id": "G0117",
    "name": "Fox Kitten",
    "profile_techniques": 41,
-   "covered": 33,
+   "covered": 34,
    "by_status": {
-    "covered": 33,
-    "telemetry_gap": 1,
+    "covered": 34,
+    "telemetry_gap": 0,
     "translation_gap": 1,
     "not_endpoint_observable": 4,
     "no_sigma_rule": 2
@@ -4721,10 +4715,6 @@
     {
      "attack_id": "T1036.004",
      "status": "translation_gap"
-    },
-    {
-     "attack_id": "T1039",
-     "status": "telemetry_gap"
     },
     {
      "attack_id": "T1213.005",
@@ -5162,10 +5152,10 @@
    "attack_id": "G0129",
    "name": "Mustang Panda",
    "profile_techniques": 85,
-   "covered": 57,
+   "covered": 58,
    "by_status": {
-    "covered": 57,
-    "telemetry_gap": 4,
+    "covered": 58,
+    "telemetry_gap": 3,
     "translation_gap": 1,
     "not_endpoint_observable": 9,
     "no_sigma_rule": 14
@@ -5222,10 +5212,6 @@
     {
      "attack_id": "T1219.001",
      "status": "no_sigma_rule"
-    },
-    {
-     "attack_id": "T1553.002",
-     "status": "telemetry_gap"
     },
     {
      "attack_id": "T1560.003",
@@ -5693,10 +5679,10 @@
    "attack_id": "G0143",
    "name": "Aquatic Panda",
    "profile_techniques": 35,
-   "covered": 28,
+   "covered": 29,
    "by_status": {
-    "covered": 28,
-    "telemetry_gap": 5,
+    "covered": 29,
+    "telemetry_gap": 4,
     "translation_gap": 1,
     "not_endpoint_observable": 0,
     "no_sigma_rule": 1
@@ -5708,10 +5694,6 @@
     },
     {
      "attack_id": "T1059.004",
-     "status": "telemetry_gap"
-    },
-    {
-     "attack_id": "T1550.002",
      "status": "telemetry_gap"
     },
     {
@@ -5846,10 +5828,10 @@
    "attack_id": "G1003",
    "name": "Ember Bear",
    "profile_techniques": 47,
-   "covered": 33,
+   "covered": 34,
    "by_status": {
-    "covered": 33,
-    "telemetry_gap": 5,
+    "covered": 34,
+    "telemetry_gap": 4,
     "translation_gap": 0,
     "not_endpoint_observable": 5,
     "no_sigma_rule": 4
@@ -5866,10 +5848,6 @@
     {
      "attack_id": "T1491.002",
      "status": "no_sigma_rule"
-    },
-    {
-     "attack_id": "T1550.002",
-     "status": "telemetry_gap"
     },
     {
      "attack_id": "T1560",
@@ -6184,10 +6162,10 @@
    "attack_id": "G1009",
    "name": "Moses Staff",
    "profile_techniques": 12,
-   "covered": 10,
+   "covered": 11,
    "by_status": {
-    "covered": 10,
-    "telemetry_gap": 1,
+    "covered": 11,
+    "telemetry_gap": 0,
     "translation_gap": 0,
     "not_endpoint_observable": 0,
     "no_sigma_rule": 1
@@ -6196,10 +6174,6 @@
     {
      "attack_id": "T1027.013",
      "status": "no_sigma_rule"
-    },
-    {
-     "attack_id": "T1553.002",
-     "status": "telemetry_gap"
     }
    ]
   },
@@ -6348,10 +6322,10 @@
    "attack_id": "G1014",
    "name": "LuminousMoth",
    "profile_techniques": 28,
-   "covered": 16,
+   "covered": 17,
    "by_status": {
-    "covered": 16,
-    "telemetry_gap": 4,
+    "covered": 17,
+    "telemetry_gap": 3,
     "translation_gap": 0,
     "not_endpoint_observable": 4,
     "no_sigma_rule": 4
@@ -6368,10 +6342,6 @@
     {
      "attack_id": "T1091",
      "status": "no_sigma_rule"
-    },
-    {
-     "attack_id": "T1553.002",
-     "status": "telemetry_gap"
     },
     {
      "attack_id": "T1557.002",
@@ -6411,10 +6381,10 @@
    "attack_id": "G1015",
    "name": "Scattered Spider",
    "profile_techniques": 64,
-   "covered": 30,
+   "covered": 31,
    "by_status": {
-    "covered": 30,
-    "telemetry_gap": 16,
+    "covered": 31,
+    "telemetry_gap": 15,
     "translation_gap": 1,
     "not_endpoint_observable": 11,
     "no_sigma_rule": 6
@@ -6493,10 +6463,6 @@
      "status": "telemetry_gap"
     },
     {
-     "attack_id": "T1553.002",
-     "status": "telemetry_gap"
-    },
-    {
      "attack_id": "T1556.006",
      "status": "telemetry_gap"
     },
@@ -6562,10 +6528,10 @@
    "attack_id": "G1016",
    "name": "FIN13",
    "profile_techniques": 53,
-   "covered": 42,
+   "covered": 43,
    "by_status": {
-    "covered": 42,
-    "telemetry_gap": 4,
+    "covered": 43,
+    "telemetry_gap": 3,
     "translation_gap": 3,
     "not_endpoint_observable": 1,
     "no_sigma_rule": 3
@@ -6598,10 +6564,6 @@
     {
      "attack_id": "T1098.007",
      "status": "no_sigma_rule"
-    },
-    {
-     "attack_id": "T1550.002",
-     "status": "telemetry_gap"
     },
     {
      "attack_id": "T1589",
@@ -7101,10 +7063,10 @@
    "attack_id": "G1031",
    "name": "Saint Bear",
    "profile_techniques": 18,
-   "covered": 10,
+   "covered": 11,
    "by_status": {
-    "covered": 10,
-    "telemetry_gap": 1,
+    "covered": 11,
+    "telemetry_gap": 0,
     "translation_gap": 1,
     "not_endpoint_observable": 2,
     "no_sigma_rule": 4
@@ -7121,10 +7083,6 @@
     {
      "attack_id": "T1497",
      "status": "no_sigma_rule"
-    },
-    {
-     "attack_id": "T1553.002",
-     "status": "telemetry_gap"
     },
     {
      "attack_id": "T1583.006",
@@ -7250,10 +7208,10 @@
    "attack_id": "G1034",
    "name": "Daggerfly",
    "profile_techniques": 17,
-   "covered": 13,
+   "covered": 14,
    "by_status": {
-    "covered": 13,
-    "telemetry_gap": 2,
+    "covered": 14,
+    "telemetry_gap": 1,
     "translation_gap": 0,
     "not_endpoint_observable": 2,
     "no_sigma_rule": 0
@@ -7261,10 +7219,6 @@
    "uncovered": [
     {
      "attack_id": "T1189",
-     "status": "telemetry_gap"
-    },
-    {
-     "attack_id": "T1553.002",
      "status": "telemetry_gap"
     },
     {
@@ -7445,19 +7399,15 @@
    "attack_id": "G1039",
    "name": "RedCurl",
    "profile_techniques": 41,
-   "covered": 33,
+   "covered": 34,
    "by_status": {
-    "covered": 33,
-    "telemetry_gap": 4,
+    "covered": 34,
+    "telemetry_gap": 3,
     "translation_gap": 0,
     "not_endpoint_observable": 0,
     "no_sigma_rule": 4
    },
    "uncovered": [
-    {
-     "attack_id": "T1039",
-     "status": "telemetry_gap"
-    },
     {
      "attack_id": "T1080",
      "status": "no_sigma_rule"
@@ -8021,10 +7971,10 @@
    "attack_id": "G1051",
    "name": "Medusa Group",
    "profile_techniques": 57,
-   "covered": 45,
+   "covered": 46,
    "by_status": {
-    "covered": 45,
-    "telemetry_gap": 3,
+    "covered": 46,
+    "telemetry_gap": 2,
     "translation_gap": 0,
     "not_endpoint_observable": 5,
     "no_sigma_rule": 4
@@ -8033,10 +7983,6 @@
     {
      "attack_id": "T1027.002",
      "status": "no_sigma_rule"
-    },
-    {
-     "attack_id": "T1553.002",
-     "status": "telemetry_gap"
     },
     {
      "attack_id": "T1573.002",
@@ -8310,10 +8256,10 @@
    "attack_id": "G1054",
    "name": "MirrorFace",
    "profile_techniques": 43,
-   "covered": 33,
+   "covered": 34,
    "by_status": {
-    "covered": 33,
-    "telemetry_gap": 3,
+    "covered": 34,
+    "telemetry_gap": 2,
     "translation_gap": 0,
     "not_endpoint_observable": 1,
     "no_sigma_rule": 6
@@ -8341,10 +8287,6 @@
     },
     {
      "attack_id": "T1221",
-     "status": "telemetry_gap"
-    },
-    {
-     "attack_id": "T1553.002",
      "status": "telemetry_gap"
     },
     {
@@ -8476,10 +8418,10 @@
    "attack_id": "G1056",
    "name": "TeamPCP",
    "profile_techniques": 36,
-   "covered": 17,
+   "covered": 18,
    "by_status": {
-    "covered": 17,
-    "telemetry_gap": 5,
+    "covered": 18,
+    "telemetry_gap": 4,
     "translation_gap": 0,
     "not_endpoint_observable": 10,
     "no_sigma_rule": 4
@@ -8511,10 +8453,6 @@
     },
     {
      "attack_id": "T1550.001",
-     "status": "telemetry_gap"
-    },
-    {
-     "attack_id": "T1553.002",
      "status": "telemetry_gap"
     },
     {
@@ -8705,7 +8643,8 @@
    "status": "covered",
    "rule_sources": 1,
    "rejected_rules_blocked_by": [
-    "logsource:windows/security"
+    "field:AttributeLDAPDisplayName",
+    "field:AttributeValue"
    ],
    "windows_platform": true,
    "has_data_component": true
@@ -8714,15 +8653,14 @@
    "attack_id": "T1003",
    "name": "OS Credential Dumping",
    "status": "covered",
-   "rule_sources": 16,
+   "rule_sources": 18,
    "rejected_rules_blocked_by": [
     "logsource:/antivirus",
     "logsource:aws/cloudtrail",
     "logsource:azure/activitylogs",
     "logsource:linux/auditd",
     "logsource:opencanary/application",
-    "logsource:windows/file_access",
-    "logsource:windows/security"
+    "logsource:windows/file_access"
    ],
    "windows_platform": true,
    "has_data_component": true
@@ -8731,15 +8669,15 @@
    "attack_id": "T1003.001",
    "name": "LSASS Memory",
    "status": "covered",
-   "rule_sources": 53,
+   "rule_sources": 55,
    "rejected_rules_blocked_by": [
     "field:Hashes",
     "field:ParentUser",
+    "field:ServiceFileName",
     "field:User",
     "logsource:/antivirus",
     "logsource:windows/",
     "logsource:windows/application",
-    "logsource:windows/security",
     "logsource:windows/system",
     "logsource:windows/windefend",
     "logsource:zeek/smb_files"
@@ -8751,11 +8689,11 @@
    "attack_id": "T1003.002",
    "name": "Security Account Manager",
    "status": "covered",
-   "rule_sources": 15,
+   "rule_sources": 17,
    "rejected_rules_blocked_by": [
+    "field:ServiceFileName",
     "logsource:/antivirus",
     "logsource:windows/",
-    "logsource:windows/security",
     "logsource:windows/system",
     "logsource:zeek/smb_files"
    ],
@@ -8766,11 +8704,10 @@
    "attack_id": "T1003.003",
    "name": "NTDS",
    "status": "covered",
-   "rule_sources": 16,
+   "rule_sources": 18,
    "rejected_rules_blocked_by": [
     "field:ParentImage",
     "logsource:windows/application",
-    "logsource:windows/security",
     "logsource:zeek/smb_files"
    ],
    "windows_platform": true,
@@ -8780,10 +8717,12 @@
    "attack_id": "T1003.004",
    "name": "LSA Secrets",
    "status": "covered",
-   "rule_sources": 4,
+   "rule_sources": 5,
    "rejected_rules_blocked_by": [
+    "event_code:4662",
+    "event_code:4692",
+    "field:ServiceFileName",
     "logsource:windows/",
-    "logsource:windows/security",
     "logsource:windows/system",
     "logsource:zeek/smb_files"
    ],
@@ -8796,7 +8735,7 @@
    "status": "covered",
    "rule_sources": 4,
    "rejected_rules_blocked_by": [
-    "logsource:windows/security",
+    "field:ServiceFileName",
     "logsource:windows/system"
    ],
    "windows_platform": true,
@@ -8808,8 +8747,9 @@
    "status": "covered",
    "rule_sources": 2,
    "rejected_rules_blocked_by": [
+    "field:Properties",
+    "field:ServiceFileName",
     "logsource:windows/",
-    "logsource:windows/security",
     "logsource:windows/system"
    ],
    "windows_platform": true,
@@ -8881,7 +8821,7 @@
    "status": "telemetry_gap",
    "rule_sources": 0,
    "rejected_rules_blocked_by": [
-    "logsource:windows/security"
+    "field:SubjectLogonId"
    ],
    "windows_platform": true,
    "has_data_component": true
@@ -8908,10 +8848,8 @@
    "attack_id": "T1012",
    "name": "Query Registry",
    "status": "covered",
-   "rule_sources": 4,
-   "rejected_rules_blocked_by": [
-    "logsource:windows/security"
-   ],
+   "rule_sources": 8,
+   "rejected_rules_blocked_by": [],
    "windows_platform": true,
    "has_data_component": true
   },
@@ -9000,11 +8938,17 @@
    "attack_id": "T1021.001",
    "name": "Remote Desktop Protocol",
    "status": "covered",
-   "rule_sources": 7,
+   "rule_sources": 8,
    "rejected_rules_blocked_by": [
+    "event_code:4825",
+    "field:Application",
+    "field:DestAddress",
+    "field:DestPort",
+    "field:FilterOrigin",
     "field:Initiated",
+    "field:SourceAddress",
+    "field:SourcePort",
     "logsource:opencanary/application",
-    "logsource:windows/security",
     "logsource:zeek/rdp"
    ],
    "windows_platform": true,
@@ -9014,12 +8958,16 @@
    "attack_id": "T1021.002",
    "name": "SMB/Windows Admin Shares",
    "status": "covered",
-   "rule_sources": 13,
+   "rule_sources": 21,
    "rejected_rules_blocked_by": [
-    "logsource:windows/security",
+    "field:ServiceFileName",
+    "field:ServiceName",
+    "field:ServiceStartType",
+    "field:ServiceType",
     "logsource:windows/smbserver-connectivity",
     "logsource:windows/system",
-    "logsource:zeek/smb_files"
+    "logsource:zeek/smb_files",
+    "rendered_value:object_access.access_list"
    ],
    "windows_platform": true,
    "has_data_component": true
@@ -9028,12 +8976,11 @@
    "attack_id": "T1021.003",
    "name": "Distributed Component Object Model",
    "status": "covered",
-   "rule_sources": 9,
+   "rule_sources": 10,
    "rejected_rules_blocked_by": [
     "field:CommandLine",
     "logsource:rpc_firewall/application",
-    "logsource:windows/powershell-classic",
-    "logsource:windows/security"
+    "logsource:windows/powershell-classic"
    ],
    "windows_platform": true,
    "has_data_component": true
@@ -9107,8 +9054,9 @@
    "status": "covered",
    "rule_sources": 28,
    "rejected_rules_blocked_by": [
+    "field:ServiceFileName",
+    "field:TargetName",
     "logsource:linux/file_event",
-    "logsource:windows/security",
     "logsource:windows/system"
    ],
    "windows_platform": true,
@@ -9157,10 +9105,8 @@
    "attack_id": "T1027.005",
    "name": "Indicator Removal from Tools",
    "status": "covered",
-   "rule_sources": 3,
-   "rejected_rules_blocked_by": [
-    "logsource:windows/security"
-   ],
+   "rule_sources": 4,
+   "rejected_rules_blocked_by": [],
    "windows_platform": true,
    "has_data_component": true
   },
@@ -9323,9 +9269,11 @@
    "rule_sources": 29,
    "rejected_rules_blocked_by": [
     "field:Hashes",
+    "field:NewTargetUserName",
+    "field:SamAccountName",
+    "field:TargetName",
     "field:User",
-    "logsource:linux/process_creation",
-    "logsource:windows/security"
+    "logsource:linux/process_creation"
    ],
    "windows_platform": true,
    "has_data_component": true
@@ -9501,11 +9449,9 @@
   {
    "attack_id": "T1039",
    "name": "Data from Network Shared Drive",
-   "status": "telemetry_gap",
-   "rule_sources": 0,
-   "rejected_rules_blocked_by": [
-    "logsource:windows/security"
-   ],
+   "status": "covered",
+   "rule_sources": 1,
+   "rejected_rules_blocked_by": [],
    "windows_platform": true,
    "has_data_component": true
   },
@@ -9515,8 +9461,8 @@
    "status": "covered",
    "rule_sources": 5,
    "rejected_rules_blocked_by": [
-    "logsource:cisco/aaa",
-    "logsource:windows/security"
+    "field:ServiceFileName",
+    "logsource:cisco/aaa"
    ],
    "windows_platform": true,
    "has_data_component": true
@@ -9553,12 +9499,11 @@
    "attack_id": "T1047",
    "name": "Windows Management Instrumentation",
    "status": "covered",
-   "rule_sources": 36,
+   "rule_sources": 37,
    "rejected_rules_blocked_by": [
     "field:LogonId",
     "field:User",
     "logsource:rpc_firewall/application",
-    "logsource:windows/security",
     "logsource:windows/windefend",
     "logsource:zeek/dce_rpc"
    ],
@@ -9655,9 +9600,9 @@
    "rule_sources": 1,
    "rejected_rules_blocked_by": [
     "logsource:rpc_firewall/application",
-    "logsource:windows/security",
     "logsource:zeek/dce_rpc",
-    "logsource:zeek/smb_files"
+    "logsource:zeek/smb_files",
+    "rendered_value:object_access.access_list"
    ],
    "windows_platform": true,
    "has_data_component": true
@@ -9681,9 +9626,9 @@
    "attack_id": "T1053.005",
    "name": "Scheduled Task",
    "status": "covered",
-   "rule_sources": 19,
+   "rule_sources": 20,
    "rejected_rules_blocked_by": [
-    "logsource:windows/security",
+    "field:TaskName",
     "logsource:windows/taskscheduler"
    ],
    "windows_platform": true,
@@ -9891,13 +9836,12 @@
    "attack_id": "T1059",
    "name": "Command and Scripting Interpreter",
    "status": "covered",
-   "rule_sources": 46,
+   "rule_sources": 47,
    "rejected_rules_blocked_by": [
     "logsource:azure/activitylogs",
     "logsource:linux/auditd",
     "logsource:linux/process_creation",
     "logsource:macos/process_creation",
-    "logsource:windows/security",
     "logsource:windows/windefend"
    ],
    "windows_platform": true,
@@ -9910,14 +9854,16 @@
    "rule_sources": 103,
    "rejected_rules_blocked_by": [
     "field:CommandLine",
+    "field:DestPort",
     "field:Initiated",
+    "field:LayerRTID",
+    "field:ServiceFileName",
     "field:SourceIsIpv6",
     "field:User",
     "logsource:aws/cloudtrail",
     "logsource:windows/applocker",
     "logsource:windows/powershell-classic",
     "logsource:windows/ps_classic_start",
-    "logsource:windows/security",
     "logsource:windows/system"
    ],
    "windows_platform": true,
@@ -10095,8 +10041,8 @@
    "status": "covered",
    "rule_sources": 7,
    "rejected_rules_blocked_by": [
-    "logsource:windows/ldap",
-    "logsource:windows/security"
+    "event_code:4661",
+    "logsource:windows/ldap"
    ],
    "windows_platform": true,
    "has_data_component": true
@@ -10139,11 +10085,10 @@
    "attack_id": "T1070.004",
    "name": "File Deletion",
    "status": "covered",
-   "rule_sources": 6,
+   "rule_sources": 7,
    "rejected_rules_blocked_by": [
     "logsource:cisco/aaa",
-    "logsource:windows/application",
-    "logsource:windows/security"
+    "logsource:windows/application"
    ],
    "windows_platform": true,
    "has_data_component": true
@@ -10317,8 +10262,11 @@
    "attack_id": "T1078",
    "name": "Valid Accounts",
    "status": "covered",
-   "rule_sources": 1,
+   "rule_sources": 3,
    "rejected_rules_blocked_by": [
+    "event_code:4732",
+    "field:TargetServerName",
+    "field:TargetSid",
     "logsource:aws/cloudtrail",
     "logsource:azure/activitylogs",
     "logsource:azure/auditlogs",
@@ -10331,8 +10279,7 @@
     "logsource:m365/audit",
     "logsource:m365/threat_management",
     "logsource:macos/process_creation",
-    "logsource:opencanary/application",
-    "logsource:windows/security"
+    "logsource:opencanary/application"
    ],
    "windows_platform": true,
    "has_data_component": true
@@ -10427,11 +10374,10 @@
    "attack_id": "T1087",
    "name": "Account Discovery",
    "status": "covered",
-   "rule_sources": 5,
+   "rule_sources": 6,
    "rejected_rules_blocked_by": [
     "field:Initiated",
-    "logsource:rpc_firewall/application",
-    "logsource:windows/security"
+    "logsource:rpc_firewall/application"
    ],
    "windows_platform": true,
    "has_data_component": true
@@ -10451,8 +10397,8 @@
    "status": "covered",
    "rule_sources": 10,
    "rejected_rules_blocked_by": [
-    "logsource:windows/ldap",
-    "logsource:windows/security"
+    "event_code:4661",
+    "logsource:windows/ldap"
    ],
    "windows_platform": true,
    "has_data_component": true
@@ -10500,7 +10446,12 @@
    "status": "covered",
    "rule_sources": 4,
    "rejected_rules_blocked_by": [
-    "logsource:windows/security"
+    "field:Application",
+    "field:DestAddress",
+    "field:DestPort",
+    "field:FilterOrigin",
+    "field:SourceAddress",
+    "field:SourcePort"
    ],
    "windows_platform": true,
    "has_data_component": true
@@ -10511,9 +10462,14 @@
    "status": "telemetry_gap",
    "rule_sources": 0,
    "rejected_rules_blocked_by": [
+    "field:Application",
+    "field:DestAddress",
+    "field:DestPort",
     "field:DestinationHostname",
+    "field:FilterOrigin",
     "field:Initiated",
-    "logsource:windows/security"
+    "field:SourceAddress",
+    "field:SourcePort"
    ],
    "windows_platform": true,
    "has_data_component": true
@@ -10574,6 +10530,15 @@
    "status": "covered",
    "rule_sources": 6,
    "rejected_rules_blocked_by": [
+    "event_code:4706",
+    "event_code:4732",
+    "event_code:4794",
+    "field:AllowedToDelegateTo",
+    "field:AttributeLDAPDisplayName",
+    "field:AttributeValue",
+    "field:ObjectClass",
+    "field:PrivilegeList",
+    "field:TargetSid",
     "logsource:aws/cloudtrail",
     "logsource:azure/activitylogs",
     "logsource:azure/auditlogs",
@@ -10583,8 +10548,7 @@
     "logsource:gcp/gcp.audit",
     "logsource:gcp/google_workspace.admin",
     "logsource:linux/",
-    "logsource:linux/process_creation",
-    "logsource:windows/security"
+    "logsource:linux/process_creation"
    ],
    "windows_platform": true,
    "has_data_component": true
@@ -10728,11 +10692,11 @@
    "rejected_rules_blocked_by": [
     "field:DestinationHostname",
     "field:Initiated",
+    "field:TargetName",
     "logsource:/proxy",
     "logsource:linux/file_event",
     "logsource:linux/process_creation",
     "logsource:macos/process_creation",
-    "logsource:windows/security",
     "logsource:zeek/http"
    ],
    "windows_platform": true,
@@ -10761,8 +10725,7 @@
     "logsource:azure/signinlogs",
     "logsource:bitbucket/audit",
     "logsource:windows/application",
-    "logsource:windows/ntlm",
-    "logsource:windows/security"
+    "logsource:windows/ntlm"
    ],
    "windows_platform": true,
    "has_data_component": true
@@ -10818,11 +10781,11 @@
    "attack_id": "T1112",
    "name": "Modify Registry",
    "status": "covered",
-   "rule_sources": 63,
+   "rule_sources": 64,
    "rejected_rules_blocked_by": [
+    "event_code:4657",
     "field:EventID",
-    "logsource:rpc_firewall/application",
-    "logsource:windows/security"
+    "logsource:rpc_firewall/application"
    ],
    "windows_platform": true,
    "has_data_component": true
@@ -10840,10 +10803,9 @@
    "attack_id": "T1114",
    "name": "Email Collection",
    "status": "covered",
-   "rule_sources": 1,
+   "rule_sources": 2,
    "rejected_rules_blocked_by": [
-    "logsource:m365/threat_management",
-    "logsource:windows/security"
+    "logsource:m365/threat_management"
    ],
    "windows_platform": true,
    "has_data_component": true
@@ -10911,10 +10873,9 @@
    "attack_id": "T1123",
    "name": "Audio Capture",
    "status": "covered",
-   "rule_sources": 3,
+   "rule_sources": 4,
    "rejected_rules_blocked_by": [
-    "logsource:opencanary/application",
-    "logsource:windows/security"
+    "logsource:opencanary/application"
    ],
    "windows_platform": true,
    "has_data_component": true
@@ -11019,8 +10980,7 @@
    "rejected_rules_blocked_by": [
     "logsource:fortigate/event",
     "logsource:opencanary/application",
-    "logsource:windows/file_change",
-    "logsource:windows/security"
+    "logsource:windows/file_change"
    ],
    "windows_platform": true,
    "has_data_component": true
@@ -11031,7 +10991,8 @@
    "status": "telemetry_gap",
    "rule_sources": 0,
    "rejected_rules_blocked_by": [
-    "logsource:windows/security"
+    "field:FilterName",
+    "field:ProviderContextName"
    ],
    "windows_platform": true,
    "has_data_component": true
@@ -11040,9 +11001,11 @@
    "attack_id": "T1134.001",
    "name": "Token Impersonation/Theft",
    "status": "covered",
-   "rule_sources": 4,
+   "rule_sources": 5,
    "rejected_rules_blocked_by": [
-    "logsource:windows/security",
+    "field:FilterName",
+    "field:ProviderContextName",
+    "field:ServiceFileName",
     "logsource:windows/system"
    ],
    "windows_platform": true,
@@ -11054,7 +11017,7 @@
    "status": "covered",
    "rule_sources": 3,
    "rejected_rules_blocked_by": [
-    "logsource:windows/security",
+    "field:ServiceFileName",
     "logsource:windows/system"
    ],
    "windows_platform": true,
@@ -11084,7 +11047,9 @@
    "status": "telemetry_gap",
    "rule_sources": 0,
    "rejected_rules_blocked_by": [
-    "logsource:windows/security"
+    "event_code:4765",
+    "event_code:4766",
+    "field:SidHistory"
    ],
    "windows_platform": true,
    "has_data_component": true
@@ -11115,11 +11080,12 @@
    "status": "covered",
    "rule_sources": 5,
    "rejected_rules_blocked_by": [
+    "event_code:4720",
+    "field:SamAccountName",
     "logsource:cisco/aaa",
     "logsource:fortigate/event",
     "logsource:linux/",
-    "logsource:linux/auditd",
-    "logsource:windows/security"
+    "logsource:linux/auditd"
    ],
    "windows_platform": true,
    "has_data_component": true
@@ -11130,7 +11096,7 @@
    "status": "covered",
    "rule_sources": 2,
    "rejected_rules_blocked_by": [
-    "logsource:windows/security"
+    "field:SamAccountName"
    ],
    "windows_platform": true,
    "has_data_component": true
@@ -11264,9 +11230,9 @@
    "attack_id": "T1187",
    "name": "Forced Authentication",
    "status": "covered",
-   "rule_sources": 2,
+   "rule_sources": 3,
    "rejected_rules_blocked_by": [
-    "logsource:windows/security",
+    "field:CertThumbprint",
     "logsource:zeek/dce_rpc",
     "logsource:zeek/dns"
    ],
@@ -11311,8 +11277,7 @@
     "logsource:ruby_on_rails/application",
     "logsource:spring/application",
     "logsource:sql/application",
-    "logsource:velocity/application",
-    "logsource:windows/security"
+    "logsource:velocity/application"
    ],
    "windows_platform": true,
    "has_data_component": true
@@ -11384,7 +11349,7 @@
    "status": "telemetry_gap",
    "rule_sources": 0,
    "rejected_rules_blocked_by": [
-    "logsource:windows/security"
+    "event_code:6423"
    ],
    "windows_platform": true,
    "has_data_component": true
@@ -11395,7 +11360,7 @@
    "status": "covered",
    "rule_sources": 1,
    "rejected_rules_blocked_by": [
-    "logsource:windows/security"
+    "event_code:4661"
    ],
    "windows_platform": true,
    "has_data_component": true
@@ -11523,7 +11488,9 @@
    "status": "telemetry_gap",
    "rule_sources": 0,
    "rejected_rules_blocked_by": [
-    "logsource:windows/security"
+    "field:AttributeLDAPDisplayName",
+    "field:AttributeValue",
+    "field:ServicePrincipalNames"
    ],
    "windows_platform": true,
    "has_data_component": true
@@ -11559,8 +11526,7 @@
    "rule_sources": 1,
    "rejected_rules_blocked_by": [
     "logsource:linux/guacamole",
-    "logsource:windows/application",
-    "logsource:windows/security"
+    "logsource:windows/application"
    ],
    "windows_platform": true,
    "has_data_component": true
@@ -11896,7 +11862,7 @@
    "status": "covered",
    "rule_sources": 2,
    "rejected_rules_blocked_by": [
-    "logsource:windows/security"
+    "event_code:4662"
    ],
    "windows_platform": true,
    "has_data_component": true
@@ -11966,9 +11932,12 @@
    "attack_id": "T1484.001",
    "name": "Group Policy Modification",
    "status": "covered",
-   "rule_sources": 3,
+   "rule_sources": 4,
    "rejected_rules_blocked_by": [
-    "logsource:windows/security"
+    "field:AttributeLDAPDisplayName",
+    "field:AttributeValue",
+    "field:ObjectClass",
+    "field:ObjectDN"
    ],
    "windows_platform": true,
    "has_data_component": true
@@ -11988,13 +11957,12 @@
    "attack_id": "T1485",
    "name": "Data Destruction",
    "status": "covered",
-   "rule_sources": 4,
+   "rule_sources": 5,
    "rejected_rules_blocked_by": [
     "logsource:aws/cloudtrail",
     "logsource:azure/activitylogs",
     "logsource:m365/threat_management",
-    "logsource:windows/application",
-    "logsource:windows/security"
+    "logsource:windows/application"
    ],
    "windows_platform": true,
    "has_data_component": true
@@ -12394,12 +12362,11 @@
    "attack_id": "T1528",
    "name": "Steal Application Access Token",
    "status": "covered",
-   "rule_sources": 4,
+   "rule_sources": 5,
    "rejected_rules_blocked_by": [
     "logsource:azure/auditlogs",
     "logsource:azure/riskdetection",
-    "logsource:windows/file_access",
-    "logsource:windows/security"
+    "logsource:windows/file_access"
    ],
    "windows_platform": false,
    "has_data_component": true
@@ -12550,9 +12517,10 @@
    "status": "covered",
    "rule_sources": 2,
    "rejected_rules_blocked_by": [
+    "field:ClientProcessId",
+    "field:ParentProcessId",
     "logsource:windows/codeintegrity-operational",
     "logsource:windows/driver_load",
-    "logsource:windows/security",
     "logsource:windows/system"
    ],
    "windows_platform": true,
@@ -12586,8 +12554,9 @@
    "status": "covered",
    "rule_sources": 14,
    "rejected_rules_blocked_by": [
+    "field:ServiceFileName",
+    "field:ServiceName",
     "logsource:windows/driver_load",
-    "logsource:windows/security",
     "logsource:windows/system"
    ],
    "windows_platform": true,
@@ -12646,8 +12615,8 @@
    "status": "covered",
    "rule_sources": 8,
    "rejected_rules_blocked_by": [
+    "event_code:4662",
     "field:EventID",
-    "logsource:windows/security",
     "logsource:windows/wmi"
    ],
    "windows_platform": true,
@@ -12796,10 +12765,8 @@
    "attack_id": "T1547",
    "name": "Boot or Logon Autostart Execution",
    "status": "covered",
-   "rule_sources": 6,
-   "rejected_rules_blocked_by": [
-    "logsource:windows/security"
-   ],
+   "rule_sources": 7,
+   "rejected_rules_blocked_by": [],
    "windows_platform": true,
    "has_data_component": true
   },
@@ -12885,7 +12852,7 @@
    "status": "covered",
    "rule_sources": 3,
    "rejected_rules_blocked_by": [
-    "logsource:windows/security"
+    "rendered_value:object_access.access_list"
    ],
    "windows_platform": true,
    "has_data_component": true
@@ -12939,13 +12906,14 @@
    "attack_id": "T1548",
    "name": "Abuse Elevation Control Mechanism",
    "status": "covered",
-   "rule_sources": 4,
+   "rule_sources": 5,
    "rejected_rules_blocked_by": [
+    "field:PrivilegeList",
+    "field:SubjectLogonId",
     "logsource:aws/cloudtrail",
     "logsource:azure/auditlogs",
     "logsource:gcp/gcp.audit",
     "logsource:linux/file_event",
-    "logsource:windows/security",
     "logsource:windows/system"
    ],
    "windows_platform": true,
@@ -13034,10 +13002,9 @@
   {
    "attack_id": "T1550.002",
    "name": "Pass the Hash",
-   "status": "telemetry_gap",
-   "rule_sources": 0,
+   "status": "covered",
+   "rule_sources": 3,
    "rejected_rules_blocked_by": [
-    "logsource:windows/security",
     "logsource:windows/system"
    ],
    "windows_platform": true,
@@ -13097,10 +13064,8 @@
    "attack_id": "T1552.002",
    "name": "Credentials in Registry",
    "status": "covered",
-   "rule_sources": 2,
-   "rejected_rules_blocked_by": [
-    "logsource:windows/security"
-   ],
+   "rule_sources": 3,
+   "rejected_rules_blocked_by": [],
    "windows_platform": true,
    "has_data_component": true
   },
@@ -13193,11 +13158,9 @@
   {
    "attack_id": "T1553.002",
    "name": "Code Signing",
-   "status": "telemetry_gap",
-   "rule_sources": 0,
-   "rejected_rules_blocked_by": [
-    "logsource:windows/security"
-   ],
+   "status": "covered",
+   "rule_sources": 1,
+   "rejected_rules_blocked_by": [],
    "windows_platform": true,
    "has_data_component": true
   },
@@ -13248,8 +13211,9 @@
    "status": "covered",
    "rule_sources": 1,
    "rejected_rules_blocked_by": [
-    "logsource:windows/microsoft-servicebus-client",
-    "logsource:windows/security"
+    "field:ServiceFileName",
+    "field:ServiceName",
+    "logsource:windows/microsoft-servicebus-client"
    ],
    "windows_platform": true,
    "has_data_component": true
@@ -13329,10 +13293,10 @@
    "status": "covered",
    "rule_sources": 1,
    "rejected_rules_blocked_by": [
+    "field:AttributeLDAPDisplayName",
     "logsource:aws/cloudtrail",
     "logsource:azure/auditlogs",
-    "logsource:github/audit",
-    "logsource:windows/security"
+    "logsource:github/audit"
    ],
    "windows_platform": true,
    "has_data_component": true
@@ -13438,10 +13402,9 @@
    "attack_id": "T1557.001",
    "name": "Name Resolution Poisoning and SMB Relay",
    "status": "covered",
-   "rule_sources": 5,
+   "rule_sources": 6,
    "rejected_rules_blocked_by": [
     "logsource:windows/driver_load",
-    "logsource:windows/security",
     "logsource:windows/system",
     "logsource:zeek/dce_rpc",
     "logsource:zeek/dns"
@@ -13464,7 +13427,9 @@
    "status": "telemetry_gap",
    "rule_sources": 0,
    "rejected_rules_blocked_by": [
-    "logsource:windows/security"
+    "field:AdditionalInfo",
+    "field:ObjectClass",
+    "field:ObjectDN"
    ],
    "windows_platform": true,
    "has_data_component": true
@@ -13484,9 +13449,9 @@
    "status": "covered",
    "rule_sources": 1,
    "rejected_rules_blocked_by": [
+    "event_code:4649",
     "field:Initiated",
-    "logsource:/antivirus",
-    "logsource:windows/security"
+    "logsource:/antivirus"
    ],
    "windows_platform": true,
    "has_data_component": true
@@ -13515,7 +13480,14 @@
    "status": "covered",
    "rule_sources": 8,
    "rejected_rules_blocked_by": [
-    "logsource:windows/security",
+    "event_code:4611",
+    "field:Application",
+    "field:DestPort",
+    "field:Keywords",
+    "field:Service",
+    "field:ServiceName",
+    "field:TicketEncryptionType",
+    "field:TicketOptions",
     "logsource:zeek/kerberos"
    ],
    "windows_platform": true,
@@ -13881,11 +13853,11 @@
    "attack_id": "T1566.001",
    "name": "Spearphishing Attachment",
    "status": "covered",
-   "rule_sources": 10,
+   "rule_sources": 11,
    "rejected_rules_blocked_by": [
+    "field:TargetName",
     "logsource:m365/audit",
-    "logsource:macos/process_creation",
-    "logsource:windows/security"
+    "logsource:macos/process_creation"
    ],
    "windows_platform": true,
    "has_data_component": true
@@ -14047,8 +14019,11 @@
    "status": "covered",
    "rule_sources": 15,
    "rejected_rules_blocked_by": [
+    "field:ServiceFileName",
+    "field:ServiceName",
+    "field:ServiceStartType",
+    "field:ServiceType",
     "logsource:rpc_firewall/application",
-    "logsource:windows/security",
     "logsource:windows/system",
     "logsource:windows/windefend",
     "logsource:zeek/dce_rpc"
@@ -14071,7 +14046,10 @@
    "status": "covered",
    "rule_sources": 3,
    "rejected_rules_blocked_by": [
-    "logsource:windows/security"
+    "field:ServiceFileName",
+    "field:ServiceName",
+    "field:ServiceStartType",
+    "field:ServiceType"
    ],
    "windows_platform": true,
    "has_data_component": true
@@ -15700,8 +15678,14 @@
    "attack_id": "T1685",
    "name": "Disable or Modify Tools",
    "status": "covered",
-   "rule_sources": 97,
+   "rule_sources": 98,
    "rejected_rules_blocked_by": [
+    "event_code:4657",
+    "field:FilterName",
+    "field:NewUacValue",
+    "field:OldUacValue",
+    "field:PrivilegeList",
+    "field:Service",
     "logsource:aws/cloudtrail",
     "logsource:azure/activitylogs",
     "logsource:bitbucket/audit",
@@ -15714,7 +15698,6 @@
     "logsource:okta/okta",
     "logsource:windows/application",
     "logsource:windows/ps_classic_provider_start",
-    "logsource:windows/security",
     "logsource:windows/system",
     "logsource:windows/windefend"
    ],
@@ -15727,9 +15710,10 @@
    "status": "covered",
    "rule_sources": 18,
    "rejected_rules_blocked_by": [
+    "field:AuditPolicyChanges",
     "field:Hashes",
-    "logsource:windows/iis-configuration",
-    "logsource:windows/security"
+    "field:SubcategoryGuid",
+    "logsource:windows/iis-configuration"
    ],
    "windows_platform": true,
    "has_data_component": true
@@ -15771,7 +15755,8 @@
    "status": "covered",
    "rule_sources": 3,
    "rejected_rules_blocked_by": [
-    "logsource:windows/security",
+    "event_code:1102",
+    "event_code:517",
     "logsource:windows/system",
     "logsource:windows/wmi"
    ],

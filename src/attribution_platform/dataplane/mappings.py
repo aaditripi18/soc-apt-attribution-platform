@@ -98,6 +98,10 @@ OBSERVATIONS_MAPPING: dict[str, Any] = {
     "pipe": {"type": "object"},
     "wmi": {"type": "object"},
     "powershell": {"type": "object"},
+    "target_user": {"type": "object"},
+    "logon": {"type": "object"},
+    "object_access": {"type": "object"},
+    "share": {"type": "object"},
 }
 
 #: Explicit field mappings for the Evidence index (Elasticsearch "properties").

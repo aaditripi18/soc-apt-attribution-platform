@@ -28,12 +28,14 @@ from attribution_platform.detection import (
 )
 from attribution_platform.domain import (
     EventMetadata,
+    LogonRef,
     NetworkEndpoint,
     NetworkInfo,
     Observation,
     ProcessAccessRef,
     ProcessRef,
     RemoteThreadRef,
+    ShareRef,
     SourceRef,
 )
 from attribution_platform.extraction import RuleRef
@@ -180,6 +182,36 @@ def _mixed_observations() -> list[Observation]:
             event=EventMetadata(kind="event", category=("process",), type=("START",)),
             process=ProcessRef(executable="C:\\Windows\\System32\\whoami.exe"),
         ),
+        # Windows Security channel events: the dataset-scoped index path
+        _obs(
+            "security-pipe",
+            event=EventMetadata(kind="event", code="5145", dataset="system.security"),
+            share=ShareRef(name="\\\\*\\IPC$", relative_target_name="PSEXESVC"),
+        ),
+        _obs(
+            "security-overpass",
+            event=EventMetadata(
+                kind="event",
+                category=("authentication",),
+                type=("start",),
+                code="4624",
+                dataset="system.security",
+            ),
+            logon=LogonRef(
+                logon_type="9", logon_process="seclogo", authentication_package="Negotiate"
+            ),
+        ),
+        # same content without the Security dataset: never a Security rule
+        _obs(
+            "no-dataset-pipe",
+            event=EventMetadata(kind="event", code="5145"),
+            share=ShareRef(name="\\\\*\\IPC$", relative_target_name="PSEXESVC"),
+        ),
+        _obs(
+            "other-dataset-pipe",
+            event=EventMetadata(kind="event", code="5145", dataset="SYSTEM.SECURITY"),
+            share=ShareRef(name="\\\\*\\IPC$", relative_target_name="PSEXESVC"),
+        ),
     ]
 
 
@@ -196,7 +228,9 @@ def test_indexed_engine_equals_reference_on_real_packs(
     assert fast == _reference_evaluate(all_rules, observations)
     fired = {r.supporting_observation_ids[0] for r in fast}
     assert {"whoami", "encoded-ps", "certutil", "process-access"} <= fired  # not vacuous
+    assert {"security-pipe", "security-overpass"} <= fired  # dataset index path
     assert "benign" not in fired
+    assert not {"no-dataset-pipe", "other-dataset-pipe"} & fired
 
 
 def test_equivalence_with_rules_in_reverse_order(all_rules: tuple[DetectionRule, ...]) -> None:

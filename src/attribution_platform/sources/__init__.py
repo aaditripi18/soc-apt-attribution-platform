@@ -27,12 +27,19 @@ Gate status:
 - **ADR-0008 Wave 1 (implemented):** ``powershell`` —
   :class:`~attribution_platform.sources.powershell.PowerShellSourceAdapter`,
   PowerShell/Operational 4103 (module logging) and 4104 (script block).
+- **ADR-0008 Wave 1, Security batch A (implemented):** ``windows_security`` —
+  :class:`~attribution_platform.sources.windows_security.WindowsSecuritySourceAdapter`,
+  Security events 4688, 4624, 4776, 4656, 4663, 4658, 5140, 5145;
+  ``nxlog_time`` — the shared exact event-time derivation for NXLog exports;
+  ``precedence`` — the ADR-0008 D3 source-precedence filter (one
+  authoritative source per observation kind per host, suppressions counted).
 - All adapters are pure functions over already-parsed JSON (no live
   collection, no host changes) and must pass ADR-0008's acceptance standard
   (exact mapping, fail-closed, real-sample golden tests, …).
-- **Not yet implemented:** Windows Security/System event logs (next, with the
-  ADR-0008 D3 overlap policy), Defender/EDR, Linux auditd/journald, network
-  (Zeek/Suricata), cloud/identity — Wave 2 per ADR-0008 D1.
+- **Not yet implemented:** further Security events (batch B: Kerberos,
+  directory service, WFP, services, tasks, account management), System and
+  Defender logs; Linux auditd/journald, network (Zeek/Suricata),
+  cloud/identity — Wave 2 per ADR-0008 D1.
 """
 
 from __future__ import annotations

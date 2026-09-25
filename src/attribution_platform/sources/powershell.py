@@ -28,7 +28,8 @@ the adapter boundary sees them.
   residual is implausible (over 5 minutes) or any of the three fields is
   missing. Precision is one second (``EventTime`` has second resolution).
   Validated on all 93,426 records of the three OTRF Empire samples (offset
-  −4 h throughout; delays ≤ 16 s).
+  −4 h throughout; delays ≤ 16 s). Implemented once, in
+  :mod:`attribution_platform.sources.nxlog_time`.
 
 The acting PowerShell host process is recorded by pid only (the event
 envelope's execution process id): these events carry no process GUID, so they
@@ -41,7 +42,6 @@ from __future__ import annotations
 import hashlib
 import json
 from collections.abc import Mapping
-from datetime import UTC, datetime, timedelta
 from typing import Any
 
 from attribution_platform.domain import (
@@ -55,6 +55,7 @@ from attribution_platform.domain import (
     UserRef,
 )
 from attribution_platform.sources.errors import SourceAdapterError
+from attribution_platform.sources.nxlog_time import nxlog_event_time, parse_timestamp
 
 #: This adapter's stable source identifier.
 POWERSHELL_SOURCE_TYPE = "windows_powershell"
@@ -68,8 +69,7 @@ _SUPPORTED_EVENT_IDS = (MODULE_LOGGING_EVENT_ID, SCRIPT_BLOCK_EVENT_ID)
 SCRIPT_BLOCK_ACTION = "powershell_script_block"
 MODULE_LOGGING_ACTION = "powershell_module"
 
-_ZONE_STEP = timedelta(minutes=15)
-_MAX_PIPELINE_DELAY = timedelta(minutes=5)
+_ADAPTER = "PowerShellSourceAdapter"
 
 
 def _get(record: Mapping[str, Any], *path: str) -> Any:
@@ -90,39 +90,6 @@ def _optional_int(value: Any, field: str) -> int | None:
         raise SourceAdapterError(
             f"PowerShellSourceAdapter: {field} {value!r} is not an integer"
         ) from exc
-
-
-def _parse(value: Any, field: str) -> datetime:
-    if not isinstance(value, str) or not value.strip():
-        raise SourceAdapterError(f"PowerShellSourceAdapter: missing required field {field}")
-    try:
-        return datetime.fromisoformat(value.strip().replace("Z", "+00:00"))
-    except ValueError as exc:
-        raise SourceAdapterError(
-            f"PowerShellSourceAdapter: {field} {value!r} is not a valid timestamp"
-        ) from exc
-
-
-def _flat_event_time(record: Mapping[str, Any]) -> datetime:
-    """Exact UTC event time of a flat NXLog record (see module docstring)."""
-    event_local = _parse(record.get("EventTime"), "EventTime")
-    received_local = _parse(record.get("EventReceivedTime"), "EventReceivedTime")
-    received_utc = _parse(record.get("@timestamp"), "@timestamp")
-    if event_local.tzinfo is not None or received_local.tzinfo is not None:
-        raise SourceAdapterError(
-            "PowerShellSourceAdapter: EventTime/EventReceivedTime unexpectedly carry a zone"
-        )
-    if received_utc.tzinfo is None:
-        raise SourceAdapterError("PowerShellSourceAdapter: @timestamp must carry a UTC zone")
-    raw_offset = received_local - received_utc.astimezone(UTC).replace(tzinfo=None)
-    steps = round(raw_offset / _ZONE_STEP)
-    offset = steps * _ZONE_STEP
-    if abs(raw_offset - offset) > _MAX_PIPELINE_DELAY:
-        raise SourceAdapterError(
-            f"PowerShellSourceAdapter: cannot derive the host UTC offset exactly "
-            f"(receive-time difference {raw_offset} is not a 15-minute zone step)"
-        )
-    return (event_local - offset).replace(tzinfo=UTC)
 
 
 def _flat_record_id(record: Mapping[str, Any]) -> str:
@@ -178,7 +145,9 @@ class PowerShellSourceAdapter:
                 raw_record, "host", "name"
             )
             data: Mapping[str, Any] = _get(raw_record, "winlog", "event_data") or {}
-            timestamp = _parse(raw_record.get("@timestamp"), "@timestamp")
+            timestamp = parse_timestamp(
+                raw_record.get("@timestamp"), "@timestamp", adapter=_ADAPTER
+            )
             precision = None
             pid = _get(raw_record, "winlog", "process", "pid")
             user_sid = _get(raw_record, "winlog", "user", "identifier")
@@ -186,7 +155,7 @@ class PowerShellSourceAdapter:
             record_id = _flat_record_id(raw_record)
             computer = raw_record.get("Hostname")
             data = raw_record
-            timestamp = _flat_event_time(raw_record)
+            timestamp = nxlog_event_time(raw_record, adapter=_ADAPTER)
             precision = TimePrecision.SECOND
             pid = raw_record.get("ExecutionProcessID")
             user_sid = raw_record.get("UserID")

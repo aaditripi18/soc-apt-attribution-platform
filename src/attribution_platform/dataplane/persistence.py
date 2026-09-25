@@ -87,8 +87,10 @@ from attribution_platform.domain import (
     FileStreamRef,
     HashSet,
     HostRef,
+    LogonRef,
     NetworkEndpoint,
     NetworkInfo,
+    ObjectAccessRef,
     Observation,
     PeInfo,
     PipeRef,
@@ -97,6 +99,7 @@ from attribution_platform.domain import (
     ProcessRef,
     RegistryRef,
     RemoteThreadRef,
+    ShareRef,
     SourceRef,
     TimePrecision,
     TimeSpan,
@@ -192,6 +195,12 @@ def _observation_from_document(doc: Mapping[str, Any]) -> Observation:
             pipe=_pipe_ref_from_dict(doc.get("pipe")),
             wmi=_wmi_ref_from_dict(doc.get("wmi")),
             powershell=_powershell_ref_from_dict(doc.get("powershell")),
+            target_user=_user_ref_from_dict(doc.get("target_user")),
+            logon=_flat_ref_from_dict(LogonRef, _LOGON_FIELDS, doc.get("logon")),
+            object_access=_flat_ref_from_dict(
+                ObjectAccessRef, _OBJECT_ACCESS_FIELDS, doc.get("object_access")
+            ),
+            share=_flat_ref_from_dict(ShareRef, _SHARE_FIELDS, doc.get("share")),
             schema_version=schema_version,
         )
     except ElasticIntegrationError:
@@ -438,6 +447,48 @@ def _wmi_ref_from_dict(d: Mapping[str, Any] | None) -> WmiRef | None:
     return WmiRef(**{f: d.get(f) for f in _WMI_FIELDS})
 
 
+_LOGON_FIELDS = (
+    "logon_type",
+    "logon_process",
+    "authentication_package",
+    "package_name",
+    "lm_package",
+    "key_length",
+    "impersonation_level",
+    "elevated_token",
+    "logon_id",
+    "workstation_name",
+    "workstation",
+    "status",
+    "sub_status",
+    "target_outbound_user_name",
+)
+
+_OBJECT_ACCESS_FIELDS = (
+    "server",
+    "type",
+    "name",
+    "handle_id",
+    "access_mask",
+    "access_list",
+    "value_name",
+    "new_value",
+)
+
+_SHARE_FIELDS = (
+    "name",
+    "local_path",
+    "relative_target_name",
+)
+
+
+def _flat_ref_from_dict(cls: Any, fields: tuple[str, ...], d: Mapping[str, Any] | None) -> Any:
+    """A flat all-optional entity group from its stored dict (None -> None)."""
+    if d is None:
+        return None
+    return cls(**{f: d.get(f) for f in fields})
+
+
 _POWERSHELL_FIELDS = (
     "script_block_text",
     "script_block_id",
@@ -499,4 +550,7 @@ def _event_metadata_from_dict(d: Mapping[str, Any] | None) -> EventMetadata | No
         type=tuple(d.get("type", ())),
         action=d.get("action"),
         outcome=d.get("outcome"),
+        provider=d.get("provider"),
+        code=d.get("code"),
+        dataset=d.get("dataset"),
     )

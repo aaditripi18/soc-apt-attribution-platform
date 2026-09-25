@@ -34,13 +34,16 @@ from __future__ import annotations
 
 from types import MappingProxyType
 
-FIELD_MAP_VERSION = "sigma-field-map/6"
+FIELD_MAP_VERSION = "sigma-field-map/7"
 
 #: ``(product, category)`` → the ``(field_path, operator, value)`` scope
 #: conditions an Observation must satisfy to be the kind of event the Sigma
-#: rule describes. The first is always ``event.category has_element`` (the
-#: detection engine indexes on it); ``event.action equals`` is used where a
-#: category+type pair alone would be ambiguous.
+#: rule describes. The first is ``event.category has_element`` (the detection
+#: engine indexes on it); ``event.action equals`` is used where a
+#: category+type pair alone would be ambiguous. A Windows event-log channel
+#: (Sigma ``service``) is scoped by ``event.dataset equals`` instead — also
+#: indexed — because one channel holds many kinds of event, which its rules
+#: select by ``EventID`` (``event.code``).
 LOGSOURCE_SCOPES: MappingProxyType[tuple[str, str], tuple[tuple[str, str, str], ...]] = (
     MappingProxyType(
         {
@@ -121,6 +124,8 @@ LOGSOURCE_SCOPES: MappingProxyType[tuple[str, str], tuple[tuple[str, str, str], 
                 ("event.type", "has_element", "protocol"),
                 ("event.action", "equals", "dns_query"),
             ),
+            # Sigma service: security = the Windows Security channel.
+            ("windows", "security"): (("event.dataset", "equals", "system.security"),),
         }
     )
 )
@@ -256,6 +261,79 @@ FIELD_MAPS: MappingProxyType[tuple[str, str], MappingProxyType[str, str]] = Mapp
                 "QueryResults": "dns.results",
             }
         ),
+        ("windows", "security"): MappingProxyType(
+            {
+                "EventID": "event.code",
+                "Provider_Name": "event.provider",
+                "SubjectUserName": "user.name",
+                "SubjectUserSid": "user.id",
+                "SubjectDomainName": "user.domain",
+                "TargetUserName": "target_user.name",
+                "TargetUserSid": "target_user.id",
+                "TargetDomainName": "target_user.domain",
+                "LogonType": "logon.logon_type",
+                "LogonProcessName": "logon.logon_process",
+                "AuthenticationPackageName": "logon.authentication_package",
+                "PackageName": "logon.package_name",
+                "LmPackageName": "logon.lm_package",
+                "KeyLength": "logon.key_length",
+                "ImpersonationLevel": "logon.impersonation_level",
+                "ElevatedToken": "logon.elevated_token",
+                "TargetLogonId": "logon.logon_id",
+                "WorkstationName": "logon.workstation_name",
+                "Workstation": "logon.workstation",
+                "Status": "logon.status",
+                "SubStatus": "logon.sub_status",
+                "TargetOutboundUserName": "logon.target_outbound_user_name",
+                "IpAddress": "network.source.ip",
+                "IpPort": "network.source.port",
+                "ObjectServer": "object_access.server",
+                "ObjectType": "object_access.type",
+                "ObjectName": "object_access.name",
+                "HandleId": "object_access.handle_id",
+                "AccessMask": "object_access.access_mask",
+                "AccessList": "object_access.access_list",
+                "ObjectValueName": "object_access.value_name",
+                "NewValue": "object_access.new_value",
+                "ProcessName": "process.executable",
+                "NewProcessName": "process.executable",
+                "ParentProcessName": "process.parent_executable",
+                "CommandLine": "process.command_line",
+                "ShareName": "share.name",
+                "ShareLocalPath": "share.local_path",
+                "RelativeTargetName": "share.relative_target_name",
+            }
+        ),
+    }
+)
+
+#: Event-log channels whose rules select events by ``EventID``: the event IDs
+#: an adapter really produces (must equal the adapter's own list — guarded by
+#: a test). A conjunct pinned to any other ID is a telemetry gap: it could
+#: never fire, and importing it would falsely count its technique as covered.
+SUPPORTED_EVENT_CODES: MappingProxyType[tuple[str, str], frozenset[str]] = MappingProxyType(
+    {
+        ("windows", "security"): frozenset(
+            {"4624", "4656", "4658", "4663", "4688", "4776", "5140", "5145"}
+        ),
+    }
+)
+
+#: Fields whose telemetry value is an *unrendered* Windows message reference
+#: list (``%%4417 %%4418 …``), exactly as the event records it. Sigma content
+#: is inconsistent here: some rules match the codes, others the rendered names
+#: (``WriteData``). A rendered-name literal can never match real telemetry, so
+#: its conjunct is a telemetry gap — imported, it would falsely count as
+#: coverage. (No rendering table is guessed: the codes are what is logged.)
+CODED_VALUE_FIELDS: MappingProxyType[tuple[str, str], frozenset[str]] = MappingProxyType(
+    {
+        ("windows", "security"): frozenset(
+            {
+                "object_access.access_list",
+                "logon.impersonation_level",
+                "logon.elevated_token",
+            }
+        ),
     }
 )
 
@@ -284,5 +362,7 @@ __all__ = [
     "FIELD_MAP_VERSION",
     "LOGSOURCE_SCOPES",
     "FIELD_MAPS",
+    "SUPPORTED_EVENT_CODES",
+    "CODED_VALUE_FIELDS",
     "UNMAPPED_FIELD_REASONS",
 ]

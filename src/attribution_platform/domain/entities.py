@@ -184,6 +184,63 @@ class PowerShellRef:
 
 
 @dataclass(frozen=True)
+class LogonRef:
+    """Windows logon and credential-validation facts (all optional; ADR-0008
+    Security log). Values are kept exactly as the source logged them —
+    including Windows' ``-`` "no value" marker and unrendered ``%%NNNN``
+    message references, which detection content is written against.
+
+    ``workstation_name`` is the logon events' ``WorkstationName``;
+    ``workstation`` is credential validation's ``Workstation`` (distinct source
+    fields, kept distinct). ``authentication_package`` is the logon events'
+    ``AuthenticationPackageName``; ``package_name`` is credential validation's
+    ``PackageName``. ``logon_id`` is the new session's id (``TargetLogonId``)."""
+
+    logon_type: str | None = None
+    logon_process: str | None = None
+    authentication_package: str | None = None
+    package_name: str | None = None
+    lm_package: str | None = None
+    key_length: str | None = None
+    impersonation_level: str | None = None
+    elevated_token: str | None = None
+    logon_id: str | None = None
+    workstation_name: str | None = None
+    workstation: str | None = None
+    status: str | None = None
+    sub_status: str | None = None
+    target_outbound_user_name: str | None = None
+
+
+@dataclass(frozen=True)
+class ObjectAccessRef:
+    """A Windows audited object handle request/access (all optional; ADR-0008
+    Security log): object manager server, type and name, the handle, the
+    access mask and the access list (unrendered ``%%NNNN`` references, as
+    logged), and for registry values the value name and new value."""
+
+    server: str | None = None
+    type: str | None = None
+    name: str | None = None
+    handle_id: str | None = None
+    access_mask: str | None = None
+    access_list: str | None = None
+    value_name: str | None = None
+    new_value: str | None = None
+
+
+@dataclass(frozen=True)
+class ShareRef:
+    """A network share access (all optional; ADR-0008 Security log): share name,
+    its local path, and for detailed share auditing the relative target
+    name (the file or directory accessed inside the share)."""
+
+    name: str | None = None
+    local_path: str | None = None
+    relative_target_name: str | None = None
+
+
+@dataclass(frozen=True)
 class ProcessRef:
     """A process and its immediate parent lineage (all optional).
 
@@ -258,7 +315,14 @@ class EventMetadata:
 
     ``category`` and ``type`` are tuples because ECS models them as arrays
     (a single event may carry several categories/types). Order is preserved
-    as supplied by the source.
+    as supplied by the source. ``provider`` / ``code`` are ECS
+    ``event.provider`` (the logging provider, e.g.
+    ``Microsoft-Windows-Security-Auditing``) and ``event.code`` (the source's
+    own event identifier, e.g. ``"4624"``), and ``dataset`` is ECS
+    ``event.dataset`` (the log the event belongs to, e.g. ``system.security``
+    for the Windows Security channel — Elastic's own dataset name), added for
+    the Windows event logs (ADR-0008), whose detection content selects on
+    them.
     """
 
     kind: str | None = None
@@ -266,6 +330,9 @@ class EventMetadata:
     type: tuple[str, ...] = ()
     action: str | None = None
     outcome: str | None = None
+    provider: str | None = None
+    code: str | None = None
+    dataset: str | None = None
 
 
 @dataclass(frozen=True)

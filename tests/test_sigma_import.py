@@ -550,7 +550,7 @@ def test_real_review_covers_every_imported_software_tag_and_is_applied() -> None
         if m["object_type"] != "attack-pattern"
     }
     assert in_pack == accepted
-    assert len(accepted) == 11
+    assert len(accepted) == 13  # + WCE wceaux.dll, SDelete rename artifact (Security batch A)
 
 
 # ===========================================================================

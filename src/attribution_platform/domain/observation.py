@@ -41,13 +41,16 @@ from attribution_platform.domain.entities import (
     FileRef,
     FileStreamRef,
     HostRef,
+    LogonRef,
     NetworkInfo,
+    ObjectAccessRef,
     PipeRef,
     PowerShellRef,
     ProcessAccessRef,
     ProcessRef,
     RegistryRef,
     RemoteThreadRef,
+    ShareRef,
     UserRef,
     WmiRef,
 )
@@ -77,11 +80,13 @@ class Observation:
     - ``event`` — ECS-style event category/type/action metadata.
     - ``host`` / ``user`` / ``process`` / ``network`` / ``file`` / ``dll`` /
       ``registry`` / ``target_process`` / ``process_access`` / ``remote_thread``
-      / ``dns`` / ``file_stream`` / ``pipe`` / ``wmi`` / ``powershell`` —
-      entity groups (added by ADR-0008 Wave 1 for image-load, registry,
-      process-access, remote-thread, DNS, stream, pipe, WMI and PowerShell
-      logging events;
-      ``target_process`` is the process *acted upon*, ``process`` the actor).
+      / ``dns`` / ``file_stream`` / ``pipe`` / ``wmi`` / ``powershell`` /
+      ``target_user`` / ``logon`` / ``object_access`` / ``share`` — entity
+      groups (added by ADR-0008 Wave 1 for image-load, registry,
+      process-access, remote-thread, DNS, stream, pipe, WMI, PowerShell
+      logging and Windows Security log events; ``target_process`` /
+      ``target_user`` are the process / account *acted upon*, ``process`` /
+      ``user`` the actor).
 
     ``schema_version`` defaults to the current contract version (a static
     fact about this code, not fabricated data).
@@ -107,6 +112,10 @@ class Observation:
     pipe: PipeRef | None = None
     wmi: WmiRef | None = None
     powershell: PowerShellRef | None = None
+    target_user: UserRef | None = None
+    logon: LogonRef | None = None
+    object_access: ObjectAccessRef | None = None
+    share: ShareRef | None = None
     schema_version: str = field(default=OBSERVATION_SCHEMA_VERSION)
 
     def __post_init__(self) -> None:

@@ -65,14 +65,16 @@ from sigma.types import (
 from attribution_platform.attack_knowledge.loader import AttackKnowledge, FrozenStixObject
 from attribution_platform.attack_knowledge.traversal import is_active
 from attribution_platform.detection_content.sigma_field_map import (
+    CODED_VALUE_FIELDS,
     FIELD_MAP_VERSION,
     FIELD_MAPS,
     LOGSOURCE_SCOPES,
+    SUPPORTED_EVENT_CODES,
     UNMAPPED_FIELD_REASONS,
 )
 
 IMPORTER_METHOD = "sigma-importer"
-IMPORTER_VERSION = "1.5"
+IMPORTER_VERSION = "1.6"
 
 #: ADR-0007 D6: maximum DNF conjuncts per Sigma rule. A documented,
 #: reproducibility-frozen importer input — rules above it are rejected whole.
@@ -517,6 +519,37 @@ def _import_rule(
                 outcome.reasons[key] = outcome.reasons.get(key, 0) + 1
             continue
         literals = [item for item in conjunct if isinstance(item, Literal)]
+        coded_fields = CODED_VALUE_FIELDS.get((product, category), frozenset())
+        rendered = sorted(
+            {
+                lit.field_path
+                for lit in literals
+                if lit.field_path in coded_fields
+                and lit.value is not None
+                and "%%" not in lit.value
+            }
+        )
+        if rendered:
+            for field_path in rendered:
+                key = f"{GapKind.TELEMETRY.value}:rendered_value:{field_path}"
+                outcome.reasons[key] = outcome.reasons.get(key, 0) + 1
+            continue
+        supported_codes = SUPPORTED_EVENT_CODES.get((product, category))
+        if supported_codes is not None:
+            pinned: set[str] = {
+                lit.value
+                for lit in literals
+                if lit.field_path == "event.code"
+                and lit.operator == "equals"
+                and not lit.negate
+                and lit.value is not None
+            }
+            unsupported = sorted(v for v in pinned if v not in supported_codes)
+            if unsupported:
+                for code in unsupported:
+                    key = f"{GapKind.TELEMETRY.value}:event_code:{code}"
+                    outcome.reasons[key] = outcome.reasons.get(key, 0) + 1
+                continue
         rules.append(
             {
                 "rule_id": f"sigma:{sigma_id}:{position:03d}",

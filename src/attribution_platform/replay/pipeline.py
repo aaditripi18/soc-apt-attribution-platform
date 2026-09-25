@@ -152,6 +152,10 @@ def _replay_scenario(
             pipe=obs.pipe,
             wmi=obs.wmi,
             powershell=obs.powershell,
+            target_user=obs.target_user,
+            logon=obs.logon,
+            object_access=obs.object_access,
+            share=obs.share,
         )
         for obs in adapter_observations
     )

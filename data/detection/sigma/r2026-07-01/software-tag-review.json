@@ -203,6 +203,30 @@
    "software": "LaZagne",
    "decision": "reject",
    "reason": "Any Python tool reading LSASS via ctypes matches (e.g. pypykatz); LaZagne is not identified."
+  },
+  {
+   "sigma_id": "192a0330-c20b-4356-90b6-7b7049ae0b87",
+   "title": "Successful Overpass the Hash Attempt",
+   "tag": "attack.s0002",
+   "software": "Mimikatz",
+   "decision": "reject",
+   "reason": "Rule matches a 4624 LogonType 9 logon with LogonProcessName seclogo and Negotiate - the logon Windows itself records for 'runas /netonly' as well as for Mimikatz sekurlsa::pth. The pattern is not Mimikatz-specific, so it is technique evidence (T1550.002) only, never software evidence."
+  },
+  {
+   "sigma_id": "1de68c67-af5c-4097-9c85-fe5578e09e67",
+   "title": "WCE wceaux.dll Access",
+   "tag": "attack.s0005",
+   "software": "Windows Credential Editor",
+   "decision": "accept",
+   "reason": "Rule matches handle requests/accesses to an object named wceaux.dll - Windows Credential Editor's own auxiliary DLL, an artifact specific to the tool."
+  },
+  {
+   "sigma_id": "39a80702-d7ca-4a83-b776-525b1f86a36d",
+   "title": "Potential Secure Deletion with SDelete",
+   "tag": "attack.s0195",
+   "software": "SDelete",
+   "decision": "accept",
+   "reason": "Rule matches object names ending .AAA / .ZZZ - the rename sequence SDelete itself applies to a file before deleting it; the rule is built around that tool's artifact."
   }
  ]
 }

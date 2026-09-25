@@ -126,6 +126,10 @@ _ALLOWED_TOP_LEVEL_FIELDS = frozenset(
         "pipe",
         "wmi",
         "powershell",
+        "target_user",
+        "logon",
+        "object_access",
+        "share",
     }
 )
 
@@ -455,6 +459,20 @@ class RulePack:
 
 #: The array field whose ``has_element`` scope condition the engine indexes on.
 _SCOPE_FIELD = "event.category"
+#: The scalar field whose ``equals`` scope condition the engine also indexes on
+#: (Windows event-log channels, ADR-0008).
+_DATASET_FIELD = "event.dataset"
+
+
+def _dataset_key(rule: DetectionRule) -> tuple[str, bool] | None:
+    """``(value, case_insensitive)`` when the rule's **first** condition is a
+    non-negated ``equals`` on ``event.dataset``, else ``None``. Skipping such a
+    rule for an Observation with a different dataset is exact for the same
+    reason as :func:`_scope_key`."""
+    first = rule.conditions[0]
+    if first.operator == "equals" and first.field_path == _DATASET_FIELD and not first.negate:
+        return cast(str, first.value), first.case_insensitive
+    return None
 
 
 def _scope_key(rule: DetectionRule) -> tuple[str, bool] | None:
@@ -502,15 +520,25 @@ class _RuleIndex:
     exact: MappingProxyType[str, tuple[int, ...]]
     folded: MappingProxyType[str, tuple[int, ...]]
     type_requirements: tuple[tuple[str, bool] | None, ...]
+    dataset_exact: MappingProxyType[str, tuple[int, ...]]
+    dataset_folded: MappingProxyType[str, tuple[int, ...]]
 
 
 def _build_index(rules: tuple[DetectionRule, ...]) -> _RuleIndex:
     unscoped: list[int] = []
     exact: dict[str, list[int]] = {}
     folded: dict[str, list[int]] = {}
+    dataset_exact: dict[str, list[int]] = {}
+    dataset_folded: dict[str, list[int]] = {}
     for position, rule in enumerate(rules):
         key = _scope_key(rule)
-        if key is None:
+        dataset = _dataset_key(rule) if key is None else None
+        if dataset is not None:
+            if dataset[1]:
+                dataset_folded.setdefault(dataset[0].casefold(), []).append(position)
+            else:
+                dataset_exact.setdefault(dataset[0], []).append(position)
+        elif key is None:
             unscoped.append(position)
         elif key[1]:
             folded.setdefault(key[0].casefold(), []).append(position)
@@ -521,6 +549,8 @@ def _build_index(rules: tuple[DetectionRule, ...]) -> _RuleIndex:
         exact=MappingProxyType({k: tuple(v) for k, v in exact.items()}),
         folded=MappingProxyType({k: tuple(v) for k, v in folded.items()}),
         type_requirements=tuple(_type_requirement(rule) for rule in rules),
+        dataset_exact=MappingProxyType({k: tuple(v) for k, v in dataset_exact.items()}),
+        dataset_folded=MappingProxyType({k: tuple(v) for k, v in dataset_folded.items()}),
     )
 
 
@@ -537,8 +567,10 @@ class DetectionEngine:
 
     **Scope index (performance only, ADR-0007 follow-up).** Rules whose first
     condition is ``event.category has_element X`` are only tried against
-    Observations whose ``event.category`` contains ``X``; see
-    :func:`_scope_key` for why this is exactly equivalent to trying them all.
+    Observations whose ``event.category`` contains ``X``, and rules whose
+    first condition is ``event.dataset equals X`` only against Observations of
+    dataset ``X``; see :func:`_scope_key` for why this is exactly equivalent to
+    trying them all.
 
     **Rule families.** Among rules sharing a non-``None``
     :attr:`DetectionRule.rule_family`, at most one detection is emitted per
@@ -576,6 +608,12 @@ class DetectionEngine:
                 return value in exact_types
 
             scoped = {p for p in scoped if type_ok(index.type_requirements[p])}
+        dataset = observation.event.dataset if observation.event is not None else None
+        if isinstance(dataset, str):
+            scoped.update(index.dataset_exact.get(dataset, ()))
+            scoped.update(index.dataset_folded.get(dataset.casefold(), ()))
+        elif dataset is not None:
+            return range(len(self.rules))  # unexpected shape: evaluate everything
         return sorted(scoped.union(index.unscoped))
 
     def evaluate(self, observations: Sequence[Observation]) -> tuple[DetectionResult, ...]:

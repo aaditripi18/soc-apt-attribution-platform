@@ -304,3 +304,58 @@ and PowerShell after real 4103/4104 samples are found. D1's list is otherwise un
   recorded honestly; no hand-written rule was added to force a detection.
 - *Acceptance (D2):* exact mapping ✓, fail-closed ✓, real-sample golden tests ✓ (19 tests), source-agnostic ✓,
   correlation facts ✓ (limitation recorded), Sigma wiring ✓, evidence type ✓, performance ✓ (≈3 ms/observation).
+
+**Windows Security log — batch A (2026-09-25).**
+
+- *Adapter:* `sources/windows_security.py` (`windows_security`), channel `Security`. Supported, each with
+  real samples: **4688** process creation, **4624** logon, **4776** credential validation, **4656 / 4663 /
+  4658** object handle requested / accessed / closed, **5140 / 5145** share access / share object check. Any
+  other event ID is refused. Collector and flat NXLog records; the exact NXLog event-time derivation now
+  lives once in `sources/nxlog_time.py` (shared with PowerShell).
+- *Exact values:* every field detection content reads is kept verbatim — including Windows' `-` marker and
+  unrendered `%%NNNN` message references (`AccessList`, `ImpersonationLevel`). Only documented exact
+  conversions: hex pids → integers, `MandatoryLabel` → Sysmon's integrity names (four unambiguous RIDs only),
+  `EventType` → `event.outcome`. ECS categories only where unambiguous (4688 process/start; 4624, 4776
+  authentication/start); object and share events carry none rather than an invented one.
+- *Domain additions (D5):* `EventMetadata.provider` / `code` / `dataset` (ECS `event.provider`, `event.code`,
+  `event.dataset`); `Observation.target_user`, `logon` (`LogonRef`), `object_access` (`ObjectAccessRef`),
+  `share` (`ShareRef`). 4776's `PackageName` / `Workstation` stay distinct from 4624's
+  `AuthenticationPackageName` / `WorkstationName` (different source fields).
+- *Real-data finding — round-1 exports refused:* the first-round OTRF files carry only `TimeCreated`, which
+  has no zone and sits exactly 16 h behind Sysmon's `UtcTime` on all 243 paired records — not a real zone,
+  an export artifact. Their 55 Security records are refused (no trustworthy event time); the round-2 NXLog
+  records (2,937 Security events) are used.
+- *Real conversion (golden):* 1,075 observations (4624: 73, 4656: 268, 4658: 499, 4663: 170, 4688: 23,
+  4776: 2, 5140: 10, 5145: 30), all ids unique; ≈0.4 ms/record. Refused: 55 round-1 records, and
+  unsupported IDs (5156/5158 WFP, 4703, 4690, 4634, 4627, 4673, … — batch B or no content).
+- *D3 overlap policy implemented:* `sources/precedence.py` — `apply_source_precedence(observations,
+  declared_sources)` with default `process_start: [sysmon, windows_security]`; suppressions are returned
+  with id, kind, source, host and the preferred source, and counted; an undeclared host or an undeclared
+  source fails closed. **Proven on real data:** every one of the 18 real 4688 events in the WMI sample has a
+  Sysmon 1 for the same host, pid and image (the double count D3 prevents); with both sources declared all
+  18 are suppressed and nothing else is; with only Security declared all are kept.
+- *Detection wiring:* `sigma-field-map/7` adds `windows/security` scoped by `event.dataset equals
+  system.security` (Sigma `service: security` is the *channel* — the log-cleared rule even matches
+  `Provider_Name: Microsoft-Windows-Eventlog`, so a provider scope would have been wrong); `EventID` →
+  `event.code`. The engine index now also buckets rules on a first `event.dataset equals` condition (index
+  equivalence re-proven on the real packs). Importer 1.6 adds two guards against **false coverage**:
+  (1) a conjunct pinned to an event ID the adapter does not produce is a telemetry gap
+  (`event_code:NNNN`) — it could never fire; (2) a conjunct matching a coded field (`AccessList`,
+  `ImpersonationLevel`, `ElevatedToken`) against *rendered* text (`WriteData`) is a telemetry gap
+  (`rendered_value`) — Windows logs `%%4417`, and some Sigma rules are written against the rendered name.
+  Found on the real SVCCTL-pipe rule; 3 rules rejected, 1 partial for this reason.
+- *Coverage:* Security rules 29 imported + 7 partial (of 125). Sigma import 1,418 + 62 partial. Group-used
+  techniques **220 → 223 of 498**; groups with ≥ 2 / ≥ 5 / ≥ 10 covered: 163 / 143 / 108. `windows/security`
+  is no longer a top blocker; the remaining Security gaps are specific events (service install 4697 /
+  ServiceFileName, tasks 4698 / TaskName, 4625, directory service 4661 / 4662 / 5136, registry 4657).
+- *Software-tag review:* +3 — **rejected** Overpass-the-Hash → Mimikatz (the LogonType 9 `seclogo` logon is
+  also what Windows records for `runas /netonly`); **accepted** `wceaux.dll` → WCE and the `.AAA/.ZZZ`
+  rename artifact → SDelete.
+- *Real-data results:* the production pack raises **no** Security detection on the 1,075 real events — they
+  are benign system activity (svchost reading LSA keys, Kerberos network logons, DC `samr`/`lsarpc` pipe
+  queries); pinned as a zero-false-positive result. The wiring is proven on real records with one labelled
+  field changed: a remote pipe `PSEXESVC` on IPC$ → T1021.002; a LogonType 9 `seclogo` logon → T1550.002
+  **without** the rejected Mimikatz tag; an object named `wceaux.dll` → WCE software evidence.
+- *Acceptance (D2):* exact mapping ✓, fail-closed ✓, real-sample golden tests ✓ (29 tests), source-agnostic ✓,
+  correlation facts ✓ (4688 has no GUID: no structural link, and suppressed where Sysmon exists), Sigma
+  wiring ✓, evidence type ✓, performance ✓.
