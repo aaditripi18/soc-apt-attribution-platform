@@ -1,0 +1,195 @@
+{
+  "source": "MITRE Engenuity Center for Threat-Informed Defense \u2014 Adversary Emulation Library",
+  "license": "Apache-2.0",
+  "license_url": "https://github.com/center-for-threat-informed-defense/adversary_emulation_library/blob/4467a6eed6e67d25009704130e1d27d1a8007f57/LICENSE",
+  "source_repository": "center-for-threat-informed-defense/adversary_emulation_library",
+  "source_commit": "4467a6eed6e67d25009704130e1d27d1a8007f57",
+  "retrieved_at_utc": "2026-09-25T08:07:24Z",
+  "method": "scripts/acquire_emulation_plans.py (urllib, commit-pinned raw URLs, size-checked against the GitHub tree API)",
+  "files": [
+    {
+      "relative_path": "data/emulation-plans/ctid/LICENSE",
+      "source_path": "LICENSE",
+      "purpose": "license",
+      "size_bytes": 11357,
+      "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4",
+      "download_url": "https://raw.githubusercontent.com/center-for-threat-informed-defense/adversary_emulation_library/4467a6eed6e67d25009704130e1d27d1a8007f57/LICENSE"
+    },
+    {
+      "relative_path": "data/emulation-plans/ctid/structure/format_dictionary.yaml",
+      "source_path": "structure/format_dictionary.yaml",
+      "purpose": "plan format",
+      "size_bytes": 2660,
+      "sha256": "4edde167373fe15b8096b20f3ffdf17cc84d6d385a49c74b3dc29700a91d4d34",
+      "download_url": "https://raw.githubusercontent.com/center-for-threat-informed-defense/adversary_emulation_library/4467a6eed6e67d25009704130e1d27d1a8007f57/structure/format_dictionary.yaml"
+    },
+    {
+      "relative_path": "data/emulation-plans/ctid/carbanak/Emulation_Plan/yaml/Carbanak.yaml",
+      "source_path": "carbanak/Emulation_Plan/yaml/Carbanak.yaml",
+      "purpose": "S1",
+      "size_bytes": 31520,
+      "sha256": "ea19b5c0bb85ffb98c2fd6072a4d487b43c98b9831daa89fcb10f266039d40db",
+      "download_url": "https://raw.githubusercontent.com/center-for-threat-informed-defense/adversary_emulation_library/4467a6eed6e67d25009704130e1d27d1a8007f57/carbanak/Emulation_Plan/yaml/Carbanak.yaml"
+    },
+    {
+      "relative_path": "data/emulation-plans/ctid/fin6/Emulation_Plan/yaml/FIN6.yaml",
+      "source_path": "fin6/Emulation_Plan/yaml/FIN6.yaml",
+      "purpose": "S1",
+      "size_bytes": 40373,
+      "sha256": "72522be3a107824446c55615455f2990df447aeaf463cf4e2ad376b4330ef172",
+      "download_url": "https://raw.githubusercontent.com/center-for-threat-informed-defense/adversary_emulation_library/4467a6eed6e67d25009704130e1d27d1a8007f57/fin6/Emulation_Plan/yaml/FIN6.yaml"
+    },
+    {
+      "relative_path": "data/emulation-plans/ctid/fin7/Emulation_Plan/yaml/Fin7.yaml",
+      "source_path": "fin7/Emulation_Plan/yaml/Fin7.yaml",
+      "purpose": "S1",
+      "size_bytes": 12283,
+      "sha256": "0cf46d63a8a24b271c2993f4e5b8f07ef0f7f17dfc9af301a85d53cfb5da3f44",
+      "download_url": "https://raw.githubusercontent.com/center-for-threat-informed-defense/adversary_emulation_library/4467a6eed6e67d25009704130e1d27d1a8007f57/fin7/Emulation_Plan/yaml/Fin7.yaml"
+    },
+    {
+      "relative_path": "data/emulation-plans/ctid/menu_pass/Emulation_Plan/yaml/menupass.yaml",
+      "source_path": "menu_pass/Emulation_Plan/yaml/menupass.yaml",
+      "purpose": "S1",
+      "size_bytes": 21126,
+      "sha256": "2b964302dd76da8744d287d4a6b5192e918310ee1f909b90e38e89dce89413c3",
+      "download_url": "https://raw.githubusercontent.com/center-for-threat-informed-defense/adversary_emulation_library/4467a6eed6e67d25009704130e1d27d1a8007f57/menu_pass/Emulation_Plan/yaml/menupass.yaml"
+    },
+    {
+      "relative_path": "data/emulation-plans/ctid/oilrig/Emulation_Plan/yaml/oilrig.yaml",
+      "source_path": "oilrig/Emulation_Plan/yaml/oilrig.yaml",
+      "purpose": "S1",
+      "size_bytes": 29045,
+      "sha256": "52d12e12b81e0340dc5b3a2e0eaafd71676957ed1831b2f6e809c2773df6356b",
+      "download_url": "https://raw.githubusercontent.com/center-for-threat-informed-defense/adversary_emulation_library/4467a6eed6e67d25009704130e1d27d1a8007f57/oilrig/Emulation_Plan/yaml/oilrig.yaml"
+    },
+    {
+      "relative_path": "data/emulation-plans/ctid/sandworm/Emulation_Plan/yaml/sandworm.yaml",
+      "source_path": "sandworm/Emulation_Plan/yaml/sandworm.yaml",
+      "purpose": "S1",
+      "size_bytes": 38777,
+      "sha256": "e6d8902a34e83925cb1dee25f501b02026f1a67ea5d6770ec57b7500077e0f85",
+      "download_url": "https://raw.githubusercontent.com/center-for-threat-informed-defense/adversary_emulation_library/4467a6eed6e67d25009704130e1d27d1a8007f57/sandworm/Emulation_Plan/yaml/sandworm.yaml"
+    },
+    {
+      "relative_path": "data/emulation-plans/ctid/turla/Emulation_Plan/yaml/turla_carbon.yaml",
+      "source_path": "turla/Emulation_Plan/yaml/turla_carbon.yaml",
+      "purpose": "S1",
+      "size_bytes": 41479,
+      "sha256": "48abb930d0fe54f7c9faf1b72519ea7dd67a9e5695e33efed72d0fa772a4fda2",
+      "download_url": "https://raw.githubusercontent.com/center-for-threat-informed-defense/adversary_emulation_library/4467a6eed6e67d25009704130e1d27d1a8007f57/turla/Emulation_Plan/yaml/turla_carbon.yaml"
+    },
+    {
+      "relative_path": "data/emulation-plans/ctid/turla/Emulation_Plan/yaml/turla_snake.yaml",
+      "source_path": "turla/Emulation_Plan/yaml/turla_snake.yaml",
+      "purpose": "S1",
+      "size_bytes": 47973,
+      "sha256": "4e0da121dc366ee04855a844ed37ea72d344c6331fbafaa6581a0c0090e22ddb",
+      "download_url": "https://raw.githubusercontent.com/center-for-threat-informed-defense/adversary_emulation_library/4467a6eed6e67d25009704130e1d27d1a8007f57/turla/Emulation_Plan/yaml/turla_snake.yaml"
+    },
+    {
+      "relative_path": "data/emulation-plans/ctid/wizard_spider/Emulation_Plan/yaml/wizard_spider.yaml",
+      "source_path": "wizard_spider/Emulation_Plan/yaml/wizard_spider.yaml",
+      "purpose": "S1",
+      "size_bytes": 35945,
+      "sha256": "10631ae393597bce3d290eb993aabbea622cca9ed5c8a73e1ffd373ec4ca3eca",
+      "download_url": "https://raw.githubusercontent.com/center-for-threat-informed-defense/adversary_emulation_library/4467a6eed6e67d25009704130e1d27d1a8007f57/wizard_spider/Emulation_Plan/yaml/wizard_spider.yaml"
+    },
+    {
+      "relative_path": "data/emulation-plans/ctid/apt29/Emulation_Plan/yaml/APT29.yaml",
+      "source_path": "apt29/Emulation_Plan/yaml/APT29.yaml",
+      "purpose": "S1 blind-actor only",
+      "size_bytes": 101876,
+      "sha256": "644f28185097f545e522ca8ed04b43f19ec8b31ace864d347feb138bc56c1615",
+      "download_url": "https://raw.githubusercontent.com/center-for-threat-informed-defense/adversary_emulation_library/4467a6eed6e67d25009704130e1d27d1a8007f57/apt29/Emulation_Plan/yaml/APT29.yaml"
+    },
+    {
+      "relative_path": "data/emulation-plans/ctid/micro_emulation_plans/README.md",
+      "source_path": "micro_emulation_plans/README.md",
+      "purpose": "S3",
+      "size_bytes": 11994,
+      "sha256": "454b331ae4e4131ab59779b42504d5a8cd60501640378c028d84ac3558524850",
+      "download_url": "https://raw.githubusercontent.com/center-for-threat-informed-defense/adversary_emulation_library/4467a6eed6e67d25009704130e1d27d1a8007f57/micro_emulation_plans/README.md"
+    },
+    {
+      "relative_path": "data/emulation-plans/ctid/micro_emulation_plans/src/ad_enum/README.md",
+      "source_path": "micro_emulation_plans/src/ad_enum/README.md",
+      "purpose": "S3",
+      "size_bytes": 9497,
+      "sha256": "4513649f4dfd2759622cdf8d0c3252499d24d27556e9890dfd82edcfa4ec5309",
+      "download_url": "https://raw.githubusercontent.com/center-for-threat-informed-defense/adversary_emulation_library/4467a6eed6e67d25009704130e1d27d1a8007f57/micro_emulation_plans/src/ad_enum/README.md"
+    },
+    {
+      "relative_path": "data/emulation-plans/ctid/micro_emulation_plans/src/log_clearing/README.md",
+      "source_path": "micro_emulation_plans/src/log_clearing/README.md",
+      "purpose": "S3",
+      "size_bytes": 5076,
+      "sha256": "bc20d1980fb550faac804bddae370f9235069797e939d594717d485078ed1547",
+      "download_url": "https://raw.githubusercontent.com/center-for-threat-informed-defense/adversary_emulation_library/4467a6eed6e67d25009704130e1d27d1a8007f57/micro_emulation_plans/src/log_clearing/README.md"
+    },
+    {
+      "relative_path": "data/emulation-plans/ctid/micro_emulation_plans/src/named_pipes/README.md",
+      "source_path": "micro_emulation_plans/src/named_pipes/README.md",
+      "purpose": "S3",
+      "size_bytes": 10989,
+      "sha256": "e7313d75b930f52e093aceef4b236bdf4c00ff15f70db4a360121ef61bb48a1f",
+      "download_url": "https://raw.githubusercontent.com/center-for-threat-informed-defense/adversary_emulation_library/4467a6eed6e67d25009704130e1d27d1a8007f57/micro_emulation_plans/src/named_pipes/README.md"
+    },
+    {
+      "relative_path": "data/emulation-plans/ctid/micro_emulation_plans/src/process_injection/README.md",
+      "source_path": "micro_emulation_plans/src/process_injection/README.md",
+      "purpose": "S3",
+      "size_bytes": 7272,
+      "sha256": "f1bee9b72c379adc62eccaa9d71f57f47c5532d03060ca3cc1859b1d9d8819a3",
+      "download_url": "https://raw.githubusercontent.com/center-for-threat-informed-defense/adversary_emulation_library/4467a6eed6e67d25009704130e1d27d1a8007f57/micro_emulation_plans/src/process_injection/README.md"
+    },
+    {
+      "relative_path": "data/emulation-plans/ctid/micro_emulation_plans/src/file_access/README.md",
+      "source_path": "micro_emulation_plans/src/file_access/README.md",
+      "purpose": "S3",
+      "size_bytes": 5596,
+      "sha256": "90b9e9aa37c9950978fcdd7a425154c2b4d6aa5a865a0da99247cb7bad8b000d",
+      "download_url": "https://raw.githubusercontent.com/center-for-threat-informed-defense/adversary_emulation_library/4467a6eed6e67d25009704130e1d27d1a8007f57/micro_emulation_plans/src/file_access/README.md"
+    },
+    {
+      "relative_path": "data/emulation-plans/ctid/micro_emulation_plans/src/windows_registry/README.md",
+      "source_path": "micro_emulation_plans/src/windows_registry/README.md",
+      "purpose": "S3",
+      "size_bytes": 7388,
+      "sha256": "898d8b5704a237c3677fa845678e26f1cf181994428bca57f8c34b6d79208af4",
+      "download_url": "https://raw.githubusercontent.com/center-for-threat-informed-defense/adversary_emulation_library/4467a6eed6e67d25009704130e1d27d1a8007f57/micro_emulation_plans/src/windows_registry/README.md"
+    },
+    {
+      "relative_path": "data/emulation-plans/ctid/micro_emulation_plans/src/dll_sideloading/README.md",
+      "source_path": "micro_emulation_plans/src/dll_sideloading/README.md",
+      "purpose": "S3",
+      "size_bytes": 8878,
+      "sha256": "b2f19cbf66a9431d949b6b4c3495d050d5b6fbe21ecb76b40c0790a5063e87a0",
+      "download_url": "https://raw.githubusercontent.com/center-for-threat-informed-defense/adversary_emulation_library/4467a6eed6e67d25009704130e1d27d1a8007f57/micro_emulation_plans/src/dll_sideloading/README.md"
+    },
+    {
+      "relative_path": "data/emulation-plans/ctid/micro_emulation_plans/src/user_execution/README_user_execution.md",
+      "source_path": "micro_emulation_plans/src/user_execution/README_user_execution.md",
+      "purpose": "S3",
+      "size_bytes": 5021,
+      "sha256": "c1b4d89f2eb16929b2498b223fa0e4df7b165390079ad26b60a861426b158378",
+      "download_url": "https://raw.githubusercontent.com/center-for-threat-informed-defense/adversary_emulation_library/4467a6eed6e67d25009704130e1d27d1a8007f57/micro_emulation_plans/src/user_execution/README_user_execution.md"
+    },
+    {
+      "relative_path": "data/emulation-plans/ctid/micro_emulation_plans/src/reflective_loading/README.md",
+      "source_path": "micro_emulation_plans/src/reflective_loading/README.md",
+      "purpose": "S3",
+      "size_bytes": 4896,
+      "sha256": "83ae029544d561512a0487661b8d62654b216ad1d90306bb00f31fe54b34edba",
+      "download_url": "https://raw.githubusercontent.com/center-for-threat-informed-defense/adversary_emulation_library/4467a6eed6e67d25009704130e1d27d1a8007f57/micro_emulation_plans/src/reflective_loading/README.md"
+    },
+    {
+      "relative_path": "data/emulation-plans/ctid/micro_emulation_plans/src/data_exfil/README.md",
+      "source_path": "micro_emulation_plans/src/data_exfil/README.md",
+      "purpose": "S3",
+      "size_bytes": 5881,
+      "sha256": "77dfca4152e419987de7036550030aa0bc140ca3f9d819e6b6efd0f3348a34cb",
+      "download_url": "https://raw.githubusercontent.com/center-for-threat-informed-defense/adversary_emulation_library/4467a6eed6e67d25009704130e1d27d1a8007f57/micro_emulation_plans/src/data_exfil/README.md"
+    }
+  ]
+}

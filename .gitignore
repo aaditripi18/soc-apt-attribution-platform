@@ -54,6 +54,7 @@ Thumbs.db
 !/data/calibration/
 !/data/detection/
 !/data/telemetry-samples/
+!/data/emulation-plans/
 
 # Interrupted-download temp file from scripts/acquire_attack_bundle.py's
 # atomic-write step — must never be committed even if a download fails.
