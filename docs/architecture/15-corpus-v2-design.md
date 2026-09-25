@@ -254,3 +254,26 @@ for Amendment B (Sysmon 5 support + pid→process-instance resolution). Also to 
 contain real background activity (e.g. `Suspicious Svchost Process Access` 152×, `HackTool - SysmonEnte` false
 positives), so per-unit ground truth must separate emulated-actor units from background units using the
 dataset's documented procedure, never the engine's output.
+
+**Recordings as sources + unit inventory (2026-09-25).** `replay/recording_pipeline.py` runs a pinned recording
+(SHA-256 verified) through the full pipeline without persistence; the builder and harness accept fixtures or
+recordings (`calibration/units.py`; recording anchors are Observation ids); a declared **excluded** unit (background
+activity) must still be anchored and give a reason. `data/calibration/corpus/v2/recordings.json` pins the 11 OTRF
+recordings with their D3 source declarations (stated from each host's own records — the original deployment
+config is unavailable) and label provenance. `scripts/inventory_corpus_units.py` wrote
+`data/calibration/corpus/v2/inventory/*.json`:
+
+| Recording | Units | Evidence |
+|---|---|---|
+| APT29 day 1 / day 2 | 18 / 14 | 1,175 / 3,211 |
+| APT3 CALDERA / Empire | 29 / 4 | 18,314 / 33 |
+| LSASS ×7 | 2–4 each | 9–50 each |
+
+Units separate into emulated activity (e.g. APT29 PsExec / sdelete / credential dumping / WinRM / `sdclt` UAC
+bypass / WMI persistence; APT3 CALDERA agent and Empire `whoami`/`ftp`/`sc` chains; the LSASS tools) and plain
+background (Defender, Azure telemetry, Office ClickToRun, Edge zone-identifier streams, a recurring lab `cscript`),
+with some ambiguous (e.g. two NEWYORK PowerShell units identical on both APT29 days). **Labels must come from each
+dataset's documented procedure**: LSASS — OTRF's `_metadata` (local); APT29 — MITRE's published APT29 emulation
+plan (`mitre-attack/attack-arsenal`, Day 1 / Day 2 READMEs, 15.5 KB / 12.2 KB); APT3 — the evals-CALDERA adversary
+and OTRF's Empire resource files (lookup pending: GitHub API rate limit). Downloading those documents needs owner
+approval.

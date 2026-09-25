@@ -1,0 +1,55 @@
+{
+ "recording_id": "otrf-lsass-07-nanodump",
+ "observations": 53316,
+ "refused_by_source": {
+  "sysmon": 324,
+  "windows_powershell": 117,
+  "windows_security": 841
+ },
+ "suppressed_by_precedence": 0,
+ "evidence": 9,
+ "units": [
+  {
+   "group_id": "corr-group::8d540b14887e53743218a0a615536c9bb2b31eefb8186d536786f20f613527a4::bd9e08ecece42d7dd2b275df703be1f7dbc22bdb12cf237d46b22ad95aa129ed::7a09b1727f469784d5a94892264b72f8d23e3286efd07fb16f71e5d9244be8d3::24d972031cb411e24ba9049382428bb1a4f8120cd1014dc926d7dbf6e005ba9f",
+   "anchor_observation_id": "sysmon:MKT01.pandalab.com:sha256:cc7059b719872a0bb730659472a7fec303ea424b07edea372ce997fbd8c01d2b",
+   "evidence": 4,
+   "observations": 4,
+   "hosts": [
+    "MKT01.pandalab.com"
+   ],
+   "first": "2023-09-06T14:18:29.276000+00:00",
+   "last": "2023-09-06T14:18:40.597000+00:00",
+   "process_images": {
+    "C:\\Windows\\System32\\nanodump.x64.exe": 4
+   },
+   "techniques": [
+    "T1003.001"
+   ],
+   "rule_families": {
+    "sigma:a5a2d357-1ab8-4675-a967-ef9990a59391": 2,
+    "sigma:9bd012ee-0dff-44d7-84a0-aa698cfd87a3": 1,
+    "sigma:ffa6861c-4461-4f59-8a41-578c39f3f23e": 1
+   }
+  },
+  {
+   "group_id": "corr-group::2deb4fdf73bc2c9ec586e36d215abf8f450ed68314cd5a8f75abff70432058da::60c2747cd15270be41048b7c060249fef16135d1089413788e8a7b4e969db062::7f845400b61501e804511e899cd000bef8d7ca25fe268fe3003916697aead7a5",
+   "anchor_observation_id": "sysmon:MKT01.pandalab.com:sha256:b11d52069b876e5e5ccb7d1c65ceae7bb90ec0f3f969c27b4dce638290756c34",
+   "evidence": 3,
+   "observations": 3,
+   "hosts": [
+    "MKT01.pandalab.com"
+   ],
+   "first": "2023-09-06T14:15:02.878000+00:00",
+   "last": "2023-09-06T14:15:02.878000+00:00",
+   "process_images": {
+    "C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe": 3
+   },
+   "techniques": [
+    "T1564.004"
+   ],
+   "rule_families": {
+    "sigma:b69888d4-380c-45ce-9cf9-d9ce46e67821": 3
+   }
+  }
+ ]
+}

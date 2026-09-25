@@ -1,0 +1,77 @@
+{
+ "recording_id": "otrf-lsass-05-sharpdump",
+ "observations": 55324,
+ "refused_by_source": {
+  "sysmon": 222,
+  "windows_powershell": 115,
+  "windows_security": 1592
+ },
+ "suppressed_by_precedence": 0,
+ "evidence": 18,
+ "units": [
+  {
+   "group_id": "corr-group::06dd8ebb4b96518999828055d0e844c230f5b91f9f5f557fd73b8d6d04e6499f::cee6a7e94d3b96bb1aa96eceb828411d28469731fc1e341308fc2bc89753a39d::204a306765698cc1d11ae3ed32fe66406f01f6c6389ffdc0dc410c45b1bc2f04::571c2a8ca7b2a509337f0e7146ae7135eea6f970fd5c32666789039dcfb1c533::f22a0b7461f3c4329d0bccce9ee94f7ddf4757a98bf2979aa689fa67d47d1a77::834528a6bd7d7e1707ee35afabba0c1a70b8176db994ef2592578e7f3713aff3::8662a8c5f5250bfe75a6738df2fddfc4e4cf6c660f84509512c87f997337d12c::5c74c0668d319609c84be5b0d0655f527e31c767a69da9cdcb335aa82ae5a5b8::0ae9c92343d580cd514c9f68652c1889d5b1733beaf165399577ee0113b1535a::fd9430d1566ae4e4ac69585f01cf3ac6afb4b6bea82c672bc57370ec792b5b10",
+   "anchor_observation_id": "sysmon:MKT01.pandalab.com:sha256:e19c9de5efcf9377d6c2eed27404a35d64492696fa9caad48ca463ba3629d4b9",
+   "evidence": 10,
+   "observations": 5,
+   "hosts": [
+    "MKT01.pandalab.com"
+   ],
+   "first": "2023-09-06T04:58:49.989000+00:00",
+   "last": "2023-09-06T04:58:50.776000+00:00",
+   "process_images": {
+    "C:\\Windows\\system32\\cscript.exe": 4,
+    "C:\\Windows\\System32\\cscript.exe": 1
+   },
+   "techniques": [
+    "T1059.005",
+    "T1112",
+    "T1615"
+   ],
+   "rule_families": {
+    "sigma:7f4c43f9-b1a5-4c7d-b24a-b41bf3a3ebf2": 8,
+    "sigma:575dce0c-8139-4e30-9295-1ee75969f7fe": 2
+   }
+  },
+  {
+   "group_id": "corr-group::e2cc3d9043b0d7977d84ef54a01104aca01fabcbf4e603da99a397ed1c38488e::a9b8d78ff3d0743076aa7bf8dde544f401fa1e2e737424018a163694141996aa::82242070395ee524439a7de429e84746b2fdb7940d765890838265cf13cf1598",
+   "anchor_observation_id": "sysmon:MKT01.pandalab.com:sha256:1e44557fdca882206b7f8b1cb006de52d5a56e547e185d847976646bc3e0a5f1",
+   "evidence": 3,
+   "observations": 3,
+   "hosts": [
+    "MKT01.pandalab.com"
+   ],
+   "first": "2023-09-06T04:52:53.592000+00:00",
+   "last": "2023-09-06T04:52:53.598000+00:00",
+   "process_images": {
+    "C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe": 3
+   },
+   "techniques": [
+    "T1564.004"
+   ],
+   "rule_families": {
+    "sigma:b69888d4-380c-45ce-9cf9-d9ce46e67821": 3
+   }
+  },
+  {
+   "group_id": "corr-group::d2a11355631c1435a44671e13c6c02df95a55e873fd49c36899ab7df0f817960::744136d56d1d57f253f0fcceb586d8279ace994ad6ad12c9a56926390887afbb",
+   "anchor_observation_id": "sysmon:MKT01.pandalab.com:sha256:fa913ccc030a3d6c07cc7d48b56d0986066d461295d475f5aae7202a4a208217",
+   "evidence": 2,
+   "observations": 2,
+   "hosts": [
+    "MKT01.pandalab.com"
+   ],
+   "first": "2023-09-06T04:56:42.315000+00:00",
+   "last": "2023-09-06T04:56:42.424000+00:00",
+   "process_images": {
+    "C:\\Program Files\\SharpDump.exe": 2
+   },
+   "techniques": [
+    "T1003.001"
+   ],
+   "rule_families": {
+    "sigma:9bd012ee-0dff-44d7-84a0-aa698cfd87a3": 2
+   }
+  }
+ ]
+}

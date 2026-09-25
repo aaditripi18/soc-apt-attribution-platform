@@ -1,0 +1,56 @@
+{
+ "recording_id": "otrf-lsass-06-outflank-dumpert",
+ "observations": 53729,
+ "refused_by_source": {
+  "sysmon": 214,
+  "windows_powershell": 119,
+  "windows_security": 1215
+ },
+ "suppressed_by_precedence": 0,
+ "evidence": 10,
+ "units": [
+  {
+   "group_id": "corr-group::dae0f131308d541a8889c12be9ea2e7ea99b704106cd8ca63fcaf5ced6d26a14::2671a45fbc83d2c3cbc389a4f8a4ebcfa4ecb97ecc1b11a7fa091adb217dd0d1::858c740755de62b0454eefd762b8fc11b30990995a783cb2bf579847c33112bb::b4b0d0a434bce463347b599d8dba118ad93c6bff23bd70ab979027cb9cda8a7d::c0c61618c43e756709bd0a8835408040a0568fa697aa6a9424b55f57bf084629",
+   "anchor_observation_id": "sysmon:MKT01.pandalab.com:sha256:0967445647eeaf0bc439e1001c2777c54bb54d7013938d8ba7e1a454e1936763",
+   "evidence": 5,
+   "observations": 3,
+   "hosts": [
+    "MKT01.pandalab.com"
+   ],
+   "first": "2023-09-06T05:47:37.667000+00:00",
+   "last": "2023-09-06T05:47:42.621000+00:00",
+   "process_images": {
+    "C:\\Windows\\Temp\\Outflank-Dumpert.exe": 3
+   },
+   "techniques": [
+    "T1003.001",
+    "T1685"
+   ],
+   "rule_families": {
+    "sigma:9bd012ee-0dff-44d7-84a0-aa698cfd87a3": 2,
+    "sigma:9f5c1d59-33be-4e60-bcab-85d2f566effd": 2,
+    "sigma:93d94efc-d7ad-4161-ad7d-1638c4f908d8": 1
+   }
+  },
+  {
+   "group_id": "corr-group::a26c3b1eef0413631e69e812d6d5b4c43c4a730871e8b252eda8a50d302bc269::57d5defd039812bb9f9ad59d53b90d57d371791aaf7f4eb93057b76f3356a9c7::7bada295294d66da42c84693be69a1202f698a6a63b0c3c0cc612a264f463cd1",
+   "anchor_observation_id": "sysmon:MKT01.pandalab.com:sha256:c9297fc80d48c48cf74b2c0e29a671f4c084e6f8124abab0d43b7496016ee7cf",
+   "evidence": 3,
+   "observations": 3,
+   "hosts": [
+    "MKT01.pandalab.com"
+   ],
+   "first": "2023-09-06T05:44:26.833000+00:00",
+   "last": "2023-09-06T05:44:26.849000+00:00",
+   "process_images": {
+    "C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe": 3
+   },
+   "techniques": [
+    "T1564.004"
+   ],
+   "rule_families": {
+    "sigma:b69888d4-380c-45ce-9cf9-d9ce46e67821": 3
+   }
+  }
+ ]
+}
