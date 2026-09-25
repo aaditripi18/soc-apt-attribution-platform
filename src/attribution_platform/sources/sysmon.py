@@ -29,8 +29,18 @@ Event IDs 1 (Process Create), 3 (Network Connection), 7 (Image Load), 8
 key/value create or delete), 13 (Registry value set), 15 (file stream hash),
 17/18 (pipe created/connected), 19/20/21 (WMI filter/consumer/binding), 22
 (DNS query) and 23 (file delete).
-Both real-world record shapes are accepted: collector records
-(ECS + ``winlog`` envelope) and flat Windows-EventData records (e.g. OTRF).
+Three real-world record shapes are accepted: collector records (ECS +
+``winlog`` envelope), Winlogbeat 6 records (normalized to the ``winlog`` shape
+by :mod:`attribution_platform.sources.winlogbeat`), and flat Windows-EventData
+records (e.g. OTRF). A record naming any channel other than Sysmon's (compared
+case-insensitively) is refused — other channels reuse Sysmon's small event IDs.
+
+**Event time** is Sysmon's own ``UtcTime`` whenever the event carries it, in
+every shape; the collector's ``@timestamp`` is used only when it does not. On
+real collector data the two disagree: in OTRF's APT3 CALDERA recording 18,712 of
+50,223 Sysmon events are 1–60 s apart, and in the Empire recording 3,409 network
+events (ID 3, one host) are 272.8 h apart — the sensor's statement of when the
+activity happened is authoritative, the forwarding pipeline's clock is not.
 The original G0.11 scope was Event ID 1 (Process Create) and Event ID 3
 (Network Connection).
 These are chosen because they are the two most fundamental Sysmon events
@@ -88,6 +98,11 @@ from attribution_platform.domain import (
     WmiRef,
 )
 from attribution_platform.sources.errors import SourceAdapterError
+from attribution_platform.sources.winlogbeat import (
+    channel_matches,
+    is_winlogbeat6,
+    normalize_winlogbeat6,
+)
 
 #: This adapter's stable source identifier.
 SYSMON_SOURCE_TYPE = "sysmon"
@@ -261,7 +276,7 @@ def _normalize_flat(record: Mapping[str, Any]) -> dict[str, Any]:
       JSON (the source provides no identifier; derived, never random).
     """
     channel = record.get("Channel")
-    if channel != SYSMON_CHANNEL:
+    if not channel_matches(channel, SYSMON_CHANNEL):
         raise SourceAdapterError(
             f"SysmonSourceAdapter: flat record channel {channel!r} is not {SYSMON_CHANNEL!r}"
         )
@@ -293,6 +308,9 @@ def _require_event_id(record: Mapping[str, Any]) -> int:
 
 
 def _require_timestamp(record: Mapping[str, Any]) -> datetime:
+    utc_time = _get(record, "winlog", "event_data", "UtcTime")
+    if utc_time is not None:
+        return _parse_sysmon_utc(utc_time)  # the sensor's own event time wins
     raw = record.get("@timestamp")
     if raw is None:
         raise SourceAdapterError("SysmonSourceAdapter: missing required field '@timestamp'")
@@ -637,9 +655,18 @@ class SysmonSourceAdapter:
                 f"SysmonSourceAdapter expects a Mapping (a parsed Sysmon-module JSON event), "
                 f"got {type(raw_record).__name__}"
             )
-        record: Mapping[str, Any] = (
-            _normalize_flat(raw_record) if _is_flat(raw_record) else raw_record
-        )
+        record: Mapping[str, Any]
+        if is_winlogbeat6(raw_record):
+            record = normalize_winlogbeat6(raw_record)
+        elif _is_flat(raw_record):
+            record = _normalize_flat(raw_record)
+        else:
+            record = raw_record
+        channel = _get(record, "winlog", "channel")
+        if channel is not None and not channel_matches(channel, SYSMON_CHANNEL):
+            raise SourceAdapterError(
+                f"SysmonSourceAdapter: channel {channel!r} is not {SYSMON_CHANNEL!r}"
+            )
 
         event_id = _require_event_id(record)
         if event_id not in _SUPPORTED_EVENT_IDS:

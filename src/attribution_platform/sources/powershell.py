@@ -56,6 +56,11 @@ from attribution_platform.domain import (
 )
 from attribution_platform.sources.errors import SourceAdapterError
 from attribution_platform.sources.nxlog_time import nxlog_event_time, parse_timestamp
+from attribution_platform.sources.winlogbeat import (
+    channel_matches,
+    is_winlogbeat6,
+    normalize_winlogbeat6,
+)
 
 #: This adapter's stable source identifier.
 POWERSHELL_SOURCE_TYPE = "windows_powershell"
@@ -113,6 +118,8 @@ class PowerShellSourceAdapter:
                 "PowerShellSourceAdapter expects a Mapping (a parsed event), "
                 f"got {type(raw_record).__name__}"
             )
+        if is_winlogbeat6(raw_record):
+            raw_record = normalize_winlogbeat6(raw_record)
         collector = "winlog" in raw_record
         # Identify the event first: a record from another channel or of an
         # unsupported type is refused for that reason, before anything else.
@@ -122,7 +129,7 @@ class PowerShellSourceAdapter:
         else:
             channel = raw_record.get("Channel")
             event_id_raw = raw_record.get("EventID")
-        if channel != POWERSHELL_OPERATIONAL_CHANNEL:
+        if not channel_matches(channel, POWERSHELL_OPERATIONAL_CHANNEL):
             raise SourceAdapterError(
                 f"PowerShellSourceAdapter: channel {channel!r} is not "
                 f"{POWERSHELL_OPERATIONAL_CHANNEL!r}"

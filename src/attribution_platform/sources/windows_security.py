@@ -32,7 +32,9 @@ only where unambiguous (4688 process/start, 4624 and 4776 authentication/
 start); object and share events carry none rather than an invented one.
 
 **Record shapes (ADR-0008 D4).** Collector records (``winlog`` envelope,
-``@timestamp`` = event time) and flat NXLog/Logstash exports, whose exact UTC
+``@timestamp`` = event time; Winlogbeat 6 records are first normalized to it by
+:mod:`attribution_platform.sources.winlogbeat`; the channel name is compared
+case-insensitively) and flat NXLog/Logstash exports, whose exact UTC
 event time is derived by :mod:`attribution_platform.sources.nxlog_time`.
 Flat records carrying only ``TimeCreated`` (the round-1 OTRF exports) are
 refused: that field has no zone and on the real samples sits exactly 16 h
@@ -62,6 +64,11 @@ from attribution_platform.domain import (
 )
 from attribution_platform.sources.errors import SourceAdapterError
 from attribution_platform.sources.nxlog_time import nxlog_event_time, parse_timestamp
+from attribution_platform.sources.winlogbeat import (
+    channel_matches,
+    is_winlogbeat6,
+    normalize_winlogbeat6,
+)
 
 #: This adapter's stable source identifier.
 WINDOWS_SECURITY_SOURCE_TYPE = "windows_security"
@@ -272,6 +279,8 @@ class WindowsSecuritySourceAdapter:
             raise SourceAdapterError(
                 f"{_ADAPTER} expects a Mapping (a parsed event), got {type(raw_record).__name__}"
             )
+        if is_winlogbeat6(raw_record):
+            raw_record = normalize_winlogbeat6(raw_record)
         collector = "winlog" in raw_record
         if collector:
             channel = _get(raw_record, "winlog", "channel")
@@ -279,7 +288,7 @@ class WindowsSecuritySourceAdapter:
         else:
             channel = raw_record.get("Channel")
             event_id_raw = raw_record.get("EventID")
-        if channel != SECURITY_CHANNEL:
+        if not channel_matches(channel, SECURITY_CHANNEL):
             raise SourceAdapterError(f"{_ADAPTER}: channel {channel!r} is not {SECURITY_CHANNEL!r}")
         try:
             event_id = int(event_id_raw)
