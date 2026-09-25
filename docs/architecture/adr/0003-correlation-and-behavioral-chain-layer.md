@@ -661,3 +661,13 @@ applies to contextual `PROCESS_ACCESS_TARGET`.
   proved it), never presented as collector-asserted.
 - **B3 — Prerequisite.** Sysmon 5 (process terminated) must be supported first; without end events a
   pid-reuse gap cannot be excluded.
+
+**Amendment B — evidence from real recordings (2026-09-25).** Measured on OTRF's APT3 CALDERA recording
+(63,412 Observations, full pipeline, production Sigma pack, D3 precedence applied): 18,314 Evidence items, of
+which **18,074 (98.7 %) come from PowerShell logging events — none with a process GUID**. Each such event forms
+its own single-Observation group, so the attack splits into **9,034 correlation groups, 9,031 of them one
+Observation** (only 3 groups join more than one Observation). The flood is real, correct content firing on the
+CALDERA agent's polling loop (two `ps_module` rules, 8,984 detections each). Without B1 the attribution unit
+for real PowerShell-heavy intrusions is meaningless. Every corpus recording carries Sysmon 5 (process
+terminated) events (81–607 each), which B1/B3 need. Amendment B is therefore promoted from optional to
+**required before corpus v2 families are built**.

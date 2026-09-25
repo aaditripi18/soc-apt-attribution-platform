@@ -246,3 +246,11 @@ After T9: fitting grid / `fitting_procedure_version` → `fitting.py` → frozen
 - *Honest gap:* public recordings give **two** actors (APT29 blind, APT3). The DC-5 minimum of ≥ 4 calibration
   actors / ≥ 12 families therefore needs owner-recorded emulations (isolated lab, CTID plans via CALDERA,
   Sysmon/PowerShell/Security collection); the platform side is ingestion and labelling of those exports.
+
+**Real-recording unit measurement (2026-09-25) — families deferred.** The APT3 CALDERA recording yields 9,034
+correlation groups, 9,031 of them single PowerShell Observations (pid-only, no GUID; ADR-0003 Amendment B
+evidence). Building families on that would create thousands of meaningless units, so family construction waits
+for Amendment B (Sysmon 5 support + pid→process-instance resolution). Also to decide with the families: units
+contain real background activity (e.g. `Suspicious Svchost Process Access` 152×, `HackTool - SysmonEnte` false
+positives), so per-unit ground truth must separate emulated-actor units from background units using the
+dataset's documented procedure, never the engine's output.
