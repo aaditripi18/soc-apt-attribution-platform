@@ -35,6 +35,7 @@ from __future__ import annotations
 import ast
 from datetime import UTC, datetime
 from pathlib import Path
+from typing import NoReturn
 
 import pytest
 
@@ -465,11 +466,11 @@ def test_d_genuine_convergence_two_distinct_parents() -> None:
     step_by_evidence = {eid: step.step_id for step in sequence.steps for eid in step.evidence_ids}
     z_step = step_by_evidence["ev-z"]
     incoming_to_z = [e for e in sequence.edges if e.to_step_id == z_step]
-    assert len(incoming_to_z) == 2
-    assert {e.from_step_id for e in incoming_to_z} == {
-        step_by_evidence["ev-p1"],
-        step_by_evidence["ev-p2"],
-    }
+    # ADR-0003 Amendment C: lineage is an instance-level fact ("P created Z"),
+    # anchored at P's earliest observed step; the telemetry never says which
+    # later step of P created Z, so no per-step lineage edge is claimed.
+    assert len(incoming_to_z) == 1
+    assert {e.from_step_id for e in incoming_to_z} == {step_by_evidence["ev-p1"]}
     assert {e.basis.basis_kind.name for e in incoming_to_z} == {"PROCESS_LINEAGE"}
 
     # no invented reverse edge between P1 and P2: exactly one directed
@@ -708,16 +709,23 @@ def test_every_corpus_sequence_round_trips(
 # ===========================================================================
 
 
-def test_multi_link_grounding_ambiguity_propagates_uncaught(
-    engine: DetectionEngine, knowledge: AttackKnowledge
+def test_construct_error_propagates_uncaught(
+    engine: DetectionEngine, knowledge: AttackKnowledge, monkeypatch: pytest.MonkeyPatch
 ) -> None:
-    """Reproduces, via the REAL rule pack and REAL raw-telemetry-shaped
-    scenarios (constructed directly in Python -- the shared JSON corpus is
-    never touched), the G2.4.1-audited multi-link-grounding ambiguity: one
-    Observation matches two rules (SHARED_OBSERVATION-collapsed into one
-    step) and is the lineage parent of a second Observation. The pipeline
-    must not catch, suppress, or otherwise convert the resulting
-    CorrelationError into a warning, partial sequence, or skipped group."""
+    """A CorrelationError raised by construct_behavioral_sequence must not be
+    caught, suppressed, or converted into a warning, partial sequence, or
+    skipped group. (The multi-link grounding ambiguity that used to trigger it
+    through the real pipeline no longer arises: ADR-0003 Amendment C links one
+    representative per lineage fact, so the error is injected here.)"""
+
+    def failing_construct(*args: object, **kwargs: object) -> NoReturn:
+        raise CorrelationError("injected construct_behavioral_sequence failure")
+
+    monkeypatch.setattr(
+        "attribution_platform.replay.behavioral_sequence_pipeline.construct_behavioral_sequence",
+        failing_construct,
+    )
+
     scenarios = (
         DetectionReplayScenario(
             scenario_id="amb-parent",
@@ -756,7 +764,7 @@ def test_multi_link_grounding_ambiguity_propagates_uncaught(
     )
     client = FakeElasticClient()
 
-    with pytest.raises(CorrelationError, match="ambiguous PROCESS_LINEAGE"):
+    with pytest.raises(CorrelationError, match="injected"):
         replay_fixture_through_behavioral_sequences(
             fixture, client=client, engine=engine, knowledge=knowledge
         )

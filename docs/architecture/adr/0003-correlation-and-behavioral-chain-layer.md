@@ -698,7 +698,7 @@ terminated) events (81–607 each), which B1/B3 need. Amendment B is therefore p
 
 ## Amendment C (2026-09-25) — Scalable link materialization for equivalence relations (PROPOSED)
 
-- **Status:** PROPOSED — needed before Amendment B is wired into correlation; implemented with it next.
+- **Status:** ACCEPTED and IMPLEMENTED (2026-09-25, owner delegation) — see the record below.
 - **Trigger:** `SAME_PROCESS_ENTITY` and the contextual same-value dimensions (`SAME_HOST_*`, `SAME_USER_*`,
   `SAME_DESTINATION_IP`) are equivalence relations materialized today as **every pair**; ADR-0004's sequence
   engine requires that full pairwise closure and compares every pair. On real data this is infeasible: one
@@ -724,3 +724,43 @@ terminated) events (81–607 each), which B1/B3 need. Amendment B is therefore p
 - **Validation required:** group memberships and ids identical to the pairwise form on every existing corpus and
   test; sequence outputs unchanged on existing fixtures; the real APT3 recordings correlate within bounded time
   and memory, and the resulting unit count is reported.
+
+**Amendments B (part 2) and C — implementation record (2026-09-25).**
+
+- *Wiring (B/C2):* `correlate_structurally` resolves pid-only identities from the Evidence and context
+  Observations it is given (`correlation/process_identity.py`) and places a resolved node in its instance's
+  `SAME_PROCESS_ENTITY` class; links with a resolved endpoint record `field_path` `process.pid` and carry the
+  proof Observation ids. `structural-correlation 1.2`, `contextual-correlation 1.2`.
+- *Chain materialization (C1/C4):* `SAME_PROCESS_ENTITY` and the contextual same-value dimensions link
+  consecutive members in (`timestamp`, `observation_id`, `evidence_id`) order. **Instance-level relations**
+  (`PROCESS_LINEAGE`, `PROCESS_INTERACTION`, `PROCESS_ACCESS_TARGET`) link one fact once: from the source
+  instance's first chain member to the child Observation's first Evidence / the target's first member not
+  confidently before the attesting event. Recorded semantic consequence: a lineage edge is anchored at the
+  parent's **earliest** observed step — the telemetry never says which later step of the parent created the
+  child, so no per-step lineage edge is claimed (test `test_d_genuine_convergence_two_distinct_parents` updated).
+  `SHARED_OBSERVATION` stays pairwise (bounded by one event's techniques).
+- *Latent defect removed:* under pairwise materialization, **any** process with two Observations that each
+  matched two rules (e.g. T1059 + T1059.001 — routine on real data) produced several links for one step pair and
+  the sequence engine refused the unit ("ambiguous grounding"). The chain gives exactly one link per step pair;
+  the engine's own guard is kept and still tested with hand-built duplicate links.
+- *Sequence engine (C3):* verifies the chain (every consecutive step pair grounded; extra links tolerated) instead
+  of the full pairwise closure; ties are sought only within the coarsest declared granularity (1 s — exact, since
+  truncation cannot tie timestamps further apart); buckets must be contiguous and pairwise tied (else fail
+  closed); edges cite the chain link crossing the bucket boundary, gaps the link into the later tied step.
+  Identical output for strictly ordered steps. The contract's cycle check is now iterative (a real 9,000-step
+  chain exceeded Python's recursion limit). Group assembly and contextual attachment are indexed (no
+  groups × links scans).
+- *Group identity preserved:* `group_id` depends only on membership, which chain connectivity leaves unchanged;
+  the frozen corpus v1 rebuilds with the same identity. Updated tests pin link *cardinality* only (chains instead
+  of all pairs, "connected by" instead of "directly linked"); every protected property (no merge, attachment to
+  both groups, fail-closed guards) is still asserted. 1,695 tests pass.
+- *Real-data result (full pipeline: adapters → D3 precedence → Sigma → Evidence → structural + contextual
+  correlation → behavioral sequences):*
+
+  | Recording | Before B/C | After B/C | Time |
+  |---|---|---|---|
+  | APT3 CALDERA (63,558 obs, 18,314 Evidence) | 9,034 groups (9,031 single-Observation) | **29** — the two CALDERA agent chains (9,045 / 9,018 Evidence: T1003.001/.002/.004/.005/.006, T1021.006, T1106, …) and two PowerShell persistence chains (T1053.005, T1098, T1685.001) | ≈2 min |
+  | APT3 Empire (87,044 obs, 33 Evidence) | — | **4** — the main HR001 chain: PowerShell → `whoami`, `ftp` (T1033, T1059.001, T1202, T1685) | ≈2 min |
+
+  The 22 remaining small CALDERA units are single `cmd.exe`/PowerShell Observations whose process has no other
+  evidence — genuine singletons, not fragmentation.

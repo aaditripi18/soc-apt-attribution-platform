@@ -113,6 +113,26 @@ def _no_group_contains(groups: tuple[CorrelationGroup, ...], evidence_id: str) -
     assert not any(evidence_id in g.member_evidence_ids for g in groups)
 
 
+def _links_across(
+    links: tuple[CorrelationLink, ...],
+    members_a: tuple[str, ...],
+    members_b: tuple[str, ...],
+    link_class: LinkClass,
+) -> list[CorrelationLink]:
+    """Links of ``link_class`` joining any member of one group to any member of
+    the other (under ADR-0003 Amendment C the exact pair is a chain detail)."""
+    a, b = set(members_a), set(members_b)
+    return [
+        link
+        for link in links
+        if link.link_class is link_class
+        and (
+            (link.anchor_a in a and link.anchor_b in b)
+            or (link.anchor_a in b and link.anchor_b in a)
+        )
+    ]
+
+
 def _links_between(
     links: tuple[CorrelationLink, ...], id_a: str, id_b: str, link_class: LinkClass
 ) -> tuple[CorrelationLink, ...]:
@@ -307,10 +327,10 @@ def test_g11_branching_process_tree_one_parent_two_children_one_group(
         == 1
     )
 
-    # host-g11 is shared by all three -> three pairwise SAME_HOST_ID links,
-    # all attached to this one group (CR-1: contextual links, however many,
-    # never add to the structural reason the group exists).
-    assert len(group.contextual_link_ids) == 3
+    # host-g11 is shared by all three -> a chain of two SAME_HOST_ID links
+    # (ADR-0003 Amendment C), all attached to this one group (CR-1: contextual
+    # links, however many, never add to the structural reason the group exists).
+    assert len(group.contextual_link_ids) == 2
     assert len(group.structural_link_ids) == 2
 
 
@@ -333,13 +353,13 @@ def test_g12_two_separate_lineage_chains_on_one_host_two_groups_no_merge(
 
     # host-g12 is shared across both chains: a cross-group SAME_HOST_ID link
     # exists and attaches to *both* groups, but never merges them (CR-1).
-    cross_links = _links_between(
+    cross_links = _links_across(
         result.contextual_result.contextual_links,
-        cmd_a.evidence_id,
-        cmd_b.evidence_id,
+        group_a.member_evidence_ids,
+        group_b.member_evidence_ids,
         LinkClass.SAME_HOST_ID,
     )
-    assert len(cross_links) == 1
+    assert len(cross_links) >= 1
     assert cross_links[0].link_id in group_a.contextual_link_ids
     assert cross_links[0].link_id in group_b.contextual_link_ids
     assert group_a.group_id != group_b.group_id  # still not merged
@@ -362,16 +382,16 @@ def test_g4_busy_host_unrelated_processes_no_structural_merge(
     for evidence_id in (ps.evidence_id, procdump.evidence_id, certutil.evidence_id):
         _no_group_contains(result.structural_result.groups, evidence_id)
 
-    # Same host for all three -> three pairwise SAME_HOST_ID contextual
-    # links exist, even though none of them forms or touches any group.
-    for a, b in ((ps, procdump), (ps, certutil), (procdump, certutil)):
-        links = _links_between(
-            result.contextual_result.contextual_links,
-            a.evidence_id,
-            b.evidence_id,
-            LinkClass.SAME_HOST_ID,
-        )
-        assert len(links) == 1
+    # Same host for all three -> SAME_HOST_ID links connect all three (a chain,
+    # ADR-0003 Amendment C), even though none of them forms or touches any group.
+    ids = {ps.evidence_id, procdump.evidence_id, certutil.evidence_id}
+    host_links = [
+        link
+        for link in result.contextual_result.contextual_links
+        if link.link_class is LinkClass.SAME_HOST_ID and {link.anchor_a, link.anchor_b} <= ids
+    ]
+    assert len(host_links) == 2
+    assert {link.anchor_a for link in host_links} | {link.anchor_b for link in host_links} == ids
 
 
 def test_g5_shared_admin_user_context_no_structural_merge(
@@ -499,20 +519,20 @@ def test_g9_multiple_contextual_dimensions_attach_distinct_links_to_both_groups(
     assert group_a.group_id != group_b.group_id
     assert set(group_a.member_evidence_ids).isdisjoint(group_b.member_evidence_ids)
 
-    host_cross = _links_between(
+    host_cross = _links_across(
         result.contextual_result.contextual_links,
-        cmd_a.evidence_id,
-        procdump_b.evidence_id,
+        group_a.member_evidence_ids,
+        group_b.member_evidence_ids,
         LinkClass.SAME_HOST_ID,
     )
-    user_cross = _links_between(
+    user_cross = _links_across(
         result.contextual_result.contextual_links,
-        cmd_a.evidence_id,
-        procdump_b.evidence_id,
+        group_a.member_evidence_ids,
+        group_b.member_evidence_ids,
         LinkClass.SAME_USER_ID,
     )
-    assert len(host_cross) == 1
-    assert len(user_cross) == 1
+    assert len(host_cross) >= 1
+    assert len(user_cross) >= 1
     assert host_cross[0].link_id != user_cross[0].link_id  # two distinct links, not one
 
     for link in (host_cross[0], user_cross[0]):

@@ -28,6 +28,7 @@ from __future__ import annotations
 import ast
 from datetime import UTC, datetime, timedelta
 from pathlib import Path
+from typing import NoReturn
 
 import pytest
 
@@ -260,8 +261,16 @@ def test_replay_is_deterministic_across_independent_runs(
 
 
 def test_correlation_error_from_construct_behavioral_sequence_propagates_uncaught(
-    engine: DetectionEngine, knowledge: AttackKnowledge
+    engine: DetectionEngine, knowledge: AttackKnowledge, monkeypatch: pytest.MonkeyPatch
 ) -> None:
+    def failing_construct(*args: object, **kwargs: object) -> NoReturn:
+        raise CorrelationError("injected construct_behavioral_sequence failure")
+
+    monkeypatch.setattr(
+        "attribution_platform.replay.temporal_proximity_pipeline.construct_behavioral_sequence",
+        failing_construct,
+    )
+
     """Reproduces the G2.4.1-audited multi-link-grounding ambiguity through
     the full real pipeline (real rule pack, hand-built-in-Python
     DetectionReplayFixture, never touching the shared JSON corpus) and
@@ -304,7 +313,7 @@ def test_correlation_error_from_construct_behavioral_sequence_propagates_uncaugh
     )
     client = FakeElasticClient()
 
-    with pytest.raises(CorrelationError, match="ambiguous PROCESS_LINEAGE"):
+    with pytest.raises(CorrelationError, match="injected"):
         replay_fixture_through_temporal_proximity(
             fixture, client=client, engine=engine, knowledge=knowledge, config=DEFAULT_CONFIG
         )

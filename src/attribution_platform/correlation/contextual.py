@@ -142,7 +142,6 @@ from __future__ import annotations
 
 from collections.abc import Callable, Sequence
 from dataclasses import dataclass
-from itertools import combinations
 
 from attribution_platform.correlation.contracts import (
     CorrelationBasis,
@@ -154,10 +153,8 @@ from attribution_platform.correlation.contracts import (
     compute_link_id,
 )
 from attribution_platform.correlation.errors import CorrelationError
-from attribution_platform.correlation.structural import (
-    StructuralCorrelationResult,
-    is_confidently_before,
-)
+from attribution_platform.correlation.structural import StructuralCorrelationResult
+from attribution_platform.correlation.timing import is_confidently_before
 from attribution_platform.domain import Evidence, Observation
 
 #: Default ``CorrelationProvenance.method``/``method_version`` this engine
@@ -165,7 +162,8 @@ from attribution_platform.domain import Evidence, Observation
 #: overrides them. Mirrors ``structural.py``'s own
 #: ``STRUCTURAL_CORRELATION_METHOD`` convention.
 CONTEXTUAL_CORRELATION_METHOD = "contextual-correlation"
-CONTEXTUAL_CORRELATION_METHOD_VERSION = "1.1"  # 1.1: + PROCESS_ACCESS_TARGET
+#: 1.1: + PROCESS_ACCESS_TARGET; 1.2: chain materialization (ADR-0003 Amendment C).
+CONTEXTUAL_CORRELATION_METHOD_VERSION = "1.2"
 
 #: The exact, ADR-0003-derived uncertainty note for each contextual
 #: dimension -- plain language, never a numeric value. Distinct per
@@ -359,6 +357,14 @@ def _process_access_links(
         key = _entity_key(node.observation)
         if key is not None:
             by_entity.setdefault(key, []).append(node)
+    for members in by_entity.values():
+        members.sort(
+            key=lambda n: (
+                n.observation.timestamp,
+                n.observation.observation_id,
+                n.evidence.evidence_id,
+            )
+        )
 
     witnesses: dict[str, Observation] = {}
     for observation in (*(n.observation for n in nodes), *context_observations):
@@ -378,28 +384,31 @@ def _process_access_links(
         ):
             continue
         assert target.entity_id is not None
-        sources = sorted(by_entity.get(source_key, ()), key=lambda n: n.evidence.evidence_id)
-        targets = sorted(
+        # One link per attested access (Amendment C1): the accessing instance's
+        # first member to the accessed instance's first member not confidently
+        # before the access.
+        sources = by_entity.get(source_key, ())
+        target_node = next(
             (
                 n
                 for n in by_entity.get((source_key[0], target.entity_id), ())
                 if not is_confidently_before(n.observation, witness)
             ),
-            key=lambda n: n.evidence.evidence_id,
+            None,
         )
-        for source in sources:
-            for target_node in targets:
-                link = _make_contextual_link(
-                    source,
-                    target_node,
-                    link_class=LinkClass.PROCESS_ACCESS_TARGET,
-                    observed_value=target.entity_id,
-                    method=method,
-                    method_version=method_version,
-                    method_content_hash=method_content_hash,
-                    witness_observation_id=witness.observation_id,
-                )
-                links.setdefault(link.link_id, link)
+        if not sources or target_node is None:
+            continue
+        link = _make_contextual_link(
+            sources[0],
+            target_node,
+            link_class=LinkClass.PROCESS_ACCESS_TARGET,
+            observed_value=target.entity_id,
+            method=method,
+            method_version=method_version,
+            method_content_hash=method_content_hash,
+            witness_observation_id=witness.observation_id,
+        )
+        links.setdefault(link.link_id, link)
     return links
 
 
@@ -470,8 +479,18 @@ def _links_for_dimension(
     for value, group in by_value.items():
         if len(group) < 2:
             continue
-        ordered = sorted(group, key=lambda n: n.evidence.evidence_id)
-        for node_a, node_b in combinations(ordered, 2):
+        # ADR-0003 Amendment C1/C4: an equivalence class is linked as a chain in
+        # (timestamp, observation_id, evidence_id) order -- n - 1 true pairwise
+        # facts instead of every pair.
+        ordered = sorted(
+            group,
+            key=lambda n: (
+                n.observation.timestamp,
+                n.observation.observation_id,
+                n.evidence.evidence_id,
+            ),
+        )
+        for node_a, node_b in zip(ordered, ordered[1:], strict=False):
             link = _make_contextual_link(
                 node_a,
                 node_b,
@@ -570,14 +589,19 @@ def contextualize(
 
     structural_links_by_id = {link.link_id: link for link in structural_result.links}
 
+    links_by_anchor: dict[str, list[CorrelationLink]] = {}
+    for link in sorted_contextual_links:
+        links_by_anchor.setdefault(link.anchor_a, []).append(link)
+        links_by_anchor.setdefault(link.anchor_b, []).append(link)
+
     updated_groups: list[CorrelationGroup] = []
     for group in structural_result.groups:
-        member_ids = set(group.member_evidence_ids)
-        touching = tuple(
-            link
-            for link in sorted_contextual_links
-            if link.anchor_a in member_ids or link.anchor_b in member_ids
-        )
+        touching_by_id = {
+            link.link_id: link
+            for member in group.member_evidence_ids
+            for link in links_by_anchor.get(member, ())
+        }
+        touching = tuple(touching_by_id[link_id] for link_id in sorted(touching_by_id))
         if not touching:
             updated_groups.append(group)
             continue

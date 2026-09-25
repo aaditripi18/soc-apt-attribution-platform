@@ -87,7 +87,7 @@ guard test mirroring the same discipline already applied to
 from __future__ import annotations
 
 import hashlib
-from collections.abc import Iterable, Sequence
+from collections.abc import Iterable, Iterator, Sequence
 from dataclasses import dataclass, field
 from enum import Enum
 
@@ -692,9 +692,21 @@ def _require_acyclic(edges: Sequence[SequenceEdge]) -> None:
     WHITE, GRAY, BLACK = 0, 1, 2
     color: dict[str, int] = {}
 
-    def visit(node: str) -> None:
-        color[node] = GRAY
-        for neighbor in adjacency.get(node, ()):
+    # Iterative depth-first search (same back-edge rule as the recursive form,
+    # without Python's recursion limit: real process chains reach thousands of
+    # steps -- ADR-0003 Amendment C).
+    for start_node in adjacency:
+        if color.get(start_node, WHITE) != WHITE:
+            continue
+        color[start_node] = GRAY
+        stack: list[tuple[str, Iterator[str]]] = [(start_node, iter(adjacency.get(start_node, ())))]
+        while stack:
+            node, neighbors = stack[-1]
+            neighbor = next(neighbors, None)
+            if neighbor is None:
+                color[node] = BLACK
+                stack.pop()
+                continue
             state = color.get(neighbor, WHITE)
             if state == GRAY:
                 raise CorrelationError(
@@ -702,12 +714,8 @@ def _require_acyclic(edges: Sequence[SequenceEdge]) -> None:
                     f"(ADR-0004 D14), a back-edge was found reaching {neighbor!r} again"
                 )
             if state == WHITE:
-                visit(neighbor)
-        color[node] = BLACK
-
-    for start_node in adjacency:
-        if color.get(start_node, WHITE) == WHITE:
-            visit(start_node)
+                color[neighbor] = GRAY
+                stack.append((neighbor, iter(adjacency.get(neighbor, ()))))
 
 
 def build_behavioral_sequence(

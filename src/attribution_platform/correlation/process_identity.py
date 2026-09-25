@@ -28,7 +28,7 @@ time *t*:
 A pid is unique among *live* processes, so a start at or before *t* with no end
 before *t*, and no later start of the same pid before *t*, identifies the owner
 exactly. Timestamps are compared at their common declared precision
-(:func:`~attribution_platform.correlation.structural.is_confidently_before`,
+(:func:`~attribution_platform.correlation.timing.is_confidently_before`,
 ADR-0004 D6); ties are never resolved by guessing.
 
 Pure and deterministic; reads only the ``process`` / ``host`` / ``event``
@@ -41,7 +41,7 @@ from collections.abc import Iterable
 from dataclasses import dataclass
 from enum import Enum
 
-from attribution_platform.correlation.structural import is_confidently_before
+from attribution_platform.correlation.timing import is_confidently_before
 from attribution_platform.domain import Observation
 
 PROCESS_IDENTITY_METHOD = "process-identity-resolution"

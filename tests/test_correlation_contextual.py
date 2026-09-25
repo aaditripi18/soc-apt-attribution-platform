@@ -540,7 +540,9 @@ def test_duplicate_contextual_relationships_are_deduplicated() -> None:
 
     link_ids = [entry.link_id for entry in result.contextual_links]
     assert len(link_ids) == len(set(link_ids))
-    assert len(result.contextual_links) == 3  # 3 choose 2 pairs, each unique
+    # ADR-0003 Amendment C: an equivalence class is chained -- n - 1 links
+    # (ev-1 - ev-2 - ev-3), each unique, instead of all 3 choose 2 pairs.
+    assert len(result.contextual_links) == 2
 
 
 def test_input_ordering_does_not_change_contextual_link_ids() -> None:

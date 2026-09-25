@@ -101,7 +101,6 @@ from __future__ import annotations
 
 from collections.abc import Sequence
 from dataclasses import dataclass
-from datetime import UTC, datetime, timedelta
 from itertools import combinations
 
 from attribution_platform.correlation.contracts import (
@@ -115,7 +114,12 @@ from attribution_platform.correlation.contracts import (
     compute_link_id,
 )
 from attribution_platform.correlation.errors import CorrelationError
-from attribution_platform.domain import Evidence, Observation, TimePrecision
+from attribution_platform.correlation.process_identity import (
+    ProcessIdentityResolution,
+    resolve_process_identities,
+)
+from attribution_platform.correlation.timing import is_confidently_before
+from attribution_platform.domain import Evidence, Observation
 
 #: Default ``CorrelationProvenance.method``/``method_version`` this engine
 #: stamps onto every link/group it produces, unless the caller overrides
@@ -123,7 +127,9 @@ from attribution_platform.domain import Evidence, Observation, TimePrecision
 #: ``"platform-rules"`` — a module-level identity constant, not a config the
 #: engine has to be told on every call.
 STRUCTURAL_CORRELATION_METHOD = "structural-correlation"
-STRUCTURAL_CORRELATION_METHOD_VERSION = "1.1"  # 1.1: + PROCESS_INTERACTION
+#: 1.1: + PROCESS_INTERACTION; 1.2: resolved pid-only identities (Amendment B)
+#: and chain materialization of equivalence links (Amendment C).
+STRUCTURAL_CORRELATION_METHOD_VERSION = "1.2"
 
 #: The (host-scope, entity-id) key process-entity dimensions are compared
 #: on. ``host_scope`` is itself ``(kind, value)`` where ``kind`` is
@@ -231,34 +237,6 @@ def _injection_fact(observation: Observation) -> _InjectionFact | None:
     )
 
 
-#: Truncation granularity per declared precision (ADR-0004 D6's table; a
-#: local copy — this module does not import ``sequence_engine`` internals).
-_PRECISION_GRANULARITY: dict[TimePrecision, timedelta] = {
-    TimePrecision.SECOND: timedelta(seconds=1),
-    TimePrecision.MILLISECOND: timedelta(milliseconds=1),
-    TimePrecision.MICROSECOND: timedelta(microseconds=1),
-    TimePrecision.NANOSECOND: timedelta(microseconds=1),
-}
-_EPOCH = datetime(1970, 1, 1, tzinfo=UTC)
-
-
-def is_confidently_before(candidate: Observation, reference: Observation) -> bool:
-    """``True`` only when ``candidate`` certainly happened before
-    ``reference``: compared at the two timestamps' common (coarser) declared
-    precision; with an undeclared/unknown precision the raw values are
-    compared. A tie at the common precision is *not* "before" (A2 links equal
-    timestamps — the sensor cannot order them)."""
-    ts_a, ts_b = candidate.timestamp, reference.timestamp
-    prec_a, prec_b = candidate.timestamp_precision, reference.timestamp_precision
-    if prec_a is not None and prec_b is not None:
-        gran_a, gran_b = _PRECISION_GRANULARITY.get(prec_a), _PRECISION_GRANULARITY.get(prec_b)
-        if gran_a is not None and gran_b is not None:
-            granularity = max(gran_a, gran_b)
-            ts_a = _EPOCH + ((ts_a - _EPOCH) // granularity) * granularity
-            ts_b = _EPOCH + ((ts_b - _EPOCH) // granularity) * granularity
-    return ts_a < ts_b
-
-
 def _validate_context_observations(
     context_observations: Sequence[Observation],
 ) -> tuple[Observation, ...]:
@@ -318,7 +296,7 @@ def _make_link(
     method: str,
     method_version: str,
     method_content_hash: str | None,
-    witness_observation_id: str | None = None,
+    witness_observation_ids: tuple[str, ...] = (),
 ) -> CorrelationLink:
     link_id = compute_link_id(
         link_class=link_class,
@@ -337,7 +315,7 @@ def _make_link(
     )
     source_observation_ids = tuple(
         {node_a.observation.observation_id, node_b.observation.observation_id}
-        | ({witness_observation_id} if witness_observation_id is not None else set())
+        | set(witness_observation_ids)
     )
     provenance = CorrelationProvenance(
         method=method,
@@ -386,27 +364,61 @@ def _shared_observation_links(
     return links
 
 
-def _same_process_entity_links(
-    nodes: Sequence[_Node], *, method: str, method_version: str, method_content_hash: str | None
-) -> dict[str, CorrelationLink]:
-    by_entity: dict[_ProcessEntityKey, list[_Node]] = {}
+def _chain_key(node: _Node) -> tuple[object, str, str]:
+    """Amendment C1 order of an equivalence class: time, then Observation, then
+    Evidence — Evidence of one Observation stays contiguous, so consecutive
+    *Observations* of a class get exactly one link."""
+    return (node.observation.timestamp, node.observation.observation_id, node.evidence.evidence_id)
+
+
+@dataclass(frozen=True)
+class _EntityIndex:
+    """Each node's effective process instance: collector-asserted
+    ``process.entity_id``, or an Amendment B resolution with its proof."""
+
+    classes: dict[_ProcessEntityKey, list[_Node]]
+    resolved_proof: dict[str, tuple[str, ...]]  # observation_id -> proof ids
+
+    def representative(self, key: _ProcessEntityKey) -> _Node | None:
+        members = self.classes.get(key)
+        return members[0] if members else None
+
+
+def _entity_index(nodes: Sequence[_Node], resolution: ProcessIdentityResolution) -> _EntityIndex:
+    resolved = resolution.by_observation_id()
+    classes: dict[_ProcessEntityKey, list[_Node]] = {}
+    proof: dict[str, tuple[str, ...]] = {}
     for node in nodes:
         key = _process_entity_key(node.observation)
         if key is None:
-            continue
-        by_entity.setdefault(key, []).append(node)
+            hit = resolved.get(node.observation.observation_id)
+            if hit is None:
+                continue
+            key = (hit.host_scope, hit.entity_id)
+            proof[node.observation.observation_id] = hit.proof_observation_ids
+        classes.setdefault(key, []).append(node)
+    for members in classes.values():
+        members.sort(key=_chain_key)
+    return _EntityIndex(classes=classes, resolved_proof=proof)
 
+
+def _same_process_entity_links(
+    index: _EntityIndex, *, method: str, method_version: str, method_content_hash: str | None
+) -> dict[str, CorrelationLink]:
+    """One link per consecutive pair of each instance's chain (Amendment C1).
+    A link with a resolved endpoint names ``process.pid`` and carries the
+    resolution's proof Observations (Amendment B2 / C2)."""
     links: dict[str, CorrelationLink] = {}
-    for (_host_scope, entity_id), group in by_entity.items():
-        if len(group) < 2:
-            continue
-        ordered = sorted(group, key=lambda n: n.evidence.evidence_id)
-        for node_a, node_b in combinations(ordered, 2):
+    for (_host_scope, entity_id), members in index.classes.items():
+        for node_a, node_b in zip(members, members[1:], strict=False):
+            proof = index.resolved_proof.get(
+                node_a.observation.observation_id, ()
+            ) + index.resolved_proof.get(node_b.observation.observation_id, ())
             link = _make_link(
                 node_a,
                 node_b,
                 link_class=LinkClass.SAME_PROCESS_ENTITY,
-                field_path="process.entity_id",
+                field_path="process.pid" if proof else "process.entity_id",
                 observed_value=entity_id,
                 observation_id_a=node_a.observation.observation_id,
                 observation_id_b=node_b.observation.observation_id,
@@ -414,62 +426,65 @@ def _same_process_entity_links(
                 method=method,
                 method_version=method_version,
                 method_content_hash=method_content_hash,
+                witness_observation_ids=proof,
             )
             links[link.link_id] = link
     return links
 
 
 def _process_lineage_links(
-    nodes: Sequence[_Node], *, method: str, method_version: str, method_content_hash: str | None
+    nodes: Sequence[_Node],
+    index: _EntityIndex,
+    *,
+    method: str,
+    method_version: str,
+    method_content_hash: str | None,
 ) -> dict[str, CorrelationLink]:
-    by_entity: dict[_ProcessEntityKey, list[_Node]] = {}
-    for node in nodes:
-        key = _process_entity_key(node.observation)
-        if key is None:
-            continue
-        by_entity.setdefault(key, []).append(node)
-
+    """One link per (parent instance, child process-start Observation): from
+    the parent instance's first chain member to the child Observation's first
+    Evidence. All members of an instance are already chained, so linking one
+    representative per side is the same relation (Amendment C1)."""
     links: dict[str, CorrelationLink] = {}
-    for child in sorted(nodes, key=lambda n: n.evidence.evidence_id):
+    first_by_observation: dict[str, _Node] = {}
+    for node in sorted(nodes, key=lambda n: n.evidence.evidence_id):
+        first_by_observation.setdefault(node.observation.observation_id, node)
+    for child in sorted(first_by_observation.values(), key=lambda n: n.evidence.evidence_id):
         parent_key = _process_parent_key(child.observation)
         if parent_key is None:
             continue
-        parents = by_entity.get(parent_key, ())
-        for parent in sorted(parents, key=lambda n: n.evidence.evidence_id):
-            if parent.evidence.evidence_id == child.evidence.evidence_id:
-                continue  # a process cannot be its own parent; skip a data anomaly
-            entity_id = parent_key[1]
-            link = _make_link(
-                parent,
-                child,
-                link_class=LinkClass.PROCESS_LINEAGE,
-                field_path="process.parent_entity_id",
-                observed_value=entity_id,
-                observation_id_a=parent.observation.observation_id,
-                observation_id_b=child.observation.observation_id,
-                uncertainty_note=None,
-                method=method,
-                method_version=method_version,
-                method_content_hash=method_content_hash,
-            )
-            links[link.link_id] = link
+        parent = index.representative(parent_key)
+        if parent is None or parent.evidence.evidence_id == child.evidence.evidence_id:
+            continue  # no parent evidence, or a process as its own parent (data anomaly)
+        link = _make_link(
+            parent,
+            child,
+            link_class=LinkClass.PROCESS_LINEAGE,
+            field_path="process.parent_entity_id",
+            observed_value=parent_key[1],
+            observation_id_a=parent.observation.observation_id,
+            observation_id_b=child.observation.observation_id,
+            uncertainty_note=None,
+            method=method,
+            method_version=method_version,
+            method_content_hash=method_content_hash,
+            witness_observation_ids=index.resolved_proof.get(parent.observation.observation_id, ()),
+        )
+        links[link.link_id] = link
     return links
 
 
 def _process_interaction_links(
     nodes: Sequence[_Node],
     context_observations: Sequence[Observation],
+    index: _EntityIndex,
     *,
     method: str,
     method_version: str,
     method_content_hash: str | None,
 ) -> dict[str, CorrelationLink]:
-    by_entity: dict[_ProcessEntityKey, list[_Node]] = {}
-    for node in nodes:
-        key = _process_entity_key(node.observation)
-        if key is not None:
-            by_entity.setdefault(key, []).append(node)
-
+    """One link per attested injection S -> T: from the injecting instance's
+    first chain member to the target instance's first member not confidently
+    before the injection (A2). The rest of each instance is chained to these."""
     witnesses: dict[str, Observation] = {}
     for observation in (*(n.observation for n in nodes), *context_observations):
         witnesses.setdefault(observation.observation_id, observation)
@@ -480,35 +495,35 @@ def _process_interaction_links(
 
     links: dict[str, CorrelationLink] = {}
     for fact in facts:  # earliest attestation first: it is the one recorded
-        sources = sorted(
-            by_entity.get((fact.host_scope, fact.source_entity_id), ()),
-            key=lambda n: n.evidence.evidence_id,
-        )
-        targets = sorted(
+        source = index.representative((fact.host_scope, fact.source_entity_id))
+        target = next(
             (
                 n
-                for n in by_entity.get((fact.host_scope, fact.target_entity_id), ())
+                for n in index.classes.get((fact.host_scope, fact.target_entity_id), ())
                 if not is_confidently_before(n.observation, fact.observation)
             ),
-            key=lambda n: n.evidence.evidence_id,
+            None,
         )
-        for source in sources:
-            for target in targets:
-                link = _make_link(
-                    source,
-                    target,
-                    link_class=LinkClass.PROCESS_INTERACTION,
-                    field_path="target_process.entity_id",
-                    observed_value=fact.target_entity_id,
-                    observation_id_a=source.observation.observation_id,
-                    observation_id_b=target.observation.observation_id,
-                    uncertainty_note=None,
-                    method=method,
-                    method_version=method_version,
-                    method_content_hash=method_content_hash,
-                    witness_observation_id=fact.observation.observation_id,
-                )
-                links.setdefault(link.link_id, link)
+        if source is None or target is None:
+            continue
+        proof = index.resolved_proof.get(
+            source.observation.observation_id, ()
+        ) + index.resolved_proof.get(target.observation.observation_id, ())
+        link = _make_link(
+            source,
+            target,
+            link_class=LinkClass.PROCESS_INTERACTION,
+            field_path="target_process.entity_id",
+            observed_value=fact.target_entity_id,
+            observation_id_a=source.observation.observation_id,
+            observation_id_b=target.observation.observation_id,
+            uncertainty_note=None,
+            method=method,
+            method_version=method_version,
+            method_content_hash=method_content_hash,
+            witness_observation_ids=(fact.observation.observation_id, *proof),
+        )
+        links.setdefault(link.link_id, link)
     return links
 
 
@@ -605,9 +620,11 @@ def correlate_structurally(
             method_content_hash=method_content_hash,
         )
     )
+    resolution = resolve_process_identities((*(node.observation for node in nodes), *context))
+    index = _entity_index(nodes, resolution)
     all_links.update(
         _same_process_entity_links(
-            nodes,
+            index,
             method=method,
             method_version=method_version,
             method_content_hash=method_content_hash,
@@ -616,6 +633,7 @@ def correlate_structurally(
     all_links.update(
         _process_lineage_links(
             nodes,
+            index,
             method=method,
             method_version=method_version,
             method_content_hash=method_content_hash,
@@ -626,6 +644,7 @@ def correlate_structurally(
         _process_interaction_links(
             nodes,
             context,
+            index,
             method=method,
             method_version=method_version,
             method_content_hash=method_content_hash,
@@ -635,13 +654,14 @@ def correlate_structurally(
     sorted_links = tuple(sorted(all_links.values(), key=lambda link_: link_.link_id))
 
     nodes_by_evidence_id = {node.evidence.evidence_id: node for node in nodes}
+    components = _connected_components(nodes, sorted_links)
+    component_of = {eid: i for i, member_ids in enumerate(components) for eid in member_ids}
+    links_by_component: dict[int, list[CorrelationLink]] = {}
+    for link in sorted_links:  # both anchors are always in the same component
+        links_by_component.setdefault(component_of[link.anchor_a], []).append(link)
     groups: list[CorrelationGroup] = []
-    for member_ids in _connected_components(nodes, sorted_links):
-        component_links = tuple(
-            link
-            for link in sorted_links
-            if link.anchor_a in member_ids and link.anchor_b in member_ids
-        )
+    for position, member_ids in enumerate(components):
+        component_links = tuple(links_by_component.get(position, ()))
         member_observation_ids = tuple(
             sorted({nodes_by_evidence_id[eid].observation.observation_id for eid in member_ids})
         )

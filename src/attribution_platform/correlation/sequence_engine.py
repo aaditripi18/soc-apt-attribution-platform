@@ -107,6 +107,7 @@ from attribution_platform.correlation.sequence import (
     compute_sequence_parallel_group_id,
     compute_step_id,
 )
+from attribution_platform.correlation.timing import MAX_GRANULARITY
 from attribution_platform.domain import Evidence, Observation, TimePrecision
 
 #: Default ``CorrelationProvenance.method``/``method_version`` this engine
@@ -520,44 +521,65 @@ def _build_temporal_same_entity_relations(
     for cluster in clusters:
         if len(cluster) < 2:
             continue
-        comparisons: dict[frozenset[str], _TimestampComparison] = {}
-        for member_a in cluster:
-            for member_b in cluster:
-                if member_a >= member_b:
-                    continue
-                pair = frozenset((member_a, member_b))
-                if pair not in pair_grounding:
-                    # G2.1 always produces the full pairwise closure within one
-                    # process-entity cluster; a missing pair here would mean the
-                    # caller's structural_links do not actually reflect one
-                    # coherent cluster -- fail closed rather than guess.
-                    raise CorrelationError(
-                        "construct_behavioral_sequence: SAME_PROCESS_ENTITY cluster "
-                        f"{sorted(cluster)!r} is missing a direct structural link between "
-                        f"{sorted(pair)!r} -- expected the full pairwise closure G2.1 "
-                        "always produces within one process-entity cluster"
-                    )
-                comparisons[pair] = _compare_timestamps(
-                    steps[member_a].observation, steps[member_b].observation
+        # ADR-0003 Amendment C / ADR-0004 C3: G2.1 links one process entity's
+        # steps as a chain in (timestamp, observation_id) order. Every
+        # consecutive pair of that order must be directly grounded; a missing
+        # link means the links do not describe one coherent entity -- fail
+        # closed. (Additional links, e.g. a legacy pairwise closure, are
+        # permitted and simply not needed.)
+        order = sorted(
+            cluster,
+            key=lambda m: (steps[m].observation.timestamp, steps[m].observation.observation_id),
+        )
+        position = {member: i for i, member in enumerate(order)}
+        for member_a, member_b in zip(order, order[1:], strict=False):
+            if frozenset((member_a, member_b)) not in pair_grounding:
+                raise CorrelationError(
+                    "construct_behavioral_sequence: SAME_PROCESS_ENTITY cluster "
+                    f"{sorted(cluster)!r} has no direct structural link between consecutive "
+                    f"steps {member_a!r} and {member_b!r} -- the links do not form the chain "
+                    "G2.1 produces for one process entity"
                 )
 
-        tie_pairs = [
-            _sorted_pair(pair)
-            for pair, comparison in comparisons.items()
-            if comparison.kind in ("equal", "coarse_tie")
-        ]
-        buckets = _union_find_components(sorted(cluster), tie_pairs)
+        # Ties (ADR-0004 D6) are only possible between timestamps less than the
+        # coarsest declared granularity apart, so comparing within that window
+        # finds every tie exactly; pairs further apart are strictly ordered in
+        # sorted order.
+        comparisons: dict[frozenset[str], _TimestampComparison] = {}
+        tie_pairs: list[tuple[str, str]] = []
+        for i, member_a in enumerate(order):
+            obs_a = steps[member_a].observation
+            for member_b in order[i + 1 :]:
+                obs_b = steps[member_b].observation
+                if obs_b.timestamp - obs_a.timestamp >= MAX_GRANULARITY:
+                    break
+                comparison = _compare_timestamps(obs_a, obs_b)
+                comparisons[frozenset((member_a, member_b))] = comparison
+                if comparison.kind in ("equal", "coarse_tie"):
+                    tie_pairs.append(_sorted_pair(frozenset((member_a, member_b))))
+                elif comparison.kind != "a_before_b":
+                    raise CorrelationError(
+                        "construct_behavioral_sequence: internal inconsistency -- steps "
+                        f"{member_a!r}/{member_b!r} compare against their timestamp order"
+                    )
+        buckets = _union_find_components(order, tie_pairs)
 
-        # Defensive transitivity check: every pair within one bucket must be
-        # pairwise tied -- a non-transitive tie (A~B, B~C, but A!~C) would be a
-        # genuine inconsistency this engine must not silently paper over.
+        # A bucket must be a contiguous run of the order and pairwise tied;
+        # otherwise the tie relation is non-transitive -- fail closed, never
+        # linearize (ADR-0004 D6).
         for bucket in buckets:
+            indices = sorted(position[m] for m in bucket)
+            if indices != list(range(indices[0], indices[-1] + 1)):
+                raise CorrelationError(
+                    "construct_behavioral_sequence: non-transitive timestamp order "
+                    f"detected across SAME_PROCESS_ENTITY cluster {sorted(cluster)!r} buckets"
+                )
             for member_a in bucket:
                 for member_b in bucket:
                     if member_a >= member_b:
                         continue
-                    comparison = comparisons[frozenset((member_a, member_b))]
-                    if comparison.kind not in ("equal", "coarse_tie"):
+                    tie = comparisons.get(frozenset((member_a, member_b)))
+                    if tie is None or tie.kind not in ("equal", "coarse_tie"):
                         raise CorrelationError(
                             "construct_behavioral_sequence: non-transitive timestamp tie "
                             f"detected within SAME_PROCESS_ENTITY cluster {sorted(cluster)!r} "
@@ -565,62 +587,37 @@ def _build_temporal_same_entity_relations(
                             "both being tied with a common other member"
                         )
 
-        bucket_order = sorted(
-            buckets, key=lambda bucket: min(steps[m].observation.timestamp for m in bucket)
-        )
-        # Defensive cross-bucket consistency check: for every pair spanning
-        # two different buckets, the pair's own pairwise comparison (computed
-        # independently, above) must agree that the member in the
-        # earlier-ordered bucket really does precede the member in the
-        # later-ordered bucket. Real timestamp comparison is transitive, so
-        # this should never trigger for genuine data; it exists as a
-        # fail-closed guard against a hypothetical precision-truncation
-        # inconsistency, rather than silently trusting the derived order.
-        for i, bucket_i in enumerate(bucket_order):
-            for bucket_j in bucket_order[i + 1 :]:
-                for member_i in bucket_i:
-                    for member_j in bucket_j:
-                        lo, hi = sorted((member_i, member_j))
-                        kind = comparisons[frozenset((lo, hi))].kind
-                        if kind not in ("a_before_b", "b_before_a"):
-                            raise CorrelationError(
-                                "construct_behavioral_sequence: internal inconsistency -- "
-                                f"cross-bucket pair {lo!r}/{hi!r} was expected to be strictly "
-                                "ordered, not tied"
-                            )
-                        lo_is_before_hi = kind == "a_before_b"
-                        member_i_is_before_member_j = (
-                            lo_is_before_hi if lo == member_i else not lo_is_before_hi
-                        )
-                        if not member_i_is_before_member_j:
-                            raise CorrelationError(
-                                "construct_behavioral_sequence: non-transitive timestamp "
-                                f"order detected across SAME_PROCESS_ENTITY cluster "
-                                f"{sorted(cluster)!r} buckets -- pairwise comparisons are "
-                                "inconsistent with the derived bucket order"
-                            )
+        bucket_order = sorted(buckets, key=lambda bucket: min(position[m] for m in bucket))
+        ordered_buckets = [sorted(bucket, key=position.__getitem__) for bucket in bucket_order]
 
-        for bucket in buckets:
-            for member_a in sorted(bucket):
-                for member_b in sorted(bucket):
+        def chain_link(
+            later: str, order: list[str] = order, position: dict[str, int] = position
+        ) -> CorrelationLink:
+            """The chain link joining ``later`` to its predecessor."""
+            previous = order[position[later] - 1]
+            return pair_grounding[frozenset((previous, later))]
+
+        for run in ordered_buckets:
+            for member_a in run:
+                for member_b in run:
                     if member_a >= member_b:
                         continue
-                    link = pair_grounding[frozenset((member_a, member_b))]
+                    later = max(member_a, member_b, key=position.__getitem__)
+                    link = chain_link(later)
                     comparison = comparisons[frozenset((member_a, member_b))]
                     reason = (
                         GapReason.EQUAL_TIMESTAMPS
                         if comparison.kind == "equal"
                         else GapReason.COARSE_PRECISION_TIE
                     )
-                    gap_id = compute_sequence_gap_id(
-                        step_id_a=member_a,
-                        step_id_b=member_b,
-                        reason=reason,
-                        grounding_link_id=link.link_id,
-                    )
                     gaps.append(
                         SequenceGap(
-                            gap_id=gap_id,
+                            gap_id=compute_sequence_gap_id(
+                                step_id_a=member_a,
+                                step_id_b=member_b,
+                                reason=reason,
+                                grounding_link_id=link.link_id,
+                            ),
                             step_id_a=member_a,
                             step_id_b=member_b,
                             grounding_link_id=link.link_id,
@@ -628,32 +625,33 @@ def _build_temporal_same_entity_relations(
                         )
                     )
 
-        for i in range(len(bucket_order) - 1):
-            for member_from in sorted(bucket_order[i]):
-                for member_to in sorted(bucket_order[i + 1]):
-                    # member_from truly precedes member_to: the defensive
-                    # cross-bucket check above already confirmed every pair
-                    # spanning bucket_order[i] -> bucket_order[i + 1] agrees
-                    # with this direction, so no re-derivation is needed here.
-                    link = pair_grounding[frozenset((member_from, member_to))]
-                    comparison = comparisons[frozenset((member_from, member_to))]
-                    from_step_id, to_step_id = member_from, member_to
+        for earlier, later_bucket in zip(ordered_buckets, ordered_buckets[1:], strict=False):
+            # Every consecutive-bucket edge is grounded by the chain link that
+            # crosses the bucket boundary -- the direct link between the two
+            # steps when both buckets are single steps (the usual case).
+            link = chain_link(later_bucket[0])
+            for member_from in earlier:
+                for member_to in later_bucket:
+                    edge_comparison = comparisons.get(
+                        frozenset((member_from, member_to))
+                    ) or _compare_timestamps(
+                        steps[member_from].observation, steps[member_to].observation
+                    )
                     basis = OrderingBasis(
                         basis_kind=OrderingBasisKind.TEMPORAL_SAME_ENTITY,
                         grounding_link_id=link.link_id,
-                        precision_uncertain=comparison.precision_uncertain,
-                    )
-                    edge_id = compute_sequence_edge_id(
-                        from_step_id=from_step_id,
-                        to_step_id=to_step_id,
-                        basis_kind=OrderingBasisKind.TEMPORAL_SAME_ENTITY,
-                        grounding_link_id=link.link_id,
+                        precision_uncertain=edge_comparison.precision_uncertain,
                     )
                     edges.append(
                         SequenceEdge(
-                            edge_id=edge_id,
-                            from_step_id=from_step_id,
-                            to_step_id=to_step_id,
+                            edge_id=compute_sequence_edge_id(
+                                from_step_id=member_from,
+                                to_step_id=member_to,
+                                basis_kind=OrderingBasisKind.TEMPORAL_SAME_ENTITY,
+                                grounding_link_id=link.link_id,
+                            ),
+                            from_step_id=member_from,
+                            to_step_id=member_to,
                             basis=basis,
                         )
                     )

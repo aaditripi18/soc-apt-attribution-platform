@@ -54,6 +54,11 @@ from attribution_platform.correlation import (
     contextualize,
     correlate_structurally,
 )
+from attribution_platform.correlation.contracts import (
+    LinkClass,
+    build_correlation_group,
+    compute_link_id,
+)
 from attribution_platform.correlation.sequence import GapReason, OrderingBasisKind
 from attribution_platform.domain import (
     AttackRef,
@@ -787,13 +792,49 @@ def test_method_content_hash_changes_sequence_id() -> None:
 # ===========================================================================
 
 
-def test_ambiguous_process_lineage_grounding_fails_closed() -> None:
-    """O1 matches two rules (E1, E2 -- SHARED_OBSERVATION-collapsed into one
-    step) and is the lineage parent of a third Evidence's Observation. G2.1
-    independently produces a PROCESS_LINEAGE link from *each* of E1 and E2
-    to the child, so after collapse two distinct, equally-real structural
-    links resolve to the same directed step-level pair. ADR-0004 specifies
-    no tie-break for this -- the engine must fail closed, not guess."""
+def _with_duplicate_link(
+    group: CorrelationGroup,
+    links: tuple[CorrelationLink, ...],
+    contextual: tuple[CorrelationLink, ...],
+    template: CorrelationLink,
+    anchor: str,
+    other: str,
+) -> tuple[CorrelationGroup, tuple[CorrelationLink, ...]]:
+    """``group`` plus a second, distinct link of ``template``'s class from
+    ``anchor`` to ``template``'s other endpoint -- hand-built, because G2.1
+    (ADR-0003 Amendment C) no longer produces such duplicates itself."""
+    duplicate = CorrelationLink(
+        link_id=compute_link_id(
+            link_class=template.link_class,
+            observed_value=template.basis.observed_value,
+            anchor_a=anchor,
+            anchor_b=other,
+        ),
+        anchor_a=anchor,
+        anchor_b=other,
+        link_class=template.link_class,
+        basis=template.basis,
+        provenance=template.provenance,
+    )
+    all_links = (*links, duplicate)
+    rebuilt = build_correlation_group(
+        group_id=group.group_id,
+        member_evidence_ids=group.member_evidence_ids,
+        member_observation_ids=group.member_observation_ids,
+        structural_links=all_links,
+        provenance=group.provenance,
+        contextual_links=contextual,
+    )
+    return rebuilt, all_links
+
+
+def test_multi_technique_parent_yields_one_lineage_link_and_a_sequence() -> None:
+    """O1 matches two rules (E1, E2 -- one step after SHARED_OBSERVATION
+    collapse) and is the lineage parent of a third Evidence's Observation.
+    Under the old pairwise materialization G2.1 produced a PROCESS_LINEAGE link
+    from *each* of E1 and E2, which made the sequence engine fail on this
+    everyday case; ADR-0003 Amendment C links one representative per side, so
+    there is exactly one lineage edge."""
     host = HostRef(id="H1")
     obs_p = _obs("obs-p", host=host, process=ProcessRef(entity_id="{P}"))
     obs_c = _obs("obs-c", host=host, process=ProcessRef(parent_entity_id="{P}", entity_id="{C}"))
@@ -803,18 +844,41 @@ def test_ambiguous_process_lineage_grounding_fails_closed() -> None:
         _pair("ev-c", obs_c),
     ]
     group, structural_links, contextual_links = _build(items)
+    lineage = [link for link in structural_links if link.link_class is LinkClass.PROCESS_LINEAGE]
+    assert len(lineage) == 1
+    sequence = construct_behavioral_sequence(group, items, structural_links, contextual_links)
+    lineage_edges = [
+        e for e in sequence.edges if e.basis.basis_kind is OrderingBasisKind.PROCESS_LINEAGE
+    ]
+    assert len(lineage_edges) == 1
 
+
+def test_ambiguous_process_lineage_grounding_still_fails_closed() -> None:
+    """The engine's own guard is unchanged: two distinct lineage links that
+    resolve to one step pair (hand-built) are refused, never tie-broken."""
+    host = HostRef(id="H1")
+    obs_p = _obs("obs-p", host=host, process=ProcessRef(entity_id="{P}"))
+    obs_c = _obs("obs-c", host=host, process=ProcessRef(parent_entity_id="{P}", entity_id="{C}"))
+    items = [
+        _pair("ev-p1", obs_p, rule_id="rule-a"),
+        _pair("ev-p2", obs_p, rule_id="rule-b"),
+        _pair("ev-c", obs_c),
+    ]
+    group, structural_links, contextual_links = _build(items)
+    (lineage,) = [x for x in structural_links if x.link_class is LinkClass.PROCESS_LINEAGE]
+    unused_parent = ({"ev-p1", "ev-p2"} - {lineage.anchor_a, lineage.anchor_b}).pop()
+    group, links = _with_duplicate_link(
+        group, structural_links, contextual_links, lineage, unused_parent, "ev-c"
+    )
     with pytest.raises(CorrelationError, match="ambiguous PROCESS_LINEAGE"):
-        construct_behavioral_sequence(group, items, structural_links, contextual_links)
+        construct_behavioral_sequence(group, items, links, contextual_links)
 
 
-def test_ambiguous_same_process_entity_grounding_fails_closed() -> None:
-    """Two Observations (O1, O2) genuinely share one process-entity id (the
-    same running process, described twice), and each Observation itself
-    matches two rules (SHARED_OBSERVATION-collapsed into one step each).
-    G2.1's full pairwise SAME_PROCESS_ENTITY closure then yields four
-    distinct structural links, all resolving to the same step-level pair
-    after collapse -- another instance of the same found ambiguity."""
+def test_multi_technique_steps_of_one_process_yield_one_chain_link() -> None:
+    """Two Observations of one process, each matching two rules. The old
+    pairwise closure gave four links for one step pair and the engine failed;
+    the Amendment C chain gives exactly one link across the two steps, and the
+    sequence orders them."""
     host = HostRef(id="H1")
     obs_1 = _obs("obs-1", host=host, process=ProcessRef(entity_id="{X}"), timestamp=T0)
     obs_2 = _obs(
@@ -827,9 +891,37 @@ def test_ambiguous_same_process_entity_grounding_fails_closed() -> None:
         _pair("ev-2b", obs_2, rule_id="rule-b"),
     ]
     group, structural_links, contextual_links = _build(items)
+    same_entity = [
+        link for link in structural_links if link.link_class is LinkClass.SAME_PROCESS_ENTITY
+    ]
+    assert len(same_entity) == 3  # the chain ev-1a - ev-1b - ev-2a - ev-2b
+    sequence = construct_behavioral_sequence(group, items, structural_links, contextual_links)
+    assert len(sequence.edges) == 1 and sequence.gaps == ()
 
+
+def test_ambiguous_same_process_entity_grounding_still_fails_closed() -> None:
+    host = HostRef(id="H1")
+    obs_1 = _obs("obs-1", host=host, process=ProcessRef(entity_id="{X}"), timestamp=T0)
+    obs_2 = _obs(
+        "obs-2", host=host, process=ProcessRef(entity_id="{X}"), timestamp=T0.replace(second=1)
+    )
+    items = [
+        _pair("ev-1a", obs_1, rule_id="rule-a"),
+        _pair("ev-1b", obs_1, rule_id="rule-b"),
+        _pair("ev-2a", obs_2, rule_id="rule-a"),
+    ]
+    group, structural_links, contextual_links = _build(items)
+    crossing = next(
+        x
+        for x in structural_links
+        if x.link_class is LinkClass.SAME_PROCESS_ENTITY and "ev-2a" in (x.anchor_a, x.anchor_b)
+    )
+    other_step_member = ({"ev-1a", "ev-1b"} - {crossing.anchor_a, crossing.anchor_b}).pop()
+    group, links = _with_duplicate_link(
+        group, structural_links, contextual_links, crossing, other_step_member, "ev-2a"
+    )
     with pytest.raises(CorrelationError, match="ambiguous SAME_PROCESS_ENTITY"):
-        construct_behavioral_sequence(group, items, structural_links, contextual_links)
+        construct_behavioral_sequence(group, items, links, contextual_links)
 
 
 def test_missing_item_is_rejected() -> None:
