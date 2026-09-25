@@ -33,6 +33,7 @@ from attribution_platform.detection_content.sigma_import import (
     SigmaImportError,
     SigmaImportResult,
     import_sigma_archive,
+    load_software_tag_review,
 )
 from attribution_platform.domain import (
     EventMetadata,
@@ -50,6 +51,7 @@ ARCHIVE = RELEASE_DIR / MANIFEST["artifact"]["filename"]
 GENERATED = RELEASE_DIR / "generated"
 PACK_PATH = GENERATED / "sigma-r2026-07-01-sigma_core++.rules.json"
 REPORT_PATH = GENERATED / "sigma-r2026-07-01-sigma_core++.import-report.json"
+REVIEW_PATH = RELEASE_DIR / "software-tag-review.json"
 
 
 @pytest.fixture(scope="module")
@@ -81,19 +83,28 @@ def _rule_yaml(
 
 
 def _import(
-    tmp_path: Path, knowledge: AttackKnowledge, *rules: str, dnf_bound: int = 64
+    tmp_path: Path,
+    knowledge: AttackKnowledge,
+    *rules: str,
+    dnf_bound: int = 64,
+    review: list[dict[str, str]] | None = None,
 ) -> SigmaImportResult:
     archive = tmp_path / "rules.zip"
     with zipfile.ZipFile(archive, "w") as z:
         for i, text in enumerate(rules):
             z.writestr(f"rules/windows/r{i:02d}.yml", text)
     sha = hashlib.sha256(archive.read_bytes()).hexdigest()
+    review_path = None
+    if review is not None:
+        review_path = tmp_path / "review.json"
+        review_path.write_text(json.dumps({"decisions": review}), encoding="utf-8")
     return import_sigma_archive(
         archive,
         knowledge=knowledge,
         release_tag="test-tag",
         archive_sha256=sha,
         dnf_bound=dnf_bound,
+        software_tag_review=review_path,
     )
 
 
@@ -438,20 +449,108 @@ def test_revoked_technique_follows_revoked_by(tmp_path: Path, knowledge: AttackK
     assert "T1156 is revoked, followed ATT&CK revoked-by to T1546.004" in mapping["mapping_basis"]
 
 
-def test_software_tag_maps_to_software(tmp_path: Path, knowledge: AttackKnowledge) -> None:
-    result = _import(
-        tmp_path,
-        knowledge,
-        _rule_yaml(
-            "sel:\n  Image|endswith: '\\a.exe'\ncondition: sel",
-            tags=("attack.t1003.001", "attack.s0002"),
-        ),
-    )
-    types = {
+_SOFTWARE_RULE = _rule_yaml(
+    "sel:\n  Image|endswith: '\\a.exe'\ncondition: sel",
+    tags=("attack.t1003.001", "attack.s0002"),
+)
+_RULE_ID = "11111111-1111-1111-1111-111111111111"
+
+
+def _mapping_types(result: SigmaImportResult) -> dict[str, str]:
+    return {
         m["external_id"]: m["object_type"] for m in result.pack["rules"][0]["technique_mappings"]
     }
+
+
+def test_unreviewed_software_tag_is_not_evidence(
+    tmp_path: Path, knowledge: AttackKnowledge
+) -> None:
+    """ADR-0007 D3 amendment: without a reviewed acceptance, a software tag is
+    recorded and ignored (tool identity is strong evidence; authors' tags are
+    often wrong). The technique tag still maps."""
+    reviews: tuple[list[dict[str, str]] | None, ...] = (None, [])
+    for review in reviews:
+        result = _import(tmp_path, knowledge, _SOFTWARE_RULE, review=review)
+        assert _mapping_types(result) == {"T1003.001": "attack-pattern"}
+        assert _outcome(result)["ignored_software_tags"] == ["attack.s0002"]
+
+
+def test_rejected_software_tag_is_not_evidence(tmp_path: Path, knowledge: AttackKnowledge) -> None:
+    review = [{"sigma_id": _RULE_ID, "tag": "attack.s0002", "decision": "reject", "reason": "x"}]
+    result = _import(tmp_path, knowledge, _SOFTWARE_RULE, review=review)
+    assert _mapping_types(result) == {"T1003.001": "attack-pattern"}
+
+
+def test_accepted_software_tag_maps_to_software(tmp_path: Path, knowledge: AttackKnowledge) -> None:
+    review = [{"sigma_id": _RULE_ID, "tag": "attack.s0002", "decision": "accept", "reason": "x"}]
+    result = _import(tmp_path, knowledge, _SOFTWARE_RULE, review=review)
+    types = _mapping_types(result)
     assert types["T1003.001"] == "attack-pattern"
     assert types["S0002"] in {"malware", "tool"}
+    assert _outcome(result)["ignored_software_tags"] == []
+
+
+def test_acceptance_is_per_rule(tmp_path: Path, knowledge: AttackKnowledge) -> None:
+    other = _rule_yaml(
+        "sel:\n  Image|endswith: '\\b.exe'\ncondition: sel",
+        rule_id="22222222-2222-2222-2222-222222222222",
+        tags=("attack.t1003.001", "attack.s0002"),
+    )
+    review = [{"sigma_id": _RULE_ID, "tag": "attack.s0002", "decision": "accept", "reason": "x"}]
+    result = _import(tmp_path, knowledge, _SOFTWARE_RULE, other, review=review)
+    by_rule = {
+        r["rule_family"]: {m["external_id"] for m in r["technique_mappings"]}
+        for r in result.pack["rules"]
+    }
+    assert by_rule[f"sigma:{_RULE_ID}"] == {"T1003.001", "S0002"}
+    assert by_rule["sigma:22222222-2222-2222-2222-222222222222"] == {"T1003.001"}
+
+
+@pytest.mark.parametrize(
+    ("decisions", "match"),
+    [
+        (
+            [
+                {"sigma_id": "a", "tag": "attack.s0002", "decision": "accept", "reason": "x"},
+                {"sigma_id": "a", "tag": "attack.s0002", "decision": "reject", "reason": "y"},
+            ],
+            "duplicate",
+        ),
+        ([{"sigma_id": "a", "tag": "attack.s0002", "decision": "maybe", "reason": "x"}], "accept"),
+        ([{"sigma_id": "a", "tag": "attack.s0002", "decision": "accept", "reason": " "}], "reason"),
+    ],
+)
+def test_review_file_fails_closed(
+    tmp_path: Path, decisions: list[dict[str, str]], match: str
+) -> None:
+    path = tmp_path / "review.json"
+    path.write_text(json.dumps({"decisions": decisions}), encoding="utf-8")
+    with pytest.raises(SigmaImportError, match=match):
+        load_software_tag_review(path)
+
+
+def test_real_review_covers_every_imported_software_tag_and_is_applied() -> None:
+    """Completeness: every software tag on an imported rule of this release has
+    a reviewed decision with a reason, and the pack carries exactly the accepted ones."""
+    review = json.loads(REVIEW_PATH.read_text(encoding="utf-8"))
+    decided = {(d["sigma_id"], d["tag"]) for d in review["decisions"]}
+    assert all(d["reason"].strip() for d in review["decisions"])
+    report = json.loads(REPORT_PATH.read_text(encoding="utf-8"))
+    for row in report["rules"]:
+        if row["status"] == "rejected":
+            continue
+        for tag in row["ignored_software_tags"]:
+            assert (row["sigma_id"], tag) in decided, (row["title"], tag)
+    accepted = {(d["sigma_id"], d["tag"]) for d in review["decisions"] if d["decision"] == "accept"}
+    pack = json.loads(PACK_PATH.read_text(encoding="utf-8"))
+    in_pack = {
+        (r["rule_family"].removeprefix("sigma:"), "attack." + m["external_id"].lower())
+        for r in pack["rules"]
+        for m in r["technique_mappings"]
+        if m["object_type"] != "attack-pattern"
+    }
+    assert in_pack == accepted
+    assert len(accepted) == 10
 
 
 # ===========================================================================
@@ -510,6 +609,7 @@ def test_committed_pack_and_report_regenerate_byte_identically(
         knowledge=knowledge,
         release_tag="r2026-07-01",
         archive_sha256=MANIFEST["artifact"]["sha256"],
+        software_tag_review=REVIEW_PATH,
     )
     assert _render(result.pack) == PACK_PATH.read_text(encoding="utf-8")
     assert _render(result.report) == REPORT_PATH.read_text(encoding="utf-8")

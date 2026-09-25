@@ -334,3 +334,29 @@ against `enterprise-attack-19.2` (doc 11 §0.1). Production detection content is
 all covered by Sigma). Coverage: 176 active Groups, 188 of 498 Group-used techniques covered, 161 Groups with
 ≥ 2 covered techniques.
 
+
+**D3 amendment — Sigma software tags are not evidence unless reviewed (2026-09-25, owner-delegated).**
+
+- *Finding (real data):* the 22 imported rules carrying an `attack.sNNNN` tag were reviewed against their
+  detection logic; **12 name a tool the rule does not identify** (NirCmd, RemCom, CSExec, RunXCmd tagged PsExec;
+  generic LSASS rules — WerFault, WinRM, "dump" in the image name — tagged Mimikatz; a CrackMapExec rule tagged
+  cmd; a Python-ctypes rule tagged LaZagne; an HTRAN rule that also matches `lcx.exe`; an esentutl rule whose
+  sensitive-path branch fires without esentutl). On the real Dumpert LSASS sample, a Mimikatz (S0002) mapping
+  would have been produced for a tool that is not Mimikatz.
+- *Why it matters:* software identity is strong attribution evidence (a specific tool is often used by few
+  Groups, so its `D` is high). A wrong tool tag injects false high-diagnosticity evidence and biases candidates
+  towards Groups known for that tool.
+- *Decision:* D3's "`attack.sNNNN` → the malware/tool object" is replaced by: a software tag becomes a mapping
+  **only if** the release's reviewed decision file (`data/detection/sigma/<tag>/software-tag-review.json`)
+  accepts it **for that rule**; accepted only when every branch of the rule's logic identifies that specific
+  tool. Unreviewed or rejected software tags are recorded per rule (`ignored_software_tags`) and ignored, like
+  Group tags. Without a review file no software tag maps (safe default). Technique tags are unchanged. The
+  review file's hash and accepted pairs are stamped into the pack provenance (importer 1.3).
+- *Result for `r2026-07-01`:* 22 decisions (10 accept, 12 reject, each with a reason); 45 software tags ignored
+  across the archive; the pack carries exactly the 10 accepted mappings; technique coverage unchanged (210 of
+  498 Group-used techniques). One rule — Zeek "Default Cobalt Strike Certificate" (S0154) — lost its only
+  mapping; Zeek is not supported yet, and its tag looks specific, so it is to be reviewed with Wave 2.
+- *Tests:* unreviewed/rejected tags never map; acceptance is per rule; the review file fails closed (duplicate,
+  bad decision, missing reason); every imported software-tagged rule has a decision; the real Dumpert sample is
+  detected as T1003.001 without any Mimikatz mapping; both real LSASS dumps (comsvcs, Dumpert) are detected by
+  ≥ 4 independent rules each.

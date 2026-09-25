@@ -33,6 +33,7 @@ from __future__ import annotations
 import enum
 import hashlib
 import io
+import json
 import zipfile
 from collections.abc import Iterable, Mapping
 from dataclasses import dataclass, field
@@ -69,7 +70,7 @@ from attribution_platform.detection_content.sigma_field_map import (
 )
 
 IMPORTER_METHOD = "sigma-importer"
-IMPORTER_VERSION = "1.2"
+IMPORTER_VERSION = "1.3"
 
 #: ADR-0007 D6: maximum DNF conjuncts per Sigma rule. A documented,
 #: reproducibility-frozen importer input — rules above it are rejected whole.
@@ -166,6 +167,7 @@ class RuleOutcome:
     rejection: RejectionReason | None = None
     technique_ids: tuple[str, ...] = ()
     ignored_group_tags: tuple[str, ...] = ()
+    ignored_software_tags: tuple[str, ...] = ()
     dropped_tags: tuple[str, ...] = ()
 
     def to_json(self, release_tag: str) -> dict[str, Any]:
@@ -183,6 +185,7 @@ class RuleOutcome:
             "gap_reasons": dict(sorted(self.reasons.items())),
             "attack_ids": list(self.technique_ids),
             "ignored_group_tags": list(self.ignored_group_tags),
+            "ignored_software_tags": list(self.ignored_software_tags),
             "dropped_tags": list(self.dropped_tags),
         }
 
@@ -254,11 +257,34 @@ class _AttackIndex:
         )
 
 
+def load_software_tag_review(path: Path) -> dict[tuple[str, str], bool]:
+    """Load the reviewed software-tag decisions (ADR-0007 D3 amendment):
+    ``(sigma_id, tag) -> accepted``. Fails closed on a malformed file, a
+    duplicate decision, an unknown decision value, or a missing reason."""
+    data = json.loads(path.read_text(encoding="utf-8"))
+    decisions: dict[tuple[str, str], bool] = {}
+    for entry in data.get("decisions", []):
+        key = (str(entry["sigma_id"]), str(entry["tag"]).lower())
+        if key in decisions:
+            raise SigmaImportError(f"{path}: duplicate software-tag decision for {key}")
+        if entry.get("decision") not in ("accept", "reject"):
+            raise SigmaImportError(f"{path}: decision for {key} must be 'accept' or 'reject'")
+        if not str(entry.get("reason", "")).strip():
+            raise SigmaImportError(f"{path}: decision for {key} has no reason")
+        decisions[key] = entry["decision"] == "accept"
+    return decisions
+
+
 def _resolve_tags(
-    tags: Iterable[str], index: _AttackIndex
-) -> tuple[list[ResolvedMapping], list[str], list[str]]:
+    tags: Iterable[str],
+    index: _AttackIndex,
+    *,
+    sigma_id: str,
+    software_review: Mapping[tuple[str, str], bool],
+) -> tuple[list[ResolvedMapping], list[str], list[str], list[str]]:
     mappings: dict[str, ResolvedMapping] = {}
     ignored_groups: list[str] = []
+    ignored_software: list[str] = []
     dropped: list[str] = []
     for tag in tags:
         namespace, _, name = tag.partition(".")
@@ -267,6 +293,12 @@ def _resolve_tags(
         prefix = name[0].lower()
         if prefix == "g":
             ignored_groups.append(tag)
+            continue
+        if prefix == "s" and not software_review.get((sigma_id, tag.lower()), False):
+            # A software tag is the rule author's claim about *which tool*, and
+            # tool identity is strong attribution evidence; it counts only when
+            # the reviewed decision file accepts it for this rule.
+            ignored_software.append(tag)
             continue
         if prefix not in ("t", "s"):
             continue
@@ -282,6 +314,7 @@ def _resolve_tags(
     return (
         [mappings[k] for k in sorted(mappings)],
         sorted(ignored_groups),
+        sorted(ignored_software),
         sorted(dropped),
     )
 
@@ -397,6 +430,7 @@ def _import_rule(
     attack_kb_version: str,
     release_tag: str,
     bound: int,
+    software_review: Mapping[tuple[str, str], bool],
 ) -> tuple[RuleOutcome, list[dict[str, Any]]]:
     sigma_id = str(rule.id)
     product, category = _logsource_key(rule)
@@ -414,7 +448,10 @@ def _import_rule(
         outcome.reasons = {f"policy:{status or 'none'}/{level or 'none'}": 1}
         return outcome, []
 
-    mappings, ignored_groups, dropped = _resolve_tags((str(t) for t in rule.tags), index)
+    mappings, ignored_groups, ignored_software, dropped = _resolve_tags(
+        (str(t) for t in rule.tags), index, sigma_id=sigma_id, software_review=software_review
+    )
+    outcome.ignored_software_tags = tuple(ignored_software)
     outcome.technique_ids = tuple(m.external_id for m in mappings)
     outcome.ignored_group_tags = tuple(ignored_groups)
     outcome.dropped_tags = tuple(dropped)
@@ -516,10 +553,18 @@ def import_sigma_archive(
     release_tag: str,
     archive_sha256: str,
     dnf_bound: int = DEFAULT_DNF_BOUND,
+    software_tag_review: Path | None = None,
 ) -> SigmaImportResult:
     """Import every rule in the pinned archive. Returns the rule pack (loadable
     by ``detection.load_rule_pack``) and the import report. Pure function of
-    its inputs; nothing is written here."""
+    its inputs; nothing is written here.
+
+    ``software_tag_review`` is the reviewed decision file for Sigma software
+    tags (ADR-0007 D3 amendment). Without it, **no** software tag becomes a
+    mapping — the safe default."""
+    software_review = (
+        load_software_tag_review(software_tag_review) if software_tag_review is not None else {}
+    )
     if dnf_bound < 1:
         raise SigmaImportError("dnf_bound must be >= 1")
     raw = archive_path.read_bytes()
@@ -557,6 +602,7 @@ def import_sigma_archive(
                 attack_kb_version=knowledge.attack_kb_version,
                 release_tag=release_tag,
                 bound=dnf_bound,
+                software_review=software_review,
             )
             outcomes.append(outcome)
             rules.extend(rule_dicts)
@@ -572,6 +618,17 @@ def import_sigma_archive(
         "field_map_version": FIELD_MAP_VERSION,
         "attack_kb_version": knowledge.attack_kb_version,
         "dnf_bound": dnf_bound,
+        "software_tag_review": (
+            {
+                "file": software_tag_review.name,
+                "sha256": hashlib.sha256(software_tag_review.read_bytes()).hexdigest(),
+                "accepted": sorted(
+                    f"{sid}:{tag}" for (sid, tag), accepted in software_review.items() if accepted
+                ),
+            }
+            if software_tag_review is not None
+            else None
+        ),
         "license": "Sigma rules: Detection Rule License (DRL) 1.1 — see NOTICE.md",
     }
     pack = {
@@ -604,6 +661,7 @@ def import_sigma_archive(
             "generated_rules": len(rules),
             "attack_ids_with_imported_rule": len(covered),
             "group_tags_ignored": sum(len(o.ignored_group_tags) for o in outcomes),
+            "software_tags_ignored": sum(len(o.ignored_software_tags) for o in outcomes),
         },
         "gap_reasons": dict(sorted(reason_counts.items(), key=lambda kv: (-kv[1], kv[0]))),
         "unmapped_field_notes": dict(sorted(UNMAPPED_FIELD_REASONS.items())),

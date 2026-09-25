@@ -447,3 +447,58 @@ def test_lsass_dump_via_comsvcs_is_detected(knowledge: AttackKnowledge) -> None:
     assert [m.attack_ref.external_id for m in detection.technique_mappings] == ["T1003.001"]
     benign = {**record, "CallTrace": "C:\\Windows\\SYSTEM32\\ntdll.dll+9d234"}
     assert engine.evaluate(ADAPTER.to_observations(benign)) == ()
+
+
+# ===========================================================================
+# Real LSASS credential dumps (round-2 samples)
+# ===========================================================================
+
+COMSVCS = SAMPLES_DIR / "psh_lsass_memory_dump_comsvcs.zip"
+DUMPERT = SAMPLES_DIR / "cmd_lsass_memory_dumpert_syscalls.zip"
+
+
+def _detections(knowledge: AttackKnowledge, path: Path) -> list[tuple[str, frozenset[str]]]:
+    engine = DetectionEngine(rules=load_rule_pack(SIGMA_PACK, knowledge=knowledge).rules)
+    observations, _ = _convert_all(path)
+    return sorted(
+        (d.detection_source, frozenset(m.attack_ref.external_id or "" for m in mappings))
+        for d in engine.evaluate(observations)
+        for mappings in [d.technique_mappings]
+    )
+
+
+@pytest.mark.parametrize("path", [COMSVCS, DUMPERT], ids=["comsvcs", "dumpert"])
+def test_real_lsass_dumps_are_detected_as_t1003_001(knowledge: AttackKnowledge, path: Path) -> None:
+    detections = _detections(knowledge, path)
+    assert len(detections) >= 4  # several independent rules, over different evidence
+    assert all("T1003.001" in techniques for _, techniques in detections)
+
+
+def test_real_lsass_access_events_are_converted() -> None:
+    for path, source in (
+        (COMSVCS, "C:\\Windows\\System32\\rundll32.exe"),
+        (DUMPERT, "C:\\Users\\wardog\\Desktop\\Outflank-Dumpert.exe"),
+    ):
+        observations, _ = _convert_all(path)
+        accesses = [
+            o
+            for o in observations
+            if o.target_process is not None
+            and (o.target_process.executable or "").lower().endswith("\\lsass.exe")
+            and o.process is not None
+            and o.process.executable == source
+        ]
+        assert accesses
+        assert any(
+            o.process_access is not None and o.process_access.granted_access == "0x1fffff"
+            for o in accesses
+        )
+
+
+def test_dumpert_is_not_mislabelled_as_mimikatz(knowledge: AttackKnowledge) -> None:
+    """The Sigma rule 'LSASS Memory Access by Tool With Dump Keyword In Name'
+    carries a Mimikatz (S0002) tag, but this real tool is Outflank Dumpert. The
+    reviewed software-tag policy keeps the false tool identity out of evidence."""
+    detections = _detections(knowledge, DUMPERT)
+    assert detections
+    assert not any("S0002" in techniques for _, techniques in detections)

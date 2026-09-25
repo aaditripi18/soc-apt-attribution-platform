@@ -47,6 +47,7 @@ def main() -> int:
         knowledge=load_attack_knowledge(),
         release_tag=args.tag,
         archive_sha256=manifest["artifact"]["sha256"],
+        software_tag_review=release_dir / "software-tag-review.json",
     )
     pack_id = result.pack["pack_id"]
     out_dir = release_dir / "generated"
