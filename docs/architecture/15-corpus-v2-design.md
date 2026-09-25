@@ -223,3 +223,26 @@ After T9: fitting grid / `fitting_procedure_version` → `fitting.py` → frozen
   exactly the two groups they produce alone), with every fail-closed path tested. 18 tests.
 - *Next:* T6 — author S1 plan fixtures from the CTID Adversary Emulation Library (Apache-2.0), a few plans per
   turn, mapped to the now-available Sysmon/PowerShell/Security telemetry and the Sigma pack.
+
+**Source change for S1 and real-data acquisition (2026-09-25).**
+
+- *S1 method change:* generating synthetic scenarios from the CTID plans' commands was stopped by a safety check
+  and is **not** pursued. The corpus is built from **real recorded emulation telemetry** instead (stronger
+  evidence anyway); the pinned CTID plans (commit `4467a6ee`, `data/emulation-plans/ctid/`) remain as
+  documentation for labels, phases and CTI sources, and the micro-plan READMEs describe the S3 behaviours.
+- *Acquired (owner-approved):* OTRF compound recordings, commit `d9d40ef1`, MIT — `scripts/acquire_corpus_telemetry.py`
+  → git-ignored cache `data/cache/otrf-compound/` (119.8 MB compressed, ≈3.7 GB uncompressed; streamed, never
+  extracted), tracked manifest + NOTICE in `data/telemetry-samples/otrf-compound/`:
+  APT29 Evals R2 day 1 / day 2 (783,367 records, 4 hosts; blind population), APT3 Evals R1 replications via
+  CALDERA (101,904 records, 5 hosts) and Empire (121,659 records), 7 LSASS-dumping recordings with 7 common tools
+  (353,229 records; real hard negatives, no actor).
+- *Label provenance:* OTRF's APT3 README names the actor APT3 with STIX id `intrusion-set--0bbdf25b-…` (its
+  "G002" is a typo for G0022) and cites ATT&CK Evaluations Round 1; APT29 is the Evals Round 2 replication.
+- *Findings to handle before building families:* (1) a lower-case `security` channel carries ≈37 k distinct
+  (non-duplicate) Security-Auditing records — Windows channel names are case-insensitive; (2) the Empire APT3
+  recording is the Winlogbeat 6 record shape (top-level `event_data` / `event_id` / `log_name` /
+  `record_number`), which no adapter reads yet; (3) the LSASS recordings' Security records carry only
+  `TimeCreated` (refused, as for round 1) — their Sysmon records carry `UtcTime`.
+- *Honest gap:* public recordings give **two** actors (APT29 blind, APT3). The DC-5 minimum of ≥ 4 calibration
+  actors / ≥ 12 families therefore needs owner-recorded emulations (isolated lab, CTID plans via CALDERA,
+  Sysmon/PowerShell/Security collection); the platform side is ingestion and labelling of those exports.

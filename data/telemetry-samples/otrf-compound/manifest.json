@@ -1,0 +1,235 @@
+{
+  "source": "OTRF Security-Datasets (compound datasets)",
+  "license": "MIT",
+  "license_url": "https://github.com/OTRF/Security-Datasets/blob/d9d40ef123d2c87d5d3df28c96bcab4f0faccc87/LICENSE",
+  "source_repository": "OTRF/Security-Datasets",
+  "source_commit": "d9d40ef123d2c87d5d3df28c96bcab4f0faccc87",
+  "retrieved_at_utc": "2026-09-25T08:15:00Z",
+  "method": "scripts/acquire_corpus_telemetry.py (commit-pinned raw URLs, size-checked against the GitHub tree API; archives inspected as data, never extracted)",
+  "cache": "data/cache/otrf-compound/ (git-ignored; rebuild with this script)",
+  "files": [
+    {
+      "source_path": "datasets/compound/LSASS_campaign_01/metasploit_logonpasswords_lsass_memory_dump.zip",
+      "cache_path": "data/cache/otrf-compound/LSASS_campaign_01/metasploit_logonpasswords_lsass_memory_dump.zip",
+      "size_bytes": 3405389,
+      "sha256": "79045fcc5a8689efed8db4911cadc11b554ef8b0bed1428ee490bb8c3f2578e6",
+      "members": [
+        {
+          "name": "metasploit_logonpasswords_lsass_memory_dump.json",
+          "size_bytes": 106496231
+        }
+      ],
+      "download_url": "https://raw.githubusercontent.com/OTRF/Security-Datasets/d9d40ef123d2c87d5d3df28c96bcab4f0faccc87/datasets/compound/LSASS_campaign_01/metasploit_logonpasswords_lsass_memory_dump.zip"
+    },
+    {
+      "source_path": "datasets/compound/LSASS_campaign_02/metasploit_procdump_lsass_memory_dump.zip",
+      "cache_path": "data/cache/otrf-compound/LSASS_campaign_02/metasploit_procdump_lsass_memory_dump.zip",
+      "size_bytes": 2551462,
+      "sha256": "2b32f11b1465f49df8bb4040652b001e4bb8a92de6ae7e84c2977abe68273f04",
+      "members": [
+        {
+          "name": "metasploit_procdump_lsass_memory_dump.json",
+          "size_bytes": 88049651
+        }
+      ],
+      "download_url": "https://raw.githubusercontent.com/OTRF/Security-Datasets/d9d40ef123d2c87d5d3df28c96bcab4f0faccc87/datasets/compound/LSASS_campaign_02/metasploit_procdump_lsass_memory_dump.zip"
+    },
+    {
+      "source_path": "datasets/compound/LSASS_campaign_03/metasploit_comsvcs_lsass_memory_dump.zip",
+      "cache_path": "data/cache/otrf-compound/LSASS_campaign_03/metasploit_comsvcs_lsass_memory_dump.zip",
+      "size_bytes": 2332754,
+      "sha256": "97a834cd72b0803d544c62cc45a41b18a4cc04a605735096be4bc5dad5e9fe7b",
+      "members": [
+        {
+          "name": "metasploit_comsvcs_lsass_memory_dump.json",
+          "size_bytes": 89445270
+        }
+      ],
+      "download_url": "https://raw.githubusercontent.com/OTRF/Security-Datasets/d9d40ef123d2c87d5d3df28c96bcab4f0faccc87/datasets/compound/LSASS_campaign_03/metasploit_comsvcs_lsass_memory_dump.zip"
+    },
+    {
+      "source_path": "datasets/compound/LSASS_campaign_04/metasploit_out-minidump_lsass_memory_dump.zip",
+      "cache_path": "data/cache/otrf-compound/LSASS_campaign_04/metasploit_out-minidump_lsass_memory_dump.zip",
+      "size_bytes": 2431111,
+      "sha256": "d6150eab4013ed0a7fc9c6b7266187214706c543c9dc3a370603f524def5de63",
+      "members": [
+        {
+          "name": "metasploit_out-minidump_lsass_memory_dump.json",
+          "size_bytes": 82589181
+        }
+      ],
+      "download_url": "https://raw.githubusercontent.com/OTRF/Security-Datasets/d9d40ef123d2c87d5d3df28c96bcab4f0faccc87/datasets/compound/LSASS_campaign_04/metasploit_out-minidump_lsass_memory_dump.zip"
+    },
+    {
+      "source_path": "datasets/compound/LSASS_campaign_05/metasploit_sharpdump_lsass_memory_dump.zip",
+      "cache_path": "data/cache/otrf-compound/LSASS_campaign_05/metasploit_sharpdump_lsass_memory_dump.zip",
+      "size_bytes": 3428302,
+      "sha256": "79e347b411beefaf5c7d0c951fdcb9d308fce20f8eabe666c11fa7b6165053b8",
+      "members": [
+        {
+          "name": "metasploit_sharpdump_lsass_memory_dump.json",
+          "size_bytes": 120231610
+        }
+      ],
+      "download_url": "https://raw.githubusercontent.com/OTRF/Security-Datasets/d9d40ef123d2c87d5d3df28c96bcab4f0faccc87/datasets/compound/LSASS_campaign_05/metasploit_sharpdump_lsass_memory_dump.zip"
+    },
+    {
+      "source_path": "datasets/compound/LSASS_campaign_06/metasploit_outflank-dumpert_lsass_memory_dump.zip",
+      "cache_path": "data/cache/otrf-compound/LSASS_campaign_06/metasploit_outflank-dumpert_lsass_memory_dump.zip",
+      "size_bytes": 3326923,
+      "sha256": "ee996c0ddc32611c572f59a68869f7d4327aaac04a3aeee65916b7221347dc1d",
+      "members": [
+        {
+          "name": "metasploit_outflank-dumpert_lsass_memory_dump.json",
+          "size_bytes": 117166974
+        }
+      ],
+      "download_url": "https://raw.githubusercontent.com/OTRF/Security-Datasets/d9d40ef123d2c87d5d3df28c96bcab4f0faccc87/datasets/compound/LSASS_campaign_06/metasploit_outflank-dumpert_lsass_memory_dump.zip"
+    },
+    {
+      "source_path": "datasets/compound/LSASS_campaign_07/metasploit_nanodump_lsass_memory_dump.zip",
+      "cache_path": "data/cache/otrf-compound/LSASS_campaign_07/metasploit_nanodump_lsass_memory_dump.zip",
+      "size_bytes": 3545590,
+      "sha256": "5335635ef2bce0fb3f8704e17fb04a3be7400ac7c4bcd6ec7c14454632acaaaf",
+      "members": [
+        {
+          "name": "metasploit_nanodump_lsass_memory_dump.json",
+          "size_bytes": 114591846
+        }
+      ],
+      "download_url": "https://raw.githubusercontent.com/OTRF/Security-Datasets/d9d40ef123d2c87d5d3df28c96bcab4f0faccc87/datasets/compound/LSASS_campaign_07/metasploit_nanodump_lsass_memory_dump.zip"
+    },
+    {
+      "source_path": "datasets/compound/_metadata/LSASS_campaign_01.yaml",
+      "cache_path": "data/cache/otrf-compound/_metadata/LSASS_campaign_01.yaml",
+      "size_bytes": 32691,
+      "sha256": "bc4f2698f03b8b4b73407a2a0ed4c80dcccc30234eeabd2867106a707d4b0fef",
+      "members": [],
+      "download_url": "https://raw.githubusercontent.com/OTRF/Security-Datasets/d9d40ef123d2c87d5d3df28c96bcab4f0faccc87/datasets/compound/_metadata/LSASS_campaign_01.yaml"
+    },
+    {
+      "source_path": "datasets/compound/_metadata/LSASS_campaign_02.yaml",
+      "cache_path": "data/cache/otrf-compound/_metadata/LSASS_campaign_02.yaml",
+      "size_bytes": 30600,
+      "sha256": "5ae5bfc2d863fa08dc6bbd7c2e6043adc3c99b2725645128b97fe8f4e347ea06",
+      "members": [],
+      "download_url": "https://raw.githubusercontent.com/OTRF/Security-Datasets/d9d40ef123d2c87d5d3df28c96bcab4f0faccc87/datasets/compound/_metadata/LSASS_campaign_02.yaml"
+    },
+    {
+      "source_path": "datasets/compound/_metadata/LSASS_campaign_03.yaml",
+      "cache_path": "data/cache/otrf-compound/_metadata/LSASS_campaign_03.yaml",
+      "size_bytes": 45697,
+      "sha256": "c79047700b91af5a3976b8621b2107d519fe2235a4e0eca21d36c5817336043f",
+      "members": [],
+      "download_url": "https://raw.githubusercontent.com/OTRF/Security-Datasets/d9d40ef123d2c87d5d3df28c96bcab4f0faccc87/datasets/compound/_metadata/LSASS_campaign_03.yaml"
+    },
+    {
+      "source_path": "datasets/compound/_metadata/LSASS_campaign_04.yaml",
+      "cache_path": "data/cache/otrf-compound/_metadata/LSASS_campaign_04.yaml",
+      "size_bytes": 34075,
+      "sha256": "1ce46cb0a8fa5ce22cfeb69cf010f1205465a12fa31adafdd9ab1f7ed5f41cf9",
+      "members": [],
+      "download_url": "https://raw.githubusercontent.com/OTRF/Security-Datasets/d9d40ef123d2c87d5d3df28c96bcab4f0faccc87/datasets/compound/_metadata/LSASS_campaign_04.yaml"
+    },
+    {
+      "source_path": "datasets/compound/_metadata/LSASS_campaign_05.yaml",
+      "cache_path": "data/cache/otrf-compound/_metadata/LSASS_campaign_05.yaml",
+      "size_bytes": 47804,
+      "sha256": "4e29ad0b1de773ce28db95813739ab18e0fad466d511036b22fc678188938dcf",
+      "members": [],
+      "download_url": "https://raw.githubusercontent.com/OTRF/Security-Datasets/d9d40ef123d2c87d5d3df28c96bcab4f0faccc87/datasets/compound/_metadata/LSASS_campaign_05.yaml"
+    },
+    {
+      "source_path": "datasets/compound/_metadata/LSASS_campaign_06.yaml",
+      "cache_path": "data/cache/otrf-compound/_metadata/LSASS_campaign_06.yaml",
+      "size_bytes": 38517,
+      "sha256": "7c1cb087d730b598110c3498f7e33c1bc4954f14e2132c9d275c93455e308a7d",
+      "members": [],
+      "download_url": "https://raw.githubusercontent.com/OTRF/Security-Datasets/d9d40ef123d2c87d5d3df28c96bcab4f0faccc87/datasets/compound/_metadata/LSASS_campaign_06.yaml"
+    },
+    {
+      "source_path": "datasets/compound/_metadata/LSASS_campaign_07.yaml",
+      "cache_path": "data/cache/otrf-compound/_metadata/LSASS_campaign_07.yaml",
+      "size_bytes": 33180,
+      "sha256": "2c03652f2cf3d258acf73b2bfaf7296545065d4d15131590f8bc8853bc8ec0e9",
+      "members": [],
+      "download_url": "https://raw.githubusercontent.com/OTRF/Security-Datasets/d9d40ef123d2c87d5d3df28c96bcab4f0faccc87/datasets/compound/_metadata/LSASS_campaign_07.yaml"
+    },
+    {
+      "source_path": "datasets/compound/apt29/README.md",
+      "cache_path": "data/cache/otrf-compound/apt29/README.md",
+      "size_bytes": 6391,
+      "sha256": "4f77eb9419a8503afb1e08ffbfb5d3b828c13b40d328cfe8e68f3959caaef2a6",
+      "members": [],
+      "download_url": "https://raw.githubusercontent.com/OTRF/Security-Datasets/d9d40ef123d2c87d5d3df28c96bcab4f0faccc87/datasets/compound/apt29/README.md"
+    },
+    {
+      "source_path": "datasets/compound/apt29/day1/README.md",
+      "cache_path": "data/cache/otrf-compound/apt29/day1/README.md",
+      "size_bytes": 3952,
+      "sha256": "f7c1e70e4e850c9a0d7b81f438e6344cc55df8a8af585732a80789cabf0528bd",
+      "members": [],
+      "download_url": "https://raw.githubusercontent.com/OTRF/Security-Datasets/d9d40ef123d2c87d5d3df28c96bcab4f0faccc87/datasets/compound/apt29/day1/README.md"
+    },
+    {
+      "source_path": "datasets/compound/apt29/day1/apt29_evals_day1_manual.zip",
+      "cache_path": "data/cache/otrf-compound/apt29/day1/apt29_evals_day1_manual.zip",
+      "size_bytes": 13944973,
+      "sha256": "98a073140860560d70080ace9142961be4f64b4862bae892d62d0f254d0fdbe5",
+      "members": [
+        {
+          "name": "apt29_evals_day1_manual_2020-05-01225525.json",
+          "size_bytes": 385334029
+        }
+      ],
+      "download_url": "https://raw.githubusercontent.com/OTRF/Security-Datasets/d9d40ef123d2c87d5d3df28c96bcab4f0faccc87/datasets/compound/apt29/day1/apt29_evals_day1_manual.zip"
+    },
+    {
+      "source_path": "datasets/compound/apt29/day2/apt29_evals_day2_manual.zip",
+      "cache_path": "data/cache/otrf-compound/apt29/day2/apt29_evals_day2_manual.zip",
+      "size_bytes": 43033041,
+      "sha256": "377f8cba5db95a453a3ee8bd19f493efafc23724541482a4da99da28ee4665f9",
+      "members": [
+        {
+          "name": "apt29_evals_day2_manual_2020-05-02035409.json",
+          "size_bytes": 1714987031
+        }
+      ],
+      "download_url": "https://raw.githubusercontent.com/OTRF/Security-Datasets/d9d40ef123d2c87d5d3df28c96bcab4f0faccc87/datasets/compound/apt29/day2/apt29_evals_day2_manual.zip"
+    },
+    {
+      "source_path": "datasets/compound/windows/apt3/README.md",
+      "cache_path": "data/cache/otrf-compound/windows/apt3/README.md",
+      "size_bytes": 2361,
+      "sha256": "0f3335e344179b3d49184cf68e9c74b881d2ff00d9ff370e3cbbc61d1a90df90",
+      "members": [],
+      "download_url": "https://raw.githubusercontent.com/OTRF/Security-Datasets/d9d40ef123d2c87d5d3df28c96bcab4f0faccc87/datasets/compound/windows/apt3/README.md"
+    },
+    {
+      "source_path": "datasets/compound/windows/apt3/caldera_attack_evals_round1_day1_2019-10-20201108.tar.gz",
+      "cache_path": "data/cache/otrf-compound/windows/apt3/caldera_attack_evals_round1_day1_2019-10-20201108.tar.gz",
+      "size_bytes": 12608123,
+      "sha256": "37d2f27f2c4fa35fa1cda926fa5b1a45497777107dd33ba04f03e0613a09636f",
+      "members": [
+        {
+          "name": "caldera_attack_evals_round1_day1_2019-10-20201108.json",
+          "size_bytes": 246373850
+        }
+      ],
+      "download_url": "https://raw.githubusercontent.com/OTRF/Security-Datasets/d9d40ef123d2c87d5d3df28c96bcab4f0faccc87/datasets/compound/windows/apt3/caldera_attack_evals_round1_day1_2019-10-20201108.tar.gz"
+    },
+    {
+      "source_path": "datasets/compound/windows/apt3/empire_apt3.tar.gz",
+      "cache_path": "data/cache/otrf-compound/windows/apt3/empire_apt3.tar.gz",
+      "size_bytes": 28948319,
+      "sha256": "ab4d1ec4e44102c87946a974f93aa248e49e5001e01fac3f137ec7e61bbc18ed",
+      "members": [
+        {
+          "name": "empire_apt3_2019-05-14223117.json",
+          "size_bytes": 629974993
+        }
+      ],
+      "download_url": "https://raw.githubusercontent.com/OTRF/Security-Datasets/d9d40ef123d2c87d5d3df28c96bcab4f0faccc87/datasets/compound/windows/apt3/empire_apt3.tar.gz"
+    }
+  ]
+}
