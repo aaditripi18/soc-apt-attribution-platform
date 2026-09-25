@@ -80,6 +80,13 @@ Gate status:
   only — no ``is_valid``, no violations, no pass/fail, no score/ratio/
   concentration/threshold, no ATT&CK, no new identity, no
   ``calibration_version``.**
+- **Corpus v2 T5 (implemented, doc 15 DC-4/DC-5):** ``corpus_builder`` builds
+  several attribution units per family (authored units anchored to replay
+  scenarios, fail closed on any ambiguity); ``decision_inputs`` records each
+  unit's observed decision features; ``readiness`` — the fail-closed
+  :func:`~attribution_platform.calibration.readiness.validate_fitting_readiness`
+  gate that fitting must pass. These replay-dependent modules are imported
+  from their own module paths, not re-exported here.
 - **B1.7+ (deferred, not implemented):** the later blind-actor ATT&CK
   identity-ablation evaluation; and — much later — parameter fitting and
   ``calibration_version``. No ``calibration_version`` and no fitting exist yet.

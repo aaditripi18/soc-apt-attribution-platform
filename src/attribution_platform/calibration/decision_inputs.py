@@ -61,12 +61,13 @@ from attribution_platform.calibration.errors import CalibrationError
 from attribution_platform.dataplane import ElasticClient
 from attribution_platform.detection import DetectionEngine
 from attribution_platform.replay import (
+    BehavioralSequenceReplayResult,
     DetectionReplayFixture,
     replay_fixture_through_behavioral_sequences,
 )
 
 DECISION_INPUTS_METHOD = "c3.2-corpus-decision-inputs"
-DECISION_INPUTS_METHOD_VERSION = "0.1"
+DECISION_INPUTS_METHOD_VERSION = "0.2"  # 0.2: multi-unit families
 
 #: The structural lower bound of ``min_profile_floor`` (ADR-0005 §D16). Used
 #: only so ``compute_comparative_evidence`` can run; see the module docstring
@@ -92,6 +93,10 @@ class CaseDecisionInput:
     candidates: tuple[Candidate, ...]
     comparative: ComparativeEvidenceResult
     unattributed_baseline: UnattributedBaseline
+    #: The unit's distinct observed decision features (technique STIX ids of
+    #: its SUPPORTING ACH cells, sorted) — candidate-independent, the same set
+    #: the ``Unattributed`` baseline is computed over (Amendment B §B2).
+    observed_features: tuple[str, ...] = ()
 
 
 @dataclass(frozen=True)
@@ -118,35 +123,37 @@ def build_case_decision_input(
     ``correlation_group_id``/``sequence_id`` frozen on ``case`` under the same
     ``attack_kb_version`` — a drifted pipeline must never silently feed
     fitting."""
+    replay = replay_fixture_through_behavioral_sequences(
+        fixture, client=client, engine=engine, knowledge=knowledge
+    )
+    return _case_decision_input(case, replay, fixture.fixture_id, knowledge)
+
+
+def _case_decision_input(
+    case: CalibrationCase,
+    replay: BehavioralSequenceReplayResult,
+    fixture_id: str,
+    knowledge: AttackKnowledge,
+) -> CaseDecisionInput:
     if case.attack_kb_version != knowledge.attack_kb_version:
         raise CalibrationError(
             f"build_case_decision_input: case {case.case_id!r} was built under "
             f"attack_kb_version {case.attack_kb_version!r}, but the loaded knowledge is "
             f"{knowledge.attack_kb_version!r}"
         )
-    replay = replay_fixture_through_behavioral_sequences(
-        fixture, client=client, engine=engine, knowledge=knowledge
-    )
-    if len(replay.sequences) != 1:
-        raise CalibrationError(
-            f"build_case_decision_input: fixture {fixture.fixture_id!r} produced "
-            f"{len(replay.sequences)} attribution units; exactly one is required "
-            f"(case {case.case_id!r})"
-        )
-    sequence = replay.sequences[0]
+    # A family may have several units: the case's own unit is selected by its
+    # frozen group/sequence ids; if the replay no longer produces that exact
+    # pair, the pipeline has drifted and the case must not feed fitting.
     groups = {g.group_id: g for g in replay.correlation_result.contextual_result.groups}
-    group = groups.get(sequence.group_id)
-    if group is None:  # pragma: no cover - structural guarantee of the replay pipeline
+    sequence = next((s for s in replay.sequences if s.sequence_id == case.sequence_id), None)
+    group = groups.get(case.correlation_group_id)
+    if sequence is None or group is None or sequence.group_id != group.group_id:
+        produced = sorted((s.group_id, s.sequence_id) for s in replay.sequences)
         raise CalibrationError(
-            f"build_case_decision_input: sequence {sequence.sequence_id!r} references "
-            f"group {sequence.group_id!r} not present in the replay result"
-        )
-    if group.group_id != case.correlation_group_id or sequence.sequence_id != case.sequence_id:
-        raise CalibrationError(
-            f"build_case_decision_input: replay of case {case.case_id!r} produced "
-            f"group/sequence ({group.group_id!r}, {sequence.sequence_id!r}) but the frozen "
-            f"case records ({case.correlation_group_id!r}, {case.sequence_id!r}) — the "
-            "pipeline no longer reproduces this corpus"
+            f"build_case_decision_input: replay of fixture {fixture_id!r} produced "
+            f"group/sequence pairs {produced!r}, none of which is the frozen case's "
+            f"({case.correlation_group_id!r}, {case.sequence_id!r}) (case {case.case_id!r}) — "
+            "the pipeline no longer reproduces this corpus"
         )
 
     candidate_result = generate_candidates(group, sequence, knowledge)
@@ -158,6 +165,7 @@ def build_case_decision_input(
         min_profile_floor=_STRUCTURAL_MIN_PROFILE_FLOOR,
     )
     baseline = compute_unattributed_decision_support(matrix, knowledge)
+    observed_features = tuple(sorted({a.technique_stix_id for a in matrix.assessments}))
 
     return CaseDecisionInput(
         case_id=case.case_id,
@@ -172,6 +180,7 @@ def build_case_decision_input(
         candidates=candidate_result.candidates,
         comparative=comparative,
         unattributed_baseline=baseline,
+        observed_features=observed_features,
     )
 
 
@@ -213,6 +222,7 @@ def build_corpus_decision_inputs(
         fixture_by_family[annotation.scenario_family_id] = fixture
 
     inputs: list[CaseDecisionInput] = []
+    replays: dict[str, BehavioralSequenceReplayResult] = {}  # one replay per family
     for case in corpus.cases:
         if case.case_role not in requested:
             continue
@@ -222,9 +232,13 @@ def build_corpus_decision_inputs(
                 f"build_corpus_decision_inputs: no fixture supplied for family "
                 f"{case.scenario_family_id!r} (case {case.case_id!r})"
             )
+        if case.scenario_family_id not in replays:
+            replays[case.scenario_family_id] = replay_fixture_through_behavioral_sequences(
+                case_fixture, client=client_factory(), engine=engine, knowledge=knowledge
+            )
         inputs.append(
-            build_case_decision_input(
-                case, case_fixture, client=client_factory(), engine=engine, knowledge=knowledge
+            _case_decision_input(
+                case, replays[case.scenario_family_id], case_fixture.fixture_id, knowledge
             )
         )
 

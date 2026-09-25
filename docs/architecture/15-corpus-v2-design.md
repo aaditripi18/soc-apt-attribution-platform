@@ -187,3 +187,39 @@ After T9: fitting grid / `fitting_procedure_version` → `fitting.py` → frozen
    S2 means downloading ~2 GB outside git.
 5. **DC-4:** APT29 as the blind actor?
 6. **DC-5:** Confirm or change the proposed readiness minimums.
+
+---
+
+## 9. Implementation record
+
+**T5 — multi-unit builder, cross-split identity and fitting-readiness gate (2026-09-25).**
+
+- *Multi-unit families (DC-4):* an annotation may declare `units`, each with `anchor_scenario_ids` (replay
+  scenarios the unit must contain — group ids are content hashes an author cannot know in advance), its own
+  expected-output shape, and unit coverage assumptions (added to the family's). The builder maps every
+  produced correlation group to exactly one declared unit and fails closed when an anchor is unknown, yields
+  no correlated evidence, or spans two units; when two units claim one group; or when a group is claimed by
+  none (an undeclared unit means an incomplete annotation). An annotation without units keeps the single-unit
+  contract, so **corpus v1 rebuilds byte-identically** (its existing tests unchanged). Builder method 0.2.
+- *Decision inputs:* each case's own unit is selected by its frozen group/sequence ids (drift still fails
+  closed); each family is replayed once; every `CaseDecisionInput` now carries `observed_features` — the unit's
+  distinct observed decision features, the same candidate-independent set the `Unattributed` baseline uses
+  (no second definition). Method 0.2.
+- *Fitting-readiness gate (DC-5):* `calibration/readiness.py` — `validate_fitting_readiness` /
+  `require_fitting_ready`, with the owner-accepted DC-5 minimums as `ReadinessThresholds` (echoed in the
+  report). Checks: calibration families ≥ 12 spanning ≥ 4 resolved actors; held-out families ≥ 8; hard-negative
+  families ≥ 3 / ≥ 2 (every unit ≥ 2 observed features); ≥ 30 % of attributable calibration units with ≥ 3
+  features; top-candidate concentration not constant; no calibration unit with exactly the observed-feature
+  set of a held-out/blind unit unless a family is declared `deliberate_imitation`; every attributable label
+  resolves to exactly one active Group by alias only; category, split and provenance reports valid **and tied
+  to this corpus version** (a report built without the manifest is refused). Defined choices, stated: top
+  candidate = greatest `decision_support` (floor-independent, ties by id), concentration at an explicit floor
+  (default the structural bound 1).
+- *Validation:* run on the frozen v1 corpus, the gate **independently rediscovers all four Stage-5 findings** —
+  unresolvable `EMU-*` labels (F5-1), constant concentration (F5-2), cross-split identical feature sets outside
+  the declared imitation families (F5-3), no hard negatives (F5-4) — plus the family-count shortfalls (7 / 7),
+  and reports no existing-validator or missing-input problem. Relabelling one family "APT29" resolves by alias
+  to G0016, as DC-2 designs. Multi-unit building is proven on real v1 content (two v1 fixtures merged replay to
+  exactly the two groups they produce alone), with every fail-closed path tested. 18 tests.
+- *Next:* T6 — author S1 plan fixtures from the CTID Adversary Emulation Library (Apache-2.0), a few plans per
+  turn, mapped to the now-available Sysmon/PowerShell/Security telemetry and the Sigma pack.
