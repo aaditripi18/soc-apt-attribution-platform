@@ -1,8 +1,9 @@
 """The structural correlation engine (gate G2.1).
 
-Implements exactly the three structural, group-forming dimensions ADR-0003
-approved — ``SHARED_OBSERVATION``, ``SAME_PROCESS_ENTITY``, and
-``PROCESS_LINEAGE`` — and nothing else. This is the first module in
+Implements exactly the four structural, group-forming dimensions ADR-0003
+approved — ``SHARED_OBSERVATION``, ``SAME_PROCESS_ENTITY``,
+``PROCESS_LINEAGE``, and (Amendment A) ``PROCESS_INTERACTION`` — and nothing
+else. This is the first module in
 :mod:`attribution_platform.correlation` that actually *computes* anything;
 G2.0's ``contracts`` module defines the shapes, this module fills them in.
 
@@ -17,6 +18,20 @@ G2.0's ``contracts`` module defines the shapes, this module fills them in.
   equals another's ``process.entity_id``, again within the same host scope
   — a direct, collector-asserted parent → child creation relationship.
   Directional: the basis always records the parent's Observation id first.
+- ``PROCESS_INTERACTION`` (ADR-0003 Amendment A): a remote-thread-creation
+  Observation (``Observation.remote_thread`` present) attests that process
+  instance S began executing code inside instance T (``process.entity_id``
+  = S, ``target_process.entity_id`` = T, same host scope; both required —
+  A3). Evidence on S is then linked to Evidence on T whose Observation is
+  **not confidently before** the injection (A2's causality bound; equal and
+  precision-tied timestamps are linked, compared like ADR-0004 D6).
+  The attesting injection Observation need not itself be Evidence
+  (Amendment A7): it may be one of the Evidence Observations or one of the
+  caller's ``context_observations`` — telemetry read only as a witness of
+  the S→T relationship, never a group member. Its id is recorded in the
+  link's provenance. Directional: the basis records the injecting side's
+  Observation first. One hop only — never transitive through other
+  processes.
 
 **What is deliberately NOT a structural signal here, per ADR-0003's own
 correction:** ``host.id``/``host.name`` sameness, ``user.id``/``user.name``
@@ -86,6 +101,7 @@ from __future__ import annotations
 
 from collections.abc import Sequence
 from dataclasses import dataclass
+from datetime import UTC, datetime, timedelta
 from itertools import combinations
 
 from attribution_platform.correlation.contracts import (
@@ -99,7 +115,7 @@ from attribution_platform.correlation.contracts import (
     compute_link_id,
 )
 from attribution_platform.correlation.errors import CorrelationError
-from attribution_platform.domain import Evidence, Observation
+from attribution_platform.domain import Evidence, Observation, TimePrecision
 
 #: Default ``CorrelationProvenance.method``/``method_version`` this engine
 #: stamps onto every link/group it produces, unless the caller overrides
@@ -107,7 +123,7 @@ from attribution_platform.domain import Evidence, Observation
 #: ``"platform-rules"`` — a module-level identity constant, not a config the
 #: engine has to be told on every call.
 STRUCTURAL_CORRELATION_METHOD = "structural-correlation"
-STRUCTURAL_CORRELATION_METHOD_VERSION = "1.0"
+STRUCTURAL_CORRELATION_METHOD_VERSION = "1.1"  # 1.1: + PROCESS_INTERACTION
 
 #: The (host-scope, entity-id) key process-entity dimensions are compared
 #: on. ``host_scope`` is itself ``(kind, value)`` where ``kind`` is
@@ -183,6 +199,78 @@ def _process_parent_key(observation: Observation) -> _ProcessEntityKey | None:
     return (host_scope, process.parent_entity_id)
 
 
+@dataclass(frozen=True)
+class _InjectionFact:
+    """One telemetry-attested remote-thread injection S -> T (Amendment A)."""
+
+    host_scope: _HostScope
+    source_entity_id: str
+    target_entity_id: str
+    observation: Observation
+
+
+def _injection_fact(observation: Observation) -> _InjectionFact | None:
+    """The injection a remote-thread Observation attests, or ``None`` when it
+    is not one or either process identifier is missing (A3: fail closed; a
+    pid-only event forms no link)."""
+    if observation.remote_thread is None:
+        return None
+    source_key = _process_entity_key(observation)
+    target = observation.target_process
+    if source_key is None or target is None or not (target.entity_id or "").strip():
+        return None
+    assert target.entity_id is not None
+    host_scope, source_entity_id = source_key
+    if target.entity_id == source_entity_id:
+        return None  # a thread in itself is not an interaction between instances
+    return _InjectionFact(
+        host_scope=host_scope,
+        source_entity_id=source_entity_id,
+        target_entity_id=target.entity_id,
+        observation=observation,
+    )
+
+
+#: Truncation granularity per declared precision (ADR-0004 D6's table; a
+#: local copy — this module does not import ``sequence_engine`` internals).
+_PRECISION_GRANULARITY: dict[TimePrecision, timedelta] = {
+    TimePrecision.SECOND: timedelta(seconds=1),
+    TimePrecision.MILLISECOND: timedelta(milliseconds=1),
+    TimePrecision.MICROSECOND: timedelta(microseconds=1),
+    TimePrecision.NANOSECOND: timedelta(microseconds=1),
+}
+_EPOCH = datetime(1970, 1, 1, tzinfo=UTC)
+
+
+def is_confidently_before(candidate: Observation, reference: Observation) -> bool:
+    """``True`` only when ``candidate`` certainly happened before
+    ``reference``: compared at the two timestamps' common (coarser) declared
+    precision; with an undeclared/unknown precision the raw values are
+    compared. A tie at the common precision is *not* "before" (A2 links equal
+    timestamps — the sensor cannot order them)."""
+    ts_a, ts_b = candidate.timestamp, reference.timestamp
+    prec_a, prec_b = candidate.timestamp_precision, reference.timestamp_precision
+    if prec_a is not None and prec_b is not None:
+        gran_a, gran_b = _PRECISION_GRANULARITY.get(prec_a), _PRECISION_GRANULARITY.get(prec_b)
+        if gran_a is not None and gran_b is not None:
+            granularity = max(gran_a, gran_b)
+            ts_a = _EPOCH + ((ts_a - _EPOCH) // granularity) * granularity
+            ts_b = _EPOCH + ((ts_b - _EPOCH) // granularity) * granularity
+    return ts_a < ts_b
+
+
+def _validate_context_observations(
+    context_observations: Sequence[Observation],
+) -> tuple[Observation, ...]:
+    for i, observation in enumerate(context_observations):
+        if not isinstance(observation, Observation):
+            raise CorrelationError(
+                f"correlate_structurally: context_observations[{i}] must be a domain "
+                f"Observation, got {type(observation).__name__}"
+            )
+    return tuple(context_observations)
+
+
 def _validate_nodes(items: Sequence[tuple[Evidence, Observation]]) -> tuple[_Node, ...]:
     seen_evidence_ids: set[str] = set()
     nodes: list[_Node] = []
@@ -230,6 +318,7 @@ def _make_link(
     method: str,
     method_version: str,
     method_content_hash: str | None,
+    witness_observation_id: str | None = None,
 ) -> CorrelationLink:
     link_id = compute_link_id(
         link_class=link_class,
@@ -248,6 +337,7 @@ def _make_link(
     )
     source_observation_ids = tuple(
         {node_a.observation.observation_id, node_b.observation.observation_id}
+        | ({witness_observation_id} if witness_observation_id is not None else set())
     )
     provenance = CorrelationProvenance(
         method=method,
@@ -366,6 +456,62 @@ def _process_lineage_links(
     return links
 
 
+def _process_interaction_links(
+    nodes: Sequence[_Node],
+    context_observations: Sequence[Observation],
+    *,
+    method: str,
+    method_version: str,
+    method_content_hash: str | None,
+) -> dict[str, CorrelationLink]:
+    by_entity: dict[_ProcessEntityKey, list[_Node]] = {}
+    for node in nodes:
+        key = _process_entity_key(node.observation)
+        if key is not None:
+            by_entity.setdefault(key, []).append(node)
+
+    witnesses: dict[str, Observation] = {}
+    for observation in (*(n.observation for n in nodes), *context_observations):
+        witnesses.setdefault(observation.observation_id, observation)
+    facts = sorted(
+        (f for f in map(_injection_fact, witnesses.values()) if f is not None),
+        key=lambda f: (f.observation.timestamp, f.observation.observation_id),
+    )
+
+    links: dict[str, CorrelationLink] = {}
+    for fact in facts:  # earliest attestation first: it is the one recorded
+        sources = sorted(
+            by_entity.get((fact.host_scope, fact.source_entity_id), ()),
+            key=lambda n: n.evidence.evidence_id,
+        )
+        targets = sorted(
+            (
+                n
+                for n in by_entity.get((fact.host_scope, fact.target_entity_id), ())
+                if not is_confidently_before(n.observation, fact.observation)
+            ),
+            key=lambda n: n.evidence.evidence_id,
+        )
+        for source in sources:
+            for target in targets:
+                link = _make_link(
+                    source,
+                    target,
+                    link_class=LinkClass.PROCESS_INTERACTION,
+                    field_path="target_process.entity_id",
+                    observed_value=fact.target_entity_id,
+                    observation_id_a=source.observation.observation_id,
+                    observation_id_b=target.observation.observation_id,
+                    uncertainty_note=None,
+                    method=method,
+                    method_version=method_version,
+                    method_content_hash=method_content_hash,
+                    witness_observation_id=fact.observation.observation_id,
+                )
+                links.setdefault(link.link_id, link)
+    return links
+
+
 def _connected_components(
     nodes: Sequence[_Node],
     links: Sequence[CorrelationLink],
@@ -410,11 +556,18 @@ def correlate_structurally(
     method: str = STRUCTURAL_CORRELATION_METHOD,
     method_version: str = STRUCTURAL_CORRELATION_METHOD_VERSION,
     method_content_hash: str | None = None,
+    context_observations: Sequence[Observation] = (),
 ) -> StructuralCorrelationResult:
     """Compute every ``SHARED_OBSERVATION``/``SAME_PROCESS_ENTITY``/
-    ``PROCESS_LINEAGE`` link across ``items``, and the ``CorrelationGroup``s
-    those structural links form (connected components; singletons produce
-    no group).
+    ``PROCESS_LINEAGE``/``PROCESS_INTERACTION`` link across ``items``, and
+    the ``CorrelationGroup``s those structural links form (connected
+    components; singletons produce no group).
+
+    ``context_observations`` (optional) are telemetry Observations that
+    carry no Evidence. They are read **only** as witnesses of
+    ``PROCESS_INTERACTION`` (a remote-thread event linking two process
+    instances, ADR-0003 Amendment A7); they never become group members and
+    no other dimension reads them.
 
     ``items`` is a sequence of ``(Evidence, Observation)`` pairs -- the same
     shape the existing pipeline already produces at the point a caller would
@@ -439,6 +592,7 @@ def correlate_structurally(
     wall-clock. Returns an empty result for empty ``items``.
     """
     nodes = _validate_nodes(items)
+    context = _validate_context_observations(context_observations)
     if not nodes:
         return StructuralCorrelationResult(links=(), groups=())
 
@@ -462,6 +616,16 @@ def correlate_structurally(
     all_links.update(
         _process_lineage_links(
             nodes,
+            method=method,
+            method_version=method_version,
+            method_content_hash=method_content_hash,
+        )
+    )
+
+    all_links.update(
+        _process_interaction_links(
+            nodes,
+            context,
             method=method,
             method_version=method_version,
             method_content_hash=method_content_hash,

@@ -608,3 +608,56 @@ never merge groups; determinism and idempotency hold as for the existing dimensi
 all of that process's *later* activity, including benign activity, to the injector — the same class of risk as
 the existing long-lived-process limitation (§Known limitations). No window or cap is added now; if the corpus
 shows this degrades group quality, a fix follows the same evidence-justified, versioned-configuration rule.
+
+**A7 — Clarification at implementation: the witness need not be Evidence (2026-09-25).** Correlation
+operates on Evidence-bearing Observations, but on real telemetry the remote-thread event itself is rarely
+Evidence: on the OTRF mavinject sample the production Sigma pack fires only on the mavinject process
+creation, not on the Sysmon 8 event. A1 is therefore implemented on *process instances*: a remote-thread
+Observation — whether it is Evidence or a caller-supplied `context_observations` entry (telemetry no rule
+fired on) — **attests** S→T, and Evidence on S is linked to Evidence on T that is not confidently before the
+injection. The witness is recorded in the link's `provenance.source_observation_ids` and never becomes a
+group member. Links are one hop only (never transitive through other instances). The same witness rule
+applies to contextual `PROCESS_ACCESS_TARGET`.
+
+**Implementation record (2026-09-25).**
+
+- *Code:* `LinkClass` gains `PROCESS_INTERACTION` (structural) and `PROCESS_ACCESS_TARGET` (contextual) —
+  eleven members, four structural (A5). `correlate_structurally` and `contextualize` take optional
+  `context_observations`; method versions `structural-correlation 1.1`, `contextual-correlation 1.1`. The
+  replay correlation pipeline passes every Observation that produced no Evidence as a witness.
+- *Causality bound (A2), exactly:* a target-side Observation is excluded only when it is **confidently
+  before** the injection — compared at the two timestamps' common declared precision (ADR-0004 D6's
+  granularity table); raw comparison when a precision is undeclared. Equal and precision-tied timestamps
+  are linked.
+- *Scope of A2 (recorded precisely):* A2 governs which `PROCESS_INTERACTION` links exist. It does not
+  override `SAME_PROCESS_ENTITY`, which links every Evidence item of one instance regardless of time. So
+  pre-injection target activity joins the group **only** when post-injection target Evidence exists (it is
+  then the same instance, by that dimension's unconditional rule); pre-injection activity alone never joins.
+- *Validation (A6), all passing (18 tests):* synthetic link, direction and basis; A2 exclusion, equality
+  and precision ties; A3 (missing target, pid-only source or target, no host scope, non-remote-thread
+  event); host scoping; one hop only; determinism/idempotency under input reordering; access never forms
+  or merges a group but attaches to existing groups. **Real OTRF mavinject → notepad:** the Sysmon 8
+  witness links the detected mavinject process creation to notepad loading the injected
+  `C:\ProgramData\T1055.dll` 15 ms after the thread (test Evidence on real telemetry — no production rule
+  fires on that load); notepad's start-up activity 7 s before the injection stays out; mavinject's two
+  handle opens on notepad are attached as `PROCESS_ACCESS_TARGET` context only.
+- *Recorded limitations:* (1) the behavioral-sequence engine (ADR-0004) has no injection ordering basis,
+  so a group joined by `PROCESS_INTERACTION` gets no edge between injector and target steps (pinned by a
+  test); adding one is an ADR-0004 amendment, deferred until a corpus case needs it. (2) The long-lived
+  shared host process risk stated above remains.
+
+## Amendment B (2026-09-25) — Process identity for pid-only telemetry (PROPOSED)
+
+- **Status:** PROPOSED — design only; requires owner acceptance and Sysmon 5 support before implementation.
+- **Trigger:** PowerShell 4103/4104 (ADR-0008) identify the host process by pid only. Under ADR-0003 they
+  form no structural link, so a malicious script block cannot join the process tree that launched it.
+- **B1 — Resolve, do not match.** A pid-only Observation is never compared to another by pid. Instead a
+  deterministic resolution step binds `(host scope, pid, timestamp)` to one process instance GUID when,
+  and only when, the telemetry proves that instance was the pid's owner at that time: a process-start
+  (Sysmon 1) with that pid at or before the timestamp, and a process-end (Sysmon 5) for that instance after
+  it — or no later start of the same pid on that host and no end before it within the same continuous
+  telemetry window. Anything short of that proof leaves the Observation unresolved (fail closed).
+- **B2 — Provenance.** A resolved identity is recorded as resolved (with the Sysmon Observation ids that
+  proved it), never presented as collector-asserted.
+- **B3 — Prerequisite.** Sysmon 5 (process terminated) must be supported first; without end events a
+  pid-reuse gap cannot be excluded.

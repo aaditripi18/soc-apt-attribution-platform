@@ -54,6 +54,7 @@ _STRUCTURAL = (
     LinkClass.SHARED_OBSERVATION,
     LinkClass.SAME_PROCESS_ENTITY,
     LinkClass.PROCESS_LINEAGE,
+    LinkClass.PROCESS_INTERACTION,
 )
 _CONTEXTUAL = (
     LinkClass.SAME_HOST_ID,
@@ -62,6 +63,7 @@ _CONTEXTUAL = (
     LinkClass.SAME_USER_NAME,
     LinkClass.SAME_DESTINATION_IP,
     LinkClass.TEMPORAL_PROXIMITY,
+    LinkClass.PROCESS_ACCESS_TARGET,
 )
 
 
@@ -108,11 +110,11 @@ def _link(
 
 
 # ===========================================================================
-# 1. LinkClass: the closed nine-value vocabulary
+# 1. LinkClass: the closed eleven-value vocabulary (ADR-0003 Amendment A5)
 # ===========================================================================
 
 
-def test_all_nine_link_classes_exist() -> None:
+def test_all_eleven_link_classes_exist() -> None:
     expected = {
         "SHARED_OBSERVATION",
         "SAME_PROCESS_ENTITY",
@@ -123,19 +125,23 @@ def test_all_nine_link_classes_exist() -> None:
         "SAME_USER_NAME",
         "SAME_DESTINATION_IP",
         "TEMPORAL_PROXIMITY",
+        "PROCESS_INTERACTION",
+        "PROCESS_ACCESS_TARGET",
     }
     assert {member.name for member in LinkClass} == expected
-    assert len(LinkClass) == 9
+    assert len(LinkClass) == 11
 
 
-def test_exactly_three_structural_and_six_contextual() -> None:
+def test_exactly_four_structural_and_seven_contextual() -> None:
     structural = {member for member in LinkClass if member.is_structural}
     contextual = {member for member in LinkClass if not member.is_structural}
     assert structural == set(_STRUCTURAL)
-    assert len(structural) == 3
+    assert len(structural) == 4
     assert contextual == set(_CONTEXTUAL)
-    assert len(contextual) == 6
+    assert len(contextual) == 7
     assert LinkClass.TEMPORAL_PROXIMITY in contextual
+    # Amendment A4: handle access is common benign behaviour -> never group-forming
+    assert LinkClass.PROCESS_ACCESS_TARGET in contextual
     assert contextual == CONTEXTUAL_LINK_CLASSES
 
 

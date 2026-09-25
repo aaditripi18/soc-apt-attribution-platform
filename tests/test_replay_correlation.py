@@ -810,8 +810,8 @@ def test_correlation_pipeline_never_constructs_link_or_group_directly() -> None:
 def test_correlation_pipeline_actually_uses_the_real_engines() -> None:
     source = CORRELATION_PIPELINE_FILE.read_text(encoding="utf-8")
     assert "replay_fixture_through_detection_engine(" in source
-    assert "correlate_structurally(items)" in source
-    assert "contextualize(structural_result, items)" in source
+    assert "correlate_structurally(items, context_observations=context_observations)" in source
+    assert "structural_result, items, context_observations=context_observations" in source
 
 
 def test_correlation_pipeline_never_passes_attack_knowledge_into_correlation() -> None:

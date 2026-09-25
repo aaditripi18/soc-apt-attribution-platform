@@ -10,13 +10,14 @@ never inside them.
 
 Five contracts, mirroring ADR-0003 §"Domain model":
 
-- :class:`LinkClass` — the closed, nine-value vocabulary of correlation
-  relationships ADR-0003/ADR-0004 D20 approved. Three values are
-  **structural** (group-forming): ``SHARED_OBSERVATION``,
-  ``SAME_PROCESS_ENTITY``, ``PROCESS_LINEAGE``. Six are **contextual**
-  (attach-only, never group-forming): ``SAME_HOST_ID``, ``SAME_HOST_NAME``,
-  ``SAME_USER_ID``, ``SAME_USER_NAME``, ``SAME_DESTINATION_IP``,
-  ``TEMPORAL_PROXIMITY`` (gate G2.4.3). The classification is a single
+- :class:`LinkClass` — the closed, eleven-value vocabulary of correlation
+  relationships ADR-0003 (+ Amendment A)/ADR-0004 D20 approved. Four values
+  are **structural** (group-forming): ``SHARED_OBSERVATION``,
+  ``SAME_PROCESS_ENTITY``, ``PROCESS_LINEAGE``, ``PROCESS_INTERACTION``.
+  Seven are **contextual** (attach-only, never group-forming):
+  ``SAME_HOST_ID``, ``SAME_HOST_NAME``, ``SAME_USER_ID``, ``SAME_USER_NAME``,
+  ``SAME_DESTINATION_IP``, ``TEMPORAL_PROXIMITY`` (gate G2.4.3),
+  ``PROCESS_ACCESS_TARGET``. The classification is a single
   authoritative property (:attr:`LinkClass.is_structural`) backed by one
   frozen set, not duplicated logic scattered across call sites — this is
   the one place "is this class allowed to form a group" can ever be asked.
@@ -121,9 +122,9 @@ def _sha256_hex(value: str) -> str:
 
 
 class LinkClass(Enum):
-    """The closed, nine-value correlation-relationship vocabulary ADR-0003/
-    ADR-0004 D20 approved. Exactly three values are structural
-    (group-forming); the remaining six are contextual (attach-only).
+    """The closed, eleven-value correlation-relationship vocabulary ADR-0003
+    (+ Amendment A)/ADR-0004 D20 approved. Exactly four values are structural
+    (group-forming); the remaining seven are contextual (attach-only).
     Membership is closed — constructing ``LinkClass(x)`` with an unknown
     ``x`` raises ``ValueError`` (fail-closed enum validation), exactly like
     :class:`attribution_platform.domain.enums.EvidenceType`.
@@ -146,6 +147,10 @@ class LinkClass(Enum):
     - ``PROCESS_LINEAGE`` — one Observation's ``process.parent_entity_id``
       equals another's ``process.entity_id``: a direct, collector-asserted
       causal creation relationship.
+    - ``PROCESS_INTERACTION`` (ADR-0003 Amendment A) — a remote-thread
+      injection: the sensor asserts code from one process instance began
+      executing inside another. Links Evidence on the injecting instance to
+      Evidence on the target instance at/after the injection.
 
     **Contextual — attach-only, never group-forming:**
 
@@ -162,6 +167,9 @@ class LinkClass(Enum):
       may coexist with, and never substitutes for, ``SAME_PROCESS_ENTITY``
       (which remains the only fact establishing "same running process
       instance," unconditionally, regardless of any time gap).
+    - ``PROCESS_ACCESS_TARGET`` (ADR-0003 Amendment A4) — one process
+      instance opened a handle to another. Extremely common benign
+      behaviour, so explanatory context only, never group-forming.
 
     ADR-0003's own words on why host/user identity is never structural
     regardless of how reliable the identifier is: *"A stable identifier
@@ -186,11 +194,13 @@ class LinkClass(Enum):
     SAME_USER_NAME = "same_user_name"
     SAME_DESTINATION_IP = "same_destination_ip"
     TEMPORAL_PROXIMITY = "temporal_proximity"
+    PROCESS_INTERACTION = "process_interaction"
+    PROCESS_ACCESS_TARGET = "process_access_target"
 
     @property
     def is_structural(self) -> bool:
-        """``True`` for the three group-forming classes, ``False`` for the
-        five contextual ones. The single authoritative classification —
+        """``True`` for the four group-forming classes, ``False`` for the
+        seven contextual ones. The single authoritative classification —
         every other invariant in this module (and every future caller)
         must ask *this*, never re-derive the split independently."""
         return self in _STRUCTURAL_LINK_CLASSES
@@ -204,6 +214,7 @@ _STRUCTURAL_LINK_CLASSES: frozenset[LinkClass] = frozenset(
         LinkClass.SHARED_OBSERVATION,
         LinkClass.SAME_PROCESS_ENTITY,
         LinkClass.PROCESS_LINEAGE,
+        LinkClass.PROCESS_INTERACTION,
     }
 )
 

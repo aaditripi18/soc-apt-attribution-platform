@@ -123,8 +123,14 @@ def replay_fixture_through_correlation(
         for evidence in result.evidences:
             items.append((evidence, result.observation))
 
-    structural_result = correlate_structurally(items)
-    contextual_result = contextualize(structural_result, items)
+    # Observations no rule fired on are still telemetry: they are passed as
+    # witnesses only (ADR-0003 Amendment A7 -- e.g. a remote-thread event
+    # attesting an injection between two instances that do carry Evidence).
+    context_observations = tuple(r.observation for r in detection_results if not r.evidences)
+    structural_result = correlate_structurally(items, context_observations=context_observations)
+    contextual_result = contextualize(
+        structural_result, items, context_observations=context_observations
+    )
 
     link_persists = tuple(
         persist_correlation_link(client, link)

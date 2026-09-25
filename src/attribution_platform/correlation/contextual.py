@@ -1,8 +1,9 @@
 """The contextual correlation engine (gate G2.2).
 
-Implements exactly the five contextual, attach-only dimensions ADR-0003
+Implements exactly the six contextual, attach-only dimensions ADR-0003
 approved — ``SAME_HOST_ID``, ``SAME_HOST_NAME``, ``SAME_USER_ID``,
-``SAME_USER_NAME``, and ``SAME_DESTINATION_IP`` — and nothing else. This
+``SAME_USER_NAME``, ``SAME_DESTINATION_IP``, and (Amendment A4)
+``PROCESS_ACCESS_TARGET`` — and nothing else. This
 module is deliberately separate from, and structurally unable to affect,
 :mod:`attribution_platform.correlation.structural` (G2.1): it never calls,
 imports, or reimplements that module's connected-component algorithm, and
@@ -38,6 +39,15 @@ group formation" below.
   Independent of ``SAME_USER_ID``, for the same reason as host.
 - ``SAME_DESTINATION_IP``: ``network.destination.ip`` equal, both present
   and non-blank.
+- ``PROCESS_ACCESS_TARGET`` (ADR-0003 Amendment A4): a process-access
+  Observation (``Observation.process_access`` present) attests that process
+  instance S opened a handle to instance T on the same host (both
+  ``entity_id`` values required). Evidence on S is related to Evidence on T
+  not confidently before the access — the same causality bound and the
+  same witness rule (the access Observation may be Evidence or one of
+  ``context_observations``) as structural ``PROCESS_INTERACTION``. Handle
+  access is extremely common benign behaviour, so this is explanation only
+  and never forms or merges a group.
 
 No dimension here ever substitutes for another (``host.name`` is never used
 when ``host.id`` is absent, and vice versa — unlike G2.1's internal
@@ -144,7 +154,10 @@ from attribution_platform.correlation.contracts import (
     compute_link_id,
 )
 from attribution_platform.correlation.errors import CorrelationError
-from attribution_platform.correlation.structural import StructuralCorrelationResult
+from attribution_platform.correlation.structural import (
+    StructuralCorrelationResult,
+    is_confidently_before,
+)
 from attribution_platform.domain import Evidence, Observation
 
 #: Default ``CorrelationProvenance.method``/``method_version`` this engine
@@ -152,7 +165,7 @@ from attribution_platform.domain import Evidence, Observation
 #: overrides them. Mirrors ``structural.py``'s own
 #: ``STRUCTURAL_CORRELATION_METHOD`` convention.
 CONTEXTUAL_CORRELATION_METHOD = "contextual-correlation"
-CONTEXTUAL_CORRELATION_METHOD_VERSION = "1.0"
+CONTEXTUAL_CORRELATION_METHOD_VERSION = "1.1"  # 1.1: + PROCESS_ACCESS_TARGET
 
 #: The exact, ADR-0003-derived uncertainty note for each contextual
 #: dimension -- plain language, never a numeric value. Distinct per
@@ -184,6 +197,12 @@ _UNCERTAINTY_NOTES: dict[LinkClass, str] = {
         "NAT, and common egress points routinely produce identical destination endpoints "
         "for causally unrelated traffic"
     ),
+    LinkClass.PROCESS_ACCESS_TARGET: (
+        "one process opened a handle to the other; handle access between processes is "
+        "extremely common benign behaviour (security agents, service hosts, system "
+        "processes), so this does not imply the two observations are part of the same "
+        "behavior"
+    ),
 }
 
 #: field_path recorded on every contextual dimension's CorrelationBasis.
@@ -193,6 +212,7 @@ _FIELD_PATHS: dict[LinkClass, str] = {
     LinkClass.SAME_USER_ID: "user.id",
     LinkClass.SAME_USER_NAME: "user.name",
     LinkClass.SAME_DESTINATION_IP: "network.destination.ip",
+    LinkClass.PROCESS_ACCESS_TARGET: "target_process.entity_id",
 }
 
 
@@ -307,6 +327,82 @@ _DIMENSION_EXTRACTORS: dict[LinkClass, Callable[[Observation], str | None]] = {
 }
 
 
+def _host_scope(observation: Observation) -> tuple[str, str] | None:
+    """The same host-scoping rule structural process identity uses: prefer
+    ``host.id``, fall back to ``host.name``; ``None`` when neither exists."""
+    host_id = _host_id(observation)
+    if host_id is not None:
+        return ("id", host_id)
+    host_name = _host_name(observation)
+    return ("name", host_name) if host_name is not None else None
+
+
+def _entity_key(observation: Observation) -> tuple[tuple[str, str], str] | None:
+    scope = _host_scope(observation)
+    process = observation.process
+    if scope is None or process is None or not (process.entity_id or "").strip():
+        return None
+    assert process.entity_id is not None
+    return (scope, process.entity_id)
+
+
+def _process_access_links(
+    nodes: Sequence[_Node],
+    context_observations: Sequence[Observation],
+    *,
+    method: str,
+    method_version: str,
+    method_content_hash: str | None,
+) -> dict[str, CorrelationLink]:
+    by_entity: dict[tuple[tuple[str, str], str], list[_Node]] = {}
+    for node in nodes:
+        key = _entity_key(node.observation)
+        if key is not None:
+            by_entity.setdefault(key, []).append(node)
+
+    witnesses: dict[str, Observation] = {}
+    for observation in (*(n.observation for n in nodes), *context_observations):
+        witnesses.setdefault(observation.observation_id, observation)
+    ordered_witnesses = sorted(witnesses.values(), key=lambda o: (o.timestamp, o.observation_id))
+
+    links: dict[str, CorrelationLink] = {}
+    for witness in ordered_witnesses:
+        source_key = _entity_key(witness)
+        target = witness.target_process
+        if (
+            witness.process_access is None
+            or source_key is None
+            or target is None
+            or not (target.entity_id or "").strip()
+            or target.entity_id == source_key[1]
+        ):
+            continue
+        assert target.entity_id is not None
+        sources = sorted(by_entity.get(source_key, ()), key=lambda n: n.evidence.evidence_id)
+        targets = sorted(
+            (
+                n
+                for n in by_entity.get((source_key[0], target.entity_id), ())
+                if not is_confidently_before(n.observation, witness)
+            ),
+            key=lambda n: n.evidence.evidence_id,
+        )
+        for source in sources:
+            for target_node in targets:
+                link = _make_contextual_link(
+                    source,
+                    target_node,
+                    link_class=LinkClass.PROCESS_ACCESS_TARGET,
+                    observed_value=target.entity_id,
+                    method=method,
+                    method_version=method_version,
+                    method_content_hash=method_content_hash,
+                    witness_observation_id=witness.observation_id,
+                )
+                links.setdefault(link.link_id, link)
+    return links
+
+
 def _make_contextual_link(
     node_a: _Node,
     node_b: _Node,
@@ -316,6 +412,7 @@ def _make_contextual_link(
     method: str,
     method_version: str,
     method_content_hash: str | None,
+    witness_observation_id: str | None = None,
 ) -> CorrelationLink:
     link_id = compute_link_id(
         link_class=link_class,
@@ -334,6 +431,7 @@ def _make_contextual_link(
     )
     source_observation_ids = tuple(
         {node_a.observation.observation_id, node_b.observation.observation_id}
+        | ({witness_observation_id} if witness_observation_id is not None else set())
     )
     provenance = CorrelationProvenance(
         method=method,
@@ -394,9 +492,11 @@ def contextualize(
     method: str = CONTEXTUAL_CORRELATION_METHOD,
     method_version: str = CONTEXTUAL_CORRELATION_METHOD_VERSION,
     method_content_hash: str | None = None,
+    context_observations: Sequence[Observation] = (),
 ) -> ContextualCorrelationResult:
     """Compute every ``SAME_HOST_ID``/``SAME_HOST_NAME``/``SAME_USER_ID``/
-    ``SAME_USER_NAME``/``SAME_DESTINATION_IP`` link across ``items``, and
+    ``SAME_USER_NAME``/``SAME_DESTINATION_IP``/``PROCESS_ACCESS_TARGET``
+    link across ``items``, and
     attach each one to every *existing* structural group (from
     ``structural_result``) that has at least one member the link touches.
 
@@ -423,6 +523,10 @@ def contextualize(
     they do in ``correlate_structurally``: defaults to this module's own
     identity; the content hash is never fabricated.
 
+    ``context_observations`` (optional) are Evidence-free telemetry read only
+    as witnesses of ``PROCESS_ACCESS_TARGET`` (a process-access event), as in
+    ``correlate_structurally``; they never touch any other dimension.
+
     Pure and deterministic: no I/O, no ATT&CK knowledge, no randomness, no
     wall-clock.
     """
@@ -433,6 +537,12 @@ def contextualize(
         )
 
     nodes = _validate_nodes(items)
+    for i, observation in enumerate(context_observations):
+        if not isinstance(observation, Observation):
+            raise CorrelationError(
+                f"contextualize: context_observations[{i}] must be a domain Observation, "
+                f"got {type(observation).__name__}"
+            )
 
     all_contextual_links: dict[str, CorrelationLink] = {}
     for link_class in _DIMENSION_EXTRACTORS:
@@ -445,6 +555,15 @@ def contextualize(
                 method_content_hash=method_content_hash,
             )
         )
+    all_contextual_links.update(
+        _process_access_links(
+            nodes,
+            context_observations,
+            method=method,
+            method_version=method_version,
+            method_content_hash=method_content_hash,
+        )
+    )
     sorted_contextual_links = tuple(
         sorted(all_contextual_links.values(), key=lambda link_: link_.link_id)
     )
