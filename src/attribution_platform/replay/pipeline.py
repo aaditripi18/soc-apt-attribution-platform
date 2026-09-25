@@ -151,6 +151,7 @@ def _replay_scenario(
             file_stream=obs.file_stream,
             pipe=obs.pipe,
             wmi=obs.wmi,
+            powershell=obs.powershell,
         )
         for obs in adapter_observations
     )

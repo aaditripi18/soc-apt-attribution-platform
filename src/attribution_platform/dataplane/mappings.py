@@ -97,6 +97,7 @@ OBSERVATIONS_MAPPING: dict[str, Any] = {
     "file_stream": {"type": "object"},
     "pipe": {"type": "object"},
     "wmi": {"type": "object"},
+    "powershell": {"type": "object"},
 }
 
 #: Explicit field mappings for the Evidence index (Elasticsearch "properties").

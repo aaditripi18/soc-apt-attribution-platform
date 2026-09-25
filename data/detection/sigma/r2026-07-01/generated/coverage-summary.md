@@ -9,9 +9,9 @@ Counts only — not detection-efficacy or attribution-accuracy claims.
 
 | Status | All active techniques | Used by ≥ 1 active Group |
 |---|---|---|
-| `covered` | 248 | 210 |
-| `telemetry_gap` | 122 | 86 |
-| `translation_gap` | 3 | 3 |
+| `covered` | 260 | 220 |
+| `telemetry_gap` | 108 | 74 |
+| `translation_gap` | 5 | 5 |
 | `not_endpoint_observable` | 160 | 91 |
 | `no_sigma_rule` | 164 | 108 |
 | **total** | **697** | **498** |
@@ -20,26 +20,26 @@ Counts only — not detection-efficacy or attribution-accuracy claims.
 
 - Active Groups: 176
 - With 0 covered techniques: 8 (of which 4 have no active techniques in ATT&CK at all, so no detection work can cover them)
-- With ≥ 2 covered (necessary, not sufficient, to attribute): 161
-- With ≥ 5 covered: 139
-- With ≥ 10 covered: 105
+- With ≥ 2 covered (necessary, not sufficient, to attribute): 163
+- With ≥ 5 covered: 141
+- With ≥ 10 covered: 108
 
 ## Top 15 telemetry blockers (upper bounds; v1 = Windows endpoint)
 
 | Blocker | v1 scope | Techniques | Group-used techniques | Groups touched |
 |---|---|---|---|---|
-| `logsource:linux/process_creation` | no | 18 | 15 | 34 |
-| `logsource:aws/cloudtrail` | no | 17 | 14 | 94 |
-| `logsource:macos/process_creation` | no | 16 | 12 | 110 |
-| `logsource:windows/ps_script` | yes | 14 | 12 | 73 |
-| `logsource:linux/auditd` | no | 15 | 11 | 51 |
-| `logsource:windows/security` | yes | 11 | 8 | 77 |
-| `logsource:azure/activitylogs` | no | 10 | 7 | 52 |
-| `logsource:github/audit` | no | 6 | 6 | 20 |
-| `logsource:okta/okta` | no | 6 | 6 | 14 |
+| `logsource:linux/process_creation` | no | 16 | 13 | 29 |
+| `logsource:aws/cloudtrail` | no | 13 | 10 | 66 |
+| `logsource:linux/auditd` | no | 13 | 9 | 29 |
+| `logsource:macos/process_creation` | no | 13 | 9 | 82 |
+| `logsource:windows/security` | yes | 10 | 7 | 51 |
+| `logsource:azure/activitylogs` | no | 8 | 5 | 14 |
 | `logsource:/proxy` | no | 7 | 5 | 43 |
-| `logsource:azure/auditlogs` | no | 6 | 5 | 50 |
+| `logsource:github/audit` | no | 5 | 5 | 15 |
+| `logsource:okta/okta` | no | 5 | 5 | 13 |
 | `logsource:cisco/aaa` | no | 8 | 4 | 7 |
+| `logsource:azure/auditlogs` | no | 5 | 4 | 12 |
 | `logsource:bitbucket/audit` | no | 5 | 4 | 16 |
-| `logsource:gcp/gcp.audit` | no | 5 | 4 | 48 |
-| `logsource:azure/signinlogs` | no | 4 | 4 | 50 |
+| `field:DestinationHostname` | yes | 4 | 3 | 35 |
+| `logsource:azure/signinlogs` | no | 3 | 3 | 12 |
+| `logsource:linux/` | no | 3 | 3 | 12 |

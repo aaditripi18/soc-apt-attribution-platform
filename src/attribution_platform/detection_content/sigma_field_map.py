@@ -17,7 +17,8 @@ is the acting ``process``, ``Target*`` the ``target_process``) and ``dns_query``
 (Sysmon 22); scopes may now also require an exact ``event.action``. ``/5``
 adds ``create_stream_hash`` (15), ``pipe_created`` (17/18), ``wmi_event``
 (19/20/21) and ``file_delete`` (23), and ``file_event`` now also requires the
-``file_create`` action (stream-hash events are file creations too).
+``file_create`` action (stream-hash events are file creations too). ``/6``
+adds ``ps_script`` (PowerShell 4104) and ``ps_module`` (PowerShell 4103).
 
 Anything else is a *telemetry gap*, reported per rule by the importer — never
 approximated. ``UNMAPPED_FIELD_REASONS`` records why the most frequent
@@ -33,7 +34,7 @@ from __future__ import annotations
 
 from types import MappingProxyType
 
-FIELD_MAP_VERSION = "sigma-field-map/5"
+FIELD_MAP_VERSION = "sigma-field-map/6"
 
 #: ``(product, category)`` → the ``(field_path, operator, value)`` scope
 #: conditions an Observation must satisfy to be the kind of event the Sigma
@@ -74,6 +75,16 @@ LOGSOURCE_SCOPES: MappingProxyType[tuple[str, str], tuple[tuple[str, str, str], 
             ("windows", "pipe_created"): (
                 ("event.category", "has_element", "file"),
                 ("event.action", "startswith", "pipe_"),
+            ),
+            ("windows", "ps_script"): (
+                ("event.category", "has_element", "process"),
+                ("event.type", "has_element", "info"),
+                ("event.action", "equals", "powershell_script_block"),
+            ),
+            ("windows", "ps_module"): (
+                ("event.category", "has_element", "process"),
+                ("event.type", "has_element", "info"),
+                ("event.action", "equals", "powershell_module"),
             ),
             # Sigma wmi_event covers Sysmon 19/20/21.
             ("windows", "wmi_event"): (
@@ -225,6 +236,18 @@ FIELD_MAPS: MappingProxyType[tuple[str, str], MappingProxyType[str, str]] = Mapp
                 "Consumer": "wmi.consumer",
             }
         ),
+        ("windows", "ps_script"): MappingProxyType(
+            {
+                "ScriptBlockText": "powershell.script_block_text",
+                "Path": "powershell.script_path",
+            }
+        ),
+        ("windows", "ps_module"): MappingProxyType(
+            {
+                "Payload": "powershell.payload",
+                "ContextInfo": "powershell.context_info",
+            }
+        ),
         ("windows", "dns_query"): MappingProxyType(
             {
                 "Image": "process.executable",
@@ -246,6 +269,10 @@ UNMAPPED_FIELD_REASONS: MappingProxyType[str, str] = MappingProxyType(
         "User": "UserRef splits domain and name; Sigma matches the combined 'DOMAIN\\user' string",
         "ParentUser": "the parent process's user is not captured",
         "DestinationHostname": "destination hostname is not captured on NetworkInfo",
+        "Data": (
+            "classic 'Windows PowerShell' channel (400/600/800) rules read the event's Data "
+            "element; exports seen so far carry only the rendered Message"
+        ),
         "SourceUser": "the acting process's user is not captured for process access",
         "SourceParentImage": "Sysmon 8 carries no source-parent image",
         "SourceCommandLine": "Sysmon 8 carries no source command line",

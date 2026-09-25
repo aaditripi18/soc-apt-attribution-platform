@@ -92,6 +92,7 @@ from attribution_platform.domain import (
     Observation,
     PeInfo,
     PipeRef,
+    PowerShellRef,
     ProcessAccessRef,
     ProcessRef,
     RegistryRef,
@@ -190,6 +191,7 @@ def _observation_from_document(doc: Mapping[str, Any]) -> Observation:
             file_stream=_file_stream_from_dict(doc.get("file_stream")),
             pipe=_pipe_ref_from_dict(doc.get("pipe")),
             wmi=_wmi_ref_from_dict(doc.get("wmi")),
+            powershell=_powershell_ref_from_dict(doc.get("powershell")),
             schema_version=schema_version,
         )
     except ElasticIntegrationError:
@@ -434,6 +436,23 @@ def _wmi_ref_from_dict(d: Mapping[str, Any] | None) -> WmiRef | None:
     if d is None:
         return None
     return WmiRef(**{f: d.get(f) for f in _WMI_FIELDS})
+
+
+_POWERSHELL_FIELDS = (
+    "script_block_text",
+    "script_block_id",
+    "script_path",
+    "message_number",
+    "message_total",
+    "payload",
+    "context_info",
+)
+
+
+def _powershell_ref_from_dict(d: Mapping[str, Any] | None) -> PowerShellRef | None:
+    if d is None:
+        return None
+    return PowerShellRef(**{f: d.get(f) for f in _POWERSHELL_FIELDS})
 
 
 def _registry_ref_from_dict(d: Mapping[str, Any] | None) -> RegistryRef | None:

@@ -125,6 +125,7 @@ _ALLOWED_TOP_LEVEL_FIELDS = frozenset(
         "file_stream",
         "pipe",
         "wmi",
+        "powershell",
     }
 )
 

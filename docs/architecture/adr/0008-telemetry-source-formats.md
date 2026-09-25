@@ -271,3 +271,36 @@ and PowerShell after real 4103/4104 samples are found. D1's list is otherwise un
   correlation facts ✓, Sigma wiring ✓, evidence type ✓, performance ✓ (≈1–2 ms/observation on all seven real
   samples, including the 64,000-event WMI file).
 - *Still unsupported:* Sysmon 2, 4, 5, 6, 9, 14, 24, 25, 26, 255 (no detection content, or no real samples yet).
+
+**PowerShell logging — 4103 / 4104 (2026-09-25).**
+
+- *Adapter:* new `sources/powershell.py` (`windows_powershell`), channel `Microsoft-Windows-PowerShell/Operational`
+  only. 4104 → `PowerShellRef` script block (`script_block_text`, `script_block_id`, `script_path`, part
+  `message_number`/`message_total`), action `powershell_script_block`; 4103 → `payload` + `context_info`, action
+  `powershell_module`. Channel and event ID are checked first; any other ID, a 4104 without `ScriptBlockText`,
+  or a 4103 without `Payload` is refused. Both collector (`winlog`) and flat NXLog records are accepted.
+- *Exact event time for NXLog exports:* these PowerShell records carry no UTC event time — `EventTime` is
+  zone-less host-local time and `@timestamp` is the pipeline's receive time. `EventReceivedTime` (local) and
+  `@timestamp` (UTC) mark the same instant, so their difference, rounded to a 15-minute zone step, is the host
+  offset; a residual over 5 minutes or any missing/zoned field refuses the record. Validated on all 93,426
+  records of the three Empire samples: offset −4 h throughout, pipeline delay ≤ 16 s. Precision `SECOND`.
+- *Real conversion (golden):* 2,321 module-logging + 2 script-block observations, all with unique
+  `RecordNumber` ids. Refused: 33 4103 records whose payload exists only in the rendered `Message` (not
+  parsed — rendering text is not a stable contract), and event IDs 40961/40962/53504 (session/IPC
+  bookkeeping, no evidence content). Classic `Windows PowerShell` channel 400/600/800 is **not** supported:
+  the exports carry no structured `Data` for it.
+- *Detection wiring:* `sigma-field-map/6` adds `ps_script` (action `powershell_script_block`) and `ps_module`
+  (action `powershell_module`); importer 1.5. A test proves script rules never fire on module events and
+  vice versa. Sigma import 1,389 + 55 partial (was 1,256 + 55); **group-used technique coverage 210 → 220 of
+  498**; groups with ≥ 2 / ≥ 5 / ≥ 10 covered techniques: 163 / 141 / 108.
+- *Software-tag review:* +1 rejection — a ps_script rule tagged S0363 **Empire** for Silence's tooling
+  (Silence.EDA); generic Empire strings are not Silence-specific evidence. Caught by the completeness test.
+- *Real-data results:* the Empire script-block **logging bypass** (`cachedGroupPolicySettings`) is detected as
+  T1685 (AMSI/logging impairment) plus T1059.001 from module logging.
+- *Recorded limitations:* (1) PowerShell events identify the host process by **pid only**, with no GUID, so
+  they form no structural correlation link under ADR-0003 (which rejects bare pid matching). Proposed
+  ADR-0003 Amendment B: bind pid + host to a process lifetime established by Sysmon 1/5. (2) The Empire
+  Mimikatz sample contains no 4104 events and no Mimikatz strings — a telemetry/content gap in that run,
+  recorded honestly; no hand-written rule was added to force a detection.
+- *Acceptance (D2):* exact mapping ✓, fail-closed ✓, real-sample golden tests ✓ (19 tests), source-agnostic ✓,
+  correlation facts ✓ (limitation recorded), Sigma wiring ✓, evidence type ✓, performance ✓ (≈3 ms/observation).

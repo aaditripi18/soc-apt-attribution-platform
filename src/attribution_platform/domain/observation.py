@@ -43,6 +43,7 @@ from attribution_platform.domain.entities import (
     HostRef,
     NetworkInfo,
     PipeRef,
+    PowerShellRef,
     ProcessAccessRef,
     ProcessRef,
     RegistryRef,
@@ -76,9 +77,10 @@ class Observation:
     - ``event`` — ECS-style event category/type/action metadata.
     - ``host`` / ``user`` / ``process`` / ``network`` / ``file`` / ``dll`` /
       ``registry`` / ``target_process`` / ``process_access`` / ``remote_thread``
-      / ``dns`` / ``file_stream`` / ``pipe`` / ``wmi`` — entity groups (added
-      by ADR-0008 Wave 1 for image-load, registry, process-access,
-      remote-thread, DNS, stream, pipe and WMI events;
+      / ``dns`` / ``file_stream`` / ``pipe`` / ``wmi`` / ``powershell`` —
+      entity groups (added by ADR-0008 Wave 1 for image-load, registry,
+      process-access, remote-thread, DNS, stream, pipe, WMI and PowerShell
+      logging events;
       ``target_process`` is the process *acted upon*, ``process`` the actor).
 
     ``schema_version`` defaults to the current contract version (a static
@@ -104,6 +106,7 @@ class Observation:
     file_stream: FileStreamRef | None = None
     pipe: PipeRef | None = None
     wmi: WmiRef | None = None
+    powershell: PowerShellRef | None = None
     schema_version: str = field(default=OBSERVATION_SCHEMA_VERSION)
 
     def __post_init__(self) -> None:

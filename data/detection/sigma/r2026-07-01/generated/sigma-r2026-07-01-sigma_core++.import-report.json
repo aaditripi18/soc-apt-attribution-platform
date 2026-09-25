@@ -1,16 +1,16 @@
 {
  "provenance": {
-  "importer": "sigma-importer/1.4",
+  "importer": "sigma-importer/1.5",
   "sigma_release": "r2026-07-01",
   "sigma_archive": "sigma_core++.zip",
   "sigma_archive_sha256": "469d83e1d1bbdb4d7876466ff1a728550fae5a20115b91339d58d20e894e7477",
   "pysigma_version": "1.5.1",
-  "field_map_version": "sigma-field-map/5",
+  "field_map_version": "sigma-field-map/6",
   "attack_kb_version": "enterprise-attack-19.2",
   "dnf_bound": 64,
   "software_tag_review": {
    "file": "software-tag-review.json",
-   "sha256": "a3c56624b8ec5a6a3370b202a81a1a6a8c0632977d7675d6b527bc7a8b4a00eb",
+   "sha256": "da251ce071a15ed2fc8efd7218bd34e81e45922d3f81b12e80d6c589cb8ffe00",
    "accepted": [
     "304afd73-55a5-4bb9-8c21-0b1fc84ea9e4:attack.s0029",
     "41504465-5e3a-4a5b-a5b4-2a0baadd4463:attack.s0029",
@@ -30,28 +30,27 @@
  "summary": {
   "sigma_rules_total": 2842,
   "by_status": {
-   "imported": 1256,
+   "imported": 1389,
    "partial": 55,
-   "rejected": 1531
+   "rejected": 1398
   },
   "rejected_by_reason": {
    "no_attack_mapping": 319,
-   "telemetry_gap": 994,
-   "translation_gap": 218
+   "telemetry_gap": 838,
+   "translation_gap": 241
   },
-  "generated_rules": 10324,
-  "attack_ids_with_imported_rule": 255,
+  "generated_rules": 10997,
+  "attack_ids_with_imported_rule": 267,
   "group_tags_ignored": 12,
   "software_tags_ignored": 44
  },
  "gap_reasons": {
-  "translation_gap:interior_wildcard_or_empty": 283,
+  "translation_gap:interior_wildcard_or_empty": 292,
   "telemetry_gap:field:Hashes": 212,
   "telemetry_gap:field:Initiated": 173,
-  "dnf_bound_exceeded:>64": 150,
-  "logsource:windows/ps_script": 130,
+  "dnf_bound_exceeded:>64": 155,
+  "translation_gap:value_type:SigmaRegularExpression": 134,
   "logsource:windows/security": 122,
-  "translation_gap:value_type:SigmaRegularExpression": 108,
   "telemetry_gap:field:CommandLine": 92,
   "translation_gap:value_type:SigmaCIDRExpression": 83,
   "logsource:linux/process_creation": 78,
@@ -65,7 +64,6 @@
   "logsource:aws/cloudtrail": 37,
   "logsource:/proxy": 26,
   "logsource:linux/auditd": 26,
-  "logsource:windows/ps_module": 26,
   "logsource:opencanary/application": 24,
   "logsource:azure/activitylogs": 23,
   "logsource:azure/signinlogs": 20,
@@ -163,6 +161,7 @@
   "telemetry_gap:field:Provider_Name": 1
  },
  "unmapped_field_notes": {
+  "Data": "classic 'Windows PowerShell' channel (400/600/800) rules read the event's Data element; exports seen so far carry only the rendered Message",
   "DestinationHostname": "destination hostname is not captured on NetworkInfo",
   "Hashes": "Sigma matches Sysmon's combined 'SHA1=..,MD5=..,IMPHASH=..' string (often IMPHASH, which no adapter captures); no exact mapping onto structured hashes",
   "Initiated": "Sysmon 'Initiated' → ECS network.direction mapping is not verified",
@@ -194,6 +193,7 @@
   "T1012",
   "T1016",
   "T1018",
+  "T1020",
   "T1021",
   "T1021.001",
   "T1021.002",
@@ -226,6 +226,7 @@
   "T1055.001",
   "T1055.003",
   "T1055.012",
+  "T1056.001",
   "T1056.002",
   "T1057",
   "T1059",
@@ -241,10 +242,12 @@
   "T1070.003",
   "T1070.004",
   "T1070.005",
+  "T1070.006",
   "T1071",
   "T1071.001",
   "T1071.004",
   "T1072",
+  "T1078",
   "T1078.002",
   "T1082",
   "T1083",
@@ -266,6 +269,7 @@
   "T1112",
   "T1113",
   "T1114",
+  "T1114.001",
   "T1115",
   "T1119",
   "T1123",
@@ -321,6 +325,7 @@
   "T1219",
   "T1219.002",
   "T1220",
+  "T1222",
   "T1222.001",
   "T1482",
   "T1484.001",
@@ -330,6 +335,7 @@
   "T1490",
   "T1491.001",
   "T1496",
+  "T1497.001",
   "T1505.002",
   "T1505.003",
   "T1505.004",
@@ -339,6 +345,7 @@
   "T1526",
   "T1528",
   "T1529",
+  "T1531",
   "T1539",
   "T1542.001",
   "T1542.003",
@@ -378,6 +385,7 @@
   "T1553",
   "T1553.003",
   "T1553.004",
+  "T1553.005",
   "T1554",
   "T1555",
   "T1555.003",
@@ -398,6 +406,8 @@
   "T1564.002",
   "T1564.003",
   "T1564.004",
+  "T1564.006",
+  "T1565",
   "T1566",
   "T1566.001",
   "T1567",
@@ -405,6 +415,7 @@
   "T1569",
   "T1569.002",
   "T1570",
+  "T1571",
   "T1572",
   "T1574",
   "T1574.001",
@@ -698,13 +709,11 @@
    "path": "rules/windows/powershell/powershell_script/posh_ps_create_new_dmsasvc_account.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/powershell/powershell_script/posh_ps_create_new_dmsasvc_account.yml",
    "logsource": "windows/ps_script",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:windows/ps_script": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 1,
+   "conjuncts_imported": 1,
+   "gap_reasons": {},
    "attack_ids": [
     "T1098",
     "T1078.002"
@@ -1070,13 +1079,11 @@
    "path": "rules/windows/powershell/powershell_script/posh_ps_susp_follina_execution.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/powershell/powershell_script/posh_ps_susp_follina_execution.yml",
    "logsource": "windows/ps_script",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:windows/ps_script": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 1,
+   "conjuncts_imported": 1,
+   "gap_reasons": {},
    "attack_ids": [
     "T1202"
    ],
@@ -1180,13 +1187,11 @@
    "path": "rules/windows/powershell/powershell_script/posh_ps_win_api_susp_access.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/powershell/powershell_script/posh_ps_win_api_susp_access.yml",
    "logsource": "windows/ps_script",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:windows/ps_script": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 5,
+   "conjuncts_imported": 5,
+   "gap_reasons": {},
    "attack_ids": [
     "T1106",
     "T1620",
@@ -1566,13 +1571,11 @@
    "path": "rules/windows/powershell/powershell_script/posh_ps_user_profile_tampering.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/powershell/powershell_script/posh_ps_user_profile_tampering.yml",
    "logsource": "windows/ps_script",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:windows/ps_script": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 8,
+   "conjuncts_imported": 8,
+   "gap_reasons": {},
    "attack_ids": [
     "T1546.013"
    ],
@@ -1645,13 +1648,11 @@
    "path": "rules/windows/powershell/powershell_script/posh_ps_get_adreplaccount.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/powershell/powershell_script/posh_ps_get_adreplaccount.yml",
    "logsource": "windows/ps_script",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:windows/ps_script": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 1,
+   "conjuncts_imported": 1,
+   "gap_reasons": {},
    "attack_ids": [
     "T1003.006"
    ],
@@ -1835,13 +1836,11 @@
    "path": "rules/windows/powershell/powershell_script/posh_ps_susp_start_process.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/powershell/powershell_script/posh_ps_susp_start_process.yml",
    "logsource": "windows/ps_script",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:windows/ps_script": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 2,
+   "conjuncts_imported": 2,
+   "gap_reasons": {},
    "attack_ids": [
     "T1036.003"
    ],
@@ -1989,13 +1988,11 @@
    "path": "rules/windows/powershell/powershell_module/posh_pm_invoke_obfuscation_via_use_mhsta.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/powershell/powershell_module/posh_pm_invoke_obfuscation_via_use_mhsta.yml",
    "logsource": "windows/ps_module",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:windows/ps_module": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 1,
+   "conjuncts_imported": 1,
+   "gap_reasons": {},
    "attack_ids": [
     "T1059.001",
     "T1027"
@@ -2402,13 +2399,11 @@
    "path": "rules/windows/powershell/powershell_script/posh_ps_wmi_unquoted_service_search.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/powershell/powershell_script/posh_ps_wmi_unquoted_service_search.yml",
    "logsource": "windows/ps_script",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:windows/ps_script": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 2,
+   "conjuncts_imported": 2,
+   "gap_reasons": {},
    "attack_ids": [
     "T1047"
    ],
@@ -2668,11 +2663,11 @@
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/powershell/powershell_script/posh_ps_invoke_obfuscation_var.yml",
    "logsource": "windows/ps_script",
    "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
+   "rejection": "translation_gap",
+   "conjuncts_total": 1,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "logsource:windows/ps_script": 1
+    "translation_gap:value_type:SigmaRegularExpression": 1
    },
    "attack_ids": [
     "T1059.001",
@@ -3493,13 +3488,11 @@
    "path": "rules/windows/powershell/powershell_script/posh_ps_susp_clear_eventlog.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/powershell/powershell_script/posh_ps_susp_clear_eventlog.yml",
    "logsource": "windows/ps_script",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:windows/ps_script": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 6,
+   "conjuncts_imported": 6,
+   "gap_reasons": {},
    "attack_ids": [
     "T1685.005"
    ],
@@ -4015,13 +4008,11 @@
    "path": "rules/windows/powershell/powershell_script/posh_ps_web_request_cmd_and_cmdlets.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/powershell/powershell_script/posh_ps_web_request_cmd_and_cmdlets.yml",
    "logsource": "windows/ps_script",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:windows/ps_script": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 10,
+   "conjuncts_imported": 10,
+   "gap_reasons": {},
    "attack_ids": [
     "T1059.001"
    ],
@@ -4071,13 +4062,11 @@
    "path": "rules/windows/powershell/powershell_script/posh_ps_etw_trace_evasion.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/powershell/powershell_script/posh_ps_etw_trace_evasion.yml",
    "logsource": "windows/ps_script",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:windows/ps_script": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 2,
+   "conjuncts_imported": 2,
+   "gap_reasons": {},
    "attack_ids": [
     "T1070",
     "T1685"
@@ -4860,13 +4849,11 @@
    "path": "rules/windows/powershell/powershell_script/posh_ps_tamper_windows_defender_set_mp.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/powershell/powershell_script/posh_ps_tamper_windows_defender_set_mp.yml",
    "logsource": "windows/ps_script",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:windows/ps_script": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 52,
+   "conjuncts_imported": 52,
+   "gap_reasons": {},
    "attack_ids": [
     "T1685"
    ],
@@ -5173,13 +5160,11 @@
    "path": "rules/windows/powershell/powershell_script/posh_ps_susp_directory_enum.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/powershell/powershell_script/posh_ps_susp_directory_enum.yml",
    "logsource": "windows/ps_script",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:windows/ps_script": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 1,
+   "conjuncts_imported": 1,
+   "gap_reasons": {},
    "attack_ids": [
     "T1083"
    ],
@@ -5268,13 +5253,11 @@
    "path": "rules/windows/powershell/powershell_script/posh_ps_shellcode_b64.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/powershell/powershell_script/posh_ps_shellcode_b64.yml",
    "logsource": "windows/ps_script",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:windows/ps_script": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 2,
+   "conjuncts_imported": 2,
+   "gap_reasons": {},
    "attack_ids": [
     "T1055",
     "T1059.001"
@@ -5706,13 +5689,11 @@
    "path": "rules/windows/powershell/powershell_script/posh_ps_potential_invoke_mimikatz.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/powershell/powershell_script/posh_ps_potential_invoke_mimikatz.yml",
    "logsource": "windows/ps_script",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:windows/ps_script": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 3,
+   "conjuncts_imported": 3,
+   "gap_reasons": {},
    "attack_ids": [
     "T1003"
    ],
@@ -6478,11 +6459,11 @@
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/powershell/powershell_script/posh_ps_invoke_obfuscation_obfuscated_iex.yml",
    "logsource": "windows/ps_script",
    "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
+   "rejection": "translation_gap",
+   "conjuncts_total": 6,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "logsource:windows/ps_script": 1
+    "translation_gap:value_type:SigmaRegularExpression": 6
    },
    "attack_ids": [
     "T1059.001",
@@ -6651,13 +6632,11 @@
    "path": "rules/windows/powershell/powershell_script/posh_ps_susp_new_psdrive.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/powershell/powershell_script/posh_ps_susp_new_psdrive.yml",
    "logsource": "windows/ps_script",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:windows/ps_script": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 1,
+   "conjuncts_imported": 1,
+   "gap_reasons": {},
    "attack_ids": [
     "T1021.002"
    ],
@@ -7342,13 +7321,11 @@
    "path": "rules/windows/powershell/powershell_script/posh_ps_susp_keywords.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/powershell/powershell_script/posh_ps_susp_keywords.yml",
    "logsource": "windows/ps_script",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:windows/ps_script": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 10,
+   "conjuncts_imported": 10,
+   "gap_reasons": {},
    "attack_ids": [
     "T1059.001"
    ],
@@ -7362,13 +7339,11 @@
    "path": "rules/windows/powershell/powershell_script/posh_ps_directorysearcher.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/powershell/powershell_script/posh_ps_directorysearcher.yml",
    "logsource": "windows/ps_script",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:windows/ps_script": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 1,
+   "conjuncts_imported": 1,
+   "gap_reasons": {},
    "attack_ids": [
     "T1018"
    ],
@@ -7618,13 +7593,11 @@
    "path": "rules/windows/powershell/powershell_script/posh_ps_invoke_obfuscation_via_compress.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/powershell/powershell_script/posh_ps_invoke_obfuscation_via_compress.yml",
    "logsource": "windows/ps_script",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:windows/ps_script": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 2,
+   "conjuncts_imported": 2,
+   "gap_reasons": {},
    "attack_ids": [
     "T1059.001",
     "T1027"
@@ -7850,13 +7823,11 @@
    "path": "rules/windows/powershell/powershell_script/posh_ps_import_module_susp_dirs.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/powershell/powershell_script/posh_ps_import_module_susp_dirs.yml",
    "logsource": "windows/ps_script",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:windows/ps_script": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 14,
+   "conjuncts_imported": 14,
+   "gap_reasons": {},
    "attack_ids": [
     "T1059.001"
    ],
@@ -8115,13 +8086,11 @@
    "path": "rules/windows/powershell/powershell_script/posh_ps_susp_service_dacl_modification_set_service.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/powershell/powershell_script/posh_ps_susp_service_dacl_modification_set_service.yml",
    "logsource": "windows/ps_script",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:windows/ps_script": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 10,
+   "conjuncts_imported": 10,
+   "gap_reasons": {},
    "attack_ids": [
     "T1574.011"
    ],
@@ -8232,13 +8201,11 @@
    "path": "rules/windows/powershell/powershell_script/posh_ps_cor_profiler.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/powershell/powershell_script/posh_ps_cor_profiler.yml",
    "logsource": "windows/ps_script",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:windows/ps_script": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 1,
+   "conjuncts_imported": 1,
+   "gap_reasons": {},
    "attack_ids": [
     "T1574.012"
    ],
@@ -8436,13 +8403,11 @@
    "path": "rules/windows/powershell/powershell_script/posh_ps_create_local_user.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/powershell/powershell_script/posh_ps_create_local_user.yml",
    "logsource": "windows/ps_script",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:windows/ps_script": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 1,
+   "conjuncts_imported": 1,
+   "gap_reasons": {},
    "attack_ids": [
     "T1136.001",
     "T1059.001"
@@ -8946,13 +8911,11 @@
    "path": "rules/windows/powershell/powershell_script/posh_ps_software_discovery.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/powershell/powershell_script/posh_ps_software_discovery.yml",
    "logsource": "windows/ps_script",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:windows/ps_script": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 1,
+   "conjuncts_imported": 1,
+   "gap_reasons": {},
    "attack_ids": [
     "T1518"
    ],
@@ -8966,13 +8929,11 @@
    "path": "rules/windows/powershell/powershell_script/posh_ps_clear_powershell_history.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/powershell/powershell_script/posh_ps_clear_powershell_history.yml",
    "logsource": "windows/ps_script",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:windows/ps_script": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 5,
+   "conjuncts_imported": 5,
+   "gap_reasons": {},
    "attack_ids": [
     "T1070.003"
    ],
@@ -9285,13 +9246,11 @@
    "path": "rules/windows/powershell/powershell_script/posh_ps_susp_mail_acces.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/powershell/powershell_script/posh_ps_susp_mail_acces.yml",
    "logsource": "windows/ps_script",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:windows/ps_script": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 4,
+   "conjuncts_imported": 4,
+   "gap_reasons": {},
    "attack_ids": [
     "T1114.001"
    ],
@@ -9574,13 +9533,11 @@
    "path": "rules/windows/powershell/powershell_script/posh_ps_vbscript_registry_modification.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/powershell/powershell_script/posh_ps_vbscript_registry_modification.yml",
    "logsource": "windows/ps_script",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:windows/ps_script": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 1,
+   "conjuncts_imported": 1,
+   "gap_reasons": {},
    "attack_ids": [
     "T1112",
     "T1059.005"
@@ -10340,11 +10297,11 @@
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/powershell/powershell_module/posh_pm_invoke_obfuscation_obfuscated_iex.yml",
    "logsource": "windows/ps_module",
    "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
+   "rejection": "translation_gap",
+   "conjuncts_total": 7,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "logsource:windows/ps_module": 1
+    "translation_gap:value_type:SigmaRegularExpression": 7
    },
    "attack_ids": [
     "T1059.001",
@@ -10876,13 +10833,11 @@
    "path": "rules/windows/powershell/powershell_script/posh_ps_susp_windowstyle.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/powershell/powershell_script/posh_ps_susp_windowstyle.yml",
    "logsource": "windows/ps_script",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:windows/ps_script": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 2,
+   "conjuncts_imported": 2,
+   "gap_reasons": {},
    "attack_ids": [
     "T1564.003"
    ],
@@ -11109,13 +11064,11 @@
    "path": "rules/windows/powershell/powershell_script/posh_ps_hktl_rubeus.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/powershell/powershell_script/posh_ps_hktl_rubeus.yml",
    "logsource": "windows/ps_script",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:windows/ps_script": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 15,
+   "conjuncts_imported": 15,
+   "gap_reasons": {},
    "attack_ids": [
     "T1003",
     "T1550.003",
@@ -11640,13 +11593,11 @@
    "path": "rules/windows/powershell/powershell_script/posh_ps_keylogging.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/powershell/powershell_script/posh_ps_keylogging.yml",
    "logsource": "windows/ps_script",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:windows/ps_script": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 2,
+   "conjuncts_imported": 2,
+   "gap_reasons": {},
    "attack_ids": [
     "T1056.001"
    ],
@@ -11935,13 +11886,11 @@
    "path": "rules/windows/powershell/powershell_script/posh_ps_cmdlet_scheduled_task.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/powershell/powershell_script/posh_ps_cmdlet_scheduled_task.yml",
    "logsource": "windows/ps_script",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:windows/ps_script": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 21,
+   "conjuncts_imported": 21,
+   "gap_reasons": {},
    "attack_ids": [
     "T1053.005"
    ],
@@ -12089,13 +12038,11 @@
    "path": "rules/windows/powershell/powershell_script/posh_ps_office_comobject_registerxll.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/powershell/powershell_script/posh_ps_office_comobject_registerxll.yml",
    "logsource": "windows/ps_script",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:windows/ps_script": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 1,
+   "conjuncts_imported": 1,
+   "gap_reasons": {},
    "attack_ids": [
     "T1137.006"
    ],
@@ -12404,13 +12351,11 @@
    "path": "rules/windows/powershell/powershell_module/posh_pm_remotefxvgpudisablement_abuse.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/powershell/powershell_module/posh_pm_remotefxvgpudisablement_abuse.yml",
    "logsource": "windows/ps_module",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:windows/ps_module": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 1,
+   "conjuncts_imported": 1,
+   "gap_reasons": {},
    "attack_ids": [
     "T1218"
    ],
@@ -13100,13 +13045,11 @@
    "path": "rules/windows/powershell/powershell_script/posh_ps_set_acl_susp_location.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/powershell/powershell_script/posh_ps_set_acl_susp_location.yml",
    "logsource": "windows/ps_script",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:windows/ps_script": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 18,
+   "conjuncts_imported": 18,
+   "gap_reasons": {},
    "attack_ids": [
     "T1222"
    ],
@@ -13156,13 +13099,11 @@
    "path": "rules/windows/powershell/powershell_script/posh_ps_download_com_cradles.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/powershell/powershell_script/posh_ps_download_com_cradles.yml",
    "logsource": "windows/ps_script",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:windows/ps_script": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 10,
+   "conjuncts_imported": 10,
+   "gap_reasons": {},
    "attack_ids": [
     "T1105"
    ],
@@ -13214,13 +13155,11 @@
    "path": "rules/windows/powershell/powershell_script/posh_ps_apt_silence_eda.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/powershell/powershell_script/posh_ps_apt_silence_eda.yml",
    "logsource": "windows/ps_script",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:windows/ps_script": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 1,
+   "conjuncts_imported": 1,
+   "gap_reasons": {},
    "attack_ids": [
     "T1071.004",
     "T1572",
@@ -13630,13 +13569,11 @@
    "path": "rules/windows/powershell/powershell_script/posh_ps_shellintel_malicious_commandlets.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/powershell/powershell_script/posh_ps_shellintel_malicious_commandlets.yml",
    "logsource": "windows/ps_script",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:windows/ps_script": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 3,
+   "conjuncts_imported": 3,
+   "gap_reasons": {},
    "attack_ids": [
     "T1059.001"
    ],
@@ -13650,13 +13587,11 @@
    "path": "rules/windows/powershell/powershell_script/posh_ps_susp_download.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/powershell/powershell_script/posh_ps_susp_download.yml",
    "logsource": "windows/ps_script",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:windows/ps_script": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 4,
+   "conjuncts_imported": 4,
+   "gap_reasons": {},
    "attack_ids": [
     "T1059.001"
    ],
@@ -13821,11 +13756,11 @@
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/powershell/powershell_module/posh_pm_exploit_scripts.yml",
    "logsource": "windows/ps_module",
    "status": "rejected",
-   "rejection": "telemetry_gap",
+   "rejection": "translation_gap",
    "conjuncts_total": 0,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "logsource:windows/ps_module": 1
+    "dnf_bound_exceeded:>64": 1
    },
    "attack_ids": [
     "T1059.001"
@@ -14179,13 +14114,11 @@
    "path": "rules/windows/powershell/powershell_script/posh_ps_root_certificate_installed.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/powershell/powershell_script/posh_ps_root_certificate_installed.yml",
    "logsource": "windows/ps_script",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:windows/ps_script": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 2,
+   "conjuncts_imported": 2,
+   "gap_reasons": {},
    "attack_ids": [
     "T1553.004"
    ],
@@ -14283,13 +14216,11 @@
    "path": "rules/windows/powershell/powershell_script/posh_ps_susp_hyper_v_condlet.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/powershell/powershell_script/posh_ps_susp_hyper_v_condlet.yml",
    "logsource": "windows/ps_script",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:windows/ps_script": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 3,
+   "conjuncts_imported": 3,
+   "gap_reasons": {},
    "attack_ids": [
     "T1564.006"
    ],
@@ -14391,13 +14322,11 @@
    "path": "rules/windows/powershell/powershell_script/posh_ps_add_dnsclient_rule.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/powershell/powershell_script/posh_ps_add_dnsclient_rule.yml",
    "logsource": "windows/ps_script",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:windows/ps_script": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 1,
+   "conjuncts_imported": 1,
+   "gap_reasons": {},
    "attack_ids": [
     "T1565"
    ],
@@ -15286,13 +15215,11 @@
    "path": "rules/windows/powershell/powershell_script/posh_ps_windows_firewall_profile_disabled.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/powershell/powershell_script/posh_ps_windows_firewall_profile_disabled.yml",
    "logsource": "windows/ps_script",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:windows/ps_script": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 4,
+   "conjuncts_imported": 4,
+   "gap_reasons": {},
    "attack_ids": [
     "T1686.003"
    ],
@@ -15324,13 +15251,11 @@
    "path": "rules/windows/powershell/powershell_script/posh_ps_susp_remove_adgroupmember.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/powershell/powershell_script/posh_ps_susp_remove_adgroupmember.yml",
    "logsource": "windows/ps_script",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:windows/ps_script": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 1,
+   "conjuncts_imported": 1,
+   "gap_reasons": {},
    "attack_ids": [
     "T1531"
    ],
@@ -16349,13 +16274,11 @@
    "path": "rules/windows/powershell/powershell_script/posh_ps_icmp_exfiltration.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/powershell/powershell_script/posh_ps_icmp_exfiltration.yml",
    "logsource": "windows/ps_script",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:windows/ps_script": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 1,
+   "conjuncts_imported": 1,
+   "gap_reasons": {},
    "attack_ids": [
     "T1048.003"
    ],
@@ -16446,13 +16369,11 @@
    "path": "rules/windows/powershell/powershell_module/posh_pm_get_clipboard.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/powershell/powershell_module/posh_pm_get_clipboard.yml",
    "logsource": "windows/ps_module",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:windows/ps_module": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 1,
+   "conjuncts_imported": 1,
+   "gap_reasons": {},
    "attack_ids": [
     "T1115"
    ],
@@ -17055,13 +16976,11 @@
    "path": "rules/windows/powershell/powershell_script/posh_ps_localuser.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/powershell/powershell_script/posh_ps_localuser.yml",
    "logsource": "windows/ps_script",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:windows/ps_script": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 7,
+   "conjuncts_imported": 7,
+   "gap_reasons": {},
    "attack_ids": [
     "T1098"
    ],
@@ -17191,13 +17110,11 @@
    "path": "rules/windows/powershell/powershell_script/posh_ps_x509enrollment.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/powershell/powershell_script/posh_ps_x509enrollment.yml",
    "logsource": "windows/ps_script",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:windows/ps_script": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 2,
+   "conjuncts_imported": 2,
+   "gap_reasons": {},
    "attack_ids": [
     "T1553.004"
    ],
@@ -19153,13 +19070,11 @@
    "path": "rules/windows/powershell/powershell_script/posh_ps_susp_unblock_file.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/powershell/powershell_script/posh_ps_susp_unblock_file.yml",
    "logsource": "windows/ps_script",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:windows/ps_script": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 1,
+   "conjuncts_imported": 1,
+   "gap_reasons": {},
    "attack_ids": [
     "T1553.005"
    ],
@@ -20316,13 +20231,11 @@
    "path": "rules/windows/powershell/powershell_script/posh_ps_powershell_web_access_installation.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/powershell/powershell_script/posh_ps_powershell_web_access_installation.yml",
    "logsource": "windows/ps_script",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:windows/ps_script": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 3,
+   "conjuncts_imported": 3,
+   "gap_reasons": {},
    "attack_ids": [
     "T1059.001"
    ],
@@ -20409,13 +20322,11 @@
    "path": "rules/windows/powershell/powershell_script/posh_ps_disable_psreadline_command_history.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/powershell/powershell_script/posh_ps_disable_psreadline_command_history.yml",
    "logsource": "windows/ps_script",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:windows/ps_script": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 1,
+   "conjuncts_imported": 1,
+   "gap_reasons": {},
    "attack_ids": [
     "T1070.003"
    ],
@@ -20429,13 +20340,11 @@
    "path": "rules/windows/powershell/powershell_script/posh_ps_enumerate_password_windows_credential_manager.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/powershell/powershell_script/posh_ps_enumerate_password_windows_credential_manager.yml",
    "logsource": "windows/ps_script",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:windows/ps_script": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 2,
+   "conjuncts_imported": 2,
+   "gap_reasons": {},
    "attack_ids": [
     "T1555"
    ],
@@ -20695,13 +20604,11 @@
    "path": "rules/windows/powershell/powershell_script/posh_ps_set_policies_to_unsecure_level.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/powershell/powershell_script/posh_ps_set_policies_to_unsecure_level.yml",
    "logsource": "windows/ps_script",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:windows/ps_script": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 2,
+   "conjuncts_imported": 2,
+   "gap_reasons": {},
    "attack_ids": [
     "T1059.001"
    ],
@@ -21048,11 +20955,11 @@
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/powershell/powershell_script/posh_ps_copy_item_system_directory.yml",
    "logsource": "windows/ps_script",
    "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
+   "rejection": "translation_gap",
+   "conjuncts_total": 1,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "logsource:windows/ps_script": 1
+    "translation_gap:value_type:SigmaRegularExpression": 1
    },
    "attack_ids": [
     "T1556.002"
@@ -21328,13 +21235,11 @@
    "path": "rules/windows/powershell/powershell_module/posh_pm_alternate_powershell_hosts.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/powershell/powershell_module/posh_pm_alternate_powershell_hosts.yml",
    "logsource": "windows/ps_module",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:windows/ps_module": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 1,
+   "conjuncts_imported": 1,
+   "gap_reasons": {},
    "attack_ids": [
     "T1059.001"
    ],
@@ -21602,13 +21507,11 @@
    "path": "rules/windows/powershell/powershell_script/posh_ps_susp_mounted_share_deletion.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/powershell/powershell_script/posh_ps_susp_mounted_share_deletion.yml",
    "logsource": "windows/ps_script",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:windows/ps_script": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 10,
+   "conjuncts_imported": 10,
+   "gap_reasons": {},
    "attack_ids": [
     "T1070.005"
    ],
@@ -22638,11 +22541,11 @@
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/powershell/powershell_module/posh_pm_invoke_obfuscation_var.yml",
    "logsource": "windows/ps_module",
    "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
+   "rejection": "translation_gap",
+   "conjuncts_total": 1,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "logsource:windows/ps_module": 1
+    "translation_gap:value_type:SigmaRegularExpression": 1
    },
    "attack_ids": [
     "T1059.001",
@@ -22694,13 +22597,11 @@
    "path": "rules/windows/powershell/powershell_script/posh_ps_xml_iex.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/powershell/powershell_script/posh_ps_xml_iex.yml",
    "logsource": "windows/ps_script",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:windows/ps_script": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 4,
+   "conjuncts_imported": 4,
+   "gap_reasons": {},
    "attack_ids": [
     "T1059.001"
    ],
@@ -23595,13 +23496,11 @@
    "path": "rules/windows/powershell/powershell_module/posh_pm_invoke_obfuscation_via_compress.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/powershell/powershell_module/posh_pm_invoke_obfuscation_via_compress.yml",
    "logsource": "windows/ps_module",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:windows/ps_module": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 2,
+   "conjuncts_imported": 2,
+   "gap_reasons": {},
    "attack_ids": [
     "T1059.001",
     "T1027"
@@ -23726,13 +23625,11 @@
    "path": "rules/windows/powershell/powershell_script/posh_ps_susp_iofilestream.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/powershell/powershell_script/posh_ps_susp_iofilestream.yml",
    "logsource": "windows/ps_script",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:windows/ps_script": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 1,
+   "conjuncts_imported": 1,
+   "gap_reasons": {},
    "attack_ids": [
     "T1070.003"
    ],
@@ -24378,11 +24275,11 @@
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/powershell/powershell_script/posh_ps_invoke_obfuscation_clip.yml",
    "logsource": "windows/ps_script",
    "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
+   "rejection": "translation_gap",
+   "conjuncts_total": 1,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "logsource:windows/ps_script": 1
+    "translation_gap:value_type:SigmaRegularExpression": 1
    },
    "attack_ids": [
     "T1059.001",
@@ -25187,11 +25084,11 @@
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/powershell/powershell_script/posh_ps_invoke_obfuscation_stdin.yml",
    "logsource": "windows/ps_script",
    "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
+   "rejection": "translation_gap",
+   "conjuncts_total": 1,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "logsource:windows/ps_script": 1
+    "translation_gap:value_type:SigmaRegularExpression": 1
    },
    "attack_ids": [
     "T1059.001",
@@ -25369,13 +25266,11 @@
    "path": "rules/windows/powershell/powershell_script/posh_ps_msxml_com.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/powershell/powershell_script/posh_ps_msxml_com.yml",
    "logsource": "windows/ps_script",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:windows/ps_script": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 1,
+   "conjuncts_imported": 1,
+   "gap_reasons": {},
    "attack_ids": [
     "T1059.001"
    ],
@@ -26073,13 +25968,11 @@
    "path": "rules/windows/powershell/powershell_script/posh_ps_invoke_command_remote.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/powershell/powershell_script/posh_ps_invoke_command_remote.yml",
    "logsource": "windows/ps_script",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:windows/ps_script": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 1,
+   "conjuncts_imported": 1,
+   "gap_reasons": {},
    "attack_ids": [
     "T1021.006"
    ],
@@ -26343,11 +26236,11 @@
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/powershell/powershell_module/posh_pm_malicious_commandlets.yml",
    "logsource": "windows/ps_module",
    "status": "rejected",
-   "rejection": "telemetry_gap",
+   "rejection": "translation_gap",
    "conjuncts_total": 0,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "logsource:windows/ps_module": 1
+    "dnf_bound_exceeded:>64": 1
    },
    "attack_ids": [
     "T1069",
@@ -26389,13 +26282,11 @@
    "path": "rules/windows/powershell/powershell_script/posh_ps_sensitive_file_discovery.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/powershell/powershell_script/posh_ps_sensitive_file_discovery.yml",
    "logsource": "windows/ps_script",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:windows/ps_script": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 9,
+   "conjuncts_imported": 9,
+   "gap_reasons": {},
    "attack_ids": [
     "T1083"
    ],
@@ -27070,13 +26961,11 @@
    "path": "rules/windows/powershell/powershell_script/posh_ps_wmimplant.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/powershell/powershell_script/posh_ps_wmimplant.yml",
    "logsource": "windows/ps_script",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:windows/ps_script": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 18,
+   "conjuncts_imported": 18,
+   "gap_reasons": {},
    "attack_ids": [
     "T1047",
     "T1059.001"
@@ -27950,13 +27839,11 @@
    "path": "rules/windows/powershell/powershell_script/posh_ps_dsinternals_cmdlets.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/powershell/powershell_script/posh_ps_dsinternals_cmdlets.yml",
    "logsource": "windows/ps_script",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:windows/ps_script": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 63,
+   "conjuncts_imported": 63,
+   "gap_reasons": {},
    "attack_ids": [
     "T1059.001"
    ],
@@ -28096,13 +27983,11 @@
    "path": "rules/windows/powershell/powershell_script/posh_ps_susp_getprocess_lsass.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/powershell/powershell_script/posh_ps_susp_getprocess_lsass.yml",
    "logsource": "windows/ps_script",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:windows/ps_script": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 1,
+   "conjuncts_imported": 1,
+   "gap_reasons": {},
    "attack_ids": [
     "T1003.001"
    ],
@@ -28196,13 +28081,11 @@
    "path": "rules/windows/powershell/powershell_script/posh_ps_winlogon_helper_dll.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/powershell/powershell_script/posh_ps_winlogon_helper_dll.yml",
    "logsource": "windows/ps_script",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:windows/ps_script": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 2,
+   "conjuncts_imported": 2,
+   "gap_reasons": {},
    "attack_ids": [
     "T1547.004"
    ],
@@ -28216,13 +28099,11 @@
    "path": "rules/windows/powershell/powershell_script/posh_ps_hktl_winpwn.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/powershell/powershell_script/posh_ps_hktl_winpwn.yml",
    "logsource": "windows/ps_script",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:windows/ps_script": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 4,
+   "conjuncts_imported": 4,
+   "gap_reasons": {},
    "attack_ids": [
     "T1548.002",
     "T1082",
@@ -28636,11 +28517,11 @@
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/powershell/powershell_script/posh_ps_invoke_obfuscation_via_stdin.yml",
    "logsource": "windows/ps_script",
    "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
+   "rejection": "translation_gap",
+   "conjuncts_total": 1,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "logsource:windows/ps_script": 1
+    "translation_gap:value_type:SigmaRegularExpression": 1
    },
    "attack_ids": [
     "T1059.001",
@@ -29000,13 +28881,11 @@
    "path": "rules/windows/powershell/powershell_module/posh_pm_invoke_obfuscation_via_use_rundll32.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/powershell/powershell_module/posh_pm_invoke_obfuscation_via_use_rundll32.yml",
    "logsource": "windows/ps_module",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:windows/ps_module": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 4,
+   "conjuncts_imported": 4,
+   "gap_reasons": {},
    "attack_ids": [
     "T1059.001",
     "T1027"
@@ -29132,11 +29011,11 @@
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/powershell/powershell_script/posh_ps_malicious_commandlets.yml",
    "logsource": "windows/ps_script",
    "status": "rejected",
-   "rejection": "telemetry_gap",
+   "rejection": "translation_gap",
    "conjuncts_total": 0,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "logsource:windows/ps_script": 1
+    "dnf_bound_exceeded:>64": 1
    },
    "attack_ids": [
     "T1069",
@@ -29623,13 +29502,11 @@
    "path": "rules/windows/powershell/powershell_script/posh_ps_susp_gettypefromclsid.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/powershell/powershell_script/posh_ps_susp_gettypefromclsid.yml",
    "logsource": "windows/ps_script",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:windows/ps_script": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 1,
+   "conjuncts_imported": 1,
+   "gap_reasons": {},
    "attack_ids": [
     "T1546.015"
    ],
@@ -29737,13 +29614,11 @@
    "path": "rules/windows/powershell/powershell_script/posh_ps_ntfs_ads_access.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/powershell/powershell_script/posh_ps_ntfs_ads_access.yml",
    "logsource": "windows/ps_script",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:windows/ps_script": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 2,
+   "conjuncts_imported": 2,
+   "gap_reasons": {},
    "attack_ids": [
     "T1059.001",
     "T1564.004"
@@ -29918,13 +29793,11 @@
    "path": "rules/windows/powershell/powershell_module/posh_pm_bad_opsec_artifacts.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/powershell/powershell_module/posh_pm_bad_opsec_artifacts.yml",
    "logsource": "windows/ps_module",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:windows/ps_module": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 6,
+   "conjuncts_imported": 6,
+   "gap_reasons": {},
    "attack_ids": [
     "T1059.001"
    ],
@@ -30400,13 +30273,11 @@
    "path": "rules/windows/powershell/powershell_module/posh_pm_susp_invocation_specific.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/powershell/powershell_module/posh_pm_susp_invocation_specific.yml",
    "logsource": "windows/ps_module",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:windows/ps_module": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 8,
+   "conjuncts_imported": 8,
+   "gap_reasons": {},
    "attack_ids": [
     "T1059.001"
    ],
@@ -30456,13 +30327,11 @@
    "path": "rules/windows/powershell/powershell_script/posh_ps_run_from_mount_diskimage.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/powershell/powershell_script/posh_ps_run_from_mount_diskimage.yml",
    "logsource": "windows/ps_script",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:windows/ps_script": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 1,
+   "conjuncts_imported": 1,
+   "gap_reasons": {},
    "attack_ids": [
     "T1553.005"
    ],
@@ -30477,11 +30346,11 @@
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/powershell/powershell_script/posh_ps_get_process_security_software_discovery.yml",
    "logsource": "windows/ps_script",
    "status": "rejected",
-   "rejection": "telemetry_gap",
+   "rejection": "translation_gap",
    "conjuncts_total": 0,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "logsource:windows/ps_script": 1
+    "dnf_bound_exceeded:>64": 1
    },
    "attack_ids": [
     "T1518.001"
@@ -30700,13 +30569,11 @@
    "path": "rules/windows/powershell/powershell_script/posh_ps_win32_product_install_msi.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/powershell/powershell_script/posh_ps_win32_product_install_msi.yml",
    "logsource": "windows/ps_script",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:windows/ps_script": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 1,
+   "conjuncts_imported": 1,
+   "gap_reasons": {},
    "attack_ids": [
     "T1218.007"
    ],
@@ -31563,13 +31430,11 @@
    "path": "rules/windows/powershell/powershell_script/posh_ps_using_set_service_to_hide_services.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/powershell/powershell_script/posh_ps_using_set_service_to_hide_services.yml",
    "logsource": "windows/ps_script",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:windows/ps_script": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 2,
+   "conjuncts_imported": 2,
+   "gap_reasons": {},
    "attack_ids": [
     "T1574.011"
    ],
@@ -31640,13 +31505,11 @@
    "path": "rules/windows/powershell/powershell_script/posh_ps_get_acl_service.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/powershell/powershell_script/posh_ps_get_acl_service.yml",
    "logsource": "windows/ps_script",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:windows/ps_script": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 1,
+   "conjuncts_imported": 1,
+   "gap_reasons": {},
    "attack_ids": [
     "T1574.011"
    ],
@@ -31793,13 +31656,11 @@
    "path": "rules/windows/powershell/powershell_script/posh_ps_susp_keylogger_activity.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/powershell/powershell_script/posh_ps_susp_keylogger_activity.yml",
    "logsource": "windows/ps_script",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:windows/ps_script": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 1,
+   "conjuncts_imported": 1,
+   "gap_reasons": {},
    "attack_ids": [
     "T1056.001"
    ],
@@ -31893,13 +31754,11 @@
    "path": "rules/windows/powershell/powershell_module/posh_pm_remote_powershell_session.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/powershell/powershell_module/posh_pm_remote_powershell_session.yml",
    "logsource": "windows/ps_module",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:windows/ps_module": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 1,
+   "conjuncts_imported": 1,
+   "gap_reasons": {},
    "attack_ids": [
     "T1021.006",
     "T1059.001"
@@ -31914,13 +31773,11 @@
    "path": "rules/windows/powershell/powershell_script/posh_ps_as_rep_roasting.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/powershell/powershell_script/posh_ps_as_rep_roasting.yml",
    "logsource": "windows/ps_script",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:windows/ps_script": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 1,
+   "conjuncts_imported": 1,
+   "gap_reasons": {},
    "attack_ids": [
     "T1033"
    ],
@@ -32553,13 +32410,11 @@
    "path": "rules/windows/powershell/powershell_script/posh_ps_enable_psremoting.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/powershell/powershell_script/posh_ps_enable_psremoting.yml",
    "logsource": "windows/ps_script",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:windows/ps_script": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 1,
+   "conjuncts_imported": 1,
+   "gap_reasons": {},
    "attack_ids": [
     "T1021.006"
    ],
@@ -32756,13 +32611,11 @@
    "path": "rules/windows/powershell/powershell_script/posh_ps_disable_windows_optional_feature.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/powershell/powershell_script/posh_ps_disable_windows_optional_feature.yml",
    "logsource": "windows/ps_script",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:windows/ps_script": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 4,
+   "conjuncts_imported": 4,
+   "gap_reasons": {},
    "attack_ids": [
     "T1685"
    ],
@@ -32776,13 +32629,11 @@
    "path": "rules/windows/powershell/powershell_script/posh_ps_dump_password_windows_credential_manager.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/powershell/powershell_script/posh_ps_dump_password_windows_credential_manager.yml",
    "logsource": "windows/ps_script",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:windows/ps_script": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 4,
+   "conjuncts_imported": 4,
+   "gap_reasons": {},
    "attack_ids": [
     "T1555"
    ],
@@ -33013,11 +32864,11 @@
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/powershell/powershell_module/posh_pm_invoke_obfuscation_stdin.yml",
    "logsource": "windows/ps_module",
    "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
+   "rejection": "translation_gap",
+   "conjuncts_total": 1,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "logsource:windows/ps_module": 1
+    "translation_gap:value_type:SigmaRegularExpression": 1
    },
    "attack_ids": [
     "T1059.001",
@@ -33717,13 +33568,11 @@
    "path": "rules/windows/powershell/powershell_script/posh_ps_wmi_persistence.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/powershell/powershell_script/posh_ps_wmi_persistence.yml",
    "logsource": "windows/ps_script",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:windows/ps_script": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 2,
+   "conjuncts_imported": 2,
+   "gap_reasons": {},
    "attack_ids": [
     "T1546.003"
    ],
@@ -34636,13 +34485,11 @@
    "path": "rules/windows/powershell/powershell_script/posh_ps_remote_session_creation.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/powershell/powershell_script/posh_ps_remote_session_creation.yml",
    "logsource": "windows/ps_script",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:windows/ps_script": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 1,
+   "conjuncts_imported": 1,
+   "gap_reasons": {},
    "attack_ids": [
     "T1059.001"
    ],
@@ -34695,11 +34542,11 @@
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/powershell/powershell_module/posh_pm_invoke_obfuscation_clip.yml",
    "logsource": "windows/ps_module",
    "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
+   "rejection": "translation_gap",
+   "conjuncts_total": 1,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "logsource:windows/ps_module": 1
+    "translation_gap:value_type:SigmaRegularExpression": 1
    },
    "attack_ids": [
     "T1059.001",
@@ -34974,13 +34821,11 @@
    "path": "rules/windows/powershell/powershell_module/posh_pm_invoke_obfuscation_via_rundll.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/powershell/powershell_module/posh_pm_invoke_obfuscation_via_rundll.yml",
    "logsource": "windows/ps_module",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:windows/ps_module": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 1,
+   "conjuncts_imported": 1,
+   "gap_reasons": {},
    "attack_ids": [
     "T1059.001",
     "T1027"
@@ -35577,13 +35422,11 @@
    "path": "rules/windows/powershell/powershell_script/posh_ps_invoke_obfuscation_via_use_rundll32.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/powershell/powershell_script/posh_ps_invoke_obfuscation_via_use_rundll32.yml",
    "logsource": "windows/ps_script",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:windows/ps_script": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 4,
+   "conjuncts_imported": 4,
+   "gap_reasons": {},
    "attack_ids": [
     "T1059.001",
     "T1027"
@@ -35852,13 +35695,11 @@
    "path": "rules/windows/powershell/powershell_script/posh_ps_store_file_in_alternate_data_stream.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/powershell/powershell_script/posh_ps_store_file_in_alternate_data_stream.yml",
    "logsource": "windows/ps_script",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:windows/ps_script": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 1,
+   "conjuncts_imported": 1,
+   "gap_reasons": {},
    "attack_ids": [
     "T1564.004"
    ],
@@ -36227,13 +36068,11 @@
    "path": "rules/windows/powershell/powershell_script/posh_ps_request_kerberos_ticket.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/powershell/powershell_script/posh_ps_request_kerberos_ticket.yml",
    "logsource": "windows/ps_script",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:windows/ps_script": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 1,
+   "conjuncts_imported": 1,
+   "gap_reasons": {},
    "attack_ids": [
     "T1558.003"
    ],
@@ -36341,13 +36180,11 @@
    "path": "rules/windows/powershell/powershell_script/posh_ps_susp_recon_export.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/powershell/powershell_script/posh_ps_susp_recon_export.yml",
    "logsource": "windows/ps_script",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:windows/ps_script": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 3,
+   "conjuncts_imported": 3,
+   "gap_reasons": {},
    "attack_ids": [
     "T1119"
    ],
@@ -36564,13 +36401,11 @@
    "path": "rules/windows/powershell/powershell_script/posh_ps_export_certificate.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/powershell/powershell_script/posh_ps_export_certificate.yml",
    "logsource": "windows/ps_script",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:windows/ps_script": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 2,
+   "conjuncts_imported": 2,
+   "gap_reasons": {},
    "attack_ids": [
     "T1552.004"
    ],
@@ -37203,13 +37038,11 @@
    "path": "rules/windows/powershell/powershell_script/posh_ps_test_netconnection.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/powershell/powershell_script/posh_ps_test_netconnection.yml",
    "logsource": "windows/ps_script",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:windows/ps_script": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 1,
+   "conjuncts_imported": 1,
+   "gap_reasons": {},
    "attack_ids": [
     "T1571"
    ],
@@ -37283,13 +37116,11 @@
    "path": "rules/windows/powershell/powershell_script/posh_ps_tamper_windows_defender_rem_mp.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/powershell/powershell_script/posh_ps_tamper_windows_defender_rem_mp.yml",
    "logsource": "windows/ps_script",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:windows/ps_script": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 4,
+   "conjuncts_imported": 4,
+   "gap_reasons": {},
    "attack_ids": [
     "T1685"
    ],
@@ -37341,13 +37172,11 @@
    "path": "rules/windows/powershell/powershell_script/posh_ps_susp_invocation_specific.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/powershell/powershell_script/posh_ps_susp_invocation_specific.yml",
    "logsource": "windows/ps_script",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:windows/ps_script": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 8,
+   "conjuncts_imported": 8,
+   "gap_reasons": {},
    "attack_ids": [
     "T1059.001"
    ],
@@ -37614,13 +37443,11 @@
    "path": "rules/windows/powershell/powershell_script/posh_ps_create_volume_shadow_copy.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/powershell/powershell_script/posh_ps_create_volume_shadow_copy.yml",
    "logsource": "windows/ps_script",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:windows/ps_script": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 1,
+   "conjuncts_imported": 1,
+   "gap_reasons": {},
    "attack_ids": [
     "T1003.003"
    ],
@@ -37634,13 +37461,11 @@
    "path": "rules/windows/powershell/powershell_script/posh_ps_psasyncshell.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/powershell/powershell_script/posh_ps_psasyncshell.yml",
    "logsource": "windows/ps_script",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:windows/ps_script": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 1,
+   "conjuncts_imported": 1,
+   "gap_reasons": {},
    "attack_ids": [
     "T1059.001"
    ],
@@ -37900,13 +37725,11 @@
    "path": "rules/windows/powershell/powershell_module/posh_pm_get_addbaccount.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/powershell/powershell_module/posh_pm_get_addbaccount.yml",
    "logsource": "windows/ps_module",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:windows/ps_module": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 1,
+   "conjuncts_imported": 1,
+   "gap_reasons": {},
    "attack_ids": [
     "T1003.003"
    ],
@@ -38362,13 +38185,11 @@
    "path": "rules/windows/powershell/powershell_script/posh_ps_directoryservices_accountmanagement.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/powershell/powershell_script/posh_ps_directoryservices_accountmanagement.yml",
    "logsource": "windows/ps_script",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:windows/ps_script": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 1,
+   "conjuncts_imported": 1,
+   "gap_reasons": {},
    "attack_ids": [
     "T1136.002"
    ],
@@ -38832,13 +38653,11 @@
    "path": "rules/windows/powershell/powershell_script/posh_ps_susp_execute_batch_script.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/powershell/powershell_script/posh_ps_susp_execute_batch_script.yml",
    "logsource": "windows/ps_script",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:windows/ps_script": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 2,
+   "conjuncts_imported": 2,
+   "gap_reasons": {},
    "attack_ids": [
     "T1059.003"
    ],
@@ -39356,13 +39175,11 @@
    "path": "rules/windows/powershell/powershell_script/posh_ps_modify_group_policy_settings.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/powershell/powershell_script/posh_ps_modify_group_policy_settings.yml",
    "logsource": "windows/ps_script",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:windows/ps_script": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 6,
+   "conjuncts_imported": 6,
+   "gap_reasons": {},
    "attack_ids": [
     "T1484.001"
    ],
@@ -39456,11 +39273,11 @@
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/powershell/powershell_script/posh_ps_susp_zip_compress.yml",
    "logsource": "windows/ps_script",
    "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
+   "rejection": "translation_gap",
+   "conjuncts_total": 3,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "logsource:windows/ps_script": 1
+    "translation_gap:interior_wildcard_or_empty": 3
    },
    "attack_ids": [
     "T1074.001"
@@ -39532,13 +39349,11 @@
    "path": "rules/windows/powershell/powershell_script/posh_ps_psattack.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/powershell/powershell_script/posh_ps_psattack.yml",
    "logsource": "windows/ps_script",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:windows/ps_script": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 1,
+   "conjuncts_imported": 1,
+   "gap_reasons": {},
    "attack_ids": [
     "T1059.001"
    ],
@@ -40419,13 +40234,11 @@
    "path": "rules/windows/powershell/powershell_module/posh_pm_susp_invocation_generic.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/powershell/powershell_module/posh_pm_susp_invocation_generic.yml",
    "logsource": "windows/ps_module",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:windows/ps_module": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 24,
+   "conjuncts_imported": 24,
+   "gap_reasons": {},
    "attack_ids": [
     "T1059.001"
    ],
@@ -40642,13 +40455,11 @@
    "path": "rules/windows/powershell/powershell_script/posh_ps_susp_proxy_scripts.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/powershell/powershell_script/posh_ps_susp_proxy_scripts.yml",
    "logsource": "windows/ps_script",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:windows/ps_script": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 1,
+   "conjuncts_imported": 1,
+   "gap_reasons": {},
    "attack_ids": [
     "T1090"
    ],
@@ -40683,13 +40494,11 @@
    "path": "rules/windows/powershell/powershell_script/posh_ps_susp_extracting.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/powershell/powershell_script/posh_ps_susp_extracting.yml",
    "logsource": "windows/ps_script",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:windows/ps_script": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 1,
+   "conjuncts_imported": 1,
+   "gap_reasons": {},
    "attack_ids": [
     "T1552.001"
    ],
@@ -40777,13 +40586,11 @@
    "path": "rules/windows/powershell/powershell_script/posh_ps_clearing_windows_console_history.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/powershell/powershell_script/posh_ps_clearing_windows_console_history.yml",
    "logsource": "windows/ps_script",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:windows/ps_script": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 5,
+   "conjuncts_imported": 5,
+   "gap_reasons": {},
    "attack_ids": [
     "T1070.003",
     "T1070"
@@ -41105,13 +40912,11 @@
    "path": "rules/windows/powershell/powershell_script/posh_ps_adrecon_execution.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/powershell/powershell_script/posh_ps_adrecon_execution.yml",
    "logsource": "windows/ps_script",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:windows/ps_script": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 4,
+   "conjuncts_imported": 4,
+   "gap_reasons": {},
    "attack_ids": [
     "T1059.001"
    ],
@@ -41395,13 +41200,11 @@
    "path": "rules/windows/powershell/powershell_script/posh_ps_susp_win32_shadowcopy_deletion.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/powershell/powershell_script/posh_ps_susp_win32_shadowcopy_deletion.yml",
    "logsource": "windows/ps_script",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:windows/ps_script": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 20,
+   "conjuncts_imported": 20,
+   "gap_reasons": {},
    "attack_ids": [
     "T1490"
    ],
@@ -41415,13 +41218,11 @@
    "path": "rules/windows/powershell/powershell_script/posh_ps_win_defender_exclusions_added.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/powershell/powershell_script/posh_ps_win_defender_exclusions_added.yml",
    "logsource": "windows/ps_script",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:windows/ps_script": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 8,
+   "conjuncts_imported": 8,
+   "gap_reasons": {},
    "attack_ids": [
     "T1059",
     "T1685"
@@ -41592,13 +41393,11 @@
    "path": "rules/windows/powershell/powershell_script/posh_ps_automated_collection.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/powershell/powershell_script/posh_ps_automated_collection.yml",
    "logsource": "windows/ps_script",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:windows/ps_script": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 9,
+   "conjuncts_imported": 9,
+   "gap_reasons": {},
    "attack_ids": [
     "T1119"
    ],
@@ -41711,13 +41510,11 @@
    "path": "rules/windows/powershell/powershell_script/posh_ps_user_discovery_get_aduser.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/powershell/powershell_script/posh_ps_user_discovery_get_aduser.yml",
    "logsource": "windows/ps_script",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:windows/ps_script": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 5,
+   "conjuncts_imported": 5,
+   "gap_reasons": {},
    "attack_ids": [
     "T1033"
    ],
@@ -42524,13 +42321,11 @@
    "path": "rules/windows/powershell/powershell_script/posh_ps_timestomp.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/powershell/powershell_script/posh_ps_timestomp.yml",
    "logsource": "windows/ps_script",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:windows/ps_script": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 6,
+   "conjuncts_imported": 6,
+   "gap_reasons": {},
    "attack_ids": [
     "T1070.006"
    ],
@@ -42698,11 +42493,11 @@
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/powershell/powershell_module/posh_pm_invoke_obfuscation_via_stdin.yml",
    "logsource": "windows/ps_module",
    "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
+   "rejection": "translation_gap",
+   "conjuncts_total": 1,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "logsource:windows/ps_module": 1
+    "translation_gap:value_type:SigmaRegularExpression": 1
    },
    "attack_ids": [
     "T1059.001",
@@ -43441,13 +43236,11 @@
    "path": "rules/windows/powershell/powershell_script/posh_ps_prompt_credentials.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/powershell/powershell_script/posh_ps_prompt_credentials.yml",
    "logsource": "windows/ps_script",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:windows/ps_script": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 1,
+   "conjuncts_imported": 1,
+   "gap_reasons": {},
    "attack_ids": [
     "T1059.001"
    ],
@@ -43535,13 +43328,11 @@
    "path": "rules/windows/powershell/powershell_script/posh_ps_remotefxvgpudisablement_abuse.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/powershell/powershell_script/posh_ps_remotefxvgpudisablement_abuse.yml",
    "logsource": "windows/ps_script",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:windows/ps_script": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 1,
+   "conjuncts_imported": 1,
+   "gap_reasons": {},
    "attack_ids": [
     "T1218"
    ],
@@ -44023,13 +43814,11 @@
    "path": "rules/windows/powershell/powershell_script/posh_ps_memorydump_getstoragediagnosticinfo.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/powershell/powershell_script/posh_ps_memorydump_getstoragediagnosticinfo.yml",
    "logsource": "windows/ps_script",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:windows/ps_script": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 1,
+   "conjuncts_imported": 1,
+   "gap_reasons": {},
    "attack_ids": [
     "T1003"
    ],
@@ -44329,11 +44118,11 @@
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/powershell/powershell_script/posh_ps_potential_unconstrained_delegation_discovery.yml",
    "logsource": "windows/ps_script",
    "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
+   "rejection": "translation_gap",
+   "conjuncts_total": 5,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "logsource:windows/ps_script": 1
+    "translation_gap:interior_wildcard_or_empty": 5
    },
    "attack_ids": [
     "T1558",
@@ -45391,13 +45180,11 @@
    "path": "rules/windows/powershell/powershell_script/posh_ps_susp_invoke_webrequest_useragent.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/powershell/powershell_script/posh_ps_susp_invoke_webrequest_useragent.yml",
    "logsource": "windows/ps_script",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:windows/ps_script": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 4,
+   "conjuncts_imported": 4,
+   "gap_reasons": {},
    "attack_ids": [
     "T1071.001"
    ],
@@ -45471,13 +45258,11 @@
    "path": "rules/windows/powershell/powershell_script/posh_ps_capture_screenshots.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/powershell/powershell_script/posh_ps_capture_screenshots.yml",
    "logsource": "windows/ps_script",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:windows/ps_script": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 1,
+   "conjuncts_imported": 1,
+   "gap_reasons": {},
    "attack_ids": [
     "T1113"
    ],
@@ -45754,13 +45539,11 @@
    "path": "rules/windows/powershell/powershell_script/posh_ps_invoke_dnsexfiltration.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/powershell/powershell_script/posh_ps_invoke_dnsexfiltration.yml",
    "logsource": "windows/ps_script",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:windows/ps_script": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 2,
+   "conjuncts_imported": 2,
+   "gap_reasons": {},
    "attack_ids": [
     "T1048"
    ],
@@ -46426,13 +46209,11 @@
    "path": "rules/windows/powershell/powershell_script/posh_ps_detect_vm_env.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/powershell/powershell_script/posh_ps_detect_vm_env.yml",
    "logsource": "windows/ps_script",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:windows/ps_script": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 4,
+   "conjuncts_imported": 4,
+   "gap_reasons": {},
    "attack_ids": [
     "T1497.001"
    ],
@@ -46579,13 +46360,11 @@
    "path": "rules/windows/powershell/powershell_script/posh_ps_packet_capture.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/powershell/powershell_script/posh_ps_packet_capture.yml",
    "logsource": "windows/ps_script",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:windows/ps_script": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 1,
+   "conjuncts_imported": 1,
+   "gap_reasons": {},
    "attack_ids": [
     "T1040"
    ],
@@ -46638,11 +46417,11 @@
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/powershell/powershell_module/posh_pm_susp_zip_compress.yml",
    "logsource": "windows/ps_module",
    "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
+   "rejection": "translation_gap",
+   "conjuncts_total": 1,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "logsource:windows/ps_module": 1
+    "translation_gap:interior_wildcard_or_empty": 1
    },
    "attack_ids": [
     "T1074.001"
@@ -46796,13 +46575,11 @@
    "path": "rules/windows/powershell/powershell_script/posh_ps_computer_discovery_get_adcomputer.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/powershell/powershell_script/posh_ps_computer_discovery_get_adcomputer.yml",
    "logsource": "windows/ps_script",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:windows/ps_script": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 4,
+   "conjuncts_imported": 4,
+   "gap_reasons": {},
    "attack_ids": [
     "T1033"
    ],
@@ -46817,11 +46594,11 @@
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/powershell/powershell_script/posh_ps_invoke_obfuscation_via_use_clip.yml",
    "logsource": "windows/ps_script",
    "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
+   "rejection": "translation_gap",
+   "conjuncts_total": 1,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "logsource:windows/ps_script": 1
+    "translation_gap:value_type:SigmaRegularExpression": 1
    },
    "attack_ids": [
     "T1059.001",
@@ -46956,13 +46733,11 @@
    "path": "rules/windows/powershell/powershell_script/posh_ps_powerview_malicious_commandlets.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/powershell/powershell_script/posh_ps_powerview_malicious_commandlets.yml",
    "logsource": "windows/ps_script",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:windows/ps_script": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 52,
+   "conjuncts_imported": 52,
+   "gap_reasons": {},
    "attack_ids": [
     "T1059.001"
    ],
@@ -47195,13 +46970,11 @@
    "path": "rules/windows/powershell/powershell_script/posh_ps_dotnet_assembly_from_file.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/powershell/powershell_script/posh_ps_dotnet_assembly_from_file.yml",
    "logsource": "windows/ps_script",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:windows/ps_script": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 1,
+   "conjuncts_imported": 1,
+   "gap_reasons": {},
    "attack_ids": [
     "T1620"
    ],
@@ -47233,13 +47006,11 @@
    "path": "rules/windows/powershell/powershell_script/posh_ps_syncappvpublishingserver_exe.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/powershell/powershell_script/posh_ps_syncappvpublishingserver_exe.yml",
    "logsource": "windows/ps_script",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:windows/ps_script": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 1,
+   "conjuncts_imported": 1,
+   "gap_reasons": {},
    "attack_ids": [
     "T1218"
    ],
@@ -47310,13 +47081,11 @@
    "path": "rules/windows/powershell/powershell_module/posh_pm_susp_download.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/powershell/powershell_module/posh_pm_susp_download.yml",
    "logsource": "windows/ps_module",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:windows/ps_module": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 2,
+   "conjuncts_imported": 2,
+   "gap_reasons": {},
    "attack_ids": [
     "T1059.001"
    ],
@@ -47541,13 +47310,11 @@
    "path": "rules/windows/powershell/powershell_script/posh_ps_frombase64string_archive.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/powershell/powershell_script/posh_ps_frombase64string_archive.yml",
    "logsource": "windows/ps_script",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:windows/ps_script": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 1,
+   "conjuncts_imported": 1,
+   "gap_reasons": {},
    "attack_ids": [
     "T1132.001"
    ],
@@ -47924,13 +47691,11 @@
    "path": "rules/windows/powershell/powershell_script/posh_ps_amsi_bypass_pattern_nov22.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/powershell/powershell_script/posh_ps_amsi_bypass_pattern_nov22.yml",
    "logsource": "windows/ps_script",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:windows/ps_script": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 1,
+   "conjuncts_imported": 1,
+   "gap_reasons": {},
    "attack_ids": [
     "T1685"
    ],
@@ -48493,13 +48258,11 @@
    "path": "rules/windows/powershell/powershell_module/posh_pm_susp_reset_computermachinepassword.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/powershell/powershell_module/posh_pm_susp_reset_computermachinepassword.yml",
    "logsource": "windows/ps_module",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:windows/ps_module": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 1,
+   "conjuncts_imported": 1,
+   "gap_reasons": {},
    "attack_ids": [
     "T1078"
    ],
@@ -48895,11 +48658,11 @@
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/powershell/powershell_script/posh_ps_invoke_obfuscation_via_var.yml",
    "logsource": "windows/ps_script",
    "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
+   "rejection": "translation_gap",
+   "conjuncts_total": 1,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "logsource:windows/ps_script": 1
+    "translation_gap:value_type:SigmaRegularExpression": 1
    },
    "attack_ids": [
     "T1059.001",
@@ -48915,13 +48678,11 @@
    "path": "rules/windows/powershell/powershell_script/posh_ps_invoke_obfuscation_via_use_mhsta.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/powershell/powershell_script/posh_ps_invoke_obfuscation_via_use_mhsta.yml",
    "logsource": "windows/ps_script",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:windows/ps_script": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 1,
+   "conjuncts_imported": 1,
+   "gap_reasons": {},
    "attack_ids": [
     "T1059.001",
     "T1027"
@@ -49183,13 +48944,11 @@
    "path": "rules/windows/powershell/powershell_script/posh_ps_invoke_obfuscation_via_rundll.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/powershell/powershell_script/posh_ps_invoke_obfuscation_via_rundll.yml",
    "logsource": "windows/ps_script",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:windows/ps_script": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 1,
+   "conjuncts_imported": 1,
+   "gap_reasons": {},
    "attack_ids": [
     "T1059.001",
     "T1027"
@@ -50159,11 +49918,11 @@
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/powershell/powershell_module/posh_pm_invoke_obfuscation_via_use_clip.yml",
    "logsource": "windows/ps_module",
    "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
+   "rejection": "translation_gap",
+   "conjuncts_total": 1,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "logsource:windows/ps_module": 1
+    "translation_gap:value_type:SigmaRegularExpression": 1
    },
    "attack_ids": [
     "T1059.001",
@@ -50594,13 +50353,11 @@
    "path": "rules/windows/powershell/powershell_script/posh_ps_susp_invocation_generic.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/powershell/powershell_script/posh_ps_susp_invocation_generic.yml",
    "logsource": "windows/ps_script",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:windows/ps_script": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 24,
+   "conjuncts_imported": 24,
+   "gap_reasons": {},
    "attack_ids": [
     "T1059.001"
    ],
@@ -51955,11 +51712,11 @@
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/powershell/powershell_module/posh_pm_invoke_obfuscation_via_var.yml",
    "logsource": "windows/ps_module",
    "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
+   "rejection": "translation_gap",
+   "conjuncts_total": 1,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "logsource:windows/ps_module": 1
+    "translation_gap:value_type:SigmaRegularExpression": 1
    },
    "attack_ids": [
     "T1059.001",
@@ -52410,13 +52167,11 @@
    "path": "rules/windows/powershell/powershell_script/posh_ps_malicious_keywords.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/powershell/powershell_script/posh_ps_malicious_keywords.yml",
    "logsource": "windows/ps_script",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:windows/ps_script": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 19,
+   "conjuncts_imported": 19,
+   "gap_reasons": {},
    "attack_ids": [
     "T1059.001"
    ],
@@ -52825,11 +52580,11 @@
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/powershell/powershell_script/posh_ps_nishang_malicious_commandlets.yml",
    "logsource": "windows/ps_script",
    "status": "rejected",
-   "rejection": "telemetry_gap",
+   "rejection": "translation_gap",
    "conjuncts_total": 0,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "logsource:windows/ps_script": 1
+    "dnf_bound_exceeded:>64": 1
    },
    "attack_ids": [
     "T1059.001"
@@ -53242,13 +52997,11 @@
    "path": "rules/windows/powershell/powershell_module/posh_pm_clear_powershell_history.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/powershell/powershell_module/posh_pm_clear_powershell_history.yml",
    "logsource": "windows/ps_module",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:windows/ps_module": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 5,
+   "conjuncts_imported": 5,
+   "gap_reasons": {},
    "attack_ids": [
     "T1070.003"
    ],
@@ -53392,13 +53145,11 @@
    "path": "rules/windows/powershell/powershell_script/posh_ps_amsi_null_bits_bypass.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/powershell/powershell_script/posh_ps_amsi_null_bits_bypass.yml",
    "logsource": "windows/ps_script",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:windows/ps_script": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 2,
+   "conjuncts_imported": 2,
+   "gap_reasons": {},
    "attack_ids": [
     "T1685"
    ],
@@ -53725,13 +53476,11 @@
    "path": "rules/windows/powershell/powershell_script/posh_ps_resolve_list_of_ip_from_file.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/powershell/powershell_script/posh_ps_resolve_list_of_ip_from_file.yml",
    "logsource": "windows/ps_script",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:windows/ps_script": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 1,
+   "conjuncts_imported": 1,
+   "gap_reasons": {},
    "attack_ids": [
     "T1020"
    ],
@@ -53781,13 +53530,11 @@
    "path": "rules/windows/powershell/powershell_script/posh_ps_access_to_browser_login_data.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/powershell/powershell_script/posh_ps_access_to_browser_login_data.yml",
    "logsource": "windows/ps_script",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:windows/ps_script": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 5,
+   "conjuncts_imported": 5,
+   "gap_reasons": {},
    "attack_ids": [
     "T1555.003"
    ],
@@ -54198,13 +53945,11 @@
    "path": "rules/windows/powershell/powershell_module/posh_pm_syncappvpublishingserver_exe.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/powershell/powershell_module/posh_pm_syncappvpublishingserver_exe.yml",
    "logsource": "windows/ps_module",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:windows/ps_module": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 1,
+   "conjuncts_imported": 1,
+   "gap_reasons": {},
    "attack_ids": [
     "T1218"
    ],

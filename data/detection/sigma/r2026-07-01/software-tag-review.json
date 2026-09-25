@@ -21,6 +21,14 @@
    "reason": "C:\\Windows\\PSEXEC-*.key is an artefact written by Sysinternals PsExec itself."
   },
   {
+   "sigma_id": "3ceb2083-a27f-449a-be33-14ec1b7cc973",
+   "title": "Silence.EDA Detection",
+   "tag": "attack.s0363",
+   "software": "Empire",
+   "decision": "reject",
+   "reason": "Requires Empire-derived strings AND dnscat2 tunnelling functions in one script block, which identifies the Silence group's Silence.EDA tool, not the Empire framework in general; the Empire tag would spread the evidence over all 17 Empire-using Groups. Reviewed 2026-09-25 when ps_script became importable."
+  },
+  {
    "sigma_id": "41504465-5e3a-4a5b-a5b4-2a0baadd4463",
    "title": "PsExec Tool Execution From Suspicious Locations - PipeName",
    "tag": "attack.s0029",

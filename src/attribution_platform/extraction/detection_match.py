@@ -44,6 +44,7 @@ from attribution_platform.domain import (
     HostRef,
     NetworkInfo,
     PipeRef,
+    PowerShellRef,
     ProcessAccessRef,
     ProcessRef,
     RegistryRef,
@@ -114,6 +115,7 @@ class MatchedEvent:
     file_stream: FileStreamRef | None = None
     pipe: PipeRef | None = None
     wmi: WmiRef | None = None
+    powershell: PowerShellRef | None = None
 
     def __post_init__(self) -> None:
         _require_nonempty_str(self.observation_id, "MatchedEvent.observation_id")

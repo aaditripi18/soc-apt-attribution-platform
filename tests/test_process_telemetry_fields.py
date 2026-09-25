@@ -34,6 +34,7 @@ from attribution_platform.domain import (
     Observation,
     PeInfo,
     PipeRef,
+    PowerShellRef,
     ProcessAccessRef,
     ProcessRef,
     RegistryRef,
@@ -221,6 +222,9 @@ def _full_observation() -> Observation:
         dns=DnsRef(question_name="a", query_status="a", results="a"),
         file_stream=FileStreamRef(contents="a", hashes="a"),
         pipe=PipeRef(name="a"),
+        powershell=PowerShellRef(
+            script_block_text="a", script_path="a", payload="a", context_info="a"
+        ),
         wmi=WmiRef(
             operation="a",
             name="a",

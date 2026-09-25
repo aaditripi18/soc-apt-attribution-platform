@@ -164,6 +164,26 @@ class WmiRef:
 
 
 @dataclass(frozen=True)
+class PowerShellRef:
+    """PowerShell engine logging (all optional) — ECS ``powershell.*``.
+
+    Script-block logging: ``script_block_text`` (one logged part of a script
+    block), ``script_block_id``, ``script_path``, and ``message_number`` /
+    ``message_total`` (a long script block is logged in several parts, each
+    its own event). Module/pipeline logging: ``payload`` (the logged
+    invocation details) and ``context_info`` (the host context block). All
+    text is kept exactly as the source logged it."""
+
+    script_block_text: str | None = None
+    script_block_id: str | None = None
+    script_path: str | None = None
+    message_number: int | None = None
+    message_total: int | None = None
+    payload: str | None = None
+    context_info: str | None = None
+
+
+@dataclass(frozen=True)
 class ProcessRef:
     """A process and its immediate parent lineage (all optional).
 

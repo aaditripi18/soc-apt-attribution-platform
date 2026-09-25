@@ -75,6 +75,7 @@ from attribution_platform.domain import (
     NetworkInfo,
     PeInfo,
     PipeRef,
+    PowerShellRef,
     ProcessAccessRef,
     ProcessRef,
     RegistryRef,
@@ -102,6 +103,7 @@ _OPTIONAL_ENTITY_FIELDS = (
     "file_stream",
     "pipe",
     "wmi",
+    "powershell",
 )
 
 
@@ -128,6 +130,7 @@ class DetectionReplayScenario:
     file_stream: FileStreamRef | None = None
     pipe: PipeRef | None = None
     wmi: WmiRef | None = None
+    powershell: PowerShellRef | None = None
 
 
 @dataclass(frozen=True)
@@ -229,6 +232,7 @@ def _scenario_from_dict(s: Any, *, index: int, source: str) -> DetectionReplaySc
         file_stream=_file_stream_from_dict(s.get("file_stream"), where=f"{where}.file_stream"),
         pipe=_pipe_ref_from_dict(s.get("pipe"), where=f"{where}.pipe"),
         wmi=_wmi_ref_from_dict(s.get("wmi"), where=f"{where}.wmi"),
+        powershell=_powershell_ref_from_dict(s.get("powershell"), where=f"{where}.powershell"),
     )
 
 
@@ -437,6 +441,22 @@ def _wmi_ref_from_dict(d: Any, *, where: str) -> WmiRef | None:
         "consumer",
     )
     return WmiRef(**{f: parsed.get(f) for f in fields})
+
+
+def _powershell_ref_from_dict(d: Any, *, where: str) -> PowerShellRef | None:
+    parsed = _require_dict(d, where=where)
+    if parsed is None:
+        return None
+    fields = (
+        "script_block_text",
+        "script_block_id",
+        "script_path",
+        "message_number",
+        "message_total",
+        "payload",
+        "context_info",
+    )
+    return PowerShellRef(**{f: parsed.get(f) for f in fields})
 
 
 def _registry_ref_from_dict(d: Any, *, where: str) -> RegistryRef | None:
