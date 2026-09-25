@@ -26,7 +26,9 @@ minimal shape because the synthetic source has no real one).
 **Scope — a growing, explicit set of Sysmon event types (ADR-0008 Wave 1):**
 Event IDs 1 (Process Create), 3 (Network Connection), 7 (Image Load), 8
 (CreateRemoteThread), 10 (Process Access), 11 (File Create), 12 (Registry
-key/value create or delete), 13 (Registry value set) and 22 (DNS query).
+key/value create or delete), 13 (Registry value set), 15 (file stream hash),
+17/18 (pipe created/connected), 19/20/21 (WMI filter/consumer/binding), 22
+(DNS query) and 23 (file delete).
 Both real-world record shapes are accepted: collector records
 (ECS + ``winlog`` envelope) and flat Windows-EventData records (e.g. OTRF).
 The original G0.11 scope was Event ID 1 (Process Create) and Event ID 3
@@ -70,17 +72,20 @@ from attribution_platform.domain import (
     DnsRef,
     EventMetadata,
     FileRef,
+    FileStreamRef,
     HostRef,
     NetworkEndpoint,
     NetworkInfo,
     Observation,
     PeInfo,
+    PipeRef,
     ProcessAccessRef,
     ProcessRef,
     RegistryRef,
     RemoteThreadRef,
     SourceRef,
     UserRef,
+    WmiRef,
 )
 from attribution_platform.sources.errors import SourceAdapterError
 
@@ -96,9 +101,16 @@ IMAGE_LOAD_EVENT_ID = 7
 CREATE_REMOTE_THREAD_EVENT_ID = 8
 PROCESS_ACCESS_EVENT_ID = 10
 FILE_CREATE_EVENT_ID = 11
+FILE_STREAM_HASH_EVENT_ID = 15
+PIPE_CREATED_EVENT_ID = 17
+PIPE_CONNECTED_EVENT_ID = 18
+WMI_FILTER_EVENT_ID = 19
+WMI_CONSUMER_EVENT_ID = 20
+WMI_BINDING_EVENT_ID = 21
 REGISTRY_OBJECT_EVENT_ID = 12  # key/value created or deleted
 REGISTRY_VALUE_SET_EVENT_ID = 13
 DNS_QUERY_EVENT_ID = 22
+FILE_DELETE_EVENT_ID = 23
 
 #: The Sysmon event IDs this adapter understands; anything else fails closed.
 _SUPPORTED_EVENT_IDS = (
@@ -110,7 +122,14 @@ _SUPPORTED_EVENT_IDS = (
     FILE_CREATE_EVENT_ID,
     REGISTRY_OBJECT_EVENT_ID,
     REGISTRY_VALUE_SET_EVENT_ID,
+    FILE_STREAM_HASH_EVENT_ID,
+    PIPE_CREATED_EVENT_ID,
+    PIPE_CONNECTED_EVENT_ID,
+    WMI_FILTER_EVENT_ID,
+    WMI_CONSUMER_EVENT_ID,
+    WMI_BINDING_EVENT_ID,
     DNS_QUERY_EVENT_ID,
+    FILE_DELETE_EVENT_ID,
 )
 
 #: Neutral ``event.action`` tokens for event types whose detection scope needs
@@ -118,6 +137,19 @@ _SUPPORTED_EVENT_IDS = (
 CREATE_REMOTE_THREAD_ACTION = "create_remote_thread"
 PROCESS_ACCESS_ACTION = "process_access"
 DNS_QUERY_ACTION = "dns_query"
+#: File-family actions: several Sysmon events are "file creation" in ECS terms,
+#: so detection scopes need the exact action to tell them apart.
+FILE_CREATE_ACTION = "file_create"
+FILE_STREAM_CREATE_ACTION = "file_stream_create"
+FILE_DELETE_ACTION = "file_delete"
+PIPE_ACTIONS = {PIPE_CREATED_EVENT_ID: "pipe_create", PIPE_CONNECTED_EVENT_ID: "pipe_connect"}
+WMI_ACTIONS = {
+    WMI_FILTER_EVENT_ID: "wmi_filter",
+    WMI_CONSUMER_EVENT_ID: "wmi_consumer",
+    WMI_BINDING_EVENT_ID: "wmi_binding",
+}
+#: Sysmon WMI ``Operation`` -> ECS ``event.type``; anything else fails closed.
+_WMI_OPERATION_TYPES = {"Created": "creation", "Deleted": "deletion"}
 
 #: The process-GUID EventData names differ by event type in real Sysmon output:
 #: event 8 writes ``SourceProcessGuid``, event 10 ``SourceProcessGUID``.
@@ -148,6 +180,31 @@ _FLAT_ENVELOPE_FIELDS = frozenset(
         "SourceName",
         "Task",
         "TimeCreated",
+        # NXLog / Logstash envelope (OTRF 2020 "mordorDataset" exports). These
+        # describe the log pipeline and the event-log service account, never the
+        # Sysmon event itself; EventTime/EventReceivedTime are collector-local.
+        "@version",
+        "AccountName",
+        "AccountType",
+        "Category",
+        "Domain",
+        "EventReceivedTime",
+        "EventTime",
+        "EventTypeOrignal",
+        "ExecutionProcessID",
+        "Opcode",
+        "OpcodeValue",
+        "RecordNumber",
+        "Severity",
+        "SeverityValue",
+        "SourceModuleName",
+        "SourceModuleType",
+        "ThreadID",
+        "UserID",
+        "Version",
+        "host",
+        "port",
+        "tags",
     }
 )
 
@@ -198,16 +255,17 @@ def _normalize_flat(record: Mapping[str, Any]) -> dict[str, Any]:
     - **Time:** Sysmon's own ``UtcTime`` — never the collector's
       ``@timestamp``/``TimeCreated``, which in real OTRF samples disagree with
       ``UtcTime`` by hours (a collector time-zone artefact).
-    - **Record id:** ``EventRecordID`` when present; otherwise a deterministic
-      content address ``sha256:<hex>`` of the record's canonical JSON (the
-      source provides no identifier; this is derived, never random).
+    - **Record id:** the Windows event record number when present
+      (``EventRecordID``, or ``RecordNumber`` in NXLog exports); otherwise a
+      deterministic content address ``sha256:<hex>`` of the record's canonical
+      JSON (the source provides no identifier; derived, never random).
     """
     channel = record.get("Channel")
     if channel != SYSMON_CHANNEL:
         raise SourceAdapterError(
             f"SysmonSourceAdapter: flat record channel {channel!r} is not {SYSMON_CHANNEL!r}"
         )
-    record_id = record.get("EventRecordID")
+    record_id = record.get("EventRecordID", record.get("RecordNumber"))
     if record_id is None:
         canonical = json.dumps(record, sort_keys=True, separators=(",", ":"), ensure_ascii=False)
         record_id = "sha256:" + hashlib.sha256(canonical.encode("utf-8")).hexdigest()
@@ -441,6 +499,44 @@ def _actor_and_target(
     return process("Source", ecs=True), target
 
 
+def _ed(record: Mapping[str, Any], key: str) -> Any:
+    return _get(record, "winlog", "event_data", key)
+
+
+def _wmi_event(record: Mapping[str, Any], event_id: int) -> tuple[EventMetadata, WmiRef]:
+    """Sysmon 19/20/21: the subscription object and whether it was created or
+    deleted. ``Operation`` decides ``event.type``; an absent or unknown value
+    fails closed. Values are kept exactly as Sysmon reported them."""
+    operation = _ed(record, "Operation")
+    ecs_type = _WMI_OPERATION_TYPES.get(operation) if isinstance(operation, str) else None
+    if ecs_type is None:
+        raise SourceAdapterError(
+            f"SysmonSourceAdapter: WMI event {event_id} has Operation {operation!r}; "
+            f"expected one of {sorted(_WMI_OPERATION_TYPES)}"
+        )
+    wmi = WmiRef(
+        operation=operation,
+        name=_ed(record, "Name"),
+        namespace=_ed(record, "EventNamespace"),
+        query=_ed(record, "Query"),
+        consumer_type=_ed(record, "Type"),
+        destination=_ed(record, "Destination"),
+        filter=_ed(record, "Filter"),
+        consumer=_ed(record, "Consumer"),
+    )
+    event = EventMetadata(
+        kind="event", category=("configuration",), type=(ecs_type,), action=WMI_ACTIONS[event_id]
+    )
+    return event, wmi
+
+
+def _pipe_ref(record: Mapping[str, Any]) -> PipeRef:
+    name = _ed(record, "PipeName")
+    if not isinstance(name, str) or not name.strip():
+        raise SourceAdapterError("SysmonSourceAdapter: pipe event without PipeName")
+    return PipeRef(name=name)
+
+
 def _dns_ref(record: Mapping[str, Any]) -> DnsRef:
     name = _event_data_or_ecs(record, "QueryName", "dns", "question", "name")
     if not isinstance(name, str) or not name.strip():
@@ -485,14 +581,22 @@ def _dll_ref(record: Mapping[str, Any]) -> DllRef:
 def _file_ref(record: Mapping[str, Any]) -> FileRef:
     path = _event_data_or_ecs(record, "TargetFilename", "file", "path")
     if not isinstance(path, str) or not path.strip():
-        raise SourceAdapterError("SysmonSourceAdapter: file create event without TargetFilename")
+        raise SourceAdapterError("SysmonSourceAdapter: file event without TargetFilename")
     return FileRef(path=path, name=_basename(path), directory=ntpath.dirname(path) or None)
 
 
 def _registry_event(record: Mapping[str, Any], event_id: int) -> tuple[EventMetadata, RegistryRef]:
     """Registry events require Sysmon's own ``EventType`` (it decides the
-    operation); an absent or unexpected value fails closed — never guessed."""
+    operation); an unexpected value fails closed — never guessed.
+
+    One exact exception: Sysmon event 13 *is* "registry value set", whose
+    ``EventType`` is always ``SetValue``, so when an export pipeline dropped the
+    field (real OTRF NXLog exports do) it follows from the event ID. Event 12
+    can be CreateKey, DeleteKey or DeleteValue; without ``EventType`` its
+    operation is unknown and the record is refused."""
     event_type = _get(record, "winlog", "event_data", "EventType")
+    if event_type is None and event_id == REGISTRY_VALUE_SET_EVENT_ID:
+        event_type = "SetValue"
     ecs_type = _REGISTRY_EVENT_TYPES[event_id].get(event_type) if event_type else None
     if ecs_type is None:
         raise SourceAdapterError(
@@ -620,12 +724,35 @@ class SysmonSourceAdapter:
             entities["dns"] = _dns_ref(record)
         elif event_id == FILE_CREATE_EVENT_ID:
             event = EventMetadata(
+                kind="event", category=("file",), type=("creation",), action=FILE_CREATE_ACTION
+            )
+            entities["file"] = _file_ref(record)
+        elif event_id == FILE_STREAM_HASH_EVENT_ID:
+            event = EventMetadata(
                 kind="event",
                 category=("file",),
                 type=("creation",),
-                action=default_action or "File created (rule: FileCreate)",
+                action=FILE_STREAM_CREATE_ACTION,
             )
             entities["file"] = _file_ref(record)
+            entities["file_stream"] = FileStreamRef(
+                contents=_ed(record, "Contents"), hashes=_ed(record, "Hash")
+            )
+        elif event_id == FILE_DELETE_EVENT_ID:
+            event = EventMetadata(
+                kind="event", category=("file",), type=("deletion",), action=FILE_DELETE_ACTION
+            )
+            entities["file"] = _file_ref(record)
+        elif event_id in PIPE_ACTIONS:
+            event = EventMetadata(
+                kind="event",
+                category=("file",),
+                type=("creation",) if event_id == PIPE_CREATED_EVENT_ID else ("access",),
+                action=PIPE_ACTIONS[event_id],
+            )
+            entities["pipe"] = _pipe_ref(record)
+        elif event_id in WMI_ACTIONS:
+            event, entities["wmi"] = _wmi_event(record, event_id)
         else:  # REGISTRY_OBJECT_EVENT_ID / REGISTRY_VALUE_SET_EVENT_ID
             event, entities["registry"] = _registry_event(record, event_id)
 

@@ -94,6 +94,9 @@ OBSERVATIONS_MAPPING: dict[str, Any] = {
     "process_access": {"type": "object"},
     "remote_thread": {"type": "object"},
     "dns": {"type": "object"},
+    "file_stream": {"type": "object"},
+    "pipe": {"type": "object"},
+    "wmi": {"type": "object"},
 }
 
 #: Explicit field mappings for the Evidence index (Elasticsearch "properties").

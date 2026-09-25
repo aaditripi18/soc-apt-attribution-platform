@@ -6,23 +6,24 @@
   "rule_packs": [
    {
     "pack_id": "sigma-r2026-07-01-sigma_core++",
-    "content_hash": "94c8f5c4875dc1196ae6d6fbfde42cb8cc306ac1f7447b7170c11f65e9a901cc"
+    "content_hash": "307d42d47c6689d0c96b5ebcbdf28c2abe9ebb91fb30f9ca2d1228cafd569a4a"
    }
   ],
   "sigma_import": {
-   "importer": "sigma-importer/1.3",
+   "importer": "sigma-importer/1.4",
    "sigma_release": "r2026-07-01",
    "sigma_archive": "sigma_core++.zip",
    "sigma_archive_sha256": "469d83e1d1bbdb4d7876466ff1a728550fae5a20115b91339d58d20e894e7477",
    "pysigma_version": "1.5.1",
-   "field_map_version": "sigma-field-map/4",
+   "field_map_version": "sigma-field-map/5",
    "attack_kb_version": "enterprise-attack-19.2",
    "dnf_bound": 64,
    "software_tag_review": {
     "file": "software-tag-review.json",
-    "sha256": "78c2a4da2b2e7345f0cc93c35a7e4a8e89d1d727b58993c2bea7e5269def85cb",
+    "sha256": "a3c56624b8ec5a6a3370b202a81a1a6a8c0632977d7675d6b527bc7a8b4a00eb",
     "accepted": [
      "304afd73-55a5-4bb9-8c21-0b1fc84ea9e4:attack.s0029",
+     "41504465-5e3a-4a5b-a5b4-2a0baadd4463:attack.s0029",
      "56321594-9087-49d9-bf10-524fe8479452:attack.s0108",
      "56c217c3-2de2-479b-990f-5c109ba8458f:attack.s0111",
      "57c4bf16-227f-4394-8ec7-1b745ee061c3:attack.s0108",
@@ -9283,7 +9284,7 @@
    "attack_id": "T1003.001",
    "name": "LSASS Memory",
    "status": "covered",
-   "rule_sources": 51,
+   "rule_sources": 52,
    "rejected_rules_blocked_by": [
     "field:Hashes",
     "field:ParentUser",
@@ -9291,7 +9292,6 @@
     "logsource:/antivirus",
     "logsource:windows/",
     "logsource:windows/application",
-    "logsource:windows/pipe_created",
     "logsource:windows/ps_script",
     "logsource:windows/security",
     "logsource:windows/system",
@@ -9305,11 +9305,10 @@
    "attack_id": "T1003.002",
    "name": "Security Account Manager",
    "status": "covered",
-   "rule_sources": 14,
+   "rule_sources": 15,
    "rejected_rules_blocked_by": [
     "logsource:/antivirus",
     "logsource:windows/",
-    "logsource:windows/pipe_created",
     "logsource:windows/security",
     "logsource:windows/system",
     "logsource:zeek/smb_files"
@@ -9337,10 +9336,9 @@
    "attack_id": "T1003.004",
    "name": "LSA Secrets",
    "status": "covered",
-   "rule_sources": 3,
+   "rule_sources": 4,
    "rejected_rules_blocked_by": [
     "logsource:windows/",
-    "logsource:windows/pipe_created",
     "logsource:windows/security",
     "logsource:windows/system",
     "logsource:zeek/smb_files"
@@ -9352,9 +9350,8 @@
    "attack_id": "T1003.005",
    "name": "Cached Domain Credentials",
    "status": "covered",
-   "rule_sources": 3,
+   "rule_sources": 4,
    "rejected_rules_blocked_by": [
-    "logsource:windows/pipe_created",
     "logsource:windows/security",
     "logsource:windows/system"
    ],
@@ -9397,11 +9394,10 @@
    "attack_id": "T1005",
    "name": "Data from Local System",
    "status": "covered",
-   "rule_sources": 6,
+   "rule_sources": 7,
    "rejected_rules_blocked_by": [
     "logsource:linux/process_creation",
     "logsource:opencanary/application",
-    "logsource:windows/pipe_created",
     "logsource:windows/system"
    ],
    "windows_platform": true,
@@ -9578,9 +9574,8 @@
    "attack_id": "T1021.002",
    "name": "SMB/Windows Admin Shares",
    "status": "covered",
-   "rule_sources": 10,
+   "rule_sources": 12,
    "rejected_rules_blocked_by": [
-    "logsource:windows/pipe_created",
     "logsource:windows/ps_script",
     "logsource:windows/security",
     "logsource:windows/smbserver-connectivity",
@@ -10127,16 +10122,14 @@
    "attack_id": "T1047",
    "name": "Windows Management Instrumentation",
    "status": "covered",
-   "rule_sources": 32,
+   "rule_sources": 34,
    "rejected_rules_blocked_by": [
     "field:LogonId",
     "field:User",
     "logsource:rpc_firewall/application",
-    "logsource:windows/pipe_created",
     "logsource:windows/ps_script",
     "logsource:windows/security",
     "logsource:windows/windefend",
-    "logsource:windows/wmi_event",
     "logsource:zeek/dce_rpc"
    ],
    "windows_platform": true,
@@ -10291,9 +10284,8 @@
    "attack_id": "T1055",
    "name": "Process Injection",
    "status": "covered",
-   "rule_sources": 13,
+   "rule_sources": 18,
    "rejected_rules_blocked_by": [
-    "logsource:windows/pipe_created",
     "logsource:windows/ps_script"
    ],
    "windows_platform": true,
@@ -10492,7 +10484,7 @@
    "attack_id": "T1059.001",
    "name": "PowerShell",
    "status": "covered",
-   "rule_sources": 63,
+   "rule_sources": 64,
    "rejected_rules_blocked_by": [
     "field:CommandLine",
     "field:Initiated",
@@ -10500,7 +10492,6 @@
     "field:User",
     "logsource:aws/cloudtrail",
     "logsource:windows/applocker",
-    "logsource:windows/pipe_created",
     "logsource:windows/powershell-classic",
     "logsource:windows/ps_classic_start",
     "logsource:windows/ps_module",
@@ -10556,11 +10547,10 @@
    "attack_id": "T1059.005",
    "name": "Visual Basic",
    "status": "covered",
-   "rule_sources": 16,
+   "rule_sources": 17,
    "rejected_rules_blocked_by": [
     "logsource:windows/applocker",
-    "logsource:windows/ps_script",
-    "logsource:windows/wmi_event"
+    "logsource:windows/ps_script"
    ],
    "windows_platform": true,
    "has_data_component": true
@@ -10713,11 +10703,10 @@
    "attack_id": "T1070",
    "name": "Indicator Removal",
    "status": "covered",
-   "rule_sources": 9,
+   "rule_sources": 14,
    "rejected_rules_blocked_by": [
     "logsource:aws/cloudtrail",
     "logsource:kubernetes/application",
-    "logsource:windows/file_delete",
     "logsource:windows/msexchange-management",
     "logsource:windows/ps_script"
    ],
@@ -10742,11 +10731,10 @@
    "attack_id": "T1070.004",
    "name": "File Deletion",
    "status": "covered",
-   "rule_sources": 3,
+   "rule_sources": 6,
    "rejected_rules_blocked_by": [
     "logsource:cisco/aaa",
     "logsource:windows/application",
-    "logsource:windows/file_delete",
     "logsource:windows/security"
    ],
    "windows_platform": true,
@@ -11651,12 +11639,11 @@
    "attack_id": "T1133",
    "name": "External Remote Services",
    "status": "covered",
-   "rule_sources": 4,
+   "rule_sources": 5,
    "rejected_rules_blocked_by": [
     "logsource:fortigate/event",
     "logsource:opencanary/application",
     "logsource:windows/file_change",
-    "logsource:windows/file_delete",
     "logsource:windows/security"
    ],
    "windows_platform": true,
@@ -11677,9 +11664,8 @@
    "attack_id": "T1134.001",
    "name": "Token Impersonation/Theft",
    "status": "covered",
-   "rule_sources": 3,
+   "rule_sources": 4,
    "rejected_rules_blocked_by": [
-    "logsource:windows/pipe_created",
     "logsource:windows/security",
     "logsource:windows/system"
    ],
@@ -12692,13 +12678,12 @@
    "attack_id": "T1490",
    "name": "Inhibit System Recovery",
    "status": "covered",
-   "rule_sources": 13,
+   "rule_sources": 14,
    "rejected_rules_blocked_by": [
     "field:CommandLine",
     "logsource:aws/cloudtrail",
     "logsource:cisco/aaa",
     "logsource:macos/process_creation",
-    "logsource:windows/file_delete",
     "logsource:windows/ps_classic_start",
     "logsource:windows/ps_script"
    ],
@@ -13051,12 +13036,11 @@
    "attack_id": "T1528",
    "name": "Steal Application Access Token",
    "status": "covered",
-   "rule_sources": 3,
+   "rule_sources": 4,
    "rejected_rules_blocked_by": [
     "logsource:azure/auditlogs",
     "logsource:azure/riskdetection",
     "logsource:windows/file_access",
-    "logsource:windows/pipe_created",
     "logsource:windows/security"
    ],
    "windows_platform": false,
@@ -13304,12 +13288,12 @@
    "attack_id": "T1546.003",
    "name": "Windows Management Instrumentation Event Subscription",
    "status": "covered",
-   "rule_sources": 6,
+   "rule_sources": 7,
    "rejected_rules_blocked_by": [
+    "field:EventID",
     "logsource:windows/ps_script",
     "logsource:windows/security",
-    "logsource:windows/wmi",
-    "logsource:windows/wmi_event"
+    "logsource:windows/wmi"
    ],
    "windows_platform": true,
    "has_data_component": true
@@ -14400,10 +14384,9 @@
    "attack_id": "T1564.004",
    "name": "NTFS File Attributes",
    "status": "covered",
-   "rule_sources": 8,
+   "rule_sources": 10,
    "rejected_rules_blocked_by": [
     "logsource:macos/process_creation",
-    "logsource:windows/create_stream_hash",
     "logsource:windows/ps_script"
    ],
    "windows_platform": true,
@@ -14731,10 +14714,9 @@
    "attack_id": "T1569.002",
    "name": "Service Execution",
    "status": "covered",
-   "rule_sources": 11,
+   "rule_sources": 15,
    "rejected_rules_blocked_by": [
     "logsource:rpc_firewall/application",
-    "logsource:windows/pipe_created",
     "logsource:windows/security",
     "logsource:windows/system",
     "logsource:windows/windefend",

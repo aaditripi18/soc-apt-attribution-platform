@@ -14,12 +14,14 @@ branch, so a partially imported rule is never broader than its author wrote
 (a negated filter is never dropped on its own). Case-insensitivity follows
 Sigma: plain strings match case-insensitively, ``|cased`` strings do not.
 
-**ATT&CK mapping (anti-circular).** ``attack.tNNNN[.NNN]`` and
-``attack.sNNNN`` tags are resolved against the pinned KB by ATT&CK external id;
-a revoked object is followed through the KB's own ``revoked-by`` relationship;
-deprecated/unresolvable ids are dropped and reported. **Group tags
-(``attack.gNNNN``) are never mapped** — a rule author's actor label is not an
-observation. Tactic and other tags are ignored.
+**ATT&CK mapping (anti-circular).** ``attack.tNNNN[.NNN]`` tags are resolved
+against the pinned KB by ATT&CK external id; a revoked object is followed
+through the KB's own ``revoked-by`` relationship; deprecated/unresolvable ids
+are dropped and reported. **Group tags (``attack.gNNNN``) are never mapped** —
+a rule author's actor label is not an observation. **Software tags
+(``attack.sNNNN``) map only when the reviewed decision file accepts them for
+that rule** (ADR-0007 D3 amendment): tool identity is strong evidence and
+authors' tool tags are often wrong. Tactic and other tags are ignored.
 
 **Outcome categories** (ADR-0007 D9): ``telemetry_gap`` (logsource/field no
 adapter produces), ``translation_gap`` (a construct with no exact equivalent),
@@ -70,7 +72,7 @@ from attribution_platform.detection_content.sigma_field_map import (
 )
 
 IMPORTER_METHOD = "sigma-importer"
-IMPORTER_VERSION = "1.3"
+IMPORTER_VERSION = "1.4"
 
 #: ADR-0007 D6: maximum DNF conjuncts per Sigma rule. A documented,
 #: reproducibility-frozen importer input — rules above it are rejected whole.

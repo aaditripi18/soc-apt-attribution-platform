@@ -230,3 +230,44 @@ and PowerShell after real 4103/4104 samples are found. D1's list is otherwise un
   observation, same process entity, parent→child lineage) do not include "acted upon". So the injected Notepad's
   own events are not linked to the injector's group through this event. Whether to add a process-interaction
   structural dimension is an ADR-0003 amendment for the owner to decide — recorded here so it is not lost.
+
+**Batch C — Sysmon 15, 17/18, 19/20/21, 23 (2026-09-25).**
+
+- *Samples:* round-2 OTRF files (commit `d9d40ef1`): Empire SMBExec, Empire Mimikatz, Empire WMI persistence.
+  They are a **third record shape**, the NXLog/Logstash flat variant: extra pipeline fields (`RecordNumber`,
+  `EventTime`, `EventReceivedTime`, `EventTypeOrignal`, `tags: ['mordorDataset']`, …), plus Sysmon's own
+  `UtcTime`, `Channel`, `Hostname`. Here the collector time agrees with `UtcTime`.
+- *Adapter:* pipeline fields are envelope and never reach an Observation; **`RecordNumber` (the Windows event
+  record number) is now the record id**, so these exports no longer rely on content hashes (no collapse). New
+  events: 15 → `file` + `FileStreamRef` (contents, hash string); 17/18 → `PipeRef` (create vs connect from the
+  event ID — real `System`-process connects lack `EventType` and `ProcessId`); 19/20/21 → `WmiRef` (filter /
+  consumer / binding, `Operation` → created/deleted, anything else refused; values kept exactly as reported);
+  23 → `file` (deletion).
+- *Real-data quirks (recorded, handled exactly):* the SMBExec export **dropped Sysmon's `EventType`** from all
+  1,140 registry events. Event 13 is by Sysmon's definition always `SetValue`, so its operation follows from the
+  event ID; event 12 (create/delete) cannot be recovered and its 680 records stay refused rather than risk a
+  wrong operation. Pipe names are HTML-escaped by the export (`&lt;Anonymous Pipe&gt;`) and are kept as
+  exported, not guessed back.
+- *Scope separation:* Sysmon 11 and 15 are both ECS file creations, so `file_event` now also requires the exact
+  `file_create` action; stream hash uses `file_stream_create`, file delete `file_delete`, pipes and WMI match on
+  `pipe_` / `wmi_` action prefixes. A test proves `file_event` content never fires on a stream event.
+- *Detection wiring:* `sigma-field-map/5` adds `create_stream_hash`, `file_delete`, `pipe_created`, `wmi_event`
+  (importer 1.4). Sigma import 1,256 + 55 partial (was 1,229 + 54). Group-used technique coverage is unchanged
+  at 210 — these event types add independent ways to see techniques already covered, not new techniques.
+- *Software-tag review extended (ADR-0007 D3 amendment):* two newly importable rules were reviewed. **Rejected**
+  "Hidden Executable In NTFS Alternate Data Stream" tagged S0139 **PowerDuke — software used by exactly one
+  Group, APT29**; the rule fires on any executable in an alternate data stream, so trusting the tag would have
+  made a common technique near-maximum-diagnosticity evidence for APT29. **Accepted** the `\PSEXESVC` pipe rule
+  (PsExec). The completeness test caught both automatically.
+- *Real-data results:* WMI persistence detected on the WMI events themselves ("Suspicious Scripting in a WMI
+  Consumer", T1059.005) and as **T1546.003** (WMI Event Subscription); SMBExec yields Empire PowerShell launch,
+  PowerShell-as-a-service and Base64 PowerShell (T1059.001, T1569.002). "HackTool - SysmonEnte Execution"
+  fires 46 times — verified as the community rule's own false positive on Azure guest agents
+  (`WaAppAgent.exe`, `AntimalwareConfig.exe` opening `Sysmon.exe`; the lab runs in Azure), faithfully translated;
+  such single-technique noise is for the attribution layer's single-technique guard and null baseline to reject
+  (to be verified in G3.6 validation). The Empire Mimikatz sample raises nothing: that credential theft runs in
+  PowerShell memory and needs PowerShell script logging (next task).
+- *Acceptance (D2):* exact mapping ✓, fail-closed ✓, real-sample golden tests ✓ (20 tests), source-agnostic ✓,
+  correlation facts ✓, Sigma wiring ✓, evidence type ✓, performance ✓ (≈1–2 ms/observation on all seven real
+  samples, including the 64,000-event WMI file).
+- *Still unsupported:* Sysmon 2, 4, 5, 6, 9, 14, 24, 25, 26, 255 (no detection content, or no real samples yet).

@@ -148,6 +148,9 @@ def _replay_scenario(
             process_access=obs.process_access,
             remote_thread=obs.remote_thread,
             dns=obs.dns,
+            file_stream=obs.file_stream,
+            pipe=obs.pipe,
+            wmi=obs.wmi,
         )
         for obs in adapter_observations
     )

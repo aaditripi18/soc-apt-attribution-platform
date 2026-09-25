@@ -84,12 +84,14 @@ from attribution_platform.domain import (
     EvidenceQuality,
     EvidenceType,
     FileRef,
+    FileStreamRef,
     HashSet,
     HostRef,
     NetworkEndpoint,
     NetworkInfo,
     Observation,
     PeInfo,
+    PipeRef,
     ProcessAccessRef,
     ProcessRef,
     RegistryRef,
@@ -98,6 +100,7 @@ from attribution_platform.domain import (
     TimePrecision,
     TimeSpan,
     UserRef,
+    WmiRef,
     to_serializable,
 )
 
@@ -184,6 +187,9 @@ def _observation_from_document(doc: Mapping[str, Any]) -> Observation:
             process_access=_process_access_from_dict(doc.get("process_access")),
             remote_thread=_remote_thread_from_dict(doc.get("remote_thread")),
             dns=_dns_ref_from_dict(doc.get("dns")),
+            file_stream=_file_stream_from_dict(doc.get("file_stream")),
+            pipe=_pipe_ref_from_dict(doc.get("pipe")),
+            wmi=_wmi_ref_from_dict(doc.get("wmi")),
             schema_version=schema_version,
         )
     except ElasticIntegrationError:
@@ -398,6 +404,36 @@ def _dns_ref_from_dict(d: Mapping[str, Any] | None) -> DnsRef | None:
         query_status=d.get("query_status"),
         results=d.get("results"),
     )
+
+
+def _file_stream_from_dict(d: Mapping[str, Any] | None) -> FileStreamRef | None:
+    if d is None:
+        return None
+    return FileStreamRef(contents=d.get("contents"), hashes=d.get("hashes"))
+
+
+def _pipe_ref_from_dict(d: Mapping[str, Any] | None) -> PipeRef | None:
+    if d is None:
+        return None
+    return PipeRef(name=d.get("name"))
+
+
+_WMI_FIELDS = (
+    "operation",
+    "name",
+    "namespace",
+    "query",
+    "consumer_type",
+    "destination",
+    "filter",
+    "consumer",
+)
+
+
+def _wmi_ref_from_dict(d: Mapping[str, Any] | None) -> WmiRef | None:
+    if d is None:
+        return None
+    return WmiRef(**{f: d.get(f) for f in _WMI_FIELDS})
 
 
 def _registry_ref_from_dict(d: Mapping[str, Any] | None) -> RegistryRef | None:

@@ -40,8 +40,10 @@ from attribution_platform.domain import (
     DnsRef,
     EventMetadata,
     FileRef,
+    FileStreamRef,
     HostRef,
     NetworkInfo,
+    PipeRef,
     ProcessAccessRef,
     ProcessRef,
     RegistryRef,
@@ -49,6 +51,7 @@ from attribution_platform.domain import (
     SourceRef,
     TimePrecision,
     UserRef,
+    WmiRef,
 )
 from attribution_platform.extraction.errors import ExtractionError
 
@@ -108,6 +111,9 @@ class MatchedEvent:
     process_access: ProcessAccessRef | None = None
     remote_thread: RemoteThreadRef | None = None
     dns: DnsRef | None = None
+    file_stream: FileStreamRef | None = None
+    pipe: PipeRef | None = None
+    wmi: WmiRef | None = None
 
     def __post_init__(self) -> None:
         _require_nonempty_str(self.observation_id, "MatchedEvent.observation_id")

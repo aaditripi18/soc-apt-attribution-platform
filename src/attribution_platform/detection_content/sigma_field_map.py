@@ -14,7 +14,10 @@ logsources (Sysmon events 7, 11, 12, 13). Field names are per logsource: in
 ``image_load`` ``OriginalFileName`` etc. describe the loaded DLL, not the process.
 ``/4`` adds ``process_access``, ``create_remote_thread`` (Sysmon 10, 8: ``Source*``
 is the acting ``process``, ``Target*`` the ``target_process``) and ``dns_query``
-(Sysmon 22); scopes may now also require an exact ``event.action``.
+(Sysmon 22); scopes may now also require an exact ``event.action``. ``/5``
+adds ``create_stream_hash`` (15), ``pipe_created`` (17/18), ``wmi_event``
+(19/20/21) and ``file_delete`` (23), and ``file_event`` now also requires the
+``file_create`` action (stream-hash events are file creations too).
 
 Anything else is a *telemetry gap*, reported per rule by the importer — never
 approximated. ``UNMAPPED_FIELD_REASONS`` records why the most frequent
@@ -30,7 +33,7 @@ from __future__ import annotations
 
 from types import MappingProxyType
 
-FIELD_MAP_VERSION = "sigma-field-map/4"
+FIELD_MAP_VERSION = "sigma-field-map/5"
 
 #: ``(product, category)`` → the ``(field_path, operator, value)`` scope
 #: conditions an Observation must satisfy to be the kind of event the Sigma
@@ -55,6 +58,27 @@ LOGSOURCE_SCOPES: MappingProxyType[tuple[str, str], tuple[tuple[str, str, str], 
             ("windows", "file_event"): (
                 ("event.category", "has_element", "file"),
                 ("event.type", "has_element", "creation"),
+                ("event.action", "equals", "file_create"),
+            ),
+            ("windows", "create_stream_hash"): (
+                ("event.category", "has_element", "file"),
+                ("event.type", "has_element", "creation"),
+                ("event.action", "equals", "file_stream_create"),
+            ),
+            ("windows", "file_delete"): (
+                ("event.category", "has_element", "file"),
+                ("event.type", "has_element", "deletion"),
+                ("event.action", "equals", "file_delete"),
+            ),
+            # Sigma pipe_created covers both Sysmon 17 (created) and 18 (connected).
+            ("windows", "pipe_created"): (
+                ("event.category", "has_element", "file"),
+                ("event.action", "startswith", "pipe_"),
+            ),
+            # Sigma wmi_event covers Sysmon 19/20/21.
+            ("windows", "wmi_event"): (
+                ("event.category", "has_element", "configuration"),
+                ("event.action", "startswith", "wmi_"),
             ),
             # Sigma's registry_* categories over Sysmon 12/13 (14, rename, is not
             # supported yet): add = CreateKey, delete = DeleteKey/DeleteValue,
@@ -167,6 +191,38 @@ FIELD_MAPS: MappingProxyType[tuple[str, str], MappingProxyType[str, str]] = Mapp
                 "StartAddress": "remote_thread.start_address",
                 "StartModule": "remote_thread.start_module",
                 "StartFunction": "remote_thread.start_function",
+            }
+        ),
+        ("windows", "create_stream_hash"): MappingProxyType(
+            {
+                "Image": "process.executable",
+                "TargetFilename": "file.path",
+                "Contents": "file_stream.contents",
+                "Hash": "file_stream.hashes",
+            }
+        ),
+        ("windows", "file_delete"): MappingProxyType(
+            {
+                "Image": "process.executable",
+                "TargetFilename": "file.path",
+            }
+        ),
+        ("windows", "pipe_created"): MappingProxyType(
+            {
+                "Image": "process.executable",
+                "PipeName": "pipe.name",
+            }
+        ),
+        ("windows", "wmi_event"): MappingProxyType(
+            {
+                "Operation": "wmi.operation",
+                "Name": "wmi.name",
+                "EventNamespace": "wmi.namespace",
+                "Query": "wmi.query",
+                "Type": "wmi.consumer_type",
+                "Destination": "wmi.destination",
+                "Filter": "wmi.filter",
+                "Consumer": "wmi.consumer",
             }
         ),
         ("windows", "dns_query"): MappingProxyType(

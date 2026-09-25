@@ -68,16 +68,19 @@ from attribution_platform.domain import (
     DnsRef,
     EventMetadata,
     FileRef,
+    FileStreamRef,
     HashSet,
     HostRef,
     NetworkEndpoint,
     NetworkInfo,
     PeInfo,
+    PipeRef,
     ProcessAccessRef,
     ProcessRef,
     RegistryRef,
     RemoteThreadRef,
     UserRef,
+    WmiRef,
 )
 from attribution_platform.replay.errors import ReplayError
 from attribution_platform.sources.synthetic import SyntheticRecord
@@ -96,6 +99,9 @@ _OPTIONAL_ENTITY_FIELDS = (
     "process_access",
     "remote_thread",
     "dns",
+    "file_stream",
+    "pipe",
+    "wmi",
 )
 
 
@@ -119,6 +125,9 @@ class DetectionReplayScenario:
     process_access: ProcessAccessRef | None = None
     remote_thread: RemoteThreadRef | None = None
     dns: DnsRef | None = None
+    file_stream: FileStreamRef | None = None
+    pipe: PipeRef | None = None
+    wmi: WmiRef | None = None
 
 
 @dataclass(frozen=True)
@@ -217,6 +226,9 @@ def _scenario_from_dict(s: Any, *, index: int, source: str) -> DetectionReplaySc
             s.get("remote_thread"), where=f"{where}.remote_thread"
         ),
         dns=_dns_ref_from_dict(s.get("dns"), where=f"{where}.dns"),
+        file_stream=_file_stream_from_dict(s.get("file_stream"), where=f"{where}.file_stream"),
+        pipe=_pipe_ref_from_dict(s.get("pipe"), where=f"{where}.pipe"),
+        wmi=_wmi_ref_from_dict(s.get("wmi"), where=f"{where}.wmi"),
     )
 
 
@@ -394,6 +406,37 @@ def _dns_ref_from_dict(d: Any, *, where: str) -> DnsRef | None:
         query_status=parsed.get("query_status"),
         results=parsed.get("results"),
     )
+
+
+def _file_stream_from_dict(d: Any, *, where: str) -> FileStreamRef | None:
+    parsed = _require_dict(d, where=where)
+    if parsed is None:
+        return None
+    return FileStreamRef(contents=parsed.get("contents"), hashes=parsed.get("hashes"))
+
+
+def _pipe_ref_from_dict(d: Any, *, where: str) -> PipeRef | None:
+    parsed = _require_dict(d, where=where)
+    if parsed is None:
+        return None
+    return PipeRef(name=parsed.get("name"))
+
+
+def _wmi_ref_from_dict(d: Any, *, where: str) -> WmiRef | None:
+    parsed = _require_dict(d, where=where)
+    if parsed is None:
+        return None
+    fields = (
+        "operation",
+        "name",
+        "namespace",
+        "query",
+        "consumer_type",
+        "destination",
+        "filter",
+        "consumer",
+    )
+    return WmiRef(**{f: parsed.get(f) for f in fields})
 
 
 def _registry_ref_from_dict(d: Any, *, where: str) -> RegistryRef | None:

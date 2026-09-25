@@ -39,13 +39,16 @@ from attribution_platform.domain.entities import (
     DnsRef,
     EventMetadata,
     FileRef,
+    FileStreamRef,
     HostRef,
     NetworkInfo,
+    PipeRef,
     ProcessAccessRef,
     ProcessRef,
     RegistryRef,
     RemoteThreadRef,
     UserRef,
+    WmiRef,
 )
 from attribution_platform.domain.enums import TimePrecision
 from attribution_platform.domain.errors import ensure_aware_datetime, ensure_nonempty_str
@@ -73,8 +76,9 @@ class Observation:
     - ``event`` — ECS-style event category/type/action metadata.
     - ``host`` / ``user`` / ``process`` / ``network`` / ``file`` / ``dll`` /
       ``registry`` / ``target_process`` / ``process_access`` / ``remote_thread``
-      / ``dns`` — entity groups (added by ADR-0008 Wave 1 for image-load,
-      registry, process-access, remote-thread and DNS events;
+      / ``dns`` / ``file_stream`` / ``pipe`` / ``wmi`` — entity groups (added
+      by ADR-0008 Wave 1 for image-load, registry, process-access,
+      remote-thread, DNS, stream, pipe and WMI events;
       ``target_process`` is the process *acted upon*, ``process`` the actor).
 
     ``schema_version`` defaults to the current contract version (a static
@@ -97,6 +101,9 @@ class Observation:
     process_access: ProcessAccessRef | None = None
     remote_thread: RemoteThreadRef | None = None
     dns: DnsRef | None = None
+    file_stream: FileStreamRef | None = None
+    pipe: PipeRef | None = None
+    wmi: WmiRef | None = None
     schema_version: str = field(default=OBSERVATION_SCHEMA_VERSION)
 
     def __post_init__(self) -> None:

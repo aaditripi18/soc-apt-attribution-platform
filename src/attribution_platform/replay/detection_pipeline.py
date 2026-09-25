@@ -196,6 +196,9 @@ def _replay_scenario_through_engine(
         process_access=scenario.process_access,
         remote_thread=scenario.remote_thread,
         dns=scenario.dns,
+        file_stream=scenario.file_stream,
+        pipe=scenario.pipe,
+        wmi=scenario.wmi,
     )
     record = DetectionMatchRecord(rule_ref=_RAW_TELEMETRY_RULE_REF, matched_events=(matched_event,))
     (observation,) = extract_observations(record)

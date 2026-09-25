@@ -127,6 +127,43 @@ class DnsRef:
 
 
 @dataclass(frozen=True)
+class FileStreamRef:
+    """An alternate data stream written to a file (all optional); the file is
+    the Observation's ``file``. ``contents`` is the stream content as the source
+    reported it (e.g. a ``Zone.Identifier`` body; Sysmon writes ``-`` when it
+    does not capture it); ``hashes`` is the source's combined hash string
+    (e.g. ``SHA1=…,MD5=…``) exactly as rendered."""
+
+    contents: str | None = None
+    hashes: str | None = None
+
+
+@dataclass(frozen=True)
+class PipeRef:
+    """A named pipe created or connected to (all optional). Whether it was
+    created or connected is on the Observation's ``event``."""
+
+    name: str | None = None
+
+
+@dataclass(frozen=True)
+class WmiRef:
+    """A WMI event-subscription object (filter, consumer or filter-to-consumer
+    binding) as the source reported it (all optional); which of the three it is
+    lives on the Observation's ``event.action``. Values are kept exactly as
+    reported (Sysmon quotes names and escapes paths)."""
+
+    operation: str | None = None
+    name: str | None = None
+    namespace: str | None = None
+    query: str | None = None
+    consumer_type: str | None = None
+    destination: str | None = None
+    filter: str | None = None
+    consumer: str | None = None
+
+
+@dataclass(frozen=True)
 class ProcessRef:
     """A process and its immediate parent lineage (all optional).
 

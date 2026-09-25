@@ -122,6 +122,9 @@ _ALLOWED_TOP_LEVEL_FIELDS = frozenset(
         "process_access",
         "remote_thread",
         "dns",
+        "file_stream",
+        "pipe",
+        "wmi",
     }
 )
 

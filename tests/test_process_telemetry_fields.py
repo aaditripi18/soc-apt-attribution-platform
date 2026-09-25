@@ -28,15 +28,18 @@ from attribution_platform.domain import (
     DnsRef,
     EventMetadata,
     FileRef,
+    FileStreamRef,
     NetworkEndpoint,
     NetworkInfo,
     Observation,
     PeInfo,
+    PipeRef,
     ProcessAccessRef,
     ProcessRef,
     RegistryRef,
     RemoteThreadRef,
     SourceRef,
+    WmiRef,
 )
 from attribution_platform.replay.detection_fixtures import _process_ref_from_dict
 from attribution_platform.sources.sysmon import SysmonSourceAdapter
@@ -216,6 +219,18 @@ def _full_observation() -> Observation:
         process_access=ProcessAccessRef(granted_access="a", call_trace="a"),
         remote_thread=RemoteThreadRef(start_address="a", start_module="a", start_function="a"),
         dns=DnsRef(question_name="a", query_status="a", results="a"),
+        file_stream=FileStreamRef(contents="a", hashes="a"),
+        pipe=PipeRef(name="a"),
+        wmi=WmiRef(
+            operation="a",
+            name="a",
+            namespace="a",
+            query="a",
+            consumer_type="a",
+            destination="a",
+            filter="a",
+            consumer="a",
+        ),
         process=ProcessRef(
             executable="a",
             command_line="a",

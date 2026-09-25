@@ -384,7 +384,7 @@ def test_unsupported_logsource_is_telemetry_gap(tmp_path: Path, knowledge: Attac
     result = _import(
         tmp_path,
         knowledge,
-        _rule_yaml("sel:\n  PipeName|contains: 'msagent'\ncondition: sel", category="pipe_created"),
+        _rule_yaml("sel:\n  ImageLoaded|endswith: '.sys'\ncondition: sel", category="driver_load"),
         _rule_yaml(
             "sel:\n  Image|endswith: '/bash'\ncondition: sel",
             rule_id="22222222-2222-2222-2222-222222222222",
@@ -550,7 +550,7 @@ def test_real_review_covers_every_imported_software_tag_and_is_applied() -> None
         if m["object_type"] != "attack-pattern"
     }
     assert in_pack == accepted
-    assert len(accepted) == 10
+    assert len(accepted) == 11
 
 
 # ===========================================================================

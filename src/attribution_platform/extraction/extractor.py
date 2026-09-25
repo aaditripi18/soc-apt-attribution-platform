@@ -54,6 +54,9 @@ def extract_observations(record: DetectionMatchRecord) -> tuple[Observation, ...
                 process_access=matched.process_access,
                 remote_thread=matched.remote_thread,
                 dns=matched.dns,
+                file_stream=matched.file_stream,
+                pipe=matched.pipe,
+                wmi=matched.wmi,
             )
         except DomainContractError as exc:
             rule = record.rule_ref
