@@ -1,0 +1,224 @@
+{
+ "schema": "corpus-v2-recordings/1",
+ "note": "Real recordings (OTRF Security-Datasets, MIT) used as corpus v2 sources. Archives live in the git-ignored cache (scripts/acquire_corpus_telemetry.py); each is SHA-256 pinned here.",
+ "declaration_basis": "ADR-0008 D3 source declaration. The recordings' original deployment configuration is not available to us, so each host's declaration is stated from the recording itself: every listed host carries both Sysmon and Security-channel records. Sysmon is therefore authoritative for process starts on every host.",
+ "recordings": [
+  {
+   "recording_id": "otrf-apt3-caldera",
+   "cache_path": "data/cache/otrf-compound/windows/apt3/caldera_attack_evals_round1_day1_2019-10-20201108.tar.gz",
+   "sha256": "37d2f27f2c4fa35fa1cda926fa5b1a45497777107dd33ba04f03e0613a09636f",
+   "source_path": "datasets/compound/windows/apt3/caldera_attack_evals_round1_day1_2019-10-20201108.tar.gz",
+   "declared_sources": {
+    "ACCT001.shire.com": [
+     "sysmon",
+     "windows_security"
+    ],
+    "FILE001.shire.com": [
+     "sysmon",
+     "windows_security"
+    ],
+    "HFDC01.shire.com": [
+     "sysmon",
+     "windows_security"
+    ],
+    "HR001.shire.com": [
+     "sysmon",
+     "windows_security"
+    ],
+    "IT001.shire.com": [
+     "sysmon",
+     "windows_security"
+    ]
+   },
+   "intended_use": "calibration-or-held-out",
+   "actor_label": "APT3",
+   "label_provenance": "OTRF compound/windows/apt3 README: replication of MITRE ATT&CK Evaluations Round 1 (APT3) scenario 1 via the evals_caldera plugin"
+  },
+  {
+   "recording_id": "otrf-apt3-empire",
+   "cache_path": "data/cache/otrf-compound/windows/apt3/empire_apt3.tar.gz",
+   "sha256": "ab4d1ec4e44102c87946a974f93aa248e49e5001e01fac3f137ec7e61bbc18ed",
+   "source_path": "datasets/compound/windows/apt3/empire_apt3.tar.gz",
+   "declared_sources": {
+    "ACCT001.shire.com": [
+     "sysmon",
+     "windows_security"
+    ],
+    "HFDC01.shire.com": [
+     "sysmon",
+     "windows_security"
+    ],
+    "HR001.shire.com": [
+     "sysmon",
+     "windows_security"
+    ],
+    "IT001.shire.com": [
+     "sysmon",
+     "windows_security"
+    ]
+   },
+   "intended_use": "calibration-or-held-out",
+   "actor_label": "APT3",
+   "label_provenance": "OTRF compound/windows/apt3 README: replication of ATT&CK Evaluations Round 1 (APT3) scenario 2 via Empire resource files"
+  },
+  {
+   "recording_id": "otrf-apt29-day1",
+   "cache_path": "data/cache/otrf-compound/apt29/day1/apt29_evals_day1_manual.zip",
+   "sha256": "98a073140860560d70080ace9142961be4f64b4862bae892d62d0f254d0fdbe5",
+   "source_path": "datasets/compound/apt29/day1/apt29_evals_day1_manual.zip",
+   "declared_sources": {
+    "NASHUA.dmevals.local": [
+     "sysmon",
+     "windows_security"
+    ],
+    "NEWYORK.dmevals.local": [
+     "sysmon",
+     "windows_security"
+    ],
+    "SCRANTON.dmevals.local": [
+     "sysmon",
+     "windows_security"
+    ],
+    "UTICA.dmevals.local": [
+     "sysmon",
+     "windows_security"
+    ]
+   },
+   "intended_use": "blind-actor-holdout",
+   "actor_label": "APT29",
+   "label_provenance": "OTRF compound/apt29 README: replication of MITRE ATT&CK Evaluations Round 2 (APT29), day 1"
+  },
+  {
+   "recording_id": "otrf-apt29-day2",
+   "cache_path": "data/cache/otrf-compound/apt29/day2/apt29_evals_day2_manual.zip",
+   "sha256": "377f8cba5db95a453a3ee8bd19f493efafc23724541482a4da99da28ee4665f9",
+   "source_path": "datasets/compound/apt29/day2/apt29_evals_day2_manual.zip",
+   "declared_sources": {
+    "NASHUA.dmevals.local": [
+     "sysmon",
+     "windows_security"
+    ],
+    "NEWYORK.dmevals.local": [
+     "sysmon",
+     "windows_security"
+    ],
+    "SCRANTON.dmevals.local": [
+     "sysmon",
+     "windows_security"
+    ],
+    "UTICA.dmevals.local": [
+     "sysmon",
+     "windows_security"
+    ]
+   },
+   "intended_use": "blind-actor-holdout",
+   "actor_label": "APT29",
+   "label_provenance": "OTRF compound/apt29 README: replication of MITRE ATT&CK Evaluations Round 2 (APT29), day 2"
+  },
+  {
+   "recording_id": "otrf-lsass-01-logonpasswords",
+   "cache_path": "data/cache/otrf-compound/LSASS_campaign_01/metasploit_logonpasswords_lsass_memory_dump.zip",
+   "sha256": "79045fcc5a8689efed8db4911cadc11b554ef8b0bed1428ee490bb8c3f2578e6",
+   "source_path": "datasets/compound/LSASS_campaign_01/metasploit_logonpasswords_lsass_memory_dump.zip",
+   "declared_sources": {
+    "MKT01.pandalab.com": [
+     "sysmon",
+     "windows_security"
+    ]
+   },
+   "intended_use": "hard-negative",
+   "actor_label": null,
+   "label_provenance": "OTRF compound/_metadata LSASS_campaign_0N: single-tool LSASS credential dumping via Metasploit, no actor attached"
+  },
+  {
+   "recording_id": "otrf-lsass-02-procdump",
+   "cache_path": "data/cache/otrf-compound/LSASS_campaign_02/metasploit_procdump_lsass_memory_dump.zip",
+   "sha256": "2b32f11b1465f49df8bb4040652b001e4bb8a92de6ae7e84c2977abe68273f04",
+   "source_path": "datasets/compound/LSASS_campaign_02/metasploit_procdump_lsass_memory_dump.zip",
+   "declared_sources": {
+    "ACCT01.pandalab.com": [
+     "sysmon",
+     "windows_security"
+    ]
+   },
+   "intended_use": "hard-negative",
+   "actor_label": null,
+   "label_provenance": "OTRF compound/_metadata LSASS_campaign_0N: single-tool LSASS credential dumping via Metasploit, no actor attached"
+  },
+  {
+   "recording_id": "otrf-lsass-03-comsvcs",
+   "cache_path": "data/cache/otrf-compound/LSASS_campaign_03/metasploit_comsvcs_lsass_memory_dump.zip",
+   "sha256": "97a834cd72b0803d544c62cc45a41b18a4cc04a605735096be4bc5dad5e9fe7b",
+   "source_path": "datasets/compound/LSASS_campaign_03/metasploit_comsvcs_lsass_memory_dump.zip",
+   "declared_sources": {
+    "PRD01.pandalab.com": [
+     "sysmon",
+     "windows_security"
+    ]
+   },
+   "intended_use": "hard-negative",
+   "actor_label": null,
+   "label_provenance": "OTRF compound/_metadata LSASS_campaign_0N: single-tool LSASS credential dumping via Metasploit, no actor attached"
+  },
+  {
+   "recording_id": "otrf-lsass-04-out-minidump",
+   "cache_path": "data/cache/otrf-compound/LSASS_campaign_04/metasploit_out-minidump_lsass_memory_dump.zip",
+   "sha256": "d6150eab4013ed0a7fc9c6b7266187214706c543c9dc3a370603f524def5de63",
+   "source_path": "datasets/compound/LSASS_campaign_04/metasploit_out-minidump_lsass_memory_dump.zip",
+   "declared_sources": {
+    "IT01.pandalab.com": [
+     "sysmon",
+     "windows_security"
+    ]
+   },
+   "intended_use": "hard-negative",
+   "actor_label": null,
+   "label_provenance": "OTRF compound/_metadata LSASS_campaign_0N: single-tool LSASS credential dumping via Metasploit, no actor attached"
+  },
+  {
+   "recording_id": "otrf-lsass-05-sharpdump",
+   "cache_path": "data/cache/otrf-compound/LSASS_campaign_05/metasploit_sharpdump_lsass_memory_dump.zip",
+   "sha256": "79e347b411beefaf5c7d0c951fdcb9d308fce20f8eabe666c11fa7b6165053b8",
+   "source_path": "datasets/compound/LSASS_campaign_05/metasploit_sharpdump_lsass_memory_dump.zip",
+   "declared_sources": {
+    "MKT01.pandalab.com": [
+     "sysmon",
+     "windows_security"
+    ]
+   },
+   "intended_use": "hard-negative",
+   "actor_label": null,
+   "label_provenance": "OTRF compound/_metadata LSASS_campaign_0N: single-tool LSASS credential dumping via Metasploit, no actor attached"
+  },
+  {
+   "recording_id": "otrf-lsass-06-outflank-dumpert",
+   "cache_path": "data/cache/otrf-compound/LSASS_campaign_06/metasploit_outflank-dumpert_lsass_memory_dump.zip",
+   "sha256": "ee996c0ddc32611c572f59a68869f7d4327aaac04a3aeee65916b7221347dc1d",
+   "source_path": "datasets/compound/LSASS_campaign_06/metasploit_outflank-dumpert_lsass_memory_dump.zip",
+   "declared_sources": {
+    "MKT01.pandalab.com": [
+     "sysmon",
+     "windows_security"
+    ]
+   },
+   "intended_use": "hard-negative",
+   "actor_label": null,
+   "label_provenance": "OTRF compound/_metadata LSASS_campaign_0N: single-tool LSASS credential dumping via Metasploit, no actor attached"
+  },
+  {
+   "recording_id": "otrf-lsass-07-nanodump",
+   "cache_path": "data/cache/otrf-compound/LSASS_campaign_07/metasploit_nanodump_lsass_memory_dump.zip",
+   "sha256": "5335635ef2bce0fb3f8704e17fb04a3be7400ac7c4bcd6ec7c14454632acaaaf",
+   "source_path": "datasets/compound/LSASS_campaign_07/metasploit_nanodump_lsass_memory_dump.zip",
+   "declared_sources": {
+    "MKT01.pandalab.com": [
+     "sysmon",
+     "windows_security"
+    ]
+   },
+   "intended_use": "hard-negative",
+   "actor_label": null,
+   "label_provenance": "OTRF compound/_metadata LSASS_campaign_0N: single-tool LSASS credential dumping via Metasploit, no actor attached"
+  }
+ ]
+}

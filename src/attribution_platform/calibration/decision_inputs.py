@@ -58,16 +58,12 @@ from attribution_platform.calibration.corpus_builder import (
     CorpusScenarioAnnotation,
 )
 from attribution_platform.calibration.errors import CalibrationError
+from attribution_platform.calibration.units import CorpusSource, UnitAnalysis, analyze_source
 from attribution_platform.dataplane import ElasticClient
 from attribution_platform.detection import DetectionEngine
-from attribution_platform.replay import (
-    BehavioralSequenceReplayResult,
-    DetectionReplayFixture,
-    replay_fixture_through_behavioral_sequences,
-)
 
 DECISION_INPUTS_METHOD = "c3.2-corpus-decision-inputs"
-DECISION_INPUTS_METHOD_VERSION = "0.2"  # 0.2: multi-unit families
+DECISION_INPUTS_METHOD_VERSION = "0.3"  # 0.2: multi-unit families; 0.3: recordings
 
 #: The structural lower bound of ``min_profile_floor`` (ADR-0005 §D16). Used
 #: only so ``compute_comparative_evidence`` can run; see the module docstring
@@ -112,7 +108,7 @@ class CorpusDecisionInputs:
 
 def build_case_decision_input(
     case: CalibrationCase,
-    fixture: DetectionReplayFixture,
+    fixture: CorpusSource,
     *,
     client: ElasticClient,
     engine: DetectionEngine,
@@ -123,15 +119,13 @@ def build_case_decision_input(
     ``correlation_group_id``/``sequence_id`` frozen on ``case`` under the same
     ``attack_kb_version`` — a drifted pipeline must never silently feed
     fitting."""
-    replay = replay_fixture_through_behavioral_sequences(
-        fixture, client=client, engine=engine, knowledge=knowledge
-    )
-    return _case_decision_input(case, replay, fixture.fixture_id, knowledge)
+    replay = analyze_source(fixture, client=client, engine=engine, knowledge=knowledge)
+    return _case_decision_input(case, replay, replay.source_id, knowledge)
 
 
 def _case_decision_input(
     case: CalibrationCase,
-    replay: BehavioralSequenceReplayResult,
+    replay: UnitAnalysis,
     fixture_id: str,
     knowledge: AttackKnowledge,
 ) -> CaseDecisionInput:
@@ -144,7 +138,7 @@ def _case_decision_input(
     # A family may have several units: the case's own unit is selected by its
     # frozen group/sequence ids; if the replay no longer produces that exact
     # pair, the pipeline has drifted and the case must not feed fitting.
-    groups = {g.group_id: g for g in replay.correlation_result.contextual_result.groups}
+    groups = {g.group_id: g for g in replay.groups}
     sequence = next((s for s in replay.sequences if s.sequence_id == case.sequence_id), None)
     group = groups.get(case.correlation_group_id)
     if sequence is None or group is None or sequence.group_id != group.group_id:
@@ -186,7 +180,7 @@ def _case_decision_input(
 
 def build_corpus_decision_inputs(
     corpus: CorpusBuildResult,
-    entries: Sequence[tuple[CorpusScenarioAnnotation, DetectionReplayFixture]],
+    entries: Sequence[tuple[CorpusScenarioAnnotation, CorpusSource]],
     *,
     roles: Iterable[CaseRole],
     client_factory: Callable[[], ElasticClient],
@@ -212,7 +206,7 @@ def build_corpus_decision_inputs(
             f"{knowledge.attack_kb_version!r}"
         )
 
-    fixture_by_family: dict[str, DetectionReplayFixture] = {}
+    fixture_by_family: dict[str, CorpusSource] = {}
     for annotation, fixture in entries:
         if annotation.scenario_family_id in fixture_by_family:
             raise CalibrationError(
@@ -222,7 +216,7 @@ def build_corpus_decision_inputs(
         fixture_by_family[annotation.scenario_family_id] = fixture
 
     inputs: list[CaseDecisionInput] = []
-    replays: dict[str, BehavioralSequenceReplayResult] = {}  # one replay per family
+    replays: dict[str, UnitAnalysis] = {}  # one replay per family
     for case in corpus.cases:
         if case.case_role not in requested:
             continue
@@ -233,12 +227,15 @@ def build_corpus_decision_inputs(
                 f"{case.scenario_family_id!r} (case {case.case_id!r})"
             )
         if case.scenario_family_id not in replays:
-            replays[case.scenario_family_id] = replay_fixture_through_behavioral_sequences(
+            replays[case.scenario_family_id] = analyze_source(
                 case_fixture, client=client_factory(), engine=engine, knowledge=knowledge
             )
         inputs.append(
             _case_decision_input(
-                case, replays[case.scenario_family_id], case_fixture.fixture_id, knowledge
+                case,
+                replays[case.scenario_family_id],
+                replays[case.scenario_family_id].source_id,
+                knowledge,
             )
         )
 

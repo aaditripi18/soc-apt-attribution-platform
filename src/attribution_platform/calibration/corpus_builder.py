@@ -65,15 +65,19 @@ from attribution_platform.calibration.manifest import (
     CalibrationCorpusManifest,
     CorpusSourceEntry,
 )
+from attribution_platform.calibration.units import (
+    CorpusSource,
+    UnitAnalysis,
+    analyze_source,
+    source_id,
+)
 from attribution_platform.correlation.contracts import CorrelationGroup
 from attribution_platform.correlation.sequence import BehavioralSequence
 from attribution_platform.dataplane import ElasticClient
 from attribution_platform.detection import DetectionEngine
 from attribution_platform.replay import (
-    BehavioralSequenceReplayResult,
     DetectionReplayFixture,
     load_detection_replay_fixture_file,
-    replay_fixture_through_behavioral_sequences,
 )
 
 #: Identity of this corpus-build method (first slice). Recorded for provenance;
@@ -90,8 +94,13 @@ class UnitAnnotation:
 
     unit_id: str
     anchor_scenario_ids: tuple[str, ...]
-    expected_output_shape: ExpectedOutputShape
+    expected_output_shape: ExpectedOutputShape | None
     coverage_assumptions: tuple[str, ...] = ()
+    #: A declared unit that is *not* part of the corpus (e.g. background
+    #: activity in a real recording that is not the emulated actor's). It must
+    #: still be anchored and claimed — never silently dropped — and carries the
+    #: author's reason; no case is built from it.
+    exclusion_reason: str | None = None
 
     def __post_init__(self) -> None:
         if not isinstance(self.unit_id, str) or not self.unit_id.strip():
@@ -102,7 +111,13 @@ class UnitAnnotation:
                 f"UnitAnnotation {self.unit_id!r}: anchor_scenario_ids must be non-empty strings"
             )
         object.__setattr__(self, "anchor_scenario_ids", anchors)
-        if not isinstance(self.expected_output_shape, ExpectedOutputShape):
+        if self.exclusion_reason is not None:
+            if not self.exclusion_reason.strip() or self.expected_output_shape is not None:
+                raise CalibrationError(
+                    f"UnitAnnotation {self.unit_id!r}: an excluded unit needs a non-empty "
+                    "exclusion_reason and no expected_output_shape"
+                )
+        elif not isinstance(self.expected_output_shape, ExpectedOutputShape):
             raise CalibrationError(
                 f"UnitAnnotation {self.unit_id!r}: expected_output_shape must be an "
                 "ExpectedOutputShape"
@@ -167,12 +182,12 @@ def _telemetry_provenance(group: CorrelationGroup) -> tuple[str, ...]:
 
 def _unit_groups(
     annotation: CorpusScenarioAnnotation,
-    result: BehavioralSequenceReplayResult,
+    result: UnitAnalysis,
     fixture_id: str,
 ) -> list[tuple[UnitAnnotation | None, CorrelationGroup, BehavioralSequence]]:
     """Pair each produced attribution unit with its authored unit (``None`` for
     a single-unit annotation). Fails closed on any ambiguity (module docstring)."""
-    groups = {g.group_id: g for g in result.correlation_result.contextual_result.groups}
+    groups = {g.group_id: g for g in result.groups}
     pairs: list[tuple[CorrelationGroup, BehavioralSequence]] = []
     for sequence in result.sequences:
         group = groups.get(sequence.group_id)
@@ -193,11 +208,7 @@ def _unit_groups(
             )
         return [(None, pairs[0][0], pairs[0][1])]
 
-    observations_by_scenario: dict[str, set[str]] = {}
-    for detection in result.correlation_result.detection_results:
-        observations_by_scenario.setdefault(detection.scenario_id, set()).add(
-            detection.observation.observation_id
-        )
+    observations_by_scenario = result.anchor_observations
     claimed: dict[str, str] = {}
     out: list[tuple[UnitAnnotation | None, CorrelationGroup, BehavioralSequence]] = []
     for unit in annotation.units:
@@ -246,25 +257,27 @@ def _unit_groups(
 
 def build_calibration_cases(
     annotation: CorpusScenarioAnnotation,
-    fixture: DetectionReplayFixture,
+    fixture: CorpusSource,
     *,
     client: ElasticClient,
     engine: DetectionEngine,
     knowledge: AttackKnowledge,
 ) -> tuple[CalibrationCase, ...]:
-    """Replay one labeled fixture through the real, unmodified pipeline and
-    assemble one :class:`CalibrationCase` per attribution unit, from the
-    produced unit plus the authored annotation (module docstring)."""
-    result = replay_fixture_through_behavioral_sequences(
-        fixture, client=client, engine=engine, knowledge=knowledge
-    )
+    """Replay one labeled source (a fixture or a real recording) through the
+    real, unmodified pipeline and assemble one :class:`CalibrationCase` per
+    attribution unit, from the produced unit plus the authored annotation
+    (module docstring). Declared excluded units produce no case."""
+    result = analyze_source(fixture, client=client, engine=engine, knowledge=knowledge)
     cases: list[CalibrationCase] = []
-    for unit, group, sequence in _unit_groups(annotation, result, fixture.fixture_id):
+    for unit, group, sequence in _unit_groups(annotation, result, result.source_id):
+        if unit is not None and unit.exclusion_reason is not None:
+            continue
         if unit is None:
             assert annotation.expected_output_shape is not None
             shape = annotation.expected_output_shape
             assumptions = annotation.coverage_assumptions
         else:
+            assert unit.expected_output_shape is not None
             shape = unit.expected_output_shape
             assumptions = tuple(
                 sorted(set(annotation.coverage_assumptions) | set(unit.coverage_assumptions))
@@ -290,7 +303,7 @@ def build_calibration_cases(
 
 def build_calibration_case(
     annotation: CorpusScenarioAnnotation,
-    fixture: DetectionReplayFixture,
+    fixture: CorpusSource,
     *,
     client: ElasticClient,
     engine: DetectionEngine,
@@ -303,14 +316,14 @@ def build_calibration_case(
     )
     if len(cases) != 1:
         raise CalibrationError(
-            f"build_calibration_case: fixture {fixture.fixture_id!r} produced {len(cases)} "
+            f"build_calibration_case: source {source_id(fixture)!r} produced {len(cases)} "
             f"cases; use build_calibration_cases for a multi-unit family"
         )
     return cases[0]
 
 
 def build_corpus(
-    entries: Sequence[tuple[CorpusScenarioAnnotation, DetectionReplayFixture]],
+    entries: Sequence[tuple[CorpusScenarioAnnotation, CorpusSource]],
     *,
     client_factory: Callable[[], ElasticClient],
     engine: DetectionEngine,
@@ -392,8 +405,13 @@ def load_scenario_annotation(path: Path) -> CorpusScenarioAnnotation:
         UnitAnnotation(
             unit_id=u["unit_id"],
             anchor_scenario_ids=tuple(u["anchor_scenario_ids"]),
-            expected_output_shape=_expected_output_shape(u["expected_output_shape"]),
+            expected_output_shape=(
+                _expected_output_shape(u["expected_output_shape"])
+                if u.get("expected_output_shape") is not None
+                else None
+            ),
             coverage_assumptions=tuple(u.get("coverage_assumptions", ())),
+            exclusion_reason=u.get("exclusion_reason"),
         )
         for u in data.get("units", ())
     )
