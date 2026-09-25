@@ -32,6 +32,19 @@ OTRF_COMMIT = "d9d40ef123d2c87d5d3df28c96bcab4f0faccc87"
 SAMPLES: tuple[tuple[str, str], ...] = (
     ("otrf", "datasets/atomic/windows/execution/host/psh_powershell_httplistener.zip"),
     ("otrf", "datasets/atomic/windows/defense_evasion/host/psh_mavinject_dll_notepad.zip"),
+    # Round 2 (2026-09-25): LSASS access, PowerShell/pipes (Empire), WMI eventing.
+    ("otrf", "datasets/atomic/windows/credential_access/host/psh_lsass_memory_dump_comsvcs.zip"),
+    (
+        "otrf",
+        "datasets/atomic/windows/credential_access/host/cmd_lsass_memory_dumpert_syscalls.zip",
+    ),
+    ("otrf", "datasets/atomic/windows/credential_access/host/empire_mimikatz_logonpasswords.zip"),
+    ("otrf", "datasets/atomic/windows/lateral_movement/host/empire_smbexec_dcerpc_smb_svcctl.zip"),
+    (
+        "otrf",
+        "datasets/atomic/windows/persistence/host/"
+        "empire_wmi_local_event_subscriptions_elevated_user.zip",
+    ),
 )
 
 

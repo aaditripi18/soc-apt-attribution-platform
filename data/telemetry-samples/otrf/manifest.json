@@ -2,7 +2,7 @@
   "source": "OTRF Security-Datasets",
   "license": "MIT",
   "license_url": "https://github.com/OTRF/Security-Datasets/blob/d9d40ef123d2c87d5d3df28c96bcab4f0faccc87/LICENSE",
-  "retrieved_at_utc": "2026-09-24T17:56:00Z",
+  "retrieved_at_utc": "2026-09-25T05:28:58Z",
   "method": "scripts/acquire_telemetry_samples.py (urllib, commit-pinned raw URLs)",
   "samples": [
     {
@@ -36,6 +36,86 @@
       "source_commit": "d9d40ef123d2c87d5d3df28c96bcab4f0faccc87",
       "source_path": "datasets/atomic/windows/defense_evasion/host/psh_mavinject_dll_notepad.zip",
       "download_url": "https://raw.githubusercontent.com/OTRF/Security-Datasets/d9d40ef123d2c87d5d3df28c96bcab4f0faccc87/datasets/atomic/windows/defense_evasion/host/psh_mavinject_dll_notepad.zip"
+    },
+    {
+      "filename": "psh_lsass_memory_dump_comsvcs.zip",
+      "relative_path": "data/telemetry-samples/otrf/psh_lsass_memory_dump_comsvcs.zip",
+      "size_bytes": 17957,
+      "sha256": "0af9e920220d746432f0972be83ad057629695540aecd68c15869d190786e1ae",
+      "members": [
+        {
+          "name": "psh_lsass_memory_dump_comsvcs_2020-10-18T19500924.json",
+          "size_bytes": 286839
+        }
+      ],
+      "source_repository": "OTRF/Security-Datasets",
+      "source_commit": "d9d40ef123d2c87d5d3df28c96bcab4f0faccc87",
+      "source_path": "datasets/atomic/windows/credential_access/host/psh_lsass_memory_dump_comsvcs.zip",
+      "download_url": "https://raw.githubusercontent.com/OTRF/Security-Datasets/d9d40ef123d2c87d5d3df28c96bcab4f0faccc87/datasets/atomic/windows/credential_access/host/psh_lsass_memory_dump_comsvcs.zip"
+    },
+    {
+      "filename": "cmd_lsass_memory_dumpert_syscalls.zip",
+      "relative_path": "data/telemetry-samples/otrf/cmd_lsass_memory_dumpert_syscalls.zip",
+      "size_bytes": 12915,
+      "sha256": "a28dbf708685a80edfb0b3d2a00c9bf196dd394fc1d61a933878841f4872a7ed",
+      "members": [
+        {
+          "name": "cmd_lsass_memory_dumpert_syscalls_2020-10-1822561997.json",
+          "size_bytes": 180023
+        }
+      ],
+      "source_repository": "OTRF/Security-Datasets",
+      "source_commit": "d9d40ef123d2c87d5d3df28c96bcab4f0faccc87",
+      "source_path": "datasets/atomic/windows/credential_access/host/cmd_lsass_memory_dumpert_syscalls.zip",
+      "download_url": "https://raw.githubusercontent.com/OTRF/Security-Datasets/d9d40ef123d2c87d5d3df28c96bcab4f0faccc87/datasets/atomic/windows/credential_access/host/cmd_lsass_memory_dumpert_syscalls.zip"
+    },
+    {
+      "filename": "empire_mimikatz_logonpasswords.zip",
+      "relative_path": "data/telemetry-samples/otrf/empire_mimikatz_logonpasswords.zip",
+      "size_bytes": 716749,
+      "sha256": "bb4c057b62d781be5426e011872ba1a15070c07afbb24848a14458f4b22b06fb",
+      "members": [
+        {
+          "name": "empire_mimikatz_logonpasswords_2020-08-07103224.json",
+          "size_bytes": 43478765
+        }
+      ],
+      "source_repository": "OTRF/Security-Datasets",
+      "source_commit": "d9d40ef123d2c87d5d3df28c96bcab4f0faccc87",
+      "source_path": "datasets/atomic/windows/credential_access/host/empire_mimikatz_logonpasswords.zip",
+      "download_url": "https://raw.githubusercontent.com/OTRF/Security-Datasets/d9d40ef123d2c87d5d3df28c96bcab4f0faccc87/datasets/atomic/windows/credential_access/host/empire_mimikatz_logonpasswords.zip"
+    },
+    {
+      "filename": "empire_smbexec_dcerpc_smb_svcctl.zip",
+      "relative_path": "data/telemetry-samples/otrf/empire_smbexec_dcerpc_smb_svcctl.zip",
+      "size_bytes": 753172,
+      "sha256": "c0fc435c9ce0ecdc7cd57b4055977b949ac6b1cae9d7f4ce7aa0f0e5eae7d7f1",
+      "members": [
+        {
+          "name": "empire_smbexec_dcerpc_smb_svcctl_2020-09-20025716.json",
+          "size_bytes": 20686465
+        }
+      ],
+      "source_repository": "OTRF/Security-Datasets",
+      "source_commit": "d9d40ef123d2c87d5d3df28c96bcab4f0faccc87",
+      "source_path": "datasets/atomic/windows/lateral_movement/host/empire_smbexec_dcerpc_smb_svcctl.zip",
+      "download_url": "https://raw.githubusercontent.com/OTRF/Security-Datasets/d9d40ef123d2c87d5d3df28c96bcab4f0faccc87/datasets/atomic/windows/lateral_movement/host/empire_smbexec_dcerpc_smb_svcctl.zip"
+    },
+    {
+      "filename": "empire_wmi_local_event_subscriptions_elevated_user.zip",
+      "relative_path": "data/telemetry-samples/otrf/empire_wmi_local_event_subscriptions_elevated_user.zip",
+      "size_bytes": 6043932,
+      "sha256": "a507f2edd768b592e6b3157e974fd0468965eee00407387d88356ecb8fd20fea",
+      "members": [
+        {
+          "name": "empire_wmi_local_event_subscriptions_elevated_user_2020-09-04164306.json",
+          "size_bytes": 186877966
+        }
+      ],
+      "source_repository": "OTRF/Security-Datasets",
+      "source_commit": "d9d40ef123d2c87d5d3df28c96bcab4f0faccc87",
+      "source_path": "datasets/atomic/windows/persistence/host/empire_wmi_local_event_subscriptions_elevated_user.zip",
+      "download_url": "https://raw.githubusercontent.com/OTRF/Security-Datasets/d9d40ef123d2c87d5d3df28c96bcab4f0faccc87/datasets/atomic/windows/persistence/host/empire_wmi_local_event_subscriptions_elevated_user.zip"
     }
   ]
 }
