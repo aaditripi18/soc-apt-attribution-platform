@@ -85,6 +85,14 @@ SELECTIONS: tuple[tuple[str, str, Callable[[Record], bool]], ...] = (
         and r["winlog"].get("event_id") == 4663,
     ),
     (
+        "nxlog-sysmon-12-nxlog-eventtype",
+        APT29_DAY1,
+        lambda r: r.get("Channel") == "Microsoft-Windows-Sysmon/Operational"
+        and r.get("EventID") == 12
+        and r.get("EventType") == "INFO"
+        and "EventType: DeleteKey" in (r.get("Message") or ""),
+    ),
+    (
         "nxlog-security-lower",
         APT29_DAY1,
         lambda r: r.get("Channel") == "security" and r.get("EventID") == 4663,

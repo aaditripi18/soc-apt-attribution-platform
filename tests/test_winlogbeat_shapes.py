@@ -73,3 +73,18 @@ def test_sysmon_adapter_refuses_other_channels() -> None:
 def test_lower_case_security_channel_is_accepted(golden_id: str) -> None:
     (obs,) = WindowsSecuritySourceAdapter().to_observations(RECORDS[golden_id])
     assert obs.event is not None and obs.event.code == "4663"
+
+
+def test_nxlog_eventtype_collision_recovers_sysmons_own_operation() -> None:
+    """NXLog wrote its own EventType ('INFO') over Sysmon's; the real operation
+    (here DeleteKey — never derivable from the event ID) comes from Sysmon's
+    rendered message line, and is still checked against the allowed values."""
+    record = RECORDS["nxlog-sysmon-12-nxlog-eventtype"]
+    assert record["EventType"] == "INFO"
+    (obs,) = SysmonSourceAdapter().to_observations(record)
+    assert obs.event is not None
+    assert (obs.event.action, obs.event.type) == ("DeleteKey", ("deletion",))
+    # without the message line the operation is unknown: refused, never guessed
+    stripped = {k: v for k, v in record.items() if k != "Message"}
+    with pytest.raises(SourceAdapterError, match="EventType None"):
+        SysmonSourceAdapter().to_observations(stripped)

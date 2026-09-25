@@ -359,3 +359,34 @@ and PowerShell after real 4103/4104 samples are found. D1's list is otherwise un
 - *Acceptance (D2):* exact mapping ✓, fail-closed ✓, real-sample golden tests ✓ (29 tests), source-agnostic ✓,
   correlation facts ✓ (4688 has no GUID: no structural link, and suppressed where Sysmon exists), Sigma
   wiring ✓, evidence type ✓, performance ✓.
+
+**Record-shape readiness for the corpus recordings (2026-09-25).**
+
+- *Winlogbeat 6:* `sources/winlogbeat.py` renames the pre-7.0 top-level envelope (`log_name`, `event_id`,
+  `record_number`, `computer_name`, `source_name`, `event_data`, `process_id`, `user`) to the 7.x `winlog.*`
+  shape, exactly as Elastic moved it; the Sysmon, PowerShell and Security adapters normalize such records first.
+  The top-level `host` is dropped: in a Windows Event Forwarding pipeline it is the forwarder (real APT3 data:
+  `WECserver` for four hosts), never the event's host.
+- *Channel names* are compared case-insensitively in all three adapters (Windows channel names are
+  case-insensitive; real APT29 / APT3 exports carry ≈39 k distinct records under `security`).
+- *Sysmon channel check:* the collector path previously did not check the channel; a `System` event with ID 7
+  or 13 would have been read as a Sysmon event. Any record naming another channel is now refused.
+- *Sysmon event time:* Sysmon's own `UtcTime` whenever present, in every shape; `@timestamp` only otherwise.
+  Real collector data: 18,712 of 50,223 CALDERA Sysmon events differ from `@timestamp` by 1–60 s, and 3,409
+  Empire network events (ID 3, one host) by 272.8 h — the sensor's statement is authoritative, the cause of the
+  11-day gap is not guessed.
+- *NXLog `EventType` collision:* in the APT29 NXLog exports, NXLog's own `EventType` (`INFO`) replaced Sysmon's
+  under the same name, so 342,814 registry events were refused. On NXLog records a value from NXLog's vocabulary
+  is now dropped as envelope, and for registry events 12/13 Sysmon's value is recovered from the single
+  `EventType:` line of Sysmon's rendered message (still validated against the allowed operations; no line →
+  refused). Verified on APT29 day 1: all 78,692 registry events convert — CreateKey 60,094, SetValue 17,541,
+  DeleteKey 876, DeleteValue 181 (the deletions could never have been derived from the event ID).
+- *Golden tests:* 13 real records vendored (`golden-records.jsonl`, MIT, reproducible byte-for-byte from the
+  verified cache by `scripts/extract_golden_records.py`); 12 tests.
+- *Per-recording report* (`scripts/report_corpus_telemetry.py` → `data/telemetry-samples/otrf-compound/conversion-report.json`):
+  1,119,755 Observations from the 11 real recordings. Detected techniques (production Sigma pack): APT29 day 1
+  **34**, day 2 **28**, APT3 CALDERA **17**, APT3 Empire **8**, LSASS tool runs 3–12 each. The NXLog `EventType`
+  recovery raised APT29 conversions from 316 k to 659 k and its techniques from 31 / 25 to 34 / 28. Remaining
+  refusals are explicit and all unsupported event types: PowerShell 4105/4106 (script-block start/stop,
+  no content), Security 5156/5158 (WFP, D3 vs Sysmon 3), 4690/4703/5447/4673, Sysmon 5/9/26/28 — Security
+  batch B and later Sysmon types.

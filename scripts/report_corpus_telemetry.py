@@ -66,10 +66,10 @@ def _records(path: Path) -> Iterator[dict[str, Any]]:
     else:
         with tarfile.open(path, "r:gz") as archive:
             for member in archive.getmembers():
-                handle = archive.extractfile(member) if member.isfile() else None
-                if handle is None:
+                extracted = archive.extractfile(member) if member.isfile() else None
+                if extracted is None:
                     continue
-                for line in io.TextIOWrapper(handle, encoding="utf-8", errors="replace"):
+                for line in io.TextIOWrapper(extracted, encoding="utf-8", errors="replace"):
                     if line.strip():
                         yield json.loads(line)
 

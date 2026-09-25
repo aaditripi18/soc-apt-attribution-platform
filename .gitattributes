@@ -15,6 +15,7 @@ data/detection/**/*.json binary
 # --- Real telemetry samples (ADR-0008 D2.3): SHA-256-pinned, byte-for-byte. ---
 data/telemetry-samples/**/*.zip binary
 data/telemetry-samples/**/*.json binary
+data/telemetry-samples/**/*.jsonl binary
 
 # --- CTID emulation plans (doc 15 DC-3): SHA-256-pinned text, byte-for-byte. ---
 data/emulation-plans/** binary

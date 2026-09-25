@@ -263,6 +263,27 @@ def _parse_sysmon_utc(raw: Any) -> datetime:
     return parsed.replace(tzinfo=UTC)
 
 
+#: NXLog's own ``EventType`` values (its event severity/audit type). They are
+#: never a Sysmon ``EventType`` (CreateKey, SetValue, ...); on an NXLog record
+#: such a value means NXLog's field has taken the name of Sysmon's.
+_NXLOG_EVENT_TYPES = frozenset(
+    {"INFO", "WARNING", "ERROR", "CRITICAL", "VERBOSE", "AUDIT_SUCCESS", "AUDIT_FAILURE"}
+)
+
+
+def _sysmon_event_type_from_message(message: Any) -> str | None:
+    """Sysmon's own ``EventType`` from its rendered message, when exactly one
+    ``EventType: <value>`` line is present; otherwise ``None``."""
+    if not isinstance(message, str):
+        return None
+    values = [
+        line[len("EventType: ") :].strip()
+        for line in message.splitlines()
+        if line.startswith("EventType: ")
+    ]
+    return values[0] if len(values) == 1 and values[0] else None
+
+
 def _normalize_flat(record: Mapping[str, Any]) -> dict[str, Any]:
     """Re-envelope a flat record so the rest of the adapter reads it exactly
     like a collector record: its event fields become ``winlog.event_data``.
@@ -270,6 +291,13 @@ def _normalize_flat(record: Mapping[str, Any]) -> dict[str, Any]:
     - **Time:** Sysmon's own ``UtcTime`` — never the collector's
       ``@timestamp``/``TimeCreated``, which in real OTRF samples disagree with
       ``UtcTime`` by hours (a collector time-zone artefact).
+    - **Colliding ``EventType``:** on an NXLog record, an ``EventType`` from
+      NXLog's own vocabulary (``INFO``, ``AUDIT_SUCCESS``, ...) is NXLog's field,
+      not Sysmon's, and is dropped. For registry events 12/13 — whose operation
+      *is* Sysmon's ``EventType`` — Sysmon's value is recovered from the
+      ``EventType:`` line of Sysmon's rendered message (exactly one such line;
+      the value is still checked against the allowed operations). Real OTRF
+      APT29 exports: 342,814 registry events recovered this way.
     - **Record id:** the Windows event record number when present
       (``EventRecordID``, or ``RecordNumber`` in NXLog exports); otherwise a
       deterministic content address ``sha256:<hex>`` of the record's canonical
@@ -286,6 +314,14 @@ def _normalize_flat(record: Mapping[str, Any]) -> dict[str, Any]:
         record_id = "sha256:" + hashlib.sha256(canonical.encode("utf-8")).hexdigest()
     if "UtcTime" not in record:
         raise SourceAdapterError("SysmonSourceAdapter: flat record missing required field UtcTime")
+    event_data = {k: v for k, v in record.items() if k not in _FLAT_ENVELOPE_FIELDS}
+    nxlog = "EventReceivedTime" in record or "SourceModuleType" in record
+    if nxlog and event_data.get("EventType") in _NXLOG_EVENT_TYPES:
+        del event_data["EventType"]
+        if _as_int(record["EventID"], "EventID") in _REGISTRY_EVENT_TYPES:
+            recovered = _sysmon_event_type_from_message(record.get("Message"))
+            if recovered is not None:
+                event_data["EventType"] = recovered
     return {
         "@timestamp": _parse_sysmon_utc(record["UtcTime"]).isoformat(),
         "winlog": {
@@ -293,7 +329,7 @@ def _normalize_flat(record: Mapping[str, Any]) -> dict[str, Any]:
             "record_id": record_id,
             "computer_name": record.get("Hostname"),
             "channel": channel,
-            "event_data": {k: v for k, v in record.items() if k not in _FLAT_ENVELOPE_FIELDS},
+            "event_data": event_data,
         },
     }
 
