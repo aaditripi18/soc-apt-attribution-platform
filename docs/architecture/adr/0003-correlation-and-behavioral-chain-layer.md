@@ -559,3 +559,52 @@ not require it), and **not a prerequisite for Phase 3** (the future attribution 
 telemetry sources, never a required one, per its own §Implementation gates text above). This is a
 confirmation of already-decided optionality, not a new decision; G2.5's scope, boundary, and Must-NOT list
 above are unchanged.
+
+---
+
+## Amendment A (2026-09-25) — Process interaction: remote-thread injection is structural, process access is contextual
+
+- **Status:** ACCEPTED (2026-09-25, owner) — design only; implementation is a later gate.
+- **Trigger:** ADR-0008 Wave 1 batch B added Sysmon 8 (CreateRemoteThread) and 10 (ProcessAccess), which
+  record one process instance acting on another (`Observation.process` = actor, `Observation.target_process` =
+  acted upon, both with collector-asserted process GUIDs). The existing three structural dimensions cannot
+  express this. On the real OTRF sample, `mavinject.exe` injects a thread into `notepad.exe` (start
+  `KERNEL32!LoadLibraryW`), and Notepad's subsequent activity would not join the injector's attribution unit.
+
+**A1 — New structural dimension `PROCESS_INTERACTION` (remote-thread injection only).** Two Observations are
+linked when one is a remote-thread-creation event whose `target_process.entity_id` equals the other's
+`process.entity_id`. It passes this ADR's structural test (§Structural dimensions): the operating system,
+through the sensor, asserts that code from the source instance began executing inside the target instance —
+a direct causal act between two specific execution instances, like `PROCESS_LINEAGE`. Directional: the basis
+records the injecting Observation first. The injector side needs no new rule — the event's own
+`process.entity_id` already links it through `SAME_PROCESS_ENTITY`.
+
+**A2 — Causality bound (not a tuned threshold).** A target-side Observation is linked only if its timestamp is
+**at or after** the injection event's timestamp. The injected process's earlier activity was not caused by the
+injection and must not be pulled into the injector's group. Equal timestamps are linked (the sensor's own
+ordering resolution); this is a causal rule with no free parameter.
+
+**A3 — Identifiers required.** Both `process.entity_id` (source) and `target_process.entity_id` must be present
+and non-empty; a pid-only event forms no link (pids are reused — the same reason ADR-0003 already rejects pid
+matching).
+
+**A4 — Process access (`ProcessAccess`, Sysmon 10) is contextual only.** Opening a handle to another process
+is extremely common benign behaviour (in two small real samples, 309 events — mostly `svchost.exe` touching
+unrelated processes). Making it group-forming would merge unrelated activity into single units and degrade
+attribution. It is therefore a new **contextual, attach-only** dimension `PROCESS_ACCESS_TARGET`, recorded in
+the explanation but never used to form or merge a group. Suspicious access (e.g. to `lsass.exe`) is already
+represented as *evidence* by detection content; correlation does not need to treat it as structure.
+
+**A5 — Vocabulary change.** `LinkClass` grows from nine to eleven members: `PROCESS_INTERACTION`
+(structural) and `PROCESS_ACCESS_TARGET` (contextual). Structural classes become four. This is a closed,
+versioned vocabulary change; stored links remain valid (their classes are unchanged).
+
+**A6 — Validation required at implementation.** Tests must show: the real OTRF injection chain
+(PowerShell → mavinject → Notepad) forms one group through `PROCESS_LINEAGE` + `PROCESS_INTERACTION`; Notepad
+activity before the injection time stays out; a pid-only remote thread forms no link; process-access events
+never merge groups; determinism and idempotency hold as for the existing dimensions.
+
+**Known limitation (recorded).** Injection into a long-lived shared host process (e.g. `explorer.exe`) links
+all of that process's *later* activity, including benign activity, to the injector — the same class of risk as
+the existing long-lived-process limitation (§Known limitations). No window or cap is added now; if the corpus
+shows this degrades group quality, a fix follows the same evidence-justified, versioned-configuration rule.
