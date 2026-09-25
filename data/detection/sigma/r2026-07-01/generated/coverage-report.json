@@ -6,7 +6,7 @@
   "rule_packs": [
    {
     "pack_id": "sigma-r2026-07-01-sigma_core++",
-    "content_hash": "38fbf68b85d635cda1efff3a751d5295cf06a987121cabf2114cb80f17beeb08"
+    "content_hash": "ee51fd090433d5f2cf1c6fa118d7218a09cd72d5cbdd921d8f6cf0077d43f086"
    }
   ],
   "sigma_import": {
@@ -15,7 +15,7 @@
    "sigma_archive": "sigma_core++.zip",
    "sigma_archive_sha256": "469d83e1d1bbdb4d7876466ff1a728550fae5a20115b91339d58d20e894e7477",
    "pysigma_version": "1.5.1",
-   "field_map_version": "sigma-field-map/7",
+   "field_map_version": "sigma-field-map/8",
    "attack_kb_version": "enterprise-attack-19.2",
    "dnf_bound": 64,
    "software_tag_review": {

@@ -648,7 +648,8 @@ applies to contextual `PROCESS_ACCESS_TARGET`.
 
 ## Amendment B (2026-09-25) — Process identity for pid-only telemetry (PROPOSED)
 
-- **Status:** PROPOSED — design only; requires owner acceptance and Sysmon 5 support before implementation.
+- **Status:** ACCEPTED (2026-09-25, owner delegation "whatever is recommended, go ahead"; required by the
+  real-recording measurement below). Implementation in progress — see the implementation record.
 - **Trigger:** PowerShell 4103/4104 (ADR-0008) identify the host process by pid only. Under ADR-0003 they
   form no structural link, so a malicious script block cannot join the process tree that launched it.
 - **B1 — Resolve, do not match.** A pid-only Observation is never compared to another by pid. Instead a
@@ -671,3 +672,55 @@ CALDERA agent's polling loop (two `ps_module` rules, 8,984 detections each). Wit
 for real PowerShell-heavy intrusions is meaningless. Every corpus recording carries Sysmon 5 (process
 terminated) events (81–607 each), which B1/B3 need. Amendment B is therefore promoted from optional to
 **required before corpus v2 families are built**.
+
+**Amendment B implementation record, part 1 — the resolver (2026-09-25).**
+
+- *Sysmon 5* (process terminated) is supported: `event.category` process, `event.type` end, action
+  `process_end`, with the instance's `ProcessGuid`/pid (ADR-0008; `sigma-field-map/8` adds the Sigma
+  `process_termination` scope — the pinned release has no importable rule for it yet, so coverage is unchanged).
+- *Resolver:* `correlation/process_identity.py` — `resolve_process_identities(observations)` implements B1
+  exactly: the latest process start on the same host with that pid not confidently after the event must be
+  confidently later than every other such start (else `AMBIGUOUS_START`); its end, if any, must not be
+  confidently before the event (else `ENDED_BEFORE`); with no end, the binding is accepted only when the host's
+  telemetry records process ends at all (else `NO_END_COVERAGE`). Timestamps are compared at their common
+  declared precision (ADR-0004 D6). B2: each resolution carries its basis (`start_and_end` /
+  `start_not_ended`) and the Observation ids that prove it; Observations are never rewritten, so a resolved
+  identity can never pass for a collector-asserted one. Source-agnostic; pure; deterministic.
+- *Real-data validation* (the resolver never reads the process image, so the owner image is an independent
+  check): APT3 CALDERA — 12,659 of 12,679 PowerShell events resolved (99.8 %), **all** to `powershell.exe`
+  instances, the ~9,000 fragments collapsing onto 108 process instances (the two CALDERA agent processes carry
+  4,887 and 4,538 events); APT3 Empire — 15,530 of 15,772 (98.5 %), all to `powershell.exe`. Refusals are
+  explicit (`no_start` 20 / 242: no recorded start for that pid). Security pid-only events resolve too
+  (CALDERA 446 of 492; Empire 1,990 of 4,244 — many 4624 logons belong to processes started before recording).
+- *Tests:* 13 (every proof rule and refusal, pid reuse, precision ties, host scoping, determinism, Sysmon 5
+  golden record, and the real CALDERA check when the cache is present).
+- *Not yet wired into correlation* — that needs Amendment C first.
+
+## Amendment C (2026-09-25) — Scalable link materialization for equivalence relations (PROPOSED)
+
+- **Status:** PROPOSED — needed before Amendment B is wired into correlation; implemented with it next.
+- **Trigger:** `SAME_PROCESS_ENTITY` and the contextual same-value dimensions (`SAME_HOST_*`, `SAME_USER_*`,
+  `SAME_DESTINATION_IP`) are equivalence relations materialized today as **every pair**; ADR-0004's sequence
+  engine requires that full pairwise closure and compares every pair. On real data this is infeasible: one
+  resolved CALDERA agent process carries ≈9,000 Observations (≈18,000 Evidence items) → ≈1.6 × 10⁸
+  `SAME_PROCESS_ENTITY` links, and `SAME_HOST_NAME` over one host is the same order.
+- **C1 — Chain materialization.** For an equivalence relation, the members of each class are ordered by
+  (`timestamp`, `observation_id`, `evidence_id`) and only **consecutive** members are linked: *n − 1* links per
+  class, each still a true, directly observed pairwise fact. Connectivity — and therefore every group's
+  membership and `group_id` (computed from members alone) — is identical to the pairwise form. Non-equivalence
+  relations (`PROCESS_LINEAGE`, `PROCESS_INTERACTION`, `SHARED_OBSERVATION`) are unchanged.
+- **C2 — Resolved identities (Amendment B wiring).** A pid-only node resolved by B1 joins its instance's
+  `SAME_PROCESS_ENTITY` class. A link with a resolved endpoint records `field_path` `process.pid` (not
+  `process.entity_id`) and carries the proof Observation ids in its provenance, so explanations always show that
+  the identity was proved, not asserted. Resolved nodes also serve as `PROCESS_INTERACTION` targets/sources.
+- **C3 — Sequence engine (ADR-0004 amendment).** `TEMPORAL_SAME_ENTITY` ordering takes a class as the connected
+  component of its same-entity links (no longer requiring the pairwise closure), sorts its steps by timestamp and
+  forms tie buckets by ADR-0004 D6's precision-aware comparison, emitting the same Hasse-reduced consecutive
+  edges and tie gaps as today; a non-transitive tie still fails closed. Output for existing (small) inputs is
+  unchanged; only the verification step changes.
+- **C4 — Contextual attachment.** With chained contextual links each member is touched by at most two links of a
+  dimension, so a group's `contextual_link_ids` name representative neighbours rather than every pair — the
+  explanation "shares host X with …" stays true; contextual links remain attach-only.
+- **Validation required:** group memberships and ids identical to the pairwise form on every existing corpus and
+  test; sequence outputs unchanged on existing fixtures; the real APT3 recordings correlate within bounded time
+  and memory, and the resulting unit count is reported.

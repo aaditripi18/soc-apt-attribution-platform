@@ -253,6 +253,7 @@ def _full_observation() -> Observation:
             consumer="a",
         ),
         process=ProcessRef(
+            pid=1,
             executable="a",
             command_line="a",
             parent_executable="a",

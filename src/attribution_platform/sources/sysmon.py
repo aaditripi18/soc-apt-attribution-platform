@@ -24,7 +24,7 @@ arrives, unlike G0.4's ``SyntheticRecord`` (which invented a fictional
 minimal shape because the synthetic source has no real one).
 
 **Scope — a growing, explicit set of Sysmon event types (ADR-0008 Wave 1):**
-Event IDs 1 (Process Create), 3 (Network Connection), 7 (Image Load), 8
+Event IDs 1 (Process Create), 5 (Process Terminated), 3 (Network Connection), 7 (Image Load), 8
 (CreateRemoteThread), 10 (Process Access), 11 (File Create), 12 (Registry
 key/value create or delete), 13 (Registry value set), 15 (file stream hash),
 17/18 (pipe created/connected), 19/20/21 (WMI filter/consumer/binding), 22
@@ -111,6 +111,7 @@ SYSMON_SOURCE_TYPE = "sysmon"
 SYSMON_CHANNEL = "Microsoft-Windows-Sysmon/Operational"
 
 PROCESS_CREATE_EVENT_ID = 1
+PROCESS_TERMINATE_EVENT_ID = 5
 NETWORK_CONNECT_EVENT_ID = 3
 IMAGE_LOAD_EVENT_ID = 7
 CREATE_REMOTE_THREAD_EVENT_ID = 8
@@ -130,6 +131,7 @@ FILE_DELETE_EVENT_ID = 23
 #: The Sysmon event IDs this adapter understands; anything else fails closed.
 _SUPPORTED_EVENT_IDS = (
     PROCESS_CREATE_EVENT_ID,
+    PROCESS_TERMINATE_EVENT_ID,
     NETWORK_CONNECT_EVENT_ID,
     IMAGE_LOAD_EVENT_ID,
     CREATE_REMOTE_THREAD_EVENT_ID,
@@ -157,6 +159,7 @@ DNS_QUERY_ACTION = "dns_query"
 FILE_CREATE_ACTION = "file_create"
 FILE_STREAM_CREATE_ACTION = "file_stream_create"
 FILE_DELETE_ACTION = "file_delete"
+PROCESS_END_ACTION = "process_end"
 PIPE_ACTIONS = {PIPE_CREATED_EVENT_ID: "pipe_create", PIPE_CONNECTED_EVENT_ID: "pipe_connect"}
 WMI_ACTIONS = {
     WMI_FILTER_EVENT_ID: "wmi_filter",
@@ -800,6 +803,12 @@ class SysmonSourceAdapter:
             entities["file"] = _file_ref(record)
             entities["file_stream"] = FileStreamRef(
                 contents=_ed(record, "Contents"), hashes=_ed(record, "Hash")
+            )
+        elif event_id == PROCESS_TERMINATE_EVENT_ID:
+            # The end of one process instance's lifetime (ADR-0003 Amendment B:
+            # the evidence that a pid no longer belongs to it).
+            event = EventMetadata(
+                kind="event", category=("process",), type=("end",), action=PROCESS_END_ACTION
             )
         elif event_id == FILE_DELETE_EVENT_ID:
             event = EventMetadata(

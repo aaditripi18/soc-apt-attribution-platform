@@ -5,7 +5,7 @@
   "sigma_archive": "sigma_core++.zip",
   "sigma_archive_sha256": "469d83e1d1bbdb4d7876466ff1a728550fae5a20115b91339d58d20e894e7477",
   "pysigma_version": "1.5.1",
-  "field_map_version": "sigma-field-map/7",
+  "field_map_version": "sigma-field-map/8",
   "attack_kb_version": "enterprise-attack-19.2",
   "dnf_bound": 64,
   "software_tag_review": {

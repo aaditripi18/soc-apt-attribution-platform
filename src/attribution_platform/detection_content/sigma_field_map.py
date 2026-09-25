@@ -34,7 +34,7 @@ from __future__ import annotations
 
 from types import MappingProxyType
 
-FIELD_MAP_VERSION = "sigma-field-map/7"
+FIELD_MAP_VERSION = "sigma-field-map/8"
 
 #: ``(product, category)`` → the ``(field_path, operator, value)`` scope
 #: conditions an Observation must satisfy to be the kind of event the Sigma
@@ -50,6 +50,10 @@ LOGSOURCE_SCOPES: MappingProxyType[tuple[str, str], tuple[tuple[str, str, str], 
             ("windows", "process_creation"): (
                 ("event.category", "has_element", "process"),
                 ("event.type", "has_element", "start"),
+            ),
+            ("windows", "process_termination"): (
+                ("event.category", "has_element", "process"),
+                ("event.type", "has_element", "end"),
             ),
             ("windows", "network_connection"): (
                 ("event.category", "has_element", "network"),
@@ -158,6 +162,9 @@ FIELD_MAPS: MappingProxyType[tuple[str, str], MappingProxyType[str, str]] = Mapp
                 "Product": "process.pe.product",
                 "Company": "process.pe.company",
             }
+        ),
+        ("windows", "process_termination"): MappingProxyType(
+            {"Image": "process.executable", "ProcessId": "process.pid"}
         ),
         ("windows", "network_connection"): MappingProxyType(
             {

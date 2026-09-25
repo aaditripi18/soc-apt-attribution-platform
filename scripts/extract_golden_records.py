@@ -57,6 +57,7 @@ SELECTIONS: tuple[tuple[str, str, Callable[[Record], bool]], ...] = (
         lambda r: _v6("Microsoft-Windows-Sysmon/Operational", 3)(r)
         and _utc_gap_seconds(r, r["event_data"]) > 3600,
     ),
+    ("wlb6-sysmon-5", EMPIRE, _v6("Microsoft-Windows-Sysmon/Operational", 5)),
     ("wlb6-security-4624", EMPIRE, _v6("Security", 4624)),
     ("wlb6-security-4688", EMPIRE, _v6("Security", 4688)),
     ("wlb6-security-5145", EMPIRE, _v6("Security", 5145)),
