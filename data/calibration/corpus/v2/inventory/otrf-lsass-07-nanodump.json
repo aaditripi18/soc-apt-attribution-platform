@@ -22,6 +22,9 @@
    "process_images": {
     "C:\\Windows\\System32\\nanodump.x64.exe": 4
    },
+   "image_names": [
+    "nanodump.x64.exe"
+   ],
    "techniques": [
     "T1003.001"
    ],
@@ -44,6 +47,9 @@
    "process_images": {
     "C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe": 3
    },
+   "image_names": [
+    "msedge.exe"
+   ],
    "techniques": [
     "T1564.004"
    ],

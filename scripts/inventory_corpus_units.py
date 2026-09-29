@@ -73,6 +73,13 @@ def main(argv: list[str]) -> int:
                     "first": min(o.timestamp for o in observations.values()).isoformat(),
                     "last": max(o.timestamp for o in observations.values()).isoformat(),
                     "process_images": dict(images.most_common(8)),
+                    "image_names": sorted(
+                        {
+                            str(o.process.executable).replace("/", "\\").rsplit("\\", 1)[-1].lower()
+                            for o in observations.values()
+                            if o.process is not None and o.process.executable
+                        }
+                    ),
                     "techniques": sorted(
                         {
                             e.attack_ref.external_id

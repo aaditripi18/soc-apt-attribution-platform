@@ -25,6 +25,11 @@
     "C:\\Windows\\System32\\whoami.exe": 2,
     "C:\\Windows\\System32\\ftp.exe": 1
    },
+   "image_names": [
+    "ftp.exe",
+    "powershell.exe",
+    "whoami.exe"
+   ],
    "techniques": [
     "T1033",
     "T1059",
@@ -58,6 +63,10 @@
     "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe": 1,
     "?": 1
    },
+   "image_names": [
+    "powershell.exe",
+    "sc.exe"
+   ],
    "techniques": [
     "T1059.001",
     "T1543.003",
@@ -85,6 +94,9 @@
    "process_images": {
     "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe": 1
    },
+   "image_names": [
+    "powershell.exe"
+   ],
    "techniques": [
     "T1059.001"
    ],
@@ -107,6 +119,9 @@
    "process_images": {
     "C:\\Windows\\System32\\svchost.exe": 1
    },
+   "image_names": [
+    "svchost.exe"
+   ],
    "techniques": [
     "T1550.002"
    ],

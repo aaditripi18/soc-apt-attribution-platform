@@ -277,3 +277,27 @@ dataset's documented procedure**: LSASS — OTRF's `_metadata` (local); APT29 �
 plan (`mitre-attack/attack-arsenal`, Day 1 / Day 2 READMEs, 15.5 KB / 12.2 KB); APT3 — the evals-CALDERA adversary
 and OTRF's Empire resource files (lookup pending: GitHub API rate limit). Downloading those documents needs owner
 approval.
+
+**Labelled real-recording corpus v2 build and readiness gate (2026-09-29).**
+
+- *Labelling (documented, reproducible):* `labelling-rules.json` states the rule — a unit is its family's emulated
+  activity iff one of its processes runs a tool the family's **documented procedure** names and that is not a
+  generic host (a fixed, published list of Windows/platform components that also run ordinary background activity);
+  every other unit is declared excluded with its reason. Procedures: MITRE `attack-arsenal` APT29 plan (Day 1/2),
+  OTRF's APT3 playbook and Empire step list, the `evals_caldera` APT3 adversary, OTRF's LSASS metadata
+  (`scripts/acquire_procedure_documents.py`, 13 files, commit-pinned, SHA-256 manifest). `scripts/label_corpus_units.py`
+  writes the annotations from rules + inventory; 17 tests pin the rule's invariants.
+- *Deferred (reasons recorded, not guessed):* APT3 CALDERA (every unit runs only through generic hosts — the agent
+  is not identifiable without command-line matching); LSASS logonpasswords, comsvcs, Out-Minidump (the documented
+  tool runs inside a generic host or is not named).
+- *Engine limitation found and fixed:* a 9-feature APT29 unit exceeded the §D3 search's 8-feature limit; replaced by
+  an exact co-used-block search (ADR-0005 implementation record), proven equivalent.
+- *Build:* 14 cases — calibration 4 (APT3 Empire ×2, LSASS procdump, Dumpert), held-out 2 (LSASS SharpDump,
+  nanodump), blind 8 (APT29). Split and provenance validators pass.
+- *Readiness gate — honest result, not ready:* **resolved on real data:** F5-1 (APT3 → G0022, APT29 → G0016,
+  matching OTRF's READMEs), F5-2 (three distinct top concentrations), F5-3 (no cross-split identical feature sets),
+  multi-feature units 100 %. **Still failing:** 1 calibration actor (≥ 4), 3 / 2 calibration / held-out families
+  (≥ 12 / ≥ 8), hard negatives 2 / 0 (≥ 3 / ≥ 2; SharpDump and nanodump units have one feature), category
+  completeness (16 gaps). These are population-size gaps public recordings cannot close; they need owner-recorded
+  emulations (isolated lab, CTID plans via CALDERA, Sysmon + Security + PowerShell collection) — the ingestion,
+  labelling and gate pipeline for them now exists end to end.

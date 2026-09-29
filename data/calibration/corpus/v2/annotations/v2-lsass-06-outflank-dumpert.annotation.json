@@ -1,0 +1,55 @@
+{
+ "scenario_family_id": "v2-lsass-06-outflank-dumpert",
+ "case_role": "calibration",
+ "source_kind": "replay",
+ "source_ref": "otrf:datasets/compound/LSASS_campaign_06/metasploit_outflank-dumpert_lsass_memory_dump.zip@d9d40ef1",
+ "license": "MIT",
+ "acquisition_provenance": "OTRF Security-Datasets recording datasets/compound/LSASS_campaign_06/metasploit_outflank-dumpert_lsass_memory_dump.zip (commit d9d40ef123d2c87d5d3df28c96bcab4f0faccc87), SHA-256 ee996c0ddc32611c572f59a68869f7d4327aaac04a3aeee65916b7221347dc1d, acquired by scripts/acquire_corpus_telemetry.py.",
+ "transformation_provenance": "Replayed through the production pipeline (replay/recording_pipeline.py: adapters, ADR-0008 D3 precedence, Sigma pack r2026-07-01, correlation incl. ADR-0003 Amendments A-C, behavioral sequences); no manual editing of derived objects. Units labelled by scripts/label_corpus_units.py from labelling-rules.json.",
+ "coverage_assumptions": [
+  "Command Execution",
+  "File Creation",
+  "Logon Session Creation",
+  "Module Load",
+  "Network Connection Creation",
+  "Network Share Access",
+  "Process Access",
+  "Process Creation",
+  "Process Termination",
+  "Script Execution",
+  "Windows Registry Key Modification"
+ ],
+ "ground_truth": {
+  "actor_label_source": "dataset-annotation",
+  "label_semantics": "unattributable_by_design",
+  "label_confidence": "high",
+  "actor_label": null,
+  "campaign_context": []
+ },
+ "units": [
+  {
+   "unit_id": "v2-lsass-06-outflank-dumpert-u00",
+   "anchor_scenario_ids": [
+    "sysmon:MKT01.pandalab.com:sha256:0967445647eeaf0bc439e1001c2777c54bb54d7013938d8ba7e1a454e1936763"
+   ],
+   "expected_output_shape": {
+    "outcome": "insufficient_evidence",
+    "authorship_provenance": "Authored from the dataset's documented procedure (OTRF/Security-Datasets@d9d40ef1 datasets/compound/_metadata/LSASS_campaign_06.yaml), step: outflank-dumpert.exe: LSASS Memory - Outflank Dumpert; NOT ATT&CK-derived and NOT derived from the engine's detections."
+   },
+   "documented_tools": [
+    "outflank-dumpert.exe"
+   ],
+   "categories": [
+    "multiple_distinct_observation",
+    "repeated_detection"
+   ]
+  },
+  {
+   "unit_id": "v2-lsass-06-outflank-dumpert-u01",
+   "anchor_scenario_ids": [
+    "sysmon:MKT01.pandalab.com:sha256:c9297fc80d48c48cf74b2c0e29a671f4c084e6f8124abab0d43b7496016ee7cf"
+   ],
+   "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: msedge.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
+  }
+ ]
+}

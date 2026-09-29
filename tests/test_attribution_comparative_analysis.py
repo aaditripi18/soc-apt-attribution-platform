@@ -640,13 +640,25 @@ def test_tie_break_is_deterministic_across_repeated_calls() -> None:
     assert result_a == result_b
 
 
-def test_combination_search_fails_closed_beyond_safety_bound() -> None:
+def test_combination_search_handles_more_than_eight_features() -> None:
+    """The former 8-feature limit is gone (exact search over co-used blocks):
+    nine features whose every combination is co-used but none narrower than its
+    parts yield the all-atomic partition, not an error."""
     features = tuple(f"attack-pattern--{i:08d}-0000-0000-0000-000000000000" for i in range(9))
 
     def g_of(_f: frozenset[str]) -> float | None:
         return 0.1
 
-    with pytest.raises(AttributionError, match="exceeds the"):
+    assert _find_combination_partition(features, g_of) == ()
+
+
+def test_combination_search_fails_closed_beyond_its_work_bound() -> None:
+    features = tuple(f"attack-pattern--{i:08d}-0000-0000-0000-000000000000" for i in range(17))
+
+    def g_of(_f: frozenset[str]) -> float | None:
+        return 0.1  # every one of the 2**17 subsets co-used: beyond the bound
+
+    with pytest.raises(AttributionError, match="exceeds the exact search's work bound"):
         _find_combination_partition(features, g_of)
 
 

@@ -1716,3 +1716,23 @@ D1–D21 / §D4 / §D10 / §D12 text above, and reopens no accepted decision.
 **This amendment does not itself implement B4.** It records the locked carrier so the later, separately-gated B4
 implementation and G3.6 gate are unambiguous. The remaining G3.6 preconditions (B1 corpus + frozen
 `calibration_version`, and the confidence-layer requirements) are unaffected and still bind.
+
+## Implementation record — exact combination-partition search (2026-09-29)
+
+**Trigger.** Real recordings (corpus v2) produced an APT29 attribution unit with 9 distinct technique features.
+The §D3 partition search enumerated **every** set partition (Bell-number growth) and therefore failed closed above
+8 features — a limit real intrusions routinely exceed.
+
+**Change (search procedure only; §D3 semantics unchanged).** An admissible combination block needs `g(C)` defined,
+i.e. at least one active Group co-using all of `C`; and every subset of a co-used set is co-used (`g` is `None`
+exactly when no Group uses all members). So the search now (1) generates the co-used blocks level by level (a
+block of size k+1 is queried only when all its k-subsets are co-used), (2) enumerates each valid partition exactly
+once from admissible blocks plus singletons (the lowest uncovered feature is atomic or in an admissible block of
+uncovered features), then (3–4) applies the unchanged local-maximality filter and the §D3 tie-break. This yields
+exactly the valid partitions the exhaustive enumeration kept. The 8-feature limit is replaced by fail-closed
+**work** bounds (65,536 candidate blocks, 1,000,000 valid partitions) that bound computation, never admissibility.
+
+**Validation.** Equivalence with the original exhaustive algorithm (kept verbatim as the test reference) on 100
+feature sets drawn from real Group profiles (2–8 features) and 60 adversarial synthetic `g` functions — identical
+partitions in every case; all 56 existing hand-verified partition and tie-break tests pass unchanged; the work
+bound fails closed as tested.

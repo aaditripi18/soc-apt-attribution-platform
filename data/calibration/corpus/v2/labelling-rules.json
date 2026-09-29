@@ -1,0 +1,189 @@
+{
+ "schema": "corpus-v2-labelling-rules/1",
+ "rule": "A unit is the emulated activity of its family's documented procedure if at least one of its processes runs a tool that procedure names (process image basename, case-insensitive) and that is not in generic_hosts. Every other unit is declared excluded with the reason recorded. Labels are never taken from the engine's detections.",
+ "generic_hosts_rationale": "Windows and platform components that also run ordinary background activity on every host; a procedure naming one (e.g. as a target or a shell) does not make every unit running it the actor's.",
+ "generic_hosts": [
+  "cmd.exe",
+  "compattelrunner.exe",
+  "conhost.exe",
+  "csrss.exe",
+  "dllhost.exe",
+  "explorer.exe",
+  "lsass.exe",
+  "microsoftedgeupdate.exe",
+  "mousocoreworker.exe",
+  "msmpeng.exe",
+  "notepad.exe",
+  "powershell.exe",
+  "pwsh.exe",
+  "rundll32.exe",
+  "searchfilterhost.exe",
+  "searchindexer.exe",
+  "searchprotocolhost.exe",
+  "securityhealthservice.exe",
+  "services.exe",
+  "sgrmbroker.exe",
+  "smss.exe",
+  "spoolsv.exe",
+  "svchost.exe",
+  "sysmon.exe",
+  "taskhostw.exe",
+  "tiworker.exe",
+  "trustedinstaller.exe",
+  "unsecapp.exe",
+  "vboxservice.exe",
+  "wininit.exe",
+  "winlogon.exe",
+  "wlms.exe",
+  "wmiprvse.exe"
+ ],
+ "families": [
+  {
+   "family_id": "v2-apt3-empire",
+   "recording_id": "otrf-apt3-empire",
+   "case_role": "calibration",
+   "ground_truth": {
+    "actor_label_source": "emulation-plan",
+    "label_semantics": "attributable",
+    "label_confidence": "high",
+    "actor_label": "APT3"
+   },
+   "procedure_document": "OTRF/Security-Datasets@d9d40ef1 datasets/compound/windows/apt3 (scope/apt3_mordor_playbook.xlsx; environment/empire/resource_files step names)",
+   "documented_tools": {
+    "ftp.exe": "19.C.1 exfiltration over alternative protocol",
+    "sc.exe": "16.I.1 new service / 16.L.1 service execution",
+    "recycler.exe": "playbook (staged archiver)",
+    "icacls.exe": "17.B file permissions modification",
+    "takeown.exe": "17.B file permissions modification",
+    "magnify.exe": "17.C.1 accessibility features",
+    "netsh.exe": "playbook",
+    "regsvr32.exe": "playbook",
+    "mshta.exe": "playbook",
+    "hh.exe": "playbook",
+    "cmstp.exe": "playbook",
+    "installutil.exe": "playbook",
+    "pcalua.exe": "playbook",
+    "sdbinst.exe": "playbook",
+    "ntsd.exe": "playbook",
+    "scrnsave.exe": "playbook"
+   }
+  },
+  {
+   "family_id": "v2-apt3-caldera",
+   "recording_id": "otrf-apt3-caldera",
+   "deferred": "Every unit runs only through generic hosts (the CALDERA PowerShell agent, cmd.exe); identifying the agent would require matching command-line content against the procedure, which this corpus step does not do. Deferred, not guessed."
+  },
+  {
+   "family_id": "v2-apt29-day1",
+   "recording_id": "otrf-apt29-day1",
+   "case_role": "blind_actor_holdout",
+   "ground_truth": {
+    "actor_label_source": "emulation-plan",
+    "label_semantics": "attributable",
+    "label_confidence": "high",
+    "actor_label": "APT29"
+   },
+   "procedure_document": "mitre-attack/attack-arsenal@201db70f adversary_emulation/APT29/Emulation_Plan/Day 1/README.md",
+   "documented_tools": {
+    "sdclt.exe": "Step 3 - Deploy Stealth Toolkit",
+    "sdelete64.exe": "Steps 4 and 9",
+    "accesschk.exe": "Step 6 - Credential Access",
+    "psexec64.exe": "Step 8 - Lateral Movement",
+    "python.exe": "Step 8 - Lateral Movement",
+    "rar.exe": "Step 9 - Collection"
+   }
+  },
+  {
+   "family_id": "v2-apt29-day2",
+   "recording_id": "otrf-apt29-day2",
+   "case_role": "blind_actor_holdout",
+   "ground_truth": {
+    "actor_label_source": "emulation-plan",
+    "label_semantics": "attributable",
+    "label_confidence": "high",
+    "actor_label": "APT29"
+   },
+   "procedure_document": "mitre-attack/attack-arsenal@201db70f adversary_emulation/APT29/Emulation_Plan/Day 2/README.md",
+   "documented_tools": {
+    "m.exe": "Steps 14 (Elevation), 16 (Lateral Movement), 19 (Clean Up)"
+   }
+  },
+  {
+   "family_id": "v2-lsass-01-logonpasswords",
+   "recording_id": "otrf-lsass-01-logonpasswords",
+   "deferred": "The documented tool (Mimikatz logonpasswords) runs in memory of generic hosts; no unit runs a named, non-generic tool."
+  },
+  {
+   "family_id": "v2-lsass-02-procdump",
+   "recording_id": "otrf-lsass-02-procdump",
+   "case_role": "calibration",
+   "ground_truth": {
+    "actor_label_source": "dataset-annotation",
+    "label_semantics": "unattributable_by_design",
+    "label_confidence": "high",
+    "actor_label": null
+   },
+   "procedure_document": "OTRF/Security-Datasets@d9d40ef1 datasets/compound/_metadata/LSASS_campaign_02.yaml",
+   "documented_tools": {
+    "procdump.exe": "LSASS Memory - Procdump",
+    "procdump64.exe": "LSASS Memory - Procdump"
+   }
+  },
+  {
+   "family_id": "v2-lsass-03-comsvcs",
+   "recording_id": "otrf-lsass-03-comsvcs",
+   "deferred": "The documented technique (comsvcs.dll MiniDump) runs through rundll32.exe, a generic host."
+  },
+  {
+   "family_id": "v2-lsass-04-out-minidump",
+   "recording_id": "otrf-lsass-04-out-minidump",
+   "deferred": "The campaign metadata names no non-generic tool (Out-Minidump.ps1 runs in PowerShell)."
+  },
+  {
+   "family_id": "v2-lsass-05-sharpdump",
+   "recording_id": "otrf-lsass-05-sharpdump",
+   "case_role": "held_out_validation",
+   "ground_truth": {
+    "actor_label_source": "dataset-annotation",
+    "label_semantics": "unattributable_by_design",
+    "label_confidence": "high",
+    "actor_label": null
+   },
+   "procedure_document": "OTRF/Security-Datasets@d9d40ef1 datasets/compound/_metadata/LSASS_campaign_05.yaml",
+   "documented_tools": {
+    "sharpdump.exe": "LSASS Memory - SharpDump"
+   }
+  },
+  {
+   "family_id": "v2-lsass-06-outflank-dumpert",
+   "recording_id": "otrf-lsass-06-outflank-dumpert",
+   "case_role": "calibration",
+   "ground_truth": {
+    "actor_label_source": "dataset-annotation",
+    "label_semantics": "unattributable_by_design",
+    "label_confidence": "high",
+    "actor_label": null
+   },
+   "procedure_document": "OTRF/Security-Datasets@d9d40ef1 datasets/compound/_metadata/LSASS_campaign_06.yaml",
+   "documented_tools": {
+    "outflank-dumpert.exe": "LSASS Memory - Outflank Dumpert"
+   }
+  },
+  {
+   "family_id": "v2-lsass-07-nanodump",
+   "recording_id": "otrf-lsass-07-nanodump",
+   "case_role": "held_out_validation",
+   "ground_truth": {
+    "actor_label_source": "dataset-annotation",
+    "label_semantics": "unattributable_by_design",
+    "label_confidence": "high",
+    "actor_label": null
+   },
+   "procedure_document": "OTRF/Security-Datasets@d9d40ef1 datasets/compound/_metadata/LSASS_campaign_07.yaml",
+   "documented_tools": {
+    "nanodump.x64.exe": "LSASS Memory - Nanodump",
+    "nanodump.exe": "LSASS Memory - Nanodump"
+   }
+  }
+ ]
+}

@@ -1,0 +1,153 @@
+{
+ "scenario_family_id": "v2-apt29-day2",
+ "case_role": "blind_actor_holdout",
+ "source_kind": "replay",
+ "source_ref": "otrf:datasets/compound/apt29/day2/apt29_evals_day2_manual.zip@d9d40ef1",
+ "license": "MIT",
+ "acquisition_provenance": "OTRF Security-Datasets recording datasets/compound/apt29/day2/apt29_evals_day2_manual.zip (commit d9d40ef123d2c87d5d3df28c96bcab4f0faccc87), SHA-256 377f8cba5db95a453a3ee8bd19f493efafc23724541482a4da99da28ee4665f9, acquired by scripts/acquire_corpus_telemetry.py.",
+ "transformation_provenance": "Replayed through the production pipeline (replay/recording_pipeline.py: adapters, ADR-0008 D3 precedence, Sigma pack r2026-07-01, correlation incl. ADR-0003 Amendments A-C, behavioral sequences); no manual editing of derived objects. Units labelled by scripts/label_corpus_units.py from labelling-rules.json.",
+ "coverage_assumptions": [
+  "Command Execution",
+  "File Creation",
+  "Logon Session Creation",
+  "Module Load",
+  "Network Connection Creation",
+  "Network Share Access",
+  "Process Access",
+  "Process Creation",
+  "Process Termination",
+  "Script Execution",
+  "Windows Registry Key Modification"
+ ],
+ "ground_truth": {
+  "actor_label_source": "emulation-plan",
+  "label_semantics": "attributable",
+  "label_confidence": "high",
+  "actor_label": "APT29",
+  "campaign_context": []
+ },
+ "units": [
+  {
+   "unit_id": "v2-apt29-day2-u00",
+   "anchor_scenario_ids": [
+    "powershell:UTICA.dmevals.local:3541"
+   ],
+   "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: certutil.exe, control.exe, csc.exe, net.exe, powershell.exe, sdclt.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
+  },
+  {
+   "unit_id": "v2-apt29-day2-u01",
+   "anchor_scenario_ids": [
+    "powershell:NEWYORK.dmevals.local:18403"
+   ],
+   "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: none recorded); not identifiable as the emulated activity \u2014 excluded, not guessed."
+  },
+  {
+   "unit_id": "v2-apt29-day2-u02",
+   "anchor_scenario_ids": [
+    "powershell:NEWYORK.dmevals.local:19104"
+   ],
+   "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: none recorded); not identifiable as the emulated activity \u2014 excluded, not guessed."
+  },
+  {
+   "unit_id": "v2-apt29-day2-u03",
+   "anchor_scenario_ids": [
+    "sysmon:UTICA.dmevals.local:984177"
+   ],
+   "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: powershell.exe, wmiprvse.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
+  },
+  {
+   "unit_id": "v2-apt29-day2-u04",
+   "anchor_scenario_ids": [
+    "sysmon:UTICA.dmevals.local:1008901"
+   ],
+   "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: antimalwareconfig.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
+  },
+  {
+   "unit_id": "v2-apt29-day2-u05",
+   "anchor_scenario_ids": [
+    "sysmon:UTICA.dmevals.local:987756"
+   ],
+   "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: windowsazuretelemetryservice.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
+  },
+  {
+   "unit_id": "v2-apt29-day2-u06",
+   "anchor_scenario_ids": [
+    "sysmon:UTICA.dmevals.local:782026"
+   ],
+   "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: svchost.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
+  },
+  {
+   "unit_id": "v2-apt29-day2-u07",
+   "anchor_scenario_ids": [
+    "sysmon:UTICA.dmevals.local:1012651"
+   ],
+   "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: msmpeng.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
+  },
+  {
+   "unit_id": "v2-apt29-day2-u08",
+   "anchor_scenario_ids": [
+    "sysmon:NEWYORK.dmevals.local:317743"
+   ],
+   "expected_output_shape": {
+    "outcome": "leading_hypothesis",
+    "authorship_provenance": "Authored from the dataset's documented procedure (mitre-attack/attack-arsenal@201db70f adversary_emulation/APT29/Emulation_Plan/Day 2/README.md), step: m.exe: Steps 14 (Elevation), 16 (Lateral Movement), 19 (Clean Up); NOT ATT&CK-derived and NOT derived from the engine's detections.",
+    "expected_likelihood_band": "AUTHORED-LEADING",
+    "expected_confidence_band": "AUTHORED-HIGH"
+   },
+   "documented_tools": [
+    "m.exe"
+   ],
+   "categories": [
+    "multiple_distinct_observation",
+    "repeated_detection"
+   ]
+  },
+  {
+   "unit_id": "v2-apt29-day2-u09",
+   "anchor_scenario_ids": [
+    "sysmon:UTICA.dmevals.local:787306"
+   ],
+   "expected_output_shape": {
+    "outcome": "leading_hypothesis",
+    "authorship_provenance": "Authored from the dataset's documented procedure (mitre-attack/attack-arsenal@201db70f adversary_emulation/APT29/Emulation_Plan/Day 2/README.md), step: m.exe: Steps 14 (Elevation), 16 (Lateral Movement), 19 (Clean Up); NOT ATT&CK-derived and NOT derived from the engine's detections.",
+    "expected_likelihood_band": "AUTHORED-LEADING",
+    "expected_confidence_band": "AUTHORED-HIGH"
+   },
+   "documented_tools": [
+    "m.exe"
+   ],
+   "categories": [
+    "multiple_distinct_observation",
+    "repeated_detection"
+   ]
+  },
+  {
+   "unit_id": "v2-apt29-day2-u10",
+   "anchor_scenario_ids": [
+    "sysmon:UTICA.dmevals.local:792928"
+   ],
+   "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: officeclicktorun.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
+  },
+  {
+   "unit_id": "v2-apt29-day2-u11",
+   "anchor_scenario_ids": [
+    "sysmon:SCRANTON.dmevals.local:343878"
+   ],
+   "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: net.exe, net1.exe, wsmprovhost.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
+  },
+  {
+   "unit_id": "v2-apt29-day2-u12",
+   "anchor_scenario_ids": [
+    "sysmon:SCRANTON.dmevals.local:343422"
+   ],
+   "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: wsmprovhost.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
+  },
+  {
+   "unit_id": "v2-apt29-day2-u13",
+   "anchor_scenario_ids": [
+    "sysmon:SCRANTON.dmevals.local:333581"
+   ],
+   "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: lsass.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
+  }
+ ]
+}

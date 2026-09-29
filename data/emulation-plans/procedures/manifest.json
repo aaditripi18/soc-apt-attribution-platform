@@ -1,0 +1,137 @@
+{
+  "purpose": "documented emulation procedures used to label corpus v2 attribution units",
+  "retrieved_at_utc": "2026-09-25T12:43:14Z",
+  "method": "scripts/acquire_procedure_documents.py (commit-pinned raw URLs, size-checked)",
+  "files": [
+    {
+      "repository": "mitre-attack/attack-arsenal",
+      "commit": "201db70f403676cc8ec090035f17d98cf9995244",
+      "license": "Apache-2.0",
+      "source_path": "LICENSE.txt",
+      "relative_path": "data/emulation-plans/procedures/mitre-attack__attack-arsenal/LICENSE.txt",
+      "size_bytes": 11348,
+      "sha256": "429bc1ce40cff60deb633bcf8d77be13037175fe37d5d4fd13252c63cd78c0d1",
+      "download_url": "https://raw.githubusercontent.com/mitre-attack/attack-arsenal/201db70f403676cc8ec090035f17d98cf9995244/LICENSE.txt"
+    },
+    {
+      "repository": "mitre-attack/attack-arsenal",
+      "commit": "201db70f403676cc8ec090035f17d98cf9995244",
+      "license": "Apache-2.0",
+      "source_path": "adversary_emulation/APT29/Emulation_Plan/README.md",
+      "relative_path": "data/emulation-plans/procedures/mitre-attack__attack-arsenal/adversary_emulation/APT29/Emulation_Plan/README.md",
+      "size_bytes": 3909,
+      "sha256": "67e7ca61dd9461dd6630b472c4aec513e1d65e7077407f7f6e1867ca83094a22",
+      "download_url": "https://raw.githubusercontent.com/mitre-attack/attack-arsenal/201db70f403676cc8ec090035f17d98cf9995244/adversary_emulation/APT29/Emulation_Plan/README.md"
+    },
+    {
+      "repository": "mitre-attack/attack-arsenal",
+      "commit": "201db70f403676cc8ec090035f17d98cf9995244",
+      "license": "Apache-2.0",
+      "source_path": "adversary_emulation/APT29/Emulation_Plan/Day 1/README.md",
+      "relative_path": "data/emulation-plans/procedures/mitre-attack__attack-arsenal/adversary_emulation/APT29/Emulation_Plan/Day 1/README.md",
+      "size_bytes": 15456,
+      "sha256": "de01c8d36ab8228704f843fd80c5e0d1d9f15d64c48fadc8f318ab45fea1a107",
+      "download_url": "https://raw.githubusercontent.com/mitre-attack/attack-arsenal/201db70f403676cc8ec090035f17d98cf9995244/adversary_emulation/APT29/Emulation_Plan/Day%201/README.md"
+    },
+    {
+      "repository": "mitre-attack/attack-arsenal",
+      "commit": "201db70f403676cc8ec090035f17d98cf9995244",
+      "license": "Apache-2.0",
+      "source_path": "adversary_emulation/APT29/Emulation_Plan/Day 2/README.md",
+      "relative_path": "data/emulation-plans/procedures/mitre-attack__attack-arsenal/adversary_emulation/APT29/Emulation_Plan/Day 2/README.md",
+      "size_bytes": 12204,
+      "sha256": "839a73bb97654be8dea4c13a3de60ad05b634f02675128d830e58daa3e733f05",
+      "download_url": "https://raw.githubusercontent.com/mitre-attack/attack-arsenal/201db70f403676cc8ec090035f17d98cf9995244/adversary_emulation/APT29/Emulation_Plan/Day%202/README.md"
+    },
+    {
+      "repository": "OTRF/Security-Datasets",
+      "commit": "d9d40ef123d2c87d5d3df28c96bcab4f0faccc87",
+      "license": "MIT",
+      "source_path": "datasets/compound/windows/apt3/scope/apt3_mordor_playbook.xlsx",
+      "relative_path": "data/emulation-plans/procedures/OTRF__Security-Datasets/datasets/compound/windows/apt3/scope/apt3_mordor_playbook.xlsx",
+      "size_bytes": 82963,
+      "sha256": "903d4c576bbb47f75ec8ddc13b4e34e8a63ab2d8edbb5160e24a654ab64fd2b7",
+      "download_url": "https://raw.githubusercontent.com/OTRF/Security-Datasets/d9d40ef123d2c87d5d3df28c96bcab4f0faccc87/datasets/compound/windows/apt3/scope/apt3_mordor_playbook.xlsx"
+    },
+    {
+      "repository": "mitre-attack/evals_caldera",
+      "commit": "8721102af46ad394d0bc7f2596d122c59eb065b6",
+      "license": "Apache-2.0",
+      "source_path": "LICENSE",
+      "relative_path": "data/emulation-plans/procedures/mitre-attack__evals_caldera/LICENSE",
+      "size_bytes": 10172,
+      "sha256": "59899c6091b540582ed617e8eeaac4919dc985ccfc35459ee9752b699be5205b",
+      "download_url": "https://raw.githubusercontent.com/mitre-attack/evals_caldera/8721102af46ad394d0bc7f2596d122c59eb065b6/LICENSE"
+    },
+    {
+      "repository": "mitre-attack/evals_caldera",
+      "commit": "8721102af46ad394d0bc7f2596d122c59eb065b6",
+      "license": "Apache-2.0",
+      "source_path": "data/adversaries/148c819b-b022-43cb-a25c-3f6f5c71318d.yml",
+      "relative_path": "data/emulation-plans/procedures/mitre-attack__evals_caldera/data/adversaries/148c819b-b022-43cb-a25c-3f6f5c71318d.yml",
+      "size_bytes": 277,
+      "sha256": "ca80941fd8ee52d0776cca708ddc53cc49a070da1dca2456097650d2bd7fb5ee",
+      "download_url": "https://raw.githubusercontent.com/mitre-attack/evals_caldera/8721102af46ad394d0bc7f2596d122c59eb065b6/data/adversaries/148c819b-b022-43cb-a25c-3f6f5c71318d.yml"
+    },
+    {
+      "repository": "mitre-attack/evals_caldera",
+      "commit": "8721102af46ad394d0bc7f2596d122c59eb065b6",
+      "license": "Apache-2.0",
+      "source_path": "data/adversaries/3af0e59b-0d2a-48cd-b934-c46d5d1621d6.yml",
+      "relative_path": "data/emulation-plans/procedures/mitre-attack__evals_caldera/data/adversaries/3af0e59b-0d2a-48cd-b934-c46d5d1621d6.yml",
+      "size_bytes": 259,
+      "sha256": "fde43ccedb26b6d1bdd389bd3e2b9fae3fe8554a118667624f570f64e6b94b21",
+      "download_url": "https://raw.githubusercontent.com/mitre-attack/evals_caldera/8721102af46ad394d0bc7f2596d122c59eb065b6/data/adversaries/3af0e59b-0d2a-48cd-b934-c46d5d1621d6.yml"
+    },
+    {
+      "repository": "mitre-attack/evals_caldera",
+      "commit": "8721102af46ad394d0bc7f2596d122c59eb065b6",
+      "license": "Apache-2.0",
+      "source_path": "data/adversaries/80e9c544-c5ea-423d-b4f3-c0de3c2947ba.yml",
+      "relative_path": "data/emulation-plans/procedures/mitre-attack__evals_caldera/data/adversaries/80e9c544-c5ea-423d-b4f3-c0de3c2947ba.yml",
+      "size_bytes": 884,
+      "sha256": "f2c8996b2cfbc7c0156447e73b3ff7a731e31d08c56ecc00393d599fe178d71a",
+      "download_url": "https://raw.githubusercontent.com/mitre-attack/evals_caldera/8721102af46ad394d0bc7f2596d122c59eb065b6/data/adversaries/80e9c544-c5ea-423d-b4f3-c0de3c2947ba.yml"
+    },
+    {
+      "repository": "mitre-attack/evals_caldera",
+      "commit": "8721102af46ad394d0bc7f2596d122c59eb065b6",
+      "license": "Apache-2.0",
+      "source_path": "data/adversaries/842d1d8e-a49d-4f11-9e97-79ce9d2f1732.yml",
+      "relative_path": "data/emulation-plans/procedures/mitre-attack__evals_caldera/data/adversaries/842d1d8e-a49d-4f11-9e97-79ce9d2f1732.yml",
+      "size_bytes": 179,
+      "sha256": "e0f0cee66ae922ee989f97dcf0c20c6b2115748ef08efda8df1856ca2dfe0f83",
+      "download_url": "https://raw.githubusercontent.com/mitre-attack/evals_caldera/8721102af46ad394d0bc7f2596d122c59eb065b6/data/adversaries/842d1d8e-a49d-4f11-9e97-79ce9d2f1732.yml"
+    },
+    {
+      "repository": "mitre-attack/evals_caldera",
+      "commit": "8721102af46ad394d0bc7f2596d122c59eb065b6",
+      "license": "Apache-2.0",
+      "source_path": "data/adversaries/c9b6f5d3-ebde-4df1-9c15-ce1f339170c7.yml",
+      "relative_path": "data/emulation-plans/procedures/mitre-attack__evals_caldera/data/adversaries/c9b6f5d3-ebde-4df1-9c15-ce1f339170c7.yml",
+      "size_bytes": 444,
+      "sha256": "2835759f0f914bf70592c2647f5bc650b361d47143eb722d1e5cf9b916e82c0e",
+      "download_url": "https://raw.githubusercontent.com/mitre-attack/evals_caldera/8721102af46ad394d0bc7f2596d122c59eb065b6/data/adversaries/c9b6f5d3-ebde-4df1-9c15-ce1f339170c7.yml"
+    },
+    {
+      "repository": "mitre-attack/evals_caldera",
+      "commit": "8721102af46ad394d0bc7f2596d122c59eb065b6",
+      "license": "Apache-2.0",
+      "source_path": "data/adversaries/e55da81a-9ce7-4da8-8313-074362fd5dee.yml",
+      "relative_path": "data/emulation-plans/procedures/mitre-attack__evals_caldera/data/adversaries/e55da81a-9ce7-4da8-8313-074362fd5dee.yml",
+      "size_bytes": 178,
+      "sha256": "2fa42b16a0e9b8b50dddc4d3bd7a2039bea2660c0a49cffba33c6b1e76066295",
+      "download_url": "https://raw.githubusercontent.com/mitre-attack/evals_caldera/8721102af46ad394d0bc7f2596d122c59eb065b6/data/adversaries/e55da81a-9ce7-4da8-8313-074362fd5dee.yml"
+    },
+    {
+      "repository": "mitre-attack/evals_caldera",
+      "commit": "8721102af46ad394d0bc7f2596d122c59eb065b6",
+      "license": "Apache-2.0",
+      "source_path": "data/adversaries/ef93dd1b-809b-4a0b-b686-fef549cabbe4.yml",
+      "relative_path": "data/emulation-plans/procedures/mitre-attack__evals_caldera/data/adversaries/ef93dd1b-809b-4a0b-b686-fef549cabbe4.yml",
+      "size_bytes": 1683,
+      "sha256": "10baab01774e52540b12ac0d78bbfa14687cab6e6c6e88680248e8ef0259debe",
+      "download_url": "https://raw.githubusercontent.com/mitre-attack/evals_caldera/8721102af46ad394d0bc7f2596d122c59eb065b6/data/adversaries/ef93dd1b-809b-4a0b-b686-fef549cabbe4.yml"
+    }
+  ]
+}

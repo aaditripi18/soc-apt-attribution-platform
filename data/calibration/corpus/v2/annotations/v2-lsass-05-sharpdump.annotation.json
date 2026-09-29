@@ -1,0 +1,61 @@
+{
+ "scenario_family_id": "v2-lsass-05-sharpdump",
+ "case_role": "held_out_validation",
+ "source_kind": "replay",
+ "source_ref": "otrf:datasets/compound/LSASS_campaign_05/metasploit_sharpdump_lsass_memory_dump.zip@d9d40ef1",
+ "license": "MIT",
+ "acquisition_provenance": "OTRF Security-Datasets recording datasets/compound/LSASS_campaign_05/metasploit_sharpdump_lsass_memory_dump.zip (commit d9d40ef123d2c87d5d3df28c96bcab4f0faccc87), SHA-256 79e347b411beefaf5c7d0c951fdcb9d308fce20f8eabe666c11fa7b6165053b8, acquired by scripts/acquire_corpus_telemetry.py.",
+ "transformation_provenance": "Replayed through the production pipeline (replay/recording_pipeline.py: adapters, ADR-0008 D3 precedence, Sigma pack r2026-07-01, correlation incl. ADR-0003 Amendments A-C, behavioral sequences); no manual editing of derived objects. Units labelled by scripts/label_corpus_units.py from labelling-rules.json.",
+ "coverage_assumptions": [
+  "Command Execution",
+  "File Creation",
+  "Logon Session Creation",
+  "Module Load",
+  "Network Connection Creation",
+  "Network Share Access",
+  "Process Access",
+  "Process Creation",
+  "Process Termination",
+  "Script Execution",
+  "Windows Registry Key Modification"
+ ],
+ "ground_truth": {
+  "actor_label_source": "dataset-annotation",
+  "label_semantics": "unattributable_by_design",
+  "label_confidence": "high",
+  "actor_label": null,
+  "campaign_context": []
+ },
+ "units": [
+  {
+   "unit_id": "v2-lsass-05-sharpdump-u00",
+   "anchor_scenario_ids": [
+    "sysmon:MKT01.pandalab.com:sha256:e19c9de5efcf9377d6c2eed27404a35d64492696fa9caad48ca463ba3629d4b9"
+   ],
+   "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: cscript.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
+  },
+  {
+   "unit_id": "v2-lsass-05-sharpdump-u01",
+   "anchor_scenario_ids": [
+    "sysmon:MKT01.pandalab.com:sha256:1e44557fdca882206b7f8b1cb006de52d5a56e547e185d847976646bc3e0a5f1"
+   ],
+   "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: msedge.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
+  },
+  {
+   "unit_id": "v2-lsass-05-sharpdump-u02",
+   "anchor_scenario_ids": [
+    "sysmon:MKT01.pandalab.com:sha256:fa913ccc030a3d6c07cc7d48b56d0986066d461295d475f5aae7202a4a208217"
+   ],
+   "expected_output_shape": {
+    "outcome": "insufficient_evidence",
+    "authorship_provenance": "Authored from the dataset's documented procedure (OTRF/Security-Datasets@d9d40ef1 datasets/compound/_metadata/LSASS_campaign_05.yaml), step: sharpdump.exe: LSASS Memory - SharpDump; NOT ATT&CK-derived and NOT derived from the engine's detections."
+   },
+   "documented_tools": [
+    "sharpdump.exe"
+   ],
+   "categories": [
+    "multiple_distinct_observation"
+   ]
+  }
+ ]
+}

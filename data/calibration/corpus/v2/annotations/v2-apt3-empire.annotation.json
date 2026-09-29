@@ -1,0 +1,83 @@
+{
+ "scenario_family_id": "v2-apt3-empire",
+ "case_role": "calibration",
+ "source_kind": "replay",
+ "source_ref": "otrf:datasets/compound/windows/apt3/empire_apt3.tar.gz@d9d40ef1",
+ "license": "MIT",
+ "acquisition_provenance": "OTRF Security-Datasets recording datasets/compound/windows/apt3/empire_apt3.tar.gz (commit d9d40ef123d2c87d5d3df28c96bcab4f0faccc87), SHA-256 ab4d1ec4e44102c87946a974f93aa248e49e5001e01fac3f137ec7e61bbc18ed, acquired by scripts/acquire_corpus_telemetry.py.",
+ "transformation_provenance": "Replayed through the production pipeline (replay/recording_pipeline.py: adapters, ADR-0008 D3 precedence, Sigma pack r2026-07-01, correlation incl. ADR-0003 Amendments A-C, behavioral sequences); no manual editing of derived objects. Units labelled by scripts/label_corpus_units.py from labelling-rules.json.",
+ "coverage_assumptions": [
+  "Command Execution",
+  "File Creation",
+  "Logon Session Creation",
+  "Module Load",
+  "Network Connection Creation",
+  "Network Share Access",
+  "Process Access",
+  "Process Creation",
+  "Process Termination",
+  "Script Execution",
+  "Windows Registry Key Modification"
+ ],
+ "ground_truth": {
+  "actor_label_source": "emulation-plan",
+  "label_semantics": "attributable",
+  "label_confidence": "high",
+  "actor_label": "APT3",
+  "campaign_context": []
+ },
+ "units": [
+  {
+   "unit_id": "v2-apt3-empire-u00",
+   "anchor_scenario_ids": [
+    "sysmon:HR001.shire.com:1452927"
+   ],
+   "expected_output_shape": {
+    "outcome": "leading_hypothesis",
+    "authorship_provenance": "Authored from the dataset's documented procedure (OTRF/Security-Datasets@d9d40ef1 datasets/compound/windows/apt3 (scope/apt3_mordor_playbook.xlsx; environment/empire/resource_files step names)), step: ftp.exe: 19.C.1 exfiltration over alternative protocol; NOT ATT&CK-derived and NOT derived from the engine's detections.",
+    "expected_likelihood_band": "AUTHORED-LEADING",
+    "expected_confidence_band": "AUTHORED-HIGH"
+   },
+   "documented_tools": [
+    "ftp.exe"
+   ],
+   "categories": [
+    "multiple_distinct_observation",
+    "repeated_detection"
+   ]
+  },
+  {
+   "unit_id": "v2-apt3-empire-u01",
+   "anchor_scenario_ids": [
+    "sysmon:HR001.shire.com:1470312"
+   ],
+   "expected_output_shape": {
+    "outcome": "leading_hypothesis",
+    "authorship_provenance": "Authored from the dataset's documented procedure (OTRF/Security-Datasets@d9d40ef1 datasets/compound/windows/apt3 (scope/apt3_mordor_playbook.xlsx; environment/empire/resource_files step names)), step: sc.exe: 16.I.1 new service / 16.L.1 service execution; NOT ATT&CK-derived and NOT derived from the engine's detections.",
+    "expected_likelihood_band": "AUTHORED-LEADING",
+    "expected_confidence_band": "AUTHORED-HIGH"
+   },
+   "documented_tools": [
+    "sc.exe"
+   ],
+   "categories": [
+    "multiple_distinct_observation",
+    "repeated_detection"
+   ]
+  },
+  {
+   "unit_id": "v2-apt3-empire-u02",
+   "anchor_scenario_ids": [
+    "sysmon:HFDC01.shire.com:5029616"
+   ],
+   "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: powershell.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
+  },
+  {
+   "unit_id": "v2-apt3-empire-u03",
+   "anchor_scenario_ids": [
+    "windows_security:HR001.shire.com:112803"
+   ],
+   "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: svchost.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
+  }
+ ]
+}

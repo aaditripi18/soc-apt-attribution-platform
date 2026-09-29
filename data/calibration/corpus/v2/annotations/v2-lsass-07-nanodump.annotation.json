@@ -1,0 +1,54 @@
+{
+ "scenario_family_id": "v2-lsass-07-nanodump",
+ "case_role": "held_out_validation",
+ "source_kind": "replay",
+ "source_ref": "otrf:datasets/compound/LSASS_campaign_07/metasploit_nanodump_lsass_memory_dump.zip@d9d40ef1",
+ "license": "MIT",
+ "acquisition_provenance": "OTRF Security-Datasets recording datasets/compound/LSASS_campaign_07/metasploit_nanodump_lsass_memory_dump.zip (commit d9d40ef123d2c87d5d3df28c96bcab4f0faccc87), SHA-256 5335635ef2bce0fb3f8704e17fb04a3be7400ac7c4bcd6ec7c14454632acaaaf, acquired by scripts/acquire_corpus_telemetry.py.",
+ "transformation_provenance": "Replayed through the production pipeline (replay/recording_pipeline.py: adapters, ADR-0008 D3 precedence, Sigma pack r2026-07-01, correlation incl. ADR-0003 Amendments A-C, behavioral sequences); no manual editing of derived objects. Units labelled by scripts/label_corpus_units.py from labelling-rules.json.",
+ "coverage_assumptions": [
+  "Command Execution",
+  "File Creation",
+  "Logon Session Creation",
+  "Module Load",
+  "Network Connection Creation",
+  "Network Share Access",
+  "Process Access",
+  "Process Creation",
+  "Process Termination",
+  "Script Execution",
+  "Windows Registry Key Modification"
+ ],
+ "ground_truth": {
+  "actor_label_source": "dataset-annotation",
+  "label_semantics": "unattributable_by_design",
+  "label_confidence": "high",
+  "actor_label": null,
+  "campaign_context": []
+ },
+ "units": [
+  {
+   "unit_id": "v2-lsass-07-nanodump-u00",
+   "anchor_scenario_ids": [
+    "sysmon:MKT01.pandalab.com:sha256:cc7059b719872a0bb730659472a7fec303ea424b07edea372ce997fbd8c01d2b"
+   ],
+   "expected_output_shape": {
+    "outcome": "insufficient_evidence",
+    "authorship_provenance": "Authored from the dataset's documented procedure (OTRF/Security-Datasets@d9d40ef1 datasets/compound/_metadata/LSASS_campaign_07.yaml), step: nanodump.x64.exe: LSASS Memory - Nanodump; NOT ATT&CK-derived and NOT derived from the engine's detections."
+   },
+   "documented_tools": [
+    "nanodump.x64.exe"
+   ],
+   "categories": [
+    "multiple_distinct_observation"
+   ]
+  },
+  {
+   "unit_id": "v2-lsass-07-nanodump-u01",
+   "anchor_scenario_ids": [
+    "sysmon:MKT01.pandalab.com:sha256:b11d52069b876e5e5ccb7d1c65ceae7bb90ec0f3f969c27b4dce638290756c34"
+   ],
+   "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: msedge.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
+  }
+ ]
+}

@@ -23,6 +23,9 @@
     "C:\\Windows\\system32\\cscript.exe": 4,
     "C:\\Windows\\System32\\cscript.exe": 1
    },
+   "image_names": [
+    "cscript.exe"
+   ],
    "techniques": [
     "T1059.005",
     "T1112",
@@ -46,6 +49,9 @@
    "process_images": {
     "C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe": 3
    },
+   "image_names": [
+    "msedge.exe"
+   ],
    "techniques": [
     "T1564.004"
    ],
@@ -66,6 +72,9 @@
    "process_images": {
     "C:\\Program Files\\SharpDump.exe": 2
    },
+   "image_names": [
+    "sharpdump.exe"
+   ],
    "techniques": [
     "T1003.001"
    ],

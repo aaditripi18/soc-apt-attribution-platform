@@ -22,6 +22,7 @@
    "process_images": {
     "?": 539
    },
+   "image_names": [],
    "techniques": [
     "T1059.001"
    ],
@@ -42,6 +43,7 @@
    "process_images": {
     "?": 415
    },
+   "image_names": [],
    "techniques": [
     "T1059.001"
    ],
@@ -63,6 +65,9 @@
     "C:\\windows\\system32\\wsmprovhost.exe": 75,
     "C:\\Windows\\System32\\wsmprovhost.exe": 1
    },
+   "image_names": [
+    "wsmprovhost.exe"
+   ],
    "techniques": [
     "T1003.001",
     "T1021.006",
@@ -90,6 +95,10 @@
     "?": 6,
     "C:\\Windows\\Microsoft.NET\\Framework64\\v4.0.30319\\csc.exe": 1
    },
+   "image_names": [
+    "csc.exe",
+    "psexec64.exe"
+   ],
    "techniques": [
     "T1021",
     "T1021.002",
@@ -130,6 +139,10 @@
     "C:\\windows\\system32\\WindowsPowerShell\\v1.0\\powershell.exe": 3,
     "?": 1
    },
+   "image_names": [
+    "powershell.exe",
+    "sdelete64.exe"
+   ],
    "techniques": [
     "T1003.001",
     "T1003.002",
@@ -166,6 +179,9 @@
    "process_images": {
     "C:\\Packages\\Plugins\\Microsoft.Azure.Security.IaaSAntimalware\\1.5.5.9\\AntimalwareConfig.exe": 13
    },
+   "image_names": [
+    "antimalwareconfig.exe"
+   ],
    "techniques": [
     "T1685.001"
    ],
@@ -186,6 +202,9 @@
    "process_images": {
     "C:\\Program Files\\Windows Defender\\MsMpEng.exe": 13
    },
+   "image_names": [
+    "msmpeng.exe"
+   ],
    "techniques": [
     "T1685"
    ],
@@ -206,6 +225,9 @@
    "process_images": {
     "C:\\WindowsAzure\\Packages\\Telemetry\\WindowsAzureTelemetryService.exe": 11
    },
+   "image_names": [
+    "windowsazuretelemetryservice.exe"
+   ],
    "techniques": [
     "T1685.001"
    ],
@@ -227,6 +249,9 @@
     "?": 1,
     "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe": 1
    },
+   "image_names": [
+    "powershell.exe"
+   ],
    "techniques": [
     "T1059.001",
     "T1132.001",
@@ -253,6 +278,9 @@
    "process_images": {
     "C:\\Windows\\Temp\\sdelete64.exe": 3
    },
+   "image_names": [
+    "sdelete64.exe"
+   ],
    "techniques": [
     "T1070.004",
     "T1485",
@@ -278,6 +306,9 @@
    "process_images": {
     "C:\\Windows\\Temp\\sdelete64.exe": 2
    },
+   "image_names": [
+    "sdelete64.exe"
+   ],
    "techniques": [
     "T1485",
     "T1588.002"
@@ -301,6 +332,9 @@
    "process_images": {
     "C:\\Windows\\Temp\\sdelete64.exe": 2
    },
+   "image_names": [
+    "sdelete64.exe"
+   ],
    "techniques": [
     "T1485",
     "T1588.002"
@@ -324,6 +358,9 @@
    "process_images": {
     "C:\\Windows\\System32\\rundll32.exe": 1
    },
+   "image_names": [
+    "rundll32.exe"
+   ],
    "techniques": [
     "T1021.002",
     "T1569.002",
@@ -347,6 +384,10 @@
     "C:\\Windows\\System32\\sdclt.exe": 1,
     "C:\\Windows\\System32\\control.exe": 1
    },
+   "image_names": [
+    "control.exe",
+    "sdclt.exe"
+   ],
    "techniques": [
     "T1548.002"
    ],
@@ -368,6 +409,7 @@
    "process_images": {
     "?": 1
    },
+   "image_names": [],
    "techniques": [
     "T1059.001"
    ],
@@ -389,6 +431,9 @@
    "process_images": {
     "C:\\windows\\system32\\lsass.exe": 2
    },
+   "image_names": [
+    "lsass.exe"
+   ],
    "techniques": [
     "T1490"
    ],
@@ -410,6 +455,10 @@
     "C:\\Windows\\Microsoft.NET\\Framework64\\v4.0.30319\\csc.exe": 1,
     "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe": 1
    },
+   "image_names": [
+    "csc.exe",
+    "powershell.exe"
+   ],
    "techniques": [
     "T1003.001",
     "T1027.004"
@@ -432,6 +481,7 @@
    "process_images": {
     "?": 1
    },
+   "image_names": [],
    "techniques": [
     "T1059.001",
     "T1620"

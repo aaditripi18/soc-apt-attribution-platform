@@ -1,0 +1,59 @@
+{
+ "rule": "A unit is the emulated activity of its family's documented procedure if at least one of its processes runs a tool that procedure names (process image basename, case-insensitive) and that is not in generic_hosts. Every other unit is declared excluded with the reason recorded. Labels are never taken from the engine's detections.",
+ "families": {
+  "v2-apt3-empire": {
+   "case_role": "calibration",
+   "units": 4,
+   "included": 2,
+   "excluded": 2
+  },
+  "v2-apt3-caldera": {
+   "deferred": "Every unit runs only through generic hosts (the CALDERA PowerShell agent, cmd.exe); identifying the agent would require matching command-line content against the procedure, which this corpus step does not do. Deferred, not guessed."
+  },
+  "v2-apt29-day1": {
+   "case_role": "blind_actor_holdout",
+   "units": 18,
+   "included": 6,
+   "excluded": 12
+  },
+  "v2-apt29-day2": {
+   "case_role": "blind_actor_holdout",
+   "units": 14,
+   "included": 2,
+   "excluded": 12
+  },
+  "v2-lsass-01-logonpasswords": {
+   "deferred": "The documented tool (Mimikatz logonpasswords) runs in memory of generic hosts; no unit runs a named, non-generic tool."
+  },
+  "v2-lsass-02-procdump": {
+   "case_role": "calibration",
+   "units": 3,
+   "included": 1,
+   "excluded": 2
+  },
+  "v2-lsass-03-comsvcs": {
+   "deferred": "The documented technique (comsvcs.dll MiniDump) runs through rundll32.exe, a generic host."
+  },
+  "v2-lsass-04-out-minidump": {
+   "deferred": "The campaign metadata names no non-generic tool (Out-Minidump.ps1 runs in PowerShell)."
+  },
+  "v2-lsass-05-sharpdump": {
+   "case_role": "held_out_validation",
+   "units": 3,
+   "included": 1,
+   "excluded": 2
+  },
+  "v2-lsass-06-outflank-dumpert": {
+   "case_role": "calibration",
+   "units": 2,
+   "included": 1,
+   "excluded": 1
+  },
+  "v2-lsass-07-nanodump": {
+   "case_role": "held_out_validation",
+   "units": 2,
+   "included": 1,
+   "excluded": 1
+  }
+ }
+}

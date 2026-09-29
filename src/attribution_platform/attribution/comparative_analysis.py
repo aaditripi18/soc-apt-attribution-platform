@@ -150,13 +150,19 @@ below):**
   identified candidate maximal partitions, but does not specify the search
   algorithm for *finding* candidate partitions, nor an operational
   definition of "maximal" as a hard, checkable constraint. This module
-  implements: (1) exhaustive enumeration of every set-partition of a
-  hypothesis's own distinct supporting-feature set, safety-bounded at
-  :data:`_MAX_COMBINATION_FEATURES` distinct features (beyond which this
-  module fails closed rather than guess a bounded/approximate algorithm —
-  Bell-number growth makes unbounded exhaustive search genuinely
-  intractable, and the ADR names no truncation rule); (2) a validity filter
-  (every multi-element block passes admissibility); (3) a **local-
+  implements: (1) exact enumeration of every *valid* set-partition of a
+  hypothesis's own distinct supporting-feature set — every partition whose
+  multi-element blocks are all admissible. Since an admissible block needs
+  ``g(C)`` defined, i.e. some active Group co-using all of ``C``, and every
+  subset of a co-used set is co-used, the co-used blocks are generated level
+  by level (a block of size k+1 is examined only if all its k-subsets are
+  co-used), and partitions are built from them plus singletons — exactly the
+  valid partitions an exhaustive set-partition enumeration would keep, without
+  Bell-number growth (ADR-0005 implementation record, 2026-09-25; equivalence
+  tested against the exhaustive form). Fail-closed work bounds
+  (:data:`_MAX_CANDIDATE_BLOCKS`, :data:`_MAX_VALID_PARTITIONS`) replace the
+  former 8-feature limit; (2) validity is therefore guaranteed by
+  construction; (3) a **local-
   maximality filter**: a valid partition is discarded if any two of its
   blocks (combination or atomic) could be merged into a single, still-
   admissible block — i.e. no pairwise "further grouping" is available; (4)
@@ -188,9 +194,10 @@ could use to mutate the inputs.
 from __future__ import annotations
 
 import hashlib
-from collections.abc import Callable, Iterator
+from collections.abc import Callable
 from dataclasses import dataclass
 from enum import Enum
+from itertools import combinations
 
 from attribution_platform.attack_knowledge.loader import AttackKnowledge
 from attribution_platform.attack_knowledge.traversal import (
@@ -223,12 +230,13 @@ COMPARATIVE_ANALYSIS_METHOD_VERSION = "1.0"
 #: callers (and tests) may pass an explicit ``min_profile_floor`` to override.
 DEFAULT_MIN_PROFILE_FLOOR = 1
 
-#: Safety bound on exhaustive combination-partition search (see the module
-#: docstring's "Architectural note"). Bell(8) = 4140 set-partitions, with
-#: at most 2**8 = 256 distinct blocks ever needing a real KB query
-#: (memoized) — comfortably fast. This is a computational fail-closed
-#: limit, never a redefinition of combination admissibility.
-_MAX_COMBINATION_FEATURES = 8
+#: Fail-closed computational bounds on the exact combination-partition search
+#: (see the module docstring's "Architectural note"): the number of co-used
+#: candidate blocks examined and the number of valid partitions enumerated.
+#: They bound the *work*, never redefine admissibility; exceeding either
+#: raises rather than approximating.
+_MAX_CANDIDATE_BLOCKS = 1 << 16
+_MAX_VALID_PARTITIONS = 1_000_000
 
 
 def _require_nonempty_str(value: object, field_name: str) -> str:
@@ -448,29 +456,6 @@ class ComparativeEvidenceResult:
         )
 
 
-def _enumerate_set_partitions(items: tuple[str, ...]) -> Iterator[tuple[frozenset[str], ...]]:
-    """Yield every partition of ``items`` into non-empty, disjoint blocks
-    (the standard restricted-growth-string recursive generation) — the
-    caller is responsible for bounding ``len(items)`` first."""
-    n = len(items)
-    if n == 0:
-        return
-
-    def helper(i: int, blocks: list[list[str]]) -> Iterator[tuple[frozenset[str], ...]]:
-        if i == n:
-            yield tuple(frozenset(b) for b in blocks)
-            return
-        for block in blocks:
-            block.append(items[i])
-            yield from helper(i + 1, blocks)
-            block.pop()
-        blocks.append([items[i]])
-        yield from helper(i + 1, blocks)
-        blocks.pop()
-
-    yield from helper(0, [])
-
-
 def _find_combination_partition(
     features: tuple[str, ...], g_of: Callable[[frozenset[str]], float | None]
 ) -> tuple[frozenset[str], ...]:
@@ -484,14 +469,6 @@ def _find_combination_partition(
     n = len(features)
     if n < 2:
         return ()
-    if n > _MAX_COMBINATION_FEATURES:
-        raise AttributionError(
-            f"_find_combination_partition: {n} distinct supporting features exceeds the "
-            f"{_MAX_COMBINATION_FEATURES}-feature bounded-search safety limit — ADR-0005 §D3 "
-            "does not specify a bounded/approximate combination-partition search algorithm "
-            "for this case, so this gate fails closed rather than guessing one (see this "
-            "module's own docstring)"
-        )
 
     atomic_g: dict[str, float | None] = {x: g_of(frozenset({x})) for x in features}
 
@@ -506,11 +483,63 @@ def _find_combination_partition(
             return False
         return combo_g < min(g for g in member_gs if g is not None)
 
+    # (1a) Co-used blocks, level by level: g(C) is None exactly when no active
+    # Group uses all of C, so a superset of an unused set is unused too.
+    ordered = tuple(sorted(features))
+    level: set[frozenset[str]] = {
+        frozenset(pair) for pair in combinations(ordered, 2) if g_of(frozenset(pair)) is not None
+    }
+    co_used: set[frozenset[str]] = set(level)
+    while level:
+        next_level: set[frozenset[str]] = set()
+        for block in level:
+            for feature in ordered:
+                if feature in block:
+                    continue
+                grown = block | {feature}
+                if grown in next_level or grown in co_used:
+                    continue
+                if all(grown - {member} in co_used for member in grown) and (
+                    g_of(grown) is not None
+                ):
+                    next_level.add(grown)
+        co_used |= next_level
+        if len(co_used) > _MAX_CANDIDATE_BLOCKS:
+            raise AttributionError(
+                f"_find_combination_partition: more than {_MAX_CANDIDATE_BLOCKS} co-used "
+                f"candidate blocks for {n} features — exceeds the exact search's work bound; "
+                "failing closed rather than approximating"
+            )
+        level = next_level
+
+    admissible_by_member: dict[str, list[frozenset[str]]] = {x: [] for x in ordered}
+    for block in sorted(co_used, key=lambda b: tuple(sorted(b))):
+        if is_admissible(block):
+            for member in block:
+                admissible_by_member[member].append(block)
+
+    # (1b) Every valid partition exactly once: the lowest uncovered feature is
+    # either atomic or in an admissible block of still-uncovered features.
     valid_partitions: list[tuple[frozenset[str], ...]] = []
-    for partition in _enumerate_set_partitions(features):
-        multi_blocks = tuple(b for b in partition if len(b) >= 2)
-        if all(is_admissible(b) for b in multi_blocks):
-            valid_partitions.append(multi_blocks)
+
+    def extend(covered: frozenset[str], chosen: tuple[frozenset[str], ...]) -> None:
+        remaining = [x for x in ordered if x not in covered]
+        if not remaining:
+            valid_partitions.append(chosen)
+            if len(valid_partitions) > _MAX_VALID_PARTITIONS:
+                raise AttributionError(
+                    f"_find_combination_partition: more than {_MAX_VALID_PARTITIONS} valid "
+                    f"partitions for {n} features — exceeds the exact search's work bound; "
+                    "failing closed rather than approximating"
+                )
+            return
+        first = remaining[0]
+        extend(covered | {first}, chosen)  # atomic
+        for block in admissible_by_member[first]:
+            if not block & covered:
+                extend(covered | block, (*chosen, block))
+
+    extend(frozenset(), ())
 
     feature_set = frozenset(features)
 
@@ -549,8 +578,8 @@ def _find_combination_partition(
     # Canonicalize the returned block ORDER itself (sorted by each block's own
     # canonical sorted-tuple form) -- the chosen partition's *content* is
     # already deterministic via the tie-break above, but the tuple order it
-    # was discovered in depends on `features`' own input order (via
-    # `_enumerate_set_partitions`); every caller must see the same order for
+    # was discovered in may depend on enumeration order; every caller must see
+    # the same order for
     # identical logical input regardless of how `features` was supplied.
     return tuple(sorted(best, key=lambda b: tuple(sorted(b))))
 

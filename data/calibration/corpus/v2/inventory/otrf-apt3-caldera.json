@@ -23,6 +23,9 @@
     "?": 4520,
     "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe": 1
    },
+   "image_names": [
+    "powershell.exe"
+   ],
    "techniques": [
     "T1003.001",
     "T1003.002",
@@ -61,6 +64,9 @@
     "?": 4503,
     "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe": 1
    },
+   "image_names": [
+    "powershell.exe"
+   ],
    "techniques": [
     "T1003",
     "T1003.001",
@@ -102,6 +108,11 @@
     "C:\\Windows\\System32\\cmd.exe": 1,
     "C:\\Windows\\System32\\schtasks.exe": 1
    },
+   "image_names": [
+    "cmd.exe",
+    "powershell.exe",
+    "schtasks.exe"
+   ],
    "techniques": [
     "T1053.005",
     "T1059",
@@ -136,6 +147,10 @@
     "?": 6,
     "C:\\Windows\\system32\\cmd.exe": 1
    },
+   "image_names": [
+    "cmd.exe",
+    "powershell.exe"
+   ],
    "techniques": [
     "T1021.006",
     "T1059",
@@ -170,6 +185,9 @@
     "?": 2,
     "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe": 2
    },
+   "image_names": [
+    "powershell.exe"
+   ],
    "techniques": [
     "T1059",
     "T1059.001",
@@ -198,6 +216,9 @@
     "?": 1,
     "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe": 1
    },
+   "image_names": [
+    "powershell.exe"
+   ],
    "techniques": [
     "T1059",
     "T1059.001",
@@ -222,6 +243,9 @@
     "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe": 1,
     "?": 1
    },
+   "image_names": [
+    "powershell.exe"
+   ],
    "techniques": [
     "T1059",
     "T1113",
@@ -245,6 +269,9 @@
    "process_images": {
     "C:\\Windows\\System32\\cmd.exe": 1
    },
+   "image_names": [
+    "cmd.exe"
+   ],
    "techniques": [
     "T1059",
     "T1564"
@@ -266,6 +293,9 @@
    "process_images": {
     "C:\\Windows\\System32\\cmd.exe": 1
    },
+   "image_names": [
+    "cmd.exe"
+   ],
    "techniques": [
     "T1059",
     "T1564"
@@ -287,6 +317,9 @@
    "process_images": {
     "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe": 1
    },
+   "image_names": [
+    "powershell.exe"
+   ],
    "techniques": [
     "T1059",
     "T1204"
@@ -309,6 +342,9 @@
    "process_images": {
     "C:\\Windows\\System32\\cmd.exe": 1
    },
+   "image_names": [
+    "cmd.exe"
+   ],
    "techniques": [
     "T1059",
     "T1564"
@@ -330,6 +366,9 @@
    "process_images": {
     "C:\\Windows\\System32\\cmd.exe": 1
    },
+   "image_names": [
+    "cmd.exe"
+   ],
    "techniques": [
     "T1059",
     "T1564"
@@ -351,6 +390,9 @@
    "process_images": {
     "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe": 1
    },
+   "image_names": [
+    "powershell.exe"
+   ],
    "techniques": [
     "T1059",
     "T1564"
@@ -372,6 +414,9 @@
    "process_images": {
     "C:\\Windows\\System32\\cmd.exe": 1
    },
+   "image_names": [
+    "cmd.exe"
+   ],
    "techniques": [
     "T1059",
     "T1564"
@@ -393,6 +438,9 @@
    "process_images": {
     "C:\\Windows\\System32\\cmd.exe": 1
    },
+   "image_names": [
+    "cmd.exe"
+   ],
    "techniques": [
     "T1059",
     "T1564"
@@ -414,6 +462,9 @@
    "process_images": {
     "C:\\Windows\\System32\\cmd.exe": 1
    },
+   "image_names": [
+    "cmd.exe"
+   ],
    "techniques": [
     "T1059",
     "T1564"
@@ -435,6 +486,9 @@
    "process_images": {
     "C:\\Windows\\System32\\cmd.exe": 1
    },
+   "image_names": [
+    "cmd.exe"
+   ],
    "techniques": [
     "T1059",
     "T1564"
@@ -456,6 +510,9 @@
    "process_images": {
     "C:\\Windows\\System32\\cmd.exe": 1
    },
+   "image_names": [
+    "cmd.exe"
+   ],
    "techniques": [
     "T1059",
     "T1564"
@@ -477,6 +534,9 @@
    "process_images": {
     "C:\\Windows\\System32\\cmd.exe": 1
    },
+   "image_names": [
+    "cmd.exe"
+   ],
    "techniques": [
     "T1059",
     "T1564"
@@ -498,6 +558,9 @@
    "process_images": {
     "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe": 1
    },
+   "image_names": [
+    "powershell.exe"
+   ],
    "techniques": [
     "T1059",
     "T1564"
@@ -519,6 +582,9 @@
    "process_images": {
     "C:\\Windows\\System32\\cmd.exe": 1
    },
+   "image_names": [
+    "cmd.exe"
+   ],
    "techniques": [
     "T1059",
     "T1564"
@@ -540,6 +606,9 @@
    "process_images": {
     "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe": 1
    },
+   "image_names": [
+    "powershell.exe"
+   ],
    "techniques": [
     "T1059",
     "T1564"
@@ -561,6 +630,9 @@
    "process_images": {
     "C:\\Windows\\System32\\cmd.exe": 1
    },
+   "image_names": [
+    "cmd.exe"
+   ],
    "techniques": [
     "T1059",
     "T1564"
@@ -582,6 +654,9 @@
    "process_images": {
     "C:\\Windows\\System32\\cmd.exe": 1
    },
+   "image_names": [
+    "cmd.exe"
+   ],
    "techniques": [
     "T1059",
     "T1564"
@@ -603,6 +678,9 @@
    "process_images": {
     "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe": 1
    },
+   "image_names": [
+    "powershell.exe"
+   ],
    "techniques": [
     "T1059",
     "T1564"
@@ -624,6 +702,9 @@
    "process_images": {
     "C:\\Windows\\System32\\cmd.exe": 1
    },
+   "image_names": [
+    "cmd.exe"
+   ],
    "techniques": [
     "T1059",
     "T1564"
@@ -645,6 +726,9 @@
    "process_images": {
     "C:\\Windows\\System32\\cmd.exe": 1
    },
+   "image_names": [
+    "cmd.exe"
+   ],
    "techniques": [
     "T1059",
     "T1564"
@@ -666,6 +750,9 @@
    "process_images": {
     "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe": 1
    },
+   "image_names": [
+    "powershell.exe"
+   ],
    "techniques": [
     "T1059",
     "T1564"
@@ -687,6 +774,9 @@
    "process_images": {
     "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe": 1
    },
+   "image_names": [
+    "powershell.exe"
+   ],
    "techniques": [
     "T1059",
     "T1564"
