@@ -301,3 +301,12 @@ approval.
   completeness (16 gaps). These are population-size gaps public recordings cannot close; they need owner-recorded
   emulations (isolated lab, CTID plans via CALDERA, Sysmon + Security + PowerShell collection) — the ingestion,
   labelling and gate pipeline for them now exists end to end.
+
+**Owner lab recordings — intake path (2026-09-29).** Public recordings cannot satisfy the DC-5 population
+minimums, so the corpus grows from owner-recorded emulations: `docs/operations/lab-recording-guide.md` (doc 12 §J
+safety rules: disposable isolated VMs, never the development host; telemetry config; published plans run
+unmodified; per-run exports — log archive, CALDERA operation report, run sheet) and
+`scripts/check_recording.py` / `replay/recording_check.py` (streams the archive; blocking problems vs recorded
+warnings; drafts the D3 declaration). On OTRF's Empire APT3 recording the checker independently reproduces the
+known clock anomaly (3,409 Sysmon events > 60 s off) and the hand-written declaration. A report-driven labelling
+rule will be implemented against the first real CALDERA report (format verified on real exports).

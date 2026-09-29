@@ -114,16 +114,16 @@ def _verify(source: RecordingSource) -> None:
         )
 
 
-def iter_recording_records(path: Path) -> Iterator[dict[str, Any]]:
-    """Stream the JSON-lines records of a ``.zip`` / ``.tar.gz`` recording
-    (read as data, never extracted to disk)."""
+def iter_recording_lines(path: Path) -> Iterator[str]:
+    """Stream the non-blank lines of a ``.zip`` / ``.tar.gz`` recording (read
+    as data, never extracted to disk), members in name order."""
     if path.suffix == ".zip":
         with zipfile.ZipFile(path) as archive:
             for name in sorted(archive.namelist()):
                 with archive.open(name) as handle:
                     for line in io.TextIOWrapper(handle, encoding="utf-8", errors="replace"):
                         if line.strip():
-                            yield json.loads(line)
+                            yield line
     elif path.name.endswith(".tar.gz"):
         with tarfile.open(path, "r:gz") as archive:
             for member in sorted(archive.getmembers(), key=lambda m: m.name):
@@ -131,9 +131,16 @@ def iter_recording_records(path: Path) -> Iterator[dict[str, Any]]:
                 if extracted is not None:
                     for line in io.TextIOWrapper(extracted, encoding="utf-8", errors="replace"):
                         if line.strip():
-                            yield json.loads(line)
+                            yield line
     else:
         raise ReplayError(f"unsupported recording archive type: {path.name}")
+
+
+def iter_recording_records(path: Path) -> Iterator[dict[str, Any]]:
+    """Stream the JSON-lines records of a recording (see
+    :func:`iter_recording_lines`)."""
+    for line in iter_recording_lines(path):
+        yield json.loads(line)
 
 
 def _channel(record: Mapping[str, Any]) -> str:
@@ -218,6 +225,7 @@ __all__ = [
     "RecordingAnalysis",
     "RecordingSource",
     "analyze_recording",
+    "iter_recording_lines",
     "iter_recording_records",
     "load_recording_sources",
 ]
