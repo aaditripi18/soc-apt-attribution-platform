@@ -30,20 +30,28 @@ from attribution_platform.api.server import create_server
 from attribution_platform.dataplane import ElasticsearchHttpClient
 
 
-def main(env: dict[str, str] | None = None) -> int:
-    env = env if env is not None else dict(os.environ)
-
+def elasticsearch_client_from_env(env: dict[str, str]) -> ElasticsearchHttpClient | None:
+    """The Elasticsearch client the environment configures (variables above),
+    or ``None`` when ``ELASTIC_PASSWORD`` is missing. Shared with the
+    investigation CLI so both use one configuration."""
     password = env.get("ELASTIC_PASSWORD")
     if not password:
-        print("ELASTIC_PASSWORD must be set to run the read-model API.", file=sys.stderr)
-        return 1
-
-    client = ElasticsearchHttpClient(
+        return None
+    return ElasticsearchHttpClient(
         env.get("ELASTICSEARCH_URL", "https://localhost:9200"),
         username=env.get("ELASTIC_USERNAME", "elastic"),
         password=password,
         ca_cert_path=env.get("ELASTICSEARCH_CA_CERT"),
     )
+
+
+def main(env: dict[str, str] | None = None) -> int:
+    env = env if env is not None else dict(os.environ)
+
+    client = elasticsearch_client_from_env(env)
+    if client is None:
+        print("ELASTIC_PASSWORD must be set to run the read-model API.", file=sys.stderr)
+        return 1
     host = env.get("API_HOST", "127.0.0.1")
     port = int(env.get("API_PORT", "8000"))
 

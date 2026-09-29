@@ -33,8 +33,10 @@ domain object (deterministic, sorted-key JSON — the same canonical form
 G0.3 already defined; no second schema). An unrecognized route or HTTP
 method needs no special handling: :class:`http.server.BaseHTTPRequestHandler`
 returns 404/501 on its own when no route matches or no ``do_<METHOD>`` is
-defined — there is deliberately no ``do_POST``/``do_PUT``/``do_DELETE`` here
-(no mutation endpoints, per this gate's requirements).
+defined. Mutation methods (``POST``/``PUT``/``PATCH``/``DELETE``) are explicitly
+refused with 501 — no mutation endpoint exists; the request body is drained
+first so the refusal always reaches the client (a real, intermittent
+connection-reset on Windows when it was not).
 """
 
 from __future__ import annotations
@@ -65,6 +67,9 @@ _ROUTES: dict[str, Callable[[ElasticClient, str], Any]] = {
     "investigations": get_investigation,
     "units": get_unit,
 }
+#: Largest request body drained before refusing a mutation method.
+_MAX_DRAINED_BODY = 1 << 20
+
 #: Collection routes (no identifier).
 _COLLECTIONS: dict[str, Callable[[ElasticClient], Any]] = {
     "health": get_health,
@@ -126,6 +131,27 @@ def make_handler(client: ElasticClient) -> type[BaseHTTPRequestHandler]:
                     HTTPStatus.INTERNAL_SERVER_ERROR,
                     json.dumps({"error": f"unexpected server error: {exc}"}, sort_keys=True),
                 )
+
+        def _refuse_mutation(self) -> None:
+            """Every mutation method is refused with 501 (read-only API). The
+            request body is drained first (bounded) so the client always
+            receives the response instead of a connection reset."""
+            try:
+                length = int(self.headers.get("Content-Length") or 0)
+            except ValueError:
+                length = 0
+            if 0 < length <= _MAX_DRAINED_BODY:
+                self.rfile.read(length)
+            else:
+                self.close_connection = True
+            self._write_json(
+                HTTPStatus.NOT_IMPLEMENTED,
+                json.dumps(
+                    {"error": f"read-only API: {self.command} is not supported"}, sort_keys=True
+                ),
+            )
+
+        do_POST = do_PUT = do_PATCH = do_DELETE = _refuse_mutation  # noqa: N815
 
         def _write_json(self, status: int, json_body: str) -> None:
             body = json_body.encode("utf-8")

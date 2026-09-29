@@ -74,3 +74,13 @@ deployment requires an authentication amendment first).
   main unit is a 12-step chain (T1033, T1202, T1059, T1059.001, T1685) whose 130 candidates include APT3, each with
   its contribution breakdown, all marked uncalibrated.
 - 8 new tests (engine run, determinism, fixture sources, HTTP routes, typed errors); 1,792 tests pass.
+
+**Command-line investigations (2026-09-29).** `python -m attribution_platform.investigation <recording>` runs one
+investigation and optionally serves it (`--serve`, localhost). `<recording>` is a pinned id from
+`recordings.json` or an archive path; an unpinned archive must pass the intake check, which supplies its SHA-256 and
+source declaration. Results are in memory by default; `--elasticsearch` persists them to the cluster configured
+like `python -m attribution_platform.api` (shared `elasticsearch_client_from_env`). Output is per-unit facts only
+(techniques, candidate count, calibration status) — no ranking. On the real APT3 Empire recording it reproduces
+the API run's investigation id exactly (determinism across runs). *Fix found on the way:* mutation methods are now
+refused explicitly (501, body drained first); previously the server answered before reading a request body and
+Windows clients intermittently saw a connection reset instead of the 501 (a pre-existing flaky test).
