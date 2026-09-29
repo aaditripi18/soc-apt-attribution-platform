@@ -146,6 +146,22 @@ and the G0.7 entry in
 [docs/architecture/13-phase-0-implementation-plan.md](docs/architecture/13-phase-0-implementation-plan.md)
 for what has and has not been verified in a given environment.
 
+### Live Elasticsearch verification
+
+With the stack running, `tests/test_live_elasticsearch.py` runs the same
+investigations into the real cluster and into the in-memory client and checks
+that the served read models are identical and that unit search is exact under
+real Query DSL semantics (ADR-0009 Amendment B). It is opt-in:
+
+```bash
+docker compose up -d es01
+docker compose cp es01:/usr/share/elasticsearch/config/certs/ca/ca.crt data/cache/es-ca.crt
+ATTRIBUTION_LIVE_ELASTICSEARCH=1 ELASTIC_PASSWORD=<from .env> ELASTICSEARCH_CA_CERT=data/cache/es-ca.crt python -m pytest tests/test_live_elasticsearch.py
+```
+
+The same variables let `python -m attribution_platform.investigation <recording> --elasticsearch --serve`
+persist to and serve from the cluster.
+
 No Attribution Engine, API, or frontend container exists yet — those are
 added to this same compose file as they land (G0.8/G0.10). No Windows
 endpoint collector is ever containerized (it runs natively — G0.11).

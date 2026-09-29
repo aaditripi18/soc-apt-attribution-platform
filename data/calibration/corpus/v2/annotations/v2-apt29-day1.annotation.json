@@ -89,16 +89,16 @@
   {
    "unit_id": "v2-apt29-day1-u05",
    "anchor_scenario_ids": [
-    "sysmon:SCRANTON.dmevals.local:423500"
+    "sysmon:SCRANTON.dmevals.local:425127"
    ],
-   "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: antimalwareconfig.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
+   "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: msmpeng.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
   },
   {
    "unit_id": "v2-apt29-day1-u06",
    "anchor_scenario_ids": [
-    "sysmon:SCRANTON.dmevals.local:425127"
+    "sysmon:SCRANTON.dmevals.local:423500"
    ],
-   "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: msmpeng.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
+   "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: antimalwareconfig.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
   },
   {
    "unit_id": "v2-apt29-day1-u07",
@@ -136,21 +136,9 @@
   {
    "unit_id": "v2-apt29-day1-u10",
    "anchor_scenario_ids": [
-    "sysmon:NASHUA.dmevals.local:353503"
+    "sysmon:SCRANTON.dmevals.local:395806"
    ],
-   "expected_output_shape": {
-    "outcome": "leading_hypothesis",
-    "authorship_provenance": "Authored from the dataset's documented procedure (mitre-attack/attack-arsenal@201db70f adversary_emulation/APT29/Emulation_Plan/Day 1/README.md), step: sdelete64.exe: Steps 4 and 9; NOT ATT&CK-derived and NOT derived from the engine's detections.",
-    "expected_likelihood_band": "AUTHORED-LEADING",
-    "expected_confidence_band": "AUTHORED-HIGH"
-   },
-   "documented_tools": [
-    "sdelete64.exe"
-   ],
-   "categories": [
-    "multiple_distinct_observation",
-    "repeated_detection"
-   ]
+   "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: rundll32.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
   },
   {
    "unit_id": "v2-apt29-day1-u11",
@@ -174,9 +162,21 @@
   {
    "unit_id": "v2-apt29-day1-u12",
    "anchor_scenario_ids": [
-    "sysmon:SCRANTON.dmevals.local:395806"
+    "sysmon:NASHUA.dmevals.local:353503"
    ],
-   "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: rundll32.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
+   "expected_output_shape": {
+    "outcome": "leading_hypothesis",
+    "authorship_provenance": "Authored from the dataset's documented procedure (mitre-attack/attack-arsenal@201db70f adversary_emulation/APT29/Emulation_Plan/Day 1/README.md), step: sdelete64.exe: Steps 4 and 9; NOT ATT&CK-derived and NOT derived from the engine's detections.",
+    "expected_likelihood_band": "AUTHORED-LEADING",
+    "expected_confidence_band": "AUTHORED-HIGH"
+   },
+   "documented_tools": [
+    "sdelete64.exe"
+   ],
+   "categories": [
+    "multiple_distinct_observation",
+    "repeated_detection"
+   ]
   },
   {
    "unit_id": "v2-apt29-day1-u13",
@@ -199,9 +199,9 @@
   {
    "unit_id": "v2-apt29-day1-u14",
    "anchor_scenario_ids": [
-    "powershell:SCRANTON.dmevals.local:12726"
+    "sysmon:SCRANTON.dmevals.local:349718"
    ],
-   "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: none recorded); not identifiable as the emulated activity \u2014 excluded, not guessed."
+   "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: csc.exe, powershell.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
   },
   {
    "unit_id": "v2-apt29-day1-u15",
@@ -213,14 +213,14 @@
   {
    "unit_id": "v2-apt29-day1-u16",
    "anchor_scenario_ids": [
-    "sysmon:SCRANTON.dmevals.local:349718"
+    "powershell:SCRANTON.dmevals.local:10681"
    ],
-   "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: csc.exe, powershell.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
+   "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: none recorded); not identifiable as the emulated activity \u2014 excluded, not guessed."
   },
   {
    "unit_id": "v2-apt29-day1-u17",
    "anchor_scenario_ids": [
-    "powershell:SCRANTON.dmevals.local:10681"
+    "powershell:SCRANTON.dmevals.local:12726"
    ],
    "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: none recorded); not identifiable as the emulated activity \u2014 excluded, not guessed."
   }

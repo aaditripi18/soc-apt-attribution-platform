@@ -164,6 +164,7 @@ def test_investigation_scoping(service: tuple[str, str]) -> None:
 def test_limit_and_truncation(service: tuple[str, str]) -> None:
     status, body = _get(f"{service[0]}/units?limit=1")
     assert status == 200 and len(body["units"]) == 1 and body["truncated"] is True
+    assert _hosts(body) == [["ws01.lab.local"]]  # the earliest unit, not an arbitrary one
 
 
 @pytest.mark.parametrize(
@@ -193,9 +194,9 @@ class _CapturingClient(FakeElasticClient):
         super().__init__()
         self.queries: list[Any] = []
 
-    def search(self, index: str, query: Any, *, size: int) -> tuple[Any, ...]:
-        self.queries.append((index, query, size))
-        return super().search(index, query, size=size)
+    def search(self, index: str, query: Any, *, size: int, sort: Any = ()) -> tuple[Any, ...]:
+        self.queries.append((index, query, size, tuple(sort)))
+        return super().search(index, query, size=size, sort=sort)
 
 
 def test_query_sent_to_elasticsearch_is_an_exact_term_filter() -> None:
@@ -204,8 +205,9 @@ def test_query_sent_to_elasticsearch_is_an_exact_term_filter() -> None:
 
     client = _CapturingClient()
     search_units(client, {"technique": "T1059", "host": "WS01.Lab.Local", "limit": "5"})
-    index, query, size = client.queries[-1]
+    index, query, size, sort = client.queries[-1]
     assert index == UNIT_SUMMARIES_INDEX and size == 5
+    assert sort == ("first_seen", "group_id")  # the cap keeps the earliest units
     assert query == {
         "bool": {
             "filter": [

@@ -130,6 +130,14 @@ def _sha256_hex(value: str) -> str:
     return hashlib.sha256(value.encode("utf-8")).hexdigest()
 
 
+def _member_set_digest(canonical_members: Iterable[str]) -> str:
+    """One fixed-length digest of an already sorted member id list — local
+    copy of ``contracts._member_set_digest`` (ADR-0003 Amendment D): ids stay
+    64 hex characters per component however many members a step, sequence or
+    parallel group has."""
+    return _sha256_hex("".join(_sha256_hex(member) for member in canonical_members))
+
+
 class OrderingBasisKind(Enum):
     """The closed, two-value set of ordering bases ADR-0004 D5 sanctions —
     exactly ``PROCESS_LINEAGE`` and ``TEMPORAL_SAME_ENTITY``, no third
@@ -793,7 +801,7 @@ def compute_step_id(group_id: str, evidence_ids: Iterable[str]) -> str:
         raise CorrelationError("compute_step_id: requires at least one evidence id")
     for eid in canonical:
         _require_nonempty_str(eid, "compute_step_id(evidence_ids=...)[]")
-    parts = ["behavioral-step", _sha256_hex(group_id), *(_sha256_hex(eid) for eid in canonical)]
+    parts = ["behavioral-step", _sha256_hex(group_id), _member_set_digest(canonical)]
     return "::".join(parts)
 
 
@@ -815,7 +823,7 @@ def compute_sequence_id(
     parts = [
         "behavioral-sequence",
         _sha256_hex(group_id),
-        *(_sha256_hex(sid) for sid in canonical),
+        _member_set_digest(canonical),
     ]
     if method_content_hash is not None:
         _require_nonempty_str(method_content_hash, "compute_sequence_id(method_content_hash=...)")
@@ -929,5 +937,11 @@ def compute_sequence_parallel_group_id(
         _sha256_hex("::".join(_sha256_hex(member) for member in branch))
         for branch in canonical_branches
     )
-    parts = ["sequence-parallel-group", _sha256_hex(source_step_id), *branch_tokens]
+    # Each 64-character branch token is itself fixed-length, so the sorted
+    # tokens reduce to one digest unambiguously (ADR-0003 Amendment D).
+    parts = [
+        "sequence-parallel-group",
+        _sha256_hex(source_step_id),
+        _sha256_hex("".join(branch_tokens)),
+    ]
     return "::".join(parts)

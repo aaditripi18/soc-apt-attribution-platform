@@ -10,7 +10,7 @@
  "evidence": 25,
  "units": [
   {
-   "group_id": "corr-group::b0d3f6e3764a790d2e3bd4e893b089102e303a396d5bbf81cf8ac5d1960e6b82::c3027ed4ec772316387b6700aa8cfed65de35fe693dbfdb2ca7d1659cd861205::c46a614e9b2b65254a81f4e4000585affb4cf23a8849a078fb5f0d2c0323c651::d417a4a046ad934b9889fdb6cfc22965ba052f3a1debc3bc93250f3224871811::0cc2bcbf6fc32197d87a0896cd8c4034805f0b8c75d1ec98a58433dbb757c358::936e5bd71260b86a8e2b34d12583a5b1ad58cbdc1e8e380c352ef5d945619384::fbf186833bd84db18ff21a95e4181b81a5de3439e772c980af764749292126b6::15d4dc9dd790a96a694a65c4bc9b971f406fced9c42409f53a71c26f2bbd5e3e::c2b2d2bbe09d188a63da76c71a49211e57fcd18cced57b1ef9f4cfc012942346::4001ed7b2e40c9b3a7f500e4c7d4b51a54b7e8554d137f50d62e5b6690ab805a::9084968176bffb7b5f012d8c42b47ca851072dedda7595eb9790039c5fdb2fde::2128bfbc4592556a8f70bf51eff422fa7a661a2dba12bde133038739255b1c1c::d0d181175c121ff4217b1d482a1fd5c3c46009deb683f013c130c8b6e13753fb::1bd8afabda1fd88f5b1ed4e90edb73208c4a9b2bedc18aa236cf742e23bfcda7",
+   "group_id": "corr-group::6a23fbe4e2cd69dd369a5ff874ad654e48e5f2ab0fe43c910ecb38044e669130",
    "anchor_observation_id": "sysmon:PRD01.pandalab.com:sha256:b2b7b973076067d6c18974ef3c95659fcd3dd58e744aac5aa16fb02033b8fa24",
    "evidence": 14,
    "observations": 7,
@@ -37,7 +37,7 @@
    }
   },
   {
-   "group_id": "corr-group::96143bdc44d88e289660faa7ced1e04901ac3983e5027a3b413bd4e771c7f772::9ae3dd464dd7c56ef010aa0d5c32e2dca500ee95dbaa4945b12bb975afa4b82a::41058785e82ffa2a3e08827205dd4c13fc4d9246867403fbaf25550523fe9f52::de0ac8caf38c4a2228bc0cea657ac31be41c63b2c1b0ee4ed66ffb19cb4c34f7",
+   "group_id": "corr-group::e72f157d7842e89fb800a2e26af46552c430b7ea7c1a4a950b98b6cc0b6c3670",
    "anchor_observation_id": "sysmon:PRD01.pandalab.com:sha256:cf57944b5180c3edaadaaea103b360c432135f09dd5a88f8bdd9b3be2b60d8e3",
    "evidence": 4,
    "observations": 2,
@@ -63,7 +63,30 @@
    }
   },
   {
-   "group_id": "corr-group::4e5158e6b6c54fa5e2d392b16e3f16c1695ca8847add822f7d17aa8a1d4d43ba::c5ea54c603455d2f738b5d640f100cd1db4f256dac18f089fd31a04f80ca44e8",
+   "group_id": "corr-group::373d2f637fbfa7b879d6d2267cbdd94c6f4bf32396d10244706ce84d8777519b",
+   "anchor_observation_id": "sysmon:PRD01.pandalab.com:sha256:3bc42e9eda6bd8eb0818fa1ac85697924803587025701a25be82664ca1e27858",
+   "evidence": 2,
+   "observations": 2,
+   "hosts": [
+    "PRD01.pandalab.com"
+   ],
+   "first": "2023-08-18T15:56:35.953000+00:00",
+   "last": "2023-08-18T15:56:36.109000+00:00",
+   "process_images": {
+    "C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe": 2
+   },
+   "image_names": [
+    "msedge.exe"
+   ],
+   "techniques": [
+    "T1564.004"
+   ],
+   "rule_families": {
+    "sigma:b69888d4-380c-45ce-9cf9-d9ce46e67821": 2
+   }
+  },
+  {
+   "group_id": "corr-group::bb32444675cd06246859f56ae4bc648556b923c2af8fee9ad8bc6304e20beef7",
    "anchor_observation_id": "sysmon:PRD01.pandalab.com:sha256:cc654e4b9dafebc8846aa18f7ef3a9172b4474b1ab263307d86811c9f7c8a472",
    "evidence": 2,
    "observations": 1,
@@ -84,29 +107,6 @@
    ],
    "rule_families": {
     "sigma:15619216-e993-4721-b590-4c520615a67d": 2
-   }
-  },
-  {
-   "group_id": "corr-group::6591e0a5d955764040f43544500e44828decc1df4b16c4cc4a4b2420dd9d381c::7415f60137a36249c3faf100981532a0889f41371aff7861fe4998f99bd2b76a",
-   "anchor_observation_id": "sysmon:PRD01.pandalab.com:sha256:3bc42e9eda6bd8eb0818fa1ac85697924803587025701a25be82664ca1e27858",
-   "evidence": 2,
-   "observations": 2,
-   "hosts": [
-    "PRD01.pandalab.com"
-   ],
-   "first": "2023-08-18T15:56:35.953000+00:00",
-   "last": "2023-08-18T15:56:36.109000+00:00",
-   "process_images": {
-    "C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe": 2
-   },
-   "image_names": [
-    "msedge.exe"
-   ],
-   "techniques": [
-    "T1564.004"
-   ],
-   "rule_families": {
-    "sigma:b69888d4-380c-45ce-9cf9-d9ce46e67821": 2
    }
   }
  ]

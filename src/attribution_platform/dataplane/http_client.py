@@ -19,12 +19,11 @@ oversight now.
 Every failure — connection refused, TLS failure, auth failure, a non-2xx
 response, a response that is not valid JSON — is wrapped in
 :class:`~attribution_platform.dataplane.errors.ElasticIntegrationError`
-(the ``ElasticClient`` Protocol's one error type). Nothing here has been
-exercised against a live cluster: Docker/Elasticsearch is not available in
-the environment this was authored in (see the G0.8 entry in
-docs/architecture/13-phase-0-implementation-plan.md) — this class's request
-construction and error handling are covered by tests that patch
-``urllib.request.urlopen`` (no network), not by a real bring-up.
+(the ``ElasticClient`` Protocol's one error type). Request construction and
+error handling are unit-tested with a patched ``urllib.request.urlopen``; the
+whole read model is verified against a real Elasticsearch 8.15.3 cluster (the
+G0.7 compose stack) by the opt-in ``tests/test_live_elasticsearch.py``
+(ADR-0009 Amendment B).
 """
 
 from __future__ import annotations
@@ -33,11 +32,19 @@ import base64
 import json
 import ssl
 import urllib.error
+import urllib.parse
 import urllib.request
-from collections.abc import Mapping
+from collections.abc import Mapping, Sequence
 from typing import Any
 
 from attribution_platform.dataplane.errors import ElasticIntegrationError
+
+
+def _segment(value: str) -> str:
+    """One URL path segment: index names and document ids are caller data
+    (ids embed host names and rule ids), so every reserved character is
+    percent-encoded — a ``/``, ``?`` or ``#`` can never re-route a request."""
+    return urllib.parse.quote(value, safe="")
 
 
 class ElasticsearchHttpClient:
@@ -112,7 +119,7 @@ class ElasticsearchHttpClient:
 
     def ensure_index(self, index: str, mappings: Mapping[str, Any]) -> None:
         status, parsed = self._request(
-            "PUT", f"/{index}", {"mappings": {"properties": dict(mappings)}}
+            "PUT", f"/{_segment(index)}", {"mappings": {"properties": dict(mappings)}}
         )
         if status in (200, 201):
             return
@@ -130,7 +137,9 @@ class ElasticsearchHttpClient:
         )
 
     def index_document(self, index: str, document_id: str, document: Mapping[str, Any]) -> None:
-        status, parsed = self._request("PUT", f"/{index}/_doc/{document_id}", dict(document))
+        status, parsed = self._request(
+            "PUT", f"/{_segment(index)}/_doc/{_segment(document_id)}", dict(document)
+        )
         if status not in (200, 201):
             raise ElasticIntegrationError(
                 f"failed to index document {document_id!r} into {index!r} "
@@ -138,7 +147,9 @@ class ElasticsearchHttpClient:
             )
 
     def get_document(self, index: str, document_id: str) -> Mapping[str, Any] | None:
-        status, parsed = self._request("GET", f"/{index}/_doc/{document_id}", None)
+        status, parsed = self._request(
+            "GET", f"/{_segment(index)}/_doc/{_segment(document_id)}", None
+        )
         if status == 404:
             return None
         if status != 200:
@@ -158,16 +169,23 @@ class ElasticsearchHttpClient:
         return source
 
     def search(
-        self, index: str, query: Mapping[str, Any], *, size: int
+        self,
+        index: str,
+        query: Mapping[str, Any],
+        *,
+        size: int,
+        sort: Sequence[str] = (),
     ) -> tuple[Mapping[str, Any], ...]:
         """Bounded, read-only search (gate G1.1): ``POST /{index}/_search``
-        with the given Query DSL body and a hard ``size`` cap. Returns each
-        hit's ``_source``. No scroll/point-in-time — a single bounded page."""
+        with the given Query DSL body, an optional ascending ``sort`` and a
+        hard ``size`` cap. Returns each hit's ``_source``. No
+        scroll/point-in-time — a single bounded page."""
         if size <= 0:
             raise ElasticIntegrationError(f"search size must be positive, got {size}")
-        status, parsed = self._request(
-            "POST", f"/{index}/_search", {"query": dict(query), "size": size}
-        )
+        body: dict[str, Any] = {"query": dict(query), "size": size}
+        if sort:
+            body["sort"] = [{name: {"order": "asc"}} for name in sort]
+        status, parsed = self._request("POST", f"/{_segment(index)}/_search", body)
         if status != 200:
             raise ElasticIntegrationError(
                 f"search on {index!r} failed (status {status}): {parsed!r}"

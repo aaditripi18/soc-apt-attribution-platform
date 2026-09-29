@@ -121,6 +121,17 @@ def _sha256_hex(value: str) -> str:
     return hashlib.sha256(value.encode("utf-8")).hexdigest()
 
 
+def _member_set_digest(canonical_members: Iterable[str]) -> str:
+    """One fixed-length digest of an already sorted, de-duplicated member id
+    list (ADR-0003 Amendment D): SHA-256 over the concatenated per-member
+    digests. Each per-member digest is exactly 64 hex characters, so the
+    concatenation is unambiguous and two different member lists cannot share
+    it; the outer digest keeps the id's length independent of the member count
+    (an id listing one hash per member reached 596,980 characters on real
+    telemetry — past Elasticsearch's 512-byte document-id limit)."""
+    return _sha256_hex("".join(_sha256_hex(member) for member in canonical_members))
+
+
 class LinkClass(Enum):
     """The closed, eleven-value correlation-relationship vocabulary ADR-0003
     (+ Amendment A)/ADR-0004 D20 approved. Exactly four values are structural
@@ -601,11 +612,12 @@ def compute_group_id(
     id. Replaying the same telemetry through the same configuration always
     yields the same member set and therefore the same ``group_id``.
 
-    Each member id is sorted (by its original value, exactly as before) and
-    then SHA-256-hashed (:func:`_sha256_hex`) before being joined with
-    ``"::"``: a real ``evidence_id`` already contains ``"::"`` by this
-    project's own convention, so joining raw ids would let two different
-    member sets produce the same ``group_id`` string. ``method_content_hash``
+    The sorted member ids are reduced to one fixed-length digest
+    (:func:`_member_set_digest`, ADR-0003 Amendment D): a real
+    ``evidence_id`` already contains ``"::"`` by this project's own
+    convention, so joining raw ids would let two different member sets
+    produce the same ``group_id`` string, and one hash per member would make
+    the id grow with the group. ``method_content_hash``
     is appended unhashed, unchanged from before — it is already a
     fixed-length SHA-256 hex digest by convention and so is already
     collision-safe to concatenate.
@@ -618,7 +630,7 @@ def compute_group_id(
         )
     for eid in canonical:
         _require_nonempty_str(eid, "compute_group_id(member_evidence_ids=...)[]")
-    parts = ["corr-group", *(_sha256_hex(eid) for eid in canonical)]
+    parts = ["corr-group", _member_set_digest(canonical)]
     if method_content_hash is not None:
         _require_nonempty_str(method_content_hash, "compute_group_id(method_content_hash=...)")
         parts.append(method_content_hash)

@@ -10,7 +10,7 @@
  "evidence": 9,
  "units": [
   {
-   "group_id": "corr-group::8d540b14887e53743218a0a615536c9bb2b31eefb8186d536786f20f613527a4::bd9e08ecece42d7dd2b275df703be1f7dbc22bdb12cf237d46b22ad95aa129ed::7a09b1727f469784d5a94892264b72f8d23e3286efd07fb16f71e5d9244be8d3::24d972031cb411e24ba9049382428bb1a4f8120cd1014dc926d7dbf6e005ba9f",
+   "group_id": "corr-group::aa1273d770a8bb52954840c6c8ab3ba1eb12c284ab7ab6cfd708f8466c9194cb",
    "anchor_observation_id": "sysmon:MKT01.pandalab.com:sha256:cc7059b719872a0bb730659472a7fec303ea424b07edea372ce997fbd8c01d2b",
    "evidence": 4,
    "observations": 4,
@@ -35,7 +35,7 @@
    }
   },
   {
-   "group_id": "corr-group::2deb4fdf73bc2c9ec586e36d215abf8f450ed68314cd5a8f75abff70432058da::60c2747cd15270be41048b7c060249fef16135d1089413788e8a7b4e969db062::7f845400b61501e804511e899cd000bef8d7ca25fe268fe3003916697aead7a5",
+   "group_id": "corr-group::ac89aa149de3a829b75c78a4ad7baa11fb81589eee50a79298101a6d6dc1ffaa",
    "anchor_observation_id": "sysmon:MKT01.pandalab.com:sha256:b11d52069b876e5e5ccb7d1c65ceae7bb90ec0f3f969c27b4dce638290756c34",
    "evidence": 3,
    "observations": 3,

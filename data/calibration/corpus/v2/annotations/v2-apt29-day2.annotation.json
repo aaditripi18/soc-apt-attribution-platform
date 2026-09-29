@@ -138,16 +138,16 @@
   {
    "unit_id": "v2-apt29-day2-u12",
    "anchor_scenario_ids": [
-    "sysmon:SCRANTON.dmevals.local:343422"
+    "sysmon:SCRANTON.dmevals.local:333581"
    ],
-   "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: wsmprovhost.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
+   "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: lsass.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
   },
   {
    "unit_id": "v2-apt29-day2-u13",
    "anchor_scenario_ids": [
-    "sysmon:SCRANTON.dmevals.local:333581"
+    "sysmon:SCRANTON.dmevals.local:343422"
    ],
-   "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: lsass.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
+   "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: wsmprovhost.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
   }
  ]
 }

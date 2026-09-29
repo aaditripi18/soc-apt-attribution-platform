@@ -35,7 +35,7 @@ directly — so they are indifferent to which implementation is plugged in.
 
 from __future__ import annotations
 
-from collections.abc import Mapping
+from collections.abc import Mapping, Sequence
 from typing import Any, Protocol, runtime_checkable
 
 
@@ -65,7 +65,10 @@ class ElasticClient(Protocol):
       required (no default that could silently mean "everything") and must
       be positive. No scrolling, no point-in-time, no "give me all matches"
       mode — a caller needing more than one bounded page is out of scope for
-      this Protocol.
+      this Protocol. ``sort`` names mapped keyword/date fields to order
+      the matches by (ascending, in priority order) *before* the ``size``
+      cap applies, so a capped page is the first ``size`` matches in that
+      order rather than an arbitrary subset.
 
     Implementations must raise
     :class:`~attribution_platform.dataplane.errors.ElasticIntegrationError`
@@ -80,5 +83,10 @@ class ElasticClient(Protocol):
     def get_document(self, index: str, document_id: str) -> Mapping[str, Any] | None: ...
 
     def search(
-        self, index: str, query: Mapping[str, Any], *, size: int
+        self,
+        index: str,
+        query: Mapping[str, Any],
+        *,
+        size: int,
+        sort: Sequence[str] = (),
     ) -> tuple[Mapping[str, Any], ...]: ...

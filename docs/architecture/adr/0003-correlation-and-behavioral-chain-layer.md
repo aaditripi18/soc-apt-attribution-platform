@@ -764,3 +764,41 @@ terminated) events (81–607 each), which B1/B3 need. Amendment B is therefore p
 
   The 22 remaining small CALDERA units are single `cmd.exe`/PowerShell Observations whose process has no other
   evidence — genuine singletons, not fragmentation.
+
+## Amendment D (2026-09-30) — Fixed-length member-set identifiers
+
+**Status:** Accepted. Found by the first live Elasticsearch verification (ADR-0009 Amendment B).
+
+**Problem (observed, not hypothetical).** `compute_group_id` joined one SHA-256 digest per member Evidence
+(`corr-group::<h1>::<h2>::…`); `compute_step_id`, `compute_sequence_id` and
+`compute_sequence_parallel_group_id` did the same per member step / branch. Id length therefore grew linearly
+with unit size. On real telemetry the APT3 Empire main unit's `group_id` was 1,396 bytes, and the largest
+group id in the corpus v2 inventory was **596,980 characters** (a 9,000-Evidence CALDERA chain). Elasticsearch
+rejects document ids over 512 bytes (`action_request_validation_exception`), so no large unit could be
+persisted; such ids would also exceed the 32,766-byte keyword-term limit and any sane URL length for the
+read-model API. The in-memory test client accepted them, which is why only the live cluster exposed it.
+
+**Decision.** Each member list is reduced to **one** digest:
+`member_set_digest = SHA-256( concat( SHA-256(member) for member in sorted(set(members)) ) )`.
+
+- `group_id = corr-group::<member_set_digest(evidence_ids)>[::method_content_hash]` — 76 characters without, 142
+  with the method hash, whatever the group size.
+- `step_id = behavioral-step::<H(group_id)>::<member_set_digest(evidence_ids)>`;
+  `sequence_id = behavioral-sequence::<H(group_id)>::<member_set_digest(step_ids)>[::method_content_hash]`;
+  a parallel group's branch tokens (already one digest per branch) are reduced the same way.
+
+**Properties preserved.** Determinism and order-independence (sorted, de-duplicated input); the `"::"`
+delimiter-collision fix of G2.0 (each per-member digest is exactly 64 hex characters, so the concatenation is
+unambiguous and two different member sets map to different digests up to a SHA-256 collision); membership-only
+identity (still true — Amendment C's "group identity preserved" holds for the new format). All other ids
+(links, edges, gaps, hypotheses, assessments, attribution-layer ids) were audited: each is built from a fixed
+number of digests and is unchanged.
+
+**Consequences.** Every group/step/sequence id changes format once. Nothing downstream parses ids. The corpus v2
+inventory (`data/calibration/corpus/v2/inventory/`), the only stored artefact holding real group ids, is
+regenerated (largest group id now 76 characters). Annotations key units by anchor Observation, not id: re-running
+the labelling gives the identical set of (anchor, label / exclusion reason) entries for every recording — only
+the `-uN` numbering of equal-sized *excluded* APT29 units permutes, because the inventory breaks size ties by
+group id. The rebuilt corpus (`calibration-corpus-version::25531bf9…`, 14 cases) has the unchanged readiness
+verdict: not ready, the same six violations. The test
+`test_member_set_ids_have_a_fixed_length_whatever_the_member_count` pins the length independence.

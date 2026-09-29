@@ -520,6 +520,30 @@ def test_compute_group_id_no_longer_collides_on_the_analogous_shape() -> None:
     assert id1 != id2
 
 
+def test_member_set_ids_have_a_fixed_length_whatever_the_member_count() -> None:
+    """ADR-0003 Amendment D: one hash per member once made a real unit's
+    group id 596,980 characters long — past Elasticsearch's 512-byte _id limit.
+    Group, step, sequence and parallel-group ids are now member-count-free."""
+    from attribution_platform.correlation.sequence import (
+        compute_sequence_id,
+        compute_sequence_parallel_group_id,
+        compute_step_id,
+    )
+
+    few = [f"ev-{i}::x" for i in range(2)]
+    many = [f"ev-{i}::x" for i in range(5000)]
+    assert len(compute_group_id(few)) == len(compute_group_id(many)) == 76
+    assert compute_group_id(many) != compute_group_id(many[:-1])
+    assert compute_group_id(list(reversed(many))) == compute_group_id(many)
+    assert len(compute_step_id("g", few)) == len(compute_step_id("g", many))
+    assert len(compute_sequence_id("g", few)) == len(compute_sequence_id("g", many))
+    assert len(compute_sequence_parallel_group_id("s", [["a"], ["b"]])) == len(
+        compute_sequence_parallel_group_id("s", [[f"s{i}"] for i in range(500)])
+    )
+    with_hash = compute_group_id(many, method_content_hash="f" * 64)
+    assert len(with_hash.encode()) <= 512
+
+
 def test_compute_link_id_still_deterministic_for_identical_semantic_inputs() -> None:
     """Fix must not weaken determinism: the same inputs, called twice,
     still produce the same id."""
@@ -584,7 +608,7 @@ def test_compute_group_id_free_text_segments_are_fixed_length_hex_digests() -> N
     group_id = compute_group_id(["ev-1::a", "ev-2::b"])
     prefix, *free_text_segments = group_id.split("::")
     assert prefix == "corr-group"
-    assert len(free_text_segments) == 2
+    assert len(free_text_segments) == 1  # one member-set digest (ADR-0003 Amendment D)
     for segment in free_text_segments:
         assert _HEX64.match(segment), f"expected a 64-char hex digest, got {segment!r}"
 

@@ -109,3 +109,38 @@ Windows clients intermittently saw a connection reset instead of the 501 (a pre-
   finds the three PowerShell units (parent-technique match), `candidate=G0022` the three units with APT3 as a
   candidate (not the pass-the-hash unit, whose technique APT3's ATT&CK profile lacks), `technique=T1550.002&host=…`
   exactly the one pass-the-hash unit. 1,822 tests pass.
+
+## Amendment B (2026-09-30) — Live Elasticsearch verification
+
+**Status:** Accepted. Until now every read-model test used the in-memory `FakeElasticClient`; the HTTP client had
+only been tested with a patched `urlopen`. The G0.7 compose stack (Elasticsearch 8.15.3, security + TLS on) was
+brought up and the whole read model was run against it.
+
+**Method.** `tests/test_live_elasticsearch.py` (opt-in: `ATTRIBUTION_LIVE_ELASTICSEARCH=1` plus the API's cluster
+variables) runs the same investigation into the live cluster and into the fake and requires identical
+`InvestigationRecord`s and identical served JSON for the investigation, every unit (group, sequence, analysis)
+and every member Evidence; checks the unit-summary index mapping types on the cluster; and checks unit search
+with real Query DSL (parent-technique match, case-insensitive host, AND, empty result, capped result). It runs a
+synthetic two-host recording and the pinned real APT3 Empire recording.
+
+**Defects found and fixed.**
+
+1. *Read-model index mappings were double-nested.* `investigation/records.py` passed `{"properties": {...}}`,
+   which `ensure_index` wraps in `properties` again. Now the flat form every other index uses; the fake client
+   now rejects any field definition without `type`/`properties`, so this fails offline too.
+2. *Unbounded identifiers.* Group/step/sequence ids grew by one digest per member (1,396 bytes for the APT3
+   Empire main unit; 596,980 characters for the largest corpus v2 unit) and Elasticsearch refuses `_id` > 512
+   bytes. Fixed at the domain level — ADR-0003 Amendment D.
+3. *A capped search was an arbitrary subset.* `search` returned any `size` matches and the API sorted them
+   afterwards, so `limit=N` (and `/investigations` beyond 100) did not return the *first* N. `ElasticClient.search`
+   gains an optional ascending `sort` (field names), applied before the cap: units by
+   (`first_seen`, `group_id`), investigations by `investigation_id`. The fake honours it.
+4. *Unescaped path segments.* Index names and document ids are now percent-encoded as single URL path segments.
+
+**Recorded behaviour, not a defect.** Search is near-real-time (visible after the index refresh interval, 1 s by
+default); `get` by id is real-time. A just-finished CLI run is served immediately by id and searchable within
+a second; the live test refreshes explicitly before searching.
+
+**Result.** Against Elasticsearch 8.15.3: 9 of 9 live tests pass — including the real APT3 Empire recording,
+whose investigation, units, analyses and Evidence are served byte-identically from the cluster and from the
+in-memory run. Offline: 1,823 tests pass (the 9 live tests skip unless opted in).

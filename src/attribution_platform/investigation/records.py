@@ -32,35 +32,32 @@ INVESTIGATION_SCHEMA_VERSION = "investigation/1"
 UNIT_SUMMARY_SCHEMA_VERSION = "unit-summary/1"
 ATTRIBUTION_ANALYSIS_SCHEMA_VERSION = "attribution-analysis/1"
 
+# Field mappings in the same form as dataplane/mappings.py: the "properties"
+# body itself (ensure_index wraps it); a "properties"-wrapped form would be
+# double-nested on a real cluster.
 _KEYWORD = {"type": "keyword"}
 INVESTIGATIONS_MAPPING: Mapping[str, Any] = {
-    "properties": {
-        "investigation_id": _KEYWORD,
-        "source_id": _KEYWORD,
-        "source_kind": _KEYWORD,
-        "source_sha256": _KEYWORD,
-        "attack_kb_version": _KEYWORD,
-    }
+    "investigation_id": _KEYWORD,
+    "source_id": _KEYWORD,
+    "source_kind": _KEYWORD,
+    "source_sha256": _KEYWORD,
+    "attack_kb_version": _KEYWORD,
 }
 ATTRIBUTION_ANALYSES_MAPPING: Mapping[str, Any] = {
-    "properties": {
-        "group_id": _KEYWORD,
-        "investigation_id": _KEYWORD,
-        "attack_kb_version": _KEYWORD,
-    }
+    "group_id": _KEYWORD,
+    "investigation_id": _KEYWORD,
+    "attack_kb_version": _KEYWORD,
 }
 
 
 UNIT_SUMMARIES_MAPPING: Mapping[str, Any] = {
-    "properties": {
-        "group_id": _KEYWORD,
-        "investigation_id": _KEYWORD,
-        "host_names": _KEYWORD,
-        "technique_ids": _KEYWORD,
-        "candidate_ids": _KEYWORD,
-        "first_seen": {"type": "date"},
-        "last_seen": {"type": "date"},
-    }
+    "group_id": _KEYWORD,
+    "investigation_id": _KEYWORD,
+    "host_names": _KEYWORD,
+    "technique_ids": _KEYWORD,
+    "candidate_ids": _KEYWORD,
+    "first_seen": {"type": "date"},
+    "last_seen": {"type": "date"},
 }
 
 
@@ -221,10 +218,13 @@ def persist_unit_summary(client: ElasticClient, record: UnitSummaryRecord) -> No
 def search_unit_summaries(
     client: ElasticClient, query: Mapping[str, Any], *, size: int
 ) -> tuple[Mapping[str, Any], ...]:
-    """Unit summaries matching ``query`` (Query DSL), at most ``size``."""
+    """The first ``size`` unit summaries matching ``query`` (Query DSL) in
+    (first event, group id) order."""
     try:
         client.ensure_index(UNIT_SUMMARIES_INDEX, UNIT_SUMMARIES_MAPPING)
-        return client.search(UNIT_SUMMARIES_INDEX, query, size=size)
+        return client.search(
+            UNIT_SUMMARIES_INDEX, query, size=size, sort=("first_seen", "group_id")
+        )
     except Exception as exc:  # noqa: BLE001
         raise ElasticIntegrationError(f"failed to search unit summaries: {exc}") from exc
 
@@ -250,10 +250,11 @@ def list_investigations(client: ElasticClient, *, size: int = 100) -> tuple[Mapp
     """Stored Investigation records (up to ``size``), sorted by id."""
     try:
         client.ensure_index(INVESTIGATIONS_INDEX, INVESTIGATIONS_MAPPING)
-        documents = client.search(INVESTIGATIONS_INDEX, {"match_all": {}}, size=size)
+        return client.search(
+            INVESTIGATIONS_INDEX, {"match_all": {}}, size=size, sort=("investigation_id",)
+        )
     except Exception as exc:  # noqa: BLE001
         raise ElasticIntegrationError(f"failed to list investigations: {exc}") from exc
-    return tuple(sorted(documents, key=lambda d: str(d.get("investigation_id"))))
 
 
 __all__ = [

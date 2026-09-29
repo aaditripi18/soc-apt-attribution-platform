@@ -307,7 +307,7 @@ def test_persistence_functions_accept_any_conforming_client() -> None:
             return self._docs.get(index, {}).get(document_id)
 
         def search(
-            self, index: str, query: Mapping[str, Any], *, size: int
+            self, index: str, query: Mapping[str, Any], *, size: int, sort: Any = ()
         ) -> tuple[Mapping[str, Any], ...]:
             return tuple(dict(d) for d in list(self._docs.get(index, {}).values())[:size])
 

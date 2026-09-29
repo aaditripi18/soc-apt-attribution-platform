@@ -22,10 +22,24 @@ tested deterministically and offline.
 
 from __future__ import annotations
 
-from collections.abc import Mapping
+from collections.abc import Mapping, Sequence
 from typing import Any
 
 from attribution_platform.dataplane.errors import ElasticIntegrationError
+
+
+def _check_properties(index: str, properties: Mapping[str, Any], path: str = "") -> None:
+    for name, spec in properties.items():
+        where = f"{path}{name}"
+        if not isinstance(spec, Mapping) or ("type" not in spec and "properties" not in spec):
+            raise ElasticIntegrationError(
+                f"mapping for {index!r} field {where!r} has neither 'type' nor 'properties'"
+            )
+        nested = spec.get("properties")
+        if nested is not None:
+            if not isinstance(nested, Mapping):
+                raise ElasticIntegrationError(f"mapping for {index!r} field {where!r} is malformed")
+            _check_properties(index, nested, f"{where}.")
 
 
 class FakeElasticClient:
@@ -36,6 +50,11 @@ class FakeElasticClient:
         self._documents: dict[str, dict[str, dict[str, Any]]] = {}
 
     def ensure_index(self, index: str, mappings: Mapping[str, Any]) -> None:
+        # The one piece of mapping enforcement modelled: every field definition
+        # must be one Elasticsearch accepts as a "properties" entry (a "type"
+        # or nested "properties"), so a wrongly nested mapping fails here as it
+        # does on a real cluster.
+        _check_properties(index, mappings)
         # Idempotent: re-creating an existing index is a documented no-op,
         # matching the real client's "already exists -> treat as success".
         if index not in self._mappings:
@@ -56,7 +75,12 @@ class FakeElasticClient:
         return dict(stored) if stored is not None else None
 
     def search(
-        self, index: str, query: Mapping[str, Any], *, size: int
+        self,
+        index: str,
+        query: Mapping[str, Any],
+        *,
+        size: int,
+        sort: Sequence[str] = (),
     ) -> tuple[Mapping[str, Any], ...]:
         """Bounded, read-only search (gate G1.1). This fake does **not**
         implement Elasticsearch's Query DSL -- ``query`` is accepted (to
@@ -66,11 +90,15 @@ class FakeElasticClient:
         Elasticsearch behavior this fake deliberately does not model (see
         the module docstring) -- a test needing to verify actual query
         construction should patch ``urllib.request.urlopen`` against
-        ``ElasticsearchHttpClient`` instead."""
+        ``ElasticsearchHttpClient`` instead. ``sort`` is honoured (ascending
+        string order of each named top-level field, before the ``size``
+        cap), as the cap's meaning depends on it."""
         if size <= 0:
             raise ElasticIntegrationError(f"search size must be positive, got {size}")
-        documents = self._documents.get(index, {})
-        return tuple(dict(doc) for doc in list(documents.values())[:size])
+        documents = list(self._documents.get(index, {}).values())
+        if sort:
+            documents.sort(key=lambda doc: tuple(str(doc.get(name, "")) for name in sort))
+        return tuple(dict(doc) for doc in documents[:size])
 
     # --- test-introspection helpers (not part of the ElasticClient Protocol) ---
 

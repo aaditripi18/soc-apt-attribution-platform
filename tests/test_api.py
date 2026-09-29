@@ -160,7 +160,7 @@ class _AlwaysFailsClient:
     def get_document(self, index: str, document_id: str) -> Any:
         raise ConnectionError("simulated transport failure")
 
-    def search(self, index: str, query: Any, *, size: int) -> tuple[Any, ...]:
+    def search(self, index: str, query: Any, *, size: int, sort: Any = ()) -> tuple[Any, ...]:
         return ()
 
 
