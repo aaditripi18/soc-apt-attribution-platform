@@ -14,8 +14,12 @@ with no query parameters and no request body, ``http.server`` from the
 standard library is sufficient and adds nothing to pin or vendor. Revisit if
 G0.10 grows real query capability; not a permanent constraint.
 
-Two routes, both GET, nothing else:
+Routes (all GET, nothing else) — G0.10 plus ADR-0009 v1:
 
+- ``GET /health``
+- ``GET /investigations`` and ``GET /investigations/<investigation_id>``
+- ``GET /units/<group_id>`` (correlation group + behavioral sequence +
+  uncalibrated attribution analysis)
 - ``GET /observations/<observation_id>``
 - ``GET /evidence/<evidence_id>``
 
@@ -43,18 +47,40 @@ from typing import Any
 from urllib.parse import unquote, urlsplit
 
 from attribution_platform.api.errors import ApiError, NotFoundError
-from attribution_platform.api.read_model import get_evidence, get_observation
+from attribution_platform.api.read_model import (
+    get_evidence,
+    get_health,
+    get_investigation,
+    get_observation,
+    get_unit,
+    list_investigation_summaries,
+)
 from attribution_platform.dataplane import ElasticClient
 from attribution_platform.domain import Evidence, Observation, to_canonical_json
 
-#: The two routes this gate exposes -- resource name -> read-model function.
-_ROUTES: dict[str, Callable[[ElasticClient, str], Observation | Evidence]] = {
+#: Identifier-addressed routes -- resource name -> read-model function.
+_ROUTES: dict[str, Callable[[ElasticClient, str], Any]] = {
     "observations": get_observation,
     "evidence": get_evidence,
+    "investigations": get_investigation,
+    "units": get_unit,
+}
+#: Collection routes (no identifier).
+_COLLECTIONS: dict[str, Callable[[ElasticClient], Any]] = {
+    "health": get_health,
+    "investigations": list_investigation_summaries,
 }
 
 
-def _dispatch(path: str, client: ElasticClient) -> Observation | Evidence:
+def _serialize(result: Any) -> str:
+    """Domain objects in their canonical JSON form; read-model records as
+    sorted-key JSON -- deterministic either way."""
+    if isinstance(result, Observation | Evidence):
+        return to_canonical_json(result)
+    return json.dumps(result, sort_keys=True, separators=(",", ":"))
+
+
+def _dispatch(path: str, client: ElasticClient) -> Any:
     """Resolve one request path to a stored domain object, or raise ApiError.
 
     ``path.lstrip("/").split("/", 1)`` (not a filtered split) deliberately
@@ -64,8 +90,11 @@ def _dispatch(path: str, client: ElasticClient) -> Observation | Evidence:
     or an unknown resource name) -> :class:`NotFoundError`, 404.
     """
     segments = path.lstrip("/").split("/", 1)
-    if len(segments) != 2:
-        raise NotFoundError(f"no such route: {path!r}")
+    if len(segments) == 1:
+        collection = _COLLECTIONS.get(segments[0])
+        if collection is None:
+            raise NotFoundError(f"no such route: {path!r}")
+        return collection(client)
     resource, raw_identifier = segments
     read_model_fn = _ROUTES.get(resource)
     if read_model_fn is None:
@@ -82,13 +111,12 @@ def make_handler(client: ElasticClient) -> type[BaseHTTPRequestHandler]:
     """
 
     class ReadModelHandler(BaseHTTPRequestHandler):
-        server_version = "AttributionPlatformReadModelAPI/0.1"
+        server_version = "AttributionPlatformReadModelAPI/1.0"
 
         def do_GET(self) -> None:  # noqa: N802 - fixed name required by the base class
             path = urlsplit(self.path).path
             try:
-                domain_object = _dispatch(path, client)
-                self._write_json(HTTPStatus.OK, to_canonical_json(domain_object))
+                self._write_json(HTTPStatus.OK, _serialize(_dispatch(path, client)))
             except ApiError as exc:
                 self._write_json(
                     exc.status_code, json.dumps({"error": exc.message}, sort_keys=True)

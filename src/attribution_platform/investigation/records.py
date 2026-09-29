@@ -1,0 +1,218 @@
+"""Persisted read-model records of an investigation (ADR-0009 D2/D3).
+
+Two new record types, each stored whole in its own index:
+
+- :class:`InvestigationRecord` — one engine run over one source: the source
+  identity and digest, every pinned version used, counts and the unit ids.
+- :class:`AttributionAnalysisRecord` — the Gate 3.3-3.5 attribution analysis of
+  one unit, **explicitly uncalibrated**: candidates, per-hypothesis supporting
+  contributions exactly as ADR-0005 computes them, the observed decision
+  features and the candidate-independent ``Unattributed`` baseline. There is no
+  likelihood, confidence, WEP band, abstention verdict or rank field — the
+  record type cannot carry one (ADR-0009 D3). Hypotheses are kept in id order.
+
+Records are plain JSON (``to_canonical_json``-compatible dataclasses) so the
+read-model API returns them unchanged.
+"""
+
+from __future__ import annotations
+
+import dataclasses
+from collections.abc import Mapping
+from dataclasses import dataclass, field
+from enum import Enum
+from typing import Any
+
+from attribution_platform.dataplane import ElasticClient, ElasticIntegrationError
+
+INVESTIGATIONS_INDEX = "attribution-platform-investigations-v1"
+ATTRIBUTION_ANALYSES_INDEX = "attribution-platform-attribution-analyses-v1"
+INVESTIGATION_SCHEMA_VERSION = "investigation/1"
+ATTRIBUTION_ANALYSIS_SCHEMA_VERSION = "attribution-analysis/1"
+
+_KEYWORD = {"type": "keyword"}
+INVESTIGATIONS_MAPPING: Mapping[str, Any] = {
+    "properties": {
+        "investigation_id": _KEYWORD,
+        "source_id": _KEYWORD,
+        "source_kind": _KEYWORD,
+        "source_sha256": _KEYWORD,
+        "attack_kb_version": _KEYWORD,
+    }
+}
+ATTRIBUTION_ANALYSES_MAPPING: Mapping[str, Any] = {
+    "properties": {
+        "group_id": _KEYWORD,
+        "investigation_id": _KEYWORD,
+        "attack_kb_version": _KEYWORD,
+    }
+}
+
+
+class CalibrationStatus(Enum):
+    """Whether a calibrated decision layer (ADR-0006) stands behind the
+    analysis. Only ``UNCALIBRATED`` exists until a ``calibration_version``
+    does."""
+
+    UNCALIBRATED = "uncalibrated"
+
+
+UNCALIBRATED_NOTE = (
+    "No calibration_version exists yet (ADR-0006: the corpus has not passed the fitting-readiness "
+    "gate), so no likelihood, confidence, WEP band, abstention verdict or ranking is emitted. The "
+    "values below are ADR-0005's documented, explainable quantities: g = share of active ATT&CK "
+    "Groups using the feature, D = 1 - g."
+)
+
+
+@dataclass(frozen=True)
+class ContributionView:
+    feature_technique_ids: tuple[str, ...]
+    diagnosticity_outcome: str
+    g_value: float | None
+    d_value: float | None
+    contribution_value: float
+    assessment_ids: tuple[str, ...]
+
+
+@dataclass(frozen=True)
+class CandidateView:
+    candidate_id: str
+    kind: str  # "group" | "campaign"
+    stix_id: str
+    name: str
+    attack_external_id: str | None
+    generation_basis: tuple[str, ...]
+
+
+@dataclass(frozen=True)
+class HypothesisView:
+    hypothesis_id: str
+    candidate_id: str
+    support_value: float
+    profile_breadth: int | None
+    contributions: tuple[ContributionView, ...]
+
+
+@dataclass(frozen=True)
+class AttributionAnalysisRecord:
+    group_id: str
+    sequence_id: str
+    investigation_id: str
+    attack_kb_version: str
+    min_profile_floor: int
+    observed_feature_technique_ids: tuple[str, ...]
+    unattributed_decision_support: float
+    candidates: tuple[CandidateView, ...]
+    hypotheses: tuple[HypothesisView, ...]
+    calibration_status: CalibrationStatus = CalibrationStatus.UNCALIBRATED
+    calibration_version: None = None
+    calibration_note: str = UNCALIBRATED_NOTE
+    schema_version: str = field(default=ATTRIBUTION_ANALYSIS_SCHEMA_VERSION)
+
+
+@dataclass(frozen=True)
+class InvestigationRecord:
+    investigation_id: str
+    source_id: str
+    source_kind: str  # "recording" | "fixture"
+    source_sha256: str
+    attack_kb_version: str
+    detection_pack_content_hash: str
+    method_versions: Mapping[str, str]
+    observations_persisted: int
+    evidence: int
+    units: tuple[str, ...]
+    schema_version: str = field(default=INVESTIGATION_SCHEMA_VERSION)
+
+
+def _to_json(value: Any) -> Any:
+    if isinstance(value, Enum):
+        return value.value
+    if dataclasses.is_dataclass(value) and not isinstance(value, type):
+        return {f.name: _to_json(getattr(value, f.name)) for f in dataclasses.fields(value)}
+    if isinstance(value, Mapping):
+        return {str(k): _to_json(v) for k, v in sorted(value.items())}
+    if isinstance(value, list | tuple):
+        return [_to_json(v) for v in value]
+    return value
+
+
+def record_to_json(record: AttributionAnalysisRecord | InvestigationRecord) -> dict[str, Any]:
+    """The record as plain JSON-ready data."""
+    return dict(_to_json(record))
+
+
+def _persist(
+    client: ElasticClient, index: str, mapping: Mapping[str, Any], key: str, doc: Any
+) -> None:
+    try:
+        client.ensure_index(index, mapping)
+        client.index_document(index, key, doc)
+    except Exception as exc:  # noqa: BLE001 - one typed error for callers
+        raise ElasticIntegrationError(f"failed to persist {index} document {key!r}: {exc}") from exc
+
+
+def persist_investigation(client: ElasticClient, record: InvestigationRecord) -> None:
+    _persist(
+        client,
+        INVESTIGATIONS_INDEX,
+        INVESTIGATIONS_MAPPING,
+        record.investigation_id,
+        record_to_json(record),
+    )
+
+
+def persist_attribution_analysis(client: ElasticClient, record: AttributionAnalysisRecord) -> None:
+    _persist(
+        client,
+        ATTRIBUTION_ANALYSES_INDEX,
+        ATTRIBUTION_ANALYSES_MAPPING,
+        record.group_id,
+        record_to_json(record),
+    )
+
+
+def _load(client: ElasticClient, index: str, key: str) -> Mapping[str, Any] | None:
+    try:
+        return client.get_document(index, key)
+    except Exception as exc:  # noqa: BLE001
+        raise ElasticIntegrationError(f"failed to load {index} document {key!r}: {exc}") from exc
+
+
+def load_investigation(client: ElasticClient, investigation_id: str) -> Mapping[str, Any] | None:
+    """The stored Investigation record as JSON data, or ``None``."""
+    return _load(client, INVESTIGATIONS_INDEX, investigation_id)
+
+
+def load_attribution_analysis(client: ElasticClient, group_id: str) -> Mapping[str, Any] | None:
+    """The stored attribution analysis of one unit as JSON data, or ``None``."""
+    return _load(client, ATTRIBUTION_ANALYSES_INDEX, group_id)
+
+
+def list_investigations(client: ElasticClient, *, size: int = 100) -> tuple[Mapping[str, Any], ...]:
+    """Stored Investigation records (up to ``size``), sorted by id."""
+    try:
+        client.ensure_index(INVESTIGATIONS_INDEX, INVESTIGATIONS_MAPPING)
+        documents = client.search(INVESTIGATIONS_INDEX, {"match_all": {}}, size=size)
+    except Exception as exc:  # noqa: BLE001
+        raise ElasticIntegrationError(f"failed to list investigations: {exc}") from exc
+    return tuple(sorted(documents, key=lambda d: str(d.get("investigation_id"))))
+
+
+__all__ = [
+    "ATTRIBUTION_ANALYSES_INDEX",
+    "INVESTIGATIONS_INDEX",
+    "AttributionAnalysisRecord",
+    "CalibrationStatus",
+    "CandidateView",
+    "ContributionView",
+    "HypothesisView",
+    "InvestigationRecord",
+    "list_investigations",
+    "load_attribution_analysis",
+    "load_investigation",
+    "persist_attribution_analysis",
+    "persist_investigation",
+    "record_to_json",
+]

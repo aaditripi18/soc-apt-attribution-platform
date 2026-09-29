@@ -34,6 +34,7 @@ from attribution_platform.attack_knowledge.loader import AttackKnowledge
 from attribution_platform.correlation import (
     BehavioralSequence,
     CorrelationGroup,
+    CorrelationLink,
     construct_behavioral_sequence,
     contextualize,
     correlate_structurally,
@@ -79,6 +80,8 @@ class RecordingAnalysis:
     groups: tuple[CorrelationGroup, ...]
     sequences: tuple[BehavioralSequence, ...]
     items: Mapping[str, tuple[Evidence, Observation]] = field(repr=False)
+    structural_links: tuple[CorrelationLink, ...] = field(default=(), repr=False)
+    contextual_links: tuple[CorrelationLink, ...] = field(default=(), repr=False)
 
 
 def load_recording_sources(path: Path, repo_root: Path) -> dict[str, RecordingSource]:
@@ -217,6 +220,8 @@ def analyze_recording(
         groups=contextual.groups,
         sequences=sequences,
         items=by_evidence,
+        structural_links=structural.links,
+        contextual_links=contextual.contextual_links,
     )
 
 

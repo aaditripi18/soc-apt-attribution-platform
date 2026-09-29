@@ -19,8 +19,14 @@ Gate status:
   with no mutation endpoints; ``__main__`` — an optional manual entrypoint
   (``python -m attribution_platform.api``) to run the API against a real
   Elasticsearch once one is available.
-- **Not yet implemented:** search/filter/query endpoints; authentication;
-  attribution endpoints; any frontend files.
+- **ADR-0009 v1 (implemented):** ``GET /health``, ``GET /investigations``,
+  ``GET /investigations/<id>`` and ``GET /units/<group_id>`` over the records an
+  engine investigation run persists (``attribution_platform.investigation``);
+  attribution analyses are explicitly uncalibrated (no likelihood, confidence
+  or ranking field exists).
+- **Not yet implemented:** search/filter endpoints; authentication (the server
+  binds to localhost); calibrated decisions (need a ``calibration_version``);
+  any frontend files.
 """
 
 from __future__ import annotations
