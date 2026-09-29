@@ -43,14 +43,17 @@ from attribution_platform.dataplane import (
     persist_observation,
 )
 from attribution_platform.detection import DetectionEngine
+from attribution_platform.domain import Evidence, Observation
 from attribution_platform.investigation.records import (
     AttributionAnalysisRecord,
     CandidateView,
     ContributionView,
     HypothesisView,
     InvestigationRecord,
+    UnitSummaryRecord,
     persist_attribution_analysis,
     persist_investigation,
+    persist_unit_summary,
 )
 from attribution_platform.replay import (
     DetectionReplayFixture,
@@ -58,7 +61,7 @@ from attribution_platform.replay import (
 )
 from attribution_platform.replay.recording_pipeline import RecordingSource, analyze_recording
 
-INVESTIGATION_METHOD_VERSION = "1.0"
+INVESTIGATION_METHOD_VERSION = "1.1"  # 1.1: unit summaries (ADR-0009 Amendment A)
 #: ADR-0005 §D16 structural lower bound; the fitted floor needs a calibration_version.
 STRUCTURAL_MIN_PROFILE_FLOOR = 1
 
@@ -154,6 +157,40 @@ def analyze_unit(
     )
 
 
+def summarize_unit(
+    group: CorrelationGroup,
+    sequence: BehavioralSequence,
+    analysis: AttributionAnalysisRecord,
+    members: Mapping[str, tuple[Evidence, Observation]],
+) -> UnitSummaryRecord:
+    """The queryable facts of one unit (ADR-0009 Amendment A1), read off its
+    own Evidence and Observations and its attribution analysis."""
+    pairs = [members[evidence_id] for evidence_id in group.member_evidence_ids]
+    observations = {o.observation_id: o for _, o in pairs}
+    techniques: set[str] = set()
+    for evidence, _ in pairs:
+        external = evidence.attack_ref.external_id if evidence.attack_ref else None
+        if external:
+            techniques.add(external)
+            techniques.add(external.split(".", 1)[0])  # parent technique
+    times = sorted(o.timestamp for o in observations.values())
+    return UnitSummaryRecord(
+        group_id=group.group_id,
+        investigation_id=analysis.investigation_id,
+        host_names=tuple(
+            sorted({o.host.name.lower() for o in observations.values() if o.host and o.host.name})
+        ),
+        first_seen=times[0].isoformat(),
+        last_seen=times[-1].isoformat(),
+        technique_ids=tuple(sorted(techniques)),
+        candidate_ids=tuple(
+            sorted({c.attack_external_id for c in analysis.candidates if c.attack_external_id})
+        ),
+        evidence=len(pairs),
+        steps=len(sequence.steps),
+    )
+
+
 def run_investigation(
     source: RecordingSource | DetectionReplayFixture,
     *,
@@ -185,6 +222,7 @@ def run_investigation(
             persist_correlation_link(client, link)
         groups, sequences = analysis.groups, analysis.sequences
         evidence_count = len(analysis.items)
+        members: dict[str, tuple[Evidence, Observation]] = dict(analysis.items)
     else:
         result = replay_fixture_through_behavioral_sequences(
             source, client=client, engine=engine, knowledge=knowledge
@@ -196,6 +234,11 @@ def run_investigation(
             for r in result.correlation_result.detection_results
         }
         evidence_count = sum(len(r.evidences) for r in result.correlation_result.detection_results)
+        members = {
+            e.evidence_id: (e, r.observation)
+            for r in result.correlation_result.detection_results
+            for e in r.evidences
+        }
 
     sequence_by_group = {s.group_id: s for s in sequences}
     for group in groups:
@@ -203,10 +246,11 @@ def run_investigation(
         sequence = sequence_by_group[group.group_id]
         if isinstance(source, RecordingSource):
             persist_behavioral_sequence(client, sequence)
-        persist_attribution_analysis(
-            client,
-            analyze_unit(group, sequence, investigation_id=investigation_id, knowledge=knowledge),
+        analysis_record = analyze_unit(
+            group, sequence, investigation_id=investigation_id, knowledge=knowledge
         )
+        persist_attribution_analysis(client, analysis_record)
+        persist_unit_summary(client, summarize_unit(group, sequence, analysis_record, members))
 
     record = InvestigationRecord(
         investigation_id=investigation_id,
@@ -224,4 +268,4 @@ def run_investigation(
     return record
 
 
-__all__ = ["INVESTIGATION_METHOD_VERSION", "analyze_unit", "run_investigation"]
+__all__ = ["INVESTIGATION_METHOD_VERSION", "analyze_unit", "run_investigation", "summarize_unit"]

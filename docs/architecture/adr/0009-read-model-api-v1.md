@@ -84,3 +84,28 @@ like `python -m attribution_platform.api` (shared `elasticsearch_client_from_env
 the API run's investigation id exactly (determinism across runs). *Fix found on the way:* mutation methods are now
 refused explicitly (501, body drained first); previously the server answered before reading a request body and
 Windows clients intermittently saw a connection reset instead of the 501 (a pre-existing flaky test).
+
+## Amendment A (2026-09-29) — Unit search and filtering
+
+- **Status:** ACCEPTED (owner "go ahead" on the recommended search task).
+- **A1 — Unit summaries are written by the engine.** Each investigation also persists one `UnitSummaryRecord` per
+  unit (index `attribution-platform-unit-summaries-v1`, keyword fields): group id, investigation id, host names
+  (lower-cased — Windows host names are case-insensitive), first / last event time, ATT&CK technique ids observed
+  **plus their parent techniques** (so `T1059` finds units with `T1059.001`), candidate Group / Campaign ATT&CK ids,
+  evidence and step counts. The API still computes nothing.
+- **A2 — Routes.** `GET /units?investigation=&technique=&host=&candidate=&limit=` and
+  `GET /investigations/{id}/units` (the same search scoped to one investigation). Filters are AND-ed exact matches;
+  `technique` must look like `T1234` / `T1234.001`, `candidate` like `G1234` / `C1234`; `limit` 1–1000 (default
+  100). Unknown or malformed parameters → 400.
+- **A3 — Exactness on every backend.** The query is sent to Elasticsearch as a `bool` filter, and every returned
+  summary is re-checked against the same filter before it is served — results are exact whether or not the backend
+  applied the query (the in-memory test backend does not). Results are sorted by (first event, group id); when the
+  number of hits reaches `limit` the response says `truncated: true` (v1 has no cursor paging).
+- **Implementation record (2026-09-29).** `UnitSummaryRecord` + `persist_unit_summary` / `search_unit_summaries`
+  (investigation method 1.1 writes one per unit); `search_units` in the read model (strict validation, `bool`/`term`
+  query, per-result re-check, deterministic sort, `truncated`); routes `/units?…` and
+  `/investigations/{id}/units` (repeated or unknown parameters → 400; parameters on id routes → 400). 24 tests,
+  including the exact Query DSL sent to Elasticsearch. On the real APT3 Empire investigation: `technique=T1059`
+  finds the three PowerShell units (parent-technique match), `candidate=G0022` the three units with APT3 as a
+  candidate (not the pass-the-hash unit, whose technique APT3's ATT&CK profile lacks), `technique=T1550.002&host=…`
+  exactly the one pass-the-hash unit. 1,822 tests pass.

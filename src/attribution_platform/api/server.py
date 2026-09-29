@@ -20,6 +20,8 @@ Routes (all GET, nothing else) — G0.10 plus ADR-0009 v1:
 - ``GET /investigations`` and ``GET /investigations/<investigation_id>``
 - ``GET /units/<group_id>`` (correlation group + behavioral sequence +
   uncalibrated attribution analysis)
+- ``GET /units?investigation=&technique=&host=&candidate=&limit=`` and
+  ``GET /investigations/<investigation_id>/units`` (ADR-0009 Amendment A)
 - ``GET /observations/<observation_id>``
 - ``GET /evidence/<evidence_id>``
 
@@ -42,20 +44,22 @@ connection-reset on Windows when it was not).
 from __future__ import annotations
 
 import json
-from collections.abc import Callable
+from collections.abc import Callable, Mapping
 from http import HTTPStatus
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from typing import Any
-from urllib.parse import unquote, urlsplit
+from urllib.parse import parse_qs, unquote, urlsplit
 
-from attribution_platform.api.errors import ApiError, NotFoundError
+from attribution_platform.api.errors import ApiError, InvalidIdentifierError, NotFoundError
 from attribution_platform.api.read_model import (
+    UNIT_SEARCH_PARAMETERS,
     get_evidence,
     get_health,
     get_investigation,
     get_observation,
     get_unit,
     list_investigation_summaries,
+    search_units,
 )
 from attribution_platform.dataplane import ElasticClient
 from attribution_platform.domain import Evidence, Observation, to_canonical_json
@@ -71,10 +75,29 @@ _ROUTES: dict[str, Callable[[ElasticClient, str], Any]] = {
 _MAX_DRAINED_BODY = 1 << 20
 
 #: Collection routes (no identifier).
-_COLLECTIONS: dict[str, Callable[[ElasticClient], Any]] = {
-    "health": get_health,
-    "investigations": list_investigation_summaries,
+_COLLECTIONS: dict[str, Callable[[ElasticClient, Mapping[str, str]], Any]] = {
+    "health": lambda client, _params: get_health(client),
+    "investigations": lambda client, _params: list_investigation_summaries(client),
+    "units": search_units,
 }
+#: Query parameters each collection accepts (anything else -> 400).
+_COLLECTION_PARAMETERS: dict[str, frozenset[str]] = {
+    "health": frozenset(),
+    "investigations": frozenset(),
+    "units": UNIT_SEARCH_PARAMETERS,
+}
+_UNITS_SUFFIX = "/units"
+
+
+def _parameters(query: str) -> dict[str, str]:
+    """Query-string parameters; a repeated parameter is refused (400)."""
+    parsed = parse_qs(query, keep_blank_values=True, strict_parsing=False)
+    repeated = sorted(name for name, values in parsed.items() if len(values) > 1)
+    if repeated:
+        raise InvalidIdentifierError(
+            f"query parameter(s) given more than once: {', '.join(repeated)}"
+        )
+    return {name: values[0] for name, values in parsed.items()}
 
 
 def _serialize(result: Any) -> str:
@@ -85,7 +108,7 @@ def _serialize(result: Any) -> str:
     return json.dumps(result, sort_keys=True, separators=(",", ":"))
 
 
-def _dispatch(path: str, client: ElasticClient) -> Any:
+def _dispatch(path: str, client: ElasticClient, query: str = "") -> Any:
     """Resolve one request path to a stored domain object, or raise ApiError.
 
     ``path.lstrip("/").split("/", 1)`` (not a filtered split) deliberately
@@ -94,13 +117,26 @@ def _dispatch(path: str, client: ElasticClient) -> Any:
     an unrecognized route shape (``"/observations"`` with no trailing slash,
     or an unknown resource name) -> :class:`NotFoundError`, 404.
     """
+    params = _parameters(query)
     segments = path.lstrip("/").split("/", 1)
     if len(segments) == 1:
         collection = _COLLECTIONS.get(segments[0])
         if collection is None:
             raise NotFoundError(f"no such route: {path!r}")
-        return collection(client)
+        unknown = sorted(set(params) - _COLLECTION_PARAMETERS[segments[0]])
+        if unknown:
+            raise InvalidIdentifierError(f"unknown query parameter(s): {', '.join(unknown)}")
+        return collection(client, params)
     resource, raw_identifier = segments
+    if resource == "investigations" and raw_identifier.endswith(_UNITS_SUFFIX):
+        # /investigations/{id}/units: the unit search scoped to one investigation
+        if "investigation" in params:
+            raise InvalidIdentifierError("the investigation is given by the path, not a parameter")
+        investigation_id = unquote(raw_identifier[: -len(_UNITS_SUFFIX)])
+        get_investigation(client, investigation_id)  # 400 / 404 if absent
+        return search_units(client, {**params, "investigation": investigation_id})
+    if params:
+        raise InvalidIdentifierError("this route takes no query parameters")
     read_model_fn = _ROUTES.get(resource)
     if read_model_fn is None:
         raise NotFoundError(f"no such route: {path!r}")
@@ -119,9 +155,10 @@ def make_handler(client: ElasticClient) -> type[BaseHTTPRequestHandler]:
         server_version = "AttributionPlatformReadModelAPI/1.0"
 
         def do_GET(self) -> None:  # noqa: N802 - fixed name required by the base class
-            path = urlsplit(self.path).path
+            parts = urlsplit(self.path)
+            path, query = parts.path, parts.query
             try:
-                self._write_json(HTTPStatus.OK, _serialize(_dispatch(path, client)))
+                self._write_json(HTTPStatus.OK, _serialize(_dispatch(path, client, query)))
             except ApiError as exc:
                 self._write_json(
                     exc.status_code, json.dumps({"error": exc.message}, sort_keys=True)

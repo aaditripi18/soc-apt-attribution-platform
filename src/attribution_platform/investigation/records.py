@@ -27,7 +27,9 @@ from attribution_platform.dataplane import ElasticClient, ElasticIntegrationErro
 
 INVESTIGATIONS_INDEX = "attribution-platform-investigations-v1"
 ATTRIBUTION_ANALYSES_INDEX = "attribution-platform-attribution-analyses-v1"
+UNIT_SUMMARIES_INDEX = "attribution-platform-unit-summaries-v1"
 INVESTIGATION_SCHEMA_VERSION = "investigation/1"
+UNIT_SUMMARY_SCHEMA_VERSION = "unit-summary/1"
 ATTRIBUTION_ANALYSIS_SCHEMA_VERSION = "attribution-analysis/1"
 
 _KEYWORD = {"type": "keyword"}
@@ -45,6 +47,19 @@ ATTRIBUTION_ANALYSES_MAPPING: Mapping[str, Any] = {
         "group_id": _KEYWORD,
         "investigation_id": _KEYWORD,
         "attack_kb_version": _KEYWORD,
+    }
+}
+
+
+UNIT_SUMMARIES_MAPPING: Mapping[str, Any] = {
+    "properties": {
+        "group_id": _KEYWORD,
+        "investigation_id": _KEYWORD,
+        "host_names": _KEYWORD,
+        "technique_ids": _KEYWORD,
+        "candidate_ids": _KEYWORD,
+        "first_seen": {"type": "date"},
+        "last_seen": {"type": "date"},
     }
 }
 
@@ -126,6 +141,24 @@ class InvestigationRecord:
     schema_version: str = field(default=INVESTIGATION_SCHEMA_VERSION)
 
 
+@dataclass(frozen=True)
+class UnitSummaryRecord:
+    """The queryable facts of one attribution unit (ADR-0009 Amendment A1).
+    ``technique_ids`` holds the observed ATT&CK technique ids and their parent
+    techniques; ``host_names`` are lower-cased."""
+
+    group_id: str
+    investigation_id: str
+    host_names: tuple[str, ...]
+    first_seen: str
+    last_seen: str
+    technique_ids: tuple[str, ...]
+    candidate_ids: tuple[str, ...]
+    evidence: int
+    steps: int
+    schema_version: str = field(default=UNIT_SUMMARY_SCHEMA_VERSION)
+
+
 def _to_json(value: Any) -> Any:
     if isinstance(value, Enum):
         return value.value
@@ -138,7 +171,9 @@ def _to_json(value: Any) -> Any:
     return value
 
 
-def record_to_json(record: AttributionAnalysisRecord | InvestigationRecord) -> dict[str, Any]:
+def record_to_json(
+    record: AttributionAnalysisRecord | InvestigationRecord | UnitSummaryRecord,
+) -> dict[str, Any]:
     """The record as plain JSON-ready data."""
     return dict(_to_json(record))
 
@@ -171,6 +206,27 @@ def persist_attribution_analysis(client: ElasticClient, record: AttributionAnaly
         record.group_id,
         record_to_json(record),
     )
+
+
+def persist_unit_summary(client: ElasticClient, record: UnitSummaryRecord) -> None:
+    _persist(
+        client,
+        UNIT_SUMMARIES_INDEX,
+        UNIT_SUMMARIES_MAPPING,
+        record.group_id,
+        record_to_json(record),
+    )
+
+
+def search_unit_summaries(
+    client: ElasticClient, query: Mapping[str, Any], *, size: int
+) -> tuple[Mapping[str, Any], ...]:
+    """Unit summaries matching ``query`` (Query DSL), at most ``size``."""
+    try:
+        client.ensure_index(UNIT_SUMMARIES_INDEX, UNIT_SUMMARIES_MAPPING)
+        return client.search(UNIT_SUMMARIES_INDEX, query, size=size)
+    except Exception as exc:  # noqa: BLE001
+        raise ElasticIntegrationError(f"failed to search unit summaries: {exc}") from exc
 
 
 def _load(client: ElasticClient, index: str, key: str) -> Mapping[str, Any] | None:
@@ -209,7 +265,11 @@ __all__ = [
     "ContributionView",
     "HypothesisView",
     "InvestigationRecord",
+    "UNIT_SUMMARIES_INDEX",
+    "UnitSummaryRecord",
     "list_investigations",
+    "persist_unit_summary",
+    "search_unit_summaries",
     "load_attribution_analysis",
     "load_investigation",
     "persist_attribution_analysis",

@@ -27,6 +27,7 @@ the full rationale):
 
 from __future__ import annotations
 
+import re
 from collections.abc import Mapping
 from typing import Any
 
@@ -44,6 +45,7 @@ from attribution_platform.investigation.records import (
     list_investigations,
     load_attribution_analysis,
     load_investigation,
+    search_unit_summaries,
 )
 
 
@@ -144,3 +146,96 @@ def get_health(client: ElasticClient) -> dict[str, Any]:
     except ElasticIntegrationError:
         backend = "unreachable"
     return {"status": "ok", "backend": backend, "api": "read-model/1"}
+
+
+# ---------------------------------------------------------------------------
+# ADR-0009 Amendment A: unit search
+# ---------------------------------------------------------------------------
+
+_TECHNIQUE_ID = re.compile(r"^T\d{4}(\.\d{3})?$")
+_CANDIDATE_ID = re.compile(r"^[GC]\d{4}$")
+UNIT_SEARCH_PARAMETERS = frozenset({"investigation", "technique", "host", "candidate", "limit"})
+DEFAULT_UNIT_LIMIT = 100
+MAX_UNIT_LIMIT = 1000
+
+
+def _unit_filters(params: Mapping[str, str]) -> tuple[dict[str, str], int]:
+    unknown = sorted(set(params) - UNIT_SEARCH_PARAMETERS)
+    if unknown:
+        raise InvalidIdentifierError(f"unknown query parameter(s): {', '.join(unknown)}")
+    filters: dict[str, str] = {}
+    for name in ("investigation", "technique", "host", "candidate"):
+        if name not in params:
+            continue
+        value = params[name].strip()
+        if not value:
+            raise InvalidIdentifierError(f"query parameter {name!r} must not be empty")
+        if name == "technique" and not _TECHNIQUE_ID.match(value):
+            raise InvalidIdentifierError(
+                f"technique must look like T1234 or T1234.001, got {value!r}"
+            )
+        if name == "candidate" and not _CANDIDATE_ID.match(value):
+            raise InvalidIdentifierError(f"candidate must look like G1234 or C1234, got {value!r}")
+        filters[name] = value.lower() if name == "host" else value
+    limit = DEFAULT_UNIT_LIMIT
+    if "limit" in params:
+        try:
+            limit = int(params["limit"])
+        except ValueError as exc:
+            raise InvalidIdentifierError(
+                f"limit must be an integer, got {params['limit']!r}"
+            ) from exc
+        if not 1 <= limit <= MAX_UNIT_LIMIT:
+            raise InvalidIdentifierError(f"limit must be between 1 and {MAX_UNIT_LIMIT}")
+    return filters, limit
+
+
+#: Filter name -> the unit-summary field it matches (keyword, exact).
+_FILTER_FIELDS = {
+    "investigation": "investigation_id",
+    "technique": "technique_ids",
+    "host": "host_names",
+    "candidate": "candidate_ids",
+}
+
+
+def _matches(summary: Mapping[str, Any], filters: Mapping[str, str]) -> bool:
+    for name, value in filters.items():
+        stored = summary.get(_FILTER_FIELDS[name])
+        values = stored if isinstance(stored, list | tuple) else [stored]
+        if value not in values:
+            return False
+    return True
+
+
+def search_units(client: ElasticClient, params: Mapping[str, str]) -> dict[str, Any]:
+    """Unit summaries matching every given filter (ADR-0009 Amendment A):
+    filtered by Elasticsearch, then re-checked here so results are exact on
+    every backend; sorted by (first event, group id)."""
+    filters, limit = _unit_filters(params)
+    query: dict[str, Any] = (
+        {
+            "bool": {
+                "filter": [
+                    {"term": {_FILTER_FIELDS[name]: value}}
+                    for name, value in sorted(filters.items())
+                ]
+            }
+        }
+        if filters
+        else {"match_all": {}}
+    )
+    try:
+        hits = search_unit_summaries(client, query, size=limit)
+    except ElasticIntegrationError as exc:
+        raise BackendError(f"could not search units: {exc}") from exc
+    units = sorted(
+        (dict(h) for h in hits if _matches(h, filters)),
+        key=lambda u: (str(u.get("first_seen")), str(u.get("group_id"))),
+    )
+    return {
+        "filters": filters,
+        "limit": limit,
+        "truncated": len(hits) >= limit,
+        "units": units,
+    }
