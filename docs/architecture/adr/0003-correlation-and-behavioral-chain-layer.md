@@ -802,3 +802,48 @@ the `-uN` numbering of equal-sized *excluded* APT29 units permutes, because the 
 group id. The rebuilt corpus (`calibration-corpus-version::25531bf9…`, 14 cases) has the unchanged readiness
 verdict: not ready, the same six violations. The test
 `test_member_set_ids_have_a_fixed_length_whatever_the_member_count` pins the length independence.
+
+## Amendment E (2026-10-01) — Process identity requires the acting principal to be the process's own (B3)
+
+**Status:** Accepted (owner delegation: "whatever is recommended, go ahead").
+
+**Problem (measured, latent).** Amendment B binds any pid-only Observation to the process instance that owned
+the pid (B1). Windows Security events record the *acting* account (`Subject*`) beside the process that performed
+the operation, and for service processes the two differ: the service impersonates the client it serves. On the
+four OTRF attack recordings, **2,042** Security Observations resolved to such a shared service instance acting
+for another account — e.g. 180 object-access events of `WmiPrvSE.exe` (NETWORK SERVICE) serving `pgustavo`
+(APT3 CALDERA), 761 privileged-service events of `svchost.exe` (SYSTEM) serving `dschrute` (APT29 day 2), and
+`lsass.exe` serving `pbeesly` / `dschrute`. Few carried Evidence yet, so no unit had been merged wrongly; but any
+rule firing on them would have grouped unrelated principals' activity under one "same process instance" —
+exactly the hub merge §6 forbids for hosts and users. Domain-controller events (`lsass.exe` serving a remote
+client) are refused today only because the DC's lsass start was never recorded; a recording that captured a DC
+boot would have glued every client's reconnaissance together.
+
+**Decision (B3).** A pid-only Observation is bound to the instance B1 selects only if its acting principal is
+consistent with the instance owner (the `user` of the proving process-start Observation). Consistent when:
+either principal is unknown or logged as `-` (nothing proves impersonation — e.g. PowerShell logging, which
+records only a SID); the account names are equal (case-insensitive); or the owner is a built-in service account
+(SYSTEM, LOCAL SERVICE, NETWORK SERVICE) and the event names the host's own machine account `HOST$` — the same
+identity in its network form, which is how Windows logs SYSTEM's own actions. Otherwise the Observation stays
+unresolved with the new reason `PRINCIPAL_MISMATCH`, and it forms no structural link. Source-agnostic: only
+`user`, `host` and `process` are read. `PROCESS_IDENTITY_METHOD_VERSION` 1.0 → 1.1.
+
+**Why this is the right line.** Structural means "same instance of execution" (§5). A service thread executing
+on behalf of another principal is that principal's request, not a continuation of the service's own behavior;
+the service instance is a *container* for many principals' requests — the contextual case. The rule is
+conservative in the safe direction: it only removes bindings, never adds one, and it never infers a principal.
+
+**What it keeps.** The APT29 day-2 explicit-credential logons (4648) by `dschrute`'s `powershell.exe` still
+bind to that process (same principal) and stay in the lateral-movement unit; SYSTEM's own actions logged as
+`HOST$` (16,442 Observations on the four recordings) and 17 with no acting account logged still bind.
+
+**Measured effect.** Refused as `PRINCIPAL_MISMATCH`: APT3 CALDERA 186, Empire 13, APT29 day 1 140, day 2
+1,703. Every corpus v2 unit is unchanged (by anchor and Evidence count), labels are identical and the readiness
+verdict is unchanged — the rule removes latent hub bindings; none had yet merged a unit.
+
+**Not decided here — for the owner.** Domain-controller events (Kerberos 4768/4769/4771, SAM / directory
+access 4661/4662, network logons, share access) have no client-side process this telemetry can prove: the
+client's network requests are made by `lsass` / the kernel, which are hubs themselves. They therefore stay
+outside units, and a single-Evidence Observation forms no group (§8), so e.g. a lone Kerberoasting detection is
+not attribution-visible. Whether a lone Evidence should become a unit of its own is an attribution-semantics
+decision (it changes what `support(h)` counts), recorded as an open question rather than taken silently.

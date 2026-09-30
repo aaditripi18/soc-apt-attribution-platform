@@ -8,6 +8,7 @@ CALDERA recording.
 
 from __future__ import annotations
 
+import dataclasses
 import io
 import json
 import tarfile
@@ -29,6 +30,7 @@ from attribution_platform.domain import (
     ProcessRef,
     SourceRef,
     TimePrecision,
+    UserRef,
 )
 from attribution_platform.sources.sysmon import SysmonSourceAdapter
 
@@ -140,6 +142,39 @@ def test_host_scoped_and_collector_identities_left_alone() -> None:
     assert result.resolved == () and result.unresolved == ()
 
 
+def _as(observation: Observation, name: str | None, domain: str | None = None) -> Observation:
+    return dataclasses.replace(observation, user=UserRef(name=name, domain=domain))
+
+
+@pytest.mark.parametrize(
+    ("owner", "acting", "resolved"),
+    [
+        (("dschrute", "DMEVALS"), ("dschrute", "DMEVALS"), True),  # the process's own account
+        (("DSchrute", "DMEVALS"), ("dschrute", "dmevals"), True),  # names are case-insensitive
+        (("SYSTEM", "NT AUTHORITY"), ("WIN-HOST$", "LAB"), True),  # SYSTEM as the machine account
+        (("NETWORK SERVICE", "NT AUTHORITY"), ("win-host$", "LAB"), True),
+        (("SYSTEM", "NT AUTHORITY"), ("OTHER-HOST$", "LAB"), False),  # another machine
+        (("SYSTEM", "NT AUTHORITY"), ("pgustavo", "SHIRE"), False),  # lsass serving a user
+        (("NETWORK SERVICE", "NT AUTHORITY"), ("pgustavo", "SHIRE"), False),  # WmiPrvSE
+        (("dschrute", "DMEVALS"), ("mscott", "DMEVALS"), False),
+        (("SYSTEM", "NT AUTHORITY"), ("-", "-"), True),  # no acting account logged
+        (("SYSTEM", "NT AUTHORITY"), None, True),  # unknown: nothing proves impersonation
+        (None, ("pgustavo", "SHIRE"), True),
+    ],
+)
+def test_b3_principal_consistency(
+    owner: tuple[str, str] | None, acting: tuple[str, str] | None, resolved: bool
+) -> None:
+    start, event = _start("s", 0, "A"), _pid_only()
+    if owner is not None:
+        start = _as(start, *owner)
+    if acting is not None:
+        event = _as(event, *acting)
+    binding, reason = _one([start, event, _end("e", 20, "A")])
+    assert (binding is not None) is resolved
+    assert reason == (None if resolved else UnresolvedReason.PRINCIPAL_MISMATCH)
+
+
 def test_deterministic_regardless_of_input_order() -> None:
     observations = [_start("s", 0, "A"), _end("e", 20, "A"), _pid_only("ps"), _pid_only("ps2", 12)]
     assert resolve_process_identities(observations) == resolve_process_identities(
@@ -222,3 +257,56 @@ def test_real_caldera_powershell_events_resolve_to_powershell_hosts() -> None:
         for r in powershell
     }
     assert owners == {"powershell.exe"}  # never consulted by the resolver
+
+
+RECORDINGS = REPO_ROOT / "data" / "calibration" / "corpus" / "v2" / "recordings.json"
+
+
+@pytest.mark.skipif(not CALDERA.is_file(), reason="corpus telemetry cache not present")
+def test_real_caldera_wmi_provider_serving_the_user_is_not_bound() -> None:
+    """B3 on real data (Amendment E): WmiPrvSE.exe, running as NETWORK SERVICE,
+    logs 186 object-access events on behalf of the emulated user ``pgustavo``.
+    They are refused, never bound to the shared provider instance; the user's
+    own processes' Security events still bind."""
+    from attribution_platform.replay.recording_pipeline import (
+        DEFAULT_CHANNEL_ADAPTERS,
+        iter_recording_records,
+        load_recording_sources,
+    )
+    from attribution_platform.sources.errors import SourceAdapterError
+    from attribution_platform.sources.precedence import apply_source_precedence
+
+    source = load_recording_sources(RECORDINGS, REPO_ROOT)["otrf-apt3-caldera"]
+    observations: dict[str, Observation] = {}
+    for record in iter_recording_records(source.path):
+        channel = str(
+            (record.get("winlog") or {}).get("channel") or record.get("Channel") or ""
+        ).casefold()
+        adapter = DEFAULT_CHANNEL_ADAPTERS.get(channel)
+        if adapter is None:
+            continue
+        try:
+            for obs in adapter.to_observations(record):
+                observations.setdefault(obs.observation_id, obs)
+        except SourceAdapterError:
+            continue
+    kept = apply_source_precedence(
+        sorted(observations.values(), key=lambda o: o.observation_id), source.declared_sources
+    ).kept
+    by_id = {o.observation_id: o for o in kept}
+    result = resolve_process_identities(kept)
+    mismatched = [
+        by_id[oid]
+        for oid, reason in result.unresolved
+        if reason is UnresolvedReason.PRINCIPAL_MISMATCH
+    ]
+    assert len(mismatched) == 186
+    assert {(o.process.name, o.user.name) for o in mismatched} == {  # type: ignore[union-attr]
+        ("WmiPrvSE.exe", "pgustavo")
+    }
+    security_bound = [
+        r
+        for r in result.resolved
+        if by_id[r.observation_id].raw_reference.source_type == "windows_security"
+    ]
+    assert security_bound  # the user's own processes' events still bind

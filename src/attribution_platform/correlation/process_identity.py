@@ -25,6 +25,12 @@ time *t*:
    process ends at all (at least one end Observation on *h*); otherwise absence
    proves nothing → ``NO_END_COVERAGE``.
 
+3. *Same principal (B3, Amendment E).* The event's acting account must be the
+   instance owner's: when both are known and differ (other than the built-in
+   service accounts' machine-account form ``HOST$``), the process was acting on
+   behalf of another principal — e.g. ``lsass`` / ``svchost`` / ``WmiPrvSE``
+   serving a user — and the event is not bound (``PRINCIPAL_MISMATCH``).
+
 A pid is unique among *live* processes, so a start at or before *t* with no end
 before *t*, and no later start of the same pid before *t*, identifies the owner
 exactly. Timestamps are compared at their common declared precision
@@ -42,10 +48,10 @@ from dataclasses import dataclass
 from enum import Enum
 
 from attribution_platform.correlation.timing import is_confidently_before
-from attribution_platform.domain import Observation
+from attribution_platform.domain import Observation, UserRef
 
 PROCESS_IDENTITY_METHOD = "process-identity-resolution"
-PROCESS_IDENTITY_METHOD_VERSION = "1.0"
+PROCESS_IDENTITY_METHOD_VERSION = "1.1"  # 1.1: B3 principal consistency (Amendment E)
 
 
 class ResolutionBasis(Enum):
@@ -63,6 +69,7 @@ class UnresolvedReason(Enum):
     AMBIGUOUS_START = "ambiguous_start"
     ENDED_BEFORE = "ended_before"
     NO_END_COVERAGE = "no_end_coverage"
+    PRINCIPAL_MISMATCH = "principal_mismatch"
 
 
 @dataclass(frozen=True)
@@ -130,6 +137,36 @@ def _is_lifecycle(observation: Observation, kind: str) -> bool:
     )
 
 
+#: Windows' built-in service accounts. On the local host they act under their
+#: own names; toward the domain (and in many Security events about their own
+#: actions) SYSTEM and NETWORK SERVICE appear as the machine account ``HOST$``.
+_SERVICE_ACCOUNTS = frozenset({"system", "local service", "network service"})
+_NO_VALUE = frozenset({"", "-"})
+
+
+def _account_name(user: UserRef | None) -> str | None:
+    if user is None or user.name is None or user.name.strip() in _NO_VALUE:
+        return None
+    return user.name.strip().casefold()
+
+
+def _principals_consistent(observation: Observation, start: Observation) -> bool:
+    """B3 (ADR-0003 Amendment E): the acting principal an event records must be
+    the process instance's own. A service process (``lsass``, ``svchost``,
+    ``WmiPrvSE``) acting on behalf of another account is not that account's
+    thread of behavior; binding its events to the instance would group
+    unrelated principals' activity. Consistent when either principal is
+    unknown (nothing proves impersonation), when the names match, or when the
+    owner is a built-in service account and the event names the host's machine
+    account (the same identity in its network form)."""
+    acting, owner = _account_name(observation.user), _account_name(start.user)
+    if acting is None or owner is None or acting == owner:
+        return True
+    host = observation.host.name if observation.host is not None else None
+    machine = f"{host.split('.', 1)[0]}$".casefold() if host else None
+    return owner in _SERVICE_ACCOUNTS and acting == machine
+
+
 def _needs_resolution(observation: Observation) -> bool:
     process = observation.process
     return process is not None and process.pid is not None and not (process.entity_id or "").strip()
@@ -195,6 +232,9 @@ def resolve_process_identities(observations: Iterable[Observation]) -> ProcessId
             basis, end_id = ResolutionBasis.START_NOT_ENDED, None
         else:
             unresolved.append((observation.observation_id, UnresolvedReason.NO_END_COVERAGE))
+            continue
+        if not _principals_consistent(observation, latest):
+            unresolved.append((observation.observation_id, UnresolvedReason.PRINCIPAL_MISMATCH))
             continue
         resolved.append(
             ResolvedProcessIdentity(

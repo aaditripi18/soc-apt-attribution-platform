@@ -402,13 +402,16 @@ and PowerShell after real 4103/4104 samples are found. D1's list is otherwise un
   ×80 — 37 in user sessions inside attack windows, **43 by DC machine accounts** (routine). That rule's noise is
   measured and left to diagnosticity / calibration (ADR-0007), not suppressed; the golden test pins 11 of 13
   sample matches as machine-account.
-- *Known limitation — Security evidence does not yet reach attribution:* every corpus unit is unchanged (labels
-  identical, readiness verdict unchanged). Security events carry no process GUID, so structural correlation
-  cannot attach them to the process chains, and a single-rule Security Observation forms no unit of its own.
-  Correlating them (logon sessions: `SubjectLogonId` ↔ 4624 `TargetLogonId`; host + pid + time to Sysmon) is the
-  next correlation task.
+- *Correlation (corrected 2026-10-01):* Security Evidence whose logged process is the *actor* joins units through
+  Amendment B's pid resolution — the 8 explicit-credential logons joined `dschrute`'s PowerShell unit on UTICA
+  (2,103 → 2,111 Evidence, + T1078); an earlier note here that no Security evidence reaches attribution was
+  wrong (units were compared by count only). Events whose logged process is a *service acting for another
+  account* must not bind — ADR-0003 Amendment E (B3). Domain-controller evidence (Kerberos, SAM / directory,
+  network logons, shares) has no provable client-side process and stays outside units; a lone Evidence forms no
+  group — an open owner question recorded in Amendment E.
 - *Acceptance (D2):* exact mapping ✓, fail-closed ✓, real-sample golden tests ✓ (75 tests), source-agnostic ✓,
-  persistence round-trip ✓, Sigma wiring ✓, evidence type ✓; correlation facts ✗ (limitation above).
+  persistence round-trip ✓, Sigma wiring ✓, evidence type ✓; correlation facts ✓ for actor-process events, ✗ for
+  domain-controller events (above).
 
 **Record-shape readiness for the corpus recordings (2026-09-25).**
 
