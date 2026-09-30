@@ -1,7 +1,8 @@
-"""The Windows Security event log SourceAdapter (ADR-0008 Wave 1, batch A).
+"""The Windows Security event log SourceAdapter (ADR-0008 Wave 1, batches A and B).
 
 Converts Windows ``Security`` channel events into Observations. Supported
-(each verified on real OTRF samples; any other event ID fails closed):
+(each verified on real OTRF samples; any other event ID fails closed).
+Batch A:
 
 - **4688** process creation → ``process`` (start). No process GUID exists in
   this event, so it forms no structural correlation link; where Sysmon is
@@ -15,21 +16,45 @@ Converts Windows ``Security`` channel events into Observations. Supported
 - **5140 / 5145** network share accessed / share object checked → ``share``,
   ``object_access`` (type, mask, list) and ``network.source``.
 
+Batch B (the acting session's ``SubjectLogonId`` → ``logon.subject_logon_id``
+throughout):
+
+- **4625** failed logon (as 4624, plus status, sub-status, failure reason);
+  **4648** logon with explicit credentials (``logon.target_server_name`` /
+  ``target_info``); **4611** logon process registered.
+- **4768 / 4769 / 4771** Kerberos TGT / service ticket / pre-auth failure →
+  ``service`` (``ServiceName`` / ``ServiceSid``), ``kerberos`` (options,
+  encryption type, pre-auth type, certificate thumbprint), ``logon.status``,
+  the client account as ``target_user``.
+- **4672 / 4673 / 4674** privileges assigned / privileged service / privileged
+  object operation → ``privilege``.
+- **4697** service installed → ``service``; **4698 / 4702** scheduled task
+  created / updated → ``scheduled_task``.
+- **4657** registry value modified, **4661 / 4662** SAM / directory-service
+  handle and operation → ``object_access`` (old value and types, operation
+  type, ``Properties`` GUIDs, additional info).
+- **4720 / 4722 / 4724 / 4738 / 4728 / 4732** account management →
+  ``account_change`` and the account or group acted upon as ``target_user``.
+- **5379** Credential Manager read → ``credential_read``; **5441 / 5447** WFP
+  filter present / changed → ``wfp_filter`` (acting account = ``UserSid``).
+
 **Exact values.** Every value detection content reads is kept exactly as
 logged — including Windows' ``-`` "no value" marker and unrendered ``%%NNNN``
 message references (``AccessList``, ``ImpersonationLevel``, …), which Sigma
 rules are written against. The only derived values are documented, exact
 conversions: hex process ids (``0x1a74``) to integers, ``MandatoryLabel``
 integrity SIDs to Sysmon's level names (only the four unambiguous RIDs),
-``EventType`` to ``event.outcome``, and bare file names from full paths.
+``EventType`` to ``event.outcome``, bare file names from full paths, and the
+decimal ``ClientProcessId`` / ``ParentProcessId`` of 4697 / 5379 to integers.
 Process identity fields holding ``-`` / ``0x0`` mean "no process" and are
 left absent.
 
 **Event classification.** ``event.dataset`` = ``system.security`` (the
 Windows Security channel; Elastic's own dataset name), ``event.provider`` =
 the logging provider, ``event.code`` = the event ID. ECS categories are set
-only where unambiguous (4688 process/start, 4624 and 4776 authentication/
-start); object and share events carry none rather than an invented one.
+only where unambiguous (4688 process/start; 4624, 4625, 4648, 4768, 4769,
+4771 and 4776 authentication/start); every other event carries none rather
+than an invented one, and is identified by ``event.code`` / ``event.action``.
 
 **Record shapes (ADR-0008 D4).** Collector records (``winlog`` envelope,
 ``@timestamp`` = event time; Winlogbeat 6 records are first normalized to it by
@@ -44,23 +69,31 @@ exists.
 
 from __future__ import annotations
 
+import dataclasses
 from collections.abc import Callable, Mapping
 from datetime import datetime
 from typing import Any
 
 from attribution_platform.domain import (
+    AccountChangeRef,
+    CredentialReadRef,
     EventMetadata,
     HostRef,
+    KerberosRef,
     LogonRef,
     NetworkEndpoint,
     NetworkInfo,
     ObjectAccessRef,
     Observation,
+    PrivilegeRef,
     ProcessRef,
+    ScheduledTaskRef,
+    ServiceRef,
     ShareRef,
     SourceRef,
     TimePrecision,
     UserRef,
+    WfpFilterRef,
 )
 from attribution_platform.sources.errors import SourceAdapterError
 from attribution_platform.sources.nxlog_time import nxlog_event_time, parse_timestamp
@@ -176,6 +209,12 @@ def _object_access(data: Mapping[str, Any]) -> ObjectAccessRef:
         access_list=_text(data, "AccessList"),
         value_name=_text(data, "ObjectValueName"),
         new_value=_text(data, "NewValue"),
+        old_value=_text(data, "OldValue"),
+        new_value_type=_text(data, "NewValueType"),
+        old_value_type=_text(data, "OldValueType"),
+        operation_type=_text(data, "OperationType"),
+        properties=_text(data, "Properties"),
+        additional_info=_text(data, "AdditionalInfo"),
     )
 
 
@@ -252,17 +291,223 @@ def _share_event(data: Mapping[str, Any]) -> _Fields:
     }
 
 
+# --- Security batch B ------------------------------------------------------
+
+
+def _decimal_pid(data: Mapping[str, Any], key: str) -> int | None:
+    """A decimal process id (4697 ``ClientProcessId`` / ``ParentProcessId``,
+    5379 ``ClientProcessId``) — unlike the hex ids of the older events."""
+    value = _text(data, key)
+    if value is None or value == "-":
+        return None
+    if not value.isdigit():
+        raise SourceAdapterError(f"{_ADAPTER}: {key} {value!r} is not a decimal process id")
+    return int(value)
+
+
+def _subject_session(data: Mapping[str, Any], **facts: str | None) -> LogonRef | None:
+    """``LogonRef`` holding the acting session's ``SubjectLogonId`` plus any
+    event-specific logon facts; ``None`` when there is nothing to hold."""
+    values = {"subject_logon_id": _text(data, "SubjectLogonId"), **facts}
+    if all(v is None for v in values.values()):
+        return None
+    return LogonRef(**values)
+
+
+def _target_account(data: Mapping[str, Any]) -> UserRef | None:
+    """The account acted upon. Account-management and Kerberos events log its
+    SID as ``TargetSid`` (logon events: ``TargetUserSid``)."""
+    sid = _text(data, "TargetSid") or _text(data, "TargetUserSid")
+    name, domain = _text(data, "TargetUserName"), _text(data, "TargetDomainName")
+    if sid is None and name is None and domain is None:
+        return None
+    return UserRef(id=sid, name=name, domain=domain)
+
+
+def _failed_logon(data: Mapping[str, Any]) -> _Fields:
+    fields = _logon(data)
+    fields["logon"] = dataclasses.replace(
+        fields["logon"],
+        status=_text(data, "Status"),
+        sub_status=_text(data, "SubStatus"),
+        failure_reason=_text(data, "FailureReason"),
+        subject_logon_id=_text(data, "SubjectLogonId"),
+    )
+    return fields
+
+
+def _explicit_credentials(data: Mapping[str, Any]) -> _Fields:
+    return {
+        "logon": _subject_session(
+            data,
+            target_server_name=_text(data, "TargetServerName"),
+            target_info=_text(data, "TargetInfo"),
+        ),
+        "target_user": _user(data, "Target"),
+        "network": _source_endpoint(data),
+        "process": _acting_process(data),
+    }
+
+
+def _logon_process_registered(data: Mapping[str, Any]) -> _Fields:
+    return {"logon": _subject_session(data, logon_process=_text(data, "LogonProcessName"))}
+
+
+def _privileges(data: Mapping[str, Any]) -> _Fields:
+    fields: _Fields = {
+        "logon": _subject_session(data),
+        "privilege": PrivilegeRef(
+            privilege_list=_text(data, "PrivilegeList"), service=_text(data, "Service")
+        ),
+        "process": _acting_process(data),
+    }
+    if _text(data, "ObjectName") is not None or _text(data, "ObjectServer") is not None:
+        fields["object_access"] = _object_access(data)
+    return fields
+
+
+def _service_installed(data: Mapping[str, Any]) -> _Fields:
+    client_pid = _decimal_pid(data, "ClientProcessId")
+    parent_pid = _decimal_pid(data, "ParentProcessId")
+    return {
+        "logon": _subject_session(data),
+        "service": ServiceRef(
+            name=_text(data, "ServiceName"),
+            file_name=_text(data, "ServiceFileName"),
+            type=_text(data, "ServiceType"),
+            start_type=_text(data, "ServiceStartType"),
+            account=_text(data, "ServiceAccount"),
+        ),
+        "process": (
+            ProcessRef(pid=client_pid, parent_pid=parent_pid)
+            if client_pid is not None or parent_pid is not None
+            else None
+        ),
+    }
+
+
+def _scheduled_task(data: Mapping[str, Any]) -> _Fields:
+    return {
+        "logon": _subject_session(data),
+        "scheduled_task": ScheduledTaskRef(
+            name=_text(data, "TaskName"),
+            content=_text(data, "TaskContent"),
+            content_new=_text(data, "TaskContentNew"),
+        ),
+    }
+
+
+def _object_event_with_session(data: Mapping[str, Any]) -> _Fields:
+    return {**_object_event(data), "logon": _subject_session(data)}
+
+
+def _kerberos(data: Mapping[str, Any]) -> _Fields:
+    return {
+        "logon": LogonRef(status=_text(data, "Status")),
+        "service": ServiceRef(name=_text(data, "ServiceName"), id=_text(data, "ServiceSid")),
+        "kerberos": KerberosRef(
+            ticket_options=_text(data, "TicketOptions"),
+            ticket_encryption_type=_text(data, "TicketEncryptionType"),
+            pre_auth_type=_text(data, "PreAuthType"),
+            cert_thumbprint=_text(data, "CertThumbprint"),
+        ),
+        "target_user": _target_account(data),
+        "network": _source_endpoint(data),
+    }
+
+
+def _account_change(data: Mapping[str, Any]) -> _Fields:
+    return {
+        "logon": _subject_session(data),
+        "target_user": _target_account(data),
+        "account_change": AccountChangeRef(
+            sam_account_name=_text(data, "SamAccountName"),
+            user_principal_name=_text(data, "UserPrincipalName"),
+            display_name=_text(data, "DisplayName"),
+            old_uac_value=_text(data, "OldUacValue"),
+            new_uac_value=_text(data, "NewUacValue"),
+            user_account_control=_text(data, "UserAccountControl"),
+            sid_history=_text(data, "SidHistory"),
+            primary_group_id=_text(data, "PrimaryGroupId"),
+            member_name=_text(data, "MemberName"),
+            member_sid=_text(data, "MemberSid"),
+        ),
+    }
+
+
+def _credential_read(data: Mapping[str, Any]) -> _Fields:
+    pid = _decimal_pid(data, "ClientProcessId")
+    return {
+        "logon": _subject_session(data),
+        "credential_read": CredentialReadRef(
+            target_name=_text(data, "TargetName"),
+            type=_text(data, "Type"),
+            read_operation=_text(data, "ReadOperation"),
+            count_returned=_text(data, "CountOfCredentialsReturned"),
+            return_code=_text(data, "ReturnCode"),
+        ),
+        "process": ProcessRef(pid=pid) if pid is not None else None,
+    }
+
+
+def _wfp_filter(data: Mapping[str, Any]) -> _Fields:
+    sid = _text(data, "UserSid")
+    return {
+        "wfp_filter": WfpFilterRef(
+            name=_text(data, "FilterName"),
+            key=_text(data, "FilterKey"),
+            type=_text(data, "FilterType"),
+            change_type=_text(data, "ChangeType"),
+            provider_name=_text(data, "ProviderName"),
+            provider_context_name=_text(data, "ProviderContextName"),
+            layer_name=_text(data, "LayerName"),
+            callout_name=_text(data, "CalloutName"),
+        ),
+        # WFP events log the acting account as UserSid / "DOMAIN\\user"
+        # UserName; only the SID maps exactly onto UserRef.
+        "user": UserRef(id=sid) if sid is not None else None,
+    }
+
+
+_AUTH = (("authentication",), ("start",))
+_NONE: tuple[tuple[str, ...], tuple[str, ...]] = ((), ())
+
 _EVENTS: dict[
     int, tuple[tuple[str, ...], tuple[str, ...], str, Callable[[Mapping[str, Any]], _Fields]]
 ] = {
     4688: (("process",), ("start",), "process_start", _process_creation),
-    4624: (("authentication",), ("start",), "logon", _logon),
-    4776: (("authentication",), ("start",), "credential_validation", _credential_validation),
-    4656: ((), (), "object_handle_request", _object_event),
-    4663: ((), (), "object_access", _object_event),
-    4658: ((), (), "object_handle_close", _object_event),
-    5140: ((), (), "share_access", _share_event),
-    5145: ((), (), "share_object_check", _share_event),
+    4624: (*_AUTH, "logon", _logon),
+    4776: (*_AUTH, "credential_validation", _credential_validation),
+    4656: (*_NONE, "object_handle_request", _object_event),
+    4663: (*_NONE, "object_access", _object_event),
+    4658: (*_NONE, "object_handle_close", _object_event),
+    5140: (*_NONE, "share_access", _share_event),
+    5145: (*_NONE, "share_object_check", _share_event),
+    # batch B
+    4625: (*_AUTH, "logon_failed", _failed_logon),
+    4648: (*_AUTH, "explicit_credential_logon", _explicit_credentials),
+    4768: (*_AUTH, "kerberos_tgt_request", _kerberos),
+    4769: (*_AUTH, "kerberos_service_ticket_request", _kerberos),
+    4771: (*_AUTH, "kerberos_preauth_failed", _kerberos),
+    4611: (*_NONE, "logon_process_registered", _logon_process_registered),
+    4672: (*_NONE, "special_privileges_assigned", _privileges),
+    4673: (*_NONE, "privileged_service_called", _privileges),
+    4674: (*_NONE, "privileged_object_operation", _privileges),
+    4697: (*_NONE, "service_installed", _service_installed),
+    4698: (*_NONE, "scheduled_task_created", _scheduled_task),
+    4702: (*_NONE, "scheduled_task_updated", _scheduled_task),
+    4657: (*_NONE, "registry_value_modified", _object_event_with_session),
+    4661: (*_NONE, "object_handle_request_directory", _object_event_with_session),
+    4662: (*_NONE, "directory_object_operation", _object_event_with_session),
+    4720: (*_NONE, "user_account_created", _account_change),
+    4722: (*_NONE, "user_account_enabled", _account_change),
+    4724: (*_NONE, "password_reset_attempted", _account_change),
+    4738: (*_NONE, "user_account_changed", _account_change),
+    4728: (*_NONE, "member_added_to_global_group", _account_change),
+    4732: (*_NONE, "member_added_to_local_group", _account_change),
+    5379: (*_NONE, "credential_manager_read", _credential_read),
+    5441: (*_NONE, "wfp_filter_present", _wfp_filter),
+    5447: (*_NONE, "wfp_filter_changed", _wfp_filter),
 }
 SUPPORTED_EVENT_IDS = tuple(sorted(_EVENTS))
 
@@ -336,6 +581,9 @@ class WindowsSecuritySourceAdapter:
 
         category, event_type, action, build = _EVENTS[event_id]
         fields = build(data)
+        # The acting account is the Subject* fields unless the event logs it
+        # under other names (WFP: UserSid), in which case the builder sets it.
+        user = fields.pop("user") if "user" in fields else _user(data, "Subject")
         return (
             Observation(
                 observation_id=f"{WINDOWS_SECURITY_SOURCE_TYPE}:{computer}:{record_id}",
@@ -353,7 +601,7 @@ class WindowsSecuritySourceAdapter:
                     dataset=SECURITY_DATASET,
                 ),
                 host=HostRef(name=computer),
-                user=_user(data, "Subject"),
+                user=user,
                 **fields,
             ),
         )

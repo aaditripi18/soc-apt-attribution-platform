@@ -9,8 +9,8 @@ Counts only — not detection-efficacy or attribution-accuracy claims.
 
 | Status | All active techniques | Used by ≥ 1 active Group |
 |---|---|---|
-| `covered` | 263 | 223 |
-| `telemetry_gap` | 105 | 71 |
+| `covered` | 267 | 225 |
+| `telemetry_gap` | 101 | 69 |
 | `translation_gap` | 5 | 5 |
 | `not_endpoint_observable` | 160 | 91 |
 | `no_sigma_rule` | 164 | 108 |

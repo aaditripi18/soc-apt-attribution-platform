@@ -35,23 +35,30 @@ from dataclasses import dataclass, field
 from datetime import datetime
 
 from attribution_platform.domain.entities import (
+    AccountChangeRef,
+    CredentialReadRef,
     DllRef,
     DnsRef,
     EventMetadata,
     FileRef,
     FileStreamRef,
     HostRef,
+    KerberosRef,
     LogonRef,
     NetworkInfo,
     ObjectAccessRef,
     PipeRef,
     PowerShellRef,
+    PrivilegeRef,
     ProcessAccessRef,
     ProcessRef,
     RegistryRef,
     RemoteThreadRef,
+    ScheduledTaskRef,
+    ServiceRef,
     ShareRef,
     UserRef,
+    WfpFilterRef,
     WmiRef,
 )
 from attribution_platform.domain.enums import TimePrecision
@@ -81,7 +88,9 @@ class Observation:
     - ``host`` / ``user`` / ``process`` / ``network`` / ``file`` / ``dll`` /
       ``registry`` / ``target_process`` / ``process_access`` / ``remote_thread``
       / ``dns`` / ``file_stream`` / ``pipe`` / ``wmi`` / ``powershell`` /
-      ``target_user`` / ``logon`` / ``object_access`` / ``share`` — entity
+      ``target_user`` / ``logon`` / ``object_access`` / ``share`` /
+      ``service`` / ``kerberos`` / ``scheduled_task`` / ``privilege`` /
+      ``account_change`` / ``credential_read`` / ``wfp_filter`` — entity
       groups (added by ADR-0008 Wave 1 for image-load, registry,
       process-access, remote-thread, DNS, stream, pipe, WMI, PowerShell
       logging and Windows Security log events; ``target_process`` /
@@ -116,6 +125,13 @@ class Observation:
     logon: LogonRef | None = None
     object_access: ObjectAccessRef | None = None
     share: ShareRef | None = None
+    service: ServiceRef | None = None
+    kerberos: KerberosRef | None = None
+    scheduled_task: ScheduledTaskRef | None = None
+    privilege: PrivilegeRef | None = None
+    account_change: AccountChangeRef | None = None
+    credential_read: CredentialReadRef | None = None
+    wfp_filter: WfpFilterRef | None = None
     schema_version: str = field(default=OBSERVATION_SCHEMA_VERSION)
 
     def __post_init__(self) -> None:

@@ -360,6 +360,56 @@ and PowerShell after real 4103/4104 samples are found. D1's list is otherwise un
   correlation facts ✓ (4688 has no GUID: no structural link, and suppressed where Sysmon exists), Sigma
   wiring ✓, evidence type ✓, performance ✓.
 
+**Windows Security log — batch B (2026-09-30).**
+
+- *Scope, chosen from measurement:* the Security rules the importer rejected, grouped by missing event / field,
+  intersected with the events that have a trustworthy real sample in the corpus recordings. Supported (26 new
+  golden records, all three record shapes): **4625** failed logon, **4648** explicit credentials, **4611**
+  logon process registered, **4768 / 4769 / 4771** Kerberos TGT / service ticket / pre-auth failure, **4672 /
+  4673 / 4674** privileges, **4697** service installed, **4698 / 4702** scheduled task created / updated,
+  **4657** registry value modified, **4661 / 4662** SAM / directory-service object access, **4720 / 4722 / 4724 /
+  4738 / 4728 / 4732** account management, **5379** Credential Manager read, **5441 / 5447** WFP filters.
+- *Deferred, with reason:* 4692 / 4699 / 4701 and 1102 occur only in the round-1 exports refused for having no
+  event time; 4704, 4706, 4741 / 4742, 4765 / 4766, 4781, 4794, 4825, 4649, 5136, 6423 have no real sample;
+  5156 / 5158 (WFP connections) need a D3 precedence decision against Sysmon 3; 4689 / 4690 / 4703 / 4627 /
+  4634 have no detection content.
+- *Domain additions (D5):* `ServiceRef` (4697's installed service and the Kerberos `ServiceName` /
+  `ServiceSid`, one Sigma field with one meaning), `KerberosRef`, `ScheduledTaskRef`, `PrivilegeRef`,
+  `AccountChangeRef`, `CredentialReadRef`, `WfpFilterRef`; `LogonRef` gains failure reason, explicit-credential
+  target and the subject session's logon id; `ObjectAccessRef` gains old value / value types / operation type,
+  `Properties` and additional info. Values stay exactly as logged; the only conversion added is the decimal
+  `ClientProcessId` / `ParentProcessId` of 4697 / 5379 (a hex value fails closed). `TargetSid` (account and
+  Kerberos events) is `target_user.id`, as `TargetUserSid` is.
+- *Two drift hazards removed:* stored Observations were rebuilt from hand-kept field lists, and the detection
+  engine's allowed top-level fields were a hand-kept set; both now come from the dataclasses themselves, so a
+  new field or group can no longer be silently dropped on load or refused at evaluation.
+- *Detection wiring:* `sigma-field-map/9` maps the batch B fields; the event-code guard grows with the adapter
+  (parity test); `%%NNNN`-coded fields added to the rendered-value guard (failure reason, value types, WFP
+  filter / change type, `UserAccountControl`, `ReadOperation`). Untranslatable rules stay gaps — PetitPotam's
+  empty-string filter and the UAC rule's single-character wildcards are not approximated.
+- *Coverage:* Security rules 29 → **77** imported (6 partial); Sigma import 1,418 → **1,466**; ATT&CK ids with an
+  imported rule 271 → 275; group-used techniques **223 → 225 of 498**. The larger gain is independent
+  detection of what process telemetry sees only indirectly (Kerberoasting, DCSync, service installation,
+  explicit-credential lateral movement).
+- *Software-tag review:* +3, all **rejected** — DCSync → Mimikatz (any replication tool), SAM recon → Net (any
+  SAMR client), credential-dumping services → WCE (seven tools' names).
+- *Real-data results* (11 recordings, full pipeline): +10,544 Security Observations (1,119,755 → 1,132,553);
+  techniques per recording APT29 day 1 34 → **36**, day 2 28 → **30**, CALDERA 17 → **19**, Empire 8 → **10**.
+  New detections: explicit-credential remote logon ×8 (APT29 day 2, `dschrute`'s PowerShell on UTICA to
+  NEWYORK, directly followed by remote PowerShell and Mimikatz there — the emulated lateral movement); SCM
+  database privileged operation ×8 (APT29 day 1, `pbeesly` on NASHUA during the PsExec runs); AD privileged-group
+  reconnaissance ×11 (all user sessions inside the CALDERA / Empire attack windows); Password Policy Enumerated
+  ×80 — 37 in user sessions inside attack windows, **43 by DC machine accounts** (routine). That rule's noise is
+  measured and left to diagnosticity / calibration (ADR-0007), not suppressed; the golden test pins 11 of 13
+  sample matches as machine-account.
+- *Known limitation — Security evidence does not yet reach attribution:* every corpus unit is unchanged (labels
+  identical, readiness verdict unchanged). Security events carry no process GUID, so structural correlation
+  cannot attach them to the process chains, and a single-rule Security Observation forms no unit of its own.
+  Correlating them (logon sessions: `SubjectLogonId` ↔ 4624 `TargetLogonId`; host + pid + time to Sysmon) is the
+  next correlation task.
+- *Acceptance (D2):* exact mapping ✓, fail-closed ✓, real-sample golden tests ✓ (75 tests), source-agnostic ✓,
+  persistence round-trip ✓, Sigma wiring ✓, evidence type ✓; correlation facts ✗ (limitation above).
+
 **Record-shape readiness for the corpus recordings (2026-09-25).**
 
 - *Winlogbeat 6:* `sources/winlogbeat.py` renames the pre-7.0 top-level envelope (`log_name`, `event_id`,

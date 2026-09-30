@@ -19,6 +19,10 @@ adds ``create_stream_hash`` (15), ``pipe_created`` (17/18), ``wmi_event``
 (19/20/21) and ``file_delete`` (23), and ``file_event`` now also requires the
 ``file_create`` action (stream-hash events are file creations too). ``/6``
 adds ``ps_script`` (PowerShell 4104) and ``ps_module`` (PowerShell 4103).
+``/7``-``/8`` add the Windows Security channel (batch A). ``/9`` adds Security
+batch B (ADR-0008): failed and explicit-credential logons, Kerberos, service
+installation, scheduled tasks, privileges, registry / directory-service object
+operations, account management, Credential Manager reads and WFP filters.
 
 Anything else is a *telemetry gap*, reported per rule by the importer — never
 approximated. ``UNMAPPED_FIELD_REASONS`` records why the most frequent
@@ -34,7 +38,7 @@ from __future__ import annotations
 
 from types import MappingProxyType
 
-FIELD_MAP_VERSION = "sigma-field-map/8"
+FIELD_MAP_VERSION = "sigma-field-map/9"
 
 #: ``(product, category)`` → the ``(field_path, operator, value)`` scope
 #: conditions an Observation must satisfy to be the kind of event the Sigma
@@ -309,6 +313,58 @@ FIELD_MAPS: MappingProxyType[tuple[str, str], MappingProxyType[str, str]] = Mapp
                 "ShareName": "share.name",
                 "ShareLocalPath": "share.local_path",
                 "RelativeTargetName": "share.relative_target_name",
+                # batch B
+                "FailureReason": "logon.failure_reason",
+                "TargetServerName": "logon.target_server_name",
+                "TargetInfo": "logon.target_info",
+                "SubjectLogonId": "logon.subject_logon_id",
+                "TargetSid": "target_user.id",
+                "PrivilegeList": "privilege.privilege_list",
+                "Service": "privilege.service",
+                "ServiceName": "service.name",
+                "ServiceSid": "service.id",
+                "ServiceFileName": "service.file_name",
+                "ServiceType": "service.type",
+                "ServiceStartType": "service.start_type",
+                "ServiceAccount": "service.account",
+                "ClientProcessId": "process.pid",
+                "ParentProcessId": "process.parent_pid",
+                "TicketOptions": "kerberos.ticket_options",
+                "TicketEncryptionType": "kerberos.ticket_encryption_type",
+                "PreAuthType": "kerberos.pre_auth_type",
+                "CertThumbprint": "kerberos.cert_thumbprint",
+                "TaskName": "scheduled_task.name",
+                "TaskContent": "scheduled_task.content",
+                "TaskContentNew": "scheduled_task.content_new",
+                "OldValue": "object_access.old_value",
+                "NewValueType": "object_access.new_value_type",
+                "OldValueType": "object_access.old_value_type",
+                "OperationType": "object_access.operation_type",
+                "Properties": "object_access.properties",
+                "AdditionalInfo": "object_access.additional_info",
+                "SamAccountName": "account_change.sam_account_name",
+                "UserPrincipalName": "account_change.user_principal_name",
+                "DisplayName": "account_change.display_name",
+                "OldUacValue": "account_change.old_uac_value",
+                "NewUacValue": "account_change.new_uac_value",
+                "UserAccountControl": "account_change.user_account_control",
+                "SidHistory": "account_change.sid_history",
+                "PrimaryGroupId": "account_change.primary_group_id",
+                "MemberName": "account_change.member_name",
+                "MemberSid": "account_change.member_sid",
+                "TargetName": "credential_read.target_name",
+                "ReadOperation": "credential_read.read_operation",
+                "CountOfCredentialsReturned": "credential_read.count_returned",
+                "ReturnCode": "credential_read.return_code",
+                "FilterName": "wfp_filter.name",
+                "FilterKey": "wfp_filter.key",
+                "FilterType": "wfp_filter.type",
+                "ChangeType": "wfp_filter.change_type",
+                "ProviderName": "wfp_filter.provider_name",
+                "ProviderContextName": "wfp_filter.provider_context_name",
+                "LayerName": "wfp_filter.layer_name",
+                "CalloutName": "wfp_filter.callout_name",
+                "UserSid": "user.id",
             }
         ),
     }
@@ -321,7 +377,13 @@ FIELD_MAPS: MappingProxyType[tuple[str, str], MappingProxyType[str, str]] = Mapp
 SUPPORTED_EVENT_CODES: MappingProxyType[tuple[str, str], frozenset[str]] = MappingProxyType(
     {
         ("windows", "security"): frozenset(
-            {"4624", "4656", "4658", "4663", "4688", "4776", "5140", "5145"}
+            {
+                *("4624", "4656", "4658", "4663", "4688", "4776", "5140", "5145"),
+                # batch B
+                *("4611", "4625", "4648", "4657", "4661", "4662", "4672", "4673", "4674"),
+                *("4697", "4698", "4702", "4720", "4722", "4724", "4728", "4732", "4738"),
+                *("4768", "4769", "4771", "5379", "5441", "5447"),
+            }
         ),
     }
 )
@@ -339,6 +401,14 @@ CODED_VALUE_FIELDS: MappingProxyType[tuple[str, str], frozenset[str]] = MappingP
                 "object_access.access_list",
                 "logon.impersonation_level",
                 "logon.elevated_token",
+                # batch B: logged as %%NNNN references
+                "logon.failure_reason",
+                "object_access.new_value_type",
+                "object_access.old_value_type",
+                "wfp_filter.type",
+                "wfp_filter.change_type",
+                "account_change.user_account_control",
+                "credential_read.read_operation",
             }
         ),
     }

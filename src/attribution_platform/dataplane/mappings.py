@@ -102,6 +102,13 @@ OBSERVATIONS_MAPPING: dict[str, Any] = {
     "logon": {"type": "object"},
     "object_access": {"type": "object"},
     "share": {"type": "object"},
+    "service": {"type": "object"},
+    "kerberos": {"type": "object"},
+    "scheduled_task": {"type": "object"},
+    "privilege": {"type": "object"},
+    "account_change": {"type": "object"},
+    "credential_read": {"type": "object"},
+    "wfp_filter": {"type": "object"},
 }
 
 #: Explicit field mappings for the Evidence index (Elasticsearch "properties").

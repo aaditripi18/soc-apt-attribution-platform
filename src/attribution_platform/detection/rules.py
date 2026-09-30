@@ -71,6 +71,7 @@ ECS-aligned entity groups — the same fields any source populates).
 
 from __future__ import annotations
 
+import dataclasses
 import hashlib
 import json
 from collections.abc import Sequence
@@ -107,30 +108,15 @@ from attribution_platform.extraction.detection_match import RuleRef
 #: ``None`` rather than erroring) — only the top-level name is validated
 #: against a fixed, closed set, catching the most likely rule-authoring
 #: mistake (a wrong entity-group name entirely) without requiring full
-#: dataclass-field introspection for every nested type.
+#: dataclass-field introspection for every nested type. The set is the
+#: Observation contract's own entity groups (every field except its identity,
+#: time and provenance fields), so a group added to the contract is
+#: addressable without a second hand-kept list to drift.
+_NON_ENTITY_FIELDS = frozenset(
+    {"observation_id", "timestamp", "timestamp_precision", "raw_reference", "schema_version"}
+)
 _ALLOWED_TOP_LEVEL_FIELDS = frozenset(
-    {
-        "event",
-        "host",
-        "user",
-        "process",
-        "network",
-        "file",
-        "dll",
-        "registry",
-        "target_process",
-        "process_access",
-        "remote_thread",
-        "dns",
-        "file_stream",
-        "pipe",
-        "wmi",
-        "powershell",
-        "target_user",
-        "logon",
-        "object_access",
-        "share",
-    }
+    f.name for f in dataclasses.fields(Observation) if f.name not in _NON_ENTITY_FIELDS
 )
 
 _OPERATORS_REQUIRING_VALUE = frozenset({"equals", "contains", "in"})

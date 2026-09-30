@@ -23,12 +23,15 @@ from attribution_platform.detection import DetectionEngine, load_rule_pack
 from attribution_platform.detection.rules import _resolve_field
 from attribution_platform.detection_content.sigma_field_map import FIELD_MAPS
 from attribution_platform.domain import (
+    AccountChangeRef,
     CodeSignature,
+    CredentialReadRef,
     DllRef,
     DnsRef,
     EventMetadata,
     FileRef,
     FileStreamRef,
+    KerberosRef,
     LogonRef,
     NetworkEndpoint,
     NetworkInfo,
@@ -37,13 +40,17 @@ from attribution_platform.domain import (
     PeInfo,
     PipeRef,
     PowerShellRef,
+    PrivilegeRef,
     ProcessAccessRef,
     ProcessRef,
     RegistryRef,
     RemoteThreadRef,
+    ScheduledTaskRef,
+    ServiceRef,
     ShareRef,
     SourceRef,
     UserRef,
+    WfpFilterRef,
     WmiRef,
 )
 from attribution_platform.replay.detection_fixtures import _process_ref_from_dict
@@ -226,6 +233,15 @@ def _full_observation() -> Observation:
         logon=LogonRef(**{f: "a" for f in LogonRef.__dataclass_fields__}),
         object_access=ObjectAccessRef(**{f: "a" for f in ObjectAccessRef.__dataclass_fields__}),
         share=ShareRef(**{f: "a" for f in ShareRef.__dataclass_fields__}),
+        service=ServiceRef(**{f: "a" for f in ServiceRef.__dataclass_fields__}),
+        kerberos=KerberosRef(**{f: "a" for f in KerberosRef.__dataclass_fields__}),
+        scheduled_task=ScheduledTaskRef(**{f: "a" for f in ScheduledTaskRef.__dataclass_fields__}),
+        privilege=PrivilegeRef(**{f: "a" for f in PrivilegeRef.__dataclass_fields__}),
+        account_change=AccountChangeRef(**{f: "a" for f in AccountChangeRef.__dataclass_fields__}),
+        credential_read=CredentialReadRef(
+            **{f: "a" for f in CredentialReadRef.__dataclass_fields__}
+        ),
+        wfp_filter=WfpFilterRef(**{f: "a" for f in WfpFilterRef.__dataclass_fields__}),
         file=FileRef(path="a"),
         dll=DllRef(
             path="a",
@@ -254,6 +270,7 @@ def _full_observation() -> Observation:
         ),
         process=ProcessRef(
             pid=1,
+            parent_pid=1,
             executable="a",
             command_line="a",
             parent_executable="a",

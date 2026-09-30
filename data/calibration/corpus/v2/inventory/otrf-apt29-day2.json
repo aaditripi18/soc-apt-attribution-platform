@@ -1,19 +1,19 @@
 {
  "recording_id": "otrf-apt29-day2",
- "observations": 488764,
+ "observations": 494098,
  "refused_by_source": {
   "sysmon": 1338,
   "windows_powershell": 549,
-  "windows_security": 27047
+  "windows_security": 21713
  },
  "suppressed_by_precedence": 556,
- "evidence": 3211,
+ "evidence": 3220,
  "units": [
   {
-   "group_id": "corr-group::f8d6fc98e34ad115dd8a5d47e1f505fd8b318397cd2e280bbc22f01cbda42582",
+   "group_id": "corr-group::6285b0021b8202f2b6909e41cf9ca64a7d962ed8567356830884c64060c1ce40",
    "anchor_observation_id": "powershell:UTICA.dmevals.local:3541",
-   "evidence": 2103,
-   "observations": 2084,
+   "evidence": 2111,
+   "observations": 2092,
    "hosts": [
     "UTICA.dmevals.local"
    ],
@@ -21,9 +21,9 @@
    "last": "2020-05-02T08:11:41+00:00",
    "process_images": {
     "?": 2071,
+    "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe": 10,
     "C:\\Windows\\Microsoft.NET\\Framework64\\v4.0.30319\\csc.exe": 4,
     "C:\\windows\\system32\\WindowsPowerShell\\v1.0\\PowerShell.exe": 3,
-    "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe": 2,
     "C:\\Windows\\System32\\sdclt.exe": 1,
     "C:\\Windows\\System32\\net.exe": 1,
     "C:\\Windows\\System32\\certutil.exe": 1,
@@ -45,6 +45,7 @@
     "T1027.004",
     "T1059.001",
     "T1070.006",
+    "T1078",
     "T1114.001",
     "T1140",
     "T1497.001",
@@ -56,16 +57,16 @@
    "rule_families": {
     "sigma:64e8e417-c19a-475a-8d19-98ea705394cc": 2046,
     "sigma:403c2cc0-7f6b-4925-9423-bfa573bed7eb": 8,
+    "sigma:941e5c45-cda7-4864-8cea-bbb7458d194a": 8,
     "sigma:1f49f2ab-26bc-48b3-96cc-dcffbc93eadf": 5,
     "sigma:313fbb0a-a341-4682-848d-6d6f8c4fab7c": 4,
     "sigma:ae7fbf8e-f3cb-49fd-8db4-5f3bed522c71": 4,
     "sigma:dcaa3f04-70c3-427a-80b4-b870d73c94c4": 4,
-    "sigma:f62176f3-8128-4faa-bf6c-83261322e5eb": 4,
-    "sigma:7b836d7f-179c-4ba4-90a7-a7e60afb48e6": 3
+    "sigma:f62176f3-8128-4faa-bf6c-83261322e5eb": 4
    }
   },
   {
-   "group_id": "corr-group::f1699415f1df93e8892dd6d826cf9332a748047ba6c1fb02b8317a3e6a60a432",
+   "group_id": "corr-group::38f7aaef2e661ae01825ceb518a90db8a8af1e2f5d9e8d6d016993df181e6bfc",
    "anchor_observation_id": "powershell:NEWYORK.dmevals.local:18403",
    "evidence": 539,
    "observations": 539,
@@ -86,7 +87,7 @@
    }
   },
   {
-   "group_id": "corr-group::3f922c0d555864fc55c343edca4ca920b2e385091cb62d10d45a61d46090a436",
+   "group_id": "corr-group::8f42909b4a0e92f748a227ff952a82f4dc084d3353c37001afd2dde84e7b7a52",
    "anchor_observation_id": "powershell:NEWYORK.dmevals.local:19104",
    "evidence": 415,
    "observations": 415,
@@ -107,7 +108,7 @@
    }
   },
   {
-   "group_id": "corr-group::26d4d8105892cfd720d0edfb5f0cd401adb26b3a0445e724b6792efce391a4a7",
+   "group_id": "corr-group::c09227eb156c7e6ec288630fd7bbc52ec7ce15bece1e48603fc28d778a046d95",
    "anchor_observation_id": "sysmon:UTICA.dmevals.local:984177",
    "evidence": 38,
    "observations": 19,
@@ -144,30 +145,7 @@
    }
   },
   {
-   "group_id": "corr-group::024f21c2b9ac03e5f4e13903a29ab947e5a329ac49913acf5baee30c7ecd108d",
-   "anchor_observation_id": "sysmon:UTICA.dmevals.local:1008901",
-   "evidence": 19,
-   "observations": 19,
-   "hosts": [
-    "UTICA.dmevals.local"
-   ],
-   "first": "2020-05-02T08:15:37.814000+00:00",
-   "last": "2020-05-02T08:15:38.719000+00:00",
-   "process_images": {
-    "C:\\Packages\\Plugins\\Microsoft.Azure.Security.IaaSAntimalware\\1.5.5.9\\AntimalwareConfig.exe": 19
-   },
-   "image_names": [
-    "antimalwareconfig.exe"
-   ],
-   "techniques": [
-    "T1685.001"
-   ],
-   "rule_families": {
-    "sigma:d29ada0f-af45-4f27-8f32-f7b77c3dbc4e": 19
-   }
-  },
-  {
-   "group_id": "corr-group::cef4513b133e4c40ec54dd247cc525234a9af6a4c4b52704541fa5d2af398798",
+   "group_id": "corr-group::10f7d9e6e27a3a764290bc635c48434a8d3648c41eedb4303fbc6862faa97ec9",
    "anchor_observation_id": "sysmon:UTICA.dmevals.local:987756",
    "evidence": 19,
    "observations": 19,
@@ -190,7 +168,30 @@
    }
   },
   {
-   "group_id": "corr-group::c065ca4687bb1cb1f3c04d1dd51ee4a1e70081b7dc6c41a1953624a1b9d9ef6e",
+   "group_id": "corr-group::a7759023d11c6e5422b9f2c8e00755d997e069bc9c9b1a080ae769179190d45e",
+   "anchor_observation_id": "sysmon:UTICA.dmevals.local:1008901",
+   "evidence": 19,
+   "observations": 19,
+   "hosts": [
+    "UTICA.dmevals.local"
+   ],
+   "first": "2020-05-02T08:15:37.814000+00:00",
+   "last": "2020-05-02T08:15:38.719000+00:00",
+   "process_images": {
+    "C:\\Packages\\Plugins\\Microsoft.Azure.Security.IaaSAntimalware\\1.5.5.9\\AntimalwareConfig.exe": 19
+   },
+   "image_names": [
+    "antimalwareconfig.exe"
+   ],
+   "techniques": [
+    "T1685.001"
+   ],
+   "rule_families": {
+    "sigma:d29ada0f-af45-4f27-8f32-f7b77c3dbc4e": 19
+   }
+  },
+  {
+   "group_id": "corr-group::fe826d3996d2b43fccccffb273efce26b9deb0808c79326097e97cc17d1e9458",
    "anchor_observation_id": "sysmon:UTICA.dmevals.local:782026",
    "evidence": 15,
    "observations": 15,
@@ -213,7 +214,7 @@
    }
   },
   {
-   "group_id": "corr-group::3507148c2bf1e44731c00f849070f1b2a027778f225dd9875d52717adc6617a9",
+   "group_id": "corr-group::aff3627546050f14475450689a4722171afacdb017f4909a70d487dbec6e47d4",
    "anchor_observation_id": "sysmon:UTICA.dmevals.local:1012651",
    "evidence": 13,
    "observations": 13,
@@ -236,7 +237,7 @@
    }
   },
   {
-   "group_id": "corr-group::26090169656a6fa9815f4e83becb608e68dc2e21d7d4864d5e33d8e4d97460b2",
+   "group_id": "corr-group::236911846336237888d46c89d29a579522d63d40c17505874cd86fccc0c6fec2",
    "anchor_observation_id": "sysmon:NEWYORK.dmevals.local:317743",
    "evidence": 12,
    "observations": 4,
@@ -273,7 +274,7 @@
    }
   },
   {
-   "group_id": "corr-group::0bf8765e43544ba8661cd0a3ba86d8350375747d330de2770aafeeaae0807f25",
+   "group_id": "corr-group::99ac22377658db80bcd037fc9c09e2c9e78c4b5388a9c51fbe38858baa7b08c6",
    "anchor_observation_id": "sysmon:UTICA.dmevals.local:787306",
    "evidence": 11,
    "observations": 3,
@@ -311,7 +312,7 @@
    }
   },
   {
-   "group_id": "corr-group::8ab1307a6a12386c86f981fe9aae81f2f7c4ff62c6381837b5b50cf27216b56a",
+   "group_id": "corr-group::1f359af5d21f73663d32a510582f88917bc1382c0f87e10b96d332f3ab78a16d",
    "anchor_observation_id": "sysmon:UTICA.dmevals.local:792928",
    "evidence": 9,
    "observations": 9,
@@ -334,7 +335,7 @@
    }
   },
   {
-   "group_id": "corr-group::3a458d2d11f0050a7a4f18c13c143c8de7d9cd26f5f28de02698661d9cd393fa",
+   "group_id": "corr-group::5a49de4d93232527b3fda54e6e2a56cdba944d5fef67d0333a18fed6fc39b743",
    "anchor_observation_id": "sysmon:SCRANTON.dmevals.local:343878",
    "evidence": 6,
    "observations": 3,
@@ -364,7 +365,7 @@
    }
   },
   {
-   "group_id": "corr-group::30ecfeb2d7e640c4d37e3c025e5902b54979442ac36691e2baa8302a7588b5f5",
+   "group_id": "corr-group::570d073753dc6cceb9e06c7fd01a77e9f88b045b116b958c838129c416cc2f46",
    "anchor_observation_id": "sysmon:SCRANTON.dmevals.local:333581",
    "evidence": 2,
    "observations": 2,
@@ -387,7 +388,7 @@
    }
   },
   {
-   "group_id": "corr-group::a2429825062b288ddb31ee974ccbee2952554f36aeb20c5d5a60e59212ace406",
+   "group_id": "corr-group::d09c79625e902bb98c766493ec15d3172b657727f642569a19f118971f79271a",
    "anchor_observation_id": "sysmon:SCRANTON.dmevals.local:343422",
    "evidence": 2,
    "observations": 1,

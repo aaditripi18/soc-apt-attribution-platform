@@ -210,6 +210,12 @@ class LogonRef:
     status: str | None = None
     sub_status: str | None = None
     target_outbound_user_name: str | None = None
+    # Security batch B: 4625 failure reason, 4648 explicit-credential target,
+    # and the acting (subject) session's logon id.
+    failure_reason: str | None = None
+    target_server_name: str | None = None
+    target_info: str | None = None
+    subject_logon_id: str | None = None
 
 
 @dataclass(frozen=True)
@@ -217,7 +223,12 @@ class ObjectAccessRef:
     """A Windows audited object handle request/access (all optional; ADR-0008
     Security log): object manager server, type and name, the handle, the
     access mask and the access list (unrendered ``%%NNNN`` references, as
-    logged), and for registry values the value name and new value."""
+    logged), and for registry values the value name and new value.
+
+    Security batch B adds the registry-change facts of 4657 (old value, value
+    types and operation type, as logged — often ``%%NNNN`` references) and the
+    directory-service / SAM facts of 4661 / 4662 (``properties``: the accessed
+    property-set and extended-right GUIDs; ``additional_info``)."""
 
     server: str | None = None
     type: str | None = None
@@ -227,6 +238,12 @@ class ObjectAccessRef:
     access_list: str | None = None
     value_name: str | None = None
     new_value: str | None = None
+    old_value: str | None = None
+    new_value_type: str | None = None
+    old_value_type: str | None = None
+    operation_type: str | None = None
+    properties: str | None = None
+    additional_info: str | None = None
 
 
 @dataclass(frozen=True)
@@ -238,6 +255,108 @@ class ShareRef:
     name: str | None = None
     local_path: str | None = None
     relative_target_name: str | None = None
+
+
+@dataclass(frozen=True)
+class ServiceRef:
+    """A Windows service an event is about (all optional; ADR-0008 Security
+    batch B): the installed service of 4697 (name, image path, type, start
+    type, account — exactly as logged, e.g. ``0x10`` / ``2``) or the Kerberos
+    service ticket target of 4768 / 4769 / 4771 (``name`` and ``id`` =
+    ``ServiceName`` / ``ServiceSid``). Both events log ``ServiceName`` under
+    the same name and meaning — the service the event concerns."""
+
+    name: str | None = None
+    id: str | None = None
+    file_name: str | None = None
+    type: str | None = None
+    start_type: str | None = None
+    account: str | None = None
+
+
+@dataclass(frozen=True)
+class KerberosRef:
+    """Kerberos ticket facts of 4768 / 4769 / 4771 (all optional), as logged:
+    ticket options and encryption type (hex strings, e.g. ``0x17`` = RC4),
+    pre-authentication type and the certificate thumbprint of PKINIT
+    requests. The result code is ``LogonRef.status`` (Sigma's shared
+    ``Status``)."""
+
+    ticket_options: str | None = None
+    ticket_encryption_type: str | None = None
+    pre_auth_type: str | None = None
+    cert_thumbprint: str | None = None
+
+
+@dataclass(frozen=True)
+class ScheduledTaskRef:
+    """A scheduled-task registration change (4698 created, 4702 updated; all
+    optional): the task path and its XML definition exactly as logged
+    (``content`` = 4698 ``TaskContent``, ``content_new`` = 4702
+    ``TaskContentNew``)."""
+
+    name: str | None = None
+    content: str | None = None
+    content_new: str | None = None
+
+
+@dataclass(frozen=True)
+class PrivilegeRef:
+    """Privileges assigned or exercised (4672 / 4673 / 4674; all optional):
+    the ``PrivilegeList`` exactly as logged (whitespace-separated names) and,
+    for 4673, the privileged ``Service`` called."""
+
+    privilege_list: str | None = None
+    service: str | None = None
+
+
+@dataclass(frozen=True)
+class AccountChangeRef:
+    """User / group account management facts (4720, 4722, 4724, 4728, 4732,
+    4738; all optional), as logged — the account or group acted upon is
+    ``Observation.target_user``. ``old_uac_value`` / ``new_uac_value`` are the
+    hex ``userAccountControl`` values; ``member_*`` the account added to a
+    group."""
+
+    sam_account_name: str | None = None
+    user_principal_name: str | None = None
+    display_name: str | None = None
+    old_uac_value: str | None = None
+    new_uac_value: str | None = None
+    user_account_control: str | None = None
+    sid_history: str | None = None
+    primary_group_id: str | None = None
+    member_name: str | None = None
+    member_sid: str | None = None
+
+
+@dataclass(frozen=True)
+class CredentialReadRef:
+    """A Credential Manager read (5379; all optional), as logged: the
+    credential's target name, its type, the read operation, the count
+    returned and the return code."""
+
+    target_name: str | None = None
+    type: str | None = None
+    read_operation: str | None = None
+    count_returned: str | None = None
+    return_code: str | None = None
+
+
+@dataclass(frozen=True)
+class WfpFilterRef:
+    """A Windows Filtering Platform filter change (5441 present at startup,
+    5447 changed; all optional), as logged — the filter, its provider and
+    provider context, the layer, the callout and the change type."""
+
+    name: str | None = None
+    key: str | None = None
+    type: str | None = None
+    change_type: str | None = None
+    provider_name: str | None = None
+    provider_context_name: str | None = None
+    layer_name: str | None = None
+    callout_name: str | None = None
 
 
 @dataclass(frozen=True)

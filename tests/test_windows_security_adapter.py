@@ -127,17 +127,26 @@ def test_real_conversion_counts_and_refusals() -> None:
         "4776": 2,
         "5140": 10,
         "5145": 30,
+        # batch B
+        "4661": 31,
+        "4662": 1,
+        "4672": 37,
+        "4673": 41,
+        "4702": 6,
+        "4768": 8,
+        "4769": 20,
     }
     # round-1 exports: TimeCreated only (no zone, 16 h off UtcTime) -> refused
     no_time = [k for k in refused if k.startswith("flat record has no EventTime")]
     assert len(no_time) == 1 and refused[no_time[0]] == 55
-    assert refused["unsupported event id 5156"] == 640  # WFP: batch B, D3 vs Sysmon 3
-    assert sum(converted.values()) == 1075
+    assert refused["unsupported event id 5156"] == 640  # WFP connections: D3 vs Sysmon 3
+    assert refused["unsupported event id 1102"] == 4  # round-1 exports only (no event time)
+    assert sum(converted.values()) == 1219
 
 
 def test_record_numbers_are_unique_ids() -> None:
     ids = [o.observation_id for o in _convert()]
-    assert len(ids) == len(set(ids)) == 1075
+    assert len(ids) == len(set(ids)) == 1219
 
 
 def test_supported_ids_equal_the_field_map_guard() -> None:
@@ -252,7 +261,7 @@ def test_round_1_time_created_records_are_refused() -> None:
     ("change", "match"),
     [
         ({"Channel": "System"}, "channel"),
-        ({"EventID": 4625}, "unsupported event id 4625"),
+        ({"EventID": 5156}, "unsupported event id 5156"),
         ({"RecordNumber": None}, "record id"),
         ({"Hostname": ""}, "host name"),
         ({"NewProcessId": "1234"}, "not a hex process id"),
@@ -396,10 +405,24 @@ def test_field_map_fields_resolve_on_security_observations() -> None:
     assert FIELD_MAPS[("windows", "security")]["Provider_Name"] == "event.provider"
 
 
-def test_no_detection_on_the_real_benign_security_events(engine: DetectionEngine) -> None:
+def test_detections_on_the_real_security_events(engine: DetectionEngine) -> None:
+    """The batch A events raise nothing. Batch B adds one noisy rule, measured
+    rather than suppressed (ADR-0007: imported-rule noise is left to the
+    diagnosticity / calibration machinery): Password Policy Enumerated (T1201)
+    matches 13 SAM-domain handle requests on the DC — 11 by the DC's own
+    machine account (routine), 2 in the user session ``pgustavo``."""
     observations = _convert()
-    assert len(observations) == 1075
-    assert engine.evaluate(observations) == ()
+    assert len(observations) == 1219
+    by_id = {o.observation_id: o for o in observations}
+    detections = engine.evaluate(observations)
+    assert {d.rule_ref.rule_id.rsplit(":", 1)[0] for d in detections} == {
+        "sigma:12ba6a38-adb3-4d6b-91ba-a7fb248e3199"
+    }
+    subjects = collections.Counter(
+        by_id[d.supporting_observation_ids[0]].user.name  # type: ignore[union-attr]
+        for d in detections
+    )
+    assert subjects == {"MORDORDC$": 11, "pgustavo": 2}
 
 
 def _fired(engine: DetectionEngine, record: dict[str, Any]) -> dict[str, set[str]]:

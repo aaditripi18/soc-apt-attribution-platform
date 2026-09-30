@@ -1,16 +1,16 @@
 {
  "recording_id": "otrf-apt3-empire",
- "observations": 87044,
+ "observations": 87929,
  "refused_by_source": {
   "sysmon": 210,
   "windows_powershell": 627,
-  "windows_security": 13959
+  "windows_security": 13074
  },
  "suppressed_by_precedence": 312,
- "evidence": 33,
+ "evidence": 93,
  "units": [
   {
-   "group_id": "corr-group::5af993948c8c8f6786907c8b5fa03c55e797dd3e9763f9d577862a286d6204ea",
+   "group_id": "corr-group::9a6391f10dba97133bed1dd90a0e40c6230d51ed795710116fd524d9c902e2cd",
    "anchor_observation_id": "sysmon:HR001.shire.com:1452927",
    "evidence": 21,
    "observations": 12,
@@ -49,7 +49,7 @@
    }
   },
   {
-   "group_id": "corr-group::40b1ae798f7632d212999b5fb4609ea5e0ab8d0676ef3e6bec251ac02eb1a875",
+   "group_id": "corr-group::8bde621f75a5f1381ffde3239c6acde2f0717e491b0c937857d9e65693f98698",
    "anchor_observation_id": "sysmon:HR001.shire.com:1470312",
    "evidence": 6,
    "observations": 3,
@@ -82,7 +82,7 @@
    }
   },
   {
-   "group_id": "corr-group::d0d462429c3aaa766afb245f66e2810c65befbfb96251b08f557f240c2baa944",
+   "group_id": "corr-group::2019edcafe9da0812a2ab4c1045fc88b0ce3a50bf574625e154a7f8b1289ed61",
    "anchor_observation_id": "sysmon:HFDC01.shire.com:5029616",
    "evidence": 3,
    "observations": 1,
@@ -107,7 +107,7 @@
    }
   },
   {
-   "group_id": "corr-group::5a5c8bd52157ce6d869e1408df7767c2c6d6f3509a9015dfc3cde5f8ca9b62ab",
+   "group_id": "corr-group::cedf0d2e21308b739e11a344386cdf546767163f7bdde9d000d26df6e07595cb",
    "anchor_observation_id": "windows_security:HR001.shire.com:112803",
    "evidence": 2,
    "observations": 1,

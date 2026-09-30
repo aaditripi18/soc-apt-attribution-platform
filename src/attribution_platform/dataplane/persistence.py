@@ -57,6 +57,7 @@ persists and loads single domain objects one at a time; nothing more.
 
 from __future__ import annotations
 
+import dataclasses
 from collections.abc import Mapping
 from dataclasses import dataclass
 from datetime import datetime
@@ -73,8 +74,10 @@ from attribution_platform.dataplane.mappings import (
 from attribution_platform.domain import (
     EVIDENCE_SCHEMA_VERSION,
     OBSERVATION_SCHEMA_VERSION,
+    AccountChangeRef,
     AttackRef,
     CodeSignature,
+    CredentialReadRef,
     DerivationProvenance,
     DllRef,
     DnsRef,
@@ -87,6 +90,7 @@ from attribution_platform.domain import (
     FileStreamRef,
     HashSet,
     HostRef,
+    KerberosRef,
     LogonRef,
     NetworkEndpoint,
     NetworkInfo,
@@ -95,15 +99,19 @@ from attribution_platform.domain import (
     PeInfo,
     PipeRef,
     PowerShellRef,
+    PrivilegeRef,
     ProcessAccessRef,
     ProcessRef,
     RegistryRef,
     RemoteThreadRef,
+    ScheduledTaskRef,
+    ServiceRef,
     ShareRef,
     SourceRef,
     TimePrecision,
     TimeSpan,
     UserRef,
+    WfpFilterRef,
     WmiRef,
     to_serializable,
 )
@@ -196,11 +204,16 @@ def _observation_from_document(doc: Mapping[str, Any]) -> Observation:
             wmi=_wmi_ref_from_dict(doc.get("wmi")),
             powershell=_powershell_ref_from_dict(doc.get("powershell")),
             target_user=_user_ref_from_dict(doc.get("target_user")),
-            logon=_flat_ref_from_dict(LogonRef, _LOGON_FIELDS, doc.get("logon")),
-            object_access=_flat_ref_from_dict(
-                ObjectAccessRef, _OBJECT_ACCESS_FIELDS, doc.get("object_access")
-            ),
-            share=_flat_ref_from_dict(ShareRef, _SHARE_FIELDS, doc.get("share")),
+            logon=_flat_ref_from_dict(LogonRef, doc.get("logon")),
+            object_access=_flat_ref_from_dict(ObjectAccessRef, doc.get("object_access")),
+            share=_flat_ref_from_dict(ShareRef, doc.get("share")),
+            service=_flat_ref_from_dict(ServiceRef, doc.get("service")),
+            kerberos=_flat_ref_from_dict(KerberosRef, doc.get("kerberos")),
+            scheduled_task=_flat_ref_from_dict(ScheduledTaskRef, doc.get("scheduled_task")),
+            privilege=_flat_ref_from_dict(PrivilegeRef, doc.get("privilege")),
+            account_change=_flat_ref_from_dict(AccountChangeRef, doc.get("account_change")),
+            credential_read=_flat_ref_from_dict(CredentialReadRef, doc.get("credential_read")),
+            wfp_filter=_flat_ref_from_dict(WfpFilterRef, doc.get("wfp_filter")),
             schema_version=schema_version,
         )
     except ElasticIntegrationError:
@@ -447,46 +460,13 @@ def _wmi_ref_from_dict(d: Mapping[str, Any] | None) -> WmiRef | None:
     return WmiRef(**{f: d.get(f) for f in _WMI_FIELDS})
 
 
-_LOGON_FIELDS = (
-    "logon_type",
-    "logon_process",
-    "authentication_package",
-    "package_name",
-    "lm_package",
-    "key_length",
-    "impersonation_level",
-    "elevated_token",
-    "logon_id",
-    "workstation_name",
-    "workstation",
-    "status",
-    "sub_status",
-    "target_outbound_user_name",
-)
-
-_OBJECT_ACCESS_FIELDS = (
-    "server",
-    "type",
-    "name",
-    "handle_id",
-    "access_mask",
-    "access_list",
-    "value_name",
-    "new_value",
-)
-
-_SHARE_FIELDS = (
-    "name",
-    "local_path",
-    "relative_target_name",
-)
-
-
-def _flat_ref_from_dict(cls: Any, fields: tuple[str, ...], d: Mapping[str, Any] | None) -> Any:
-    """A flat all-optional entity group from its stored dict (None -> None)."""
+def _flat_ref_from_dict(cls: Any, d: Mapping[str, Any] | None) -> Any:
+    """A flat all-optional entity group (every field a string or None) from its
+    stored dict (None -> None). The field list is the dataclass's own, so a
+    field added to the contract can never be silently dropped on load."""
     if d is None:
         return None
-    return cls(**{f: d.get(f) for f in fields})
+    return cls(**{f.name: d.get(f.name) for f in dataclasses.fields(cls)})
 
 
 _POWERSHELL_FIELDS = (

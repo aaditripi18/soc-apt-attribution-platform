@@ -10,7 +10,7 @@
  "evidence": 10,
  "units": [
   {
-   "group_id": "corr-group::c34a55b647070a27c6066b571ae89ff6d32711a098956fc58d37e5c789c081e6",
+   "group_id": "corr-group::afc03e076e59bda1fef2cf7c71955ea49433ba472ce2ce59b5dc0670cc1eacf0",
    "anchor_observation_id": "sysmon:MKT01.pandalab.com:sha256:0967445647eeaf0bc439e1001c2777c54bb54d7013938d8ba7e1a454e1936763",
    "evidence": 5,
    "observations": 3,
@@ -36,7 +36,7 @@
    }
   },
   {
-   "group_id": "corr-group::1fceceb31d29840dd6890deb2ee3cd8953bf35a801e70dbaa50ffc433a82c890",
+   "group_id": "corr-group::1cff1e9bbab110d5be4761f0292cbf29578abd6159ccb371eb854d95d09aa36c",
    "anchor_observation_id": "sysmon:MKT01.pandalab.com:sha256:c9297fc80d48c48cf74b2c0e29a671f4c084e6f8124abab0d43b7496016ee7cf",
    "evidence": 3,
    "observations": 3,

@@ -1,16 +1,16 @@
 {
  "recording_id": "otrf-apt29-day1",
- "observations": 171084,
+ "observations": 175143,
  "refused_by_source": {
   "sysmon": 863,
   "windows_powershell": 359,
-  "windows_security": 18274
+  "windows_security": 14215
  },
  "suppressed_by_precedence": 460,
- "evidence": 1175,
+ "evidence": 1194,
  "units": [
   {
-   "group_id": "corr-group::30438932733b72128331bfe9dbdc656a9a463b9659d8038bbff940e3cc32c760",
+   "group_id": "corr-group::ad352b93ffc7f5eba2e877e75ad00181e739518cddd1646a3b9cd427d8153d87",
    "anchor_observation_id": "powershell:NEWYORK.dmevals.local:19894",
    "evidence": 539,
    "observations": 539,
@@ -31,7 +31,7 @@
    }
   },
   {
-   "group_id": "corr-group::1f01e44b2ed2958573f1b97667836494b9972794603e71b2f94bdea971a3500e",
+   "group_id": "corr-group::0e5072db4270aefdb540bde91bd14896528e6e7412540f7b69a7c46caea087ca",
    "anchor_observation_id": "powershell:NEWYORK.dmevals.local:20598",
    "evidence": 415,
    "observations": 415,
@@ -52,7 +52,7 @@
    }
   },
   {
-   "group_id": "corr-group::75b67a93dde2f9e0b0beea2f19c394f0c2baae7b860eb03a221b6f71a2a68749",
+   "group_id": "corr-group::34c427fe0a407a17f998744847b557c274512a9f1b622b7493e3a4b3739e3d8b",
    "anchor_observation_id": "sysmon:NASHUA.dmevals.local:346370",
    "evidence": 79,
    "observations": 76,
@@ -81,7 +81,7 @@
    }
   },
   {
-   "group_id": "corr-group::4456224d5610a6a5bf75bf4071fef13d742aaf31615b071d9344b75d6953c9de",
+   "group_id": "corr-group::93d6404723707fe63514fbc5ac97a009732cfb5a96bafc689037817498f67356",
    "anchor_observation_id": "powershell:SCRANTON.dmevals.local:10620",
    "evidence": 25,
    "observations": 15,
@@ -125,7 +125,7 @@
    }
   },
   {
-   "group_id": "corr-group::c5c0c913c07c1b55fa32027dc449063063fbd1c6418a1ef5797bf1cfb41e95ad",
+   "group_id": "corr-group::8b798ecee6b9e3bdeaf083a4ea7c006489e3dc5373ccb76f38c1bf72c0fd35bb",
    "anchor_observation_id": "sysmon:SCRANTON.dmevals.local:360619",
    "evidence": 24,
    "observations": 12,
@@ -167,30 +167,7 @@
    }
   },
   {
-   "group_id": "corr-group::b4a9fd08e47605d370cb6f0bd924161d64db35497ed078d7267de1146b73c681",
-   "anchor_observation_id": "sysmon:SCRANTON.dmevals.local:425127",
-   "evidence": 13,
-   "observations": 13,
-   "hosts": [
-    "SCRANTON.dmevals.local"
-   ],
-   "first": "2020-05-02T03:20:43.178000+00:00",
-   "last": "2020-05-02T03:20:43.178000+00:00",
-   "process_images": {
-    "C:\\Program Files\\Windows Defender\\MsMpEng.exe": 13
-   },
-   "image_names": [
-    "msmpeng.exe"
-   ],
-   "techniques": [
-    "T1685"
-   ],
-   "rule_families": {
-    "sigma:a982fc9c-6333-4ffb-a51d-addb04e8b529": 13
-   }
-  },
-  {
-   "group_id": "corr-group::f110445f023e8b4cc13f6a312c7bc4efb2d9bb01c45b5e6153b0f74abb6bd17b",
+   "group_id": "corr-group::4105391de50480912a41e2a4593a6305824908fdf12c8ac09fe78f74f67d61b0",
    "anchor_observation_id": "sysmon:SCRANTON.dmevals.local:423500",
    "evidence": 13,
    "observations": 13,
@@ -213,7 +190,30 @@
    }
   },
   {
-   "group_id": "corr-group::437e1b0c09f9c2c8baad6ccbb9a04c839f0045eac12755e6c1f398d3945c61d5",
+   "group_id": "corr-group::c37b84fdfe07efa06e8cc4c2a9187345fc1032ead50d23fbaca57c9fd6263b1e",
+   "anchor_observation_id": "sysmon:SCRANTON.dmevals.local:425127",
+   "evidence": 13,
+   "observations": 13,
+   "hosts": [
+    "SCRANTON.dmevals.local"
+   ],
+   "first": "2020-05-02T03:20:43.178000+00:00",
+   "last": "2020-05-02T03:20:43.178000+00:00",
+   "process_images": {
+    "C:\\Program Files\\Windows Defender\\MsMpEng.exe": 13
+   },
+   "image_names": [
+    "msmpeng.exe"
+   ],
+   "techniques": [
+    "T1685"
+   ],
+   "rule_families": {
+    "sigma:a982fc9c-6333-4ffb-a51d-addb04e8b529": 13
+   }
+  },
+  {
+   "group_id": "corr-group::04eb198e52158de98e450b7922fbd604020363bba085996c77885b7711a961c7",
    "anchor_observation_id": "sysmon:SCRANTON.dmevals.local:418049",
    "evidence": 11,
    "observations": 11,
@@ -236,7 +236,7 @@
    }
   },
   {
-   "group_id": "corr-group::ef8e70d034f42d88c219ffcdbbb0d721eb83041080c0bcbf60a94ac84742fd02",
+   "group_id": "corr-group::a5eec41dcb1d3a4fd2195e3084f3d4e7ee04114d1105bde6419dd652d14aed5b",
    "anchor_observation_id": "sysmon:SCRANTON.dmevals.local:439372",
    "evidence": 5,
    "observations": 2,
@@ -266,7 +266,7 @@
    }
   },
   {
-   "group_id": "corr-group::599f188ab499ed3e5ed4e490159fe229212e38327c1340cc30cad01124eebbb5",
+   "group_id": "corr-group::8be69eb3626f475dc7b2eece6048d2c0cf9d6a47610e987354cef43bd9f61784",
    "anchor_observation_id": "sysmon:NASHUA.dmevals.local:354433",
    "evidence": 4,
    "observations": 3,
@@ -294,32 +294,7 @@
    }
   },
   {
-   "group_id": "corr-group::12c71e6431dee43fcdee8a3910824bb0709a38e39084c8da627fa4b77bddd0cd",
-   "anchor_observation_id": "sysmon:SCRANTON.dmevals.local:395806",
-   "evidence": 3,
-   "observations": 1,
-   "hosts": [
-    "SCRANTON.dmevals.local"
-   ],
-   "first": "2020-05-02T03:19:14.525000+00:00",
-   "last": "2020-05-02T03:19:14.525000+00:00",
-   "process_images": {
-    "C:\\Windows\\System32\\rundll32.exe": 1
-   },
-   "image_names": [
-    "rundll32.exe"
-   ],
-   "techniques": [
-    "T1021.002",
-    "T1569.002",
-    "T1570"
-   ],
-   "rule_families": {
-    "sigma:5bb68627-3198-40ca-b458-49f973db8752": 3
-   }
-  },
-  {
-   "group_id": "corr-group::921c7e4529a0f5f17d4c9a4ae7d05f13410b7384e7e06d1b938c8149e27d2d58",
+   "group_id": "corr-group::3d80a252d6b736981c8093cbc76782f66412c8d90b11097c91caa359cf6d6343",
    "anchor_observation_id": "sysmon:NASHUA.dmevals.local:354515",
    "evidence": 3,
    "observations": 2,
@@ -345,7 +320,7 @@
    }
   },
   {
-   "group_id": "corr-group::c32270df2935ab01d9366d4f0a5b4b0d7592a881a1cabfe2e4e654d7684281be",
+   "group_id": "corr-group::78d5d7e5af7994450e02880d4774b8b666b1cde16d2ea0414b71ab6fc102ecb8",
    "anchor_observation_id": "sysmon:NASHUA.dmevals.local:353503",
    "evidence": 3,
    "observations": 2,
@@ -371,33 +346,100 @@
    }
   },
   {
-   "group_id": "corr-group::015219b90a8d185c3e1450009a82d0efbcdad8558aee91c6bad7c609fe0f4398",
-   "anchor_observation_id": "sysmon:SCRANTON.dmevals.local:348988",
-   "evidence": 2,
-   "observations": 2,
+   "group_id": "corr-group::b4eb157057c75d3b07ebd82b5bc47eb6c28931a1cfd1e046a779504ac7829586",
+   "anchor_observation_id": "sysmon:SCRANTON.dmevals.local:395806",
+   "evidence": 3,
+   "observations": 1,
    "hosts": [
     "SCRANTON.dmevals.local"
    ],
-   "first": "2020-05-02T02:58:43.008000+00:00",
-   "last": "2020-05-02T02:58:43.212000+00:00",
+   "first": "2020-05-02T03:19:14.525000+00:00",
+   "last": "2020-05-02T03:19:14.525000+00:00",
    "process_images": {
-    "C:\\Windows\\System32\\sdclt.exe": 1,
-    "C:\\Windows\\System32\\control.exe": 1
+    "C:\\Windows\\System32\\rundll32.exe": 1
    },
    "image_names": [
-    "control.exe",
-    "sdclt.exe"
+    "rundll32.exe"
    ],
    "techniques": [
-    "T1548.002"
+    "T1021.002",
+    "T1569.002",
+    "T1570"
    ],
    "rule_families": {
-    "sigma:40f9af16-589d-4984-b78d-8c2aec023197": 1,
-    "sigma:da2738f2-fadb-4394-afa7-0a0674885afa": 1
+    "sigma:5bb68627-3198-40ca-b458-49f973db8752": 3
    }
   },
   {
-   "group_id": "corr-group::07c36e13dc41259097a91e8e8cbd3dfff36e5c4b3a24e679b43eb23be3b342a6",
+   "group_id": "corr-group::282a93d7178b2b0fa7766dd87d2d417de298e3625b689fe94a611fc5a2bab54b",
+   "anchor_observation_id": "powershell:SCRANTON.dmevals.local:12726",
+   "evidence": 2,
+   "observations": 1,
+   "hosts": [
+    "SCRANTON.dmevals.local"
+   ],
+   "first": "2020-05-02T03:21:29+00:00",
+   "last": "2020-05-02T03:21:29+00:00",
+   "process_images": {
+    "?": 1
+   },
+   "image_names": [],
+   "techniques": [
+    "T1059.001"
+   ],
+   "rule_families": {
+    "sigma:1f49f2ab-26bc-48b3-96cc-dcffbc93eadf": 1,
+    "sigma:f62176f3-8128-4faa-bf6c-83261322e5eb": 1
+   }
+  },
+  {
+   "group_id": "corr-group::50fcdd9183152265e1821189c9f7f42ffad908e010fdfbec4351eda4585e00e6",
+   "anchor_observation_id": "powershell:SCRANTON.dmevals.local:10681",
+   "evidence": 2,
+   "observations": 1,
+   "hosts": [
+    "SCRANTON.dmevals.local"
+   ],
+   "first": "2020-05-02T03:07:01+00:00",
+   "last": "2020-05-02T03:07:01+00:00",
+   "process_images": {
+    "?": 1
+   },
+   "image_names": [],
+   "techniques": [
+    "T1059.001",
+    "T1620"
+   ],
+   "rule_families": {
+    "sigma:1f49f2ab-26bc-48b3-96cc-dcffbc93eadf": 1,
+    "sigma:ddcd88cb-7f62-4ce5-86f9-1704190feb0a": 1
+   }
+  },
+  {
+   "group_id": "corr-group::75d1914f1f4145d54b90cd8a05d03af975289518fc62132821603c99a392f96c",
+   "anchor_observation_id": "sysmon:NASHUA.dmevals.local:336787",
+   "evidence": 2,
+   "observations": 2,
+   "hosts": [
+    "NASHUA.dmevals.local"
+   ],
+   "first": "2020-05-02T02:59:37.453000+00:00",
+   "last": "2020-05-02T02:59:37.453000+00:00",
+   "process_images": {
+    "C:\\windows\\system32\\lsass.exe": 2
+   },
+   "image_names": [
+    "lsass.exe"
+   ],
+   "techniques": [
+    "T1490"
+   ],
+   "rule_families": {
+    "sigma:d223b46b-5621-4037-88fe-fda32eead684": 2
+   }
+  },
+  {
+   "group_id": "corr-group::7a4b87e8f73748e0bcd8cf5d737fada8f169c151ba12a3c81889c20f3e8feaf1",
    "anchor_observation_id": "sysmon:SCRANTON.dmevals.local:349718",
    "evidence": 2,
    "observations": 2,
@@ -424,71 +466,29 @@
    }
   },
   {
-   "group_id": "corr-group::65a6cbb6ca733a9c6efa7cd6f5a233b8bd15c8c161bb47723702d003edc6edd7",
-   "anchor_observation_id": "sysmon:NASHUA.dmevals.local:336787",
+   "group_id": "corr-group::8236bbe2a6eda9ae3bb7022b40461cf2727bb9f5fc0a6de1349e410a0158a9b9",
+   "anchor_observation_id": "sysmon:SCRANTON.dmevals.local:348988",
    "evidence": 2,
    "observations": 2,
    "hosts": [
-    "NASHUA.dmevals.local"
+    "SCRANTON.dmevals.local"
    ],
-   "first": "2020-05-02T02:59:37.453000+00:00",
-   "last": "2020-05-02T02:59:37.453000+00:00",
+   "first": "2020-05-02T02:58:43.008000+00:00",
+   "last": "2020-05-02T02:58:43.212000+00:00",
    "process_images": {
-    "C:\\windows\\system32\\lsass.exe": 2
+    "C:\\Windows\\System32\\sdclt.exe": 1,
+    "C:\\Windows\\System32\\control.exe": 1
    },
    "image_names": [
-    "lsass.exe"
+    "control.exe",
+    "sdclt.exe"
    ],
    "techniques": [
-    "T1490"
+    "T1548.002"
    ],
    "rule_families": {
-    "sigma:d223b46b-5621-4037-88fe-fda32eead684": 2
-   }
-  },
-  {
-   "group_id": "corr-group::de21bdf7816a9483cfb8a5cbc94838bfd41dd6fc078b74da066d6588ac7cd616",
-   "anchor_observation_id": "powershell:SCRANTON.dmevals.local:10681",
-   "evidence": 2,
-   "observations": 1,
-   "hosts": [
-    "SCRANTON.dmevals.local"
-   ],
-   "first": "2020-05-02T03:07:01+00:00",
-   "last": "2020-05-02T03:07:01+00:00",
-   "process_images": {
-    "?": 1
-   },
-   "image_names": [],
-   "techniques": [
-    "T1059.001",
-    "T1620"
-   ],
-   "rule_families": {
-    "sigma:1f49f2ab-26bc-48b3-96cc-dcffbc93eadf": 1,
-    "sigma:ddcd88cb-7f62-4ce5-86f9-1704190feb0a": 1
-   }
-  },
-  {
-   "group_id": "corr-group::f2c6b32724e83c72f9a55ae0d1caab168d0cd115c00abe1fe0e4059301833305",
-   "anchor_observation_id": "powershell:SCRANTON.dmevals.local:12726",
-   "evidence": 2,
-   "observations": 1,
-   "hosts": [
-    "SCRANTON.dmevals.local"
-   ],
-   "first": "2020-05-02T03:21:29+00:00",
-   "last": "2020-05-02T03:21:29+00:00",
-   "process_images": {
-    "?": 1
-   },
-   "image_names": [],
-   "techniques": [
-    "T1059.001"
-   ],
-   "rule_families": {
-    "sigma:1f49f2ab-26bc-48b3-96cc-dcffbc93eadf": 1,
-    "sigma:f62176f3-8128-4faa-bf6c-83261322e5eb": 1
+    "sigma:40f9af16-589d-4984-b78d-8c2aec023197": 1,
+    "sigma:da2738f2-fadb-4394-afa7-0a0674885afa": 1
    }
   }
  ]

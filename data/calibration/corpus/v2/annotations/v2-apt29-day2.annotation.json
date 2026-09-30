@@ -58,16 +58,16 @@
   {
    "unit_id": "v2-apt29-day2-u04",
    "anchor_scenario_ids": [
-    "sysmon:UTICA.dmevals.local:1008901"
+    "sysmon:UTICA.dmevals.local:987756"
    ],
-   "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: antimalwareconfig.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
+   "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: windowsazuretelemetryservice.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
   },
   {
    "unit_id": "v2-apt29-day2-u05",
    "anchor_scenario_ids": [
-    "sysmon:UTICA.dmevals.local:987756"
+    "sysmon:UTICA.dmevals.local:1008901"
    ],
-   "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: windowsazuretelemetryservice.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
+   "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: antimalwareconfig.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
   },
   {
    "unit_id": "v2-apt29-day2-u06",

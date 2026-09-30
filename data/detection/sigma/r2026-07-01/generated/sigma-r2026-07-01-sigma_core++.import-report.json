@@ -5,12 +5,12 @@
   "sigma_archive": "sigma_core++.zip",
   "sigma_archive_sha256": "469d83e1d1bbdb4d7876466ff1a728550fae5a20115b91339d58d20e894e7477",
   "pysigma_version": "1.5.1",
-  "field_map_version": "sigma-field-map/8",
+  "field_map_version": "sigma-field-map/9",
   "attack_kb_version": "enterprise-attack-19.2",
   "dnf_bound": 64,
   "software_tag_review": {
    "file": "software-tag-review.json",
-   "sha256": "335a914ab78b4bfec8328947c8d2068f1513138aa5fb77a118b9eb6cd52798cb",
+   "sha256": "b1b7480e44d0697cdadb3740866289e70266f062f273ea25a90117584a4312f9",
    "accepted": [
     "1de68c67-af5c-4097-9c85-fe5578e09e67:attack.s0005",
     "304afd73-55a5-4bb9-8c21-0b1fc84ea9e4:attack.s0029",
@@ -32,66 +32,58 @@
  "summary": {
   "sigma_rules_total": 2842,
   "by_status": {
-   "imported": 1418,
-   "partial": 62,
-   "rejected": 1362
+   "imported": 1466,
+   "partial": 61,
+   "rejected": 1315
   },
   "rejected_by_reason": {
    "no_attack_mapping": 319,
-   "telemetry_gap": 791,
-   "translation_gap": 252
+   "telemetry_gap": 740,
+   "translation_gap": 256
   },
-  "generated_rules": 11095,
-  "attack_ids_with_imported_rule": 271,
+  "generated_rules": 11280,
+  "attack_ids_with_imported_rule": 275,
   "group_tags_ignored": 12,
   "software_tags_ignored": 42
  },
  "gap_reasons": {
-  "translation_gap:interior_wildcard_or_empty": 292,
+  "translation_gap:interior_wildcard_or_empty": 293,
   "telemetry_gap:field:Hashes": 212,
   "telemetry_gap:field:Initiated": 173,
   "dnf_bound_exceeded:>64": 161,
-  "translation_gap:value_type:SigmaRegularExpression": 137,
+  "translation_gap:value_type:SigmaRegularExpression": 145,
+  "translation_gap:single_char_wildcard": 109,
   "telemetry_gap:field:CommandLine": 92,
   "translation_gap:value_type:SigmaCIDRExpression": 86,
-  "translation_gap:single_char_wildcard": 85,
   "logsource:linux/process_creation": 78,
   "telemetry_gap:field:ParentImage": 70,
-  "telemetry_gap:field:ServiceFileName": 60,
   "telemetry_gap:field:DestinationHostname": 59,
   "logsource:windows/system": 51,
   "telemetry_gap:field:User": 49,
   "logsource:macos/process_creation": 42,
-  "telemetry_gap:field:TaskName": 42,
   "logsource:azure/auditlogs": 38,
   "logsource:aws/cloudtrail": 37,
   "telemetry_gap:field:AuditPolicyChanges": 29,
   "telemetry_gap:field:SubcategoryGuid": 29,
   "logsource:/proxy": 26,
   "logsource:linux/auditd": 26,
-  "telemetry_gap:field:ServiceName": 26,
-  "telemetry_gap:event_code:4661": 25,
   "telemetry_gap:field:AttributeLDAPDisplayName": 25,
   "logsource:opencanary/application": 24,
-  "telemetry_gap:field:NewUacValue": 24,
-  "telemetry_gap:field:OldUacValue": 24,
   "logsource:azure/activitylogs": 23,
+  "telemetry_gap:event_code:4699": 21,
+  "telemetry_gap:event_code:4701": 21,
   "telemetry_gap:field:AttributeValue": 21,
   "logsource:azure/signinlogs": 20,
   "logsource:azure/riskdetection": 19,
-  "telemetry_gap:field:TargetServerName": 16,
   "logsource:windows/windefend": 14,
   "logsource:/webserver": 13,
-  "telemetry_gap:event_code:4625": 13,
   "logsource:bitbucket/audit": 12,
   "logsource:windows/application": 12,
   "telemetry_gap:field:Application": 12,
   "telemetry_gap:field:DestPort": 12,
   "logsource:linux/": 11,
-  "telemetry_gap:event_code:4657": 11,
   "logsource:cisco/aaa": 10,
   "logsource:m365/threat_management": 10,
-  "telemetry_gap:field:TargetName": 10,
   "logsource:github/audit": 9,
   "logsource:okta/okta": 9,
   "logsource:rpc_firewall/application": 9,
@@ -100,7 +92,6 @@
   "logsource:/antivirus": 8,
   "telemetry_gap:field:ObjectClass": 8,
   "telemetry_gap:field:ParentUser": 8,
-  "telemetry_gap:field:Properties": 8,
   "telemetry_gap:field:SourceIsIpv6": 8,
   "telemetry_gap:rendered_value:object_access.access_list": 8,
   "logsource:/dns": 7,
@@ -118,14 +109,11 @@
   "logsource:windows/ps_classic_start": 5,
   "telemetry_gap:field:EventID": 5,
   "telemetry_gap:field:NewName": 5,
-  "telemetry_gap:field:PrivilegeList": 5,
   "logsource:kubernetes/application": 4,
   "logsource:m365/audit": 4,
   "logsource:windows/dns-client": 4,
-  "telemetry_gap:event_code:4662": 4,
   "telemetry_gap:field:FilterOrigin": 4,
   "telemetry_gap:field:ObjectDN": 4,
-  "telemetry_gap:field:SamAccountName": 4,
   "logsource:gcp/google_workspace.admin": 3,
   "logsource:gcp/google_workspace.login": 3,
   "logsource:windows/iis-configuration": 3,
@@ -133,8 +121,6 @@
   "logsource:windows/taskscheduler": 3,
   "logsource:zeek/dce_rpc": 3,
   "logsource:zeek/dns": 3,
-  "telemetry_gap:field:FilterName": 3,
-  "telemetry_gap:field:Service": 3,
   "logsource:/apache": 2,
   "logsource:kubernetes/audit": 2,
   "logsource:linux/syslog": 2,
@@ -153,8 +139,6 @@
   "telemetry_gap:field:SourceAddress": 2,
   "telemetry_gap:field:SourceHostname": 2,
   "telemetry_gap:field:SourcePort": 2,
-  "telemetry_gap:field:SubjectLogonId": 2,
-  "telemetry_gap:field:TicketEncryptionType": 2,
   "translation_gap:value_type:SigmaBool": 2,
   "logsource:/database": 1,
   "logsource:/nginx": 1,
@@ -192,34 +176,23 @@
   "logsource:zeek/kerberos": 1,
   "logsource:zeek/rdp": 1,
   "telemetry_gap:event_code:1102": 1,
-  "telemetry_gap:event_code:4611": 1,
   "telemetry_gap:event_code:4649": 1,
   "telemetry_gap:event_code:4692": 1,
+  "telemetry_gap:event_code:4704": 1,
   "telemetry_gap:event_code:4706": 1,
-  "telemetry_gap:event_code:4720": 1,
-  "telemetry_gap:event_code:4732": 1,
   "telemetry_gap:event_code:4765": 1,
   "telemetry_gap:event_code:4766": 1,
   "telemetry_gap:event_code:4794": 1,
   "telemetry_gap:event_code:4825": 1,
   "telemetry_gap:event_code:517": 1,
+  "telemetry_gap:event_code:5449": 1,
   "telemetry_gap:event_code:6423": 1,
-  "telemetry_gap:field:AdditionalInfo": 1,
   "telemetry_gap:field:AllowedToDelegateTo": 1,
-  "telemetry_gap:field:CertThumbprint": 1,
-  "telemetry_gap:field:ClientProcessId": 1,
   "telemetry_gap:field:FileVersion": 1,
   "telemetry_gap:field:Keywords": 1,
   "telemetry_gap:field:LogonId": 1,
-  "telemetry_gap:field:ParentProcessId": 1,
-  "telemetry_gap:field:ProviderContextName": 1,
   "telemetry_gap:field:Provider_Name": 1,
-  "telemetry_gap:field:ServicePrincipalNames": 1,
-  "telemetry_gap:field:ServiceStartType": 1,
-  "telemetry_gap:field:ServiceType": 1,
-  "telemetry_gap:field:SidHistory": 1,
-  "telemetry_gap:field:TargetSid": 1,
-  "telemetry_gap:field:TicketOptions": 1
+  "telemetry_gap:field:ServicePrincipalNames": 1
  },
  "unmapped_field_notes": {
   "Data": "classic 'Windows PowerShell' channel (400/600/800) rules read the event's Data element; exports seen so far carry only the rendered Message",
@@ -252,6 +225,7 @@
   "T1005",
   "T1007",
   "T1008",
+  "T1010",
   "T1012",
   "T1016",
   "T1018",
@@ -342,10 +316,12 @@
   "T1129",
   "T1132.001",
   "T1133",
+  "T1134",
   "T1134.001",
   "T1134.002",
   "T1134.003",
   "T1134.004",
+  "T1134.005",
   "T1135",
   "T1136.001",
   "T1136.002",
@@ -460,6 +436,7 @@
   "T1556.002",
   "T1557",
   "T1557.001",
+  "T1557.003",
   "T1558",
   "T1558.003",
   "T1559.001",
@@ -613,13 +590,11 @@
    "path": "rules/windows/builtin/security/win_security_susp_opened_encrypted_zip.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/builtin/security/win_security_susp_opened_encrypted_zip.yml",
    "logsource": "windows/security",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
+   "status": "imported",
+   "rejection": null,
    "conjuncts_total": 1,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "telemetry_gap:field:TargetName": 1
-   },
+   "conjuncts_imported": 1,
+   "gap_reasons": {},
    "attack_ids": [
     "T1027"
    ],
@@ -992,13 +967,11 @@
    "path": "rules/windows/builtin/security/win_security_ad_object_writedac_access.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/builtin/security/win_security_ad_object_writedac_access.yml",
    "logsource": "windows/security",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
+   "status": "imported",
+   "rejection": null,
    "conjuncts_total": 2,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "telemetry_gap:event_code:4662": 2
-   },
+   "conjuncts_imported": 2,
+   "gap_reasons": {},
    "attack_ids": [
     "T1222.001"
    ],
@@ -3022,13 +2995,11 @@
    "path": "rules/windows/builtin/security/win_security_invoke_obfuscation_stdin_services_security.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/builtin/security/win_security_invoke_obfuscation_stdin_services_security.yml",
    "logsource": "windows/security",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
+   "status": "imported",
+   "rejection": null,
    "conjuncts_total": 4,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "telemetry_gap:field:ServiceFileName": 4
-   },
+   "conjuncts_imported": 4,
+   "gap_reasons": {},
    "attack_ids": [
     "T1059.001",
     "T1027"
@@ -3529,14 +3500,11 @@
    "path": "rules/windows/builtin/security/win_security_hybridconnectionmgr_svc_installation.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/builtin/security/win_security_hybridconnectionmgr_svc_installation.yml",
    "logsource": "windows/security",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
+   "status": "imported",
+   "rejection": null,
    "conjuncts_total": 1,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "telemetry_gap:field:ServiceFileName": 1,
-    "telemetry_gap:field:ServiceName": 1
-   },
+   "conjuncts_imported": 1,
+   "gap_reasons": {},
    "attack_ids": [
     "T1554"
    ],
@@ -4418,13 +4386,11 @@
    "path": "rules/windows/builtin/security/win_security_password_policy_enumerated.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/builtin/security/win_security_password_policy_enumerated.yml",
    "logsource": "windows/security",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
+   "status": "imported",
+   "rejection": null,
    "conjuncts_total": 1,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "telemetry_gap:event_code:4661": 1
-   },
+   "conjuncts_imported": 1,
+   "gap_reasons": {},
    "attack_ids": [
     "T1201"
    ],
@@ -4461,13 +4427,11 @@
    "path": "rules/windows/builtin/security/win_security_register_new_logon_process_by_rubeus.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/builtin/security/win_security_register_new_logon_process_by_rubeus.yml",
    "logsource": "windows/security",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
+   "status": "imported",
+   "rejection": null,
    "conjuncts_total": 1,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "telemetry_gap:event_code:4611": 1
-   },
+   "conjuncts_imported": 1,
+   "gap_reasons": {},
    "attack_ids": [
     "T1558.003"
    ],
@@ -4628,13 +4592,11 @@
    "path": "rules/windows/builtin/security/win_security_scm_database_handle_failure.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/builtin/security/win_security_scm_database_handle_failure.yml",
    "logsource": "windows/security",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
+   "status": "imported",
+   "rejection": null,
    "conjuncts_total": 1,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "telemetry_gap:field:SubjectLogonId": 1
-   },
+   "conjuncts_imported": 1,
+   "gap_reasons": {},
    "attack_ids": [
     "T1010"
    ],
@@ -5579,13 +5541,11 @@
    "path": "rules/windows/builtin/security/win_security_ad_replication_non_machine_account.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/builtin/security/win_security_ad_replication_non_machine_account.yml",
    "logsource": "windows/security",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
+   "status": "imported",
+   "rejection": null,
    "conjuncts_total": 3,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "telemetry_gap:field:Properties": 3
-   },
+   "conjuncts_imported": 3,
+   "gap_reasons": {},
    "attack_ids": [
     "T1003.006"
    ],
@@ -5810,13 +5770,11 @@
    "path": "rules/windows/builtin/security/win_security_sysmon_channel_reference_deletion.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/builtin/security/win_security_sysmon_channel_reference_deletion.yml",
    "logsource": "windows/security",
-   "status": "partial",
+   "status": "imported",
    "rejection": null,
    "conjuncts_total": 4,
-   "conjuncts_imported": 2,
-   "gap_reasons": {
-    "telemetry_gap:event_code:4657": 2
-   },
+   "conjuncts_imported": 4,
+   "gap_reasons": {},
    "attack_ids": [
     "T1112"
    ],
@@ -6128,13 +6086,11 @@
    "path": "rules/windows/builtin/security/win_security_invoke_obfuscation_via_use_clip_services_security.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/builtin/security/win_security_invoke_obfuscation_via_use_clip_services_security.yml",
    "logsource": "windows/security",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
+   "status": "imported",
+   "rejection": null,
    "conjuncts_total": 1,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "telemetry_gap:field:ServiceFileName": 1
-   },
+   "conjuncts_imported": 1,
+   "gap_reasons": {},
    "attack_ids": [
     "T1059.001",
     "T1027"
@@ -6560,13 +6516,11 @@
    "path": "rules/windows/builtin/security/win_security_susp_local_anon_logon_created.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/builtin/security/win_security_susp_local_anon_logon_created.yml",
    "logsource": "windows/security",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
+   "status": "imported",
+   "rejection": null,
    "conjuncts_total": 1,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "telemetry_gap:field:SamAccountName": 1
-   },
+   "conjuncts_imported": 1,
+   "gap_reasons": {},
    "attack_ids": [
     "T1136.001",
     "T1136.002"
@@ -8475,13 +8429,11 @@
    "path": "rules/windows/builtin/security/win_security_alert_ruler.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/builtin/security/win_security_alert_ruler.yml",
    "logsource": "windows/security",
-   "status": "partial",
+   "status": "imported",
    "rejection": null,
    "conjuncts_total": 3,
-   "conjuncts_imported": 2,
-   "gap_reasons": {
-    "telemetry_gap:event_code:4625": 1
-   },
+   "conjuncts_imported": 3,
+   "gap_reasons": {},
    "attack_ids": [
     "T1114",
     "T1087",
@@ -8883,14 +8835,13 @@
    "path": "rules/windows/builtin/security/win_security_susp_add_sid_history.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/builtin/security/win_security_susp_add_sid_history.yml",
    "logsource": "windows/security",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
+   "status": "partial",
+   "rejection": null,
    "conjuncts_total": 3,
-   "conjuncts_imported": 0,
+   "conjuncts_imported": 1,
    "gap_reasons": {
     "telemetry_gap:event_code:4765": 1,
-    "telemetry_gap:event_code:4766": 1,
-    "telemetry_gap:field:SidHistory": 1
+    "telemetry_gap:event_code:4766": 1
    },
    "attack_ids": [
     "T1134.005"
@@ -9657,13 +9608,11 @@
    "path": "rules/windows/builtin/security/win_security_powershell_script_installed_as_service.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/builtin/security/win_security_powershell_script_installed_as_service.yml",
    "logsource": "windows/security",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
+   "status": "imported",
+   "rejection": null,
    "conjuncts_total": 2,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "telemetry_gap:field:ServiceFileName": 2
-   },
+   "conjuncts_imported": 2,
+   "gap_reasons": {},
    "attack_ids": [
     "T1569.002"
    ],
@@ -10799,7 +10748,7 @@
    "conjuncts_total": 1,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "telemetry_gap:field:PrivilegeList": 1
+    "telemetry_gap:event_code:4704": 1
    },
    "attack_ids": [
     "T1098"
@@ -11785,13 +11734,11 @@
    "path": "rules/windows/builtin/security/win_security_account_discovery.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/builtin/security/win_security_account_discovery.yml",
    "logsource": "windows/security",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
+   "status": "imported",
+   "rejection": null,
    "conjuncts_total": 20,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "telemetry_gap:event_code:4661": 20
-   },
+   "conjuncts_imported": 20,
+   "gap_reasons": {},
    "attack_ids": [
     "T1087.002"
    ],
@@ -12501,13 +12448,11 @@
    "path": "rules/windows/builtin/security/win_security_susp_computer_name.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/builtin/security/win_security_susp_computer_name.yml",
    "logsource": "windows/security",
-   "status": "partial",
+   "status": "imported",
    "rejection": null,
    "conjuncts_total": 2,
-   "conjuncts_imported": 1,
-   "gap_reasons": {
-    "telemetry_gap:field:SamAccountName": 1
-   },
+   "conjuncts_imported": 2,
+   "gap_reasons": {},
    "attack_ids": [
     "T1078"
    ],
@@ -14947,13 +14892,11 @@
    "path": "rules/windows/builtin/security/win_security_windows_defender_exclusions_registry_modified.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/builtin/security/win_security_windows_defender_exclusions_registry_modified.yml",
    "logsource": "windows/security",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
+   "status": "imported",
+   "rejection": null,
    "conjuncts_total": 1,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "telemetry_gap:event_code:4657": 1
-   },
+   "conjuncts_imported": 1,
+   "gap_reasons": {},
    "attack_ids": [
     "T1685"
    ],
@@ -15515,15 +15458,11 @@
    "path": "rules/windows/builtin/security/win_security_susp_rc4_kerberos.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/builtin/security/win_security_susp_rc4_kerberos.yml",
    "logsource": "windows/security",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
+   "status": "imported",
+   "rejection": null,
    "conjuncts_total": 1,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "telemetry_gap:field:ServiceName": 1,
-    "telemetry_gap:field:TicketEncryptionType": 1,
-    "telemetry_gap:field:TicketOptions": 1
-   },
+   "conjuncts_imported": 1,
+   "gap_reasons": {},
    "attack_ids": [
     "T1558.003"
    ],
@@ -15877,13 +15816,11 @@
    "path": "rules/windows/builtin/security/win_security_dpapi_domain_backupkey_extraction.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/builtin/security/win_security_dpapi_domain_backupkey_extraction.yml",
    "logsource": "windows/security",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
+   "status": "imported",
+   "rejection": null,
    "conjuncts_total": 1,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "telemetry_gap:event_code:4662": 1
-   },
+   "conjuncts_imported": 1,
+   "gap_reasons": {},
    "attack_ids": [
     "T1003.004"
    ],
@@ -16344,13 +16281,11 @@
    "path": "rules/windows/builtin/security/win_security_invoke_obfuscation_via_var_services_security.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/builtin/security/win_security_invoke_obfuscation_via_var_services_security.yml",
    "logsource": "windows/security",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
+   "status": "imported",
+   "rejection": null,
    "conjuncts_total": 6,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "telemetry_gap:field:ServiceFileName": 6
-   },
+   "conjuncts_imported": 6,
+   "gap_reasons": {},
    "attack_ids": [
     "T1059.001",
     "T1027"
@@ -16785,13 +16720,11 @@
    "path": "rules/windows/builtin/security/win_security_invoke_obfuscation_clip_services_security.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/builtin/security/win_security_invoke_obfuscation_clip_services_security.yml",
    "logsource": "windows/security",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
+   "status": "imported",
+   "rejection": null,
    "conjuncts_total": 1,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "telemetry_gap:field:ServiceFileName": 1
-   },
+   "conjuncts_imported": 1,
+   "gap_reasons": {},
    "attack_ids": [
     "T1059.001",
     "T1027"
@@ -18216,13 +18149,11 @@
    "path": "rules/windows/builtin/security/win_security_susp_opened_encrypted_zip_filename.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/builtin/security/win_security_susp_opened_encrypted_zip_filename.yml",
    "logsource": "windows/security",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
+   "status": "imported",
+   "rejection": null,
    "conjuncts_total": 8,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "telemetry_gap:field:TargetName": 8
-   },
+   "conjuncts_imported": 8,
+   "gap_reasons": {},
    "attack_ids": [
     "T1036",
     "T1027",
@@ -18691,13 +18622,11 @@
    "path": "rules/windows/builtin/security/win_security_susp_opened_encrypted_zip_outlook.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/builtin/security/win_security_susp_opened_encrypted_zip_outlook.yml",
    "logsource": "windows/security",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
+   "status": "imported",
+   "rejection": null,
    "conjuncts_total": 1,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "telemetry_gap:field:TargetName": 1
-   },
+   "conjuncts_imported": 1,
+   "gap_reasons": {},
    "attack_ids": [
     "T1566.001",
     "T1027"
@@ -20520,13 +20449,11 @@
    "path": "rules/windows/builtin/security/win_security_dcsync.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/builtin/security/win_security_dcsync.yml",
    "logsource": "windows/security",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
+   "status": "imported",
+   "rejection": null,
    "conjuncts_total": 5,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "telemetry_gap:field:Properties": 5
-   },
+   "conjuncts_imported": 5,
+   "gap_reasons": {},
    "attack_ids": [
     "T1003.006"
    ],
@@ -22219,11 +22146,11 @@
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/builtin/security/win_security_petitpotam_susp_tgt_request.yml",
    "logsource": "windows/security",
    "status": "rejected",
-   "rejection": "telemetry_gap",
+   "rejection": "translation_gap",
    "conjuncts_total": 1,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "telemetry_gap:field:CertThumbprint": 1
+    "translation_gap:interior_wildcard_or_empty": 1
    },
    "attack_ids": [
     "T1187"
@@ -22940,8 +22867,7 @@
    "conjuncts_total": 1,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "telemetry_gap:field:Keywords": 1,
-    "telemetry_gap:field:Service": 1
+    "telemetry_gap:field:Keywords": 1
    },
    "attack_ids": [
     "T1558.003"
@@ -23412,14 +23338,11 @@
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/builtin/security/win_security_metasploit_or_impacket_smb_psexec_service_install.yml",
    "logsource": "windows/security",
    "status": "rejected",
-   "rejection": "telemetry_gap",
+   "rejection": "translation_gap",
    "conjuncts_total": 1,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "telemetry_gap:field:ServiceFileName": 1,
-    "telemetry_gap:field:ServiceName": 1,
-    "telemetry_gap:field:ServiceStartType": 1,
-    "telemetry_gap:field:ServiceType": 1
+    "translation_gap:value_type:SigmaRegularExpression": 1
    },
    "attack_ids": [
     "T1021.002",
@@ -24613,7 +24536,8 @@
    "conjuncts_total": 42,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "telemetry_gap:field:TaskName": 42
+    "telemetry_gap:event_code:4699": 21,
+    "telemetry_gap:event_code:4701": 21
    },
    "attack_ids": [
     "T1053.005"
@@ -25747,13 +25671,11 @@
    "path": "rules/windows/builtin/security/win_security_invoke_obfuscation_via_compress_services_security.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/builtin/security/win_security_invoke_obfuscation_via_compress_services_security.yml",
    "logsource": "windows/security",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
+   "status": "imported",
+   "rejection": null,
    "conjuncts_total": 2,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "telemetry_gap:field:ServiceFileName": 2
-   },
+   "conjuncts_imported": 2,
+   "gap_reasons": {},
    "attack_ids": [
     "T1059.001",
     "T1027"
@@ -25883,13 +25805,12 @@
    "path": "rules/windows/builtin/security/win_security_hktl_nofilter.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/builtin/security/win_security_hktl_nofilter.yml",
    "logsource": "windows/security",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
+   "status": "partial",
+   "rejection": null,
    "conjuncts_total": 2,
-   "conjuncts_imported": 0,
+   "conjuncts_imported": 1,
    "gap_reasons": {
-    "telemetry_gap:field:FilterName": 1,
-    "telemetry_gap:field:ProviderContextName": 1
+    "telemetry_gap:event_code:5449": 1
    },
    "attack_ids": [
     "T1134.001",
@@ -25926,13 +25847,11 @@
    "path": "rules/windows/builtin/security/win_security_hidden_user_creation.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/builtin/security/win_security_hidden_user_creation.yml",
    "logsource": "windows/security",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
+   "status": "imported",
+   "rejection": null,
    "conjuncts_total": 1,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "telemetry_gap:event_code:4720": 1
-   },
+   "conjuncts_imported": 1,
+   "gap_reasons": {},
    "attack_ids": [
     "T1136.001"
    ],
@@ -25982,13 +25901,11 @@
    "path": "rules/windows/builtin/security/win_security_pcap_drivers.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/builtin/security/win_security_pcap_drivers.yml",
    "logsource": "windows/security",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
+   "status": "imported",
+   "rejection": null,
    "conjuncts_total": 9,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "telemetry_gap:field:ServiceFileName": 9
-   },
+   "conjuncts_imported": 9,
+   "gap_reasons": {},
    "attack_ids": [
     "T1040"
    ],
@@ -27094,13 +27011,11 @@
    "path": "rules/windows/builtin/security/win_security_invoke_obfuscation_via_stdin_services_security.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/builtin/security/win_security_invoke_obfuscation_via_stdin_services_security.yml",
    "logsource": "windows/security",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
+   "status": "imported",
+   "rejection": null,
    "conjuncts_total": 3,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "telemetry_gap:field:ServiceFileName": 3
-   },
+   "conjuncts_imported": 3,
+   "gap_reasons": {},
    "attack_ids": [
     "T1059.001",
     "T1027"
@@ -29791,13 +29706,11 @@
    "path": "rules/windows/builtin/security/win_security_camera_microphone_access.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/builtin/security/win_security_camera_microphone_access.yml",
    "logsource": "windows/security",
-   "status": "partial",
+   "status": "imported",
    "rejection": null,
    "conjuncts_total": 6,
-   "conjuncts_imported": 4,
-   "gap_reasons": {
-    "telemetry_gap:event_code:4657": 2
-   },
+   "conjuncts_imported": 6,
+   "gap_reasons": {},
    "attack_ids": [
     "T1123"
    ],
@@ -31174,13 +31087,11 @@
    "path": "rules/windows/builtin/security/win_security_susp_logon_explicit_credentials.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/builtin/security/win_security_susp_logon_explicit_credentials.yml",
    "logsource": "windows/security",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
+   "status": "imported",
+   "rejection": null,
    "conjuncts_total": 16,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "telemetry_gap:field:TargetServerName": 16
-   },
+   "conjuncts_imported": 16,
+   "gap_reasons": {},
    "attack_ids": [
     "T1078"
    ],
@@ -31738,13 +31649,11 @@
    "path": "rules/windows/builtin/security/win_security_susp_net_recon_activity.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/builtin/security/win_security_susp_net_recon_activity.yml",
    "logsource": "windows/security",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
+   "status": "imported",
+   "rejection": null,
    "conjuncts_total": 4,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "telemetry_gap:event_code:4661": 4
-   },
+   "conjuncts_imported": 4,
+   "gap_reasons": {},
    "attack_ids": [
     "T1087.002",
     "T1069.002"
@@ -32248,13 +32157,11 @@
    "path": "rules/windows/builtin/security/win_security_hktl_edr_silencer.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/builtin/security/win_security_hktl_edr_silencer.yml",
    "logsource": "windows/security",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
+   "status": "imported",
+   "rejection": null,
    "conjuncts_total": 2,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "telemetry_gap:field:FilterName": 2
-   },
+   "conjuncts_imported": 2,
+   "gap_reasons": {},
    "attack_ids": [
     "T1685"
    ],
@@ -33120,13 +33027,11 @@
    "path": "rules/windows/builtin/security/win_security_invoke_obfuscation_via_use_mshta_services_security.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/builtin/security/win_security_invoke_obfuscation_via_use_mshta_services_security.yml",
    "logsource": "windows/security",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
+   "status": "imported",
+   "rejection": null,
    "conjuncts_total": 1,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "telemetry_gap:field:ServiceFileName": 1
-   },
+   "conjuncts_imported": 1,
+   "gap_reasons": {},
    "attack_ids": [
     "T1059.001",
     "T1027"
@@ -33881,13 +33786,11 @@
    "path": "rules/windows/builtin/security/win_security_susp_failed_logon_reasons.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/builtin/security/win_security_susp_failed_logon_reasons.yml",
    "logsource": "windows/security",
-   "status": "partial",
+   "status": "imported",
    "rejection": null,
    "conjuncts_total": 24,
-   "conjuncts_imported": 12,
-   "gap_reasons": {
-    "telemetry_gap:event_code:4625": 12
-   },
+   "conjuncts_imported": 24,
+   "gap_reasons": {},
    "attack_ids": [
     "T1078"
    ],
@@ -35339,13 +35242,11 @@
    "path": "rules/windows/builtin/security/win_security_dot_net_etw_tamper.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/builtin/security/win_security_dot_net_etw_tamper.yml",
    "logsource": "windows/security",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
+   "status": "imported",
+   "rejection": null,
    "conjuncts_total": 3,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "telemetry_gap:event_code:4657": 3
-   },
+   "conjuncts_imported": 3,
+   "gap_reasons": {},
    "attack_ids": [
     "T1112",
     "T1685"
@@ -37642,12 +37543,11 @@
    "path": "rules/windows/builtin/security/win_security_kerberos_coercion_via_dns_object.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/builtin/security/win_security_kerberos_coercion_via_dns_object.yml",
    "logsource": "windows/security",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
+   "status": "partial",
+   "rejection": null,
    "conjuncts_total": 3,
-   "conjuncts_imported": 0,
+   "conjuncts_imported": 1,
    "gap_reasons": {
-    "telemetry_gap:field:AdditionalInfo": 1,
     "telemetry_gap:field:ObjectClass": 2,
     "telemetry_gap:field:ObjectDN": 2
    },
@@ -41515,14 +41415,11 @@
    "path": "rules/windows/builtin/security/win_security_user_added_to_local_administrators.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/builtin/security/win_security_user_added_to_local_administrators.yml",
    "logsource": "windows/security",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
+   "status": "imported",
+   "rejection": null,
    "conjuncts_total": 2,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "telemetry_gap:event_code:4732": 1,
-    "telemetry_gap:field:TargetSid": 1
-   },
+   "conjuncts_imported": 2,
+   "gap_reasons": {},
    "attack_ids": [
     "T1098",
     "T1078"
@@ -42098,14 +41995,11 @@
    "path": "rules/windows/builtin/security/win_security_service_installation_by_unusal_client.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/builtin/security/win_security_service_installation_by_unusal_client.yml",
    "logsource": "windows/security",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
+   "status": "imported",
+   "rejection": null,
    "conjuncts_total": 2,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "telemetry_gap:field:ClientProcessId": 1,
-    "telemetry_gap:field:ParentProcessId": 1
-   },
+   "conjuncts_imported": 2,
+   "gap_reasons": {},
    "attack_ids": [
     "T1543"
    ],
@@ -42968,13 +42862,11 @@
    "path": "rules/windows/builtin/security/win_security_service_install_remote_access_software.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/builtin/security/win_security_service_install_remote_access_software.yml",
    "logsource": "windows/security",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
+   "status": "imported",
+   "rejection": null,
    "conjuncts_total": 22,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "telemetry_gap:field:ServiceName": 22
-   },
+   "conjuncts_imported": 22,
+   "gap_reasons": {},
    "attack_ids": [
     "T1543.003",
     "T1569.002"
@@ -43838,13 +43730,11 @@
    "path": "rules/windows/builtin/security/win_security_invoke_obfuscation_via_use_rundll32_services_security.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/builtin/security/win_security_invoke_obfuscation_via_use_rundll32_services_security.yml",
    "logsource": "windows/security",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
+   "status": "imported",
+   "rejection": null,
    "conjuncts_total": 4,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "telemetry_gap:field:ServiceFileName": 4
-   },
+   "conjuncts_imported": 4,
+   "gap_reasons": {},
    "attack_ids": [
     "T1059.001",
     "T1027"
@@ -44467,13 +44357,12 @@
    "path": "rules/windows/builtin/security/win_security_new_or_renamed_user_account_with_dollar_sign.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/builtin/security/win_security_new_or_renamed_user_account_with_dollar_sign.yml",
    "logsource": "windows/security",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
+   "status": "partial",
+   "rejection": null,
    "conjuncts_total": 4,
-   "conjuncts_imported": 0,
+   "conjuncts_imported": 2,
    "gap_reasons": {
-    "telemetry_gap:field:NewTargetUserName": 2,
-    "telemetry_gap:field:SamAccountName": 2
+    "telemetry_gap:field:NewTargetUserName": 2
    },
    "attack_ids": [
     "T1036"
@@ -44543,14 +44432,11 @@
    "path": "rules/windows/builtin/security/win_security_kerberoasting_activity.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/builtin/security/win_security_kerberoasting_activity.yml",
    "logsource": "windows/security",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
+   "status": "imported",
+   "rejection": null,
    "conjuncts_total": 1,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "telemetry_gap:field:ServiceName": 1,
-    "telemetry_gap:field:TicketEncryptionType": 1
-   },
+   "conjuncts_imported": 1,
+   "gap_reasons": {},
    "attack_ids": [
     "T1558.003"
    ],
@@ -45092,13 +44978,11 @@
    "path": "rules/windows/builtin/security/win_security_net_ntlm_downgrade.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/builtin/security/win_security_net_ntlm_downgrade.yml",
    "logsource": "windows/security",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
+   "status": "imported",
+   "rejection": null,
    "conjuncts_total": 3,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "telemetry_gap:event_code:4657": 3
-   },
+   "conjuncts_imported": 3,
+   "gap_reasons": {},
    "attack_ids": [
     "T1112",
     "T1685"
@@ -45977,13 +45861,11 @@
    "path": "rules/windows/builtin/security/win_security_cobaltstrike_service_installs.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/builtin/security/win_security_cobaltstrike_service_installs.yml",
    "logsource": "windows/security",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 4,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "telemetry_gap:field:ServiceFileName": 4
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 6,
+   "conjuncts_imported": 6,
+   "gap_reasons": {},
    "attack_ids": [
     "T1543.003",
     "T1021.002",
@@ -46445,14 +46327,11 @@
    "path": "rules/windows/builtin/security/win_security_scm_database_privileged_operation.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/builtin/security/win_security_scm_database_privileged_operation.yml",
    "logsource": "windows/security",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
+   "status": "imported",
+   "rejection": null,
    "conjuncts_total": 2,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "telemetry_gap:field:PrivilegeList": 2,
-    "telemetry_gap:field:SubjectLogonId": 1
-   },
+   "conjuncts_imported": 2,
+   "gap_reasons": {},
    "attack_ids": [
     "T1548"
    ],
@@ -46820,13 +46699,11 @@
    "path": "rules/windows/builtin/security/win_security_invoke_obfuscation_var_services_security.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/builtin/security/win_security_invoke_obfuscation_var_services_security.yml",
    "logsource": "windows/security",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
+   "status": "imported",
+   "rejection": null,
    "conjuncts_total": 2,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "telemetry_gap:field:ServiceFileName": 2
-   },
+   "conjuncts_imported": 2,
+   "gap_reasons": {},
    "attack_ids": [
     "T1059.001",
     "T1027"
@@ -50323,13 +50200,11 @@
    "path": "rules/windows/builtin/security/win_security_meterpreter_or_cobaltstrike_getsystem_service_install.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/builtin/security/win_security_meterpreter_or_cobaltstrike_getsystem_service_install.yml",
    "logsource": "windows/security",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
+   "status": "imported",
+   "rejection": null,
    "conjuncts_total": 4,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "telemetry_gap:field:ServiceFileName": 4
-   },
+   "conjuncts_imported": 4,
+   "gap_reasons": {},
    "attack_ids": [
     "T1134.002",
     "T1134.001"
@@ -50963,13 +50838,11 @@
    "path": "rules/windows/builtin/security/win_security_wmi_persistence.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/builtin/security/win_security_wmi_persistence.yml",
    "logsource": "windows/security",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
+   "status": "imported",
+   "rejection": null,
    "conjuncts_total": 1,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "telemetry_gap:event_code:4662": 1
-   },
+   "conjuncts_imported": 1,
+   "gap_reasons": {},
    "attack_ids": [
     "T1546.003"
    ],
@@ -51077,13 +50950,11 @@
    "path": "rules/windows/builtin/security/win_security_mal_creddumper.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/builtin/security/win_security_mal_creddumper.yml",
    "logsource": "windows/security",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
+   "status": "imported",
+   "rejection": null,
    "conjuncts_total": 7,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "telemetry_gap:field:ServiceFileName": 7
-   },
+   "conjuncts_imported": 7,
+   "gap_reasons": {},
    "attack_ids": [
     "T1003.002",
     "T1003.004",
@@ -51384,13 +51255,11 @@
    "path": "rules/windows/builtin/security/win_security_invoke_obfuscation_via_rundll_services_security.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/builtin/security/win_security_invoke_obfuscation_via_rundll_services_security.yml",
    "logsource": "windows/security",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
+   "status": "imported",
+   "rejection": null,
    "conjuncts_total": 1,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "telemetry_gap:field:ServiceFileName": 1
-   },
+   "conjuncts_imported": 1,
+   "gap_reasons": {},
    "attack_ids": [
     "T1059.001",
     "T1027"
@@ -52235,14 +52104,11 @@
    "path": "rules/windows/builtin/security/win_security_user_driver_loaded.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/builtin/security/win_security_user_driver_loaded.yml",
    "logsource": "windows/security",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
+   "status": "imported",
+   "rejection": null,
    "conjuncts_total": 2,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "telemetry_gap:field:PrivilegeList": 2,
-    "telemetry_gap:field:Service": 2
-   },
+   "conjuncts_imported": 2,
+   "gap_reasons": {},
    "attack_ids": [
     "T1685"
    ],
@@ -52479,12 +52345,11 @@
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/builtin/security/win_security_alert_enable_weak_encryption.yml",
    "logsource": "windows/security",
    "status": "rejected",
-   "rejection": "telemetry_gap",
+   "rejection": "translation_gap",
    "conjuncts_total": 24,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "telemetry_gap:field:NewUacValue": 24,
-    "telemetry_gap:field:OldUacValue": 24
+    "translation_gap:single_char_wildcard": 24
    },
    "attack_ids": [
     "T1685"
@@ -53725,11 +53590,11 @@
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/windows/builtin/security/win_security_invoke_obfuscation_obfuscated_iex_services_security.yml",
    "logsource": "windows/security",
    "status": "rejected",
-   "rejection": "telemetry_gap",
+   "rejection": "translation_gap",
    "conjuncts_total": 7,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "telemetry_gap:field:ServiceFileName": 7
+    "translation_gap:value_type:SigmaRegularExpression": 7
    },
    "attack_ids": [
     "T1027"

@@ -31,12 +31,29 @@ OUT = REPO_ROOT / "data" / "telemetry-samples" / "otrf-compound" / "golden-recor
 EMPIRE = "windows/apt3/empire_apt3.tar.gz"
 CALDERA = "windows/apt3/caldera_attack_evals_round1_day1_2019-10-20201108.tar.gz"
 APT29_DAY1 = "apt29/day1/apt29_evals_day1_manual.zip"
+APT29_DAY2 = "apt29/day2/apt29_evals_day2_manual.zip"
 
 Record = dict[str, Any]
 
 
 def _v6(channel: str, event_id: int) -> Callable[[Record], bool]:
     return lambda r: r.get("log_name") == channel and r.get("event_id") == event_id
+
+
+def _wlb7(event_id: int) -> Callable[[Record], bool]:
+    """A Winlogbeat 7 collector record of the (lower-case) Security channel."""
+    return lambda r: str((r.get("winlog") or {}).get("channel", "")).lower() == "security" and (
+        r["winlog"].get("event_id") == event_id
+    )
+
+
+def _nx(event_id: int) -> Callable[[Record], bool]:
+    """A flat NXLog Security record carrying its exact EventTime."""
+    return lambda r: (
+        str(r.get("Channel", "")).lower() == "security"
+        and int(r.get("EventID", -1)) == event_id
+        and "EventTime" in r
+    )
 
 
 def _utc_gap_seconds(r: Record, event_data: Record) -> float:
@@ -98,6 +115,33 @@ SELECTIONS: tuple[tuple[str, str, Callable[[Record], bool]], ...] = (
         APT29_DAY1,
         lambda r: r.get("Channel") == "security" and r.get("EventID") == 4663,
     ),
+    # Security batch B (ADR-0008): one real record per supported event.
+    ("b-4611", CALDERA, _wlb7(4611)),
+    ("b-4625", EMPIRE, _v6("Security", 4625)),
+    ("b-4648", EMPIRE, _v6("Security", 4648)),
+    ("b-4648-nxlog", APT29_DAY1, _nx(4648)),
+    ("b-4657", APT29_DAY1, _nx(4657)),
+    ("b-4661", CALDERA, _wlb7(4661)),
+    ("b-4662", CALDERA, _wlb7(4662)),
+    ("b-4672", CALDERA, _wlb7(4672)),
+    ("b-4673", CALDERA, _wlb7(4673)),
+    ("b-4674", CALDERA, _wlb7(4674)),
+    ("b-4697", EMPIRE, _v6("Security", 4697)),
+    ("b-4697-apt29", APT29_DAY1, lambda r: _nx(4697)(r) and r.get("ServiceName") == "javamtsup"),
+    ("b-4698", CALDERA, _wlb7(4698)),
+    ("b-4702", CALDERA, _wlb7(4702)),
+    ("b-4720", APT29_DAY2, _nx(4720)),
+    ("b-4722", APT29_DAY2, _nx(4722)),
+    ("b-4724", APT29_DAY2, _nx(4724)),
+    ("b-4728", APT29_DAY2, _nx(4728)),
+    ("b-4732", APT29_DAY2, _nx(4732)),
+    ("b-4738", APT29_DAY2, _nx(4738)),
+    ("b-4768", CALDERA, _wlb7(4768)),
+    ("b-4769", CALDERA, _wlb7(4769)),
+    ("b-4771", EMPIRE, _v6("Security", 4771)),
+    ("b-5379", APT29_DAY1, _nx(5379)),
+    ("b-5441", APT29_DAY1, _nx(5441)),
+    ("b-5447", APT29_DAY1, _nx(5447)),
 )
 
 

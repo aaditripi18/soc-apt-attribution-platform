@@ -37,7 +37,9 @@ from __future__ import annotations
 
 from attribution_platform.domain.attack import AttackRef
 from attribution_platform.domain.entities import (
+    AccountChangeRef,
     CodeSignature,
+    CredentialReadRef,
     DllRef,
     DnsRef,
     EventMetadata,
@@ -45,6 +47,7 @@ from attribution_platform.domain.entities import (
     FileStreamRef,
     HashSet,
     HostRef,
+    KerberosRef,
     LogonRef,
     NetworkEndpoint,
     NetworkInfo,
@@ -52,13 +55,17 @@ from attribution_platform.domain.entities import (
     PeInfo,
     PipeRef,
     PowerShellRef,
+    PrivilegeRef,
     ProcessAccessRef,
     ProcessRef,
     RegistryRef,
     RemoteThreadRef,
+    ScheduledTaskRef,
+    ServiceRef,
     ShareRef,
     TimeSpan,
     UserRef,
+    WfpFilterRef,
     WmiRef,
 )
 from attribution_platform.domain.enums import EvidenceQuality, EvidenceType, TimePrecision
@@ -69,6 +76,13 @@ from attribution_platform.domain.provenance import DerivationProvenance, SourceR
 from attribution_platform.domain.serialization import to_canonical_json, to_serializable
 
 __all__ = [
+    "WfpFilterRef",
+    "ServiceRef",
+    "ScheduledTaskRef",
+    "PrivilegeRef",
+    "KerberosRef",
+    "CredentialReadRef",
+    "AccountChangeRef",
     # errors
     "DomainContractError",
     # enums

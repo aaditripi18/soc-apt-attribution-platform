@@ -227,6 +227,30 @@
    "software": "SDelete",
    "decision": "accept",
    "reason": "Rule matches object names ending .AAA / .ZZZ - the rename sequence SDelete itself applies to a file before deleting it; the rule is built around that tool's artifact."
+  },
+  {
+   "sigma_id": "611eab06-a145-4dfa-a295-3ccc5c20f59a",
+   "title": "Mimikatz DC Sync",
+   "tag": "attack.s0002",
+   "software": "Mimikatz",
+   "decision": "reject",
+   "reason": "The rule matches a 4662 directory-replication extended-right request by a non-machine account; any DCSync implementation (e.g. Impacket secretsdump, DSInternals) produces the identical event, so it does not identify Mimikatz. (Security batch B, 2026-09-30.)"
+  },
+  {
+   "sigma_id": "968eef52-9cff-4454-8992-1e74b9cbad6c",
+   "title": "Reconnaissance Activity",
+   "tag": "attack.s0039",
+   "software": "Net",
+   "decision": "reject",
+   "reason": "The rule matches 4661 SAM_USER / SAM_GROUP handle requests for the -500 / -512 principals; any SAMR client (net.exe, PowerView, AD administration tools) produces them, so it does not identify Net. (Security batch B, 2026-09-30.)"
+  },
+  {
+   "sigma_id": "f0d1feba-4344-4ca9-8121-a6c97bd6df52",
+   "title": "Credential Dumping Tools Service Execution - Security",
+   "tag": "attack.s0005",
+   "software": "Windows Credential Editor",
+   "decision": "reject",
+   "reason": "The rule's branches match the service image names of several different tools (cachedump, dumpsvc, fgexec, gsecdump, mimidrv, pwdump, servpw); not every branch identifies Windows Credential Editor. (Security batch B, 2026-09-30.)"
   }
  ]
 }

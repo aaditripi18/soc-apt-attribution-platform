@@ -6,7 +6,7 @@
   "rule_packs": [
    {
     "pack_id": "sigma-r2026-07-01-sigma_core++",
-    "content_hash": "ee51fd090433d5f2cf1c6fa118d7218a09cd72d5cbdd921d8f6cf0077d43f086"
+    "content_hash": "f7b41e77407ae5c78a38ca30d2a24420c483a3fcc9307b25ccaeb0b6cb6a4d5b"
    }
   ],
   "sigma_import": {
@@ -15,12 +15,12 @@
    "sigma_archive": "sigma_core++.zip",
    "sigma_archive_sha256": "469d83e1d1bbdb4d7876466ff1a728550fae5a20115b91339d58d20e894e7477",
    "pysigma_version": "1.5.1",
-   "field_map_version": "sigma-field-map/8",
+   "field_map_version": "sigma-field-map/9",
    "attack_kb_version": "enterprise-attack-19.2",
    "dnf_bound": 64,
    "software_tag_review": {
     "file": "software-tag-review.json",
-    "sha256": "335a914ab78b4bfec8328947c8d2068f1513138aa5fb77a118b9eb6cd52798cb",
+    "sha256": "b1b7480e44d0697cdadb3740866289e70266f062f273ea25a90117584a4312f9",
     "accepted": [
      "1de68c67-af5c-4097-9c85-fe5578e09e67:attack.s0005",
      "304afd73-55a5-4bb9-8c21-0b1fc84ea9e4:attack.s0029",
@@ -52,15 +52,15 @@
   "group_used_techniques": 498,
   "active_groups": 176,
   "techniques_by_status": {
-   "covered": 263,
-   "telemetry_gap": 105,
+   "covered": 267,
+   "telemetry_gap": 101,
    "translation_gap": 5,
    "not_endpoint_observable": 160,
    "no_sigma_rule": 164
   },
   "group_used_techniques_by_status": {
-   "covered": 223,
-   "telemetry_gap": 71,
+   "covered": 225,
+   "telemetry_gap": 69,
    "translation_gap": 5,
    "not_endpoint_observable": 91,
    "no_sigma_rule": 108
@@ -290,25 +290,11 @@
    "groups_touched_upper_bound": 11
   },
   {
-   "blocker": "field:FilterName",
-   "in_v1_scope": true,
-   "techniques_upper_bound": 1,
-   "group_used_techniques_upper_bound": 1,
-   "groups_touched_upper_bound": 3
-  },
-  {
    "blocker": "field:FilterOrigin",
    "in_v1_scope": true,
    "techniques_upper_bound": 1,
    "group_used_techniques_upper_bound": 1,
    "groups_touched_upper_bound": 11
-  },
-  {
-   "blocker": "field:ProviderContextName",
-   "in_v1_scope": true,
-   "techniques_upper_bound": 1,
-   "group_used_techniques_upper_bound": 1,
-   "groups_touched_upper_bound": 3
   },
   {
    "blocker": "field:SourceAddress",
@@ -323,13 +309,6 @@
    "techniques_upper_bound": 1,
    "group_used_techniques_upper_bound": 1,
    "groups_touched_upper_bound": 11
-  },
-  {
-   "blocker": "field:SubjectLogonId",
-   "in_v1_scope": true,
-   "techniques_upper_bound": 1,
-   "group_used_techniques_upper_bound": 1,
-   "groups_touched_upper_bound": 3
   },
   {
    "blocker": "logsource:/dns",
@@ -402,27 +381,6 @@
    "groups_touched_upper_bound": 28
   },
   {
-   "blocker": "event_code:4765",
-   "in_v1_scope": false,
-   "techniques_upper_bound": 1,
-   "group_used_techniques_upper_bound": 0,
-   "groups_touched_upper_bound": 0
-  },
-  {
-   "blocker": "event_code:4766",
-   "in_v1_scope": false,
-   "techniques_upper_bound": 1,
-   "group_used_techniques_upper_bound": 0,
-   "groups_touched_upper_bound": 0
-  },
-  {
-   "blocker": "field:AdditionalInfo",
-   "in_v1_scope": true,
-   "techniques_upper_bound": 1,
-   "group_used_techniques_upper_bound": 0,
-   "groups_touched_upper_bound": 0
-  },
-  {
    "blocker": "field:AttributeLDAPDisplayName",
    "in_v1_scope": true,
    "techniques_upper_bound": 1,
@@ -437,28 +395,7 @@
    "groups_touched_upper_bound": 0
   },
   {
-   "blocker": "field:ObjectClass",
-   "in_v1_scope": true,
-   "techniques_upper_bound": 1,
-   "group_used_techniques_upper_bound": 0,
-   "groups_touched_upper_bound": 0
-  },
-  {
-   "blocker": "field:ObjectDN",
-   "in_v1_scope": true,
-   "techniques_upper_bound": 1,
-   "group_used_techniques_upper_bound": 0,
-   "groups_touched_upper_bound": 0
-  },
-  {
    "blocker": "field:ServicePrincipalNames",
-   "in_v1_scope": true,
-   "techniques_upper_bound": 1,
-   "group_used_techniques_upper_bound": 0,
-   "groups_touched_upper_bound": 0
-  },
-  {
-   "blocker": "field:SidHistory",
    "in_v1_scope": true,
    "techniques_upper_bound": 1,
    "group_used_techniques_upper_bound": 0,
@@ -1574,10 +1511,10 @@
    "attack_id": "G0030",
    "name": "Lotus Blossom",
    "profile_techniques": 21,
-   "covered": 16,
+   "covered": 17,
    "by_status": {
-    "covered": 16,
-    "telemetry_gap": 2,
+    "covered": 17,
+    "telemetry_gap": 1,
     "translation_gap": 1,
     "not_endpoint_observable": 0,
     "no_sigma_rule": 2
@@ -1596,10 +1533,6 @@
      "status": "telemetry_gap"
     },
     {
-     "attack_id": "T1134",
-     "status": "telemetry_gap"
-    },
-    {
      "attack_id": "T1560.003",
      "status": "no_sigma_rule"
     }
@@ -1609,19 +1542,15 @@
    "attack_id": "G0032",
    "name": "Lazarus Group",
    "profile_techniques": 93,
-   "covered": 63,
+   "covered": 64,
    "by_status": {
-    "covered": 63,
-    "telemetry_gap": 8,
+    "covered": 64,
+    "telemetry_gap": 7,
     "translation_gap": 4,
     "not_endpoint_observable": 7,
     "no_sigma_rule": 11
    },
    "uncovered": [
-    {
-     "attack_id": "T1010",
-     "status": "telemetry_gap"
-    },
     {
      "attack_id": "T1027.007",
      "status": "no_sigma_rule"
@@ -1983,10 +1912,10 @@
    "attack_id": "G0037",
    "name": "FIN6",
    "profile_techniques": 40,
-   "covered": 32,
+   "covered": 33,
    "by_status": {
-    "covered": 32,
-    "telemetry_gap": 1,
+    "covered": 33,
+    "telemetry_gap": 0,
     "translation_gap": 1,
     "not_endpoint_observable": 0,
     "no_sigma_rule": 6
@@ -1999,10 +1928,6 @@
     {
      "attack_id": "T1074.002",
      "status": "no_sigma_rule"
-    },
-    {
-     "attack_id": "T1134",
-     "status": "telemetry_gap"
     },
     {
      "attack_id": "T1213.006",
@@ -4555,10 +4480,10 @@
    "attack_id": "G0108",
    "name": "Blue Mockingbird",
    "profile_techniques": 22,
-   "covered": 19,
+   "covered": 20,
    "by_status": {
-    "covered": 19,
-    "telemetry_gap": 1,
+    "covered": 20,
+    "telemetry_gap": 0,
     "translation_gap": 0,
     "not_endpoint_observable": 0,
     "no_sigma_rule": 2
@@ -4567,10 +4492,6 @@
     {
      "attack_id": "T1027.013",
      "status": "no_sigma_rule"
-    },
-    {
-     "attack_id": "T1134",
-     "status": "telemetry_gap"
     },
     {
      "attack_id": "T1496.001",
@@ -5718,19 +5639,15 @@
    "attack_id": "G1001",
    "name": "HEXANE",
    "profile_techniques": 36,
-   "covered": 22,
+   "covered": 23,
    "by_status": {
-    "covered": 22,
-    "telemetry_gap": 3,
+    "covered": 23,
+    "telemetry_gap": 2,
     "translation_gap": 2,
     "not_endpoint_observable": 6,
     "no_sigma_rule": 3
    },
    "uncovered": [
-    {
-     "attack_id": "T1010",
-     "status": "telemetry_gap"
-    },
     {
      "attack_id": "T1016.001",
      "status": "no_sigma_rule"
@@ -6583,10 +6500,10 @@
    "attack_id": "G1017",
    "name": "Volt Typhoon",
    "profile_techniques": 81,
-   "covered": 47,
+   "covered": 48,
    "by_status": {
-    "covered": 47,
-    "telemetry_gap": 7,
+    "covered": 48,
+    "telemetry_gap": 6,
     "translation_gap": 3,
     "not_endpoint_observable": 13,
     "no_sigma_rule": 11
@@ -6595,10 +6512,6 @@
     {
      "attack_id": "T1006",
      "status": "no_sigma_rule"
-    },
-    {
-     "attack_id": "T1010",
-     "status": "telemetry_gap"
     },
     {
      "attack_id": "T1016.001",
@@ -8669,11 +8582,10 @@
    "attack_id": "T1003.001",
    "name": "LSASS Memory",
    "status": "covered",
-   "rule_sources": 55,
+   "rule_sources": 56,
    "rejected_rules_blocked_by": [
     "field:Hashes",
     "field:ParentUser",
-    "field:ServiceFileName",
     "field:User",
     "logsource:/antivirus",
     "logsource:windows/",
@@ -8689,9 +8601,8 @@
    "attack_id": "T1003.002",
    "name": "Security Account Manager",
    "status": "covered",
-   "rule_sources": 17,
+   "rule_sources": 18,
    "rejected_rules_blocked_by": [
-    "field:ServiceFileName",
     "logsource:/antivirus",
     "logsource:windows/",
     "logsource:windows/system",
@@ -8717,11 +8628,9 @@
    "attack_id": "T1003.004",
    "name": "LSA Secrets",
    "status": "covered",
-   "rule_sources": 5,
+   "rule_sources": 7,
    "rejected_rules_blocked_by": [
-    "event_code:4662",
     "event_code:4692",
-    "field:ServiceFileName",
     "logsource:windows/",
     "logsource:windows/system",
     "logsource:zeek/smb_files"
@@ -8733,9 +8642,8 @@
    "attack_id": "T1003.005",
    "name": "Cached Domain Credentials",
    "status": "covered",
-   "rule_sources": 4,
+   "rule_sources": 5,
    "rejected_rules_blocked_by": [
-    "field:ServiceFileName",
     "logsource:windows/system"
    ],
    "windows_platform": true,
@@ -8745,10 +8653,8 @@
    "attack_id": "T1003.006",
    "name": "DCSync",
    "status": "covered",
-   "rule_sources": 2,
+   "rule_sources": 5,
    "rejected_rules_blocked_by": [
-    "field:Properties",
-    "field:ServiceFileName",
     "logsource:windows/",
     "logsource:windows/system"
    ],
@@ -8818,11 +8724,9 @@
   {
    "attack_id": "T1010",
    "name": "Application Window Discovery",
-   "status": "telemetry_gap",
-   "rule_sources": 0,
-   "rejected_rules_blocked_by": [
-    "field:SubjectLogonId"
-   ],
+   "status": "covered",
+   "rule_sources": 1,
+   "rejected_rules_blocked_by": [],
    "windows_platform": true,
    "has_data_component": true
   },
@@ -8958,12 +8862,8 @@
    "attack_id": "T1021.002",
    "name": "SMB/Windows Admin Shares",
    "status": "covered",
-   "rule_sources": 21,
+   "rule_sources": 22,
    "rejected_rules_blocked_by": [
-    "field:ServiceFileName",
-    "field:ServiceName",
-    "field:ServiceStartType",
-    "field:ServiceType",
     "logsource:windows/smbserver-connectivity",
     "logsource:windows/system",
     "logsource:zeek/smb_files",
@@ -9052,10 +8952,8 @@
    "attack_id": "T1027",
    "name": "Obfuscated Files or Information",
    "status": "covered",
-   "rule_sources": 28,
+   "rule_sources": 41,
    "rejected_rules_blocked_by": [
-    "field:ServiceFileName",
-    "field:TargetName",
     "logsource:linux/file_event",
     "logsource:windows/system"
    ],
@@ -9266,12 +9164,9 @@
    "attack_id": "T1036",
    "name": "Masquerading",
    "status": "covered",
-   "rule_sources": 29,
+   "rule_sources": 31,
    "rejected_rules_blocked_by": [
     "field:Hashes",
-    "field:NewTargetUserName",
-    "field:SamAccountName",
-    "field:TargetName",
     "field:User",
     "logsource:linux/process_creation"
    ],
@@ -9459,9 +9354,8 @@
    "attack_id": "T1040",
    "name": "Network Sniffing",
    "status": "covered",
-   "rule_sources": 5,
+   "rule_sources": 6,
    "rejected_rules_blocked_by": [
-    "field:ServiceFileName",
     "logsource:cisco/aaa"
    ],
    "windows_platform": true,
@@ -9628,7 +9522,8 @@
    "status": "covered",
    "rule_sources": 20,
    "rejected_rules_blocked_by": [
-    "field:TaskName",
+    "event_code:4699",
+    "event_code:4701",
     "logsource:windows/taskscheduler"
    ],
    "windows_platform": true,
@@ -9851,13 +9746,12 @@
    "attack_id": "T1059.001",
    "name": "PowerShell",
    "status": "covered",
-   "rule_sources": 103,
+   "rule_sources": 113,
    "rejected_rules_blocked_by": [
     "field:CommandLine",
     "field:DestPort",
     "field:Initiated",
     "field:LayerRTID",
-    "field:ServiceFileName",
     "field:SourceIsIpv6",
     "field:User",
     "logsource:aws/cloudtrail",
@@ -10039,9 +9933,8 @@
    "attack_id": "T1069.002",
    "name": "Domain Groups",
    "status": "covered",
-   "rule_sources": 7,
+   "rule_sources": 8,
    "rejected_rules_blocked_by": [
-    "event_code:4661",
     "logsource:windows/ldap"
    ],
    "windows_platform": true,
@@ -10262,11 +10155,8 @@
    "attack_id": "T1078",
    "name": "Valid Accounts",
    "status": "covered",
-   "rule_sources": 3,
+   "rule_sources": 5,
    "rejected_rules_blocked_by": [
-    "event_code:4732",
-    "field:TargetServerName",
-    "field:TargetSid",
     "logsource:aws/cloudtrail",
     "logsource:azure/activitylogs",
     "logsource:azure/auditlogs",
@@ -10395,9 +10285,8 @@
    "attack_id": "T1087.002",
    "name": "Domain Account",
    "status": "covered",
-   "rule_sources": 10,
+   "rule_sources": 12,
    "rejected_rules_blocked_by": [
-    "event_code:4661",
     "logsource:windows/ldap"
    ],
    "windows_platform": true,
@@ -10528,17 +10417,15 @@
    "attack_id": "T1098",
    "name": "Account Manipulation",
    "status": "covered",
-   "rule_sources": 6,
+   "rule_sources": 7,
    "rejected_rules_blocked_by": [
+    "event_code:4704",
     "event_code:4706",
-    "event_code:4732",
     "event_code:4794",
     "field:AllowedToDelegateTo",
     "field:AttributeLDAPDisplayName",
     "field:AttributeValue",
     "field:ObjectClass",
-    "field:PrivilegeList",
-    "field:TargetSid",
     "logsource:aws/cloudtrail",
     "logsource:azure/activitylogs",
     "logsource:azure/auditlogs",
@@ -10688,11 +10575,10 @@
    "attack_id": "T1105",
    "name": "Ingress Tool Transfer",
    "status": "covered",
-   "rule_sources": 35,
+   "rule_sources": 36,
    "rejected_rules_blocked_by": [
     "field:DestinationHostname",
     "field:Initiated",
-    "field:TargetName",
     "logsource:/proxy",
     "logsource:linux/file_event",
     "logsource:linux/process_creation",
@@ -10781,9 +10667,8 @@
    "attack_id": "T1112",
    "name": "Modify Registry",
    "status": "covered",
-   "rule_sources": 64,
+   "rule_sources": 66,
    "rejected_rules_blocked_by": [
-    "event_code:4657",
     "field:EventID",
     "logsource:rpc_firewall/application"
    ],
@@ -10988,12 +10873,9 @@
   {
    "attack_id": "T1134",
    "name": "Access Token Manipulation",
-   "status": "telemetry_gap",
-   "rule_sources": 0,
-   "rejected_rules_blocked_by": [
-    "field:FilterName",
-    "field:ProviderContextName"
-   ],
+   "status": "covered",
+   "rule_sources": 1,
+   "rejected_rules_blocked_by": [],
    "windows_platform": true,
    "has_data_component": true
   },
@@ -11001,11 +10883,8 @@
    "attack_id": "T1134.001",
    "name": "Token Impersonation/Theft",
    "status": "covered",
-   "rule_sources": 5,
+   "rule_sources": 7,
    "rejected_rules_blocked_by": [
-    "field:FilterName",
-    "field:ProviderContextName",
-    "field:ServiceFileName",
     "logsource:windows/system"
    ],
    "windows_platform": true,
@@ -11015,9 +10894,8 @@
    "attack_id": "T1134.002",
    "name": "Create Process with Token",
    "status": "covered",
-   "rule_sources": 3,
+   "rule_sources": 4,
    "rejected_rules_blocked_by": [
-    "field:ServiceFileName",
     "logsource:windows/system"
    ],
    "windows_platform": true,
@@ -11044,13 +10922,9 @@
   {
    "attack_id": "T1134.005",
    "name": "SID-History Injection",
-   "status": "telemetry_gap",
-   "rule_sources": 0,
-   "rejected_rules_blocked_by": [
-    "event_code:4765",
-    "event_code:4766",
-    "field:SidHistory"
-   ],
+   "status": "covered",
+   "rule_sources": 1,
+   "rejected_rules_blocked_by": [],
    "windows_platform": true,
    "has_data_component": true
   },
@@ -11078,10 +10952,8 @@
    "attack_id": "T1136.001",
    "name": "Local Account",
    "status": "covered",
-   "rule_sources": 5,
+   "rule_sources": 7,
    "rejected_rules_blocked_by": [
-    "event_code:4720",
-    "field:SamAccountName",
     "logsource:cisco/aaa",
     "logsource:fortigate/event",
     "logsource:linux/",
@@ -11094,10 +10966,8 @@
    "attack_id": "T1136.002",
    "name": "Domain Account",
    "status": "covered",
-   "rule_sources": 2,
-   "rejected_rules_blocked_by": [
-    "field:SamAccountName"
-   ],
+   "rule_sources": 3,
+   "rejected_rules_blocked_by": [],
    "windows_platform": true,
    "has_data_component": true
   },
@@ -11232,7 +11102,6 @@
    "status": "covered",
    "rule_sources": 3,
    "rejected_rules_blocked_by": [
-    "field:CertThumbprint",
     "logsource:zeek/dce_rpc",
     "logsource:zeek/dns"
    ],
@@ -11358,10 +11227,8 @@
    "attack_id": "T1201",
    "name": "Password Policy Discovery",
    "status": "covered",
-   "rule_sources": 1,
-   "rejected_rules_blocked_by": [
-    "event_code:4661"
-   ],
+   "rule_sources": 2,
+   "rejected_rules_blocked_by": [],
    "windows_platform": true,
    "has_data_component": true
   },
@@ -11860,10 +11727,8 @@
    "attack_id": "T1222.001",
    "name": "Windows Permissions",
    "status": "covered",
-   "rule_sources": 2,
-   "rejected_rules_blocked_by": [
-    "event_code:4662"
-   ],
+   "rule_sources": 3,
+   "rejected_rules_blocked_by": [],
    "windows_platform": true,
    "has_data_component": true
   },
@@ -12515,10 +12380,8 @@
    "attack_id": "T1543",
    "name": "Create or Modify System Process",
    "status": "covered",
-   "rule_sources": 2,
+   "rule_sources": 3,
    "rejected_rules_blocked_by": [
-    "field:ClientProcessId",
-    "field:ParentProcessId",
     "logsource:windows/codeintegrity-operational",
     "logsource:windows/driver_load",
     "logsource:windows/system"
@@ -12552,10 +12415,8 @@
    "attack_id": "T1543.003",
    "name": "Windows Service",
    "status": "covered",
-   "rule_sources": 14,
+   "rule_sources": 16,
    "rejected_rules_blocked_by": [
-    "field:ServiceFileName",
-    "field:ServiceName",
     "logsource:windows/driver_load",
     "logsource:windows/system"
    ],
@@ -12613,9 +12474,8 @@
    "attack_id": "T1546.003",
    "name": "Windows Management Instrumentation Event Subscription",
    "status": "covered",
-   "rule_sources": 8,
+   "rule_sources": 9,
    "rejected_rules_blocked_by": [
-    "event_code:4662",
     "field:EventID",
     "logsource:windows/wmi"
    ],
@@ -12906,10 +12766,8 @@
    "attack_id": "T1548",
    "name": "Abuse Elevation Control Mechanism",
    "status": "covered",
-   "rule_sources": 5,
+   "rule_sources": 6,
    "rejected_rules_blocked_by": [
-    "field:PrivilegeList",
-    "field:SubjectLogonId",
     "logsource:aws/cloudtrail",
     "logsource:azure/auditlogs",
     "logsource:gcp/gcp.audit",
@@ -13209,10 +13067,8 @@
    "attack_id": "T1554",
    "name": "Compromise Host Software Binary",
    "status": "covered",
-   "rule_sources": 1,
+   "rule_sources": 2,
    "rejected_rules_blocked_by": [
-    "field:ServiceFileName",
-    "field:ServiceName",
     "logsource:windows/microsoft-servicebus-client"
    ],
    "windows_platform": true,
@@ -13424,13 +13280,9 @@
   {
    "attack_id": "T1557.003",
    "name": "DHCP Spoofing",
-   "status": "telemetry_gap",
-   "rule_sources": 0,
-   "rejected_rules_blocked_by": [
-    "field:AdditionalInfo",
-    "field:ObjectClass",
-    "field:ObjectDN"
-   ],
+   "status": "covered",
+   "rule_sources": 1,
+   "rejected_rules_blocked_by": [],
    "windows_platform": true,
    "has_data_component": true
   },
@@ -13478,16 +13330,11 @@
    "attack_id": "T1558.003",
    "name": "Kerberoasting",
    "status": "covered",
-   "rule_sources": 8,
+   "rule_sources": 11,
    "rejected_rules_blocked_by": [
-    "event_code:4611",
     "field:Application",
     "field:DestPort",
     "field:Keywords",
-    "field:Service",
-    "field:ServiceName",
-    "field:TicketEncryptionType",
-    "field:TicketOptions",
     "logsource:zeek/kerberos"
    ],
    "windows_platform": true,
@@ -13853,9 +13700,8 @@
    "attack_id": "T1566.001",
    "name": "Spearphishing Attachment",
    "status": "covered",
-   "rule_sources": 11,
+   "rule_sources": 12,
    "rejected_rules_blocked_by": [
-    "field:TargetName",
     "logsource:m365/audit",
     "logsource:macos/process_creation"
    ],
@@ -14017,12 +13863,8 @@
    "attack_id": "T1569.002",
    "name": "Service Execution",
    "status": "covered",
-   "rule_sources": 15,
+   "rule_sources": 19,
    "rejected_rules_blocked_by": [
-    "field:ServiceFileName",
-    "field:ServiceName",
-    "field:ServiceStartType",
-    "field:ServiceType",
     "logsource:rpc_firewall/application",
     "logsource:windows/system",
     "logsource:windows/windefend",
@@ -14045,12 +13887,7 @@
    "name": "Lateral Tool Transfer",
    "status": "covered",
    "rule_sources": 3,
-   "rejected_rules_blocked_by": [
-    "field:ServiceFileName",
-    "field:ServiceName",
-    "field:ServiceStartType",
-    "field:ServiceType"
-   ],
+   "rejected_rules_blocked_by": [],
    "windows_platform": true,
    "has_data_component": true
   },
@@ -15678,14 +15515,8 @@
    "attack_id": "T1685",
    "name": "Disable or Modify Tools",
    "status": "covered",
-   "rule_sources": 98,
+   "rule_sources": 103,
    "rejected_rules_blocked_by": [
-    "event_code:4657",
-    "field:FilterName",
-    "field:NewUacValue",
-    "field:OldUacValue",
-    "field:PrivilegeList",
-    "field:Service",
     "logsource:aws/cloudtrail",
     "logsource:azure/activitylogs",
     "logsource:bitbucket/audit",
