@@ -847,3 +847,40 @@ client's network requests are made by `lsass` / the kernel, which are hubs thems
 outside units, and a single-Evidence Observation forms no group (§8), so e.g. a lone Kerberoasting detection is
 not attribution-visible. Whether a lone Evidence should become a unit of its own is an attribution-semantics
 decision (it changes what `support(h)` counts), recorded as an open question rather than taken silently.
+
+## Amendment F (2026-10-01) — A single Evidence is a unit of its own
+
+**Status:** Accepted (owner decision, option 1 of the question recorded in Amendment E).
+
+**Problem.** A `CorrelationGroup` was a connected component of *at least two* Evidence; an Evidence no structural
+link touched produced no group, so attribution — which analyses one unit per group — never saw it. Evidence with
+no provable process chain was silently invisible: domain-controller detections (Kerberoasting, SAM / directory
+reconnaissance), and any process that triggered exactly one rule. On APT29 day 1 this hid the documented
+**Step 9 collection (`rar.exe` on NASHUA)** from attribution entirely.
+
+**Decision.** Every connected component is a group, including a component of one Evidence. A single-Evidence
+group has **no** structural link (the contract now requires `structural_link_ids` to be non-empty exactly when
+the group has two or more members, and empty for one); its id is `compute_group_id` over its one member. Its
+behavioral sequence is one step with no edges, and attribution analyses it like any unit: its one observed
+feature is weighed by diagnosticity against the `Unattributed` baseline (ADR-0005), so a lone, common detection
+earns little support and a lone, rare one more — the existing machinery decides, nothing is suppressed.
+
+**What is unchanged.** Group-forming links are still structural only; contextual links still never merge (§8) —
+two unrelated Evidence on one host are now two single-Evidence groups instead of no group. CR-1 is unchanged: a
+group is the unit counted once for `support(h)`; a single Evidence is one behavior counted once.
+
+**Versions.** `correlation-group/1` → `/2` (index `attribution-platform-correlation-groups-v2`); structural
+correlation method 1.2 → 1.3.
+
+**Measured effect (corpus v2, full pipeline).** Units: APT29 day 1 18 → 65, day 2 14 → 23, APT3 CALDERA
+29 → 57, Empire 4 → 65 (mostly single DC reconnaissance / password-policy detections), LSASS runs 2–4 → 4–7.
+Labelling (unchanged rule: a unit is labelled only when it runs a tool the documented procedure names): one new
+labelled unit — APT29 day 1 Step 9 `rar.exe` collection; every previously labelled unit is identical; all new
+single-Evidence units without a documented tool are excluded with a reason, not guessed. Corpus 14 → 15 cases;
+readiness verdict unchanged (the same six gaps, which need the owner's lab recordings). Fixture corpus: 8 groups
+→ 21 (the same 8 plus 13 single-Evidence groups). Tests that protected "no merge" now assert one
+single-Evidence group per unmerged Evidence — the protected property is unchanged.
+
+**Cost.** More, smaller units per investigation (Empire 65); each is analysed independently. Noise from a broad
+rule (e.g. Password Policy Enumerated's 43 machine-account matches) becomes visible as low-support units rather
+than disappearing — the honest outcome under ADR-0007's "measure, don't suppress".

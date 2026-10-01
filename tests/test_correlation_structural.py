@@ -28,6 +28,7 @@ from __future__ import annotations
 import ast
 from datetime import UTC, datetime
 from pathlib import Path
+from typing import Any
 
 import pytest
 
@@ -61,6 +62,14 @@ T0 = datetime(2026, 1, 1, 12, 0, 0, tzinfo=UTC)
 @pytest.fixture(scope="module")
 def knowledge() -> AttackKnowledge:
     return load_attack_knowledge()
+
+
+def _singletons(groups: tuple[Any, ...], count: int) -> bool:
+    """ADR-0003 Amendment F: ``count`` unmerged Evidence, each its own
+    single-Evidence group with no structural link."""
+    return len(groups) == count and all(
+        len(g.member_evidence_ids) == 1 and g.structural_link_ids == () for g in groups
+    )
 
 
 def _obs(
@@ -149,7 +158,7 @@ def test_shared_observation_does_not_use_timestamp_host_user_or_event_fields() -
     result = correlate_structurally(items)
 
     assert result.links == ()
-    assert result.groups == ()
+    assert _singletons(result.groups, 2)
 
 
 # ===========================================================================
@@ -244,7 +253,7 @@ def test_same_entity_id_on_different_hosts_does_not_correlate() -> None:
     result = correlate_structurally(items)
 
     assert result.links == ()
-    assert result.groups == ()
+    assert _singletons(result.groups, 2)
 
 
 def test_host_id_is_preferred_over_host_name() -> None:
@@ -309,7 +318,7 @@ def test_no_host_at_all_fails_closed_never_correlates() -> None:
     obs_b = _obs("obs-b", process=ProcessRef(entity_id="{GUID-1}"))
     result = correlate_structurally([_pair("ev-1", obs_a), _pair("ev-2", obs_b)])
     assert result.links == ()
-    assert result.groups == ()
+    assert _singletons(result.groups, 2)
 
 
 # ===========================================================================
@@ -366,7 +375,7 @@ def test_same_host_alone_produces_no_structural_link() -> None:
     ]
     result = correlate_structurally(items)
     assert result.links == ()
-    assert result.groups == ()
+    assert _singletons(result.groups, 3)
 
 
 def test_same_user_alone_produces_no_structural_link() -> None:
@@ -524,10 +533,11 @@ def test_group_contains_exactly_the_structurally_connected_evidence() -> None:
 
     result = correlate_structurally(items)
 
-    assert len(result.groups) == 1
-    group = result.groups[0]
+    assert len(result.groups) == 2
+    (group,) = [g for g in result.groups if len(g.member_evidence_ids) > 1]
     assert set(group.member_evidence_ids) == {"ev-parent", "ev-child"}
-    assert "ev-unrelated" not in group.member_evidence_ids
+    # the unrelated Evidence is its own single-Evidence group (Amendment F)
+    assert _singletons(tuple(g for g in result.groups if g is not group), 1)
     assert set(group.structural_link_ids) == {entry.link_id for entry in result.links}
 
 

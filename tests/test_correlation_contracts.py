@@ -462,9 +462,12 @@ def test_compute_group_id_changes_when_content_hash_changes() -> None:
     assert id1 != id2
 
 
-def test_compute_group_id_requires_at_least_two_members() -> None:
-    with pytest.raises(CorrelationError, match="at least two distinct"):
-        compute_group_id(["ev-1"])
+def test_compute_group_id_accepts_one_member_but_not_none() -> None:
+    """ADR-0003 Amendment F: a single-Evidence group has an id too."""
+    assert compute_group_id(["ev-1"]).startswith("corr-group::")
+    assert compute_group_id(["ev-1"]) != compute_group_id(["ev-2"])
+    with pytest.raises(CorrelationError, match="at least one member"):
+        compute_group_id([])
 
 
 def test_compute_link_id_rejects_identical_anchors() -> None:
@@ -639,8 +642,18 @@ def test_compute_group_id_method_content_hash_still_appended_unhashed() -> None:
 # ===========================================================================
 
 
-def test_group_requires_at_least_two_members() -> None:
-    with pytest.raises(CorrelationError, match="at least two distinct"):
+def test_single_evidence_group_has_no_structural_link() -> None:
+    """ADR-0003 Amendment F: one Evidence no structural link touches is a group
+    of its own -- and such a group cannot claim a structural link."""
+    group = CorrelationGroup(
+        group_id="g1",
+        member_evidence_ids=("ev-1",),
+        member_observation_ids=("obs-1",),
+        structural_link_ids=(),
+        provenance=_provenance(),
+    )
+    assert group.member_evidence_ids == ("ev-1",)
+    with pytest.raises(CorrelationError, match="single-Evidence group has no structural link"):
         CorrelationGroup(
             group_id="g1",
             member_evidence_ids=("ev-1",),

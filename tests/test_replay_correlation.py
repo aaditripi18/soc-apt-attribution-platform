@@ -110,7 +110,10 @@ def _group_containing(groups: tuple[CorrelationGroup, ...], evidence_id: str) ->
 
 
 def _no_group_contains(groups: tuple[CorrelationGroup, ...], evidence_id: str) -> None:
-    assert not any(evidence_id in g.member_evidence_ids for g in groups)
+    """Merged with nothing: the Evidence is only in its own single-Evidence
+    group, which no structural link formed (ADR-0003 Amendment F)."""
+    (group,) = [g for g in groups if evidence_id in g.member_evidence_ids]
+    assert group.member_evidence_ids == (evidence_id,) and group.structural_link_ids == ()
 
 
 def _links_across(
@@ -588,29 +591,33 @@ def test_g10_context_only_no_structure_produces_no_group(
 def test_corpus_wide_structural_group_and_link_counts(
     engine: DetectionEngine, knowledge: AttackKnowledge
 ) -> None:
-    """Pins the exact structural shape of the whole corpus: 8 groups
-    (g1, g2, g3, g9a, g9b, g11, g12a, g12b), 9 structural links (one each
-    for g1/g2/g3/g9a/g9b/g12a/g12b, two for g11's branch)."""
+    """Pins the exact structural shape of the whole corpus: 8 multi-Evidence
+    groups (g1, g2, g3, g9a, g9b, g11, g12a, g12b), 9 structural links (one
+    each for g1/g2/g3/g9a/g9b/g12a/g12b, two for g11's branch), and 13
+    single-Evidence groups -- every Evidence no structural link touches
+    (ADR-0003 Amendment F)."""
     result = _replay(engine, knowledge)
-    assert len(result.structural_result.groups) == 8
+    groups = result.structural_result.groups
+    assert len(groups) == 21
     assert len(result.structural_result.links) == 9
-    for group in result.structural_result.groups:
-        assert len(group.member_evidence_ids) >= 2
-        assert len(group.structural_link_ids) >= 1
+    multi = [g for g in groups if len(g.member_evidence_ids) >= 2]
+    single = [g for g in groups if len(g.member_evidence_ids) == 1]
+    assert len(multi) == 8 and all(g.structural_link_ids for g in multi)
+    assert len(single) == 13 and all(g.structural_link_ids == () for g in single)
 
 
 def test_corpus_wide_contextual_group_count_matches_structural(
     engine: DetectionEngine, knowledge: AttackKnowledge
 ) -> None:
     """contextualize() must preserve the exact structural group set -- same
-    8 groups, never fewer (a group silently dropped) and never more (a
-    group spuriously created from contextual links alone, which g10 and
-    g4-g8 already prove cannot happen for any single pair, but this pins it
-    corpus-wide rather than relying only on contextualize()'s current
-    implementation, which happens to iterate structural_result.groups 1:1)."""
+    21 groups (8 multi-Evidence, 13 single-Evidence), never fewer (a group
+    silently dropped) and never more (a group spuriously created from
+    contextual links alone, which g10 and g4-g8 already prove cannot happen
+    for any single pair; this pins it corpus-wide rather than relying only
+    on contextualize() iterating structural_result.groups 1:1)."""
     result = _replay(engine, knowledge)
     assert len(result.contextual_result.groups) == len(result.structural_result.groups)
-    assert len(result.contextual_result.groups) == 8
+    assert len(result.contextual_result.groups) == 21
     assert {g.group_id for g in result.contextual_result.groups} == {
         g.group_id for g in result.structural_result.groups
     }

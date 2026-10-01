@@ -129,7 +129,7 @@ from attribution_platform.domain import Evidence, Observation
 STRUCTURAL_CORRELATION_METHOD = "structural-correlation"
 #: 1.1: + PROCESS_INTERACTION; 1.2: resolved pid-only identities (Amendment B)
 #: and chain materialization of equivalence links (Amendment C).
-STRUCTURAL_CORRELATION_METHOD_VERSION = "1.2"
+STRUCTURAL_CORRELATION_METHOD_VERSION = "1.3"  # 1.3: single-Evidence groups (Amendment F)
 
 #: The (host-scope, entity-id) key process-entity dimensions are compared
 #: on. ``host_scope`` is itself ``(kind, value)`` where ``kind`` is
@@ -562,7 +562,9 @@ def _connected_components(
     for evidence_id in parent:
         members.setdefault(find(evidence_id), set()).add(evidence_id)
 
-    return [frozenset(group) for group in members.values() if len(group) >= 2]
+    # Every component is a group, including one Evidence no structural link
+    # touches (ADR-0003 Amendment F): an independent behavior of its own.
+    return [frozenset(group) for group in members.values()]
 
 
 def correlate_structurally(
@@ -576,7 +578,8 @@ def correlate_structurally(
     """Compute every ``SHARED_OBSERVATION``/``SAME_PROCESS_ENTITY``/
     ``PROCESS_LINEAGE``/``PROCESS_INTERACTION`` link across ``items``, and
     the ``CorrelationGroup``s those structural links form (connected
-    components; singletons produce no group).
+    components; an Evidence no structural link touches is a single-Evidence
+    group of its own, ADR-0003 Amendment F).
 
     ``context_observations`` (optional) are telemetry Observations that
     carry no Evidence. They are read **only** as witnesses of

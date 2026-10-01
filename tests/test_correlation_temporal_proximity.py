@@ -33,6 +33,7 @@ from __future__ import annotations
 import ast
 from datetime import UTC, datetime, timedelta
 from pathlib import Path
+from typing import Any
 
 import pytest
 
@@ -64,6 +65,14 @@ CORRELATION_DIR = REPO_ROOT / "src" / "attribution_platform" / "correlation"
 TEMPORAL_PROXIMITY_FILE = CORRELATION_DIR / "temporal_proximity.py"
 
 T0 = datetime(2026, 1, 1, 12, 0, 0, tzinfo=UTC)
+
+
+def _singletons(groups: tuple[Any, ...], count: int) -> bool:
+    """ADR-0003 Amendment F: ``count`` unmerged Evidence, each its own
+    single-Evidence group with no structural link."""
+    return len(groups) == count and all(
+        len(g.member_evidence_ids) == 1 and g.structural_link_ids == () for g in groups
+    )
 
 
 def _obs(
@@ -452,8 +461,8 @@ def test_temporal_proximity_alone_creates_no_structural_link_or_group() -> None:
     items = [_pair("ev-1", obs_a), _pair("ev-2", obs_b)]
     structural_result, _, _, result = _compute(items, timedelta(seconds=5))
     assert structural_result.links == ()
-    assert structural_result.groups == ()
-    assert result.groups == ()  # no structural group exists to attach to
+    assert _singletons(structural_result.groups, 2)
+    assert _singletons(result.groups, 2)  # proximity never merges them
 
 
 # ===========================================================================

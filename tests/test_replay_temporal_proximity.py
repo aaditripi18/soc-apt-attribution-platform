@@ -105,8 +105,8 @@ def test_replay_produces_links_enriched_groups_and_sequences(
 ) -> None:
     result = _replay(engine, knowledge)
     assert len(result.temporal_proximity_links) > 0
-    assert len(result.enriched_groups) == 8  # same 8 groups G2.3/G2.4.2 already pin
-    assert len(result.sequences) == 8
+    assert len(result.enriched_groups) == 21  # same 21 groups G2.3/G2.4.2 already pin
+    assert len(result.sequences) == 21
     assert len(result.temporal_proximity_link_persists) == len(result.temporal_proximity_links)
     assert len(result.group_persists) == len(result.enriched_groups)
     assert len(result.sequence_persists) == len(result.sequences)

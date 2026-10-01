@@ -129,6 +129,1407 @@
     "sigma:192a0330-c20b-4356-90b6-7b7049ae0b87": 1,
     "sigma:8eef149c-bd26-49f2-9e5a-9b00e3af499b": 1
    }
+  },
+  {
+   "group_id": "corr-group::019d1d4a5f529101d0b6b18e9e4e475aa506bb9f997b6710eec7b1bf99357c81",
+   "anchor_observation_id": "windows_security:HFDC01.shire.com:11688005",
+   "evidence": 1,
+   "observations": 1,
+   "hosts": [
+    "HFDC01.shire.com"
+   ],
+   "first": "2019-05-14T23:44:29.019000+00:00",
+   "last": "2019-05-14T23:44:29.019000+00:00",
+   "process_images": {
+    "C:\\Windows\\System32\\lsass.exe": 1
+   },
+   "image_names": [
+    "lsass.exe"
+   ],
+   "techniques": [
+    "T1201"
+   ],
+   "rule_families": {
+    "sigma:12ba6a38-adb3-4d6b-91ba-a7fb248e3199": 1
+   }
+  },
+  {
+   "group_id": "corr-group::11fbf5d9558ee2b5dbc21040b6f235e172cd5b7fbe4e0bce67f4fd7382cb5c9b",
+   "anchor_observation_id": "windows_security:HFDC01.shire.com:11687976",
+   "evidence": 1,
+   "observations": 1,
+   "hosts": [
+    "HFDC01.shire.com"
+   ],
+   "first": "2019-05-14T23:44:28.691000+00:00",
+   "last": "2019-05-14T23:44:28.691000+00:00",
+   "process_images": {
+    "C:\\Windows\\System32\\lsass.exe": 1
+   },
+   "image_names": [
+    "lsass.exe"
+   ],
+   "techniques": [
+    "T1201"
+   ],
+   "rule_families": {
+    "sigma:12ba6a38-adb3-4d6b-91ba-a7fb248e3199": 1
+   }
+  },
+  {
+   "group_id": "corr-group::20a90b9f132b9bd7817f08e44170976bc6b5978df6e1df28c8eb31497744019e",
+   "anchor_observation_id": "windows_security:HFDC01.shire.com:11687191",
+   "evidence": 1,
+   "observations": 1,
+   "hosts": [
+    "HFDC01.shire.com"
+   ],
+   "first": "2019-05-14T23:43:09.176000+00:00",
+   "last": "2019-05-14T23:43:09.176000+00:00",
+   "process_images": {
+    "C:\\Windows\\System32\\lsass.exe": 1
+   },
+   "image_names": [
+    "lsass.exe"
+   ],
+   "techniques": [
+    "T1201"
+   ],
+   "rule_families": {
+    "sigma:12ba6a38-adb3-4d6b-91ba-a7fb248e3199": 1
+   }
+  },
+  {
+   "group_id": "corr-group::21c3f799860cfcc8f58dd2d74b9d14798b72f4a81c1b8247bf432256dc159114",
+   "anchor_observation_id": "windows_security:HFDC01.shire.com:11682799",
+   "evidence": 1,
+   "observations": 1,
+   "hosts": [
+    "HFDC01.shire.com"
+   ],
+   "first": "2019-05-14T23:02:37.578000+00:00",
+   "last": "2019-05-14T23:02:37.578000+00:00",
+   "process_images": {
+    "C:\\Windows\\System32\\lsass.exe": 1
+   },
+   "image_names": [
+    "lsass.exe"
+   ],
+   "techniques": [
+    "T1201"
+   ],
+   "rule_families": {
+    "sigma:12ba6a38-adb3-4d6b-91ba-a7fb248e3199": 1
+   }
+  },
+  {
+   "group_id": "corr-group::233f54223a2a7fb27d8e841369bf22a84369142337652e2942830e9cd1c8f341",
+   "anchor_observation_id": "windows_security:HFDC01.shire.com:11683533",
+   "evidence": 1,
+   "observations": 1,
+   "hosts": [
+    "HFDC01.shire.com"
+   ],
+   "first": "2019-05-14T23:11:26.333000+00:00",
+   "last": "2019-05-14T23:11:26.333000+00:00",
+   "process_images": {
+    "C:\\Windows\\System32\\lsass.exe": 1
+   },
+   "image_names": [
+    "lsass.exe"
+   ],
+   "techniques": [
+    "T1201"
+   ],
+   "rule_families": {
+    "sigma:12ba6a38-adb3-4d6b-91ba-a7fb248e3199": 1
+   }
+  },
+  {
+   "group_id": "corr-group::2341a0d0689d9ab813bf2806d9db5230a76540b782c560f94980333acae63cd1",
+   "anchor_observation_id": "windows_security:HFDC01.shire.com:11687187",
+   "evidence": 1,
+   "observations": 1,
+   "hosts": [
+    "HFDC01.shire.com"
+   ],
+   "first": "2019-05-14T23:43:09.135000+00:00",
+   "last": "2019-05-14T23:43:09.135000+00:00",
+   "process_images": {
+    "C:\\Windows\\System32\\lsass.exe": 1
+   },
+   "image_names": [
+    "lsass.exe"
+   ],
+   "techniques": [
+    "T1201"
+   ],
+   "rule_families": {
+    "sigma:12ba6a38-adb3-4d6b-91ba-a7fb248e3199": 1
+   }
+  },
+  {
+   "group_id": "corr-group::306b4f42f5dbfbfb6b753ab3fd54787a86dacc78a95d51e7ae5b2180b0d2fa04",
+   "anchor_observation_id": "windows_security:HFDC01.shire.com:11687203",
+   "evidence": 1,
+   "observations": 1,
+   "hosts": [
+    "HFDC01.shire.com"
+   ],
+   "first": "2019-05-14T23:43:09.179000+00:00",
+   "last": "2019-05-14T23:43:09.179000+00:00",
+   "process_images": {
+    "C:\\Windows\\System32\\lsass.exe": 1
+   },
+   "image_names": [
+    "lsass.exe"
+   ],
+   "techniques": [
+    "T1201"
+   ],
+   "rule_families": {
+    "sigma:12ba6a38-adb3-4d6b-91ba-a7fb248e3199": 1
+   }
+  },
+  {
+   "group_id": "corr-group::32d10f16e973b0444e0788d9e03dd58d29878e09ee4778762c851abd165f535d",
+   "anchor_observation_id": "windows_security:HFDC01.shire.com:11688009",
+   "evidence": 1,
+   "observations": 1,
+   "hosts": [
+    "HFDC01.shire.com"
+   ],
+   "first": "2019-05-14T23:44:29.020000+00:00",
+   "last": "2019-05-14T23:44:29.020000+00:00",
+   "process_images": {
+    "C:\\Windows\\System32\\lsass.exe": 1
+   },
+   "image_names": [
+    "lsass.exe"
+   ],
+   "techniques": [
+    "T1201"
+   ],
+   "rule_families": {
+    "sigma:12ba6a38-adb3-4d6b-91ba-a7fb248e3199": 1
+   }
+  },
+  {
+   "group_id": "corr-group::3310150b638755cd4093c8bbe4cdcf23a0660b8ce9924450bb61aa4333ca0fb3",
+   "anchor_observation_id": "windows_security:HFDC01.shire.com:11687189",
+   "evidence": 1,
+   "observations": 1,
+   "hosts": [
+    "HFDC01.shire.com"
+   ],
+   "first": "2019-05-14T23:43:09.176000+00:00",
+   "last": "2019-05-14T23:43:09.176000+00:00",
+   "process_images": {
+    "C:\\Windows\\System32\\lsass.exe": 1
+   },
+   "image_names": [
+    "lsass.exe"
+   ],
+   "techniques": [
+    "T1201"
+   ],
+   "rule_families": {
+    "sigma:12ba6a38-adb3-4d6b-91ba-a7fb248e3199": 1
+   }
+  },
+  {
+   "group_id": "corr-group::337715ba11f11ed024f2c357fce8a1d0d4e1b6fff27c12d3578352247597cfe7",
+   "anchor_observation_id": "windows_security:HFDC01.shire.com:11687209",
+   "evidence": 1,
+   "observations": 1,
+   "hosts": [
+    "HFDC01.shire.com"
+   ],
+   "first": "2019-05-14T23:43:09.181000+00:00",
+   "last": "2019-05-14T23:43:09.181000+00:00",
+   "process_images": {
+    "C:\\Windows\\System32\\lsass.exe": 1
+   },
+   "image_names": [
+    "lsass.exe"
+   ],
+   "techniques": [
+    "T1201"
+   ],
+   "rule_families": {
+    "sigma:12ba6a38-adb3-4d6b-91ba-a7fb248e3199": 1
+   }
+  },
+  {
+   "group_id": "corr-group::359b98d1c2fd67a07f0db4ee3d087c64295597d1db9e12697df2d8e21e3f5fc3",
+   "anchor_observation_id": "windows_security:HFDC01.shire.com:11682765",
+   "evidence": 1,
+   "observations": 1,
+   "hosts": [
+    "HFDC01.shire.com"
+   ],
+   "first": "2019-05-14T23:02:30.569000+00:00",
+   "last": "2019-05-14T23:02:30.569000+00:00",
+   "process_images": {
+    "C:\\Windows\\System32\\lsass.exe": 1
+   },
+   "image_names": [
+    "lsass.exe"
+   ],
+   "techniques": [
+    "T1087.002"
+   ],
+   "rule_families": {
+    "sigma:35ba1d85-724d-42a3-889f-2e2362bcaf23": 1
+   }
+  },
+  {
+   "group_id": "corr-group::378ad75f915e05bb6d0a9ec2e3f7bf7cb7e655aa032b510cb8cacbb9e5c4853c",
+   "anchor_observation_id": "windows_security:HFDC01.shire.com:11687980",
+   "evidence": 1,
+   "observations": 1,
+   "hosts": [
+    "HFDC01.shire.com"
+   ],
+   "first": "2019-05-14T23:44:28.692000+00:00",
+   "last": "2019-05-14T23:44:28.692000+00:00",
+   "process_images": {
+    "C:\\Windows\\System32\\lsass.exe": 1
+   },
+   "image_names": [
+    "lsass.exe"
+   ],
+   "techniques": [
+    "T1201"
+   ],
+   "rule_families": {
+    "sigma:12ba6a38-adb3-4d6b-91ba-a7fb248e3199": 1
+   }
+  },
+  {
+   "group_id": "corr-group::3c7518c7fe86325e5b878be0784ac6b944878b3af0efc484c60cb21717b6fc19",
+   "anchor_observation_id": "windows_security:HFDC01.shire.com:11688001",
+   "evidence": 1,
+   "observations": 1,
+   "hosts": [
+    "HFDC01.shire.com"
+   ],
+   "first": "2019-05-14T23:44:29.017000+00:00",
+   "last": "2019-05-14T23:44:29.017000+00:00",
+   "process_images": {
+    "C:\\Windows\\System32\\lsass.exe": 1
+   },
+   "image_names": [
+    "lsass.exe"
+   ],
+   "techniques": [
+    "T1201"
+   ],
+   "rule_families": {
+    "sigma:12ba6a38-adb3-4d6b-91ba-a7fb248e3199": 1
+   }
+  },
+  {
+   "group_id": "corr-group::3d19a7782e8cf20dc414304ece3ca002c570feb8d8b298a97e28beaba13f4b3f",
+   "anchor_observation_id": "windows_security:HFDC01.shire.com:11687880",
+   "evidence": 1,
+   "observations": 1,
+   "hosts": [
+    "HFDC01.shire.com"
+   ],
+   "first": "2019-05-14T23:44:21.284000+00:00",
+   "last": "2019-05-14T23:44:21.284000+00:00",
+   "process_images": {
+    "C:\\Windows\\System32\\lsass.exe": 1
+   },
+   "image_names": [
+    "lsass.exe"
+   ],
+   "techniques": [
+    "T1201"
+   ],
+   "rule_families": {
+    "sigma:12ba6a38-adb3-4d6b-91ba-a7fb248e3199": 1
+   }
+  },
+  {
+   "group_id": "corr-group::3d7497790de194a7f8d3f9a83c5b068dbc7f824f64a7b6464cd42158003428cd",
+   "anchor_observation_id": "windows_security:HFDC01.shire.com:11687197",
+   "evidence": 1,
+   "observations": 1,
+   "hosts": [
+    "HFDC01.shire.com"
+   ],
+   "first": "2019-05-14T23:43:09.177000+00:00",
+   "last": "2019-05-14T23:43:09.177000+00:00",
+   "process_images": {
+    "C:\\Windows\\System32\\lsass.exe": 1
+   },
+   "image_names": [
+    "lsass.exe"
+   ],
+   "techniques": [
+    "T1201"
+   ],
+   "rule_families": {
+    "sigma:12ba6a38-adb3-4d6b-91ba-a7fb248e3199": 1
+   }
+  },
+  {
+   "group_id": "corr-group::411071aacfc3c478a6f7f9828d80de7d72a214ef83d62a1530692e9ab9f2f96e",
+   "anchor_observation_id": "windows_security:HFDC01.shire.com:11682860",
+   "evidence": 1,
+   "observations": 1,
+   "hosts": [
+    "HFDC01.shire.com"
+   ],
+   "first": "2019-05-14T23:02:50.993000+00:00",
+   "last": "2019-05-14T23:02:50.993000+00:00",
+   "process_images": {
+    "C:\\Windows\\System32\\lsass.exe": 1
+   },
+   "image_names": [
+    "lsass.exe"
+   ],
+   "techniques": [
+    "T1087.002"
+   ],
+   "rule_families": {
+    "sigma:35ba1d85-724d-42a3-889f-2e2362bcaf23": 1
+   }
+  },
+  {
+   "group_id": "corr-group::432c71c772baa86aa3199cf71bf00f107528d354c8a67b2dc021201a59315511",
+   "anchor_observation_id": "windows_security:HFDC01.shire.com:11687878",
+   "evidence": 1,
+   "observations": 1,
+   "hosts": [
+    "HFDC01.shire.com"
+   ],
+   "first": "2019-05-14T23:44:21.283000+00:00",
+   "last": "2019-05-14T23:44:21.283000+00:00",
+   "process_images": {
+    "C:\\Windows\\System32\\lsass.exe": 1
+   },
+   "image_names": [
+    "lsass.exe"
+   ],
+   "techniques": [
+    "T1201"
+   ],
+   "rule_families": {
+    "sigma:12ba6a38-adb3-4d6b-91ba-a7fb248e3199": 1
+   }
+  },
+  {
+   "group_id": "corr-group::48b1e484a9aa3a6634a7de41523d0f57d4c00a62ee63446547ae9a8b863ad1e3",
+   "anchor_observation_id": "windows_security:HFDC01.shire.com:11682859",
+   "evidence": 1,
+   "observations": 1,
+   "hosts": [
+    "HFDC01.shire.com"
+   ],
+   "first": "2019-05-14T23:02:50.992000+00:00",
+   "last": "2019-05-14T23:02:50.992000+00:00",
+   "process_images": {
+    "C:\\Windows\\System32\\lsass.exe": 1
+   },
+   "image_names": [
+    "lsass.exe"
+   ],
+   "techniques": [
+    "T1201"
+   ],
+   "rule_families": {
+    "sigma:12ba6a38-adb3-4d6b-91ba-a7fb248e3199": 1
+   }
+  },
+  {
+   "group_id": "corr-group::4ed4ccc38b0ec582876990a79e209d3fd0a21dc2290a188c694fbb3269477362",
+   "anchor_observation_id": "windows_security:HFDC01.shire.com:11682699",
+   "evidence": 1,
+   "observations": 1,
+   "hosts": [
+    "HFDC01.shire.com"
+   ],
+   "first": "2019-05-14T23:02:10.625000+00:00",
+   "last": "2019-05-14T23:02:10.625000+00:00",
+   "process_images": {
+    "C:\\Windows\\System32\\lsass.exe": 1
+   },
+   "image_names": [
+    "lsass.exe"
+   ],
+   "techniques": [
+    "T1201"
+   ],
+   "rule_families": {
+    "sigma:12ba6a38-adb3-4d6b-91ba-a7fb248e3199": 1
+   }
+  },
+  {
+   "group_id": "corr-group::50597a2edcfe880fee5cec078b565df737d6fcbf0aec3e348973f290ab596df9",
+   "anchor_observation_id": "windows_security:HFDC01.shire.com:11682691",
+   "evidence": 1,
+   "observations": 1,
+   "hosts": [
+    "HFDC01.shire.com"
+   ],
+   "first": "2019-05-14T23:02:10.622000+00:00",
+   "last": "2019-05-14T23:02:10.622000+00:00",
+   "process_images": {
+    "C:\\Windows\\System32\\lsass.exe": 1
+   },
+   "image_names": [
+    "lsass.exe"
+   ],
+   "techniques": [
+    "T1201"
+   ],
+   "rule_families": {
+    "sigma:12ba6a38-adb3-4d6b-91ba-a7fb248e3199": 1
+   }
+  },
+  {
+   "group_id": "corr-group::5205e08eb1ae135428c252c4ad15f29fda831084dc61d9a5a63a99f141b80161",
+   "anchor_observation_id": "windows_security:HFDC01.shire.com:11680897",
+   "evidence": 1,
+   "observations": 1,
+   "hosts": [
+    "HFDC01.shire.com"
+   ],
+   "first": "2019-05-14T22:43:10.371000+00:00",
+   "last": "2019-05-14T22:43:10.371000+00:00",
+   "process_images": {
+    "C:\\Windows\\System32\\lsass.exe": 1
+   },
+   "image_names": [
+    "lsass.exe"
+   ],
+   "techniques": [
+    "T1087.002"
+   ],
+   "rule_families": {
+    "sigma:35ba1d85-724d-42a3-889f-2e2362bcaf23": 1
+   }
+  },
+  {
+   "group_id": "corr-group::57fb4b808b95fa9ba0d18e1e4e7277267cbd67c4ba0ed703e51ebdb3ca6e269e",
+   "anchor_observation_id": "windows_security:HFDC01.shire.com:11682798",
+   "evidence": 1,
+   "observations": 1,
+   "hosts": [
+    "HFDC01.shire.com"
+   ],
+   "first": "2019-05-14T23:02:37.578000+00:00",
+   "last": "2019-05-14T23:02:37.578000+00:00",
+   "process_images": {
+    "C:\\Windows\\System32\\lsass.exe": 1
+   },
+   "image_names": [
+    "lsass.exe"
+   ],
+   "techniques": [
+    "T1201"
+   ],
+   "rule_families": {
+    "sigma:12ba6a38-adb3-4d6b-91ba-a7fb248e3199": 1
+   }
+  },
+  {
+   "group_id": "corr-group::5d7f18159cca7a795327c899b7aa151f0809ee1bc42af7ea439808d466a610b9",
+   "anchor_observation_id": "windows_security:HFDC01.shire.com:11683537",
+   "evidence": 1,
+   "observations": 1,
+   "hosts": [
+    "HFDC01.shire.com"
+   ],
+   "first": "2019-05-14T23:11:26.425000+00:00",
+   "last": "2019-05-14T23:11:26.425000+00:00",
+   "process_images": {
+    "C:\\Windows\\System32\\lsass.exe": 1
+   },
+   "image_names": [
+    "lsass.exe"
+   ],
+   "techniques": [
+    "T1201"
+   ],
+   "rule_families": {
+    "sigma:12ba6a38-adb3-4d6b-91ba-a7fb248e3199": 1
+   }
+  },
+  {
+   "group_id": "corr-group::5e2386c8440f6e3337721f56e5b25904d3ff78e34edf16094641326110c5dbbb",
+   "anchor_observation_id": "windows_security:HFDC01.shire.com:11687882",
+   "evidence": 1,
+   "observations": 1,
+   "hosts": [
+    "HFDC01.shire.com"
+   ],
+   "first": "2019-05-14T23:44:21.284000+00:00",
+   "last": "2019-05-14T23:44:21.284000+00:00",
+   "process_images": {
+    "C:\\Windows\\System32\\lsass.exe": 1
+   },
+   "image_names": [
+    "lsass.exe"
+   ],
+   "techniques": [
+    "T1201"
+   ],
+   "rule_families": {
+    "sigma:12ba6a38-adb3-4d6b-91ba-a7fb248e3199": 1
+   }
+  },
+  {
+   "group_id": "corr-group::601b8db4530d951405ae637a8594600a36e7c8516f051a122add65873ddbcada",
+   "anchor_observation_id": "windows_security:HFDC01.shire.com:11687213",
+   "evidence": 1,
+   "observations": 1,
+   "hosts": [
+    "HFDC01.shire.com"
+   ],
+   "first": "2019-05-14T23:43:09.183000+00:00",
+   "last": "2019-05-14T23:43:09.183000+00:00",
+   "process_images": {
+    "C:\\Windows\\System32\\lsass.exe": 1
+   },
+   "image_names": [
+    "lsass.exe"
+   ],
+   "techniques": [
+    "T1201"
+   ],
+   "rule_families": {
+    "sigma:12ba6a38-adb3-4d6b-91ba-a7fb248e3199": 1
+   }
+  },
+  {
+   "group_id": "corr-group::6380abfa9c4f48c4af9d030fa1caf6fe80d0fc11faca131f276ea953288b1ae5",
+   "anchor_observation_id": "windows_security:HFDC01.shire.com:11687971",
+   "evidence": 1,
+   "observations": 1,
+   "hosts": [
+    "HFDC01.shire.com"
+   ],
+   "first": "2019-05-14T23:44:28.690000+00:00",
+   "last": "2019-05-14T23:44:28.690000+00:00",
+   "process_images": {
+    "C:\\Windows\\System32\\lsass.exe": 1
+   },
+   "image_names": [
+    "lsass.exe"
+   ],
+   "techniques": [
+    "T1201"
+   ],
+   "rule_families": {
+    "sigma:12ba6a38-adb3-4d6b-91ba-a7fb248e3199": 1
+   }
+  },
+  {
+   "group_id": "corr-group::6d7775a83021332c7086ee67946ee11b8f47131485b0ce9e74a7d3a5294d8876",
+   "anchor_observation_id": "windows_security:HFDC01.shire.com:11687195",
+   "evidence": 1,
+   "observations": 1,
+   "hosts": [
+    "HFDC01.shire.com"
+   ],
+   "first": "2019-05-14T23:43:09.177000+00:00",
+   "last": "2019-05-14T23:43:09.177000+00:00",
+   "process_images": {
+    "C:\\Windows\\System32\\lsass.exe": 1
+   },
+   "image_names": [
+    "lsass.exe"
+   ],
+   "techniques": [
+    "T1201"
+   ],
+   "rule_families": {
+    "sigma:12ba6a38-adb3-4d6b-91ba-a7fb248e3199": 1
+   }
+  },
+  {
+   "group_id": "corr-group::6e2aacd613674598a9a57710d16a04dbff5a60b95b2f8df82c85856ee0774318",
+   "anchor_observation_id": "windows_security:HFDC01.shire.com:11682775",
+   "evidence": 1,
+   "observations": 1,
+   "hosts": [
+    "HFDC01.shire.com"
+   ],
+   "first": "2019-05-14T23:02:31.038000+00:00",
+   "last": "2019-05-14T23:02:31.038000+00:00",
+   "process_images": {
+    "C:\\Windows\\System32\\lsass.exe": 1
+   },
+   "image_names": [
+    "lsass.exe"
+   ],
+   "techniques": [
+    "T1087.002"
+   ],
+   "rule_families": {
+    "sigma:35ba1d85-724d-42a3-889f-2e2362bcaf23": 1
+   }
+  },
+  {
+   "group_id": "corr-group::72d128d8da16af7a81632e228454d013f28b16471cede563c167afdb1f628758",
+   "anchor_observation_id": "windows_security:HFDC01.shire.com:11687217",
+   "evidence": 1,
+   "observations": 1,
+   "hosts": [
+    "HFDC01.shire.com"
+   ],
+   "first": "2019-05-14T23:43:09.183000+00:00",
+   "last": "2019-05-14T23:43:09.183000+00:00",
+   "process_images": {
+    "C:\\Windows\\System32\\lsass.exe": 1
+   },
+   "image_names": [
+    "lsass.exe"
+   ],
+   "techniques": [
+    "T1201"
+   ],
+   "rule_families": {
+    "sigma:12ba6a38-adb3-4d6b-91ba-a7fb248e3199": 1
+   }
+  },
+  {
+   "group_id": "corr-group::78da922a7f0aaab468d2ace327b5f258ca087e3aca930becce0441674097a46f",
+   "anchor_observation_id": "windows_security:HFDC01.shire.com:11682800",
+   "evidence": 1,
+   "observations": 1,
+   "hosts": [
+    "HFDC01.shire.com"
+   ],
+   "first": "2019-05-14T23:02:37.579000+00:00",
+   "last": "2019-05-14T23:02:37.579000+00:00",
+   "process_images": {
+    "C:\\Windows\\System32\\lsass.exe": 1
+   },
+   "image_names": [
+    "lsass.exe"
+   ],
+   "techniques": [
+    "T1087.002"
+   ],
+   "rule_families": {
+    "sigma:35ba1d85-724d-42a3-889f-2e2362bcaf23": 1
+   }
+  },
+  {
+   "group_id": "corr-group::799d8fec346f024040b80013780936b81ca9b18c4668215f5a3017e0b8a8eba7",
+   "anchor_observation_id": "windows_security:HFDC01.shire.com:11683532",
+   "evidence": 1,
+   "observations": 1,
+   "hosts": [
+    "HFDC01.shire.com"
+   ],
+   "first": "2019-05-14T23:11:26.333000+00:00",
+   "last": "2019-05-14T23:11:26.333000+00:00",
+   "process_images": {
+    "C:\\Windows\\System32\\lsass.exe": 1
+   },
+   "image_names": [
+    "lsass.exe"
+   ],
+   "techniques": [
+    "T1201"
+   ],
+   "rule_families": {
+    "sigma:12ba6a38-adb3-4d6b-91ba-a7fb248e3199": 1
+   }
+  },
+  {
+   "group_id": "corr-group::7a1a8d079427870a39e724dc249c81158ae7e1422bc746c65337a6df0d75c178",
+   "anchor_observation_id": "windows_security:HFDC01.shire.com:11687201",
+   "evidence": 1,
+   "observations": 1,
+   "hosts": [
+    "HFDC01.shire.com"
+   ],
+   "first": "2019-05-14T23:43:09.179000+00:00",
+   "last": "2019-05-14T23:43:09.179000+00:00",
+   "process_images": {
+    "C:\\Windows\\System32\\lsass.exe": 1
+   },
+   "image_names": [
+    "lsass.exe"
+   ],
+   "techniques": [
+    "T1201"
+   ],
+   "rule_families": {
+    "sigma:12ba6a38-adb3-4d6b-91ba-a7fb248e3199": 1
+   }
+  },
+  {
+   "group_id": "corr-group::8894cf3ea4b96081aa48e7ffb8fbfca2d2dd42ca4d78b6d861d3d7e5140fbcb6",
+   "anchor_observation_id": "windows_security:HFDC01.shire.com:11682781",
+   "evidence": 1,
+   "observations": 1,
+   "hosts": [
+    "HFDC01.shire.com"
+   ],
+   "first": "2019-05-14T23:02:34.836000+00:00",
+   "last": "2019-05-14T23:02:34.836000+00:00",
+   "process_images": {
+    "C:\\Windows\\System32\\lsass.exe": 1
+   },
+   "image_names": [
+    "lsass.exe"
+   ],
+   "techniques": [
+    "T1087.002"
+   ],
+   "rule_families": {
+    "sigma:35ba1d85-724d-42a3-889f-2e2362bcaf23": 1
+   }
+  },
+  {
+   "group_id": "corr-group::89da4cc3aceb3d44b80e8b42ab78b27724cd7616f034e9bb9d4c26f0f3ceafe2",
+   "anchor_observation_id": "windows_security:HFDC01.shire.com:11682763",
+   "evidence": 1,
+   "observations": 1,
+   "hosts": [
+    "HFDC01.shire.com"
+   ],
+   "first": "2019-05-14T23:02:30.569000+00:00",
+   "last": "2019-05-14T23:02:30.569000+00:00",
+   "process_images": {
+    "C:\\Windows\\System32\\lsass.exe": 1
+   },
+   "image_names": [
+    "lsass.exe"
+   ],
+   "techniques": [
+    "T1201"
+   ],
+   "rule_families": {
+    "sigma:12ba6a38-adb3-4d6b-91ba-a7fb248e3199": 1
+   }
+  },
+  {
+   "group_id": "corr-group::9c13a354361cf1ac6baea32d0326a9c11640096a3b1ad50c10e09e9d8809a566",
+   "anchor_observation_id": "windows_security:HFDC01.shire.com:11683518",
+   "evidence": 1,
+   "observations": 1,
+   "hosts": [
+    "HFDC01.shire.com"
+   ],
+   "first": "2019-05-14T23:11:17.994000+00:00",
+   "last": "2019-05-14T23:11:17.994000+00:00",
+   "process_images": {
+    "?": 1
+   },
+   "image_names": [],
+   "techniques": [
+    "T1021.002"
+   ],
+   "rule_families": {
+    "sigma:b210394c-ba12-4f89-9117-44a2464b9511": 1
+   }
+  },
+  {
+   "group_id": "corr-group::9f451c730f40ec96b6a1f63d1893960a0036d3cf8afcbc944c116dce196abc00",
+   "anchor_observation_id": "windows_security:HFDC01.shire.com:11682806",
+   "evidence": 1,
+   "observations": 1,
+   "hosts": [
+    "HFDC01.shire.com"
+   ],
+   "first": "2019-05-14T23:02:41.196000+00:00",
+   "last": "2019-05-14T23:02:41.196000+00:00",
+   "process_images": {
+    "C:\\Windows\\System32\\lsass.exe": 1
+   },
+   "image_names": [
+    "lsass.exe"
+   ],
+   "techniques": [
+    "T1087.002"
+   ],
+   "rule_families": {
+    "sigma:35ba1d85-724d-42a3-889f-2e2362bcaf23": 1
+   }
+  },
+  {
+   "group_id": "corr-group::a278f9c81e19da52cc2c658de9779fef50b96495503aefbcb2757d68d84c5d3c",
+   "anchor_observation_id": "windows_security:HFDC01.shire.com:11682780",
+   "evidence": 1,
+   "observations": 1,
+   "hosts": [
+    "HFDC01.shire.com"
+   ],
+   "first": "2019-05-14T23:02:34.835000+00:00",
+   "last": "2019-05-14T23:02:34.835000+00:00",
+   "process_images": {
+    "C:\\Windows\\System32\\lsass.exe": 1
+   },
+   "image_names": [
+    "lsass.exe"
+   ],
+   "techniques": [
+    "T1201"
+   ],
+   "rule_families": {
+    "sigma:12ba6a38-adb3-4d6b-91ba-a7fb248e3199": 1
+   }
+  },
+  {
+   "group_id": "corr-group::a322a4245317cff8fa87d52ecaac975951f11a83d3579a2412ca0ec8f245c989",
+   "anchor_observation_id": "windows_security:HFDC01.shire.com:11687193",
+   "evidence": 1,
+   "observations": 1,
+   "hosts": [
+    "HFDC01.shire.com"
+   ],
+   "first": "2019-05-14T23:43:09.177000+00:00",
+   "last": "2019-05-14T23:43:09.177000+00:00",
+   "process_images": {
+    "C:\\Windows\\System32\\lsass.exe": 1
+   },
+   "image_names": [
+    "lsass.exe"
+   ],
+   "techniques": [
+    "T1201"
+   ],
+   "rule_families": {
+    "sigma:12ba6a38-adb3-4d6b-91ba-a7fb248e3199": 1
+   }
+  },
+  {
+   "group_id": "corr-group::a4a4178146450bec8d00efee4e597fa66417f071eb57e621c7cbc6360627b6e6",
+   "anchor_observation_id": "windows_security:HFDC01.shire.com:11688013",
+   "evidence": 1,
+   "observations": 1,
+   "hosts": [
+    "HFDC01.shire.com"
+   ],
+   "first": "2019-05-14T23:44:29.136000+00:00",
+   "last": "2019-05-14T23:44:29.136000+00:00",
+   "process_images": {
+    "C:\\Windows\\System32\\lsass.exe": 1
+   },
+   "image_names": [
+    "lsass.exe"
+   ],
+   "techniques": [
+    "T1201"
+   ],
+   "rule_families": {
+    "sigma:12ba6a38-adb3-4d6b-91ba-a7fb248e3199": 1
+   }
+  },
+  {
+   "group_id": "corr-group::a8c3c807f7f8d0848f10985c55ff27c4be985ec8fc7ce388cde069729a590cc0",
+   "anchor_observation_id": "windows_security:HFDC01.shire.com:11687207",
+   "evidence": 1,
+   "observations": 1,
+   "hosts": [
+    "HFDC01.shire.com"
+   ],
+   "first": "2019-05-14T23:43:09.179000+00:00",
+   "last": "2019-05-14T23:43:09.179000+00:00",
+   "process_images": {
+    "C:\\Windows\\System32\\lsass.exe": 1
+   },
+   "image_names": [
+    "lsass.exe"
+   ],
+   "techniques": [
+    "T1201"
+   ],
+   "rule_families": {
+    "sigma:12ba6a38-adb3-4d6b-91ba-a7fb248e3199": 1
+   }
+  },
+  {
+   "group_id": "corr-group::ab12a0b21fcf1a75a363da07aa8b0ee9a2cd02d6b312a9ec169a26a78c30c244",
+   "anchor_observation_id": "windows_security:HFDC01.shire.com:11688007",
+   "evidence": 1,
+   "observations": 1,
+   "hosts": [
+    "HFDC01.shire.com"
+   ],
+   "first": "2019-05-14T23:44:29.019000+00:00",
+   "last": "2019-05-14T23:44:29.019000+00:00",
+   "process_images": {
+    "C:\\Windows\\System32\\lsass.exe": 1
+   },
+   "image_names": [
+    "lsass.exe"
+   ],
+   "techniques": [
+    "T1201"
+   ],
+   "rule_families": {
+    "sigma:12ba6a38-adb3-4d6b-91ba-a7fb248e3199": 1
+   }
+  },
+  {
+   "group_id": "corr-group::b94d9a2b527852db63096eeab3640d2b3635321897f6a77895a96af672268385",
+   "anchor_observation_id": "windows_security:HFDC01.shire.com:11683544",
+   "evidence": 1,
+   "observations": 1,
+   "hosts": [
+    "HFDC01.shire.com"
+   ],
+   "first": "2019-05-14T23:11:26.426000+00:00",
+   "last": "2019-05-14T23:11:26.426000+00:00",
+   "process_images": {
+    "C:\\Windows\\System32\\lsass.exe": 1
+   },
+   "image_names": [
+    "lsass.exe"
+   ],
+   "techniques": [
+    "T1087.002"
+   ],
+   "rule_families": {
+    "sigma:35ba1d85-724d-42a3-889f-2e2362bcaf23": 1
+   }
+  },
+  {
+   "group_id": "corr-group::bdc4c42153d0f057fb69bd48e968e8cba4bb1292b27a8166b5d143c118688d18",
+   "anchor_observation_id": "windows_security:HFDC01.shire.com:11682773",
+   "evidence": 1,
+   "observations": 1,
+   "hosts": [
+    "HFDC01.shire.com"
+   ],
+   "first": "2019-05-14T23:02:31.037000+00:00",
+   "last": "2019-05-14T23:02:31.037000+00:00",
+   "process_images": {
+    "C:\\Windows\\System32\\lsass.exe": 1
+   },
+   "image_names": [
+    "lsass.exe"
+   ],
+   "techniques": [
+    "T1201"
+   ],
+   "rule_families": {
+    "sigma:12ba6a38-adb3-4d6b-91ba-a7fb248e3199": 1
+   }
+  },
+  {
+   "group_id": "corr-group::c0d7699d1a08f2ccce73258f695e212ce5c2f0d3e08a5155f3eb4a25f2436872",
+   "anchor_observation_id": "windows_security:HFDC01.shire.com:11687317",
+   "evidence": 1,
+   "observations": 1,
+   "hosts": [
+    "HFDC01.shire.com"
+   ],
+   "first": "2019-05-14T23:43:11.049000+00:00",
+   "last": "2019-05-14T23:43:11.049000+00:00",
+   "process_images": {
+    "C:\\Windows\\System32\\lsass.exe": 1
+   },
+   "image_names": [
+    "lsass.exe"
+   ],
+   "techniques": [
+    "T1201"
+   ],
+   "rule_families": {
+    "sigma:12ba6a38-adb3-4d6b-91ba-a7fb248e3199": 1
+   }
+  },
+  {
+   "group_id": "corr-group::cb7f092ec038a60152dc40002c1b1ad95a282a411bb15d24b986deca00295e17",
+   "anchor_observation_id": "windows_security:HFDC01.shire.com:11688011",
+   "evidence": 1,
+   "observations": 1,
+   "hosts": [
+    "HFDC01.shire.com"
+   ],
+   "first": "2019-05-14T23:44:29.021000+00:00",
+   "last": "2019-05-14T23:44:29.021000+00:00",
+   "process_images": {
+    "C:\\Windows\\System32\\lsass.exe": 1
+   },
+   "image_names": [
+    "lsass.exe"
+   ],
+   "techniques": [
+    "T1201"
+   ],
+   "rule_families": {
+    "sigma:12ba6a38-adb3-4d6b-91ba-a7fb248e3199": 1
+   }
+  },
+  {
+   "group_id": "corr-group::d1d5b3f85bb53faa9a36f26c939349f0b2593d79d3a9d3e869bba835eafaa7af",
+   "anchor_observation_id": "windows_security:HFDC01.shire.com:11683539",
+   "evidence": 1,
+   "observations": 1,
+   "hosts": [
+    "HFDC01.shire.com"
+   ],
+   "first": "2019-05-14T23:11:26.425000+00:00",
+   "last": "2019-05-14T23:11:26.425000+00:00",
+   "process_images": {
+    "C:\\Windows\\System32\\lsass.exe": 1
+   },
+   "image_names": [
+    "lsass.exe"
+   ],
+   "techniques": [
+    "T1201"
+   ],
+   "rule_families": {
+    "sigma:12ba6a38-adb3-4d6b-91ba-a7fb248e3199": 1
+   }
+  },
+  {
+   "group_id": "corr-group::d874814a2f60837e9342149d8d1be4a73084188bdac3518b939cc2cfe7b9ff1f",
+   "anchor_observation_id": "windows_security:HFDC01.shire.com:11683541",
+   "evidence": 1,
+   "observations": 1,
+   "hosts": [
+    "HFDC01.shire.com"
+   ],
+   "first": "2019-05-14T23:11:26.426000+00:00",
+   "last": "2019-05-14T23:11:26.426000+00:00",
+   "process_images": {
+    "C:\\Windows\\System32\\lsass.exe": 1
+   },
+   "image_names": [
+    "lsass.exe"
+   ],
+   "techniques": [
+    "T1201"
+   ],
+   "rule_families": {
+    "sigma:12ba6a38-adb3-4d6b-91ba-a7fb248e3199": 1
+   }
+  },
+  {
+   "group_id": "corr-group::df27a3007b5f7b453d97ad7d2d7a0dcd676340c9f008b7e4210724454a598d30",
+   "anchor_observation_id": "windows_security:HFDC01.shire.com:11682805",
+   "evidence": 1,
+   "observations": 1,
+   "hosts": [
+    "HFDC01.shire.com"
+   ],
+   "first": "2019-05-14T23:02:41.196000+00:00",
+   "last": "2019-05-14T23:02:41.196000+00:00",
+   "process_images": {
+    "C:\\Windows\\System32\\lsass.exe": 1
+   },
+   "image_names": [
+    "lsass.exe"
+   ],
+   "techniques": [
+    "T1201"
+   ],
+   "rule_families": {
+    "sigma:12ba6a38-adb3-4d6b-91ba-a7fb248e3199": 1
+   }
+  },
+  {
+   "group_id": "corr-group::e3bf375450f070da7eb4207f583b65366c4f58cfca5167c42941242948deb9f1",
+   "anchor_observation_id": "windows_security:HFDC01.shire.com:11687978",
+   "evidence": 1,
+   "observations": 1,
+   "hosts": [
+    "HFDC01.shire.com"
+   ],
+   "first": "2019-05-14T23:44:28.691000+00:00",
+   "last": "2019-05-14T23:44:28.691000+00:00",
+   "process_images": {
+    "C:\\Windows\\System32\\lsass.exe": 1
+   },
+   "image_names": [
+    "lsass.exe"
+   ],
+   "techniques": [
+    "T1201"
+   ],
+   "rule_families": {
+    "sigma:12ba6a38-adb3-4d6b-91ba-a7fb248e3199": 1
+   }
+  },
+  {
+   "group_id": "corr-group::e444b90904db4bde46b883cf4d93521caf6182babc3c2e682468ad0bc7bf2a40",
+   "anchor_observation_id": "windows_security:HFDC01.shire.com:11683543",
+   "evidence": 1,
+   "observations": 1,
+   "hosts": [
+    "HFDC01.shire.com"
+   ],
+   "first": "2019-05-14T23:11:26.426000+00:00",
+   "last": "2019-05-14T23:11:26.426000+00:00",
+   "process_images": {
+    "C:\\Windows\\System32\\lsass.exe": 1
+   },
+   "image_names": [
+    "lsass.exe"
+   ],
+   "techniques": [
+    "T1201"
+   ],
+   "rule_families": {
+    "sigma:12ba6a38-adb3-4d6b-91ba-a7fb248e3199": 1
+   }
+  },
+  {
+   "group_id": "corr-group::e56b3d77a1b2491910fdc3b5b73ac304d137f01fefc65e367a20a6eebbe3a405",
+   "anchor_observation_id": "windows_security:HFDC01.shire.com:11682764",
+   "evidence": 1,
+   "observations": 1,
+   "hosts": [
+    "HFDC01.shire.com"
+   ],
+   "first": "2019-05-14T23:02:30.569000+00:00",
+   "last": "2019-05-14T23:02:30.569000+00:00",
+   "process_images": {
+    "C:\\Windows\\System32\\lsass.exe": 1
+   },
+   "image_names": [
+    "lsass.exe"
+   ],
+   "techniques": [
+    "T1201"
+   ],
+   "rule_families": {
+    "sigma:12ba6a38-adb3-4d6b-91ba-a7fb248e3199": 1
+   }
+  },
+  {
+   "group_id": "corr-group::e85621e2ac989e9c0d44d5f0280fbe83632af5f45b14cad299e9a6fb8c5814e6",
+   "anchor_observation_id": "windows_security:HFDC01.shire.com:11687215",
+   "evidence": 1,
+   "observations": 1,
+   "hosts": [
+    "HFDC01.shire.com"
+   ],
+   "first": "2019-05-14T23:43:09.183000+00:00",
+   "last": "2019-05-14T23:43:09.183000+00:00",
+   "process_images": {
+    "C:\\Windows\\System32\\lsass.exe": 1
+   },
+   "image_names": [
+    "lsass.exe"
+   ],
+   "techniques": [
+    "T1201"
+   ],
+   "rule_families": {
+    "sigma:12ba6a38-adb3-4d6b-91ba-a7fb248e3199": 1
+   }
+  },
+  {
+   "group_id": "corr-group::e93fa7392c55584f4b24184b085ae551a587e1b719bda1d184243fe1a00196a7",
+   "anchor_observation_id": "windows_security:HFDC01.shire.com:11680892",
+   "evidence": 1,
+   "observations": 1,
+   "hosts": [
+    "HFDC01.shire.com"
+   ],
+   "first": "2019-05-14T22:43:10.366000+00:00",
+   "last": "2019-05-14T22:43:10.366000+00:00",
+   "process_images": {
+    "C:\\Windows\\System32\\lsass.exe": 1
+   },
+   "image_names": [
+    "lsass.exe"
+   ],
+   "techniques": [
+    "T1087.002"
+   ],
+   "rule_families": {
+    "sigma:35ba1d85-724d-42a3-889f-2e2362bcaf23": 1
+   }
+  },
+  {
+   "group_id": "corr-group::ea165c9a3a24e5dd40f1243856334d5dfc2194a56548d21cc6351959e8dbac3d",
+   "anchor_observation_id": "windows_security:HFDC01.shire.com:11682858",
+   "evidence": 1,
+   "observations": 1,
+   "hosts": [
+    "HFDC01.shire.com"
+   ],
+   "first": "2019-05-14T23:02:50.992000+00:00",
+   "last": "2019-05-14T23:02:50.992000+00:00",
+   "process_images": {
+    "C:\\Windows\\System32\\lsass.exe": 1
+   },
+   "image_names": [
+    "lsass.exe"
+   ],
+   "techniques": [
+    "T1201"
+   ],
+   "rule_families": {
+    "sigma:12ba6a38-adb3-4d6b-91ba-a7fb248e3199": 1
+   }
+  },
+  {
+   "group_id": "corr-group::eb12fff71eea061b9b2c432cfdf1fd2f73135a746f819510f9f0d05bd55f6695",
+   "anchor_observation_id": "windows_security:HFDC01.shire.com:11687874",
+   "evidence": 1,
+   "observations": 1,
+   "hosts": [
+    "HFDC01.shire.com"
+   ],
+   "first": "2019-05-14T23:44:21.277000+00:00",
+   "last": "2019-05-14T23:44:21.277000+00:00",
+   "process_images": {
+    "C:\\Windows\\System32\\lsass.exe": 1
+   },
+   "image_names": [
+    "lsass.exe"
+   ],
+   "techniques": [
+    "T1201"
+   ],
+   "rule_families": {
+    "sigma:12ba6a38-adb3-4d6b-91ba-a7fb248e3199": 1
+   }
+  },
+  {
+   "group_id": "corr-group::ef4769bc3942e76cb2ab7a120019f8ef1a9861cf905011e4d173a001f1997a94",
+   "anchor_observation_id": "windows_security:HFDC01.shire.com:11682774",
+   "evidence": 1,
+   "observations": 1,
+   "hosts": [
+    "HFDC01.shire.com"
+   ],
+   "first": "2019-05-14T23:02:31.037000+00:00",
+   "last": "2019-05-14T23:02:31.037000+00:00",
+   "process_images": {
+    "C:\\Windows\\System32\\lsass.exe": 1
+   },
+   "image_names": [
+    "lsass.exe"
+   ],
+   "techniques": [
+    "T1201"
+   ],
+   "rule_families": {
+    "sigma:12ba6a38-adb3-4d6b-91ba-a7fb248e3199": 1
+   }
+  },
+  {
+   "group_id": "corr-group::f193b882510db9964b068ac1f79331d20f762dc33cdec28b22f31b457bf43b96",
+   "anchor_observation_id": "windows_security:HFDC01.shire.com:11683535",
+   "evidence": 1,
+   "observations": 1,
+   "hosts": [
+    "HFDC01.shire.com"
+   ],
+   "first": "2019-05-14T23:11:26.334000+00:00",
+   "last": "2019-05-14T23:11:26.334000+00:00",
+   "process_images": {
+    "C:\\Windows\\System32\\lsass.exe": 1
+   },
+   "image_names": [
+    "lsass.exe"
+   ],
+   "techniques": [
+    "T1201"
+   ],
+   "rule_families": {
+    "sigma:12ba6a38-adb3-4d6b-91ba-a7fb248e3199": 1
+   }
+  },
+  {
+   "group_id": "corr-group::f27a899017342c3dcf027b941f02a04af7f15f377af6445ca646ab77fd4ca452",
+   "anchor_observation_id": "windows_security:HFDC01.shire.com:11682695",
+   "evidence": 1,
+   "observations": 1,
+   "hosts": [
+    "HFDC01.shire.com"
+   ],
+   "first": "2019-05-14T23:02:10.625000+00:00",
+   "last": "2019-05-14T23:02:10.625000+00:00",
+   "process_images": {
+    "C:\\Windows\\System32\\lsass.exe": 1
+   },
+   "image_names": [
+    "lsass.exe"
+   ],
+   "techniques": [
+    "T1201"
+   ],
+   "rule_families": {
+    "sigma:12ba6a38-adb3-4d6b-91ba-a7fb248e3199": 1
+   }
+  },
+  {
+   "group_id": "corr-group::f3c9d0c1eda4964a9bbbebdd0aad904759d5174a046d968d2e9a7a2f7749605a",
+   "anchor_observation_id": "windows_security:HFDC01.shire.com:11682779",
+   "evidence": 1,
+   "observations": 1,
+   "hosts": [
+    "HFDC01.shire.com"
+   ],
+   "first": "2019-05-14T23:02:34.835000+00:00",
+   "last": "2019-05-14T23:02:34.835000+00:00",
+   "process_images": {
+    "C:\\Windows\\System32\\lsass.exe": 1
+   },
+   "image_names": [
+    "lsass.exe"
+   ],
+   "techniques": [
+    "T1201"
+   ],
+   "rule_families": {
+    "sigma:12ba6a38-adb3-4d6b-91ba-a7fb248e3199": 1
+   }
+  },
+  {
+   "group_id": "corr-group::f5915b2a9c879d7a644ea464ea65ae9230325a16f7782573bb3c6ce54ed618b8",
+   "anchor_observation_id": "windows_security:HFDC01.shire.com:11682804",
+   "evidence": 1,
+   "observations": 1,
+   "hosts": [
+    "HFDC01.shire.com"
+   ],
+   "first": "2019-05-14T23:02:41.196000+00:00",
+   "last": "2019-05-14T23:02:41.196000+00:00",
+   "process_images": {
+    "C:\\Windows\\System32\\lsass.exe": 1
+   },
+   "image_names": [
+    "lsass.exe"
+   ],
+   "techniques": [
+    "T1201"
+   ],
+   "rule_families": {
+    "sigma:12ba6a38-adb3-4d6b-91ba-a7fb248e3199": 1
+   }
+  },
+  {
+   "group_id": "corr-group::fbbde458f0abb7bbd0c75da69961eb5444a84dbba334d637eb9284138d739872",
+   "anchor_observation_id": "windows_security:HFDC01.shire.com:11682697",
+   "evidence": 1,
+   "observations": 1,
+   "hosts": [
+    "HFDC01.shire.com"
+   ],
+   "first": "2019-05-14T23:02:10.625000+00:00",
+   "last": "2019-05-14T23:02:10.625000+00:00",
+   "process_images": {
+    "C:\\Windows\\System32\\lsass.exe": 1
+   },
+   "image_names": [
+    "lsass.exe"
+   ],
+   "techniques": [
+    "T1201"
+   ],
+   "rule_families": {
+    "sigma:12ba6a38-adb3-4d6b-91ba-a7fb248e3199": 1
+   }
   }
  ]
 }

@@ -20,6 +20,7 @@ from __future__ import annotations
 import sys
 from datetime import UTC, datetime, timedelta
 from pathlib import Path
+from typing import Any
 
 import pytest
 
@@ -52,6 +53,14 @@ T0 = datetime(2026, 1, 1, 12, 0, 0, tzinfo=UTC)
 HOST = HostRef(name="WIN-HOST")
 INJECTOR = "{injector-guid}"
 TARGET = "{target-guid}"
+
+
+def _singletons(groups: tuple[Any, ...], count: int) -> bool:
+    """ADR-0003 Amendment F: ``count`` unmerged Evidence, each its own
+    single-Evidence group with no structural link."""
+    return len(groups) == count and all(
+        len(g.member_evidence_ids) == 1 and g.structural_link_ids == () for g in groups
+    )
 
 
 def _obs(
@@ -133,7 +142,7 @@ def test_target_activity_before_the_injection_is_not_linked() -> None:
     injector = _ev("e-injector", _obs("o-injector", INJECTOR))
     before = _ev("e-before", _obs("o-before", TARGET, timestamp=T0 - timedelta(seconds=7)))
     result = correlate_structurally([injector, before], context_observations=[_injection()])
-    assert result.links == () and result.groups == ()
+    assert result.links == () and _singletons(result.groups, 2)
 
 
 def test_equal_timestamp_is_linked() -> None:
@@ -243,7 +252,7 @@ def test_process_access_never_forms_or_merges_a_group() -> None:
     accessed = _ev("e-accessed", _obs("o-accessed", TARGET, timestamp=T0 + timedelta(seconds=1)))
     items = [accessor, accessed]
     structural = correlate_structurally(items, context_observations=[access])
-    assert structural.links == () and structural.groups == ()  # no group from access
+    assert structural.links == () and _singletons(structural.groups, 2)  # access merges nothing
     contextual = contextualize(structural, items, context_observations=[access])
     (link,) = [
         link
@@ -253,7 +262,7 @@ def test_process_access_never_forms_or_merges_a_group() -> None:
     assert not link.link_class.is_structural
     assert link.basis.uncertainty_note and "benign" in link.basis.uncertainty_note
     assert "access" in link.provenance.source_observation_ids
-    assert contextual.groups == ()
+    assert _singletons(contextual.groups, 2)
 
 
 def test_process_access_attaches_to_existing_groups_without_merging_them() -> None:
@@ -308,10 +317,10 @@ def test_real_injection_chain_forms_one_group(
     assert mavinject_start.process is not None and injection.process is not None
     assert mavinject_start.process.entity_id == injection.process.entity_id
 
-    # production evidence alone: one item, nothing to correlate
+    # production evidence alone: one item, its own single-Evidence group
     production = [_ev("e-mavinject", mavinject_start)]
     context = [o for o in real if o.observation_id != mavinject_start.observation_id]
-    assert correlate_structurally(production, context_observations=context).groups == ()
+    assert _singletons(correlate_structurally(production, context_observations=context).groups, 1)
 
     # + test evidence on notepad loading the injected DLL (15 ms after the thread)
     injected_dll = _dll_load(real, "C:\\ProgramData\\T1055.dll")
@@ -356,4 +365,4 @@ def test_real_notepad_activity_before_the_injection_stays_out(real: list[Observa
     assert early.timestamp < injection.timestamp
     items = [_ev("e-mavinject", mavinject_start), _ev("e-early", early)]
     result = correlate_structurally(items, context_observations=[injection])
-    assert result.links == () and result.groups == ()
+    assert result.links == () and _singletons(result.groups, 2)

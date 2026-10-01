@@ -56,6 +56,52 @@
    "rule_families": {
     "sigma:b69888d4-380c-45ce-9cf9-d9ce46e67821": 3
    }
+  },
+  {
+   "group_id": "corr-group::ac74d1bd6e49cc590ddc932c545ccf04dd7c3faf97a81be6d4fa60413c0f9f42",
+   "anchor_observation_id": "sysmon:MKT01.pandalab.com:sha256:e9487f5b80c4acad9c8b76e74871df69199b80e3407cbe68c175e5bd3905055d",
+   "evidence": 1,
+   "observations": 1,
+   "hosts": [
+    "MKT01.pandalab.com"
+   ],
+   "first": "2023-09-06T14:14:57.471000+00:00",
+   "last": "2023-09-06T14:14:57.471000+00:00",
+   "process_images": {
+    "C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe": 1
+   },
+   "image_names": [
+    "msedge.exe"
+   ],
+   "techniques": [
+    "T1564.004"
+   ],
+   "rule_families": {
+    "sigma:b69888d4-380c-45ce-9cf9-d9ce46e67821": 1
+   }
+  },
+  {
+   "group_id": "corr-group::dd2fd816eefc70bc4703299acd3d12add07d745cc0eacbf53114e9b2857bcc65",
+   "anchor_observation_id": "sysmon:MKT01.pandalab.com:sha256:a7c2f8f05fabef8cfa6e16534abe07df54115c736a1372073dda4fe32374f000",
+   "evidence": 1,
+   "observations": 1,
+   "hosts": [
+    "MKT01.pandalab.com"
+   ],
+   "first": "2023-09-06T14:16:14.374000+00:00",
+   "last": "2023-09-06T14:16:14.374000+00:00",
+   "process_images": {
+    "C:\\Windows\\System32\\whoami.exe": 1
+   },
+   "image_names": [
+    "whoami.exe"
+   ],
+   "techniques": [
+    "T1033"
+   ],
+   "rule_families": {
+    "sigma:bd8b828d-0dca-48e1-8a63-8a58ecf2644f": 1
+   }
   }
  ]
 }

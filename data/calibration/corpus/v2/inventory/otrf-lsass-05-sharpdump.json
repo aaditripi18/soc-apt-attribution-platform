@@ -81,6 +81,75 @@
    "rule_families": {
     "sigma:9bd012ee-0dff-44d7-84a0-aa698cfd87a3": 2
    }
+  },
+  {
+   "group_id": "corr-group::6da8b8c24b7cac0ac13408b576992d66dd6b632c17969a7f07b484000a1cbe3d",
+   "anchor_observation_id": "sysmon:MKT01.pandalab.com:sha256:7c726a3a5755a4394ae13dc1e707d1fc9883f1cfba66b60e32fa16b05f0a42f4",
+   "evidence": 1,
+   "observations": 1,
+   "hosts": [
+    "MKT01.pandalab.com"
+   ],
+   "first": "2023-09-06T04:54:12.746000+00:00",
+   "last": "2023-09-06T04:54:12.746000+00:00",
+   "process_images": {
+    "C:\\Windows\\System32\\whoami.exe": 1
+   },
+   "image_names": [
+    "whoami.exe"
+   ],
+   "techniques": [
+    "T1033"
+   ],
+   "rule_families": {
+    "sigma:bd8b828d-0dca-48e1-8a63-8a58ecf2644f": 1
+   }
+  },
+  {
+   "group_id": "corr-group::9cb7e9253d7a5bca628de55fbedd3f000cc7cbbee3fd0c46bff0696cf5925902",
+   "anchor_observation_id": "sysmon:MKT01.pandalab.com:sha256:e21b147d8eade365871bc88b06180c34e40de27c10df642c27b7fa6eae305f8d",
+   "evidence": 1,
+   "observations": 1,
+   "hosts": [
+    "MKT01.pandalab.com"
+   ],
+   "first": "2023-09-06T04:58:51.423000+00:00",
+   "last": "2023-09-06T04:58:51.423000+00:00",
+   "process_images": {
+    "C:\\Windows\\System32\\gpresult.exe": 1
+   },
+   "image_names": [
+    "gpresult.exe"
+   ],
+   "techniques": [
+    "T1615"
+   ],
+   "rule_families": {
+    "sigma:e56d3073-83ff-4021-90fe-c658e0709e72": 1
+   }
+  },
+  {
+   "group_id": "corr-group::d2f1ec6e3bd26d7e806d9804aef69feeae7662aa17f4a39c90c2c2bfbac11bf2",
+   "anchor_observation_id": "sysmon:MKT01.pandalab.com:sha256:6be73eb67f6ad2ff07e45b5e80953706ea9178bbd742dabd26e738ae5dd7645a",
+   "evidence": 1,
+   "observations": 1,
+   "hosts": [
+    "MKT01.pandalab.com"
+   ],
+   "first": "2023-09-06T04:52:43.665000+00:00",
+   "last": "2023-09-06T04:52:43.665000+00:00",
+   "process_images": {
+    "C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe": 1
+   },
+   "image_names": [
+    "msedge.exe"
+   ],
+   "techniques": [
+    "T1564.004"
+   ],
+   "rule_families": {
+    "sigma:b69888d4-380c-45ce-9cf9-d9ce46e67821": 1
+   }
   }
  ]
 }

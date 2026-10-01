@@ -268,13 +268,15 @@ def test_g12_independent_groups_produce_independent_sequences(
 def test_corpus_wide_sequence_count_matches_group_count(
     engine: DetectionEngine, knowledge: AttackKnowledge
 ) -> None:
-    """Pins the exact corpus-wide shape: 8 groups (per G2.3's own
-    corpus-wide pin) -> exactly 8 BehavioralSequences, never fewer, never
-    merged."""
+    """Pins the exact corpus-wide shape: 21 groups (per G2.3's own
+    corpus-wide pin: 8 multi-Evidence + 13 single-Evidence, ADR-0003
+    Amendment F) -> exactly 21 BehavioralSequences, never fewer, never
+    merged; a single-Evidence group is a one-step sequence."""
     result = _replay(engine, knowledge)
     assert len(result.sequences) == len(result.correlation_result.contextual_result.groups)
-    assert len(result.sequences) == 8
-    assert len({s.sequence_id for s in result.sequences}) == 8
+    assert len(result.sequences) == 21
+    assert len({s.sequence_id for s in result.sequences}) == 21
+    assert sum(len(s.steps) == 1 and not s.edges for s in result.sequences) >= 13
 
 
 # ===========================================================================
@@ -665,7 +667,7 @@ def test_replaying_the_same_fixture_twice_into_one_client_is_idempotent(
 
     expected_docs = len({s.sequence_id for s in second.sequences})
     assert client.document_count(BEHAVIORAL_SEQUENCES_INDEX) == expected_docs
-    assert expected_docs == 8
+    assert expected_docs == 21
 
 
 def test_replaying_twice_produces_identical_sequence_ids(

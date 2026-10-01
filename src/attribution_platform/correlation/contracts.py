@@ -90,7 +90,7 @@ from attribution_platform.correlation.errors import CorrelationError
 CORRELATION_LINK_SCHEMA_VERSION = "correlation-link/1"
 
 #: Version of the CorrelationGroup contract (this module's schema).
-CORRELATION_GROUP_SCHEMA_VERSION = "correlation-group/1"
+CORRELATION_GROUP_SCHEMA_VERSION = "correlation-group/2"  # /2: single-Evidence groups (Amendment F)
 
 
 def _require_nonempty_str(value: object, field_name: str) -> str:
@@ -450,15 +450,17 @@ class CorrelationGroup:
       (typically via :func:`compute_group_id`) from the sorted member
       Evidence ids — never randomly generated.
     - ``member_evidence_ids``: the Evidence items in this component —
-      **required, non-empty, and at least two** (a connected component
-      formed by at least one edge inherently spans at least two nodes;
-      see ``structural_link_ids`` below). Canonicalized to sorted-unique.
+      **required, non-empty**. A component of one Evidence (no structural
+      link touches it) is a group too (ADR-0003 Amendment F): it is one
+      independent behavior, so attribution must see it as its own unit.
+      Canonicalized to sorted-unique.
     - ``member_observation_ids``: the Observation ids reachable from those
       Evidence items, for direct raw-telemetry navigation without walking
       through Evidence first. Required, non-empty, canonicalized.
     - ``structural_link_ids``: the structural ``CorrelationLink`` ids that
-      actually formed this component — **required, non-empty** (a group
-      with no structural link has no reason to exist as a distinct object).
+      actually formed this component — **non-empty exactly when the group
+      has two or more members** (members are joined only by structural
+      links) and **empty for a single-Evidence group** (Amendment F).
       This contract cannot verify from an id string alone that a given id
       truly names a structural link; use :func:`build_correlation_group`,
       which can (it receives the actual link objects).
@@ -486,12 +488,6 @@ class CorrelationGroup:
         for eid in self.member_evidence_ids:
             _require_nonempty_str(eid, "CorrelationGroup.member_evidence_ids[]")
         canonical_members = tuple(sorted(set(self.member_evidence_ids)))
-        if len(canonical_members) < 2:
-            raise CorrelationError(
-                "CorrelationGroup.member_evidence_ids must contain at least two distinct "
-                "Evidence ids — a connected component formed by at least one structural link "
-                "inherently spans at least two nodes"
-            )
         object.__setattr__(self, "member_evidence_ids", canonical_members)
 
         if not self.member_observation_ids:
@@ -505,10 +501,15 @@ class CorrelationGroup:
             self, "member_observation_ids", tuple(sorted(set(self.member_observation_ids)))
         )
 
-        if not self.structural_link_ids:
+        if len(canonical_members) >= 2 and not self.structural_link_ids:
             raise CorrelationError(
-                "CorrelationGroup.structural_link_ids must be non-empty: a group with no "
-                "structural link has no reason to exist as a distinct CorrelationGroup"
+                "CorrelationGroup.structural_link_ids must be non-empty for a group of two or "
+                "more Evidence: members are joined only by structural links"
+            )
+        if len(canonical_members) == 1 and self.structural_link_ids:
+            raise CorrelationError(
+                "CorrelationGroup: a single-Evidence group has no structural link "
+                "(ADR-0003 Amendment F)"
             )
         for lid in self.structural_link_ids:
             _require_nonempty_str(lid, "CorrelationGroup.structural_link_ids[]")
@@ -623,11 +624,8 @@ def compute_group_id(
     collision-safe to concatenate.
     """
     canonical = sorted(set(member_evidence_ids))
-    if len(canonical) < 2:
-        raise CorrelationError(
-            f"compute_group_id: requires at least two distinct member Evidence ids, "
-            f"got {canonical!r}"
-        )
+    if not canonical:
+        raise CorrelationError("compute_group_id: requires at least one member Evidence id")
     for eid in canonical:
         _require_nonempty_str(eid, "compute_group_id(member_evidence_ids=...)[]")
     parts = ["corr-group", _member_set_digest(canonical)]

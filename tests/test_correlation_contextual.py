@@ -26,6 +26,7 @@ from __future__ import annotations
 import ast
 from datetime import UTC, datetime
 from pathlib import Path
+from typing import Any
 
 import pytest
 
@@ -63,6 +64,14 @@ _CONTEXTUAL_CLASSES = (
     LinkClass.SAME_USER_NAME,
     LinkClass.SAME_DESTINATION_IP,
 )
+
+
+def _singletons(groups: tuple[Any, ...], count: int) -> bool:
+    """ADR-0003 Amendment F: ``count`` unmerged Evidence, each its own
+    single-Evidence group with no structural link."""
+    return len(groups) == count and all(
+        len(g.member_evidence_ids) == 1 and g.structural_link_ids == () for g in groups
+    )
 
 
 @pytest.fixture(scope="module")
@@ -319,12 +328,12 @@ def test_same_host_alone_never_creates_a_structural_link_or_group() -> None:
     ]
     structural = correlate_structurally(items)
     assert structural.links == ()
-    assert structural.groups == ()
+    assert _singletons(structural.groups, 2)
 
     contextual = contextualize(structural, items)
     assert len(contextual.contextual_links) == 1
     assert contextual.contextual_links[0].link_class == LinkClass.SAME_HOST_ID
-    assert contextual.groups == ()  # still no group -- contextual alone never creates one
+    assert _singletons(contextual.groups, 2)  # contextual links never merge them
 
 
 def test_same_user_alone_never_creates_a_structural_link_or_group() -> None:
@@ -334,9 +343,9 @@ def test_same_user_alone_never_creates_a_structural_link_or_group() -> None:
         _pair("ev-2", _obs("obs-2", user=user, process=ProcessRef(entity_id="{B}"))),
     ]
     structural = correlate_structurally(items)
-    assert structural.groups == ()
+    assert _singletons(structural.groups, 2)
     contextual = contextualize(structural, items)
-    assert contextual.groups == ()
+    assert _singletons(contextual.groups, 2)
 
 
 def test_same_destination_ip_alone_never_creates_a_structural_link_or_group() -> None:
@@ -346,9 +355,9 @@ def test_same_destination_ip_alone_never_creates_a_structural_link_or_group() ->
         _pair("ev-2", _obs("obs-2", network=dest)),
     ]
     structural = correlate_structurally(items)
-    assert structural.groups == ()
+    assert _singletons(structural.groups, 2)
     contextual = contextualize(structural, items)
-    assert contextual.groups == ()
+    assert _singletons(contextual.groups, 2)
 
 
 # ===========================================================================

@@ -3,33 +3,33 @@
  "families": {
   "v2-apt3-empire": {
    "case_role": "calibration",
-   "units": 4,
+   "units": 65,
    "included": 2,
-   "excluded": 2
+   "excluded": 63
   },
   "v2-apt3-caldera": {
    "deferred": "Every unit runs only through generic hosts (the CALDERA PowerShell agent, cmd.exe); identifying the agent would require matching command-line content against the procedure, which this corpus step does not do. Deferred, not guessed."
   },
   "v2-apt29-day1": {
    "case_role": "blind_actor_holdout",
-   "units": 18,
-   "included": 6,
-   "excluded": 12
+   "units": 65,
+   "included": 7,
+   "excluded": 58
   },
   "v2-apt29-day2": {
    "case_role": "blind_actor_holdout",
-   "units": 14,
+   "units": 23,
    "included": 2,
-   "excluded": 12
+   "excluded": 21
   },
   "v2-lsass-01-logonpasswords": {
    "deferred": "The documented tool (Mimikatz logonpasswords) runs in memory of generic hosts; no unit runs a named, non-generic tool."
   },
   "v2-lsass-02-procdump": {
    "case_role": "calibration",
-   "units": 3,
+   "units": 6,
    "included": 1,
-   "excluded": 2
+   "excluded": 5
   },
   "v2-lsass-03-comsvcs": {
    "deferred": "The documented technique (comsvcs.dll MiniDump) runs through rundll32.exe, a generic host."
@@ -39,21 +39,21 @@
   },
   "v2-lsass-05-sharpdump": {
    "case_role": "held_out_validation",
-   "units": 3,
+   "units": 6,
    "included": 1,
-   "excluded": 2
+   "excluded": 5
   },
   "v2-lsass-06-outflank-dumpert": {
    "case_role": "calibration",
-   "units": 2,
+   "units": 4,
    "included": 1,
-   "excluded": 1
+   "excluded": 3
   },
   "v2-lsass-07-nanodump": {
    "case_role": "held_out_validation",
-   "units": 2,
+   "units": 4,
    "included": 1,
-   "excluded": 1
+   "excluded": 3
   }
  }
 }

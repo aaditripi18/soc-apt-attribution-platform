@@ -490,6 +490,1049 @@
     "sigma:40f9af16-589d-4984-b78d-8c2aec023197": 1,
     "sigma:da2738f2-fadb-4394-afa7-0a0674885afa": 1
    }
+  },
+  {
+   "group_id": "corr-group::062b08af2cfcedc03cadac3d2fd2fb7199538a2d19479450bfea2646dfe284fe",
+   "anchor_observation_id": "sysmon:NASHUA.dmevals.local:353030",
+   "evidence": 1,
+   "observations": 1,
+   "hosts": [
+    "NASHUA.dmevals.local"
+   ],
+   "first": "2020-05-02T03:16:19.395000+00:00",
+   "last": "2020-05-02T03:16:19.395000+00:00",
+   "process_images": {
+    "C:\\Windows\\Temp\\Rar.exe": 1
+   },
+   "image_names": [
+    "rar.exe"
+   ],
+   "techniques": [
+    "T1560.001"
+   ],
+   "rule_families": {
+    "sigma:faa48cae-6b25-4f00-a094-08947fef582f": 1
+   }
+  },
+  {
+   "group_id": "corr-group::0b5178e81edfa479f3d73e06d2a3f2d6b177fa6fd95d2a3f0af7bb586fe0df50",
+   "anchor_observation_id": "windows_security:NEWYORK.dmevals.local:151236",
+   "evidence": 1,
+   "observations": 1,
+   "hosts": [
+    "NEWYORK.dmevals.local"
+   ],
+   "first": "2020-05-02T03:03:15+00:00",
+   "last": "2020-05-02T03:03:15+00:00",
+   "process_images": {
+    "C:\\Windows\\System32\\lsass.exe": 1
+   },
+   "image_names": [
+    "lsass.exe"
+   ],
+   "techniques": [
+    "T1201"
+   ],
+   "rule_families": {
+    "sigma:12ba6a38-adb3-4d6b-91ba-a7fb248e3199": 1
+   }
+  },
+  {
+   "group_id": "corr-group::186ed4adca3dbe81246ece4a35e5498c377b09f63555c8a0bfbe1067e1985095",
+   "anchor_observation_id": "windows_security:NASHUA.dmevals.local:65653",
+   "evidence": 1,
+   "observations": 1,
+   "hosts": [
+    "NASHUA.dmevals.local"
+   ],
+   "first": "2020-05-02T03:13:49+00:00",
+   "last": "2020-05-02T03:13:49+00:00",
+   "process_images": {
+    "?": 1
+   },
+   "image_names": [],
+   "techniques": [
+    "T1021.002"
+   ],
+   "rule_families": {
+    "sigma:52d8b0c6-53d6-439a-9e41-52ad442ad9ad": 1
+   }
+  },
+  {
+   "group_id": "corr-group::1f03043a033635baf5bcdda74db8ef96c3a3021560645029332b0f5cec9f1ca0",
+   "anchor_observation_id": "windows_security:NEWYORK.dmevals.local:151225",
+   "evidence": 1,
+   "observations": 1,
+   "hosts": [
+    "NEWYORK.dmevals.local"
+   ],
+   "first": "2020-05-02T03:03:15+00:00",
+   "last": "2020-05-02T03:03:15+00:00",
+   "process_images": {
+    "C:\\Windows\\System32\\lsass.exe": 1
+   },
+   "image_names": [
+    "lsass.exe"
+   ],
+   "techniques": [
+    "T1201"
+   ],
+   "rule_families": {
+    "sigma:12ba6a38-adb3-4d6b-91ba-a7fb248e3199": 1
+   }
+  },
+  {
+   "group_id": "corr-group::28244576f1d1912d77f8e978b78cd2862fac1868efec21c0f24719adcb6afa4e",
+   "anchor_observation_id": "windows_security:NEWYORK.dmevals.local:151259",
+   "evidence": 1,
+   "observations": 1,
+   "hosts": [
+    "NEWYORK.dmevals.local"
+   ],
+   "first": "2020-05-02T03:03:15+00:00",
+   "last": "2020-05-02T03:03:15+00:00",
+   "process_images": {
+    "C:\\Windows\\System32\\lsass.exe": 1
+   },
+   "image_names": [
+    "lsass.exe"
+   ],
+   "techniques": [
+    "T1201"
+   ],
+   "rule_families": {
+    "sigma:12ba6a38-adb3-4d6b-91ba-a7fb248e3199": 1
+   }
+  },
+  {
+   "group_id": "corr-group::2d93fef76c084a2d1a96220e12fdccbcc954882ffe0381a9268ae67b860c6474",
+   "anchor_observation_id": "windows_security:NASHUA.dmevals.local:66049",
+   "evidence": 1,
+   "observations": 1,
+   "hosts": [
+    "NASHUA.dmevals.local"
+   ],
+   "first": "2020-05-02T03:15:03+00:00",
+   "last": "2020-05-02T03:15:03+00:00",
+   "process_images": {
+    "C:\\Windows\\System32\\services.exe": 1
+   },
+   "image_names": [
+    "services.exe"
+   ],
+   "techniques": [
+    "T1548"
+   ],
+   "rule_families": {
+    "sigma:dae8171c-5ec6-4396-b210-8466585b53e9": 1
+   }
+  },
+  {
+   "group_id": "corr-group::32242d32b97c501d699ebb9ce17b5d69c24d754d8a2c1986a0da1eea5ca1bc0b",
+   "anchor_observation_id": "windows_security:NEWYORK.dmevals.local:151231",
+   "evidence": 1,
+   "observations": 1,
+   "hosts": [
+    "NEWYORK.dmevals.local"
+   ],
+   "first": "2020-05-02T03:03:15+00:00",
+   "last": "2020-05-02T03:03:15+00:00",
+   "process_images": {
+    "C:\\Windows\\System32\\lsass.exe": 1
+   },
+   "image_names": [
+    "lsass.exe"
+   ],
+   "techniques": [
+    "T1201"
+   ],
+   "rule_families": {
+    "sigma:12ba6a38-adb3-4d6b-91ba-a7fb248e3199": 1
+   }
+  },
+  {
+   "group_id": "corr-group::345c85087de640a8e5405156321123693ba5c2b300888dfe6555dea7507be614",
+   "anchor_observation_id": "windows_security:NASHUA.dmevals.local:65405",
+   "evidence": 1,
+   "observations": 1,
+   "hosts": [
+    "NASHUA.dmevals.local"
+   ],
+   "first": "2020-05-02T03:11:39+00:00",
+   "last": "2020-05-02T03:11:39+00:00",
+   "process_images": {
+    "C:\\Windows\\System32\\services.exe": 1
+   },
+   "image_names": [
+    "services.exe"
+   ],
+   "techniques": [
+    "T1548"
+   ],
+   "rule_families": {
+    "sigma:dae8171c-5ec6-4396-b210-8466585b53e9": 1
+   }
+  },
+  {
+   "group_id": "corr-group::3c70a89990fcbc90343ec8d2ba5142505d665556f6b6a5a5b7301d720bf74b00",
+   "anchor_observation_id": "windows_security:NEWYORK.dmevals.local:151267",
+   "evidence": 1,
+   "observations": 1,
+   "hosts": [
+    "NEWYORK.dmevals.local"
+   ],
+   "first": "2020-05-02T03:03:15+00:00",
+   "last": "2020-05-02T03:03:15+00:00",
+   "process_images": {
+    "C:\\Windows\\System32\\lsass.exe": 1
+   },
+   "image_names": [
+    "lsass.exe"
+   ],
+   "techniques": [
+    "T1201"
+   ],
+   "rule_families": {
+    "sigma:12ba6a38-adb3-4d6b-91ba-a7fb248e3199": 1
+   }
+  },
+  {
+   "group_id": "corr-group::3da999817c7c6af6ffd0921eca5e777fa84562e590cffb36148aeb21a600ee1b",
+   "anchor_observation_id": "windows_security:NASHUA.dmevals.local:66063",
+   "evidence": 1,
+   "observations": 1,
+   "hosts": [
+    "NASHUA.dmevals.local"
+   ],
+   "first": "2020-05-02T03:15:03+00:00",
+   "last": "2020-05-02T03:15:03+00:00",
+   "process_images": {
+    "?": 1
+   },
+   "image_names": [],
+   "techniques": [
+    "T1021.002"
+   ],
+   "rule_families": {
+    "sigma:52d8b0c6-53d6-439a-9e41-52ad442ad9ad": 1
+   }
+  },
+  {
+   "group_id": "corr-group::3ff21182d510b067145fdc613b988e4fd6ce6b79cee6a72691d003612c0c8b8f",
+   "anchor_observation_id": "windows_security:NASHUA.dmevals.local:67280",
+   "evidence": 1,
+   "observations": 1,
+   "hosts": [
+    "NASHUA.dmevals.local"
+   ],
+   "first": "2020-05-02T03:18:20+00:00",
+   "last": "2020-05-02T03:18:20+00:00",
+   "process_images": {
+    "C:\\Windows\\System32\\services.exe": 1
+   },
+   "image_names": [
+    "services.exe"
+   ],
+   "techniques": [
+    "T1548"
+   ],
+   "rule_families": {
+    "sigma:dae8171c-5ec6-4396-b210-8466585b53e9": 1
+   }
+  },
+  {
+   "group_id": "corr-group::4248a995c848b9e026536c9da230847c0542c157989adf562dce52bdabf14c94",
+   "anchor_observation_id": "windows_security:NASHUA.dmevals.local:65527",
+   "evidence": 1,
+   "observations": 1,
+   "hosts": [
+    "NASHUA.dmevals.local"
+   ],
+   "first": "2020-05-02T03:12:46+00:00",
+   "last": "2020-05-02T03:12:46+00:00",
+   "process_images": {
+    "?": 1
+   },
+   "image_names": [],
+   "techniques": [
+    "T1021.002"
+   ],
+   "rule_families": {
+    "sigma:52d8b0c6-53d6-439a-9e41-52ad442ad9ad": 1
+   }
+  },
+  {
+   "group_id": "corr-group::4af6e475bc686fae0e418daf4fb0d9f4745c24bbebc2f2326e6ecba3220872b7",
+   "anchor_observation_id": "windows_security:NASHUA.dmevals.local:65419",
+   "evidence": 1,
+   "observations": 1,
+   "hosts": [
+    "NASHUA.dmevals.local"
+   ],
+   "first": "2020-05-02T03:11:40+00:00",
+   "last": "2020-05-02T03:11:40+00:00",
+   "process_images": {
+    "?": 1
+   },
+   "image_names": [],
+   "techniques": [
+    "T1021.002"
+   ],
+   "rule_families": {
+    "sigma:52d8b0c6-53d6-439a-9e41-52ad442ad9ad": 1
+   }
+  },
+  {
+   "group_id": "corr-group::4dba510454f84f3cdc5e8cecef8c08a14ce164f8892f46e7bf096778958e359d",
+   "anchor_observation_id": "windows_security:NEWYORK.dmevals.local:151258",
+   "evidence": 1,
+   "observations": 1,
+   "hosts": [
+    "NEWYORK.dmevals.local"
+   ],
+   "first": "2020-05-02T03:03:15+00:00",
+   "last": "2020-05-02T03:03:15+00:00",
+   "process_images": {
+    "C:\\Windows\\System32\\lsass.exe": 1
+   },
+   "image_names": [
+    "lsass.exe"
+   ],
+   "techniques": [
+    "T1201"
+   ],
+   "rule_families": {
+    "sigma:12ba6a38-adb3-4d6b-91ba-a7fb248e3199": 1
+   }
+  },
+  {
+   "group_id": "corr-group::5725d7c0c77c7410221848bae53b21228a42d725d8c7d74f119f792bfb95f2c7",
+   "anchor_observation_id": "sysmon:SCRANTON.dmevals.local:385063",
+   "evidence": 1,
+   "observations": 1,
+   "hosts": [
+    "SCRANTON.dmevals.local"
+   ],
+   "first": "2020-05-02T03:10:23.154000+00:00",
+   "last": "2020-05-02T03:10:23.154000+00:00",
+   "process_images": {
+    "C:\\Windows\\System32\\rundll32.exe": 1
+   },
+   "image_names": [
+    "rundll32.exe"
+   ],
+   "techniques": [
+    "T1048.003"
+   ],
+   "rule_families": {
+    "sigma:2dbd9d3d-9e27-42a8-b8df-f13825c6c3d5": 1
+   }
+  },
+  {
+   "group_id": "corr-group::5955ad25cbfb6ad9e7bfd77c0b928f16d700a89e916a37d6306ae25d081e860c",
+   "anchor_observation_id": "windows_security:NASHUA.dmevals.local:65421",
+   "evidence": 1,
+   "observations": 1,
+   "hosts": [
+    "NASHUA.dmevals.local"
+   ],
+   "first": "2020-05-02T03:11:40+00:00",
+   "last": "2020-05-02T03:11:40+00:00",
+   "process_images": {
+    "?": 1
+   },
+   "image_names": [],
+   "techniques": [
+    "T1021.002"
+   ],
+   "rule_families": {
+    "sigma:52d8b0c6-53d6-439a-9e41-52ad442ad9ad": 1
+   }
+  },
+  {
+   "group_id": "corr-group::5a07556510fa44cbd8ac9a7eb948fd50ac08e2108b03df8574e90f60ef0f2f6e",
+   "anchor_observation_id": "sysmon:SCRANTON.dmevals.local:384438",
+   "evidence": 1,
+   "observations": 1,
+   "hosts": [
+    "SCRANTON.dmevals.local"
+   ],
+   "first": "2020-05-02T03:08:50.846000+00:00",
+   "last": "2020-05-02T03:08:50.846000+00:00",
+   "process_images": {
+    "C:\\Windows\\System32\\rundll32.exe": 1
+   },
+   "image_names": [
+    "rundll32.exe"
+   ],
+   "techniques": [
+    "T1048.003"
+   ],
+   "rule_families": {
+    "sigma:2dbd9d3d-9e27-42a8-b8df-f13825c6c3d5": 1
+   }
+  },
+  {
+   "group_id": "corr-group::619d73702ac1b373a11bed1785830907b0537370f7465d75fa0f309d11491be5",
+   "anchor_observation_id": "windows_security:NEWYORK.dmevals.local:151237",
+   "evidence": 1,
+   "observations": 1,
+   "hosts": [
+    "NEWYORK.dmevals.local"
+   ],
+   "first": "2020-05-02T03:03:15+00:00",
+   "last": "2020-05-02T03:03:15+00:00",
+   "process_images": {
+    "C:\\Windows\\System32\\lsass.exe": 1
+   },
+   "image_names": [
+    "lsass.exe"
+   ],
+   "techniques": [
+    "T1201"
+   ],
+   "rule_families": {
+    "sigma:12ba6a38-adb3-4d6b-91ba-a7fb248e3199": 1
+   }
+  },
+  {
+   "group_id": "corr-group::64cfc2237b9c45d79cbb07690d468209ce903454c2c3286bd2295abf28e28df0",
+   "anchor_observation_id": "windows_security:NASHUA.dmevals.local:65510",
+   "evidence": 1,
+   "observations": 1,
+   "hosts": [
+    "NASHUA.dmevals.local"
+   ],
+   "first": "2020-05-02T03:12:46+00:00",
+   "last": "2020-05-02T03:12:46+00:00",
+   "process_images": {
+    "C:\\Windows\\System32\\services.exe": 1
+   },
+   "image_names": [
+    "services.exe"
+   ],
+   "techniques": [
+    "T1548"
+   ],
+   "rule_families": {
+    "sigma:dae8171c-5ec6-4396-b210-8466585b53e9": 1
+   }
+  },
+  {
+   "group_id": "corr-group::6b1c30c32a7d411fb65ebb6122c90ed54f94e23182877263ace9a8f54930ac63",
+   "anchor_observation_id": "windows_security:NASHUA.dmevals.local:66065",
+   "evidence": 1,
+   "observations": 1,
+   "hosts": [
+    "NASHUA.dmevals.local"
+   ],
+   "first": "2020-05-02T03:15:03+00:00",
+   "last": "2020-05-02T03:15:03+00:00",
+   "process_images": {
+    "?": 1
+   },
+   "image_names": [],
+   "techniques": [
+    "T1021.002"
+   ],
+   "rule_families": {
+    "sigma:52d8b0c6-53d6-439a-9e41-52ad442ad9ad": 1
+   }
+  },
+  {
+   "group_id": "corr-group::6c634584e407b08375b428ab9a03bc548fbf63ecf596a982f0d4f9101dbd8880",
+   "anchor_observation_id": "powershell:SCRANTON.dmevals.local:12727",
+   "evidence": 1,
+   "observations": 1,
+   "hosts": [
+    "SCRANTON.dmevals.local"
+   ],
+   "first": "2020-05-02T03:21:29+00:00",
+   "last": "2020-05-02T03:21:29+00:00",
+   "process_images": {
+    "?": 1
+   },
+   "image_names": [],
+   "techniques": [
+    "T1059.001"
+   ],
+   "rule_families": {
+    "sigma:f62176f3-8128-4faa-bf6c-83261322e5eb": 1
+   }
+  },
+  {
+   "group_id": "corr-group::6da9efd92acde568c28411147a52fc1da09b034c092658c06df27d46852f6cf2",
+   "anchor_observation_id": "windows_security:NASHUA.dmevals.local:66067",
+   "evidence": 1,
+   "observations": 1,
+   "hosts": [
+    "NASHUA.dmevals.local"
+   ],
+   "first": "2020-05-02T03:15:03+00:00",
+   "last": "2020-05-02T03:15:03+00:00",
+   "process_images": {
+    "?": 1
+   },
+   "image_names": [],
+   "techniques": [
+    "T1021.002"
+   ],
+   "rule_families": {
+    "sigma:52d8b0c6-53d6-439a-9e41-52ad442ad9ad": 1
+   }
+  },
+  {
+   "group_id": "corr-group::7109b138c1b9408aa69f48fb4060f22a779cda9521db23058ab0347ee79acd74",
+   "anchor_observation_id": "windows_security:NASHUA.dmevals.local:65590",
+   "evidence": 1,
+   "observations": 1,
+   "hosts": [
+    "NASHUA.dmevals.local"
+   ],
+   "first": "2020-05-02T03:13:08+00:00",
+   "last": "2020-05-02T03:13:08+00:00",
+   "process_images": {
+    "C:\\Windows\\System32\\services.exe": 1
+   },
+   "image_names": [
+    "services.exe"
+   ],
+   "techniques": [
+    "T1548"
+   ],
+   "rule_families": {
+    "sigma:dae8171c-5ec6-4396-b210-8466585b53e9": 1
+   }
+  },
+  {
+   "group_id": "corr-group::8e6bc7cb187f9c75f0e88e9b48f4da7a77b9077aca89d14407d27141bd434f7f",
+   "anchor_observation_id": "windows_security:NASHUA.dmevals.local:65423",
+   "evidence": 1,
+   "observations": 1,
+   "hosts": [
+    "NASHUA.dmevals.local"
+   ],
+   "first": "2020-05-02T03:11:40+00:00",
+   "last": "2020-05-02T03:11:40+00:00",
+   "process_images": {
+    "?": 1
+   },
+   "image_names": [],
+   "techniques": [
+    "T1021.002"
+   ],
+   "rule_families": {
+    "sigma:52d8b0c6-53d6-439a-9e41-52ad442ad9ad": 1
+   }
+  },
+  {
+   "group_id": "corr-group::9e86e43fd4c5901aa9adcfae62039628c54476a081cc1e94c14f06651fa1acf4",
+   "anchor_observation_id": "windows_security:NEWYORK.dmevals.local:151266",
+   "evidence": 1,
+   "observations": 1,
+   "hosts": [
+    "NEWYORK.dmevals.local"
+   ],
+   "first": "2020-05-02T03:03:15+00:00",
+   "last": "2020-05-02T03:03:15+00:00",
+   "process_images": {
+    "C:\\Windows\\System32\\lsass.exe": 1
+   },
+   "image_names": [
+    "lsass.exe"
+   ],
+   "techniques": [
+    "T1201"
+   ],
+   "rule_families": {
+    "sigma:12ba6a38-adb3-4d6b-91ba-a7fb248e3199": 1
+   }
+  },
+  {
+   "group_id": "corr-group::a00cb6f7df78408462d1a1876c373d1c34be59a452abcd1dbab6fd8fea53add7",
+   "anchor_observation_id": "windows_security:NASHUA.dmevals.local:65652",
+   "evidence": 1,
+   "observations": 1,
+   "hosts": [
+    "NASHUA.dmevals.local"
+   ],
+   "first": "2020-05-02T03:13:49+00:00",
+   "last": "2020-05-02T03:13:49+00:00",
+   "process_images": {
+    "?": 1
+   },
+   "image_names": [],
+   "techniques": [
+    "T1021.002"
+   ],
+   "rule_families": {
+    "sigma:52d8b0c6-53d6-439a-9e41-52ad442ad9ad": 1
+   }
+  },
+  {
+   "group_id": "corr-group::ae89732b570e3fd2f153eb95e7db1ac2fd9effe3bc32a773c5801b47d1a9c135",
+   "anchor_observation_id": "powershell:SCRANTON.dmevals.local:12722",
+   "evidence": 1,
+   "observations": 1,
+   "hosts": [
+    "SCRANTON.dmevals.local"
+   ],
+   "first": "2020-05-02T03:21:29+00:00",
+   "last": "2020-05-02T03:21:29+00:00",
+   "process_images": {
+    "?": 1
+   },
+   "image_names": [],
+   "techniques": [
+    "T1132.001"
+   ],
+   "rule_families": {
+    "sigma:df69cb1d-b891-4cd9-90c7-d617d90100ce": 1
+   }
+  },
+  {
+   "group_id": "corr-group::b5489ef027e356f318a9288698147e7fbb57bb3e6d45ae419f1c4565294053de",
+   "anchor_observation_id": "windows_security:NASHUA.dmevals.local:65654",
+   "evidence": 1,
+   "observations": 1,
+   "hosts": [
+    "NASHUA.dmevals.local"
+   ],
+   "first": "2020-05-02T03:13:49+00:00",
+   "last": "2020-05-02T03:13:49+00:00",
+   "process_images": {
+    "?": 1
+   },
+   "image_names": [],
+   "techniques": [
+    "T1021.002"
+   ],
+   "rule_families": {
+    "sigma:52d8b0c6-53d6-439a-9e41-52ad442ad9ad": 1
+   }
+  },
+  {
+   "group_id": "corr-group::b5895bcd9db50d41385ecdff8b599f466906478be35a2cf49670987cb1211d2c",
+   "anchor_observation_id": "windows_security:NASHUA.dmevals.local:65528",
+   "evidence": 1,
+   "observations": 1,
+   "hosts": [
+    "NASHUA.dmevals.local"
+   ],
+   "first": "2020-05-02T03:12:46+00:00",
+   "last": "2020-05-02T03:12:46+00:00",
+   "process_images": {
+    "?": 1
+   },
+   "image_names": [],
+   "techniques": [
+    "T1021.002"
+   ],
+   "rule_families": {
+    "sigma:52d8b0c6-53d6-439a-9e41-52ad442ad9ad": 1
+   }
+  },
+  {
+   "group_id": "corr-group::baa58ca57dc8899a77cd1e0feff8d3c516ec023e1599a6ce8b2a5d0e842fe49f",
+   "anchor_observation_id": "sysmon:SCRANTON.dmevals.local:396706",
+   "evidence": 1,
+   "observations": 1,
+   "hosts": [
+    "SCRANTON.dmevals.local"
+   ],
+   "first": "2020-05-02T03:19:17.154000+00:00",
+   "last": "2020-05-02T03:19:17.154000+00:00",
+   "process_images": {
+    "C:\\Windows\\System32\\netsh.exe": 1
+   },
+   "image_names": [
+    "netsh.exe"
+   ],
+   "techniques": [
+    "T1040"
+   ],
+   "rule_families": {
+    "sigma:d3c3861d-c504-4c77-ba55-224ba82d0118": 1
+   }
+  },
+  {
+   "group_id": "corr-group::c507f0740fc62260cd66c4679e06b8bf19372913ea302842e0be568fd2217265",
+   "anchor_observation_id": "sysmon:SCRANTON.dmevals.local:348647",
+   "evidence": 1,
+   "observations": 1,
+   "hosts": [
+    "SCRANTON.dmevals.local"
+   ],
+   "first": "2020-05-02T02:58:30.649000+00:00",
+   "last": "2020-05-02T02:58:30.649000+00:00",
+   "process_images": {
+    "C:\\windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe": 1
+   },
+   "image_names": [
+    "powershell.exe"
+   ],
+   "techniques": [
+    "T1548.002"
+   ],
+   "rule_families": {
+    "sigma:46dd5308-4572-4d12-aa43-8938f0184d4f": 1
+   }
+  },
+  {
+   "group_id": "corr-group::c62a8921aac369c9272f8780f275def009297f79b39b4c3b8dd7cc74a7e6e755",
+   "anchor_observation_id": "windows_security:NEWYORK.dmevals.local:151262",
+   "evidence": 1,
+   "observations": 1,
+   "hosts": [
+    "NEWYORK.dmevals.local"
+   ],
+   "first": "2020-05-02T03:03:15+00:00",
+   "last": "2020-05-02T03:03:15+00:00",
+   "process_images": {
+    "C:\\Windows\\System32\\lsass.exe": 1
+   },
+   "image_names": [
+    "lsass.exe"
+   ],
+   "techniques": [
+    "T1201"
+   ],
+   "rule_families": {
+    "sigma:12ba6a38-adb3-4d6b-91ba-a7fb248e3199": 1
+   }
+  },
+  {
+   "group_id": "corr-group::c85eeda6c522c7379694d9f875812907aedbfcbc63b5ed1649bfce047f91d360",
+   "anchor_observation_id": "windows_security:NEWYORK.dmevals.local:151270",
+   "evidence": 1,
+   "observations": 1,
+   "hosts": [
+    "NEWYORK.dmevals.local"
+   ],
+   "first": "2020-05-02T03:03:15+00:00",
+   "last": "2020-05-02T03:03:15+00:00",
+   "process_images": {
+    "C:\\Windows\\System32\\lsass.exe": 1
+   },
+   "image_names": [
+    "lsass.exe"
+   ],
+   "techniques": [
+    "T1201"
+   ],
+   "rule_families": {
+    "sigma:12ba6a38-adb3-4d6b-91ba-a7fb248e3199": 1
+   }
+  },
+  {
+   "group_id": "corr-group::d03dca812651fe738043ce2fe211a34ff064b39675042de9ef581392cc818bcc",
+   "anchor_observation_id": "windows_security:NASHUA.dmevals.local:65526",
+   "evidence": 1,
+   "observations": 1,
+   "hosts": [
+    "NASHUA.dmevals.local"
+   ],
+   "first": "2020-05-02T03:12:46+00:00",
+   "last": "2020-05-02T03:12:46+00:00",
+   "process_images": {
+    "?": 1
+   },
+   "image_names": [],
+   "techniques": [
+    "T1021.002"
+   ],
+   "rule_families": {
+    "sigma:52d8b0c6-53d6-439a-9e41-52ad442ad9ad": 1
+   }
+  },
+  {
+   "group_id": "corr-group::d09e0d3c509ccf4397e787f0d5d6fed46601a39d19d7bc26d83b8ccf9c3bc878",
+   "anchor_observation_id": "windows_security:NASHUA.dmevals.local:66066",
+   "evidence": 1,
+   "observations": 1,
+   "hosts": [
+    "NASHUA.dmevals.local"
+   ],
+   "first": "2020-05-02T03:15:03+00:00",
+   "last": "2020-05-02T03:15:03+00:00",
+   "process_images": {
+    "?": 1
+   },
+   "image_names": [],
+   "techniques": [
+    "T1021.002"
+   ],
+   "rule_families": {
+    "sigma:52d8b0c6-53d6-439a-9e41-52ad442ad9ad": 1
+   }
+  },
+  {
+   "group_id": "corr-group::d361ede8869b70e77408d835034f954110b0b6460dfeb64d188a4760538d4429",
+   "anchor_observation_id": "windows_security:NASHUA.dmevals.local:65636",
+   "evidence": 1,
+   "observations": 1,
+   "hosts": [
+    "NASHUA.dmevals.local"
+   ],
+   "first": "2020-05-02T03:13:49+00:00",
+   "last": "2020-05-02T03:13:49+00:00",
+   "process_images": {
+    "C:\\Windows\\System32\\services.exe": 1
+   },
+   "image_names": [
+    "services.exe"
+   ],
+   "techniques": [
+    "T1548"
+   ],
+   "rule_families": {
+    "sigma:dae8171c-5ec6-4396-b210-8466585b53e9": 1
+   }
+  },
+  {
+   "group_id": "corr-group::d66235e252ae91040e553deaab2dba5af76bcfb7fa0f6a9e324ac33745844bf7",
+   "anchor_observation_id": "windows_security:NASHUA.dmevals.local:65650",
+   "evidence": 1,
+   "observations": 1,
+   "hosts": [
+    "NASHUA.dmevals.local"
+   ],
+   "first": "2020-05-02T03:13:49+00:00",
+   "last": "2020-05-02T03:13:49+00:00",
+   "process_images": {
+    "?": 1
+   },
+   "image_names": [],
+   "techniques": [
+    "T1021.002"
+   ],
+   "rule_families": {
+    "sigma:52d8b0c6-53d6-439a-9e41-52ad442ad9ad": 1
+   }
+  },
+  {
+   "group_id": "corr-group::d802f84ddfd90bcaa471b287b7f55c46aef2741540f9890be47e3d5ef90d0beb",
+   "anchor_observation_id": "sysmon:SCRANTON.dmevals.local:384518",
+   "evidence": 1,
+   "observations": 1,
+   "hosts": [
+    "SCRANTON.dmevals.local"
+   ],
+   "first": "2020-05-02T03:08:50.963000+00:00",
+   "last": "2020-05-02T03:08:50.963000+00:00",
+   "process_images": {
+    "C:\\Windows\\System32\\rundll32.exe": 1
+   },
+   "image_names": [
+    "rundll32.exe"
+   ],
+   "techniques": [
+    "T1048.003"
+   ],
+   "rule_families": {
+    "sigma:2dbd9d3d-9e27-42a8-b8df-f13825c6c3d5": 1
+   }
+  },
+  {
+   "group_id": "corr-group::e0695543ea76448521bc10265fa4db00a161543dcfb5ea904ed8f821a877d85f",
+   "anchor_observation_id": "sysmon:SCRANTON.dmevals.local:384991",
+   "evidence": 1,
+   "observations": 1,
+   "hosts": [
+    "SCRANTON.dmevals.local"
+   ],
+   "first": "2020-05-02T03:10:23.065000+00:00",
+   "last": "2020-05-02T03:10:23.065000+00:00",
+   "process_images": {
+    "C:\\Windows\\System32\\rundll32.exe": 1
+   },
+   "image_names": [
+    "rundll32.exe"
+   ],
+   "techniques": [
+    "T1048.003"
+   ],
+   "rule_families": {
+    "sigma:2dbd9d3d-9e27-42a8-b8df-f13825c6c3d5": 1
+   }
+  },
+  {
+   "group_id": "corr-group::e7d252a39e6a71128b5ff617b01d0de02af51d9aa3e1360f93af6845c768e57c",
+   "anchor_observation_id": "sysmon:NASHUA.dmevals.local:353206",
+   "evidence": 1,
+   "observations": 1,
+   "hosts": [
+    "NASHUA.dmevals.local"
+   ],
+   "first": "2020-05-02T03:16:19.447000+00:00",
+   "last": "2020-05-02T03:16:19.447000+00:00",
+   "process_images": {
+    "C:\\windows\\system32\\svchost.exe": 1
+   },
+   "image_names": [
+    "svchost.exe"
+   ],
+   "techniques": [
+    "T1490"
+   ],
+   "rule_families": {
+    "sigma:d223b46b-5621-4037-88fe-fda32eead684": 1
+   }
+  },
+  {
+   "group_id": "corr-group::ecec32d24c9cb25f7f0dad98b35d15e79eef585a3c5640d8b9ebc882d60d4854",
+   "anchor_observation_id": "powershell:SCRANTON.dmevals.local:10637",
+   "evidence": 1,
+   "observations": 1,
+   "hosts": [
+    "SCRANTON.dmevals.local"
+   ],
+   "first": "2020-05-02T03:05:59+00:00",
+   "last": "2020-05-02T03:05:59+00:00",
+   "process_images": {
+    "?": 1
+   },
+   "image_names": [],
+   "techniques": [
+    "T1113"
+   ],
+   "rule_families": {
+    "sigma:d4a11f63-2390-411c-9adf-d791fd152830": 1
+   }
+  },
+  {
+   "group_id": "corr-group::eff01ad0b98da0a64123044557c5a6703769ce1065b41c765c52530ee4b307a2",
+   "anchor_observation_id": "sysmon:SCRANTON.dmevals.local:384919",
+   "evidence": 1,
+   "observations": 1,
+   "hosts": [
+    "SCRANTON.dmevals.local"
+   ],
+   "first": "2020-05-02T03:10:22.994000+00:00",
+   "last": "2020-05-02T03:10:22.994000+00:00",
+   "process_images": {
+    "C:\\Windows\\System32\\rundll32.exe": 1
+   },
+   "image_names": [
+    "rundll32.exe"
+   ],
+   "techniques": [
+    "T1048.003"
+   ],
+   "rule_families": {
+    "sigma:2dbd9d3d-9e27-42a8-b8df-f13825c6c3d5": 1
+   }
+  },
+  {
+   "group_id": "corr-group::f378b9af0093a5c1d41cc61b6ce9fffc3be5eef8e9633fd243acffdac6de7c00",
+   "anchor_observation_id": "windows_security:NASHUA.dmevals.local:65422",
+   "evidence": 1,
+   "observations": 1,
+   "hosts": [
+    "NASHUA.dmevals.local"
+   ],
+   "first": "2020-05-02T03:11:40+00:00",
+   "last": "2020-05-02T03:11:40+00:00",
+   "process_images": {
+    "?": 1
+   },
+   "image_names": [],
+   "techniques": [
+    "T1021.002"
+   ],
+   "rule_families": {
+    "sigma:52d8b0c6-53d6-439a-9e41-52ad442ad9ad": 1
+   }
+  },
+  {
+   "group_id": "corr-group::f473986f18237aed31ae69889138009e8388c0932042b7939088f637869dbaa6",
+   "anchor_observation_id": "windows_security:NASHUA.dmevals.local:65484",
+   "evidence": 1,
+   "observations": 1,
+   "hosts": [
+    "NASHUA.dmevals.local"
+   ],
+   "first": "2020-05-02T03:12:01+00:00",
+   "last": "2020-05-02T03:12:01+00:00",
+   "process_images": {
+    "C:\\Windows\\System32\\services.exe": 1
+   },
+   "image_names": [
+    "services.exe"
+   ],
+   "techniques": [
+    "T1548"
+   ],
+   "rule_families": {
+    "sigma:dae8171c-5ec6-4396-b210-8466585b53e9": 1
+   }
+  },
+  {
+   "group_id": "corr-group::f54d16337ec8f6141fe3a35f4e44294ed601fd43b13fedf37fb071e19384fb3b",
+   "anchor_observation_id": "windows_security:NASHUA.dmevals.local:65718",
+   "evidence": 1,
+   "observations": 1,
+   "hosts": [
+    "NASHUA.dmevals.local"
+   ],
+   "first": "2020-05-02T03:14:10+00:00",
+   "last": "2020-05-02T03:14:10+00:00",
+   "process_images": {
+    "C:\\Windows\\System32\\services.exe": 1
+   },
+   "image_names": [
+    "services.exe"
+   ],
+   "techniques": [
+    "T1548"
+   ],
+   "rule_families": {
+    "sigma:dae8171c-5ec6-4396-b210-8466585b53e9": 1
+   }
+  },
+  {
+   "group_id": "corr-group::fc691edbd9b61855c903c465af3a5fdab97642be91b7d014133dfbf7e98e870e",
+   "anchor_observation_id": "windows_security:NASHUA.dmevals.local:65524",
+   "evidence": 1,
+   "observations": 1,
+   "hosts": [
+    "NASHUA.dmevals.local"
+   ],
+   "first": "2020-05-02T03:12:46+00:00",
+   "last": "2020-05-02T03:12:46+00:00",
+   "process_images": {
+    "?": 1
+   },
+   "image_names": [],
+   "techniques": [
+    "T1021.002"
+   ],
+   "rule_families": {
+    "sigma:52d8b0c6-53d6-439a-9e41-52ad442ad9ad": 1
+   }
+  },
+  {
+   "group_id": "corr-group::fe6371279b9269459dd85854af2a76dac0957c30f6fabe5173f92e54337eedea",
+   "anchor_observation_id": "windows_security:NEWYORK.dmevals.local:151227",
+   "evidence": 1,
+   "observations": 1,
+   "hosts": [
+    "NEWYORK.dmevals.local"
+   ],
+   "first": "2020-05-02T03:03:15+00:00",
+   "last": "2020-05-02T03:03:15+00:00",
+   "process_images": {
+    "C:\\Windows\\System32\\lsass.exe": 1
+   },
+   "image_names": [
+    "lsass.exe"
+   ],
+   "techniques": [
+    "T1201"
+   ],
+   "rule_families": {
+    "sigma:12ba6a38-adb3-4d6b-91ba-a7fb248e3199": 1
+   }
   }
  ]
 }

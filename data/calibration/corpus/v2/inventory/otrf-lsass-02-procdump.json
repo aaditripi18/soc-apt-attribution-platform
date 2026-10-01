@@ -97,6 +97,75 @@
    "rule_families": {
     "sigma:b69888d4-380c-45ce-9cf9-d9ce46e67821": 3
    }
+  },
+  {
+   "group_id": "corr-group::8a6d67a5f5befcefb8c9325b42c8ae08b3be9adf8041b995e2bb0d3b5d6b72be",
+   "anchor_observation_id": "sysmon:ACCT01.pandalab.com:sha256:fdf205098aed53e40a225c246c34c664da9b12891486bc830b5eb7625397f45d",
+   "evidence": 1,
+   "observations": 1,
+   "hosts": [
+    "ACCT01.pandalab.com"
+   ],
+   "first": "2023-08-16T00:35:11.735000+00:00",
+   "last": "2023-08-16T00:35:11.735000+00:00",
+   "process_images": {
+    "C:\\Windows\\System32\\whoami.exe": 1
+   },
+   "image_names": [
+    "whoami.exe"
+   ],
+   "techniques": [
+    "T1033"
+   ],
+   "rule_families": {
+    "sigma:bd8b828d-0dca-48e1-8a63-8a58ecf2644f": 1
+   }
+  },
+  {
+   "group_id": "corr-group::b651b16175893fd87f52ebb37cd06b5fe587228c1228cdedbd6898b0c0d580a8",
+   "anchor_observation_id": "sysmon:ACCT01.pandalab.com:sha256:e5ee5037fd447d69d221ef5b19782e6bb4c7606920f8049e0fedbeb163a0e21a",
+   "evidence": 1,
+   "observations": 1,
+   "hosts": [
+    "ACCT01.pandalab.com"
+   ],
+   "first": "2023-08-16T00:40:13.539000+00:00",
+   "last": "2023-08-16T00:40:13.539000+00:00",
+   "process_images": {
+    "C:\\Windows\\System32\\gpresult.exe": 1
+   },
+   "image_names": [
+    "gpresult.exe"
+   ],
+   "techniques": [
+    "T1615"
+   ],
+   "rule_families": {
+    "sigma:e56d3073-83ff-4021-90fe-c658e0709e72": 1
+   }
+  },
+  {
+   "group_id": "corr-group::e87b4d0046f98c63218bc19e36b0fda6d78be68eec96f577546a34d5c73af984",
+   "anchor_observation_id": "sysmon:ACCT01.pandalab.com:sha256:effad8b31d51717f1c7ce5012ed02e9ab59c55759655b1fabe94812d03f6543a",
+   "evidence": 1,
+   "observations": 1,
+   "hosts": [
+    "ACCT01.pandalab.com"
+   ],
+   "first": "2023-08-16T00:34:31.589000+00:00",
+   "last": "2023-08-16T00:34:31.589000+00:00",
+   "process_images": {
+    "C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe": 1
+   },
+   "image_names": [
+    "msedge.exe"
+   ],
+   "techniques": [
+    "T1564.004"
+   ],
+   "rule_families": {
+    "sigma:b69888d4-380c-45ce-9cf9-d9ce46e67821": 1
+   }
   }
  ]
 }

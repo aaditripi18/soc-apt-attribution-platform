@@ -56,6 +56,27 @@
    "categories": [
     "multiple_distinct_observation"
    ]
+  },
+  {
+   "unit_id": "v2-lsass-05-sharpdump-u03",
+   "anchor_scenario_ids": [
+    "sysmon:MKT01.pandalab.com:sha256:7c726a3a5755a4394ae13dc1e707d1fc9883f1cfba66b60e32fa16b05f0a42f4"
+   ],
+   "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: whoami.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
+  },
+  {
+   "unit_id": "v2-lsass-05-sharpdump-u04",
+   "anchor_scenario_ids": [
+    "sysmon:MKT01.pandalab.com:sha256:e21b147d8eade365871bc88b06180c34e40de27c10df642c27b7fa6eae305f8d"
+   ],
+   "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: gpresult.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
+  },
+  {
+   "unit_id": "v2-lsass-05-sharpdump-u05",
+   "anchor_scenario_ids": [
+    "sysmon:MKT01.pandalab.com:sha256:6be73eb67f6ad2ff07e45b5e80953706ea9178bbd742dabd26e738ae5dd7645a"
+   ],
+   "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: msedge.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
   }
  ]
 }
