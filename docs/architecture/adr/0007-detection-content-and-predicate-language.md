@@ -398,3 +398,29 @@ information 27). Every one maps to a common, low-diagnosticity technique.
 **Recommendation:** option 2, gated on the project-wide measurement (the Windows corpus noise is unknown and must
 be measured the same way before acceptance), because it keeps one consistent content policy and lets the existing
 diagnosticity machinery — not a hand-drawn level threshold — decide how much a common behavior counts.
+
+**Windows measurement (2026-10-02, the gate for option 2).** *Packaging finding:* SigmaHQ's release packages —
+even `sigma_all_rules.zip` (3,172,748 bytes, SHA-256 `5725c91b…`, downloaded with owner approval) — contain **no**
+`low` / `informational` generic rules; those exist only in the repository tree (Windows 163, Linux 61, macOS 21,
+cloud 22, network 11, application 15, web 3 at `r2026-07-01`). The 163 Windows rules were read at the pinned tag
+(not vendored) and replayed, with Core++, over all 11 real Windows recordings through the full pipeline:
+
+| Recording | Units before → after | Extra Evidence | Dominant low-level rule |
+|---|---|---|---|
+| APT29 day 1 | 65 → 70 | +703 | PowerShell Decompress Commands (620) |
+| APT29 day 2 | 23 → 28 | +80 | process / user discovery via PowerShell |
+| APT3 CALDERA | 57 → 60 | +57 | PowerShell instance creation |
+| APT3 Empire | 65 → 68 | +227 | Local Accounts Discovery (106), `net` share / connection discovery (103) |
+| LSASS run 01 (hard negative) | **6 → 92** | +92 | *Suspicious High IntegrityLevel Conhost Legacy Option* (77) |
+| LSASS runs 02–07 | 4–7 → 8–33 | +9 … +35 | the same conhost rule, AppCompat, systeminfo |
+
+106 Windows rules import (2 partial); **+11 technique ids** (T1027.002, T1049, T1055.011, T1056, T1078.001,
+T1078.003, T1120, T1217, T1550, T1560, T1573).
+
+**Revised recommendation — option 3, made concrete:** the measurement shows the unit flood comes from a few broad
+rules on benign activity (one rule alone turns 6 units into 92 on a hard-negative run), while the useful low-level
+evidence lands where the attack already is (APT29 staging, Empire discovery). So low-level rules should
+**enrich, not create**: low-level Evidence joins a unit only when it is structurally linked to Core++ Evidence, and
+never forms a unit on its own. This keeps one consistent content source, adds the measured recall, keeps
+hard-negative units intact, and needs a small, explicit contract (an Evidence content tier) rather than a level
+threshold. Option 2 as first stated is **not** recommended on this evidence.

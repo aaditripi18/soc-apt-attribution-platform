@@ -93,7 +93,13 @@ def main() -> int:
     url = release_asset_url(args.tag, args.asset)
     out_dir = REPO_ROOT / "data" / "detection" / "sigma" / args.tag
     artifact_path = out_dir / args.asset
-    manifest_path = out_dir / "manifest.json"
+    # The baseline package keeps manifest.json (the import pipeline reads it);
+    # any other package of the same release gets its own record beside it.
+    manifest_path = out_dir / (
+        "manifest.json"
+        if args.asset == DEFAULT_ASSET
+        else f"manifest-{args.asset.removesuffix('.zip')}.json"
+    )
     notice_path = out_dir / "NOTICE.md"
 
     download(url, artifact_path)
