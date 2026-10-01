@@ -133,9 +133,10 @@ def _member_set_digest(canonical_members: Iterable[str]) -> str:
 
 
 class LinkClass(Enum):
-    """The closed, eleven-value correlation-relationship vocabulary ADR-0003
-    (+ Amendment A)/ADR-0004 D20 approved. Exactly four values are structural
-    (group-forming); the remaining seven are contextual (attach-only).
+    """The closed, twelve-value correlation-relationship vocabulary ADR-0003
+    (+ Amendments A, G)/ADR-0004 D20 approved. Exactly five values are
+    structural (group-forming); the remaining seven are contextual
+    (attach-only).
     Membership is closed — constructing ``LinkClass(x)`` with an unknown
     ``x`` raises ``ValueError`` (fail-closed enum validation), exactly like
     :class:`attribution_platform.domain.enums.EvidenceType`.
@@ -162,6 +163,11 @@ class LinkClass(Enum):
       injection: the sensor asserts code from one process instance began
       executing inside another. Links Evidence on the injecting instance to
       Evidence on the target instance at/after the injection.
+
+    - ``SAME_AUDIT_EVENT`` (ADR-0003 Amendment G) — two Linux Audit records
+      with the same kernel event serial on the same host: the records of one
+      audit event (one syscall), which the kernel itself asserts belong
+      together. Like ``SHARED_OBSERVATION``, one instance described twice.
 
     **Contextual — attach-only, never group-forming:**
 
@@ -207,10 +213,11 @@ class LinkClass(Enum):
     TEMPORAL_PROXIMITY = "temporal_proximity"
     PROCESS_INTERACTION = "process_interaction"
     PROCESS_ACCESS_TARGET = "process_access_target"
+    SAME_AUDIT_EVENT = "same_audit_event"
 
     @property
     def is_structural(self) -> bool:
-        """``True`` for the four group-forming classes, ``False`` for the
+        """``True`` for the five group-forming classes, ``False`` for the
         seven contextual ones. The single authoritative classification —
         every other invariant in this module (and every future caller)
         must ask *this*, never re-derive the split independently."""
@@ -226,6 +233,7 @@ _STRUCTURAL_LINK_CLASSES: frozenset[LinkClass] = frozenset(
         LinkClass.SAME_PROCESS_ENTITY,
         LinkClass.PROCESS_LINEAGE,
         LinkClass.PROCESS_INTERACTION,
+        LinkClass.SAME_AUDIT_EVENT,
     }
 )
 

@@ -40,8 +40,9 @@ from attribution_platform.correlation import (
     correlate_structurally,
 )
 from attribution_platform.detection import DetectionEngine, derive_evidence_from_detection
-from attribution_platform.domain import Evidence, Observation
+from attribution_platform.domain import Evidence, HostRef, Observation
 from attribution_platform.replay.errors import ReplayError
+from attribution_platform.sources.auditd import AuditdSourceAdapter, is_audit_record
 from attribution_platform.sources.errors import SourceAdapterError
 from attribution_platform.sources.powershell import PowerShellSourceAdapter
 from attribution_platform.sources.precedence import apply_source_precedence
@@ -53,11 +54,15 @@ from attribution_platform.sources.windows_security import WindowsSecuritySourceA
 #: for Linux, ADR-0010 D1) are routed by :data:`XML_EVENT_CHANNEL`; the Sysmon
 #: adapter parses them and checks their real channel itself.
 XML_EVENT_CHANNEL = "<sysmon-xml>"
+#: Raw Linux Audit lines (ADR-0010 D4). Their adapter needs the logging host,
+#: which :func:`analyze_recording` takes from the recording's source declaration.
+AUDIT_CHANNEL = "<auditd>"
 _SYSMON = SysmonSourceAdapter()
 DEFAULT_CHANNEL_ADAPTERS: Mapping[str, Any] = {
     "microsoft-windows-sysmon/operational": _SYSMON,
     "linux-sysmon/operational": _SYSMON,
     XML_EVENT_CHANNEL: _SYSMON,
+    AUDIT_CHANNEL: AuditdSourceAdapter(),
     "microsoft-windows-powershell/operational": PowerShellSourceAdapter(),
     "security": WindowsSecuritySourceAdapter(),
 }
@@ -170,6 +175,8 @@ def iter_recording_records(path: Path) -> Iterator[dict[str, Any] | str]:
             if line.rstrip().endswith("</Event>"):
                 yield "".join(pending).strip()
                 pending = []
+        elif is_audit_record(line):
+            yield line.rstrip("\r\n")
         elif is_sysmon_event_xml(line):
             if line.rstrip().endswith("</Event>"):
                 yield line.strip()
@@ -183,7 +190,7 @@ def iter_recording_records(path: Path) -> Iterator[dict[str, Any] | str]:
 
 def _channel(record: Mapping[str, Any] | str) -> str:
     if isinstance(record, str):
-        return XML_EVENT_CHANNEL
+        return AUDIT_CHANNEL if is_audit_record(record) else XML_EVENT_CHANNEL
     winlog = record.get("winlog")
     value = (
         winlog.get("channel")
@@ -202,6 +209,13 @@ def analyze_recording(
 ) -> RecordingAnalysis:
     """Run ``source`` through the full pipeline (module docstring)."""
     _verify(source)
+    audit_hosts = [h for h, kinds in source.declared_sources.items() if "auditd" in kinds]
+    if AUDIT_CHANNEL in adapters and len(audit_hosts) == 1:
+        # The declaration names the one host whose audit.log this recording holds.
+        adapters = {
+            **adapters,
+            AUDIT_CHANNEL: AuditdSourceAdapter(host=HostRef(name=audit_hosts[0], os_type="linux")),
+        }
     observations: dict[str, Observation] = {}
     refused: dict[str, int] = {}
     for record in iter_recording_records(source.path):

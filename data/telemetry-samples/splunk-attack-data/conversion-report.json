@@ -1,485 +1,1856 @@
 {
- "report_version": 1,
+ "report_version": 2,
  "source_manifest_sha256": "088f96422e3201b28c5309ff0907e771ebc6fb820979bd997acf2abb856411e5",
- "sigma_pack_sha256": "3adfb0910fc3af962d277b710d33bc962067c7fb3f0c460078167ef3bc93a367",
- "observations": 246717,
- "os_types": [
-  "linux"
- ],
- "refused_by_reason": {
-  "SysmonSourceAdapter: unsupported winlog.event_id 9": 52
+ "sigma_pack_sha256": "380b92d3910ce2bf243658bdb12db197c7d1bd56a2cf7472b86d7f6f94a67fdf",
+ "sysmon_for_linux": {
+  "observations": 246717,
+  "os_types": [
+   "linux"
+  ],
+  "refused_by_reason": {
+   "SysmonSourceAdapter: unsupported winlog.event_id 9": 52
+  },
+  "fired_rules": [
+   {
+    "product": "linux",
+    "title": "Access of Sudoers File Content",
+    "detections": 2
+   },
+   {
+    "product": "linux",
+    "title": "Chmod Targeting Sensitive Directories",
+    "detections": 3
+   },
+   {
+    "product": "linux",
+    "title": "Linux Doas Conf File Creation",
+    "detections": 1
+   },
+   {
+    "product": "linux",
+    "title": "Shell Execution via Find - Linux",
+    "detections": 3
+   },
+   {
+    "product": "linux",
+    "title": "Shell Invocation via Apt - Linux",
+    "detections": 1
+   },
+   {
+    "product": "linux",
+    "title": "Suspicious Invocation of Shell via AWK - Linux",
+    "detections": 3
+   }
+  ],
+  "labelled_datasets_with_observations": 45,
+  "labelled_datasets_with_documented_technique_detected": 1,
+  "datasets": [
+   {
+    "dataset": "attack_techniques/T1003.008/copy_file_stdoutpipe",
+    "logs": [
+     "sysmon_linux.log"
+    ],
+    "observations": 11109,
+    "documented_techniques": [
+     "T1003.008"
+    ],
+    "documented_techniques_current": [
+     "T1003.008"
+    ],
+    "detected_techniques": [
+     "T1592.004"
+    ],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1014/medusa_rootkit",
+    "logs": [
+     "sysmon_linux.log"
+    ],
+    "observations": 7,
+    "documented_techniques": [
+     "T1014"
+    ],
+    "documented_techniques_current": [
+     "T1014"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1016/atomic_red_team/linux_net_discovery",
+    "logs": [
+     "sysmon_linux.log"
+    ],
+    "observations": 18084,
+    "documented_techniques": [
+     "T1016"
+    ],
+    "documented_techniques_current": [
+     "T1016"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1053.003/cronjobs_entry",
+    "logs": [
+     "sysmon_linux_cron_append.log"
+    ],
+    "observations": 7595,
+    "documented_techniques": [
+     "T1053.003"
+    ],
+    "documented_techniques_current": [
+     "T1053.003"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1053.003/crontab_list_parameter",
+    "logs": [
+     "sysmon_linux.log"
+    ],
+    "observations": 332,
+    "documented_techniques": [
+     "T1053.003"
+    ],
+    "documented_techniques_current": [
+     "T1053.003"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1059.004/linux_discovery_tools",
+    "logs": [
+     "sysmon_linux.log"
+    ],
+    "observations": 2447,
+    "documented_techniques": [
+     "T1059.004"
+    ],
+    "documented_techniques_current": [
+     "T1059.004"
+    ],
+    "detected_techniques": [
+     "T1592.004"
+    ],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1068/linux_pedit",
+    "logs": [
+     "sysmon_linux.log"
+    ],
+    "observations": 1,
+    "documented_techniques": [
+     "T1068"
+    ],
+    "documented_techniques_current": [
+     "T1068"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1098.004/ssh_authorized_keys",
+    "logs": [
+     "sysmon_linux.log"
+    ],
+    "observations": 14563,
+    "documented_techniques": [
+     "T1098.004"
+    ],
+    "documented_techniques_current": [
+     "T1098.004"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1485/linux_dd_file_overwrite",
+    "logs": [
+     "sysmon_linux.log"
+    ],
+    "observations": 6911,
+    "documented_techniques": [
+     "T1485"
+    ],
+    "documented_techniques_current": [
+     "T1485"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1485/rm_boot_dir",
+    "logs": [
+     "sysmon_linux.log"
+    ],
+    "observations": 675,
+    "documented_techniques": [
+     "T1485"
+    ],
+    "documented_techniques_current": [
+     "T1485"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1485/rm_shred_critical_dir",
+    "logs": [
+     "sysmon_linux.log"
+    ],
+    "observations": 617,
+    "documented_techniques": [
+     "T1485"
+    ],
+    "documented_techniques_current": [
+     "T1485"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1489/linux_service_stop_disable",
+    "logs": [
+     "sysmon_linux.log"
+    ],
+    "observations": 3323,
+    "documented_techniques": [
+     "T1489"
+    ],
+    "documented_techniques_current": [
+     "T1489"
+    ],
+    "detected_techniques": [
+     "T1222.002"
+    ],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1547.006/loading_linux_kernel_module",
+    "logs": [
+     "sysmon_linux.log"
+    ],
+    "observations": 15640,
+    "documented_techniques": [
+     "T1547.006"
+    ],
+    "documented_techniques_current": [
+     "T1547.006"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1548.001/linux_setcap",
+    "logs": [
+     "sysmon_linux.log"
+    ],
+    "observations": 16016,
+    "documented_techniques": [
+     "T1548.001"
+    ],
+    "documented_techniques_current": [
+     "T1548.001"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1548.003/doas",
+    "logs": [
+     "sysmon_linux.log"
+    ],
+    "observations": 7577,
+    "documented_techniques": [
+     "T1548.003"
+    ],
+    "documented_techniques_current": [
+     "T1548.003"
+    ],
+    "detected_techniques": [
+     "T1548"
+    ],
+    "documented_technique_detected": true
+   },
+   {
+    "dataset": "attack_techniques/T1548.003/doas_exec",
+    "logs": [
+     "sysmon_linux.log"
+    ],
+    "observations": 14878,
+    "documented_techniques": [
+     "T1548.003"
+    ],
+    "documented_techniques_current": [
+     "T1548.003"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1548.003/linux_adduser",
+    "logs": [
+     "sysmon_linux.log"
+    ],
+    "observations": 11436,
+    "documented_techniques": [
+     "T1548.003"
+    ],
+    "documented_techniques_current": [
+     "T1548.003"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1548.003/sudo_su",
+    "logs": [
+     "sysmon_linux.log"
+    ],
+    "observations": 12227,
+    "documented_techniques": [
+     "T1548.003"
+    ],
+    "documented_techniques_current": [
+     "T1548.003"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1548.003/sudoers_temp",
+    "logs": [
+     "sysmon_linux.log"
+    ],
+    "observations": 6743,
+    "documented_techniques": [
+     "T1548.003"
+    ],
+    "documented_techniques_current": [
+     "T1548.003"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1548/apt",
+    "logs": [
+     "sysmon_linux.log"
+    ],
+    "observations": 44,
+    "documented_techniques": [
+     "T1548"
+    ],
+    "documented_techniques_current": [
+     "T1548"
+    ],
+    "detected_techniques": [
+     "T1083"
+    ],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1548/apt_get",
+    "logs": [
+     "sysmon_linux.log"
+    ],
+    "observations": 2,
+    "documented_techniques": [
+     "T1548"
+    ],
+    "documented_techniques_current": [
+     "T1548"
+    ],
+    "detected_techniques": [
+     "T1083"
+    ],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1548/awk",
+    "logs": [
+     "sysmon_linux.log"
+    ],
+    "observations": 18,
+    "documented_techniques": [
+     "T1548"
+    ],
+    "documented_techniques_current": [
+     "T1548"
+    ],
+    "detected_techniques": [
+     "T1059"
+    ],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1548/busybox",
+    "logs": [
+     "sysmon_linux.log"
+    ],
+    "observations": 2,
+    "documented_techniques": [
+     "T1548"
+    ],
+    "documented_techniques_current": [
+     "T1548"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1548/c89",
+    "logs": [
+     "sysmon_linux.log"
+    ],
+    "observations": 10,
+    "documented_techniques": [
+     "T1548"
+    ],
+    "documented_techniques_current": [
+     "T1548"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1548/c99",
+    "logs": [
+     "sysmon_linux.log"
+    ],
+    "observations": 3,
+    "documented_techniques": [
+     "T1548"
+    ],
+    "documented_techniques_current": [
+     "T1548"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1548/composer",
+    "logs": [
+     "sysmon_linux.log"
+    ],
+    "observations": 6,
+    "documented_techniques": [
+     "T1548"
+    ],
+    "documented_techniques_current": [
+     "T1548"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1548/cpulimit",
+    "logs": [
+     "sysmon_linux.log"
+    ],
+    "observations": 9,
+    "documented_techniques": [
+     "T1548"
+    ],
+    "documented_techniques_current": [
+     "T1548"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1548/csvtool",
+    "logs": [
+     "sysmon_linux.log"
+    ],
+    "observations": 4,
+    "documented_techniques": [
+     "T1548"
+    ],
+    "documented_techniques_current": [
+     "T1548"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1548/docker",
+    "logs": [
+     "sysmon_linux.log"
+    ],
+    "observations": 598,
+    "documented_techniques": [
+     "T1548"
+    ],
+    "documented_techniques_current": [
+     "T1548"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1548/emacs",
+    "logs": [
+     "sysmon_linux.log"
+    ],
+    "observations": 22,
+    "documented_techniques": [
+     "T1548"
+    ],
+    "documented_techniques_current": [
+     "T1548"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1548/find",
+    "logs": [
+     "sysmon_linux.log"
+    ],
+    "observations": 6,
+    "documented_techniques": [
+     "T1548"
+    ],
+    "documented_techniques_current": [
+     "T1548"
+    ],
+    "detected_techniques": [
+     "T1083"
+    ],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1548/gawk",
+    "logs": [
+     "sysmon_linux.log"
+    ],
+    "observations": 4,
+    "documented_techniques": [
+     "T1548"
+    ],
+    "documented_techniques_current": [
+     "T1548"
+    ],
+    "detected_techniques": [
+     "T1059"
+    ],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1548/gdb",
+    "logs": [
+     "sysmon_linux.log"
+    ],
+    "observations": 13,
+    "documented_techniques": [
+     "T1548"
+    ],
+    "documented_techniques_current": [
+     "T1548"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1548/gem",
+    "logs": [
+     "sysmon_linux.log"
+    ],
+    "observations": 4,
+    "documented_techniques": [
+     "T1548"
+    ],
+    "documented_techniques_current": [
+     "T1548"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1548/make",
+    "logs": [
+     "sysmon_linux.log"
+    ],
+    "observations": 5,
+    "documented_techniques": [
+     "T1548"
+    ],
+    "documented_techniques_current": [
+     "T1548"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1548/mysql",
+    "logs": [
+     "sysmon_linux.log"
+    ],
+    "observations": 8,
+    "documented_techniques": [
+     "T1548"
+    ],
+    "documented_techniques_current": [
+     "T1548"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1548/node",
+    "logs": [
+     "sysmon_linux.log"
+    ],
+    "observations": 17,
+    "documented_techniques": [
+     "T1548"
+    ],
+    "documented_techniques_current": [
+     "T1548"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1548/octave",
+    "logs": [
+     "sysmon_linux.log"
+    ],
+    "observations": 6,
+    "documented_techniques": [
+     "T1548"
+    ],
+    "documented_techniques_current": [
+     "T1548"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1548/openvpn",
+    "logs": [
+     "sysmon_linux.log"
+    ],
+    "observations": 8,
+    "documented_techniques": [
+     "T1548"
+    ],
+    "documented_techniques_current": [
+     "T1548"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1548/php",
+    "logs": [
+     "sysmon_linux.log"
+    ],
+    "observations": 10,
+    "documented_techniques": [
+     "T1548"
+    ],
+    "documented_techniques_current": [
+     "T1548"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1548/puppet",
+    "logs": [
+     "sysmon_linux.log"
+    ],
+    "observations": 4,
+    "documented_techniques": [
+     "T1548"
+    ],
+    "documented_techniques_current": [
+     "T1548"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1548/rpm",
+    "logs": [
+     "sysmon_linux.log"
+    ],
+    "observations": 2,
+    "documented_techniques": [
+     "T1548"
+    ],
+    "documented_techniques_current": [
+     "T1548"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1548/ruby",
+    "logs": [
+     "sysmon_linux.log"
+    ],
+    "observations": 6,
+    "documented_techniques": [
+     "T1548"
+    ],
+    "documented_techniques_current": [
+     "T1548"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1548/sqlite3",
+    "logs": [
+     "sysmon_linux.log"
+    ],
+    "observations": 8,
+    "documented_techniques": [
+     "T1548"
+    ],
+    "documented_techniques_current": [
+     "T1548"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1548/telnet",
+    "logs": [
+     "sysmon_linux.log"
+    ],
+    "observations": 1,
+    "documented_techniques": [
+     "T1548"
+    ],
+    "documented_techniques_current": [
+     "T1548"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "malware/acidrain",
+    "logs": [
+     "sysmon_linux.log"
+    ],
+    "observations": 15416,
+    "documented_techniques": [],
+    "documented_techniques_current": [],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "malware/cyclopsblink",
+    "logs": [
+     "sysmon_linux.log"
+    ],
+    "observations": 80457,
+    "documented_techniques": [],
+    "documented_techniques_current": [],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   }
+  ]
  },
- "fired_rules": [
-  {
-   "product": "linux",
-   "title": "Access of Sudoers File Content",
-   "detections": 2
+ "auditd": {
+  "observations": 837,
+  "os_types": [
+   "linux"
+  ],
+  "refused_by_reason": {
+   "AuditdSourceAdapter: a0='xclip' is neither quoted nor hex": 2,
+   "AuditdSourceAdapter: ausearch -i interpreted record \u2014 local time with no zone is not a trustworthy UTC event time": 6348
   },
-  {
-   "product": "linux",
-   "title": "Chmod Targeting Sensitive Directories",
-   "detections": 3
-  },
-  {
-   "product": "linux",
-   "title": "Linux Doas Conf File Creation",
-   "detections": 1
-  },
-  {
-   "product": "linux",
-   "title": "Shell Execution via Find - Linux",
-   "detections": 3
-  },
-  {
-   "product": "linux",
-   "title": "Shell Invocation via Apt - Linux",
-   "detections": 1
-  },
-  {
-   "product": "linux",
-   "title": "Suspicious Invocation of Shell via AWK - Linux",
-   "detections": 3
-  }
- ],
- "labelled_datasets": 45,
- "labelled_datasets_with_documented_technique_detected": 1,
- "datasets": [
-  {
-   "log": "attack_techniques/T1003.008/copy_file_stdoutpipe/sysmon_linux.log",
-   "observations": 11109,
-   "documented_techniques": [
-    "T1003.008"
-   ],
-   "detected_techniques": [
-    "T1592.004"
-   ],
-   "documented_technique_detected": false
-  },
-  {
-   "log": "attack_techniques/T1014/medusa_rootkit/sysmon_linux.log",
-   "observations": 7,
-   "documented_techniques": [
-    "T1014"
-   ],
-   "detected_techniques": [],
-   "documented_technique_detected": false
-  },
-  {
-   "log": "attack_techniques/T1016/atomic_red_team/linux_net_discovery/sysmon_linux.log",
-   "observations": 18084,
-   "documented_techniques": [
-    "T1016"
-   ],
-   "detected_techniques": [],
-   "documented_technique_detected": false
-  },
-  {
-   "log": "attack_techniques/T1053.003/cronjobs_entry/sysmon_linux_cron_append.log",
-   "observations": 7595,
-   "documented_techniques": [
-    "T1053.003"
-   ],
-   "detected_techniques": [],
-   "documented_technique_detected": false
-  },
-  {
-   "log": "attack_techniques/T1053.003/crontab_list_parameter/sysmon_linux.log",
-   "observations": 332,
-   "documented_techniques": [
-    "T1053.003"
-   ],
-   "detected_techniques": [],
-   "documented_technique_detected": false
-  },
-  {
-   "log": "attack_techniques/T1059.004/linux_discovery_tools/sysmon_linux.log",
-   "observations": 2447,
-   "documented_techniques": [
-    "T1059.004"
-   ],
-   "detected_techniques": [
-    "T1592.004"
-   ],
-   "documented_technique_detected": false
-  },
-  {
-   "log": "attack_techniques/T1068/linux_pedit/sysmon_linux.log",
-   "observations": 1,
-   "documented_techniques": [
-    "T1068"
-   ],
-   "detected_techniques": [],
-   "documented_technique_detected": false
-  },
-  {
-   "log": "attack_techniques/T1098.004/ssh_authorized_keys/sysmon_linux.log",
-   "observations": 14563,
-   "documented_techniques": [
-    "T1098.004"
-   ],
-   "detected_techniques": [],
-   "documented_technique_detected": false
-  },
-  {
-   "log": "attack_techniques/T1485/linux_dd_file_overwrite/sysmon_linux.log",
-   "observations": 6911,
-   "documented_techniques": [
-    "T1485"
-   ],
-   "detected_techniques": [],
-   "documented_technique_detected": false
-  },
-  {
-   "log": "attack_techniques/T1485/rm_boot_dir/sysmon_linux.log",
-   "observations": 675,
-   "documented_techniques": [
-    "T1485"
-   ],
-   "detected_techniques": [],
-   "documented_technique_detected": false
-  },
-  {
-   "log": "attack_techniques/T1485/rm_shred_critical_dir/sysmon_linux.log",
-   "observations": 617,
-   "documented_techniques": [
-    "T1485"
-   ],
-   "detected_techniques": [],
-   "documented_technique_detected": false
-  },
-  {
-   "log": "attack_techniques/T1489/linux_service_stop_disable/sysmon_linux.log",
-   "observations": 3323,
-   "documented_techniques": [
-    "T1489"
-   ],
-   "detected_techniques": [
-    "T1222.002"
-   ],
-   "documented_technique_detected": false
-  },
-  {
-   "log": "attack_techniques/T1547.006/loading_linux_kernel_module/sysmon_linux.log",
-   "observations": 15640,
-   "documented_techniques": [
-    "T1547.006"
-   ],
-   "detected_techniques": [],
-   "documented_technique_detected": false
-  },
-  {
-   "log": "attack_techniques/T1548.001/linux_setcap/sysmon_linux.log",
-   "observations": 16016,
-   "documented_techniques": [
-    "T1548.001"
-   ],
-   "detected_techniques": [],
-   "documented_technique_detected": false
-  },
-  {
-   "log": "attack_techniques/T1548.003/doas/sysmon_linux.log",
-   "observations": 7577,
-   "documented_techniques": [
-    "T1548.003"
-   ],
-   "detected_techniques": [
-    "T1548"
-   ],
-   "documented_technique_detected": true
-  },
-  {
-   "log": "attack_techniques/T1548.003/doas_exec/sysmon_linux.log",
-   "observations": 14878,
-   "documented_techniques": [
-    "T1548.003"
-   ],
-   "detected_techniques": [],
-   "documented_technique_detected": false
-  },
-  {
-   "log": "attack_techniques/T1548.003/linux_adduser/sysmon_linux.log",
-   "observations": 11436,
-   "documented_techniques": [
-    "T1548.003"
-   ],
-   "detected_techniques": [],
-   "documented_technique_detected": false
-  },
-  {
-   "log": "attack_techniques/T1548.003/sudo_su/sysmon_linux.log",
-   "observations": 12227,
-   "documented_techniques": [
-    "T1548.003"
-   ],
-   "detected_techniques": [],
-   "documented_technique_detected": false
-  },
-  {
-   "log": "attack_techniques/T1548.003/sudoers_temp/sysmon_linux.log",
-   "observations": 6743,
-   "documented_techniques": [
-    "T1548.003"
-   ],
-   "detected_techniques": [],
-   "documented_technique_detected": false
-  },
-  {
-   "log": "attack_techniques/T1548/apt/sysmon_linux.log",
-   "observations": 44,
-   "documented_techniques": [
-    "T1548"
-   ],
-   "detected_techniques": [
-    "T1083"
-   ],
-   "documented_technique_detected": false
-  },
-  {
-   "log": "attack_techniques/T1548/apt_get/sysmon_linux.log",
-   "observations": 2,
-   "documented_techniques": [
-    "T1548"
-   ],
-   "detected_techniques": [
-    "T1083"
-   ],
-   "documented_technique_detected": false
-  },
-  {
-   "log": "attack_techniques/T1548/awk/sysmon_linux.log",
-   "observations": 18,
-   "documented_techniques": [
-    "T1548"
-   ],
-   "detected_techniques": [
-    "T1059"
-   ],
-   "documented_technique_detected": false
-  },
-  {
-   "log": "attack_techniques/T1548/busybox/sysmon_linux.log",
-   "observations": 2,
-   "documented_techniques": [
-    "T1548"
-   ],
-   "detected_techniques": [],
-   "documented_technique_detected": false
-  },
-  {
-   "log": "attack_techniques/T1548/c89/sysmon_linux.log",
-   "observations": 10,
-   "documented_techniques": [
-    "T1548"
-   ],
-   "detected_techniques": [],
-   "documented_technique_detected": false
-  },
-  {
-   "log": "attack_techniques/T1548/c99/sysmon_linux.log",
-   "observations": 3,
-   "documented_techniques": [
-    "T1548"
-   ],
-   "detected_techniques": [],
-   "documented_technique_detected": false
-  },
-  {
-   "log": "attack_techniques/T1548/composer/sysmon_linux.log",
-   "observations": 6,
-   "documented_techniques": [
-    "T1548"
-   ],
-   "detected_techniques": [],
-   "documented_technique_detected": false
-  },
-  {
-   "log": "attack_techniques/T1548/cpulimit/sysmon_linux.log",
-   "observations": 9,
-   "documented_techniques": [
-    "T1548"
-   ],
-   "detected_techniques": [],
-   "documented_technique_detected": false
-  },
-  {
-   "log": "attack_techniques/T1548/csvtool/sysmon_linux.log",
-   "observations": 4,
-   "documented_techniques": [
-    "T1548"
-   ],
-   "detected_techniques": [],
-   "documented_technique_detected": false
-  },
-  {
-   "log": "attack_techniques/T1548/docker/sysmon_linux.log",
-   "observations": 598,
-   "documented_techniques": [
-    "T1548"
-   ],
-   "detected_techniques": [],
-   "documented_technique_detected": false
-  },
-  {
-   "log": "attack_techniques/T1548/emacs/sysmon_linux.log",
-   "observations": 22,
-   "documented_techniques": [
-    "T1548"
-   ],
-   "detected_techniques": [],
-   "documented_technique_detected": false
-  },
-  {
-   "log": "attack_techniques/T1548/find/sysmon_linux.log",
-   "observations": 6,
-   "documented_techniques": [
-    "T1548"
-   ],
-   "detected_techniques": [
-    "T1083"
-   ],
-   "documented_technique_detected": false
-  },
-  {
-   "log": "attack_techniques/T1548/gawk/sysmon_linux.log",
-   "observations": 4,
-   "documented_techniques": [
-    "T1548"
-   ],
-   "detected_techniques": [
-    "T1059"
-   ],
-   "documented_technique_detected": false
-  },
-  {
-   "log": "attack_techniques/T1548/gdb/sysmon_linux.log",
-   "observations": 13,
-   "documented_techniques": [
-    "T1548"
-   ],
-   "detected_techniques": [],
-   "documented_technique_detected": false
-  },
-  {
-   "log": "attack_techniques/T1548/gem/sysmon_linux.log",
-   "observations": 4,
-   "documented_techniques": [
-    "T1548"
-   ],
-   "detected_techniques": [],
-   "documented_technique_detected": false
-  },
-  {
-   "log": "attack_techniques/T1548/make/sysmon_linux.log",
-   "observations": 5,
-   "documented_techniques": [
-    "T1548"
-   ],
-   "detected_techniques": [],
-   "documented_technique_detected": false
-  },
-  {
-   "log": "attack_techniques/T1548/mysql/sysmon_linux.log",
-   "observations": 8,
-   "documented_techniques": [
-    "T1548"
-   ],
-   "detected_techniques": [],
-   "documented_technique_detected": false
-  },
-  {
-   "log": "attack_techniques/T1548/node/sysmon_linux.log",
-   "observations": 17,
-   "documented_techniques": [
-    "T1548"
-   ],
-   "detected_techniques": [],
-   "documented_technique_detected": false
-  },
-  {
-   "log": "attack_techniques/T1548/octave/sysmon_linux.log",
-   "observations": 6,
-   "documented_techniques": [
-    "T1548"
-   ],
-   "detected_techniques": [],
-   "documented_technique_detected": false
-  },
-  {
-   "log": "attack_techniques/T1548/openvpn/sysmon_linux.log",
-   "observations": 8,
-   "documented_techniques": [
-    "T1548"
-   ],
-   "detected_techniques": [],
-   "documented_technique_detected": false
-  },
-  {
-   "log": "attack_techniques/T1548/php/sysmon_linux.log",
-   "observations": 10,
-   "documented_techniques": [
-    "T1548"
-   ],
-   "detected_techniques": [],
-   "documented_technique_detected": false
-  },
-  {
-   "log": "attack_techniques/T1548/puppet/sysmon_linux.log",
-   "observations": 4,
-   "documented_techniques": [
-    "T1548"
-   ],
-   "detected_techniques": [],
-   "documented_technique_detected": false
-  },
-  {
-   "log": "attack_techniques/T1548/rpm/sysmon_linux.log",
-   "observations": 2,
-   "documented_techniques": [
-    "T1548"
-   ],
-   "detected_techniques": [],
-   "documented_technique_detected": false
-  },
-  {
-   "log": "attack_techniques/T1548/ruby/sysmon_linux.log",
-   "observations": 6,
-   "documented_techniques": [
-    "T1548"
-   ],
-   "detected_techniques": [],
-   "documented_technique_detected": false
-  },
-  {
-   "log": "attack_techniques/T1548/sqlite3/sysmon_linux.log",
-   "observations": 8,
-   "documented_techniques": [
-    "T1548"
-   ],
-   "detected_techniques": [],
-   "documented_technique_detected": false
-  },
-  {
-   "log": "attack_techniques/T1548/telnet/sysmon_linux.log",
-   "observations": 1,
-   "documented_techniques": [
-    "T1548"
-   ],
-   "detected_techniques": [],
-   "documented_technique_detected": false
-  },
-  {
-   "log": "malware/acidrain/sysmon_linux.log",
-   "observations": 15416,
-   "documented_techniques": [],
-   "detected_techniques": [],
-   "documented_technique_detected": false
-  },
-  {
-   "log": "malware/cyclopsblink/sysmon_linux.log",
-   "observations": 80457,
-   "documented_techniques": [],
-   "detected_techniques": [],
-   "documented_technique_detected": false
-  }
- ]
+  "fired_rules": [
+   {
+    "product": "linux",
+    "title": "Creation Of An User Account",
+    "detections": 1
+   },
+   {
+    "product": "linux",
+    "title": "Disable System Firewall",
+    "detections": 1
+   },
+   {
+    "product": "linux",
+    "title": "Loading of Kernel Module via Insmod",
+    "detections": 2
+   },
+   {
+    "product": "linux",
+    "title": "Modification of ld.so.preload",
+    "detections": 4
+   }
+  ],
+  "labelled_datasets_with_observations": 48,
+  "labelled_datasets_with_documented_technique_detected": 4,
+  "datasets": [
+   {
+    "dataset": "attack_techniques/T1003.008/linux_auditd_access_credential",
+    "logs": [
+     "auditd_proctitle_access_cred.log",
+     "linux_auditd_access_credential.log"
+    ],
+    "observations": 14,
+    "documented_techniques": [
+     "T1003.008"
+    ],
+    "documented_techniques_current": [
+     "T1003.008"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1016/linux_auditd_net_tool",
+    "logs": [
+     "linux_auditd_net_tool.log"
+    ],
+    "observations": 25,
+    "documented_techniques": [
+     "T1016"
+    ],
+    "documented_techniques_current": [
+     "T1016"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1016/linux_auditd_net_tool_new",
+    "logs": [
+     "linux_auditd_net_tool_bucket_new.log"
+    ],
+    "observations": 0,
+    "documented_techniques": [
+     "T1016"
+    ],
+    "documented_techniques_current": [
+     "T1016"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1030/linux_auditd_split_b_exec",
+    "logs": [
+     "auditd_execve_split.log",
+     "linux_auditd_split_b_exec.log"
+    ],
+    "observations": 2,
+    "documented_techniques": [
+     "T1030"
+    ],
+    "documented_techniques_current": [
+     "T1030"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1030/linux_auditd_split_syscall",
+    "logs": [
+     "linux_auditd_split_syscall.log"
+    ],
+    "observations": 1,
+    "documented_techniques": [
+     "T1030"
+    ],
+    "documented_techniques_current": [
+     "T1030"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1030/linux_auditd_split_syscall_new",
+    "logs": [
+     "linux_auditd_new_split.log"
+    ],
+    "observations": 0,
+    "documented_techniques": [
+     "T1030"
+    ],
+    "documented_techniques_current": [
+     "T1030"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1033/linux_auditd_whoami",
+    "logs": [
+     "linux_auditd_whoami.log"
+    ],
+    "observations": 3,
+    "documented_techniques": [
+     "T1033"
+    ],
+    "documented_techniques_current": [
+     "T1033"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1033/linux_auditd_whoami_new",
+    "logs": [
+     "linux_auditd_new_whoami.log"
+    ],
+    "observations": 0,
+    "documented_techniques": [
+     "T1033"
+    ],
+    "documented_techniques_current": [
+     "T1033"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1053.002/linux_auditd_at",
+    "logs": [
+     "linux_auditd_at_execution.log"
+    ],
+    "observations": 14,
+    "documented_techniques": [
+     "T1053.002"
+    ],
+    "documented_techniques_current": [
+     "T1053.002"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1053.002/linux_auditd_chown_root",
+    "logs": [
+     "auditd_proctitle_chown_root.log",
+     "linux_auditd_chown_root.log"
+    ],
+    "observations": 1,
+    "documented_techniques": [
+     "T1053.002"
+    ],
+    "documented_techniques_current": [
+     "T1053.002"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1053.002/linux_new_auditd_at",
+    "logs": [
+     "linux_auditd_new_at.log"
+    ],
+    "observations": 0,
+    "documented_techniques": [
+     "T1053.002"
+    ],
+    "documented_techniques_current": [
+     "T1053.002"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1053.003/auditd_path_cron",
+    "logs": [
+     "path_cron.log"
+    ],
+    "observations": 0,
+    "documented_techniques": [
+     "T1053.003"
+    ],
+    "documented_techniques_current": [
+     "T1053.003"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1053.003/linux_auditd_cron_file_audited",
+    "logs": [
+     "linux_auditd_cron_file_audited2.log",
+     "linux_path_cron.log"
+    ],
+    "observations": 19,
+    "documented_techniques": [
+     "T1053.003"
+    ],
+    "documented_techniques_current": [
+     "T1053.003"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1053.003/linux_auditd_crontab_edit",
+    "logs": [
+     "linux_auditd_crontab_edit.log"
+    ],
+    "observations": 3,
+    "documented_techniques": [
+     "T1053.003"
+    ],
+    "documented_techniques_current": [
+     "T1053.003"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1053.003/linux_auditd_crontab_edit_new",
+    "logs": [
+     "linux_auditd_new_crontab.log"
+    ],
+    "observations": 0,
+    "documented_techniques": [
+     "T1053.003"
+    ],
+    "documented_techniques_current": [
+     "T1053.003"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1053.006/linux_services_restart",
+    "logs": [
+     "auditd_proctitle_service_restart.log"
+    ],
+    "observations": 0,
+    "documented_techniques": [
+     "T1053.006"
+    ],
+    "documented_techniques_current": [
+     "T1053.006"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1068/linux_auditd_copy_fail",
+    "logs": [
+     "linux_auditd.log"
+    ],
+    "observations": 241,
+    "documented_techniques": [
+     "T1068"
+    ],
+    "documented_techniques_current": [
+     "T1068"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1068/linux_pedit",
+    "logs": [
+     "linux_auditd.log"
+    ],
+    "observations": 1,
+    "documented_techniques": [
+     "T1068"
+    ],
+    "documented_techniques_current": [
+     "T1068"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1082/linux_auditd_lsmod",
+    "logs": [
+     "linux_auditd_lsmod.log"
+    ],
+    "observations": 1,
+    "documented_techniques": [
+     "T1082"
+    ],
+    "documented_techniques_current": [
+     "T1082"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1082/linux_auditd_lsmod_new",
+    "logs": [
+     "linux_auditd_new_lsmod.log"
+    ],
+    "observations": 0,
+    "documented_techniques": [
+     "T1082"
+    ],
+    "documented_techniques_current": [
+     "T1082"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1083/linux_auditd_find_db",
+    "logs": [
+     "linux_auditd_find_db.log"
+    ],
+    "observations": 8,
+    "documented_techniques": [
+     "T1083"
+    ],
+    "documented_techniques_current": [
+     "T1083"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1083/linux_auditd_find_document",
+    "logs": [
+     "auditd_execve_file_dir_discovery.log",
+     "linux_auditd_find_document.log"
+    ],
+    "observations": 19,
+    "documented_techniques": [
+     "T1083"
+    ],
+    "documented_techniques_current": [
+     "T1083"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1083/linux_auditd_find_virtual_disk",
+    "logs": [
+     "auditd_execve_find_vhd.log",
+     "linux_auditd_find_virtual_disk.log"
+    ],
+    "observations": 3,
+    "documented_techniques": [
+     "T1083"
+    ],
+    "documented_techniques_current": [
+     "T1083"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1083/linux_auditd_hidden_file",
+    "logs": [
+     "auditd_execve_hidden_file.log",
+     "linux_auditd_hidden_file.log"
+    ],
+    "observations": 2,
+    "documented_techniques": [
+     "T1083"
+    ],
+    "documented_techniques_current": [
+     "T1083"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1098.004/auditd_path_ssh_config",
+    "logs": [
+     "path_ssh_config.log"
+    ],
+    "observations": 0,
+    "documented_techniques": [
+     "T1098.004"
+    ],
+    "documented_techniques_current": [
+     "T1098.004"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1098.004/linux_auditd_nopasswd",
+    "logs": [
+     "linux_auditd_ssh_config.log",
+     "linux_path_ssh_config.log"
+    ],
+    "observations": 4,
+    "documented_techniques": [
+     "T1098.004"
+    ],
+    "documented_techniques_current": [
+     "T1098.004"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1115/linux_auditd_xclip",
+    "logs": [
+     "linux_auditd_xclip.log",
+     "linux_auditd_xclip2.log"
+    ],
+    "observations": 3,
+    "documented_techniques": [
+     "T1115"
+    ],
+    "documented_techniques_current": [
+     "T1115"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1136.001/linux_auditd_add_user",
+    "logs": [
+     "auditd_proctitle_user_add.log",
+     "linux_auditd_add_user.log"
+    ],
+    "observations": 68,
+    "documented_techniques": [
+     "T1136.001"
+    ],
+    "documented_techniques_current": [
+     "T1136.001"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1136.001/linux_auditd_add_user_type",
+    "logs": [
+     "linux_auditd_add_user_type.log"
+    ],
+    "observations": 1,
+    "documented_techniques": [
+     "T1136.001"
+    ],
+    "documented_techniques_current": [
+     "T1136.001"
+    ],
+    "detected_techniques": [
+     "T1136.001"
+    ],
+    "documented_technique_detected": true
+   },
+   {
+    "dataset": "attack_techniques/T1140/linux_auditd_base64",
+    "logs": [
+     "auditd_execve_base64.log",
+     "linux_auditd_base64.log"
+    ],
+    "observations": 4,
+    "documented_techniques": [
+     "T1140"
+    ],
+    "documented_techniques_current": [
+     "T1140"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1200/linux_auditd_swapoff",
+    "logs": [
+     "linux_auditd_swapoff.log",
+     "linux_auditd_swapoff2.log"
+    ],
+    "observations": 1,
+    "documented_techniques": [
+     "T1200"
+    ],
+    "documented_techniques_current": [
+     "T1200"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1222.002/linux_auditd_chattr_i",
+    "logs": [
+     "auditd_proctitle_chattr.log",
+     "linux_auditd_chattr_i.log"
+    ],
+    "observations": 1,
+    "documented_techniques": [
+     "T1222.002"
+    ],
+    "documented_techniques_current": [
+     "T1222.002"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1222.002/linux_auditd_chmod_exec_attrib",
+    "logs": [
+     "auditd_proctitle_chmod.log",
+     "linux_auditd_chmod_exec_attrib.log"
+    ],
+    "observations": 1,
+    "documented_techniques": [
+     "T1222.002"
+    ],
+    "documented_techniques_current": [
+     "T1222.002"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1485/linux_auditd_dd_overwrite",
+    "logs": [
+     "auditd_proctitle_dd_overwrite.log",
+     "linux_auditd_dd_overwrite.log"
+    ],
+    "observations": 1,
+    "documented_techniques": [
+     "T1485"
+    ],
+    "documented_techniques_current": [
+     "T1485"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1485/linux_auditd_no_preserve_root",
+    "logs": [
+     "auditd_proctitle_rm_rf.log",
+     "linux_auditd_no_preserve_root.log"
+    ],
+    "observations": 2,
+    "documented_techniques": [
+     "T1485"
+    ],
+    "documented_techniques_current": [
+     "T1485"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1485/linux_auditd_shred",
+    "logs": [
+     "auditd_proctitle_shred.log",
+     "linux_auditd_shred.log"
+    ],
+    "observations": 1,
+    "documented_techniques": [
+     "T1485"
+    ],
+    "documented_techniques_current": [
+     "T1485"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1489/linux_auditd_auditd_service_stop",
+    "logs": [
+     "linux_auditd_auditd_service_stop.log"
+    ],
+    "observations": 8,
+    "documented_techniques": [
+     "T1489"
+    ],
+    "documented_techniques_current": [
+     "T1489"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1489/linux_auditd_osquerd_service_stop",
+    "logs": [
+     "linux_auditd_osquerd_service_stop.log"
+    ],
+    "observations": 8,
+    "documented_techniques": [
+     "T1489"
+    ],
+    "documented_techniques_current": [
+     "T1489"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1489/linux_auditd_service_stop",
+    "logs": [
+     "linux_auditd_service_stop.log"
+    ],
+    "observations": 1,
+    "documented_techniques": [
+     "T1489"
+    ],
+    "documented_techniques_current": [
+     "T1489"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1529/auditd_path_sysrq",
+    "logs": [
+     "path_sysrq.log"
+    ],
+    "observations": 0,
+    "documented_techniques": [
+     "T1529"
+    ],
+    "documented_techniques_current": [
+     "T1529"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1546.004/linux_auditd_unix_shell_mod_config",
+    "logs": [
+     "linux_auditd_unix_shell_mod_config.log",
+     "linux_path_profile_d.log"
+    ],
+    "observations": 6,
+    "documented_techniques": [
+     "T1546.004"
+    ],
+    "documented_techniques_current": [
+     "T1546.004"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1547.006/linux_auditd_insmod",
+    "logs": [
+     "linux_auditd_insmod.log"
+    ],
+    "observations": 2,
+    "documented_techniques": [
+     "T1547.006"
+    ],
+    "documented_techniques_current": [
+     "T1547.006"
+    ],
+    "detected_techniques": [
+     "T1547.006"
+    ],
+    "documented_technique_detected": true
+   },
+   {
+    "dataset": "attack_techniques/T1547.006/linux_auditd_insmod_new",
+    "logs": [
+     "linux_auditd_new_insmod.log"
+    ],
+    "observations": 0,
+    "documented_techniques": [
+     "T1547.006"
+    ],
+    "documented_techniques_current": [
+     "T1547.006"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1547.006/linux_auditd_modprobe",
+    "logs": [
+     "linux_auditd_modprobe.log"
+    ],
+    "observations": 3,
+    "documented_techniques": [
+     "T1547.006"
+    ],
+    "documented_techniques_current": [
+     "T1547.006"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1547.006/linux_auditd_modprobe_new",
+    "logs": [
+     "linux_auditd_new_modprobe.log"
+    ],
+    "observations": 0,
+    "documented_techniques": [
+     "T1547.006"
+    ],
+    "documented_techniques_current": [
+     "T1547.006"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1547.006/linux_auditd_modprobe_unload_module",
+    "logs": [
+     "auditd_execve_modprobe.log",
+     "linux_auditd_modprobe_unload_module.log"
+    ],
+    "observations": 2,
+    "documented_techniques": [
+     "T1547.006"
+    ],
+    "documented_techniques_current": [
+     "T1547.006"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1547.006/linux_auditd_rmmod",
+    "logs": [
+     "linux_auditd_rmmod.log"
+    ],
+    "observations": 2,
+    "documented_techniques": [
+     "T1547.006"
+    ],
+    "documented_techniques_current": [
+     "T1547.006"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1547.006/linux_auditd_rmmod_new",
+    "logs": [
+     "linux_auditd_new_rmmod.log"
+    ],
+    "observations": 0,
+    "documented_techniques": [
+     "T1547.006"
+    ],
+    "documented_techniques_current": [
+     "T1547.006"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1548.001/linux_auditd_setuid",
+    "logs": [
+     "auditd_execve_setcap.log",
+     "auditd_proctitle_setuid.log",
+     "linux_auditd_setcap_priv.log",
+     "linux_auditd_setuid.log"
+    ],
+    "observations": 21,
+    "documented_techniques": [
+     "T1548.001"
+    ],
+    "documented_techniques_current": [
+     "T1548.001"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1548.003/auditd_path_cwd_doas_conf",
+    "logs": [
+     "path_doas.log"
+    ],
+    "observations": 0,
+    "documented_techniques": [
+     "T1548.003"
+    ],
+    "documented_techniques_current": [
+     "T1548.003"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1548.003/auditd_path_sudoers",
+    "logs": [
+     "path_sudoers.log"
+    ],
+    "observations": 0,
+    "documented_techniques": [
+     "T1548.003"
+    ],
+    "documented_techniques_current": [
+     "T1548.003"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1548.003/linux_auditd_doas",
+    "logs": [
+     "linux_auditd_doas.log"
+    ],
+    "observations": 11,
+    "documented_techniques": [
+     "T1548.003"
+    ],
+    "documented_techniques_current": [
+     "T1548.003"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1548.003/linux_auditd_doas_new",
+    "logs": [
+     "linux_auditd_new_doas.log"
+    ],
+    "observations": 0,
+    "documented_techniques": [
+     "T1548.003"
+    ],
+    "documented_techniques_current": [
+     "T1548.003"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1548.003/linux_auditd_nopasswd",
+    "logs": [
+     "linux_auditd_nopasswd.log",
+     "linux_auditd_nopasswd2.log"
+    ],
+    "observations": 2,
+    "documented_techniques": [
+     "T1548.003"
+    ],
+    "documented_techniques_current": [
+     "T1548.003"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1548.003/linux_auditd_sudo_su",
+    "logs": [
+     "auditd_proctitle_sudo.log",
+     "linux_auditd_sudo_su.log"
+    ],
+    "observations": 108,
+    "documented_techniques": [
+     "T1548.003"
+    ],
+    "documented_techniques_current": [
+     "T1548.003"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1548.003/linux_auditd_sudoers_access",
+    "logs": [
+     "linux_auditd_sudoers_access.log",
+     "linux_path_sudoers.log"
+    ],
+    "observations": 1,
+    "documented_techniques": [
+     "T1548.003"
+    ],
+    "documented_techniques_current": [
+     "T1548.003"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1552.004/linux_auditd_find_gpg",
+    "logs": [
+     "auditd_execve_find_gpg.log",
+     "linux_auditd_find_gpg.log"
+    ],
+    "observations": 9,
+    "documented_techniques": [
+     "T1552.004"
+    ],
+    "documented_techniques_current": [
+     "T1552.004"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1552.004/linux_auditd_find_ssh_files",
+    "logs": [
+     "auditd_execve_find_ssh.log",
+     "linux_auditd_find_ssh_files.log"
+    ],
+    "observations": 62,
+    "documented_techniques": [
+     "T1552.004"
+    ],
+    "documented_techniques_current": [
+     "T1552.004"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1555.005/linux_auditd_find_credentials",
+    "logs": [
+     "auditd_execve_find_creds.log",
+     "linux_auditd_find_credentials.log"
+    ],
+    "observations": 132,
+    "documented_techniques": [
+     "T1555.005"
+    ],
+    "documented_techniques_current": [
+     "T1555.005"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1555.005/linux_auditd_find_password_db",
+    "logs": [
+     "auditd_execve_pwd_mgr.log",
+     "linux_auditd_find_password_db.log"
+    ],
+    "observations": 5,
+    "documented_techniques": [
+     "T1555.005"
+    ],
+    "documented_techniques_current": [
+     "T1555.005"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1562.004/linux_auditd_disable_firewall",
+    "logs": [
+     "linux_auditd_disable_firewall.log"
+    ],
+    "observations": 1,
+    "documented_techniques": [
+     "T1562.004"
+    ],
+    "documented_techniques_current": [
+     "T1686"
+    ],
+    "detected_techniques": [
+     "T1686"
+    ],
+    "documented_technique_detected": true
+   },
+   {
+    "dataset": "attack_techniques/T1562.012/auditd_daemon_end",
+    "logs": [
+     "linux_daemon_end.log"
+    ],
+    "observations": 0,
+    "documented_techniques": [],
+    "documented_techniques_current": [],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1562.012/auditd_daemon_type",
+    "logs": [
+     "linux_auditd_daemon.log"
+    ],
+    "observations": 0,
+    "documented_techniques": [
+     "T1562.012"
+    ],
+    "documented_techniques_current": [
+     "T1685.004"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1564.001/linux_auditd_hidden_file",
+    "logs": [
+     "linux_auditd_hidden_file.log"
+    ],
+    "observations": 2,
+    "documented_techniques": [
+     "T1564.001"
+    ],
+    "documented_techniques_current": [
+     "T1564.001"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1569.002/linux_service_start",
+    "logs": [
+     "auditd_proctitle_service_start.log"
+    ],
+    "observations": 0,
+    "documented_techniques": [
+     "T1569.002"
+    ],
+    "documented_techniques_current": [
+     "T1569.002"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1574.006/auditd_path_preload_file",
+    "logs": [
+     "path_preload.log"
+    ],
+    "observations": 0,
+    "documented_techniques": [
+     "T1574.006"
+    ],
+    "documented_techniques_current": [
+     "T1574.006"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1574.006/linux_auditd_ldpreload",
+    "logs": [
+     "auditd_execve_ldpreload.log",
+     "linux_auditd_ldpreload.log"
+    ],
+    "observations": 1,
+    "documented_techniques": [
+     "T1574.006"
+    ],
+    "documented_techniques_current": [
+     "T1574.006"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1574.006/linux_auditd_preload_file",
+    "logs": [
+     "linux_auditd_preload_file.log",
+     "linux_path_preload.log"
+    ],
+    "observations": 6,
+    "documented_techniques": [
+     "T1574.006"
+    ],
+    "documented_techniques_current": [
+     "T1574.006"
+    ],
+    "detected_techniques": [
+     "T1574.006"
+    ],
+    "documented_technique_detected": true
+   }
+  ]
+ }
 }

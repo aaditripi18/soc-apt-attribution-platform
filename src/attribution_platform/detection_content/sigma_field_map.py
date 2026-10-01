@@ -25,7 +25,7 @@ installation, scheduled tasks, privileges, registry / directory-service object
 operations, account management, Credential Manager reads and WFP filters.
 ``/10`` (ADR-0010) scopes every product by operating system (``PRODUCT_OS_SCOPES``)
 and adds Linux ``process_creation`` / ``file_event`` / ``network_connection``
-(Sysmon for Linux).
+(Sysmon for Linux). ``/11`` adds ``linux/auditd`` (raw Linux Audit records).
 
 Anything else is a *telemetry gap*, reported per rule by the importer — never
 approximated. ``UNMAPPED_FIELD_REASONS`` records why the most frequent
@@ -41,7 +41,7 @@ from __future__ import annotations
 
 from types import MappingProxyType
 
-FIELD_MAP_VERSION = "sigma-field-map/10"
+FIELD_MAP_VERSION = "sigma-field-map/11"
 
 #: ``(product, category)`` → the ``(field_path, operator, value)`` scope
 #: conditions an Observation must satisfy to be the kind of event the Sigma
@@ -152,6 +152,8 @@ LOGSOURCE_SCOPES: MappingProxyType[tuple[str, str], tuple[tuple[str, str, str], 
                 ("event.category", "has_element", "network"),
                 ("event.type", "has_element", "connection"),
             ),
+            # Sigma service: auditd = Linux Audit records (one per record).
+            ("linux", "auditd"): (("event.dataset", "equals", "auditd.log"),),
         }
     )
 )
@@ -162,16 +164,14 @@ LOGSOURCE_SCOPES: MappingProxyType[tuple[str, str], tuple[tuple[str, str, str], 
 #: a Linux host; Windows rules require the host **not** to be Linux or macOS, so
 #: Windows Observations that predate ``host.os_type`` (fixtures) still match. A
 #: Windows rule can therefore never fire on a Linux process, nor the reverse.
-PRODUCT_OS_SCOPES: MappingProxyType[str, tuple[tuple[str, str, str, bool], ...]] = (
-    MappingProxyType(
-        {
-            "windows": (
-                ("host.os_type", "equals", "linux", True),
-                ("host.os_type", "equals", "macos", True),
-            ),
-            "linux": (("host.os_type", "equals", "linux", False),),
-        }
-    )
+PRODUCT_OS_SCOPES: MappingProxyType[str, tuple[tuple[str, str, str, bool], ...]] = MappingProxyType(
+    {
+        "windows": (
+            ("host.os_type", "equals", "linux", True),
+            ("host.os_type", "equals", "macos", True),
+        ),
+        "linux": (("host.os_type", "equals", "linux", False),),
+    }
 )
 
 #: Registry fields shared by every ``registry_*`` logsource. ``EventType`` is
@@ -331,6 +331,30 @@ FIELD_MAPS: MappingProxyType[tuple[str, str], MappingProxyType[str, str]] = Mapp
                 "SourceIp": "network.source.ip",
                 "SourcePort": "network.source.port",
                 "Protocol": "network.transport",
+            }
+        ),
+        # Linux Audit (ADR-0010 D4): Sigma reads single records; ``a0``–``a7``
+        # mean what the record type defines (argv in EXECVE, raw hex syscall
+        # arguments in SYSCALL); ``SYSCALL`` is the ENRICHED syscall name.
+        ("linux", "auditd"): MappingProxyType(
+            {
+                "type": "audit.record_type",
+                **{f"a{i}": f"audit.a{i}" for i in range(8)},
+                "argc": "audit.argc",
+                "comm": "audit.comm",
+                "exe": "process.executable",
+                "name": "audit.name",
+                "nametype": "audit.nametype",
+                "unit": "audit.unit",
+                "key": "audit.key",
+                "SYSCALL": "audit.syscall_name",
+                "syscall": "audit.syscall",
+                "success": "audit.success",
+                "auid": "audit.auid",
+                "uid": "audit.uid",
+                "euid": "audit.euid",
+                "pid": "process.pid",
+                "ppid": "process.parent_pid",
             }
         ),
         ("windows", "security"): MappingProxyType(

@@ -344,6 +344,51 @@ class CredentialReadRef:
 
 
 @dataclass(frozen=True)
+class AuditRef:
+    """One Linux Audit record (ADR-0010 D4; all optional except as noted).
+
+    Values are kept as auditd logs them, with only auditd's own encoding
+    undone: an *untrusted string* field (EXECVE arguments, ``name``, ``comm``,
+    ``exe``) logged unquoted is hex-encoded and is decoded exactly; ``(null)``
+    means absent. ``a0``–``a7`` therefore mean what the record type defines —
+    decoded argv strings in an ``EXECVE`` record, raw hex syscall arguments in
+    a ``SYSCALL`` record — exactly as Sigma's auditd rules read them.
+    ``syscall_name`` and the ``*_name`` account fields come only from the
+    ENRICHED log format's interpreted suffix (never from a syscall table).
+    ``event_serial`` is the kernel's event serial, shared by every record of
+    one audit event."""
+
+    record_type: str | None = None
+    event_serial: str | None = None
+    syscall: str | None = None
+    syscall_name: str | None = None
+    success: str | None = None
+    exit: str | None = None
+    argc: str | None = None
+    a0: str | None = None
+    a1: str | None = None
+    a2: str | None = None
+    a3: str | None = None
+    a4: str | None = None
+    a5: str | None = None
+    a6: str | None = None
+    a7: str | None = None
+    item: str | None = None
+    name: str | None = None
+    nametype: str | None = None
+    comm: str | None = None
+    unit: str | None = None
+    op: str | None = None
+    res: str | None = None
+    key: str | None = None
+    auid: str | None = None
+    uid: str | None = None
+    euid: str | None = None
+    ses: str | None = None
+    tty: str | None = None
+
+
+@dataclass(frozen=True)
 class WfpFilterRef:
     """A Windows Filtering Platform filter change (5441 present at startup,
     5447 changed; all optional), as logged — the filter, its provider and

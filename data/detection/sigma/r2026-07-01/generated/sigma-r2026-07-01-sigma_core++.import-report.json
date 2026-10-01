@@ -5,7 +5,7 @@
   "sigma_archive": "sigma_core++.zip",
   "sigma_archive_sha256": "469d83e1d1bbdb4d7876466ff1a728550fae5a20115b91339d58d20e894e7477",
   "pysigma_version": "1.5.1",
-  "field_map_version": "sigma-field-map/10",
+  "field_map_version": "sigma-field-map/11",
   "attack_kb_version": "enterprise-attack-19.2",
   "dnf_bound": 64,
   "software_tag_review": {
@@ -32,22 +32,22 @@
  "summary": {
   "sigma_rules_total": 2842,
   "by_status": {
-   "imported": 1539,
-   "partial": 63,
-   "rejected": 1240
+   "imported": 1558,
+   "partial": 65,
+   "rejected": 1219
   },
   "rejected_by_reason": {
    "no_attack_mapping": 319,
-   "telemetry_gap": 657,
-   "translation_gap": 264
+   "telemetry_gap": 631,
+   "translation_gap": 269
   },
-  "generated_rules": 11938,
-  "attack_ids_with_imported_rule": 291,
+  "generated_rules": 12037,
+  "attack_ids_with_imported_rule": 297,
   "group_tags_ignored": 12,
   "software_tags_ignored": 42
  },
  "gap_reasons": {
-  "translation_gap:interior_wildcard_or_empty": 293,
+  "translation_gap:interior_wildcard_or_empty": 303,
   "telemetry_gap:field:Hashes": 212,
   "telemetry_gap:field:Initiated": 185,
   "dnf_bound_exceeded:>64": 166,
@@ -65,7 +65,6 @@
   "telemetry_gap:field:AuditPolicyChanges": 29,
   "telemetry_gap:field:SubcategoryGuid": 29,
   "logsource:/proxy": 26,
-  "logsource:linux/auditd": 26,
   "telemetry_gap:field:AttributeLDAPDisplayName": 25,
   "logsource:opencanary/application": 24,
   "logsource:azure/activitylogs": 23,
@@ -74,6 +73,7 @@
   "telemetry_gap:field:AttributeValue": 21,
   "logsource:azure/signinlogs": 20,
   "logsource:azure/riskdetection": 19,
+  "translation_gap:keyword_search": 15,
   "logsource:windows/windefend": 14,
   "logsource:/webserver": 13,
   "logsource:bitbucket/audit": 12,
@@ -380,6 +380,7 @@
   "T1491.001",
   "T1496",
   "T1497.001",
+  "T1499",
   "T1505.002",
   "T1505.003",
   "T1505.004",
@@ -394,11 +395,13 @@
   "T1542.001",
   "T1542.003",
   "T1543",
+  "T1543.002",
   "T1543.003",
   "T1546",
   "T1546.001",
   "T1546.002",
   "T1546.003",
+  "T1546.004",
   "T1546.007",
   "T1546.008",
   "T1546.009",
@@ -413,6 +416,7 @@
   "T1547.003",
   "T1547.004",
   "T1547.005",
+  "T1547.006",
   "T1547.008",
   "T1547.009",
   "T1547.010",
@@ -469,10 +473,12 @@
   "T1574",
   "T1574.001",
   "T1574.005",
+  "T1574.006",
   "T1574.007",
   "T1574.008",
   "T1574.011",
   "T1574.012",
+  "T1584",
   "T1587",
   "T1587.001",
   "T1588.002",
@@ -1899,13 +1905,11 @@
    "path": "rules/linux/auditd/execve/lnx_auditd_coinminer.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/linux/auditd/execve/lnx_auditd_coinminer.yml",
    "logsource": "linux/auditd",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:linux/auditd": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 7,
+   "conjuncts_imported": 7,
+   "gap_reasons": {},
    "attack_ids": [
     "T1068"
    ],
@@ -3912,13 +3916,11 @@
    "path": "rules/linux/auditd/syscall/lnx_auditd_load_module_insmod.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/linux/auditd/syscall/lnx_auditd_load_module_insmod.yml",
    "logsource": "linux/auditd",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:linux/auditd": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 1,
+   "conjuncts_imported": 1,
+   "gap_reasons": {},
    "attack_ids": [
     "T1547.006"
    ],
@@ -4952,13 +4954,11 @@
    "path": "rules/linux/auditd/execve/lnx_auditd_susp_cmds.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/linux/auditd/execve/lnx_auditd_susp_cmds.yml",
    "logsource": "linux/auditd",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:linux/auditd": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 4,
+   "conjuncts_imported": 4,
+   "gap_reasons": {},
    "attack_ids": [
     "T1059.004"
    ],
@@ -6493,13 +6493,11 @@
    "path": "rules/linux/auditd/path/lnx_auditd_systemd_service_creation.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/linux/auditd/path/lnx_auditd_systemd_service_creation.yml",
    "logsource": "linux/auditd",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:linux/auditd": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 3,
+   "conjuncts_imported": 3,
+   "gap_reasons": {},
    "attack_ids": [
     "T1543.002"
    ],
@@ -10993,13 +10991,11 @@
    "path": "rules/linux/auditd/execve/lnx_auditd_modify_system_firewall.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/linux/auditd/execve/lnx_auditd_modify_system_firewall.yml",
    "logsource": "linux/auditd",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:linux/auditd": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 5,
+   "conjuncts_imported": 5,
+   "gap_reasons": {},
    "attack_ids": [
     "T1686"
    ],
@@ -15490,13 +15486,11 @@
    "path": "rules/linux/auditd/lnx_auditd_keylogging_with_pam_d.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/linux/auditd/lnx_auditd_keylogging_with_pam_d.yml",
    "logsource": "linux/auditd",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:linux/auditd": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 4,
+   "conjuncts_imported": 4,
+   "gap_reasons": {},
    "attack_ids": [
     "T1056.001",
     "T1003"
@@ -15951,13 +15945,11 @@
    "path": "rules/linux/auditd/path/lnx_auditd_ld_so_preload_mod.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/linux/auditd/path/lnx_auditd_ld_so_preload_mod.yml",
    "logsource": "linux/auditd",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:linux/auditd": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 1,
+   "conjuncts_imported": 1,
+   "gap_reasons": {},
    "attack_ids": [
     "T1574.006"
    ],
@@ -17676,13 +17668,11 @@
    "path": "rules/linux/auditd/service_stop/lnx_auditd_disable_system_firewall.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/linux/auditd/service_stop/lnx_auditd_disable_system_firewall.yml",
    "logsource": "linux/auditd",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:linux/auditd": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 3,
+   "conjuncts_imported": 3,
+   "gap_reasons": {},
    "attack_ids": [
     "T1686"
    ],
@@ -23569,11 +23559,11 @@
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/linux/auditd/execve/lnx_auditd_bpfdoor_port_redirect.yml",
    "logsource": "linux/auditd",
    "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
+   "rejection": "translation_gap",
+   "conjuncts_total": 2,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "logsource:linux/auditd": 1
+    "translation_gap:keyword_search": 2
    },
    "attack_ids": [
     "T1686"
@@ -24499,13 +24489,11 @@
    "path": "rules/linux/auditd/syscall/lnx_auditd_create_account.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/linux/auditd/syscall/lnx_auditd_create_account.yml",
    "logsource": "linux/auditd",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:linux/auditd": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 2,
+   "conjuncts_imported": 2,
+   "gap_reasons": {},
    "attack_ids": [
     "T1136.001"
    ],
@@ -26917,13 +26905,11 @@
    "path": "rules/linux/auditd/path/lnx_auditd_bpfdoor_file_accessed.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/linux/auditd/path/lnx_auditd_bpfdoor_file_accessed.yml",
    "logsource": "linux/auditd",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:linux/auditd": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 19,
+   "conjuncts_imported": 19,
+   "gap_reasons": {},
    "attack_ids": [
     "T1106",
     "T1059"
@@ -31933,13 +31919,11 @@
    "path": "rules/linux/auditd/path/lnx_auditd_auditing_config_change.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/linux/auditd/path/lnx_auditd_auditing_config_change.yml",
    "logsource": "linux/auditd",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:linux/auditd": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 3,
+   "conjuncts_imported": 3,
+   "gap_reasons": {},
    "attack_ids": [
     "T1685"
    ],
@@ -33272,13 +33256,11 @@
    "path": "rules/linux/auditd/execve/lnx_auditd_masquerading_crond.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/linux/auditd/execve/lnx_auditd_masquerading_crond.yml",
    "logsource": "linux/auditd",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:linux/auditd": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 1,
+   "conjuncts_imported": 1,
+   "gap_reasons": {},
    "attack_ids": [
     "T1036.003"
    ],
@@ -34992,12 +34974,12 @@
    "path": "rules/linux/auditd/syscall/lnx_auditd_susp_exe_folders.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/linux/auditd/syscall/lnx_auditd_susp_exe_folders.yml",
    "logsource": "linux/auditd",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
+   "status": "partial",
+   "rejection": null,
+   "conjuncts_total": 16,
+   "conjuncts_imported": 15,
    "gap_reasons": {
-    "logsource:linux/auditd": 1
+    "translation_gap:interior_wildcard_or_empty": 1
    },
    "attack_ids": [
     "T1584",
@@ -35330,13 +35312,11 @@
    "path": "rules/linux/auditd/execve/lnx_auditd_chattr_immutable_removal.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/linux/auditd/execve/lnx_auditd_chattr_immutable_removal.yml",
    "logsource": "linux/auditd",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:linux/auditd": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 1,
+   "conjuncts_imported": 1,
+   "gap_reasons": {},
    "attack_ids": [
     "T1222.002"
    ],
@@ -35994,12 +35974,12 @@
    "path": "rules/linux/auditd/path/lnx_auditd_unix_shell_configuration_modification.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/linux/auditd/path/lnx_auditd_unix_shell_configuration_modification.yml",
    "logsource": "linux/auditd",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
+   "status": "partial",
+   "rejection": null,
+   "conjuncts_total": 25,
+   "conjuncts_imported": 16,
    "gap_reasons": {
-    "logsource:linux/auditd": 1
+    "translation_gap:interior_wildcard_or_empty": 9
    },
    "attack_ids": [
     "T1546.004"
@@ -38236,11 +38216,11 @@
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/linux/auditd/execve/lnx_auditd_change_file_time_attr.yml",
    "logsource": "linux/auditd",
    "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
+   "rejection": "translation_gap",
+   "conjuncts_total": 4,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "logsource:linux/auditd": 1
+    "translation_gap:keyword_search": 4
    },
    "attack_ids": [
     "T1070.006"
@@ -40981,13 +40961,11 @@
    "path": "rules/linux/auditd/syscall/lnx_auditd_web_rce.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/linux/auditd/syscall/lnx_auditd_web_rce.yml",
    "logsource": "linux/auditd",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:linux/auditd": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 2,
+   "conjuncts_imported": 2,
+   "gap_reasons": {},
    "attack_ids": [
     "T1505.003"
    ],
@@ -41962,11 +41940,11 @@
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/linux/auditd/execve/lnx_auditd_binary_padding.yml",
    "logsource": "linux/auditd",
    "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
+   "rejection": "translation_gap",
+   "conjuncts_total": 2,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "logsource:linux/auditd": 1
+    "translation_gap:keyword_search": 2
    },
    "attack_ids": [
     "T1027.001"
@@ -42656,13 +42634,11 @@
    "path": "rules/linux/auditd/path/lnx_auditd_logging_config_change.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/linux/auditd/path/lnx_auditd_logging_config_change.yml",
    "logsource": "linux/auditd",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:linux/auditd": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 3,
+   "conjuncts_imported": 3,
+   "gap_reasons": {},
    "attack_ids": [
     "T1685"
    ],
@@ -43260,13 +43236,11 @@
    "path": "rules/linux/auditd/execve/lnx_auditd_data_exfil_wget.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/linux/auditd/execve/lnx_auditd_data_exfil_wget.yml",
    "logsource": "linux/auditd",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:linux/auditd": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 1,
+   "conjuncts_imported": 1,
+   "gap_reasons": {},
    "attack_ids": [
     "T1048.003"
    ],
@@ -47072,11 +47046,11 @@
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/linux/auditd/execve/lnx_auditd_find_cred_in_files.yml",
    "logsource": "linux/auditd",
    "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
+   "rejection": "translation_gap",
+   "conjuncts_total": 1,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "logsource:linux/auditd": 1
+    "translation_gap:keyword_search": 1
    },
    "attack_ids": [
     "T1552.001"
@@ -48262,13 +48236,11 @@
    "path": "rules/linux/auditd/lnx_auditd_disable_aslr_protection.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/linux/auditd/lnx_auditd_disable_aslr_protection.yml",
    "logsource": "linux/auditd",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:linux/auditd": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 2,
+   "conjuncts_imported": 2,
+   "gap_reasons": {},
    "attack_ids": [
     "T1685",
     "T1055.009"
@@ -49543,13 +49515,11 @@
    "path": "rules/linux/auditd/path/lnx_auditd_magic_system_request_key.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/linux/auditd/path/lnx_auditd_magic_system_request_key.yml",
    "logsource": "linux/auditd",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:linux/auditd": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 3,
+   "conjuncts_imported": 3,
+   "gap_reasons": {},
    "attack_ids": [
     "T1489",
     "T1059.004",
@@ -49629,11 +49599,11 @@
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/linux/auditd/execve/lnx_auditd_susp_histfile_operations.yml",
    "logsource": "linux/auditd",
    "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
+   "rejection": "translation_gap",
+   "conjuncts_total": 6,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "logsource:linux/auditd": 1
+    "translation_gap:keyword_search": 6
    },
    "attack_ids": [
     "T1552.003"
@@ -50002,13 +49972,11 @@
    "path": "rules/linux/auditd/syscall/lnx_auditd_clean_disable_dmesg_logs_via_syslog.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/linux/auditd/syscall/lnx_auditd_clean_disable_dmesg_logs_via_syslog.yml",
    "logsource": "linux/auditd",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:linux/auditd": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 3,
+   "conjuncts_imported": 3,
+   "gap_reasons": {},
    "attack_ids": [
     "T1685.006"
    ],

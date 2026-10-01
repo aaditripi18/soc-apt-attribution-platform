@@ -62,8 +62,8 @@ from sigma.types import (
     SpecialChars,
 )
 
+from attribution_platform.attack_knowledge.external_ids import ExternalIdResolver
 from attribution_platform.attack_knowledge.loader import AttackKnowledge, FrozenStixObject
-from attribution_platform.attack_knowledge.traversal import is_active
 from attribution_platform.detection_content.sigma_field_map import (
     CODED_VALUE_FIELDS,
     FIELD_MAP_VERSION,
@@ -207,42 +207,18 @@ class SigmaImportResult:
 
 
 class _AttackIndex:
-    """External-id → object index over the pinned KB, with ``revoked-by``."""
+    """External-id → object index over the pinned KB, with ``revoked-by``
+    (the shared :class:`ExternalIdResolver`)."""
 
     def __init__(self, knowledge: AttackKnowledge) -> None:
-        self._knowledge = knowledge
-        self._by_external_id: dict[str, list[FrozenStixObject]] = {}
-        for obj_type in (_TECHNIQUE_TYPE, *sorted(_SOFTWARE_TYPES)):
-            for obj in knowledge.objects_of_type(obj_type):
-                for ref in obj.get("external_references") or ():
-                    if ref.get("source_name") == "mitre-attack" and ref.get("external_id"):
-                        self._by_external_id.setdefault(str(ref["external_id"]), []).append(obj)
-        self._revoked_by: dict[str, str] = {}
-        for rel in knowledge.relationships():
-            if rel.get("relationship_type") == "revoked-by":
-                self._revoked_by[str(rel["source_ref"])] = str(rel["target_ref"])
+        self._resolver = ExternalIdResolver(knowledge, (_TECHNIQUE_TYPE, *_SOFTWARE_TYPES))
 
     def resolve(self, external_id: str, tag: str) -> ResolvedMapping | None:
-        candidates = self._by_external_id.get(external_id, [])
-        active = [o for o in candidates if is_active(o)]
-        if len(active) == 1:
-            return self._mapping(active[0], tag)
-        if active:
-            return None  # ambiguous: never pick arbitrarily
-        revoked = [o for o in candidates if o.get("revoked") is True]
-        if len(revoked) != 1:
+        resolved = self._resolver.resolve(external_id)
+        if resolved is None:
             return None
-        current_id = str(revoked[0]["id"])
-        seen = {current_id}
-        while current_id in self._revoked_by:
-            current_id = self._revoked_by[current_id]
-            if current_id in seen:
-                return None
-            seen.add(current_id)
-        target = self._knowledge.get_by_id(current_id)
-        if target is None or not is_active(target):
-            return None
-        return self._mapping(target, tag, revoked_from=external_id)
+        obj, revoked_from = resolved
+        return self._mapping(obj, tag, revoked_from=revoked_from)
 
     @staticmethod
     def _mapping(

@@ -109,6 +109,7 @@ OBSERVATIONS_MAPPING: dict[str, Any] = {
     "account_change": {"type": "object"},
     "credential_read": {"type": "object"},
     "wfp_filter": {"type": "object"},
+    "audit": {"type": "object"},
 }
 
 #: Explicit field mappings for the Evidence index (Elasticsearch "properties").

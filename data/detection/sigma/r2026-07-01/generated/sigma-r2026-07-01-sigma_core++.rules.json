@@ -7,7 +7,7 @@
   "sigma_archive": "sigma_core++.zip",
   "sigma_archive_sha256": "469d83e1d1bbdb4d7876466ff1a728550fae5a20115b91339d58d20e894e7477",
   "pysigma_version": "1.5.1",
-  "field_map_version": "sigma-field-map/10",
+  "field_map_version": "sigma-field-map/11",
   "attack_kb_version": "enterprise-attack-19.2",
   "dnf_bound": 64,
   "software_tag_review": {
@@ -19566,6 +19566,251 @@
    "evidence_type": "behavioral",
    "rule_source": "sigma:0718cd72-f316-4aa2-988f-838ea8533277",
    "rule_family": "sigma:0718cd72-f316-4aa2-988f-838ea8533277"
+  },
+  {
+   "rule_id": "sigma:071d5e5a-9cef-47ec-bc4e-a42e34d8d0ed:000",
+   "rule_version": "r2026-07-01",
+   "conditions": [
+    {
+     "field_path": "event.dataset",
+     "operator": "equals",
+     "value": "auditd.log"
+    },
+    {
+     "field_path": "host.os_type",
+     "operator": "equals",
+     "value": "linux"
+    },
+    {
+     "field_path": "audit.a1",
+     "operator": "startswith",
+     "value": "--cpu-priority",
+     "case_insensitive": true
+    }
+   ],
+   "technique_mappings": [
+    {
+     "stix_id": "attack-pattern--b21c3b2d-02e6-45b1-980b-e69051040839",
+     "object_type": "attack-pattern",
+     "attack_kb_version": "enterprise-attack-19.2",
+     "external_id": "T1068",
+     "mapping_basis": "Sigma rule 071d5e5a-9cef-47ec-bc4e-a42e34d8d0ed 'Possible Coin Miner CPU Priority Param' (author: Florian Roth (Nextron Systems)) tag attack.t1068",
+     "mapping_source": "sigma"
+    }
+   ],
+   "evidence_type": "behavioral",
+   "rule_source": "sigma:071d5e5a-9cef-47ec-bc4e-a42e34d8d0ed",
+   "rule_family": "sigma:071d5e5a-9cef-47ec-bc4e-a42e34d8d0ed"
+  },
+  {
+   "rule_id": "sigma:071d5e5a-9cef-47ec-bc4e-a42e34d8d0ed:001",
+   "rule_version": "r2026-07-01",
+   "conditions": [
+    {
+     "field_path": "event.dataset",
+     "operator": "equals",
+     "value": "auditd.log"
+    },
+    {
+     "field_path": "host.os_type",
+     "operator": "equals",
+     "value": "linux"
+    },
+    {
+     "field_path": "audit.a2",
+     "operator": "startswith",
+     "value": "--cpu-priority",
+     "case_insensitive": true
+    }
+   ],
+   "technique_mappings": [
+    {
+     "stix_id": "attack-pattern--b21c3b2d-02e6-45b1-980b-e69051040839",
+     "object_type": "attack-pattern",
+     "attack_kb_version": "enterprise-attack-19.2",
+     "external_id": "T1068",
+     "mapping_basis": "Sigma rule 071d5e5a-9cef-47ec-bc4e-a42e34d8d0ed 'Possible Coin Miner CPU Priority Param' (author: Florian Roth (Nextron Systems)) tag attack.t1068",
+     "mapping_source": "sigma"
+    }
+   ],
+   "evidence_type": "behavioral",
+   "rule_source": "sigma:071d5e5a-9cef-47ec-bc4e-a42e34d8d0ed",
+   "rule_family": "sigma:071d5e5a-9cef-47ec-bc4e-a42e34d8d0ed"
+  },
+  {
+   "rule_id": "sigma:071d5e5a-9cef-47ec-bc4e-a42e34d8d0ed:002",
+   "rule_version": "r2026-07-01",
+   "conditions": [
+    {
+     "field_path": "event.dataset",
+     "operator": "equals",
+     "value": "auditd.log"
+    },
+    {
+     "field_path": "host.os_type",
+     "operator": "equals",
+     "value": "linux"
+    },
+    {
+     "field_path": "audit.a3",
+     "operator": "startswith",
+     "value": "--cpu-priority",
+     "case_insensitive": true
+    }
+   ],
+   "technique_mappings": [
+    {
+     "stix_id": "attack-pattern--b21c3b2d-02e6-45b1-980b-e69051040839",
+     "object_type": "attack-pattern",
+     "attack_kb_version": "enterprise-attack-19.2",
+     "external_id": "T1068",
+     "mapping_basis": "Sigma rule 071d5e5a-9cef-47ec-bc4e-a42e34d8d0ed 'Possible Coin Miner CPU Priority Param' (author: Florian Roth (Nextron Systems)) tag attack.t1068",
+     "mapping_source": "sigma"
+    }
+   ],
+   "evidence_type": "behavioral",
+   "rule_source": "sigma:071d5e5a-9cef-47ec-bc4e-a42e34d8d0ed",
+   "rule_family": "sigma:071d5e5a-9cef-47ec-bc4e-a42e34d8d0ed"
+  },
+  {
+   "rule_id": "sigma:071d5e5a-9cef-47ec-bc4e-a42e34d8d0ed:003",
+   "rule_version": "r2026-07-01",
+   "conditions": [
+    {
+     "field_path": "event.dataset",
+     "operator": "equals",
+     "value": "auditd.log"
+    },
+    {
+     "field_path": "host.os_type",
+     "operator": "equals",
+     "value": "linux"
+    },
+    {
+     "field_path": "audit.a4",
+     "operator": "startswith",
+     "value": "--cpu-priority",
+     "case_insensitive": true
+    }
+   ],
+   "technique_mappings": [
+    {
+     "stix_id": "attack-pattern--b21c3b2d-02e6-45b1-980b-e69051040839",
+     "object_type": "attack-pattern",
+     "attack_kb_version": "enterprise-attack-19.2",
+     "external_id": "T1068",
+     "mapping_basis": "Sigma rule 071d5e5a-9cef-47ec-bc4e-a42e34d8d0ed 'Possible Coin Miner CPU Priority Param' (author: Florian Roth (Nextron Systems)) tag attack.t1068",
+     "mapping_source": "sigma"
+    }
+   ],
+   "evidence_type": "behavioral",
+   "rule_source": "sigma:071d5e5a-9cef-47ec-bc4e-a42e34d8d0ed",
+   "rule_family": "sigma:071d5e5a-9cef-47ec-bc4e-a42e34d8d0ed"
+  },
+  {
+   "rule_id": "sigma:071d5e5a-9cef-47ec-bc4e-a42e34d8d0ed:004",
+   "rule_version": "r2026-07-01",
+   "conditions": [
+    {
+     "field_path": "event.dataset",
+     "operator": "equals",
+     "value": "auditd.log"
+    },
+    {
+     "field_path": "host.os_type",
+     "operator": "equals",
+     "value": "linux"
+    },
+    {
+     "field_path": "audit.a5",
+     "operator": "startswith",
+     "value": "--cpu-priority",
+     "case_insensitive": true
+    }
+   ],
+   "technique_mappings": [
+    {
+     "stix_id": "attack-pattern--b21c3b2d-02e6-45b1-980b-e69051040839",
+     "object_type": "attack-pattern",
+     "attack_kb_version": "enterprise-attack-19.2",
+     "external_id": "T1068",
+     "mapping_basis": "Sigma rule 071d5e5a-9cef-47ec-bc4e-a42e34d8d0ed 'Possible Coin Miner CPU Priority Param' (author: Florian Roth (Nextron Systems)) tag attack.t1068",
+     "mapping_source": "sigma"
+    }
+   ],
+   "evidence_type": "behavioral",
+   "rule_source": "sigma:071d5e5a-9cef-47ec-bc4e-a42e34d8d0ed",
+   "rule_family": "sigma:071d5e5a-9cef-47ec-bc4e-a42e34d8d0ed"
+  },
+  {
+   "rule_id": "sigma:071d5e5a-9cef-47ec-bc4e-a42e34d8d0ed:005",
+   "rule_version": "r2026-07-01",
+   "conditions": [
+    {
+     "field_path": "event.dataset",
+     "operator": "equals",
+     "value": "auditd.log"
+    },
+    {
+     "field_path": "host.os_type",
+     "operator": "equals",
+     "value": "linux"
+    },
+    {
+     "field_path": "audit.a6",
+     "operator": "startswith",
+     "value": "--cpu-priority",
+     "case_insensitive": true
+    }
+   ],
+   "technique_mappings": [
+    {
+     "stix_id": "attack-pattern--b21c3b2d-02e6-45b1-980b-e69051040839",
+     "object_type": "attack-pattern",
+     "attack_kb_version": "enterprise-attack-19.2",
+     "external_id": "T1068",
+     "mapping_basis": "Sigma rule 071d5e5a-9cef-47ec-bc4e-a42e34d8d0ed 'Possible Coin Miner CPU Priority Param' (author: Florian Roth (Nextron Systems)) tag attack.t1068",
+     "mapping_source": "sigma"
+    }
+   ],
+   "evidence_type": "behavioral",
+   "rule_source": "sigma:071d5e5a-9cef-47ec-bc4e-a42e34d8d0ed",
+   "rule_family": "sigma:071d5e5a-9cef-47ec-bc4e-a42e34d8d0ed"
+  },
+  {
+   "rule_id": "sigma:071d5e5a-9cef-47ec-bc4e-a42e34d8d0ed:006",
+   "rule_version": "r2026-07-01",
+   "conditions": [
+    {
+     "field_path": "event.dataset",
+     "operator": "equals",
+     "value": "auditd.log"
+    },
+    {
+     "field_path": "host.os_type",
+     "operator": "equals",
+     "value": "linux"
+    },
+    {
+     "field_path": "audit.a7",
+     "operator": "startswith",
+     "value": "--cpu-priority",
+     "case_insensitive": true
+    }
+   ],
+   "technique_mappings": [
+    {
+     "stix_id": "attack-pattern--b21c3b2d-02e6-45b1-980b-e69051040839",
+     "object_type": "attack-pattern",
+     "attack_kb_version": "enterprise-attack-19.2",
+     "external_id": "T1068",
+     "mapping_basis": "Sigma rule 071d5e5a-9cef-47ec-bc4e-a42e34d8d0ed 'Possible Coin Miner CPU Priority Param' (author: Florian Roth (Nextron Systems)) tag attack.t1068",
+     "mapping_source": "sigma"
+    }
+   ],
+   "evidence_type": "behavioral",
+   "rule_source": "sigma:071d5e5a-9cef-47ec-bc4e-a42e34d8d0ed",
+   "rule_family": "sigma:071d5e5a-9cef-47ec-bc4e-a42e34d8d0ed"
   },
   {
    "rule_id": "sigma:074e0ded-6ced-4ebd-8b4d-53f55908119d:000",
@@ -55581,6 +55826,53 @@
    "rule_family": "sigma:104cdb48-a7a8-4ca7-a453-32942c6e5dcb"
   },
   {
+   "rule_id": "sigma:106d7cbd-80ff-4985-b682-a7043e5acb72:000",
+   "rule_version": "r2026-07-01",
+   "conditions": [
+    {
+     "field_path": "event.dataset",
+     "operator": "equals",
+     "value": "auditd.log"
+    },
+    {
+     "field_path": "host.os_type",
+     "operator": "equals",
+     "value": "linux"
+    },
+    {
+     "field_path": "audit.record_type",
+     "operator": "equals",
+     "value": "SYSCALL",
+     "case_insensitive": true
+    },
+    {
+     "field_path": "audit.comm",
+     "operator": "equals",
+     "value": "insmod",
+     "case_insensitive": true
+    },
+    {
+     "field_path": "process.executable",
+     "operator": "equals",
+     "value": "/usr/bin/kmod",
+     "case_insensitive": true
+    }
+   ],
+   "technique_mappings": [
+    {
+     "stix_id": "attack-pattern--a1b52199-c8c5-438a-9ded-656f1d0888c6",
+     "object_type": "attack-pattern",
+     "attack_kb_version": "enterprise-attack-19.2",
+     "external_id": "T1547.006",
+     "mapping_basis": "Sigma rule 106d7cbd-80ff-4985-b682-a7043e5acb72 'Loading of Kernel Module via Insmod' (author: Pawel Mazur) tag attack.t1547.006",
+     "mapping_source": "sigma"
+    }
+   ],
+   "evidence_type": "behavioral",
+   "rule_source": "sigma:106d7cbd-80ff-4985-b682-a7043e5acb72",
+   "rule_family": "sigma:106d7cbd-80ff-4985-b682-a7043e5acb72"
+  },
+  {
    "rule_id": "sigma:1070db9a-3e5d-412e-8e7b-7183b616e1b3:000",
    "rule_version": "r2026-07-01",
    "conditions": [
@@ -76026,6 +76318,193 @@
    "rule_family": "sigma:15434e33-5027-4914-88d5-3d4145ec25a9"
   },
   {
+   "rule_id": "sigma:1543ae20-cbdf-4ec1-8d12-7664d667a825:000",
+   "rule_version": "r2026-07-01",
+   "conditions": [
+    {
+     "field_path": "event.dataset",
+     "operator": "equals",
+     "value": "auditd.log"
+    },
+    {
+     "field_path": "host.os_type",
+     "operator": "equals",
+     "value": "linux"
+    },
+    {
+     "field_path": "audit.record_type",
+     "operator": "equals",
+     "value": "EXECVE",
+     "case_insensitive": true
+    },
+    {
+     "field_path": "audit.a0",
+     "operator": "equals",
+     "value": "chmod",
+     "case_insensitive": true
+    },
+    {
+     "field_path": "audit.a1",
+     "operator": "equals",
+     "value": "777"
+    }
+   ],
+   "technique_mappings": [
+    {
+     "stix_id": "attack-pattern--a9d4b653-6915-42af-98b2-5758c4ceee56",
+     "object_type": "attack-pattern",
+     "attack_kb_version": "enterprise-attack-19.2",
+     "external_id": "T1059.004",
+     "mapping_basis": "Sigma rule 1543ae20-cbdf-4ec1-8d12-7664d667a825 'Suspicious Commands Linux' (author: Florian Roth (Nextron Systems)) tag attack.t1059.004",
+     "mapping_source": "sigma"
+    }
+   ],
+   "evidence_type": "behavioral",
+   "rule_source": "sigma:1543ae20-cbdf-4ec1-8d12-7664d667a825",
+   "rule_family": "sigma:1543ae20-cbdf-4ec1-8d12-7664d667a825"
+  },
+  {
+   "rule_id": "sigma:1543ae20-cbdf-4ec1-8d12-7664d667a825:001",
+   "rule_version": "r2026-07-01",
+   "conditions": [
+    {
+     "field_path": "event.dataset",
+     "operator": "equals",
+     "value": "auditd.log"
+    },
+    {
+     "field_path": "host.os_type",
+     "operator": "equals",
+     "value": "linux"
+    },
+    {
+     "field_path": "audit.record_type",
+     "operator": "equals",
+     "value": "EXECVE",
+     "case_insensitive": true
+    },
+    {
+     "field_path": "audit.a0",
+     "operator": "equals",
+     "value": "chmod",
+     "case_insensitive": true
+    },
+    {
+     "field_path": "audit.a1",
+     "operator": "equals",
+     "value": "u+s",
+     "case_insensitive": true
+    }
+   ],
+   "technique_mappings": [
+    {
+     "stix_id": "attack-pattern--a9d4b653-6915-42af-98b2-5758c4ceee56",
+     "object_type": "attack-pattern",
+     "attack_kb_version": "enterprise-attack-19.2",
+     "external_id": "T1059.004",
+     "mapping_basis": "Sigma rule 1543ae20-cbdf-4ec1-8d12-7664d667a825 'Suspicious Commands Linux' (author: Florian Roth (Nextron Systems)) tag attack.t1059.004",
+     "mapping_source": "sigma"
+    }
+   ],
+   "evidence_type": "behavioral",
+   "rule_source": "sigma:1543ae20-cbdf-4ec1-8d12-7664d667a825",
+   "rule_family": "sigma:1543ae20-cbdf-4ec1-8d12-7664d667a825"
+  },
+  {
+   "rule_id": "sigma:1543ae20-cbdf-4ec1-8d12-7664d667a825:002",
+   "rule_version": "r2026-07-01",
+   "conditions": [
+    {
+     "field_path": "event.dataset",
+     "operator": "equals",
+     "value": "auditd.log"
+    },
+    {
+     "field_path": "host.os_type",
+     "operator": "equals",
+     "value": "linux"
+    },
+    {
+     "field_path": "audit.record_type",
+     "operator": "equals",
+     "value": "EXECVE",
+     "case_insensitive": true
+    },
+    {
+     "field_path": "audit.a0",
+     "operator": "equals",
+     "value": "cp",
+     "case_insensitive": true
+    },
+    {
+     "field_path": "audit.a1",
+     "operator": "equals",
+     "value": "/bin/ksh",
+     "case_insensitive": true
+    }
+   ],
+   "technique_mappings": [
+    {
+     "stix_id": "attack-pattern--a9d4b653-6915-42af-98b2-5758c4ceee56",
+     "object_type": "attack-pattern",
+     "attack_kb_version": "enterprise-attack-19.2",
+     "external_id": "T1059.004",
+     "mapping_basis": "Sigma rule 1543ae20-cbdf-4ec1-8d12-7664d667a825 'Suspicious Commands Linux' (author: Florian Roth (Nextron Systems)) tag attack.t1059.004",
+     "mapping_source": "sigma"
+    }
+   ],
+   "evidence_type": "behavioral",
+   "rule_source": "sigma:1543ae20-cbdf-4ec1-8d12-7664d667a825",
+   "rule_family": "sigma:1543ae20-cbdf-4ec1-8d12-7664d667a825"
+  },
+  {
+   "rule_id": "sigma:1543ae20-cbdf-4ec1-8d12-7664d667a825:003",
+   "rule_version": "r2026-07-01",
+   "conditions": [
+    {
+     "field_path": "event.dataset",
+     "operator": "equals",
+     "value": "auditd.log"
+    },
+    {
+     "field_path": "host.os_type",
+     "operator": "equals",
+     "value": "linux"
+    },
+    {
+     "field_path": "audit.record_type",
+     "operator": "equals",
+     "value": "EXECVE",
+     "case_insensitive": true
+    },
+    {
+     "field_path": "audit.a0",
+     "operator": "equals",
+     "value": "cp",
+     "case_insensitive": true
+    },
+    {
+     "field_path": "audit.a1",
+     "operator": "equals",
+     "value": "/bin/sh",
+     "case_insensitive": true
+    }
+   ],
+   "technique_mappings": [
+    {
+     "stix_id": "attack-pattern--a9d4b653-6915-42af-98b2-5758c4ceee56",
+     "object_type": "attack-pattern",
+     "attack_kb_version": "enterprise-attack-19.2",
+     "external_id": "T1059.004",
+     "mapping_basis": "Sigma rule 1543ae20-cbdf-4ec1-8d12-7664d667a825 'Suspicious Commands Linux' (author: Florian Roth (Nextron Systems)) tag attack.t1059.004",
+     "mapping_source": "sigma"
+    }
+   ],
+   "evidence_type": "behavioral",
+   "rule_source": "sigma:1543ae20-cbdf-4ec1-8d12-7664d667a825",
+   "rule_family": "sigma:1543ae20-cbdf-4ec1-8d12-7664d667a825"
+  },
+  {
    "rule_id": "sigma:1547e27c-3974-43e2-a7d7-7f484fb928ec:000",
    "rule_version": "r2026-07-01",
    "conditions": [
@@ -89123,6 +89602,147 @@
    "evidence_type": "behavioral",
    "rule_source": "sigma:1af57a4b-460a-4738-9034-db68b880c665",
    "rule_family": "sigma:1af57a4b-460a-4738-9034-db68b880c665"
+  },
+  {
+   "rule_id": "sigma:1bac86ba-41aa-4f62-9d6b-405eac99b485:000",
+   "rule_version": "r2026-07-01",
+   "conditions": [
+    {
+     "field_path": "event.dataset",
+     "operator": "equals",
+     "value": "auditd.log"
+    },
+    {
+     "field_path": "host.os_type",
+     "operator": "equals",
+     "value": "linux"
+    },
+    {
+     "field_path": "audit.record_type",
+     "operator": "equals",
+     "value": "PATH",
+     "case_insensitive": true
+    },
+    {
+     "field_path": "audit.nametype",
+     "operator": "equals",
+     "value": "CREATE",
+     "case_insensitive": true
+    },
+    {
+     "field_path": "audit.name",
+     "operator": "startswith",
+     "value": "/usr/lib/systemd/system/",
+     "case_insensitive": true
+    }
+   ],
+   "technique_mappings": [
+    {
+     "stix_id": "attack-pattern--dfefe2ed-4389-4318-8762-f0272b350a1b",
+     "object_type": "attack-pattern",
+     "attack_kb_version": "enterprise-attack-19.2",
+     "external_id": "T1543.002",
+     "mapping_basis": "Sigma rule 1bac86ba-41aa-4f62-9d6b-405eac99b485 'Systemd Service Creation' (author: Pawel Mazur) tag attack.t1543.002",
+     "mapping_source": "sigma"
+    }
+   ],
+   "evidence_type": "behavioral",
+   "rule_source": "sigma:1bac86ba-41aa-4f62-9d6b-405eac99b485",
+   "rule_family": "sigma:1bac86ba-41aa-4f62-9d6b-405eac99b485"
+  },
+  {
+   "rule_id": "sigma:1bac86ba-41aa-4f62-9d6b-405eac99b485:001",
+   "rule_version": "r2026-07-01",
+   "conditions": [
+    {
+     "field_path": "event.dataset",
+     "operator": "equals",
+     "value": "auditd.log"
+    },
+    {
+     "field_path": "host.os_type",
+     "operator": "equals",
+     "value": "linux"
+    },
+    {
+     "field_path": "audit.record_type",
+     "operator": "equals",
+     "value": "PATH",
+     "case_insensitive": true
+    },
+    {
+     "field_path": "audit.nametype",
+     "operator": "equals",
+     "value": "CREATE",
+     "case_insensitive": true
+    },
+    {
+     "field_path": "audit.name",
+     "operator": "startswith",
+     "value": "/etc/systemd/system/",
+     "case_insensitive": true
+    }
+   ],
+   "technique_mappings": [
+    {
+     "stix_id": "attack-pattern--dfefe2ed-4389-4318-8762-f0272b350a1b",
+     "object_type": "attack-pattern",
+     "attack_kb_version": "enterprise-attack-19.2",
+     "external_id": "T1543.002",
+     "mapping_basis": "Sigma rule 1bac86ba-41aa-4f62-9d6b-405eac99b485 'Systemd Service Creation' (author: Pawel Mazur) tag attack.t1543.002",
+     "mapping_source": "sigma"
+    }
+   ],
+   "evidence_type": "behavioral",
+   "rule_source": "sigma:1bac86ba-41aa-4f62-9d6b-405eac99b485",
+   "rule_family": "sigma:1bac86ba-41aa-4f62-9d6b-405eac99b485"
+  },
+  {
+   "rule_id": "sigma:1bac86ba-41aa-4f62-9d6b-405eac99b485:002",
+   "rule_version": "r2026-07-01",
+   "conditions": [
+    {
+     "field_path": "event.dataset",
+     "operator": "equals",
+     "value": "auditd.log"
+    },
+    {
+     "field_path": "host.os_type",
+     "operator": "equals",
+     "value": "linux"
+    },
+    {
+     "field_path": "audit.record_type",
+     "operator": "equals",
+     "value": "PATH",
+     "case_insensitive": true
+    },
+    {
+     "field_path": "audit.nametype",
+     "operator": "equals",
+     "value": "CREATE",
+     "case_insensitive": true
+    },
+    {
+     "field_path": "audit.name",
+     "operator": "contains",
+     "value": "/.config/systemd/user/",
+     "case_insensitive": true
+    }
+   ],
+   "technique_mappings": [
+    {
+     "stix_id": "attack-pattern--dfefe2ed-4389-4318-8762-f0272b350a1b",
+     "object_type": "attack-pattern",
+     "attack_kb_version": "enterprise-attack-19.2",
+     "external_id": "T1543.002",
+     "mapping_basis": "Sigma rule 1bac86ba-41aa-4f62-9d6b-405eac99b485 'Systemd Service Creation' (author: Pawel Mazur) tag attack.t1543.002",
+     "mapping_source": "sigma"
+    }
+   ],
+   "evidence_type": "behavioral",
+   "rule_source": "sigma:1bac86ba-41aa-4f62-9d6b-405eac99b485",
+   "rule_family": "sigma:1bac86ba-41aa-4f62-9d6b-405eac99b485"
   },
   {
    "rule_id": "sigma:1bbf25b9-8038-4154-a50b-118f2a32be27:000",
@@ -143012,6 +143632,241 @@
    "evidence_type": "behavioral",
    "rule_source": "sigma:322ed9ec-fcab-4f67-9a34-e7c6aef43614",
    "rule_family": "sigma:322ed9ec-fcab-4f67-9a34-e7c6aef43614"
+  },
+  {
+   "rule_id": "sigma:323ff3f5-0013-4847-bbd4-250b5edb62cc:000",
+   "rule_version": "r2026-07-01",
+   "conditions": [
+    {
+     "field_path": "event.dataset",
+     "operator": "equals",
+     "value": "auditd.log"
+    },
+    {
+     "field_path": "host.os_type",
+     "operator": "equals",
+     "value": "linux"
+    },
+    {
+     "field_path": "audit.record_type",
+     "operator": "equals",
+     "value": "EXECVE",
+     "case_insensitive": true
+    },
+    {
+     "field_path": "audit.a0",
+     "operator": "equals",
+     "value": "iptables",
+     "case_insensitive": true
+    },
+    {
+     "field_path": "audit.a1",
+     "operator": "contains",
+     "value": "DROP",
+     "case_insensitive": true
+    }
+   ],
+   "technique_mappings": [
+    {
+     "stix_id": "attack-pattern--eec096b8-c207-43df-b6c1-11523861e452",
+     "object_type": "attack-pattern",
+     "attack_kb_version": "enterprise-attack-19.2",
+     "external_id": "T1686",
+     "mapping_basis": "Sigma rule 323ff3f5-0013-4847-bbd4-250b5edb62cc 'Modify System Firewall' (author: IAI) tag attack.t1686",
+     "mapping_source": "sigma"
+    }
+   ],
+   "evidence_type": "behavioral",
+   "rule_source": "sigma:323ff3f5-0013-4847-bbd4-250b5edb62cc",
+   "rule_family": "sigma:323ff3f5-0013-4847-bbd4-250b5edb62cc"
+  },
+  {
+   "rule_id": "sigma:323ff3f5-0013-4847-bbd4-250b5edb62cc:001",
+   "rule_version": "r2026-07-01",
+   "conditions": [
+    {
+     "field_path": "event.dataset",
+     "operator": "equals",
+     "value": "auditd.log"
+    },
+    {
+     "field_path": "host.os_type",
+     "operator": "equals",
+     "value": "linux"
+    },
+    {
+     "field_path": "audit.record_type",
+     "operator": "equals",
+     "value": "EXECVE",
+     "case_insensitive": true
+    },
+    {
+     "field_path": "audit.a0",
+     "operator": "equals",
+     "value": "firewall-cmd",
+     "case_insensitive": true
+    },
+    {
+     "field_path": "audit.a1",
+     "operator": "contains",
+     "value": "remove",
+     "case_insensitive": true
+    }
+   ],
+   "technique_mappings": [
+    {
+     "stix_id": "attack-pattern--eec096b8-c207-43df-b6c1-11523861e452",
+     "object_type": "attack-pattern",
+     "attack_kb_version": "enterprise-attack-19.2",
+     "external_id": "T1686",
+     "mapping_basis": "Sigma rule 323ff3f5-0013-4847-bbd4-250b5edb62cc 'Modify System Firewall' (author: IAI) tag attack.t1686",
+     "mapping_source": "sigma"
+    }
+   ],
+   "evidence_type": "behavioral",
+   "rule_source": "sigma:323ff3f5-0013-4847-bbd4-250b5edb62cc",
+   "rule_family": "sigma:323ff3f5-0013-4847-bbd4-250b5edb62cc"
+  },
+  {
+   "rule_id": "sigma:323ff3f5-0013-4847-bbd4-250b5edb62cc:002",
+   "rule_version": "r2026-07-01",
+   "conditions": [
+    {
+     "field_path": "event.dataset",
+     "operator": "equals",
+     "value": "auditd.log"
+    },
+    {
+     "field_path": "host.os_type",
+     "operator": "equals",
+     "value": "linux"
+    },
+    {
+     "field_path": "audit.record_type",
+     "operator": "equals",
+     "value": "EXECVE",
+     "case_insensitive": true
+    },
+    {
+     "field_path": "audit.a0",
+     "operator": "equals",
+     "value": "ufw",
+     "case_insensitive": true
+    },
+    {
+     "field_path": "audit.a1",
+     "operator": "contains",
+     "value": "delete",
+     "case_insensitive": true
+    }
+   ],
+   "technique_mappings": [
+    {
+     "stix_id": "attack-pattern--eec096b8-c207-43df-b6c1-11523861e452",
+     "object_type": "attack-pattern",
+     "attack_kb_version": "enterprise-attack-19.2",
+     "external_id": "T1686",
+     "mapping_basis": "Sigma rule 323ff3f5-0013-4847-bbd4-250b5edb62cc 'Modify System Firewall' (author: IAI) tag attack.t1686",
+     "mapping_source": "sigma"
+    }
+   ],
+   "evidence_type": "behavioral",
+   "rule_source": "sigma:323ff3f5-0013-4847-bbd4-250b5edb62cc",
+   "rule_family": "sigma:323ff3f5-0013-4847-bbd4-250b5edb62cc"
+  },
+  {
+   "rule_id": "sigma:323ff3f5-0013-4847-bbd4-250b5edb62cc:003",
+   "rule_version": "r2026-07-01",
+   "conditions": [
+    {
+     "field_path": "event.dataset",
+     "operator": "equals",
+     "value": "auditd.log"
+    },
+    {
+     "field_path": "host.os_type",
+     "operator": "equals",
+     "value": "linux"
+    },
+    {
+     "field_path": "audit.record_type",
+     "operator": "equals",
+     "value": "EXECVE",
+     "case_insensitive": true
+    },
+    {
+     "field_path": "audit.a0",
+     "operator": "equals",
+     "value": "nft",
+     "case_insensitive": true
+    },
+    {
+     "field_path": "audit.a1",
+     "operator": "contains",
+     "value": "delete",
+     "case_insensitive": true
+    }
+   ],
+   "technique_mappings": [
+    {
+     "stix_id": "attack-pattern--eec096b8-c207-43df-b6c1-11523861e452",
+     "object_type": "attack-pattern",
+     "attack_kb_version": "enterprise-attack-19.2",
+     "external_id": "T1686",
+     "mapping_basis": "Sigma rule 323ff3f5-0013-4847-bbd4-250b5edb62cc 'Modify System Firewall' (author: IAI) tag attack.t1686",
+     "mapping_source": "sigma"
+    }
+   ],
+   "evidence_type": "behavioral",
+   "rule_source": "sigma:323ff3f5-0013-4847-bbd4-250b5edb62cc",
+   "rule_family": "sigma:323ff3f5-0013-4847-bbd4-250b5edb62cc"
+  },
+  {
+   "rule_id": "sigma:323ff3f5-0013-4847-bbd4-250b5edb62cc:004",
+   "rule_version": "r2026-07-01",
+   "conditions": [
+    {
+     "field_path": "event.dataset",
+     "operator": "equals",
+     "value": "auditd.log"
+    },
+    {
+     "field_path": "host.os_type",
+     "operator": "equals",
+     "value": "linux"
+    },
+    {
+     "field_path": "audit.record_type",
+     "operator": "equals",
+     "value": "EXECVE",
+     "case_insensitive": true
+    },
+    {
+     "field_path": "audit.a0",
+     "operator": "equals",
+     "value": "nft",
+     "case_insensitive": true
+    },
+    {
+     "field_path": "audit.a1",
+     "operator": "contains",
+     "value": "flush",
+     "case_insensitive": true
+    }
+   ],
+   "technique_mappings": [
+    {
+     "stix_id": "attack-pattern--eec096b8-c207-43df-b6c1-11523861e452",
+     "object_type": "attack-pattern",
+     "attack_kb_version": "enterprise-attack-19.2",
+     "external_id": "T1686",
+     "mapping_basis": "Sigma rule 323ff3f5-0013-4847-bbd4-250b5edb62cc 'Modify System Firewall' (author: IAI) tag attack.t1686",
+     "mapping_source": "sigma"
+    }
+   ],
+   "evidence_type": "behavioral",
+   "rule_source": "sigma:323ff3f5-0013-4847-bbd4-250b5edb62cc",
+   "rule_family": "sigma:323ff3f5-0013-4847-bbd4-250b5edb62cc"
   },
   {
    "rule_id": "sigma:32410e29-5f94-4568-b6a3-d91a8adad863:000",
@@ -221198,6 +222053,190 @@
    "rule_family": "sigma:496a0e47-0a33-4dca-b009-9e6ca3591f39"
   },
   {
+   "rule_id": "sigma:49aae26c-450e-448b-911d-b3c13d178dfc:000",
+   "rule_version": "r2026-07-01",
+   "conditions": [
+    {
+     "field_path": "event.dataset",
+     "operator": "equals",
+     "value": "auditd.log"
+    },
+    {
+     "field_path": "host.os_type",
+     "operator": "equals",
+     "value": "linux"
+    },
+    {
+     "field_path": "audit.record_type",
+     "operator": "equals",
+     "value": "PATH",
+     "case_insensitive": true
+    },
+    {
+     "field_path": "audit.name",
+     "operator": "equals",
+     "value": "/etc/pam.d/system-auth",
+     "case_insensitive": true
+    }
+   ],
+   "technique_mappings": [
+    {
+     "stix_id": "attack-pattern--09a60ea3-a8d1-4ae5-976e-5783248b72a4",
+     "object_type": "attack-pattern",
+     "attack_kb_version": "enterprise-attack-19.2",
+     "external_id": "T1056.001",
+     "mapping_basis": "Sigma rule 49aae26c-450e-448b-911d-b3c13d178dfc 'Linux Keylogging with Pam.d' (author: Pawel Mazur) tag attack.t1056.001",
+     "mapping_source": "sigma"
+    },
+    {
+     "stix_id": "attack-pattern--0a3ead4e-6d47-4ccb-854c-a6a4f9d96b22",
+     "object_type": "attack-pattern",
+     "attack_kb_version": "enterprise-attack-19.2",
+     "external_id": "T1003",
+     "mapping_basis": "Sigma rule 49aae26c-450e-448b-911d-b3c13d178dfc 'Linux Keylogging with Pam.d' (author: Pawel Mazur) tag attack.t1003",
+     "mapping_source": "sigma"
+    }
+   ],
+   "evidence_type": "behavioral",
+   "rule_source": "sigma:49aae26c-450e-448b-911d-b3c13d178dfc",
+   "rule_family": "sigma:49aae26c-450e-448b-911d-b3c13d178dfc"
+  },
+  {
+   "rule_id": "sigma:49aae26c-450e-448b-911d-b3c13d178dfc:001",
+   "rule_version": "r2026-07-01",
+   "conditions": [
+    {
+     "field_path": "event.dataset",
+     "operator": "equals",
+     "value": "auditd.log"
+    },
+    {
+     "field_path": "host.os_type",
+     "operator": "equals",
+     "value": "linux"
+    },
+    {
+     "field_path": "audit.record_type",
+     "operator": "equals",
+     "value": "PATH",
+     "case_insensitive": true
+    },
+    {
+     "field_path": "audit.name",
+     "operator": "equals",
+     "value": "/etc/pam.d/password-auth",
+     "case_insensitive": true
+    }
+   ],
+   "technique_mappings": [
+    {
+     "stix_id": "attack-pattern--09a60ea3-a8d1-4ae5-976e-5783248b72a4",
+     "object_type": "attack-pattern",
+     "attack_kb_version": "enterprise-attack-19.2",
+     "external_id": "T1056.001",
+     "mapping_basis": "Sigma rule 49aae26c-450e-448b-911d-b3c13d178dfc 'Linux Keylogging with Pam.d' (author: Pawel Mazur) tag attack.t1056.001",
+     "mapping_source": "sigma"
+    },
+    {
+     "stix_id": "attack-pattern--0a3ead4e-6d47-4ccb-854c-a6a4f9d96b22",
+     "object_type": "attack-pattern",
+     "attack_kb_version": "enterprise-attack-19.2",
+     "external_id": "T1003",
+     "mapping_basis": "Sigma rule 49aae26c-450e-448b-911d-b3c13d178dfc 'Linux Keylogging with Pam.d' (author: Pawel Mazur) tag attack.t1003",
+     "mapping_source": "sigma"
+    }
+   ],
+   "evidence_type": "behavioral",
+   "rule_source": "sigma:49aae26c-450e-448b-911d-b3c13d178dfc",
+   "rule_family": "sigma:49aae26c-450e-448b-911d-b3c13d178dfc"
+  },
+  {
+   "rule_id": "sigma:49aae26c-450e-448b-911d-b3c13d178dfc:002",
+   "rule_version": "r2026-07-01",
+   "conditions": [
+    {
+     "field_path": "event.dataset",
+     "operator": "equals",
+     "value": "auditd.log"
+    },
+    {
+     "field_path": "host.os_type",
+     "operator": "equals",
+     "value": "linux"
+    },
+    {
+     "field_path": "audit.record_type",
+     "operator": "equals",
+     "value": "TTY",
+     "case_insensitive": true
+    }
+   ],
+   "technique_mappings": [
+    {
+     "stix_id": "attack-pattern--09a60ea3-a8d1-4ae5-976e-5783248b72a4",
+     "object_type": "attack-pattern",
+     "attack_kb_version": "enterprise-attack-19.2",
+     "external_id": "T1056.001",
+     "mapping_basis": "Sigma rule 49aae26c-450e-448b-911d-b3c13d178dfc 'Linux Keylogging with Pam.d' (author: Pawel Mazur) tag attack.t1056.001",
+     "mapping_source": "sigma"
+    },
+    {
+     "stix_id": "attack-pattern--0a3ead4e-6d47-4ccb-854c-a6a4f9d96b22",
+     "object_type": "attack-pattern",
+     "attack_kb_version": "enterprise-attack-19.2",
+     "external_id": "T1003",
+     "mapping_basis": "Sigma rule 49aae26c-450e-448b-911d-b3c13d178dfc 'Linux Keylogging with Pam.d' (author: Pawel Mazur) tag attack.t1003",
+     "mapping_source": "sigma"
+    }
+   ],
+   "evidence_type": "behavioral",
+   "rule_source": "sigma:49aae26c-450e-448b-911d-b3c13d178dfc",
+   "rule_family": "sigma:49aae26c-450e-448b-911d-b3c13d178dfc"
+  },
+  {
+   "rule_id": "sigma:49aae26c-450e-448b-911d-b3c13d178dfc:003",
+   "rule_version": "r2026-07-01",
+   "conditions": [
+    {
+     "field_path": "event.dataset",
+     "operator": "equals",
+     "value": "auditd.log"
+    },
+    {
+     "field_path": "host.os_type",
+     "operator": "equals",
+     "value": "linux"
+    },
+    {
+     "field_path": "audit.record_type",
+     "operator": "equals",
+     "value": "USER_TTY",
+     "case_insensitive": true
+    }
+   ],
+   "technique_mappings": [
+    {
+     "stix_id": "attack-pattern--09a60ea3-a8d1-4ae5-976e-5783248b72a4",
+     "object_type": "attack-pattern",
+     "attack_kb_version": "enterprise-attack-19.2",
+     "external_id": "T1056.001",
+     "mapping_basis": "Sigma rule 49aae26c-450e-448b-911d-b3c13d178dfc 'Linux Keylogging with Pam.d' (author: Pawel Mazur) tag attack.t1056.001",
+     "mapping_source": "sigma"
+    },
+    {
+     "stix_id": "attack-pattern--0a3ead4e-6d47-4ccb-854c-a6a4f9d96b22",
+     "object_type": "attack-pattern",
+     "attack_kb_version": "enterprise-attack-19.2",
+     "external_id": "T1003",
+     "mapping_basis": "Sigma rule 49aae26c-450e-448b-911d-b3c13d178dfc 'Linux Keylogging with Pam.d' (author: Pawel Mazur) tag attack.t1003",
+     "mapping_source": "sigma"
+    }
+   ],
+   "evidence_type": "behavioral",
+   "rule_source": "sigma:49aae26c-450e-448b-911d-b3c13d178dfc",
+   "rule_family": "sigma:49aae26c-450e-448b-911d-b3c13d178dfc"
+  },
+  {
    "rule_id": "sigma:49be8799-7b4d-4fda-ad23-cafbefdebbc5:000",
    "rule_version": "r2026-07-01",
    "conditions": [
@@ -229315,6 +230354,47 @@
    "evidence_type": "behavioral",
    "rule_source": "sigma:4b09c71e-4269-4111-9cdd-107d8867f0cc",
    "rule_family": "sigma:4b09c71e-4269-4111-9cdd-107d8867f0cc"
+  },
+  {
+   "rule_id": "sigma:4b3cb710-5e83-4715-8c45-8b2b5b3e5751:000",
+   "rule_version": "r2026-07-01",
+   "conditions": [
+    {
+     "field_path": "event.dataset",
+     "operator": "equals",
+     "value": "auditd.log"
+    },
+    {
+     "field_path": "host.os_type",
+     "operator": "equals",
+     "value": "linux"
+    },
+    {
+     "field_path": "audit.record_type",
+     "operator": "equals",
+     "value": "PATH",
+     "case_insensitive": true
+    },
+    {
+     "field_path": "audit.name",
+     "operator": "equals",
+     "value": "/etc/ld.so.preload",
+     "case_insensitive": true
+    }
+   ],
+   "technique_mappings": [
+    {
+     "stix_id": "attack-pattern--633a100c-b2c9-41bf-9be5-905c1b16c825",
+     "object_type": "attack-pattern",
+     "attack_kb_version": "enterprise-attack-19.2",
+     "external_id": "T1574.006",
+     "mapping_basis": "Sigma rule 4b3cb710-5e83-4715-8c45-8b2b5b3e5751 'Modification of ld.so.preload' (author: E.M. Anhaus (originally from Atomic Blue Detections, Tony Lambert), oscd.community) tag attack.t1574.006",
+     "mapping_source": "sigma"
+    }
+   ],
+   "evidence_type": "behavioral",
+   "rule_source": "sigma:4b3cb710-5e83-4715-8c45-8b2b5b3e5751",
+   "rule_family": "sigma:4b3cb710-5e83-4715-8c45-8b2b5b3e5751"
   },
   {
    "rule_id": "sigma:4b60e6f2-bf39-47b4-b4ea-398e33cfe253:000",
@@ -250593,6 +251673,129 @@
    "evidence_type": "behavioral",
    "rule_source": "sigma:52ff7941-8211-46f9-84f8-9903efb7077d",
    "rule_family": "sigma:52ff7941-8211-46f9-84f8-9903efb7077d"
+  },
+  {
+   "rule_id": "sigma:53059bc0-1472-438b-956a-7508a94a91f0:000",
+   "rule_version": "r2026-07-01",
+   "conditions": [
+    {
+     "field_path": "event.dataset",
+     "operator": "equals",
+     "value": "auditd.log"
+    },
+    {
+     "field_path": "host.os_type",
+     "operator": "equals",
+     "value": "linux"
+    },
+    {
+     "field_path": "audit.record_type",
+     "operator": "equals",
+     "value": "SERVICE_STOP",
+     "case_insensitive": true
+    },
+    {
+     "field_path": "audit.unit",
+     "operator": "equals",
+     "value": "firewalld",
+     "case_insensitive": true
+    }
+   ],
+   "technique_mappings": [
+    {
+     "stix_id": "attack-pattern--eec096b8-c207-43df-b6c1-11523861e452",
+     "object_type": "attack-pattern",
+     "attack_kb_version": "enterprise-attack-19.2",
+     "external_id": "T1686",
+     "mapping_basis": "Sigma rule 53059bc0-1472-438b-956a-7508a94a91f0 'Disable System Firewall' (author: Pawel Mazur) tag attack.t1686",
+     "mapping_source": "sigma"
+    }
+   ],
+   "evidence_type": "behavioral",
+   "rule_source": "sigma:53059bc0-1472-438b-956a-7508a94a91f0",
+   "rule_family": "sigma:53059bc0-1472-438b-956a-7508a94a91f0"
+  },
+  {
+   "rule_id": "sigma:53059bc0-1472-438b-956a-7508a94a91f0:001",
+   "rule_version": "r2026-07-01",
+   "conditions": [
+    {
+     "field_path": "event.dataset",
+     "operator": "equals",
+     "value": "auditd.log"
+    },
+    {
+     "field_path": "host.os_type",
+     "operator": "equals",
+     "value": "linux"
+    },
+    {
+     "field_path": "audit.record_type",
+     "operator": "equals",
+     "value": "SERVICE_STOP",
+     "case_insensitive": true
+    },
+    {
+     "field_path": "audit.unit",
+     "operator": "equals",
+     "value": "iptables",
+     "case_insensitive": true
+    }
+   ],
+   "technique_mappings": [
+    {
+     "stix_id": "attack-pattern--eec096b8-c207-43df-b6c1-11523861e452",
+     "object_type": "attack-pattern",
+     "attack_kb_version": "enterprise-attack-19.2",
+     "external_id": "T1686",
+     "mapping_basis": "Sigma rule 53059bc0-1472-438b-956a-7508a94a91f0 'Disable System Firewall' (author: Pawel Mazur) tag attack.t1686",
+     "mapping_source": "sigma"
+    }
+   ],
+   "evidence_type": "behavioral",
+   "rule_source": "sigma:53059bc0-1472-438b-956a-7508a94a91f0",
+   "rule_family": "sigma:53059bc0-1472-438b-956a-7508a94a91f0"
+  },
+  {
+   "rule_id": "sigma:53059bc0-1472-438b-956a-7508a94a91f0:002",
+   "rule_version": "r2026-07-01",
+   "conditions": [
+    {
+     "field_path": "event.dataset",
+     "operator": "equals",
+     "value": "auditd.log"
+    },
+    {
+     "field_path": "host.os_type",
+     "operator": "equals",
+     "value": "linux"
+    },
+    {
+     "field_path": "audit.record_type",
+     "operator": "equals",
+     "value": "SERVICE_STOP",
+     "case_insensitive": true
+    },
+    {
+     "field_path": "audit.unit",
+     "operator": "equals",
+     "value": "ufw",
+     "case_insensitive": true
+    }
+   ],
+   "technique_mappings": [
+    {
+     "stix_id": "attack-pattern--eec096b8-c207-43df-b6c1-11523861e452",
+     "object_type": "attack-pattern",
+     "attack_kb_version": "enterprise-attack-19.2",
+     "external_id": "T1686",
+     "mapping_basis": "Sigma rule 53059bc0-1472-438b-956a-7508a94a91f0 'Disable System Firewall' (author: Pawel Mazur) tag attack.t1686",
+     "mapping_source": "sigma"
+    }
+   ],
+   "evidence_type": "behavioral",
+   "rule_source": "sigma:53059bc0-1472-438b-956a-7508a94a91f0",
+   "rule_family": "sigma:53059bc0-1472-438b-956a-7508a94a91f0"
   },
   {
    "rule_id": "sigma:53330955-dc52-487f-a3a2-da24dcff99b5:000",
@@ -341511,6 +342714,82 @@
    "rule_family": "sigma:758ff488-18d5-4cbe-8ec4-02b6285a434f"
   },
   {
+   "rule_id": "sigma:759d0d51-bc99-4b5e-9add-8f5b2c8e7512:000",
+   "rule_version": "r2026-07-01",
+   "conditions": [
+    {
+     "field_path": "event.dataset",
+     "operator": "equals",
+     "value": "auditd.log"
+    },
+    {
+     "field_path": "host.os_type",
+     "operator": "equals",
+     "value": "linux"
+    },
+    {
+     "field_path": "audit.record_type",
+     "operator": "equals",
+     "value": "SYSCALL",
+     "case_insensitive": true
+    },
+    {
+     "field_path": "process.executable",
+     "operator": "endswith",
+     "value": "/useradd",
+     "case_insensitive": true
+    }
+   ],
+   "technique_mappings": [
+    {
+     "stix_id": "attack-pattern--635cbe30-392d-4e27-978e-66774357c762",
+     "object_type": "attack-pattern",
+     "attack_kb_version": "enterprise-attack-19.2",
+     "external_id": "T1136.001",
+     "mapping_basis": "Sigma rule 759d0d51-bc99-4b5e-9add-8f5b2c8e7512 'Creation Of An User Account' (author: Marie Euler, Pawel Mazur) tag attack.t1136.001",
+     "mapping_source": "sigma"
+    }
+   ],
+   "evidence_type": "behavioral",
+   "rule_source": "sigma:759d0d51-bc99-4b5e-9add-8f5b2c8e7512",
+   "rule_family": "sigma:759d0d51-bc99-4b5e-9add-8f5b2c8e7512"
+  },
+  {
+   "rule_id": "sigma:759d0d51-bc99-4b5e-9add-8f5b2c8e7512:001",
+   "rule_version": "r2026-07-01",
+   "conditions": [
+    {
+     "field_path": "event.dataset",
+     "operator": "equals",
+     "value": "auditd.log"
+    },
+    {
+     "field_path": "host.os_type",
+     "operator": "equals",
+     "value": "linux"
+    },
+    {
+     "field_path": "audit.record_type",
+     "operator": "equals",
+     "value": "ADD_USER",
+     "case_insensitive": true
+    }
+   ],
+   "technique_mappings": [
+    {
+     "stix_id": "attack-pattern--635cbe30-392d-4e27-978e-66774357c762",
+     "object_type": "attack-pattern",
+     "attack_kb_version": "enterprise-attack-19.2",
+     "external_id": "T1136.001",
+     "mapping_basis": "Sigma rule 759d0d51-bc99-4b5e-9add-8f5b2c8e7512 'Creation Of An User Account' (author: Marie Euler, Pawel Mazur) tag attack.t1136.001",
+     "mapping_source": "sigma"
+    }
+   ],
+   "evidence_type": "behavioral",
+   "rule_source": "sigma:759d0d51-bc99-4b5e-9add-8f5b2c8e7512",
+   "rule_family": "sigma:759d0d51-bc99-4b5e-9add-8f5b2c8e7512"
+  },
+  {
    "rule_id": "sigma:75bf09fa-1dd7-4d18-9af9-dd9e492562eb:000",
    "rule_version": "r2026-07-01",
    "conditions": [
@@ -367007,6 +368286,937 @@
    "evidence_type": "behavioral",
    "rule_source": "sigma:805c55d9-31e6-4846-9878-c34c75054fe9",
    "rule_family": "sigma:805c55d9-31e6-4846-9878-c34c75054fe9"
+  },
+  {
+   "rule_id": "sigma:808146b2-9332-4d78-9416-d7e47012d83d:000",
+   "rule_version": "r2026-07-01",
+   "conditions": [
+    {
+     "field_path": "event.dataset",
+     "operator": "equals",
+     "value": "auditd.log"
+    },
+    {
+     "field_path": "host.os_type",
+     "operator": "equals",
+     "value": "linux"
+    },
+    {
+     "field_path": "audit.record_type",
+     "operator": "equals",
+     "value": "PATH",
+     "case_insensitive": true
+    },
+    {
+     "field_path": "audit.name",
+     "operator": "equals",
+     "value": "/var/run/aepmonend.pid",
+     "case_insensitive": true
+    }
+   ],
+   "technique_mappings": [
+    {
+     "stix_id": "attack-pattern--391d824f-0ef1-47a0-b0ee-c59a75e27670",
+     "object_type": "attack-pattern",
+     "attack_kb_version": "enterprise-attack-19.2",
+     "external_id": "T1106",
+     "mapping_basis": "Sigma rule 808146b2-9332-4d78-9416-d7e47012d83d 'BPFDoor Abnormal Process ID or Lock File Accessed' (author: Rafal Piasecki) tag attack.t1106",
+     "mapping_source": "sigma"
+    },
+    {
+     "stix_id": "attack-pattern--7385dfaf-6886-4229-9ecd-6fd678040830",
+     "object_type": "attack-pattern",
+     "attack_kb_version": "enterprise-attack-19.2",
+     "external_id": "T1059",
+     "mapping_basis": "Sigma rule 808146b2-9332-4d78-9416-d7e47012d83d 'BPFDoor Abnormal Process ID or Lock File Accessed' (author: Rafal Piasecki) tag attack.t1059",
+     "mapping_source": "sigma"
+    }
+   ],
+   "evidence_type": "behavioral",
+   "rule_source": "sigma:808146b2-9332-4d78-9416-d7e47012d83d",
+   "rule_family": "sigma:808146b2-9332-4d78-9416-d7e47012d83d"
+  },
+  {
+   "rule_id": "sigma:808146b2-9332-4d78-9416-d7e47012d83d:001",
+   "rule_version": "r2026-07-01",
+   "conditions": [
+    {
+     "field_path": "event.dataset",
+     "operator": "equals",
+     "value": "auditd.log"
+    },
+    {
+     "field_path": "host.os_type",
+     "operator": "equals",
+     "value": "linux"
+    },
+    {
+     "field_path": "audit.record_type",
+     "operator": "equals",
+     "value": "PATH",
+     "case_insensitive": true
+    },
+    {
+     "field_path": "audit.name",
+     "operator": "equals",
+     "value": "/var/run/auditd.lock",
+     "case_insensitive": true
+    }
+   ],
+   "technique_mappings": [
+    {
+     "stix_id": "attack-pattern--391d824f-0ef1-47a0-b0ee-c59a75e27670",
+     "object_type": "attack-pattern",
+     "attack_kb_version": "enterprise-attack-19.2",
+     "external_id": "T1106",
+     "mapping_basis": "Sigma rule 808146b2-9332-4d78-9416-d7e47012d83d 'BPFDoor Abnormal Process ID or Lock File Accessed' (author: Rafal Piasecki) tag attack.t1106",
+     "mapping_source": "sigma"
+    },
+    {
+     "stix_id": "attack-pattern--7385dfaf-6886-4229-9ecd-6fd678040830",
+     "object_type": "attack-pattern",
+     "attack_kb_version": "enterprise-attack-19.2",
+     "external_id": "T1059",
+     "mapping_basis": "Sigma rule 808146b2-9332-4d78-9416-d7e47012d83d 'BPFDoor Abnormal Process ID or Lock File Accessed' (author: Rafal Piasecki) tag attack.t1059",
+     "mapping_source": "sigma"
+    }
+   ],
+   "evidence_type": "behavioral",
+   "rule_source": "sigma:808146b2-9332-4d78-9416-d7e47012d83d",
+   "rule_family": "sigma:808146b2-9332-4d78-9416-d7e47012d83d"
+  },
+  {
+   "rule_id": "sigma:808146b2-9332-4d78-9416-d7e47012d83d:002",
+   "rule_version": "r2026-07-01",
+   "conditions": [
+    {
+     "field_path": "event.dataset",
+     "operator": "equals",
+     "value": "auditd.log"
+    },
+    {
+     "field_path": "host.os_type",
+     "operator": "equals",
+     "value": "linux"
+    },
+    {
+     "field_path": "audit.record_type",
+     "operator": "equals",
+     "value": "PATH",
+     "case_insensitive": true
+    },
+    {
+     "field_path": "audit.name",
+     "operator": "equals",
+     "value": "/var/run/cma.lock",
+     "case_insensitive": true
+    }
+   ],
+   "technique_mappings": [
+    {
+     "stix_id": "attack-pattern--391d824f-0ef1-47a0-b0ee-c59a75e27670",
+     "object_type": "attack-pattern",
+     "attack_kb_version": "enterprise-attack-19.2",
+     "external_id": "T1106",
+     "mapping_basis": "Sigma rule 808146b2-9332-4d78-9416-d7e47012d83d 'BPFDoor Abnormal Process ID or Lock File Accessed' (author: Rafal Piasecki) tag attack.t1106",
+     "mapping_source": "sigma"
+    },
+    {
+     "stix_id": "attack-pattern--7385dfaf-6886-4229-9ecd-6fd678040830",
+     "object_type": "attack-pattern",
+     "attack_kb_version": "enterprise-attack-19.2",
+     "external_id": "T1059",
+     "mapping_basis": "Sigma rule 808146b2-9332-4d78-9416-d7e47012d83d 'BPFDoor Abnormal Process ID or Lock File Accessed' (author: Rafal Piasecki) tag attack.t1059",
+     "mapping_source": "sigma"
+    }
+   ],
+   "evidence_type": "behavioral",
+   "rule_source": "sigma:808146b2-9332-4d78-9416-d7e47012d83d",
+   "rule_family": "sigma:808146b2-9332-4d78-9416-d7e47012d83d"
+  },
+  {
+   "rule_id": "sigma:808146b2-9332-4d78-9416-d7e47012d83d:003",
+   "rule_version": "r2026-07-01",
+   "conditions": [
+    {
+     "field_path": "event.dataset",
+     "operator": "equals",
+     "value": "auditd.log"
+    },
+    {
+     "field_path": "host.os_type",
+     "operator": "equals",
+     "value": "linux"
+    },
+    {
+     "field_path": "audit.record_type",
+     "operator": "equals",
+     "value": "PATH",
+     "case_insensitive": true
+    },
+    {
+     "field_path": "audit.name",
+     "operator": "equals",
+     "value": "/var/run/console-kit.pid",
+     "case_insensitive": true
+    }
+   ],
+   "technique_mappings": [
+    {
+     "stix_id": "attack-pattern--391d824f-0ef1-47a0-b0ee-c59a75e27670",
+     "object_type": "attack-pattern",
+     "attack_kb_version": "enterprise-attack-19.2",
+     "external_id": "T1106",
+     "mapping_basis": "Sigma rule 808146b2-9332-4d78-9416-d7e47012d83d 'BPFDoor Abnormal Process ID or Lock File Accessed' (author: Rafal Piasecki) tag attack.t1106",
+     "mapping_source": "sigma"
+    },
+    {
+     "stix_id": "attack-pattern--7385dfaf-6886-4229-9ecd-6fd678040830",
+     "object_type": "attack-pattern",
+     "attack_kb_version": "enterprise-attack-19.2",
+     "external_id": "T1059",
+     "mapping_basis": "Sigma rule 808146b2-9332-4d78-9416-d7e47012d83d 'BPFDoor Abnormal Process ID or Lock File Accessed' (author: Rafal Piasecki) tag attack.t1059",
+     "mapping_source": "sigma"
+    }
+   ],
+   "evidence_type": "behavioral",
+   "rule_source": "sigma:808146b2-9332-4d78-9416-d7e47012d83d",
+   "rule_family": "sigma:808146b2-9332-4d78-9416-d7e47012d83d"
+  },
+  {
+   "rule_id": "sigma:808146b2-9332-4d78-9416-d7e47012d83d:004",
+   "rule_version": "r2026-07-01",
+   "conditions": [
+    {
+     "field_path": "event.dataset",
+     "operator": "equals",
+     "value": "auditd.log"
+    },
+    {
+     "field_path": "host.os_type",
+     "operator": "equals",
+     "value": "linux"
+    },
+    {
+     "field_path": "audit.record_type",
+     "operator": "equals",
+     "value": "PATH",
+     "case_insensitive": true
+    },
+    {
+     "field_path": "audit.name",
+     "operator": "equals",
+     "value": "/var/run/consolekit.pid",
+     "case_insensitive": true
+    }
+   ],
+   "technique_mappings": [
+    {
+     "stix_id": "attack-pattern--391d824f-0ef1-47a0-b0ee-c59a75e27670",
+     "object_type": "attack-pattern",
+     "attack_kb_version": "enterprise-attack-19.2",
+     "external_id": "T1106",
+     "mapping_basis": "Sigma rule 808146b2-9332-4d78-9416-d7e47012d83d 'BPFDoor Abnormal Process ID or Lock File Accessed' (author: Rafal Piasecki) tag attack.t1106",
+     "mapping_source": "sigma"
+    },
+    {
+     "stix_id": "attack-pattern--7385dfaf-6886-4229-9ecd-6fd678040830",
+     "object_type": "attack-pattern",
+     "attack_kb_version": "enterprise-attack-19.2",
+     "external_id": "T1059",
+     "mapping_basis": "Sigma rule 808146b2-9332-4d78-9416-d7e47012d83d 'BPFDoor Abnormal Process ID or Lock File Accessed' (author: Rafal Piasecki) tag attack.t1059",
+     "mapping_source": "sigma"
+    }
+   ],
+   "evidence_type": "behavioral",
+   "rule_source": "sigma:808146b2-9332-4d78-9416-d7e47012d83d",
+   "rule_family": "sigma:808146b2-9332-4d78-9416-d7e47012d83d"
+  },
+  {
+   "rule_id": "sigma:808146b2-9332-4d78-9416-d7e47012d83d:005",
+   "rule_version": "r2026-07-01",
+   "conditions": [
+    {
+     "field_path": "event.dataset",
+     "operator": "equals",
+     "value": "auditd.log"
+    },
+    {
+     "field_path": "host.os_type",
+     "operator": "equals",
+     "value": "linux"
+    },
+    {
+     "field_path": "audit.record_type",
+     "operator": "equals",
+     "value": "PATH",
+     "case_insensitive": true
+    },
+    {
+     "field_path": "audit.name",
+     "operator": "equals",
+     "value": "/var/run/daemon.pid",
+     "case_insensitive": true
+    }
+   ],
+   "technique_mappings": [
+    {
+     "stix_id": "attack-pattern--391d824f-0ef1-47a0-b0ee-c59a75e27670",
+     "object_type": "attack-pattern",
+     "attack_kb_version": "enterprise-attack-19.2",
+     "external_id": "T1106",
+     "mapping_basis": "Sigma rule 808146b2-9332-4d78-9416-d7e47012d83d 'BPFDoor Abnormal Process ID or Lock File Accessed' (author: Rafal Piasecki) tag attack.t1106",
+     "mapping_source": "sigma"
+    },
+    {
+     "stix_id": "attack-pattern--7385dfaf-6886-4229-9ecd-6fd678040830",
+     "object_type": "attack-pattern",
+     "attack_kb_version": "enterprise-attack-19.2",
+     "external_id": "T1059",
+     "mapping_basis": "Sigma rule 808146b2-9332-4d78-9416-d7e47012d83d 'BPFDoor Abnormal Process ID or Lock File Accessed' (author: Rafal Piasecki) tag attack.t1059",
+     "mapping_source": "sigma"
+    }
+   ],
+   "evidence_type": "behavioral",
+   "rule_source": "sigma:808146b2-9332-4d78-9416-d7e47012d83d",
+   "rule_family": "sigma:808146b2-9332-4d78-9416-d7e47012d83d"
+  },
+  {
+   "rule_id": "sigma:808146b2-9332-4d78-9416-d7e47012d83d:006",
+   "rule_version": "r2026-07-01",
+   "conditions": [
+    {
+     "field_path": "event.dataset",
+     "operator": "equals",
+     "value": "auditd.log"
+    },
+    {
+     "field_path": "host.os_type",
+     "operator": "equals",
+     "value": "linux"
+    },
+    {
+     "field_path": "audit.record_type",
+     "operator": "equals",
+     "value": "PATH",
+     "case_insensitive": true
+    },
+    {
+     "field_path": "audit.name",
+     "operator": "equals",
+     "value": "/var/run/hald-addon.pid",
+     "case_insensitive": true
+    }
+   ],
+   "technique_mappings": [
+    {
+     "stix_id": "attack-pattern--391d824f-0ef1-47a0-b0ee-c59a75e27670",
+     "object_type": "attack-pattern",
+     "attack_kb_version": "enterprise-attack-19.2",
+     "external_id": "T1106",
+     "mapping_basis": "Sigma rule 808146b2-9332-4d78-9416-d7e47012d83d 'BPFDoor Abnormal Process ID or Lock File Accessed' (author: Rafal Piasecki) tag attack.t1106",
+     "mapping_source": "sigma"
+    },
+    {
+     "stix_id": "attack-pattern--7385dfaf-6886-4229-9ecd-6fd678040830",
+     "object_type": "attack-pattern",
+     "attack_kb_version": "enterprise-attack-19.2",
+     "external_id": "T1059",
+     "mapping_basis": "Sigma rule 808146b2-9332-4d78-9416-d7e47012d83d 'BPFDoor Abnormal Process ID or Lock File Accessed' (author: Rafal Piasecki) tag attack.t1059",
+     "mapping_source": "sigma"
+    }
+   ],
+   "evidence_type": "behavioral",
+   "rule_source": "sigma:808146b2-9332-4d78-9416-d7e47012d83d",
+   "rule_family": "sigma:808146b2-9332-4d78-9416-d7e47012d83d"
+  },
+  {
+   "rule_id": "sigma:808146b2-9332-4d78-9416-d7e47012d83d:007",
+   "rule_version": "r2026-07-01",
+   "conditions": [
+    {
+     "field_path": "event.dataset",
+     "operator": "equals",
+     "value": "auditd.log"
+    },
+    {
+     "field_path": "host.os_type",
+     "operator": "equals",
+     "value": "linux"
+    },
+    {
+     "field_path": "audit.record_type",
+     "operator": "equals",
+     "value": "PATH",
+     "case_insensitive": true
+    },
+    {
+     "field_path": "audit.name",
+     "operator": "equals",
+     "value": "/var/run/hald-smartd.pid",
+     "case_insensitive": true
+    }
+   ],
+   "technique_mappings": [
+    {
+     "stix_id": "attack-pattern--391d824f-0ef1-47a0-b0ee-c59a75e27670",
+     "object_type": "attack-pattern",
+     "attack_kb_version": "enterprise-attack-19.2",
+     "external_id": "T1106",
+     "mapping_basis": "Sigma rule 808146b2-9332-4d78-9416-d7e47012d83d 'BPFDoor Abnormal Process ID or Lock File Accessed' (author: Rafal Piasecki) tag attack.t1106",
+     "mapping_source": "sigma"
+    },
+    {
+     "stix_id": "attack-pattern--7385dfaf-6886-4229-9ecd-6fd678040830",
+     "object_type": "attack-pattern",
+     "attack_kb_version": "enterprise-attack-19.2",
+     "external_id": "T1059",
+     "mapping_basis": "Sigma rule 808146b2-9332-4d78-9416-d7e47012d83d 'BPFDoor Abnormal Process ID or Lock File Accessed' (author: Rafal Piasecki) tag attack.t1059",
+     "mapping_source": "sigma"
+    }
+   ],
+   "evidence_type": "behavioral",
+   "rule_source": "sigma:808146b2-9332-4d78-9416-d7e47012d83d",
+   "rule_family": "sigma:808146b2-9332-4d78-9416-d7e47012d83d"
+  },
+  {
+   "rule_id": "sigma:808146b2-9332-4d78-9416-d7e47012d83d:008",
+   "rule_version": "r2026-07-01",
+   "conditions": [
+    {
+     "field_path": "event.dataset",
+     "operator": "equals",
+     "value": "auditd.log"
+    },
+    {
+     "field_path": "host.os_type",
+     "operator": "equals",
+     "value": "linux"
+    },
+    {
+     "field_path": "audit.record_type",
+     "operator": "equals",
+     "value": "PATH",
+     "case_insensitive": true
+    },
+    {
+     "field_path": "audit.name",
+     "operator": "equals",
+     "value": "/var/run/haldrund.pid",
+     "case_insensitive": true
+    }
+   ],
+   "technique_mappings": [
+    {
+     "stix_id": "attack-pattern--391d824f-0ef1-47a0-b0ee-c59a75e27670",
+     "object_type": "attack-pattern",
+     "attack_kb_version": "enterprise-attack-19.2",
+     "external_id": "T1106",
+     "mapping_basis": "Sigma rule 808146b2-9332-4d78-9416-d7e47012d83d 'BPFDoor Abnormal Process ID or Lock File Accessed' (author: Rafal Piasecki) tag attack.t1106",
+     "mapping_source": "sigma"
+    },
+    {
+     "stix_id": "attack-pattern--7385dfaf-6886-4229-9ecd-6fd678040830",
+     "object_type": "attack-pattern",
+     "attack_kb_version": "enterprise-attack-19.2",
+     "external_id": "T1059",
+     "mapping_basis": "Sigma rule 808146b2-9332-4d78-9416-d7e47012d83d 'BPFDoor Abnormal Process ID or Lock File Accessed' (author: Rafal Piasecki) tag attack.t1059",
+     "mapping_source": "sigma"
+    }
+   ],
+   "evidence_type": "behavioral",
+   "rule_source": "sigma:808146b2-9332-4d78-9416-d7e47012d83d",
+   "rule_family": "sigma:808146b2-9332-4d78-9416-d7e47012d83d"
+  },
+  {
+   "rule_id": "sigma:808146b2-9332-4d78-9416-d7e47012d83d:009",
+   "rule_version": "r2026-07-01",
+   "conditions": [
+    {
+     "field_path": "event.dataset",
+     "operator": "equals",
+     "value": "auditd.log"
+    },
+    {
+     "field_path": "host.os_type",
+     "operator": "equals",
+     "value": "linux"
+    },
+    {
+     "field_path": "audit.record_type",
+     "operator": "equals",
+     "value": "PATH",
+     "case_insensitive": true
+    },
+    {
+     "field_path": "audit.name",
+     "operator": "equals",
+     "value": "/var/run/hp-health.pid",
+     "case_insensitive": true
+    }
+   ],
+   "technique_mappings": [
+    {
+     "stix_id": "attack-pattern--391d824f-0ef1-47a0-b0ee-c59a75e27670",
+     "object_type": "attack-pattern",
+     "attack_kb_version": "enterprise-attack-19.2",
+     "external_id": "T1106",
+     "mapping_basis": "Sigma rule 808146b2-9332-4d78-9416-d7e47012d83d 'BPFDoor Abnormal Process ID or Lock File Accessed' (author: Rafal Piasecki) tag attack.t1106",
+     "mapping_source": "sigma"
+    },
+    {
+     "stix_id": "attack-pattern--7385dfaf-6886-4229-9ecd-6fd678040830",
+     "object_type": "attack-pattern",
+     "attack_kb_version": "enterprise-attack-19.2",
+     "external_id": "T1059",
+     "mapping_basis": "Sigma rule 808146b2-9332-4d78-9416-d7e47012d83d 'BPFDoor Abnormal Process ID or Lock File Accessed' (author: Rafal Piasecki) tag attack.t1059",
+     "mapping_source": "sigma"
+    }
+   ],
+   "evidence_type": "behavioral",
+   "rule_source": "sigma:808146b2-9332-4d78-9416-d7e47012d83d",
+   "rule_family": "sigma:808146b2-9332-4d78-9416-d7e47012d83d"
+  },
+  {
+   "rule_id": "sigma:808146b2-9332-4d78-9416-d7e47012d83d:010",
+   "rule_version": "r2026-07-01",
+   "conditions": [
+    {
+     "field_path": "event.dataset",
+     "operator": "equals",
+     "value": "auditd.log"
+    },
+    {
+     "field_path": "host.os_type",
+     "operator": "equals",
+     "value": "linux"
+    },
+    {
+     "field_path": "audit.record_type",
+     "operator": "equals",
+     "value": "PATH",
+     "case_insensitive": true
+    },
+    {
+     "field_path": "audit.name",
+     "operator": "equals",
+     "value": "/var/run/hpasmlit.lock",
+     "case_insensitive": true
+    }
+   ],
+   "technique_mappings": [
+    {
+     "stix_id": "attack-pattern--391d824f-0ef1-47a0-b0ee-c59a75e27670",
+     "object_type": "attack-pattern",
+     "attack_kb_version": "enterprise-attack-19.2",
+     "external_id": "T1106",
+     "mapping_basis": "Sigma rule 808146b2-9332-4d78-9416-d7e47012d83d 'BPFDoor Abnormal Process ID or Lock File Accessed' (author: Rafal Piasecki) tag attack.t1106",
+     "mapping_source": "sigma"
+    },
+    {
+     "stix_id": "attack-pattern--7385dfaf-6886-4229-9ecd-6fd678040830",
+     "object_type": "attack-pattern",
+     "attack_kb_version": "enterprise-attack-19.2",
+     "external_id": "T1059",
+     "mapping_basis": "Sigma rule 808146b2-9332-4d78-9416-d7e47012d83d 'BPFDoor Abnormal Process ID or Lock File Accessed' (author: Rafal Piasecki) tag attack.t1059",
+     "mapping_source": "sigma"
+    }
+   ],
+   "evidence_type": "behavioral",
+   "rule_source": "sigma:808146b2-9332-4d78-9416-d7e47012d83d",
+   "rule_family": "sigma:808146b2-9332-4d78-9416-d7e47012d83d"
+  },
+  {
+   "rule_id": "sigma:808146b2-9332-4d78-9416-d7e47012d83d:011",
+   "rule_version": "r2026-07-01",
+   "conditions": [
+    {
+     "field_path": "event.dataset",
+     "operator": "equals",
+     "value": "auditd.log"
+    },
+    {
+     "field_path": "host.os_type",
+     "operator": "equals",
+     "value": "linux"
+    },
+    {
+     "field_path": "audit.record_type",
+     "operator": "equals",
+     "value": "PATH",
+     "case_insensitive": true
+    },
+    {
+     "field_path": "audit.name",
+     "operator": "equals",
+     "value": "/var/run/hpasmlited.pid",
+     "case_insensitive": true
+    }
+   ],
+   "technique_mappings": [
+    {
+     "stix_id": "attack-pattern--391d824f-0ef1-47a0-b0ee-c59a75e27670",
+     "object_type": "attack-pattern",
+     "attack_kb_version": "enterprise-attack-19.2",
+     "external_id": "T1106",
+     "mapping_basis": "Sigma rule 808146b2-9332-4d78-9416-d7e47012d83d 'BPFDoor Abnormal Process ID or Lock File Accessed' (author: Rafal Piasecki) tag attack.t1106",
+     "mapping_source": "sigma"
+    },
+    {
+     "stix_id": "attack-pattern--7385dfaf-6886-4229-9ecd-6fd678040830",
+     "object_type": "attack-pattern",
+     "attack_kb_version": "enterprise-attack-19.2",
+     "external_id": "T1059",
+     "mapping_basis": "Sigma rule 808146b2-9332-4d78-9416-d7e47012d83d 'BPFDoor Abnormal Process ID or Lock File Accessed' (author: Rafal Piasecki) tag attack.t1059",
+     "mapping_source": "sigma"
+    }
+   ],
+   "evidence_type": "behavioral",
+   "rule_source": "sigma:808146b2-9332-4d78-9416-d7e47012d83d",
+   "rule_family": "sigma:808146b2-9332-4d78-9416-d7e47012d83d"
+  },
+  {
+   "rule_id": "sigma:808146b2-9332-4d78-9416-d7e47012d83d:012",
+   "rule_version": "r2026-07-01",
+   "conditions": [
+    {
+     "field_path": "event.dataset",
+     "operator": "equals",
+     "value": "auditd.log"
+    },
+    {
+     "field_path": "host.os_type",
+     "operator": "equals",
+     "value": "linux"
+    },
+    {
+     "field_path": "audit.record_type",
+     "operator": "equals",
+     "value": "PATH",
+     "case_insensitive": true
+    },
+    {
+     "field_path": "audit.name",
+     "operator": "equals",
+     "value": "/var/run/kdevrund.pid",
+     "case_insensitive": true
+    }
+   ],
+   "technique_mappings": [
+    {
+     "stix_id": "attack-pattern--391d824f-0ef1-47a0-b0ee-c59a75e27670",
+     "object_type": "attack-pattern",
+     "attack_kb_version": "enterprise-attack-19.2",
+     "external_id": "T1106",
+     "mapping_basis": "Sigma rule 808146b2-9332-4d78-9416-d7e47012d83d 'BPFDoor Abnormal Process ID or Lock File Accessed' (author: Rafal Piasecki) tag attack.t1106",
+     "mapping_source": "sigma"
+    },
+    {
+     "stix_id": "attack-pattern--7385dfaf-6886-4229-9ecd-6fd678040830",
+     "object_type": "attack-pattern",
+     "attack_kb_version": "enterprise-attack-19.2",
+     "external_id": "T1059",
+     "mapping_basis": "Sigma rule 808146b2-9332-4d78-9416-d7e47012d83d 'BPFDoor Abnormal Process ID or Lock File Accessed' (author: Rafal Piasecki) tag attack.t1059",
+     "mapping_source": "sigma"
+    }
+   ],
+   "evidence_type": "behavioral",
+   "rule_source": "sigma:808146b2-9332-4d78-9416-d7e47012d83d",
+   "rule_family": "sigma:808146b2-9332-4d78-9416-d7e47012d83d"
+  },
+  {
+   "rule_id": "sigma:808146b2-9332-4d78-9416-d7e47012d83d:013",
+   "rule_version": "r2026-07-01",
+   "conditions": [
+    {
+     "field_path": "event.dataset",
+     "operator": "equals",
+     "value": "auditd.log"
+    },
+    {
+     "field_path": "host.os_type",
+     "operator": "equals",
+     "value": "linux"
+    },
+    {
+     "field_path": "audit.record_type",
+     "operator": "equals",
+     "value": "PATH",
+     "case_insensitive": true
+    },
+    {
+     "field_path": "audit.name",
+     "operator": "equals",
+     "value": "/var/run/lldpad.lock",
+     "case_insensitive": true
+    }
+   ],
+   "technique_mappings": [
+    {
+     "stix_id": "attack-pattern--391d824f-0ef1-47a0-b0ee-c59a75e27670",
+     "object_type": "attack-pattern",
+     "attack_kb_version": "enterprise-attack-19.2",
+     "external_id": "T1106",
+     "mapping_basis": "Sigma rule 808146b2-9332-4d78-9416-d7e47012d83d 'BPFDoor Abnormal Process ID or Lock File Accessed' (author: Rafal Piasecki) tag attack.t1106",
+     "mapping_source": "sigma"
+    },
+    {
+     "stix_id": "attack-pattern--7385dfaf-6886-4229-9ecd-6fd678040830",
+     "object_type": "attack-pattern",
+     "attack_kb_version": "enterprise-attack-19.2",
+     "external_id": "T1059",
+     "mapping_basis": "Sigma rule 808146b2-9332-4d78-9416-d7e47012d83d 'BPFDoor Abnormal Process ID or Lock File Accessed' (author: Rafal Piasecki) tag attack.t1059",
+     "mapping_source": "sigma"
+    }
+   ],
+   "evidence_type": "behavioral",
+   "rule_source": "sigma:808146b2-9332-4d78-9416-d7e47012d83d",
+   "rule_family": "sigma:808146b2-9332-4d78-9416-d7e47012d83d"
+  },
+  {
+   "rule_id": "sigma:808146b2-9332-4d78-9416-d7e47012d83d:014",
+   "rule_version": "r2026-07-01",
+   "conditions": [
+    {
+     "field_path": "event.dataset",
+     "operator": "equals",
+     "value": "auditd.log"
+    },
+    {
+     "field_path": "host.os_type",
+     "operator": "equals",
+     "value": "linux"
+    },
+    {
+     "field_path": "audit.record_type",
+     "operator": "equals",
+     "value": "PATH",
+     "case_insensitive": true
+    },
+    {
+     "field_path": "audit.name",
+     "operator": "equals",
+     "value": "/var/run/mcelog.pid",
+     "case_insensitive": true
+    }
+   ],
+   "technique_mappings": [
+    {
+     "stix_id": "attack-pattern--391d824f-0ef1-47a0-b0ee-c59a75e27670",
+     "object_type": "attack-pattern",
+     "attack_kb_version": "enterprise-attack-19.2",
+     "external_id": "T1106",
+     "mapping_basis": "Sigma rule 808146b2-9332-4d78-9416-d7e47012d83d 'BPFDoor Abnormal Process ID or Lock File Accessed' (author: Rafal Piasecki) tag attack.t1106",
+     "mapping_source": "sigma"
+    },
+    {
+     "stix_id": "attack-pattern--7385dfaf-6886-4229-9ecd-6fd678040830",
+     "object_type": "attack-pattern",
+     "attack_kb_version": "enterprise-attack-19.2",
+     "external_id": "T1059",
+     "mapping_basis": "Sigma rule 808146b2-9332-4d78-9416-d7e47012d83d 'BPFDoor Abnormal Process ID or Lock File Accessed' (author: Rafal Piasecki) tag attack.t1059",
+     "mapping_source": "sigma"
+    }
+   ],
+   "evidence_type": "behavioral",
+   "rule_source": "sigma:808146b2-9332-4d78-9416-d7e47012d83d",
+   "rule_family": "sigma:808146b2-9332-4d78-9416-d7e47012d83d"
+  },
+  {
+   "rule_id": "sigma:808146b2-9332-4d78-9416-d7e47012d83d:015",
+   "rule_version": "r2026-07-01",
+   "conditions": [
+    {
+     "field_path": "event.dataset",
+     "operator": "equals",
+     "value": "auditd.log"
+    },
+    {
+     "field_path": "host.os_type",
+     "operator": "equals",
+     "value": "linux"
+    },
+    {
+     "field_path": "audit.record_type",
+     "operator": "equals",
+     "value": "PATH",
+     "case_insensitive": true
+    },
+    {
+     "field_path": "audit.name",
+     "operator": "equals",
+     "value": "/var/run/system.pid",
+     "case_insensitive": true
+    }
+   ],
+   "technique_mappings": [
+    {
+     "stix_id": "attack-pattern--391d824f-0ef1-47a0-b0ee-c59a75e27670",
+     "object_type": "attack-pattern",
+     "attack_kb_version": "enterprise-attack-19.2",
+     "external_id": "T1106",
+     "mapping_basis": "Sigma rule 808146b2-9332-4d78-9416-d7e47012d83d 'BPFDoor Abnormal Process ID or Lock File Accessed' (author: Rafal Piasecki) tag attack.t1106",
+     "mapping_source": "sigma"
+    },
+    {
+     "stix_id": "attack-pattern--7385dfaf-6886-4229-9ecd-6fd678040830",
+     "object_type": "attack-pattern",
+     "attack_kb_version": "enterprise-attack-19.2",
+     "external_id": "T1059",
+     "mapping_basis": "Sigma rule 808146b2-9332-4d78-9416-d7e47012d83d 'BPFDoor Abnormal Process ID or Lock File Accessed' (author: Rafal Piasecki) tag attack.t1059",
+     "mapping_source": "sigma"
+    }
+   ],
+   "evidence_type": "behavioral",
+   "rule_source": "sigma:808146b2-9332-4d78-9416-d7e47012d83d",
+   "rule_family": "sigma:808146b2-9332-4d78-9416-d7e47012d83d"
+  },
+  {
+   "rule_id": "sigma:808146b2-9332-4d78-9416-d7e47012d83d:016",
+   "rule_version": "r2026-07-01",
+   "conditions": [
+    {
+     "field_path": "event.dataset",
+     "operator": "equals",
+     "value": "auditd.log"
+    },
+    {
+     "field_path": "host.os_type",
+     "operator": "equals",
+     "value": "linux"
+    },
+    {
+     "field_path": "audit.record_type",
+     "operator": "equals",
+     "value": "PATH",
+     "case_insensitive": true
+    },
+    {
+     "field_path": "audit.name",
+     "operator": "equals",
+     "value": "/var/run/uvp-srv.pid",
+     "case_insensitive": true
+    }
+   ],
+   "technique_mappings": [
+    {
+     "stix_id": "attack-pattern--391d824f-0ef1-47a0-b0ee-c59a75e27670",
+     "object_type": "attack-pattern",
+     "attack_kb_version": "enterprise-attack-19.2",
+     "external_id": "T1106",
+     "mapping_basis": "Sigma rule 808146b2-9332-4d78-9416-d7e47012d83d 'BPFDoor Abnormal Process ID or Lock File Accessed' (author: Rafal Piasecki) tag attack.t1106",
+     "mapping_source": "sigma"
+    },
+    {
+     "stix_id": "attack-pattern--7385dfaf-6886-4229-9ecd-6fd678040830",
+     "object_type": "attack-pattern",
+     "attack_kb_version": "enterprise-attack-19.2",
+     "external_id": "T1059",
+     "mapping_basis": "Sigma rule 808146b2-9332-4d78-9416-d7e47012d83d 'BPFDoor Abnormal Process ID or Lock File Accessed' (author: Rafal Piasecki) tag attack.t1059",
+     "mapping_source": "sigma"
+    }
+   ],
+   "evidence_type": "behavioral",
+   "rule_source": "sigma:808146b2-9332-4d78-9416-d7e47012d83d",
+   "rule_family": "sigma:808146b2-9332-4d78-9416-d7e47012d83d"
+  },
+  {
+   "rule_id": "sigma:808146b2-9332-4d78-9416-d7e47012d83d:017",
+   "rule_version": "r2026-07-01",
+   "conditions": [
+    {
+     "field_path": "event.dataset",
+     "operator": "equals",
+     "value": "auditd.log"
+    },
+    {
+     "field_path": "host.os_type",
+     "operator": "equals",
+     "value": "linux"
+    },
+    {
+     "field_path": "audit.record_type",
+     "operator": "equals",
+     "value": "PATH",
+     "case_insensitive": true
+    },
+    {
+     "field_path": "audit.name",
+     "operator": "equals",
+     "value": "/var/run/vmtoolagt.pid",
+     "case_insensitive": true
+    }
+   ],
+   "technique_mappings": [
+    {
+     "stix_id": "attack-pattern--391d824f-0ef1-47a0-b0ee-c59a75e27670",
+     "object_type": "attack-pattern",
+     "attack_kb_version": "enterprise-attack-19.2",
+     "external_id": "T1106",
+     "mapping_basis": "Sigma rule 808146b2-9332-4d78-9416-d7e47012d83d 'BPFDoor Abnormal Process ID or Lock File Accessed' (author: Rafal Piasecki) tag attack.t1106",
+     "mapping_source": "sigma"
+    },
+    {
+     "stix_id": "attack-pattern--7385dfaf-6886-4229-9ecd-6fd678040830",
+     "object_type": "attack-pattern",
+     "attack_kb_version": "enterprise-attack-19.2",
+     "external_id": "T1059",
+     "mapping_basis": "Sigma rule 808146b2-9332-4d78-9416-d7e47012d83d 'BPFDoor Abnormal Process ID or Lock File Accessed' (author: Rafal Piasecki) tag attack.t1059",
+     "mapping_source": "sigma"
+    }
+   ],
+   "evidence_type": "behavioral",
+   "rule_source": "sigma:808146b2-9332-4d78-9416-d7e47012d83d",
+   "rule_family": "sigma:808146b2-9332-4d78-9416-d7e47012d83d"
+  },
+  {
+   "rule_id": "sigma:808146b2-9332-4d78-9416-d7e47012d83d:018",
+   "rule_version": "r2026-07-01",
+   "conditions": [
+    {
+     "field_path": "event.dataset",
+     "operator": "equals",
+     "value": "auditd.log"
+    },
+    {
+     "field_path": "host.os_type",
+     "operator": "equals",
+     "value": "linux"
+    },
+    {
+     "field_path": "audit.record_type",
+     "operator": "equals",
+     "value": "PATH",
+     "case_insensitive": true
+    },
+    {
+     "field_path": "audit.name",
+     "operator": "equals",
+     "value": "/var/run/xinetd.lock",
+     "case_insensitive": true
+    }
+   ],
+   "technique_mappings": [
+    {
+     "stix_id": "attack-pattern--391d824f-0ef1-47a0-b0ee-c59a75e27670",
+     "object_type": "attack-pattern",
+     "attack_kb_version": "enterprise-attack-19.2",
+     "external_id": "T1106",
+     "mapping_basis": "Sigma rule 808146b2-9332-4d78-9416-d7e47012d83d 'BPFDoor Abnormal Process ID or Lock File Accessed' (author: Rafal Piasecki) tag attack.t1106",
+     "mapping_source": "sigma"
+    },
+    {
+     "stix_id": "attack-pattern--7385dfaf-6886-4229-9ecd-6fd678040830",
+     "object_type": "attack-pattern",
+     "attack_kb_version": "enterprise-attack-19.2",
+     "external_id": "T1059",
+     "mapping_basis": "Sigma rule 808146b2-9332-4d78-9416-d7e47012d83d 'BPFDoor Abnormal Process ID or Lock File Accessed' (author: Rafal Piasecki) tag attack.t1059",
+     "mapping_source": "sigma"
+    }
+   ],
+   "evidence_type": "behavioral",
+   "rule_source": "sigma:808146b2-9332-4d78-9416-d7e47012d83d",
+   "rule_family": "sigma:808146b2-9332-4d78-9416-d7e47012d83d"
   },
   {
    "rule_id": "sigma:80915f59-9b56-4616-9de0-fd0dea6c12fe:000",
@@ -463942,6 +466152,129 @@
    "rule_family": "sigma:974515da-6cc5-4c95-ae65-f97f9150ec7f"
   },
   {
+   "rule_id": "sigma:977ef627-4539-4875-adf4-ed8f780c4922:000",
+   "rule_version": "r2026-07-01",
+   "conditions": [
+    {
+     "field_path": "event.dataset",
+     "operator": "equals",
+     "value": "auditd.log"
+    },
+    {
+     "field_path": "host.os_type",
+     "operator": "equals",
+     "value": "linux"
+    },
+    {
+     "field_path": "audit.record_type",
+     "operator": "equals",
+     "value": "PATH",
+     "case_insensitive": true
+    },
+    {
+     "field_path": "audit.name",
+     "operator": "startswith",
+     "value": "/etc/audit/",
+     "case_insensitive": true
+    }
+   ],
+   "technique_mappings": [
+    {
+     "stix_id": "attack-pattern--bbde9781-60aa-4b8a-a911-895b0c1b3872",
+     "object_type": "attack-pattern",
+     "attack_kb_version": "enterprise-attack-19.2",
+     "external_id": "T1685",
+     "mapping_basis": "Sigma rule 977ef627-4539-4875-adf4-ed8f780c4922 'Auditing Configuration Changes on Linux Host' (author: Mikhail Larin, oscd.community) tag attack.t1685",
+     "mapping_source": "sigma"
+    }
+   ],
+   "evidence_type": "behavioral",
+   "rule_source": "sigma:977ef627-4539-4875-adf4-ed8f780c4922",
+   "rule_family": "sigma:977ef627-4539-4875-adf4-ed8f780c4922"
+  },
+  {
+   "rule_id": "sigma:977ef627-4539-4875-adf4-ed8f780c4922:001",
+   "rule_version": "r2026-07-01",
+   "conditions": [
+    {
+     "field_path": "event.dataset",
+     "operator": "equals",
+     "value": "auditd.log"
+    },
+    {
+     "field_path": "host.os_type",
+     "operator": "equals",
+     "value": "linux"
+    },
+    {
+     "field_path": "audit.record_type",
+     "operator": "equals",
+     "value": "PATH",
+     "case_insensitive": true
+    },
+    {
+     "field_path": "audit.name",
+     "operator": "equals",
+     "value": "/etc/libaudit.conf",
+     "case_insensitive": true
+    }
+   ],
+   "technique_mappings": [
+    {
+     "stix_id": "attack-pattern--bbde9781-60aa-4b8a-a911-895b0c1b3872",
+     "object_type": "attack-pattern",
+     "attack_kb_version": "enterprise-attack-19.2",
+     "external_id": "T1685",
+     "mapping_basis": "Sigma rule 977ef627-4539-4875-adf4-ed8f780c4922 'Auditing Configuration Changes on Linux Host' (author: Mikhail Larin, oscd.community) tag attack.t1685",
+     "mapping_source": "sigma"
+    }
+   ],
+   "evidence_type": "behavioral",
+   "rule_source": "sigma:977ef627-4539-4875-adf4-ed8f780c4922",
+   "rule_family": "sigma:977ef627-4539-4875-adf4-ed8f780c4922"
+  },
+  {
+   "rule_id": "sigma:977ef627-4539-4875-adf4-ed8f780c4922:002",
+   "rule_version": "r2026-07-01",
+   "conditions": [
+    {
+     "field_path": "event.dataset",
+     "operator": "equals",
+     "value": "auditd.log"
+    },
+    {
+     "field_path": "host.os_type",
+     "operator": "equals",
+     "value": "linux"
+    },
+    {
+     "field_path": "audit.record_type",
+     "operator": "equals",
+     "value": "PATH",
+     "case_insensitive": true
+    },
+    {
+     "field_path": "audit.name",
+     "operator": "startswith",
+     "value": "/etc/audisp/",
+     "case_insensitive": true
+    }
+   ],
+   "technique_mappings": [
+    {
+     "stix_id": "attack-pattern--bbde9781-60aa-4b8a-a911-895b0c1b3872",
+     "object_type": "attack-pattern",
+     "attack_kb_version": "enterprise-attack-19.2",
+     "external_id": "T1685",
+     "mapping_basis": "Sigma rule 977ef627-4539-4875-adf4-ed8f780c4922 'Auditing Configuration Changes on Linux Host' (author: Mikhail Larin, oscd.community) tag attack.t1685",
+     "mapping_source": "sigma"
+    }
+   ],
+   "evidence_type": "behavioral",
+   "rule_source": "sigma:977ef627-4539-4875-adf4-ed8f780c4922",
+   "rule_family": "sigma:977ef627-4539-4875-adf4-ed8f780c4922"
+  },
+  {
    "rule_id": "sigma:979baf41-ca44-4540-9d0c-4fcef3b5a3a4:000",
    "rule_version": "r2026-07-01",
    "conditions": [
@@ -493802,6 +496135,59 @@
    "rule_family": "sigma:9d3436ef-9476-4c43-acca-90ce06bdf33a"
   },
   {
+   "rule_id": "sigma:9d4548fa-bba0-4e88-bd66-5d5bf516cda0:000",
+   "rule_version": "r2026-07-01",
+   "conditions": [
+    {
+     "field_path": "event.dataset",
+     "operator": "equals",
+     "value": "auditd.log"
+    },
+    {
+     "field_path": "host.os_type",
+     "operator": "equals",
+     "value": "linux"
+    },
+    {
+     "field_path": "audit.record_type",
+     "operator": "equals",
+     "value": "execve",
+     "case_insensitive": true
+    },
+    {
+     "field_path": "audit.a0",
+     "operator": "equals",
+     "value": "cp",
+     "case_insensitive": true
+    },
+    {
+     "field_path": "audit.a1",
+     "operator": "equals",
+     "value": "/bin/sh",
+     "case_insensitive": true
+    },
+    {
+     "field_path": "audit.a2",
+     "operator": "endswith",
+     "value": "/crond",
+     "case_insensitive": true
+    }
+   ],
+   "technique_mappings": [
+    {
+     "stix_id": "attack-pattern--bd5b58a4-a52d-4a29-bc0d-3f1d3968eb6b",
+     "object_type": "attack-pattern",
+     "attack_kb_version": "enterprise-attack-19.2",
+     "external_id": "T1036.003",
+     "mapping_basis": "Sigma rule 9d4548fa-bba0-4e88-bd66-5d5bf516cda0 'Masquerading as Linux Crond Process' (author: Timur Zinniatullin, oscd.community) tag attack.t1036.003",
+     "mapping_source": "sigma"
+    }
+   ],
+   "evidence_type": "behavioral",
+   "rule_source": "sigma:9d4548fa-bba0-4e88-bd66-5d5bf516cda0",
+   "rule_family": "sigma:9d4548fa-bba0-4e88-bd66-5d5bf516cda0"
+  },
+  {
    "rule_id": "sigma:9d5a1274-922a-49d0-87f3-8c653483b909:000",
    "rule_version": "r2026-07-01",
    "conditions": [
@@ -521133,6 +523519,741 @@
    "rule_family": "sigma:a34f79a3-8e5f-4cc3-b765-de00695452c2"
   },
   {
+   "rule_id": "sigma:a39d7fa7-3fbd-4dc2-97e1-d87f546b1bbc:000",
+   "rule_version": "r2026-07-01",
+   "conditions": [
+    {
+     "field_path": "event.dataset",
+     "operator": "equals",
+     "value": "auditd.log"
+    },
+    {
+     "field_path": "host.os_type",
+     "operator": "equals",
+     "value": "linux"
+    },
+    {
+     "field_path": "audit.record_type",
+     "operator": "equals",
+     "value": "SYSCALL",
+     "case_insensitive": true
+    },
+    {
+     "field_path": "process.executable",
+     "operator": "startswith",
+     "value": "/tmp/",
+     "case_insensitive": true
+    }
+   ],
+   "technique_mappings": [
+    {
+     "stix_id": "attack-pattern--7e3beebd-8bfe-4e7b-a892-e44ab06a75f9",
+     "object_type": "attack-pattern",
+     "attack_kb_version": "enterprise-attack-19.2",
+     "external_id": "T1584",
+     "mapping_basis": "Sigma rule a39d7fa7-3fbd-4dc2-97e1-d87f546b1bbc 'Program Executions in Suspicious Folders' (author: Florian Roth (Nextron Systems)) tag attack.t1584",
+     "mapping_source": "sigma"
+    },
+    {
+     "stix_id": "attack-pattern--edadea33-549c-4ed1-9783-8f5a5853cbdf",
+     "object_type": "attack-pattern",
+     "attack_kb_version": "enterprise-attack-19.2",
+     "external_id": "T1587",
+     "mapping_basis": "Sigma rule a39d7fa7-3fbd-4dc2-97e1-d87f546b1bbc 'Program Executions in Suspicious Folders' (author: Florian Roth (Nextron Systems)) tag attack.t1587",
+     "mapping_source": "sigma"
+    }
+   ],
+   "evidence_type": "behavioral",
+   "rule_source": "sigma:a39d7fa7-3fbd-4dc2-97e1-d87f546b1bbc",
+   "rule_family": "sigma:a39d7fa7-3fbd-4dc2-97e1-d87f546b1bbc"
+  },
+  {
+   "rule_id": "sigma:a39d7fa7-3fbd-4dc2-97e1-d87f546b1bbc:001",
+   "rule_version": "r2026-07-01",
+   "conditions": [
+    {
+     "field_path": "event.dataset",
+     "operator": "equals",
+     "value": "auditd.log"
+    },
+    {
+     "field_path": "host.os_type",
+     "operator": "equals",
+     "value": "linux"
+    },
+    {
+     "field_path": "audit.record_type",
+     "operator": "equals",
+     "value": "SYSCALL",
+     "case_insensitive": true
+    },
+    {
+     "field_path": "process.executable",
+     "operator": "startswith",
+     "value": "/var/www/",
+     "case_insensitive": true
+    }
+   ],
+   "technique_mappings": [
+    {
+     "stix_id": "attack-pattern--7e3beebd-8bfe-4e7b-a892-e44ab06a75f9",
+     "object_type": "attack-pattern",
+     "attack_kb_version": "enterprise-attack-19.2",
+     "external_id": "T1584",
+     "mapping_basis": "Sigma rule a39d7fa7-3fbd-4dc2-97e1-d87f546b1bbc 'Program Executions in Suspicious Folders' (author: Florian Roth (Nextron Systems)) tag attack.t1584",
+     "mapping_source": "sigma"
+    },
+    {
+     "stix_id": "attack-pattern--edadea33-549c-4ed1-9783-8f5a5853cbdf",
+     "object_type": "attack-pattern",
+     "attack_kb_version": "enterprise-attack-19.2",
+     "external_id": "T1587",
+     "mapping_basis": "Sigma rule a39d7fa7-3fbd-4dc2-97e1-d87f546b1bbc 'Program Executions in Suspicious Folders' (author: Florian Roth (Nextron Systems)) tag attack.t1587",
+     "mapping_source": "sigma"
+    }
+   ],
+   "evidence_type": "behavioral",
+   "rule_source": "sigma:a39d7fa7-3fbd-4dc2-97e1-d87f546b1bbc",
+   "rule_family": "sigma:a39d7fa7-3fbd-4dc2-97e1-d87f546b1bbc"
+  },
+  {
+   "rule_id": "sigma:a39d7fa7-3fbd-4dc2-97e1-d87f546b1bbc:003",
+   "rule_version": "r2026-07-01",
+   "conditions": [
+    {
+     "field_path": "event.dataset",
+     "operator": "equals",
+     "value": "auditd.log"
+    },
+    {
+     "field_path": "host.os_type",
+     "operator": "equals",
+     "value": "linux"
+    },
+    {
+     "field_path": "audit.record_type",
+     "operator": "equals",
+     "value": "SYSCALL",
+     "case_insensitive": true
+    },
+    {
+     "field_path": "process.executable",
+     "operator": "startswith",
+     "value": "/usr/local/apache2/",
+     "case_insensitive": true
+    }
+   ],
+   "technique_mappings": [
+    {
+     "stix_id": "attack-pattern--7e3beebd-8bfe-4e7b-a892-e44ab06a75f9",
+     "object_type": "attack-pattern",
+     "attack_kb_version": "enterprise-attack-19.2",
+     "external_id": "T1584",
+     "mapping_basis": "Sigma rule a39d7fa7-3fbd-4dc2-97e1-d87f546b1bbc 'Program Executions in Suspicious Folders' (author: Florian Roth (Nextron Systems)) tag attack.t1584",
+     "mapping_source": "sigma"
+    },
+    {
+     "stix_id": "attack-pattern--edadea33-549c-4ed1-9783-8f5a5853cbdf",
+     "object_type": "attack-pattern",
+     "attack_kb_version": "enterprise-attack-19.2",
+     "external_id": "T1587",
+     "mapping_basis": "Sigma rule a39d7fa7-3fbd-4dc2-97e1-d87f546b1bbc 'Program Executions in Suspicious Folders' (author: Florian Roth (Nextron Systems)) tag attack.t1587",
+     "mapping_source": "sigma"
+    }
+   ],
+   "evidence_type": "behavioral",
+   "rule_source": "sigma:a39d7fa7-3fbd-4dc2-97e1-d87f546b1bbc",
+   "rule_family": "sigma:a39d7fa7-3fbd-4dc2-97e1-d87f546b1bbc"
+  },
+  {
+   "rule_id": "sigma:a39d7fa7-3fbd-4dc2-97e1-d87f546b1bbc:004",
+   "rule_version": "r2026-07-01",
+   "conditions": [
+    {
+     "field_path": "event.dataset",
+     "operator": "equals",
+     "value": "auditd.log"
+    },
+    {
+     "field_path": "host.os_type",
+     "operator": "equals",
+     "value": "linux"
+    },
+    {
+     "field_path": "audit.record_type",
+     "operator": "equals",
+     "value": "SYSCALL",
+     "case_insensitive": true
+    },
+    {
+     "field_path": "process.executable",
+     "operator": "startswith",
+     "value": "/usr/local/httpd/",
+     "case_insensitive": true
+    }
+   ],
+   "technique_mappings": [
+    {
+     "stix_id": "attack-pattern--7e3beebd-8bfe-4e7b-a892-e44ab06a75f9",
+     "object_type": "attack-pattern",
+     "attack_kb_version": "enterprise-attack-19.2",
+     "external_id": "T1584",
+     "mapping_basis": "Sigma rule a39d7fa7-3fbd-4dc2-97e1-d87f546b1bbc 'Program Executions in Suspicious Folders' (author: Florian Roth (Nextron Systems)) tag attack.t1584",
+     "mapping_source": "sigma"
+    },
+    {
+     "stix_id": "attack-pattern--edadea33-549c-4ed1-9783-8f5a5853cbdf",
+     "object_type": "attack-pattern",
+     "attack_kb_version": "enterprise-attack-19.2",
+     "external_id": "T1587",
+     "mapping_basis": "Sigma rule a39d7fa7-3fbd-4dc2-97e1-d87f546b1bbc 'Program Executions in Suspicious Folders' (author: Florian Roth (Nextron Systems)) tag attack.t1587",
+     "mapping_source": "sigma"
+    }
+   ],
+   "evidence_type": "behavioral",
+   "rule_source": "sigma:a39d7fa7-3fbd-4dc2-97e1-d87f546b1bbc",
+   "rule_family": "sigma:a39d7fa7-3fbd-4dc2-97e1-d87f546b1bbc"
+  },
+  {
+   "rule_id": "sigma:a39d7fa7-3fbd-4dc2-97e1-d87f546b1bbc:005",
+   "rule_version": "r2026-07-01",
+   "conditions": [
+    {
+     "field_path": "event.dataset",
+     "operator": "equals",
+     "value": "auditd.log"
+    },
+    {
+     "field_path": "host.os_type",
+     "operator": "equals",
+     "value": "linux"
+    },
+    {
+     "field_path": "audit.record_type",
+     "operator": "equals",
+     "value": "SYSCALL",
+     "case_insensitive": true
+    },
+    {
+     "field_path": "process.executable",
+     "operator": "startswith",
+     "value": "/var/apache/",
+     "case_insensitive": true
+    }
+   ],
+   "technique_mappings": [
+    {
+     "stix_id": "attack-pattern--7e3beebd-8bfe-4e7b-a892-e44ab06a75f9",
+     "object_type": "attack-pattern",
+     "attack_kb_version": "enterprise-attack-19.2",
+     "external_id": "T1584",
+     "mapping_basis": "Sigma rule a39d7fa7-3fbd-4dc2-97e1-d87f546b1bbc 'Program Executions in Suspicious Folders' (author: Florian Roth (Nextron Systems)) tag attack.t1584",
+     "mapping_source": "sigma"
+    },
+    {
+     "stix_id": "attack-pattern--edadea33-549c-4ed1-9783-8f5a5853cbdf",
+     "object_type": "attack-pattern",
+     "attack_kb_version": "enterprise-attack-19.2",
+     "external_id": "T1587",
+     "mapping_basis": "Sigma rule a39d7fa7-3fbd-4dc2-97e1-d87f546b1bbc 'Program Executions in Suspicious Folders' (author: Florian Roth (Nextron Systems)) tag attack.t1587",
+     "mapping_source": "sigma"
+    }
+   ],
+   "evidence_type": "behavioral",
+   "rule_source": "sigma:a39d7fa7-3fbd-4dc2-97e1-d87f546b1bbc",
+   "rule_family": "sigma:a39d7fa7-3fbd-4dc2-97e1-d87f546b1bbc"
+  },
+  {
+   "rule_id": "sigma:a39d7fa7-3fbd-4dc2-97e1-d87f546b1bbc:006",
+   "rule_version": "r2026-07-01",
+   "conditions": [
+    {
+     "field_path": "event.dataset",
+     "operator": "equals",
+     "value": "auditd.log"
+    },
+    {
+     "field_path": "host.os_type",
+     "operator": "equals",
+     "value": "linux"
+    },
+    {
+     "field_path": "audit.record_type",
+     "operator": "equals",
+     "value": "SYSCALL",
+     "case_insensitive": true
+    },
+    {
+     "field_path": "process.executable",
+     "operator": "startswith",
+     "value": "/srv/www/",
+     "case_insensitive": true
+    }
+   ],
+   "technique_mappings": [
+    {
+     "stix_id": "attack-pattern--7e3beebd-8bfe-4e7b-a892-e44ab06a75f9",
+     "object_type": "attack-pattern",
+     "attack_kb_version": "enterprise-attack-19.2",
+     "external_id": "T1584",
+     "mapping_basis": "Sigma rule a39d7fa7-3fbd-4dc2-97e1-d87f546b1bbc 'Program Executions in Suspicious Folders' (author: Florian Roth (Nextron Systems)) tag attack.t1584",
+     "mapping_source": "sigma"
+    },
+    {
+     "stix_id": "attack-pattern--edadea33-549c-4ed1-9783-8f5a5853cbdf",
+     "object_type": "attack-pattern",
+     "attack_kb_version": "enterprise-attack-19.2",
+     "external_id": "T1587",
+     "mapping_basis": "Sigma rule a39d7fa7-3fbd-4dc2-97e1-d87f546b1bbc 'Program Executions in Suspicious Folders' (author: Florian Roth (Nextron Systems)) tag attack.t1587",
+     "mapping_source": "sigma"
+    }
+   ],
+   "evidence_type": "behavioral",
+   "rule_source": "sigma:a39d7fa7-3fbd-4dc2-97e1-d87f546b1bbc",
+   "rule_family": "sigma:a39d7fa7-3fbd-4dc2-97e1-d87f546b1bbc"
+  },
+  {
+   "rule_id": "sigma:a39d7fa7-3fbd-4dc2-97e1-d87f546b1bbc:007",
+   "rule_version": "r2026-07-01",
+   "conditions": [
+    {
+     "field_path": "event.dataset",
+     "operator": "equals",
+     "value": "auditd.log"
+    },
+    {
+     "field_path": "host.os_type",
+     "operator": "equals",
+     "value": "linux"
+    },
+    {
+     "field_path": "audit.record_type",
+     "operator": "equals",
+     "value": "SYSCALL",
+     "case_insensitive": true
+    },
+    {
+     "field_path": "process.executable",
+     "operator": "startswith",
+     "value": "/home/httpd/html/",
+     "case_insensitive": true
+    }
+   ],
+   "technique_mappings": [
+    {
+     "stix_id": "attack-pattern--7e3beebd-8bfe-4e7b-a892-e44ab06a75f9",
+     "object_type": "attack-pattern",
+     "attack_kb_version": "enterprise-attack-19.2",
+     "external_id": "T1584",
+     "mapping_basis": "Sigma rule a39d7fa7-3fbd-4dc2-97e1-d87f546b1bbc 'Program Executions in Suspicious Folders' (author: Florian Roth (Nextron Systems)) tag attack.t1584",
+     "mapping_source": "sigma"
+    },
+    {
+     "stix_id": "attack-pattern--edadea33-549c-4ed1-9783-8f5a5853cbdf",
+     "object_type": "attack-pattern",
+     "attack_kb_version": "enterprise-attack-19.2",
+     "external_id": "T1587",
+     "mapping_basis": "Sigma rule a39d7fa7-3fbd-4dc2-97e1-d87f546b1bbc 'Program Executions in Suspicious Folders' (author: Florian Roth (Nextron Systems)) tag attack.t1587",
+     "mapping_source": "sigma"
+    }
+   ],
+   "evidence_type": "behavioral",
+   "rule_source": "sigma:a39d7fa7-3fbd-4dc2-97e1-d87f546b1bbc",
+   "rule_family": "sigma:a39d7fa7-3fbd-4dc2-97e1-d87f546b1bbc"
+  },
+  {
+   "rule_id": "sigma:a39d7fa7-3fbd-4dc2-97e1-d87f546b1bbc:008",
+   "rule_version": "r2026-07-01",
+   "conditions": [
+    {
+     "field_path": "event.dataset",
+     "operator": "equals",
+     "value": "auditd.log"
+    },
+    {
+     "field_path": "host.os_type",
+     "operator": "equals",
+     "value": "linux"
+    },
+    {
+     "field_path": "audit.record_type",
+     "operator": "equals",
+     "value": "SYSCALL",
+     "case_insensitive": true
+    },
+    {
+     "field_path": "process.executable",
+     "operator": "startswith",
+     "value": "/srv/http/",
+     "case_insensitive": true
+    }
+   ],
+   "technique_mappings": [
+    {
+     "stix_id": "attack-pattern--7e3beebd-8bfe-4e7b-a892-e44ab06a75f9",
+     "object_type": "attack-pattern",
+     "attack_kb_version": "enterprise-attack-19.2",
+     "external_id": "T1584",
+     "mapping_basis": "Sigma rule a39d7fa7-3fbd-4dc2-97e1-d87f546b1bbc 'Program Executions in Suspicious Folders' (author: Florian Roth (Nextron Systems)) tag attack.t1584",
+     "mapping_source": "sigma"
+    },
+    {
+     "stix_id": "attack-pattern--edadea33-549c-4ed1-9783-8f5a5853cbdf",
+     "object_type": "attack-pattern",
+     "attack_kb_version": "enterprise-attack-19.2",
+     "external_id": "T1587",
+     "mapping_basis": "Sigma rule a39d7fa7-3fbd-4dc2-97e1-d87f546b1bbc 'Program Executions in Suspicious Folders' (author: Florian Roth (Nextron Systems)) tag attack.t1587",
+     "mapping_source": "sigma"
+    }
+   ],
+   "evidence_type": "behavioral",
+   "rule_source": "sigma:a39d7fa7-3fbd-4dc2-97e1-d87f546b1bbc",
+   "rule_family": "sigma:a39d7fa7-3fbd-4dc2-97e1-d87f546b1bbc"
+  },
+  {
+   "rule_id": "sigma:a39d7fa7-3fbd-4dc2-97e1-d87f546b1bbc:009",
+   "rule_version": "r2026-07-01",
+   "conditions": [
+    {
+     "field_path": "event.dataset",
+     "operator": "equals",
+     "value": "auditd.log"
+    },
+    {
+     "field_path": "host.os_type",
+     "operator": "equals",
+     "value": "linux"
+    },
+    {
+     "field_path": "audit.record_type",
+     "operator": "equals",
+     "value": "SYSCALL",
+     "case_insensitive": true
+    },
+    {
+     "field_path": "process.executable",
+     "operator": "startswith",
+     "value": "/usr/share/nginx/html/",
+     "case_insensitive": true
+    }
+   ],
+   "technique_mappings": [
+    {
+     "stix_id": "attack-pattern--7e3beebd-8bfe-4e7b-a892-e44ab06a75f9",
+     "object_type": "attack-pattern",
+     "attack_kb_version": "enterprise-attack-19.2",
+     "external_id": "T1584",
+     "mapping_basis": "Sigma rule a39d7fa7-3fbd-4dc2-97e1-d87f546b1bbc 'Program Executions in Suspicious Folders' (author: Florian Roth (Nextron Systems)) tag attack.t1584",
+     "mapping_source": "sigma"
+    },
+    {
+     "stix_id": "attack-pattern--edadea33-549c-4ed1-9783-8f5a5853cbdf",
+     "object_type": "attack-pattern",
+     "attack_kb_version": "enterprise-attack-19.2",
+     "external_id": "T1587",
+     "mapping_basis": "Sigma rule a39d7fa7-3fbd-4dc2-97e1-d87f546b1bbc 'Program Executions in Suspicious Folders' (author: Florian Roth (Nextron Systems)) tag attack.t1587",
+     "mapping_source": "sigma"
+    }
+   ],
+   "evidence_type": "behavioral",
+   "rule_source": "sigma:a39d7fa7-3fbd-4dc2-97e1-d87f546b1bbc",
+   "rule_family": "sigma:a39d7fa7-3fbd-4dc2-97e1-d87f546b1bbc"
+  },
+  {
+   "rule_id": "sigma:a39d7fa7-3fbd-4dc2-97e1-d87f546b1bbc:010",
+   "rule_version": "r2026-07-01",
+   "conditions": [
+    {
+     "field_path": "event.dataset",
+     "operator": "equals",
+     "value": "auditd.log"
+    },
+    {
+     "field_path": "host.os_type",
+     "operator": "equals",
+     "value": "linux"
+    },
+    {
+     "field_path": "audit.record_type",
+     "operator": "equals",
+     "value": "SYSCALL",
+     "case_insensitive": true
+    },
+    {
+     "field_path": "process.executable",
+     "operator": "startswith",
+     "value": "/var/lib/pgsql/data/",
+     "case_insensitive": true
+    }
+   ],
+   "technique_mappings": [
+    {
+     "stix_id": "attack-pattern--7e3beebd-8bfe-4e7b-a892-e44ab06a75f9",
+     "object_type": "attack-pattern",
+     "attack_kb_version": "enterprise-attack-19.2",
+     "external_id": "T1584",
+     "mapping_basis": "Sigma rule a39d7fa7-3fbd-4dc2-97e1-d87f546b1bbc 'Program Executions in Suspicious Folders' (author: Florian Roth (Nextron Systems)) tag attack.t1584",
+     "mapping_source": "sigma"
+    },
+    {
+     "stix_id": "attack-pattern--edadea33-549c-4ed1-9783-8f5a5853cbdf",
+     "object_type": "attack-pattern",
+     "attack_kb_version": "enterprise-attack-19.2",
+     "external_id": "T1587",
+     "mapping_basis": "Sigma rule a39d7fa7-3fbd-4dc2-97e1-d87f546b1bbc 'Program Executions in Suspicious Folders' (author: Florian Roth (Nextron Systems)) tag attack.t1587",
+     "mapping_source": "sigma"
+    }
+   ],
+   "evidence_type": "behavioral",
+   "rule_source": "sigma:a39d7fa7-3fbd-4dc2-97e1-d87f546b1bbc",
+   "rule_family": "sigma:a39d7fa7-3fbd-4dc2-97e1-d87f546b1bbc"
+  },
+  {
+   "rule_id": "sigma:a39d7fa7-3fbd-4dc2-97e1-d87f546b1bbc:011",
+   "rule_version": "r2026-07-01",
+   "conditions": [
+    {
+     "field_path": "event.dataset",
+     "operator": "equals",
+     "value": "auditd.log"
+    },
+    {
+     "field_path": "host.os_type",
+     "operator": "equals",
+     "value": "linux"
+    },
+    {
+     "field_path": "audit.record_type",
+     "operator": "equals",
+     "value": "SYSCALL",
+     "case_insensitive": true
+    },
+    {
+     "field_path": "process.executable",
+     "operator": "startswith",
+     "value": "/usr/local/mysql/data/",
+     "case_insensitive": true
+    }
+   ],
+   "technique_mappings": [
+    {
+     "stix_id": "attack-pattern--7e3beebd-8bfe-4e7b-a892-e44ab06a75f9",
+     "object_type": "attack-pattern",
+     "attack_kb_version": "enterprise-attack-19.2",
+     "external_id": "T1584",
+     "mapping_basis": "Sigma rule a39d7fa7-3fbd-4dc2-97e1-d87f546b1bbc 'Program Executions in Suspicious Folders' (author: Florian Roth (Nextron Systems)) tag attack.t1584",
+     "mapping_source": "sigma"
+    },
+    {
+     "stix_id": "attack-pattern--edadea33-549c-4ed1-9783-8f5a5853cbdf",
+     "object_type": "attack-pattern",
+     "attack_kb_version": "enterprise-attack-19.2",
+     "external_id": "T1587",
+     "mapping_basis": "Sigma rule a39d7fa7-3fbd-4dc2-97e1-d87f546b1bbc 'Program Executions in Suspicious Folders' (author: Florian Roth (Nextron Systems)) tag attack.t1587",
+     "mapping_source": "sigma"
+    }
+   ],
+   "evidence_type": "behavioral",
+   "rule_source": "sigma:a39d7fa7-3fbd-4dc2-97e1-d87f546b1bbc",
+   "rule_family": "sigma:a39d7fa7-3fbd-4dc2-97e1-d87f546b1bbc"
+  },
+  {
+   "rule_id": "sigma:a39d7fa7-3fbd-4dc2-97e1-d87f546b1bbc:012",
+   "rule_version": "r2026-07-01",
+   "conditions": [
+    {
+     "field_path": "event.dataset",
+     "operator": "equals",
+     "value": "auditd.log"
+    },
+    {
+     "field_path": "host.os_type",
+     "operator": "equals",
+     "value": "linux"
+    },
+    {
+     "field_path": "audit.record_type",
+     "operator": "equals",
+     "value": "SYSCALL",
+     "case_insensitive": true
+    },
+    {
+     "field_path": "process.executable",
+     "operator": "startswith",
+     "value": "/var/lib/mysql/",
+     "case_insensitive": true
+    }
+   ],
+   "technique_mappings": [
+    {
+     "stix_id": "attack-pattern--7e3beebd-8bfe-4e7b-a892-e44ab06a75f9",
+     "object_type": "attack-pattern",
+     "attack_kb_version": "enterprise-attack-19.2",
+     "external_id": "T1584",
+     "mapping_basis": "Sigma rule a39d7fa7-3fbd-4dc2-97e1-d87f546b1bbc 'Program Executions in Suspicious Folders' (author: Florian Roth (Nextron Systems)) tag attack.t1584",
+     "mapping_source": "sigma"
+    },
+    {
+     "stix_id": "attack-pattern--edadea33-549c-4ed1-9783-8f5a5853cbdf",
+     "object_type": "attack-pattern",
+     "attack_kb_version": "enterprise-attack-19.2",
+     "external_id": "T1587",
+     "mapping_basis": "Sigma rule a39d7fa7-3fbd-4dc2-97e1-d87f546b1bbc 'Program Executions in Suspicious Folders' (author: Florian Roth (Nextron Systems)) tag attack.t1587",
+     "mapping_source": "sigma"
+    }
+   ],
+   "evidence_type": "behavioral",
+   "rule_source": "sigma:a39d7fa7-3fbd-4dc2-97e1-d87f546b1bbc",
+   "rule_family": "sigma:a39d7fa7-3fbd-4dc2-97e1-d87f546b1bbc"
+  },
+  {
+   "rule_id": "sigma:a39d7fa7-3fbd-4dc2-97e1-d87f546b1bbc:013",
+   "rule_version": "r2026-07-01",
+   "conditions": [
+    {
+     "field_path": "event.dataset",
+     "operator": "equals",
+     "value": "auditd.log"
+    },
+    {
+     "field_path": "host.os_type",
+     "operator": "equals",
+     "value": "linux"
+    },
+    {
+     "field_path": "audit.record_type",
+     "operator": "equals",
+     "value": "SYSCALL",
+     "case_insensitive": true
+    },
+    {
+     "field_path": "process.executable",
+     "operator": "startswith",
+     "value": "/var/vsftpd/",
+     "case_insensitive": true
+    }
+   ],
+   "technique_mappings": [
+    {
+     "stix_id": "attack-pattern--7e3beebd-8bfe-4e7b-a892-e44ab06a75f9",
+     "object_type": "attack-pattern",
+     "attack_kb_version": "enterprise-attack-19.2",
+     "external_id": "T1584",
+     "mapping_basis": "Sigma rule a39d7fa7-3fbd-4dc2-97e1-d87f546b1bbc 'Program Executions in Suspicious Folders' (author: Florian Roth (Nextron Systems)) tag attack.t1584",
+     "mapping_source": "sigma"
+    },
+    {
+     "stix_id": "attack-pattern--edadea33-549c-4ed1-9783-8f5a5853cbdf",
+     "object_type": "attack-pattern",
+     "attack_kb_version": "enterprise-attack-19.2",
+     "external_id": "T1587",
+     "mapping_basis": "Sigma rule a39d7fa7-3fbd-4dc2-97e1-d87f546b1bbc 'Program Executions in Suspicious Folders' (author: Florian Roth (Nextron Systems)) tag attack.t1587",
+     "mapping_source": "sigma"
+    }
+   ],
+   "evidence_type": "behavioral",
+   "rule_source": "sigma:a39d7fa7-3fbd-4dc2-97e1-d87f546b1bbc",
+   "rule_family": "sigma:a39d7fa7-3fbd-4dc2-97e1-d87f546b1bbc"
+  },
+  {
+   "rule_id": "sigma:a39d7fa7-3fbd-4dc2-97e1-d87f546b1bbc:014",
+   "rule_version": "r2026-07-01",
+   "conditions": [
+    {
+     "field_path": "event.dataset",
+     "operator": "equals",
+     "value": "auditd.log"
+    },
+    {
+     "field_path": "host.os_type",
+     "operator": "equals",
+     "value": "linux"
+    },
+    {
+     "field_path": "audit.record_type",
+     "operator": "equals",
+     "value": "SYSCALL",
+     "case_insensitive": true
+    },
+    {
+     "field_path": "process.executable",
+     "operator": "startswith",
+     "value": "/etc/bind/",
+     "case_insensitive": true
+    }
+   ],
+   "technique_mappings": [
+    {
+     "stix_id": "attack-pattern--7e3beebd-8bfe-4e7b-a892-e44ab06a75f9",
+     "object_type": "attack-pattern",
+     "attack_kb_version": "enterprise-attack-19.2",
+     "external_id": "T1584",
+     "mapping_basis": "Sigma rule a39d7fa7-3fbd-4dc2-97e1-d87f546b1bbc 'Program Executions in Suspicious Folders' (author: Florian Roth (Nextron Systems)) tag attack.t1584",
+     "mapping_source": "sigma"
+    },
+    {
+     "stix_id": "attack-pattern--edadea33-549c-4ed1-9783-8f5a5853cbdf",
+     "object_type": "attack-pattern",
+     "attack_kb_version": "enterprise-attack-19.2",
+     "external_id": "T1587",
+     "mapping_basis": "Sigma rule a39d7fa7-3fbd-4dc2-97e1-d87f546b1bbc 'Program Executions in Suspicious Folders' (author: Florian Roth (Nextron Systems)) tag attack.t1587",
+     "mapping_source": "sigma"
+    }
+   ],
+   "evidence_type": "behavioral",
+   "rule_source": "sigma:a39d7fa7-3fbd-4dc2-97e1-d87f546b1bbc",
+   "rule_family": "sigma:a39d7fa7-3fbd-4dc2-97e1-d87f546b1bbc"
+  },
+  {
+   "rule_id": "sigma:a39d7fa7-3fbd-4dc2-97e1-d87f546b1bbc:015",
+   "rule_version": "r2026-07-01",
+   "conditions": [
+    {
+     "field_path": "event.dataset",
+     "operator": "equals",
+     "value": "auditd.log"
+    },
+    {
+     "field_path": "host.os_type",
+     "operator": "equals",
+     "value": "linux"
+    },
+    {
+     "field_path": "audit.record_type",
+     "operator": "equals",
+     "value": "SYSCALL",
+     "case_insensitive": true
+    },
+    {
+     "field_path": "process.executable",
+     "operator": "startswith",
+     "value": "/var/named/",
+     "case_insensitive": true
+    }
+   ],
+   "technique_mappings": [
+    {
+     "stix_id": "attack-pattern--7e3beebd-8bfe-4e7b-a892-e44ab06a75f9",
+     "object_type": "attack-pattern",
+     "attack_kb_version": "enterprise-attack-19.2",
+     "external_id": "T1584",
+     "mapping_basis": "Sigma rule a39d7fa7-3fbd-4dc2-97e1-d87f546b1bbc 'Program Executions in Suspicious Folders' (author: Florian Roth (Nextron Systems)) tag attack.t1584",
+     "mapping_source": "sigma"
+    },
+    {
+     "stix_id": "attack-pattern--edadea33-549c-4ed1-9783-8f5a5853cbdf",
+     "object_type": "attack-pattern",
+     "attack_kb_version": "enterprise-attack-19.2",
+     "external_id": "T1587",
+     "mapping_basis": "Sigma rule a39d7fa7-3fbd-4dc2-97e1-d87f546b1bbc 'Program Executions in Suspicious Folders' (author: Florian Roth (Nextron Systems)) tag attack.t1587",
+     "mapping_source": "sigma"
+    }
+   ],
+   "evidence_type": "behavioral",
+   "rule_source": "sigma:a39d7fa7-3fbd-4dc2-97e1-d87f546b1bbc",
+   "rule_family": "sigma:a39d7fa7-3fbd-4dc2-97e1-d87f546b1bbc"
+  },
+  {
    "rule_id": "sigma:a4694263-59a8-4608-a3a0-6f8d3a51664c:000",
    "rule_version": "r2026-07-01",
    "conditions": [
@@ -523241,6 +526362,53 @@
    "evidence_type": "behavioral",
    "rule_source": "sigma:a5a30a6e-75ca-4233-8b8c-42e0f2037d3b",
    "rule_family": "sigma:a5a30a6e-75ca-4233-8b8c-42e0f2037d3b"
+  },
+  {
+   "rule_id": "sigma:a5b977d6-8a81-4475-91b9-49dbfcd941f7:000",
+   "rule_version": "r2026-07-01",
+   "conditions": [
+    {
+     "field_path": "event.dataset",
+     "operator": "equals",
+     "value": "auditd.log"
+    },
+    {
+     "field_path": "host.os_type",
+     "operator": "equals",
+     "value": "linux"
+    },
+    {
+     "field_path": "audit.record_type",
+     "operator": "equals",
+     "value": "EXECVE",
+     "case_insensitive": true
+    },
+    {
+     "field_path": "audit.a0",
+     "operator": "contains",
+     "value": "chattr",
+     "case_insensitive": true
+    },
+    {
+     "field_path": "audit.a1",
+     "operator": "contains",
+     "value": "-i",
+     "case_insensitive": true
+    }
+   ],
+   "technique_mappings": [
+    {
+     "stix_id": "attack-pattern--09b130a2-a77e-4af0-a361-f46f9aad1345",
+     "object_type": "attack-pattern",
+     "attack_kb_version": "enterprise-attack-19.2",
+     "external_id": "T1222.002",
+     "mapping_basis": "Sigma rule a5b977d6-8a81-4475-91b9-49dbfcd941f7 'Remove Immutable File Attribute - Auditd' (author: Jakob Weinzettl, oscd.community) tag attack.t1222.002",
+     "mapping_source": "sigma"
+    }
+   ],
+   "evidence_type": "behavioral",
+   "rule_source": "sigma:a5b977d6-8a81-4475-91b9-49dbfcd941f7",
+   "rule_family": "sigma:a5b977d6-8a81-4475-91b9-49dbfcd941f7"
   },
   {
    "rule_id": "sigma:a5c7a43f-6009-4a8c-80c5-32abf1c53ecc:000",
@@ -530539,6 +533707,662 @@
    "evidence_type": "behavioral",
    "rule_source": "sigma:a8f866e1-bdd4-425e-a27a-37619238d9c7",
    "rule_family": "sigma:a8f866e1-bdd4-425e-a27a-37619238d9c7"
+  },
+  {
+   "rule_id": "sigma:a94cdd87-6c54-4678-a6cc-2814ffe5a13d:000",
+   "rule_version": "r2026-07-01",
+   "conditions": [
+    {
+     "field_path": "event.dataset",
+     "operator": "equals",
+     "value": "auditd.log"
+    },
+    {
+     "field_path": "host.os_type",
+     "operator": "equals",
+     "value": "linux"
+    },
+    {
+     "field_path": "audit.record_type",
+     "operator": "equals",
+     "value": "PATH",
+     "case_insensitive": true
+    },
+    {
+     "field_path": "audit.name",
+     "operator": "equals",
+     "value": "/etc/shells",
+     "case_insensitive": true
+    }
+   ],
+   "technique_mappings": [
+    {
+     "stix_id": "attack-pattern--b63a34e8-0a61-4c97-a23b-bf8a2ed812e2",
+     "object_type": "attack-pattern",
+     "attack_kb_version": "enterprise-attack-19.2",
+     "external_id": "T1546.004",
+     "mapping_basis": "Sigma rule a94cdd87-6c54-4678-a6cc-2814ffe5a13d 'Unix Shell Configuration Modification' (author: Peter Matkovski, IAI) tag attack.t1546.004",
+     "mapping_source": "sigma"
+    }
+   ],
+   "evidence_type": "behavioral",
+   "rule_source": "sigma:a94cdd87-6c54-4678-a6cc-2814ffe5a13d",
+   "rule_family": "sigma:a94cdd87-6c54-4678-a6cc-2814ffe5a13d"
+  },
+  {
+   "rule_id": "sigma:a94cdd87-6c54-4678-a6cc-2814ffe5a13d:001",
+   "rule_version": "r2026-07-01",
+   "conditions": [
+    {
+     "field_path": "event.dataset",
+     "operator": "equals",
+     "value": "auditd.log"
+    },
+    {
+     "field_path": "host.os_type",
+     "operator": "equals",
+     "value": "linux"
+    },
+    {
+     "field_path": "audit.record_type",
+     "operator": "equals",
+     "value": "PATH",
+     "case_insensitive": true
+    },
+    {
+     "field_path": "audit.name",
+     "operator": "equals",
+     "value": "/etc/profile",
+     "case_insensitive": true
+    }
+   ],
+   "technique_mappings": [
+    {
+     "stix_id": "attack-pattern--b63a34e8-0a61-4c97-a23b-bf8a2ed812e2",
+     "object_type": "attack-pattern",
+     "attack_kb_version": "enterprise-attack-19.2",
+     "external_id": "T1546.004",
+     "mapping_basis": "Sigma rule a94cdd87-6c54-4678-a6cc-2814ffe5a13d 'Unix Shell Configuration Modification' (author: Peter Matkovski, IAI) tag attack.t1546.004",
+     "mapping_source": "sigma"
+    }
+   ],
+   "evidence_type": "behavioral",
+   "rule_source": "sigma:a94cdd87-6c54-4678-a6cc-2814ffe5a13d",
+   "rule_family": "sigma:a94cdd87-6c54-4678-a6cc-2814ffe5a13d"
+  },
+  {
+   "rule_id": "sigma:a94cdd87-6c54-4678-a6cc-2814ffe5a13d:002",
+   "rule_version": "r2026-07-01",
+   "conditions": [
+    {
+     "field_path": "event.dataset",
+     "operator": "equals",
+     "value": "auditd.log"
+    },
+    {
+     "field_path": "host.os_type",
+     "operator": "equals",
+     "value": "linux"
+    },
+    {
+     "field_path": "audit.record_type",
+     "operator": "equals",
+     "value": "PATH",
+     "case_insensitive": true
+    },
+    {
+     "field_path": "audit.name",
+     "operator": "startswith",
+     "value": "/etc/profile.d/",
+     "case_insensitive": true
+    }
+   ],
+   "technique_mappings": [
+    {
+     "stix_id": "attack-pattern--b63a34e8-0a61-4c97-a23b-bf8a2ed812e2",
+     "object_type": "attack-pattern",
+     "attack_kb_version": "enterprise-attack-19.2",
+     "external_id": "T1546.004",
+     "mapping_basis": "Sigma rule a94cdd87-6c54-4678-a6cc-2814ffe5a13d 'Unix Shell Configuration Modification' (author: Peter Matkovski, IAI) tag attack.t1546.004",
+     "mapping_source": "sigma"
+    }
+   ],
+   "evidence_type": "behavioral",
+   "rule_source": "sigma:a94cdd87-6c54-4678-a6cc-2814ffe5a13d",
+   "rule_family": "sigma:a94cdd87-6c54-4678-a6cc-2814ffe5a13d"
+  },
+  {
+   "rule_id": "sigma:a94cdd87-6c54-4678-a6cc-2814ffe5a13d:003",
+   "rule_version": "r2026-07-01",
+   "conditions": [
+    {
+     "field_path": "event.dataset",
+     "operator": "equals",
+     "value": "auditd.log"
+    },
+    {
+     "field_path": "host.os_type",
+     "operator": "equals",
+     "value": "linux"
+    },
+    {
+     "field_path": "audit.record_type",
+     "operator": "equals",
+     "value": "PATH",
+     "case_insensitive": true
+    },
+    {
+     "field_path": "audit.name",
+     "operator": "equals",
+     "value": "/etc/bash.bashrc",
+     "case_insensitive": true
+    }
+   ],
+   "technique_mappings": [
+    {
+     "stix_id": "attack-pattern--b63a34e8-0a61-4c97-a23b-bf8a2ed812e2",
+     "object_type": "attack-pattern",
+     "attack_kb_version": "enterprise-attack-19.2",
+     "external_id": "T1546.004",
+     "mapping_basis": "Sigma rule a94cdd87-6c54-4678-a6cc-2814ffe5a13d 'Unix Shell Configuration Modification' (author: Peter Matkovski, IAI) tag attack.t1546.004",
+     "mapping_source": "sigma"
+    }
+   ],
+   "evidence_type": "behavioral",
+   "rule_source": "sigma:a94cdd87-6c54-4678-a6cc-2814ffe5a13d",
+   "rule_family": "sigma:a94cdd87-6c54-4678-a6cc-2814ffe5a13d"
+  },
+  {
+   "rule_id": "sigma:a94cdd87-6c54-4678-a6cc-2814ffe5a13d:004",
+   "rule_version": "r2026-07-01",
+   "conditions": [
+    {
+     "field_path": "event.dataset",
+     "operator": "equals",
+     "value": "auditd.log"
+    },
+    {
+     "field_path": "host.os_type",
+     "operator": "equals",
+     "value": "linux"
+    },
+    {
+     "field_path": "audit.record_type",
+     "operator": "equals",
+     "value": "PATH",
+     "case_insensitive": true
+    },
+    {
+     "field_path": "audit.name",
+     "operator": "equals",
+     "value": "/etc/bashrc",
+     "case_insensitive": true
+    }
+   ],
+   "technique_mappings": [
+    {
+     "stix_id": "attack-pattern--b63a34e8-0a61-4c97-a23b-bf8a2ed812e2",
+     "object_type": "attack-pattern",
+     "attack_kb_version": "enterprise-attack-19.2",
+     "external_id": "T1546.004",
+     "mapping_basis": "Sigma rule a94cdd87-6c54-4678-a6cc-2814ffe5a13d 'Unix Shell Configuration Modification' (author: Peter Matkovski, IAI) tag attack.t1546.004",
+     "mapping_source": "sigma"
+    }
+   ],
+   "evidence_type": "behavioral",
+   "rule_source": "sigma:a94cdd87-6c54-4678-a6cc-2814ffe5a13d",
+   "rule_family": "sigma:a94cdd87-6c54-4678-a6cc-2814ffe5a13d"
+  },
+  {
+   "rule_id": "sigma:a94cdd87-6c54-4678-a6cc-2814ffe5a13d:005",
+   "rule_version": "r2026-07-01",
+   "conditions": [
+    {
+     "field_path": "event.dataset",
+     "operator": "equals",
+     "value": "auditd.log"
+    },
+    {
+     "field_path": "host.os_type",
+     "operator": "equals",
+     "value": "linux"
+    },
+    {
+     "field_path": "audit.record_type",
+     "operator": "equals",
+     "value": "PATH",
+     "case_insensitive": true
+    },
+    {
+     "field_path": "audit.name",
+     "operator": "equals",
+     "value": "/etc/zsh/zprofile",
+     "case_insensitive": true
+    }
+   ],
+   "technique_mappings": [
+    {
+     "stix_id": "attack-pattern--b63a34e8-0a61-4c97-a23b-bf8a2ed812e2",
+     "object_type": "attack-pattern",
+     "attack_kb_version": "enterprise-attack-19.2",
+     "external_id": "T1546.004",
+     "mapping_basis": "Sigma rule a94cdd87-6c54-4678-a6cc-2814ffe5a13d 'Unix Shell Configuration Modification' (author: Peter Matkovski, IAI) tag attack.t1546.004",
+     "mapping_source": "sigma"
+    }
+   ],
+   "evidence_type": "behavioral",
+   "rule_source": "sigma:a94cdd87-6c54-4678-a6cc-2814ffe5a13d",
+   "rule_family": "sigma:a94cdd87-6c54-4678-a6cc-2814ffe5a13d"
+  },
+  {
+   "rule_id": "sigma:a94cdd87-6c54-4678-a6cc-2814ffe5a13d:006",
+   "rule_version": "r2026-07-01",
+   "conditions": [
+    {
+     "field_path": "event.dataset",
+     "operator": "equals",
+     "value": "auditd.log"
+    },
+    {
+     "field_path": "host.os_type",
+     "operator": "equals",
+     "value": "linux"
+    },
+    {
+     "field_path": "audit.record_type",
+     "operator": "equals",
+     "value": "PATH",
+     "case_insensitive": true
+    },
+    {
+     "field_path": "audit.name",
+     "operator": "equals",
+     "value": "/etc/zsh/zshrc",
+     "case_insensitive": true
+    }
+   ],
+   "technique_mappings": [
+    {
+     "stix_id": "attack-pattern--b63a34e8-0a61-4c97-a23b-bf8a2ed812e2",
+     "object_type": "attack-pattern",
+     "attack_kb_version": "enterprise-attack-19.2",
+     "external_id": "T1546.004",
+     "mapping_basis": "Sigma rule a94cdd87-6c54-4678-a6cc-2814ffe5a13d 'Unix Shell Configuration Modification' (author: Peter Matkovski, IAI) tag attack.t1546.004",
+     "mapping_source": "sigma"
+    }
+   ],
+   "evidence_type": "behavioral",
+   "rule_source": "sigma:a94cdd87-6c54-4678-a6cc-2814ffe5a13d",
+   "rule_family": "sigma:a94cdd87-6c54-4678-a6cc-2814ffe5a13d"
+  },
+  {
+   "rule_id": "sigma:a94cdd87-6c54-4678-a6cc-2814ffe5a13d:007",
+   "rule_version": "r2026-07-01",
+   "conditions": [
+    {
+     "field_path": "event.dataset",
+     "operator": "equals",
+     "value": "auditd.log"
+    },
+    {
+     "field_path": "host.os_type",
+     "operator": "equals",
+     "value": "linux"
+    },
+    {
+     "field_path": "audit.record_type",
+     "operator": "equals",
+     "value": "PATH",
+     "case_insensitive": true
+    },
+    {
+     "field_path": "audit.name",
+     "operator": "equals",
+     "value": "/etc/zsh/zlogin",
+     "case_insensitive": true
+    }
+   ],
+   "technique_mappings": [
+    {
+     "stix_id": "attack-pattern--b63a34e8-0a61-4c97-a23b-bf8a2ed812e2",
+     "object_type": "attack-pattern",
+     "attack_kb_version": "enterprise-attack-19.2",
+     "external_id": "T1546.004",
+     "mapping_basis": "Sigma rule a94cdd87-6c54-4678-a6cc-2814ffe5a13d 'Unix Shell Configuration Modification' (author: Peter Matkovski, IAI) tag attack.t1546.004",
+     "mapping_source": "sigma"
+    }
+   ],
+   "evidence_type": "behavioral",
+   "rule_source": "sigma:a94cdd87-6c54-4678-a6cc-2814ffe5a13d",
+   "rule_family": "sigma:a94cdd87-6c54-4678-a6cc-2814ffe5a13d"
+  },
+  {
+   "rule_id": "sigma:a94cdd87-6c54-4678-a6cc-2814ffe5a13d:008",
+   "rule_version": "r2026-07-01",
+   "conditions": [
+    {
+     "field_path": "event.dataset",
+     "operator": "equals",
+     "value": "auditd.log"
+    },
+    {
+     "field_path": "host.os_type",
+     "operator": "equals",
+     "value": "linux"
+    },
+    {
+     "field_path": "audit.record_type",
+     "operator": "equals",
+     "value": "PATH",
+     "case_insensitive": true
+    },
+    {
+     "field_path": "audit.name",
+     "operator": "equals",
+     "value": "/etc/zsh/zlogout",
+     "case_insensitive": true
+    }
+   ],
+   "technique_mappings": [
+    {
+     "stix_id": "attack-pattern--b63a34e8-0a61-4c97-a23b-bf8a2ed812e2",
+     "object_type": "attack-pattern",
+     "attack_kb_version": "enterprise-attack-19.2",
+     "external_id": "T1546.004",
+     "mapping_basis": "Sigma rule a94cdd87-6c54-4678-a6cc-2814ffe5a13d 'Unix Shell Configuration Modification' (author: Peter Matkovski, IAI) tag attack.t1546.004",
+     "mapping_source": "sigma"
+    }
+   ],
+   "evidence_type": "behavioral",
+   "rule_source": "sigma:a94cdd87-6c54-4678-a6cc-2814ffe5a13d",
+   "rule_family": "sigma:a94cdd87-6c54-4678-a6cc-2814ffe5a13d"
+  },
+  {
+   "rule_id": "sigma:a94cdd87-6c54-4678-a6cc-2814ffe5a13d:009",
+   "rule_version": "r2026-07-01",
+   "conditions": [
+    {
+     "field_path": "event.dataset",
+     "operator": "equals",
+     "value": "auditd.log"
+    },
+    {
+     "field_path": "host.os_type",
+     "operator": "equals",
+     "value": "linux"
+    },
+    {
+     "field_path": "audit.record_type",
+     "operator": "equals",
+     "value": "PATH",
+     "case_insensitive": true
+    },
+    {
+     "field_path": "audit.name",
+     "operator": "equals",
+     "value": "/etc/csh.cshrc",
+     "case_insensitive": true
+    }
+   ],
+   "technique_mappings": [
+    {
+     "stix_id": "attack-pattern--b63a34e8-0a61-4c97-a23b-bf8a2ed812e2",
+     "object_type": "attack-pattern",
+     "attack_kb_version": "enterprise-attack-19.2",
+     "external_id": "T1546.004",
+     "mapping_basis": "Sigma rule a94cdd87-6c54-4678-a6cc-2814ffe5a13d 'Unix Shell Configuration Modification' (author: Peter Matkovski, IAI) tag attack.t1546.004",
+     "mapping_source": "sigma"
+    }
+   ],
+   "evidence_type": "behavioral",
+   "rule_source": "sigma:a94cdd87-6c54-4678-a6cc-2814ffe5a13d",
+   "rule_family": "sigma:a94cdd87-6c54-4678-a6cc-2814ffe5a13d"
+  },
+  {
+   "rule_id": "sigma:a94cdd87-6c54-4678-a6cc-2814ffe5a13d:010",
+   "rule_version": "r2026-07-01",
+   "conditions": [
+    {
+     "field_path": "event.dataset",
+     "operator": "equals",
+     "value": "auditd.log"
+    },
+    {
+     "field_path": "host.os_type",
+     "operator": "equals",
+     "value": "linux"
+    },
+    {
+     "field_path": "audit.record_type",
+     "operator": "equals",
+     "value": "PATH",
+     "case_insensitive": true
+    },
+    {
+     "field_path": "audit.name",
+     "operator": "equals",
+     "value": "/etc/csh.login",
+     "case_insensitive": true
+    }
+   ],
+   "technique_mappings": [
+    {
+     "stix_id": "attack-pattern--b63a34e8-0a61-4c97-a23b-bf8a2ed812e2",
+     "object_type": "attack-pattern",
+     "attack_kb_version": "enterprise-attack-19.2",
+     "external_id": "T1546.004",
+     "mapping_basis": "Sigma rule a94cdd87-6c54-4678-a6cc-2814ffe5a13d 'Unix Shell Configuration Modification' (author: Peter Matkovski, IAI) tag attack.t1546.004",
+     "mapping_source": "sigma"
+    }
+   ],
+   "evidence_type": "behavioral",
+   "rule_source": "sigma:a94cdd87-6c54-4678-a6cc-2814ffe5a13d",
+   "rule_family": "sigma:a94cdd87-6c54-4678-a6cc-2814ffe5a13d"
+  },
+  {
+   "rule_id": "sigma:a94cdd87-6c54-4678-a6cc-2814ffe5a13d:011",
+   "rule_version": "r2026-07-01",
+   "conditions": [
+    {
+     "field_path": "event.dataset",
+     "operator": "equals",
+     "value": "auditd.log"
+    },
+    {
+     "field_path": "host.os_type",
+     "operator": "equals",
+     "value": "linux"
+    },
+    {
+     "field_path": "audit.record_type",
+     "operator": "equals",
+     "value": "PATH",
+     "case_insensitive": true
+    },
+    {
+     "field_path": "audit.name",
+     "operator": "equals",
+     "value": "/root/.bashrc",
+     "case_insensitive": true
+    }
+   ],
+   "technique_mappings": [
+    {
+     "stix_id": "attack-pattern--b63a34e8-0a61-4c97-a23b-bf8a2ed812e2",
+     "object_type": "attack-pattern",
+     "attack_kb_version": "enterprise-attack-19.2",
+     "external_id": "T1546.004",
+     "mapping_basis": "Sigma rule a94cdd87-6c54-4678-a6cc-2814ffe5a13d 'Unix Shell Configuration Modification' (author: Peter Matkovski, IAI) tag attack.t1546.004",
+     "mapping_source": "sigma"
+    }
+   ],
+   "evidence_type": "behavioral",
+   "rule_source": "sigma:a94cdd87-6c54-4678-a6cc-2814ffe5a13d",
+   "rule_family": "sigma:a94cdd87-6c54-4678-a6cc-2814ffe5a13d"
+  },
+  {
+   "rule_id": "sigma:a94cdd87-6c54-4678-a6cc-2814ffe5a13d:012",
+   "rule_version": "r2026-07-01",
+   "conditions": [
+    {
+     "field_path": "event.dataset",
+     "operator": "equals",
+     "value": "auditd.log"
+    },
+    {
+     "field_path": "host.os_type",
+     "operator": "equals",
+     "value": "linux"
+    },
+    {
+     "field_path": "audit.record_type",
+     "operator": "equals",
+     "value": "PATH",
+     "case_insensitive": true
+    },
+    {
+     "field_path": "audit.name",
+     "operator": "equals",
+     "value": "/root/.bash_profile",
+     "case_insensitive": true
+    }
+   ],
+   "technique_mappings": [
+    {
+     "stix_id": "attack-pattern--b63a34e8-0a61-4c97-a23b-bf8a2ed812e2",
+     "object_type": "attack-pattern",
+     "attack_kb_version": "enterprise-attack-19.2",
+     "external_id": "T1546.004",
+     "mapping_basis": "Sigma rule a94cdd87-6c54-4678-a6cc-2814ffe5a13d 'Unix Shell Configuration Modification' (author: Peter Matkovski, IAI) tag attack.t1546.004",
+     "mapping_source": "sigma"
+    }
+   ],
+   "evidence_type": "behavioral",
+   "rule_source": "sigma:a94cdd87-6c54-4678-a6cc-2814ffe5a13d",
+   "rule_family": "sigma:a94cdd87-6c54-4678-a6cc-2814ffe5a13d"
+  },
+  {
+   "rule_id": "sigma:a94cdd87-6c54-4678-a6cc-2814ffe5a13d:013",
+   "rule_version": "r2026-07-01",
+   "conditions": [
+    {
+     "field_path": "event.dataset",
+     "operator": "equals",
+     "value": "auditd.log"
+    },
+    {
+     "field_path": "host.os_type",
+     "operator": "equals",
+     "value": "linux"
+    },
+    {
+     "field_path": "audit.record_type",
+     "operator": "equals",
+     "value": "PATH",
+     "case_insensitive": true
+    },
+    {
+     "field_path": "audit.name",
+     "operator": "equals",
+     "value": "/root/.profile",
+     "case_insensitive": true
+    }
+   ],
+   "technique_mappings": [
+    {
+     "stix_id": "attack-pattern--b63a34e8-0a61-4c97-a23b-bf8a2ed812e2",
+     "object_type": "attack-pattern",
+     "attack_kb_version": "enterprise-attack-19.2",
+     "external_id": "T1546.004",
+     "mapping_basis": "Sigma rule a94cdd87-6c54-4678-a6cc-2814ffe5a13d 'Unix Shell Configuration Modification' (author: Peter Matkovski, IAI) tag attack.t1546.004",
+     "mapping_source": "sigma"
+    }
+   ],
+   "evidence_type": "behavioral",
+   "rule_source": "sigma:a94cdd87-6c54-4678-a6cc-2814ffe5a13d",
+   "rule_family": "sigma:a94cdd87-6c54-4678-a6cc-2814ffe5a13d"
+  },
+  {
+   "rule_id": "sigma:a94cdd87-6c54-4678-a6cc-2814ffe5a13d:014",
+   "rule_version": "r2026-07-01",
+   "conditions": [
+    {
+     "field_path": "event.dataset",
+     "operator": "equals",
+     "value": "auditd.log"
+    },
+    {
+     "field_path": "host.os_type",
+     "operator": "equals",
+     "value": "linux"
+    },
+    {
+     "field_path": "audit.record_type",
+     "operator": "equals",
+     "value": "PATH",
+     "case_insensitive": true
+    },
+    {
+     "field_path": "audit.name",
+     "operator": "equals",
+     "value": "/root/.zshrc",
+     "case_insensitive": true
+    }
+   ],
+   "technique_mappings": [
+    {
+     "stix_id": "attack-pattern--b63a34e8-0a61-4c97-a23b-bf8a2ed812e2",
+     "object_type": "attack-pattern",
+     "attack_kb_version": "enterprise-attack-19.2",
+     "external_id": "T1546.004",
+     "mapping_basis": "Sigma rule a94cdd87-6c54-4678-a6cc-2814ffe5a13d 'Unix Shell Configuration Modification' (author: Peter Matkovski, IAI) tag attack.t1546.004",
+     "mapping_source": "sigma"
+    }
+   ],
+   "evidence_type": "behavioral",
+   "rule_source": "sigma:a94cdd87-6c54-4678-a6cc-2814ffe5a13d",
+   "rule_family": "sigma:a94cdd87-6c54-4678-a6cc-2814ffe5a13d"
+  },
+  {
+   "rule_id": "sigma:a94cdd87-6c54-4678-a6cc-2814ffe5a13d:015",
+   "rule_version": "r2026-07-01",
+   "conditions": [
+    {
+     "field_path": "event.dataset",
+     "operator": "equals",
+     "value": "auditd.log"
+    },
+    {
+     "field_path": "host.os_type",
+     "operator": "equals",
+     "value": "linux"
+    },
+    {
+     "field_path": "audit.record_type",
+     "operator": "equals",
+     "value": "PATH",
+     "case_insensitive": true
+    },
+    {
+     "field_path": "audit.name",
+     "operator": "equals",
+     "value": "/root/.zprofile",
+     "case_insensitive": true
+    }
+   ],
+   "technique_mappings": [
+    {
+     "stix_id": "attack-pattern--b63a34e8-0a61-4c97-a23b-bf8a2ed812e2",
+     "object_type": "attack-pattern",
+     "attack_kb_version": "enterprise-attack-19.2",
+     "external_id": "T1546.004",
+     "mapping_basis": "Sigma rule a94cdd87-6c54-4678-a6cc-2814ffe5a13d 'Unix Shell Configuration Modification' (author: Peter Matkovski, IAI) tag attack.t1546.004",
+     "mapping_source": "sigma"
+    }
+   ],
+   "evidence_type": "behavioral",
+   "rule_source": "sigma:a94cdd87-6c54-4678-a6cc-2814ffe5a13d",
+   "rule_family": "sigma:a94cdd87-6c54-4678-a6cc-2814ffe5a13d"
   },
   {
    "rule_id": "sigma:a95b9b42-1308-4735-a1af-abb1c5e6f5ac:000",
@@ -589815,6 +593639,98 @@
    "rule_family": "sigma:c0b40568-b1e9-4b03-8d6c-b096da6da9ab"
   },
   {
+   "rule_id": "sigma:c0d3734d-330f-4a03-aae2-65dacc6a8222:000",
+   "rule_version": "r2026-07-01",
+   "conditions": [
+    {
+     "field_path": "event.dataset",
+     "operator": "equals",
+     "value": "auditd.log"
+    },
+    {
+     "field_path": "host.os_type",
+     "operator": "equals",
+     "value": "linux"
+    },
+    {
+     "field_path": "audit.record_type",
+     "operator": "equals",
+     "value": "SYSCALL",
+     "case_insensitive": true
+    },
+    {
+     "field_path": "audit.syscall_name",
+     "operator": "equals",
+     "value": "execve",
+     "case_insensitive": true
+    },
+    {
+     "field_path": "audit.euid",
+     "operator": "equals",
+     "value": "33"
+    }
+   ],
+   "technique_mappings": [
+    {
+     "stix_id": "attack-pattern--5d0d3609-d06d-49e1-b9c9-b544e0c618cb",
+     "object_type": "attack-pattern",
+     "attack_kb_version": "enterprise-attack-19.2",
+     "external_id": "T1505.003",
+     "mapping_basis": "Sigma rule c0d3734d-330f-4a03-aae2-65dacc6a8222 'Webshell Remote Command Execution' (author: Ilyas Ochkov, Beyu Denis, oscd.community) tag attack.t1505.003",
+     "mapping_source": "sigma"
+    }
+   ],
+   "evidence_type": "behavioral",
+   "rule_source": "sigma:c0d3734d-330f-4a03-aae2-65dacc6a8222",
+   "rule_family": "sigma:c0d3734d-330f-4a03-aae2-65dacc6a8222"
+  },
+  {
+   "rule_id": "sigma:c0d3734d-330f-4a03-aae2-65dacc6a8222:001",
+   "rule_version": "r2026-07-01",
+   "conditions": [
+    {
+     "field_path": "event.dataset",
+     "operator": "equals",
+     "value": "auditd.log"
+    },
+    {
+     "field_path": "host.os_type",
+     "operator": "equals",
+     "value": "linux"
+    },
+    {
+     "field_path": "audit.record_type",
+     "operator": "equals",
+     "value": "SYSCALL",
+     "case_insensitive": true
+    },
+    {
+     "field_path": "audit.syscall_name",
+     "operator": "equals",
+     "value": "execveat",
+     "case_insensitive": true
+    },
+    {
+     "field_path": "audit.euid",
+     "operator": "equals",
+     "value": "33"
+    }
+   ],
+   "technique_mappings": [
+    {
+     "stix_id": "attack-pattern--5d0d3609-d06d-49e1-b9c9-b544e0c618cb",
+     "object_type": "attack-pattern",
+     "attack_kb_version": "enterprise-attack-19.2",
+     "external_id": "T1505.003",
+     "mapping_basis": "Sigma rule c0d3734d-330f-4a03-aae2-65dacc6a8222 'Webshell Remote Command Execution' (author: Ilyas Ochkov, Beyu Denis, oscd.community) tag attack.t1505.003",
+     "mapping_source": "sigma"
+    }
+   ],
+   "evidence_type": "behavioral",
+   "rule_source": "sigma:c0d3734d-330f-4a03-aae2-65dacc6a8222",
+   "rule_family": "sigma:c0d3734d-330f-4a03-aae2-65dacc6a8222"
+  },
+  {
    "rule_id": "sigma:c0e0bdec-3e3d-47aa-9974-05539c999c89:000",
    "rule_version": "r2026-07-01",
    "conditions": [
@@ -608749,6 +612665,129 @@
    "rule_family": "sigma:c7dcacd0-cc59-4004-b0a4-1d6cdebe6f3e"
   },
   {
+   "rule_id": "sigma:c830f15d-6f6e-430f-8074-6f73d6807841:000",
+   "rule_version": "r2026-07-01",
+   "conditions": [
+    {
+     "field_path": "event.dataset",
+     "operator": "equals",
+     "value": "auditd.log"
+    },
+    {
+     "field_path": "host.os_type",
+     "operator": "equals",
+     "value": "linux"
+    },
+    {
+     "field_path": "audit.record_type",
+     "operator": "equals",
+     "value": "PATH",
+     "case_insensitive": true
+    },
+    {
+     "field_path": "audit.name",
+     "operator": "equals",
+     "value": "/etc/syslog.conf",
+     "case_insensitive": true
+    }
+   ],
+   "technique_mappings": [
+    {
+     "stix_id": "attack-pattern--bbde9781-60aa-4b8a-a911-895b0c1b3872",
+     "object_type": "attack-pattern",
+     "attack_kb_version": "enterprise-attack-19.2",
+     "external_id": "T1685",
+     "mapping_basis": "Sigma rule c830f15d-6f6e-430f-8074-6f73d6807841 'Logging Configuration Changes on Linux Host' (author: Mikhail Larin, oscd.community) tag attack.t1685",
+     "mapping_source": "sigma"
+    }
+   ],
+   "evidence_type": "behavioral",
+   "rule_source": "sigma:c830f15d-6f6e-430f-8074-6f73d6807841",
+   "rule_family": "sigma:c830f15d-6f6e-430f-8074-6f73d6807841"
+  },
+  {
+   "rule_id": "sigma:c830f15d-6f6e-430f-8074-6f73d6807841:001",
+   "rule_version": "r2026-07-01",
+   "conditions": [
+    {
+     "field_path": "event.dataset",
+     "operator": "equals",
+     "value": "auditd.log"
+    },
+    {
+     "field_path": "host.os_type",
+     "operator": "equals",
+     "value": "linux"
+    },
+    {
+     "field_path": "audit.record_type",
+     "operator": "equals",
+     "value": "PATH",
+     "case_insensitive": true
+    },
+    {
+     "field_path": "audit.name",
+     "operator": "equals",
+     "value": "/etc/rsyslog.conf",
+     "case_insensitive": true
+    }
+   ],
+   "technique_mappings": [
+    {
+     "stix_id": "attack-pattern--bbde9781-60aa-4b8a-a911-895b0c1b3872",
+     "object_type": "attack-pattern",
+     "attack_kb_version": "enterprise-attack-19.2",
+     "external_id": "T1685",
+     "mapping_basis": "Sigma rule c830f15d-6f6e-430f-8074-6f73d6807841 'Logging Configuration Changes on Linux Host' (author: Mikhail Larin, oscd.community) tag attack.t1685",
+     "mapping_source": "sigma"
+    }
+   ],
+   "evidence_type": "behavioral",
+   "rule_source": "sigma:c830f15d-6f6e-430f-8074-6f73d6807841",
+   "rule_family": "sigma:c830f15d-6f6e-430f-8074-6f73d6807841"
+  },
+  {
+   "rule_id": "sigma:c830f15d-6f6e-430f-8074-6f73d6807841:002",
+   "rule_version": "r2026-07-01",
+   "conditions": [
+    {
+     "field_path": "event.dataset",
+     "operator": "equals",
+     "value": "auditd.log"
+    },
+    {
+     "field_path": "host.os_type",
+     "operator": "equals",
+     "value": "linux"
+    },
+    {
+     "field_path": "audit.record_type",
+     "operator": "equals",
+     "value": "PATH",
+     "case_insensitive": true
+    },
+    {
+     "field_path": "audit.name",
+     "operator": "equals",
+     "value": "/etc/syslog-ng/syslog-ng.conf",
+     "case_insensitive": true
+    }
+   ],
+   "technique_mappings": [
+    {
+     "stix_id": "attack-pattern--bbde9781-60aa-4b8a-a911-895b0c1b3872",
+     "object_type": "attack-pattern",
+     "attack_kb_version": "enterprise-attack-19.2",
+     "external_id": "T1685",
+     "mapping_basis": "Sigma rule c830f15d-6f6e-430f-8074-6f73d6807841 'Logging Configuration Changes on Linux Host' (author: Mikhail Larin, oscd.community) tag attack.t1685",
+     "mapping_source": "sigma"
+    }
+   ],
+   "evidence_type": "behavioral",
+   "rule_source": "sigma:c830f15d-6f6e-430f-8074-6f73d6807841",
+   "rule_family": "sigma:c830f15d-6f6e-430f-8074-6f73d6807841"
+  },
+  {
    "rule_id": "sigma:c8a180d6-47a3-4345-a609-53f9c3d834fc:000",
    "rule_version": "r2026-07-01",
    "conditions": [
@@ -617338,6 +621377,53 @@
    "evidence_type": "behavioral",
    "rule_source": "sigma:cb0fe7c5-f3a3-484d-aa25-d350a7912729",
    "rule_family": "sigma:cb0fe7c5-f3a3-484d-aa25-d350a7912729"
+  },
+  {
+   "rule_id": "sigma:cb39d16b-b3b6-4a7a-8222-1cf24b686ffc:000",
+   "rule_version": "r2026-07-01",
+   "conditions": [
+    {
+     "field_path": "event.dataset",
+     "operator": "equals",
+     "value": "auditd.log"
+    },
+    {
+     "field_path": "host.os_type",
+     "operator": "equals",
+     "value": "linux"
+    },
+    {
+     "field_path": "audit.record_type",
+     "operator": "equals",
+     "value": "EXECVE",
+     "case_insensitive": true
+    },
+    {
+     "field_path": "audit.a0",
+     "operator": "equals",
+     "value": "wget",
+     "case_insensitive": true
+    },
+    {
+     "field_path": "audit.a1",
+     "operator": "startswith",
+     "value": "--post-file=",
+     "case_insensitive": true
+    }
+   ],
+   "technique_mappings": [
+    {
+     "stix_id": "attack-pattern--fb8d023d-45be-47e9-bc51-f56bcae6435b",
+     "object_type": "attack-pattern",
+     "attack_kb_version": "enterprise-attack-19.2",
+     "external_id": "T1048.003",
+     "mapping_basis": "Sigma rule cb39d16b-b3b6-4a7a-8222-1cf24b686ffc 'Data Exfiltration with Wget' (author: Pawel Mazur) tag attack.t1048.003",
+     "mapping_source": "sigma"
+    }
+   ],
+   "evidence_type": "behavioral",
+   "rule_source": "sigma:cb39d16b-b3b6-4a7a-8222-1cf24b686ffc",
+   "rule_family": "sigma:cb39d16b-b3b6-4a7a-8222-1cf24b686ffc"
   },
   {
    "rule_id": "sigma:cbb9e3d1-2386-4e59-912e-62f1484f7a89:000",
@@ -693607,6 +697693,121 @@
    "rule_family": "sigma:e4903324-1a10-4ed3-981b-f6fe3be3a2c2"
   },
   {
+   "rule_id": "sigma:e497a24e-9345-4a62-9803-b06d7d7cb132:000",
+   "rule_version": "r2026-07-01",
+   "conditions": [
+    {
+     "field_path": "event.dataset",
+     "operator": "equals",
+     "value": "auditd.log"
+    },
+    {
+     "field_path": "host.os_type",
+     "operator": "equals",
+     "value": "linux"
+    },
+    {
+     "field_path": "audit.record_type",
+     "operator": "equals",
+     "value": "SYSCALL",
+     "case_insensitive": true
+    },
+    {
+     "field_path": "audit.syscall_name",
+     "operator": "equals",
+     "value": "personality",
+     "case_insensitive": true
+    },
+    {
+     "field_path": "audit.a0",
+     "operator": "equals",
+     "value": "40000"
+    }
+   ],
+   "technique_mappings": [
+    {
+     "stix_id": "attack-pattern--bbde9781-60aa-4b8a-a911-895b0c1b3872",
+     "object_type": "attack-pattern",
+     "attack_kb_version": "enterprise-attack-19.2",
+     "external_id": "T1685",
+     "mapping_basis": "Sigma rule e497a24e-9345-4a62-9803-b06d7d7cb132 'ASLR Disabled Via Sysctl or Direct Syscall - Linux' (author: Milad Cheraghi) tag attack.t1685",
+     "mapping_source": "sigma"
+    },
+    {
+     "stix_id": "attack-pattern--d201d4cc-214d-4a74-a1ba-b3fa09fd4591",
+     "object_type": "attack-pattern",
+     "attack_kb_version": "enterprise-attack-19.2",
+     "external_id": "T1055.009",
+     "mapping_basis": "Sigma rule e497a24e-9345-4a62-9803-b06d7d7cb132 'ASLR Disabled Via Sysctl or Direct Syscall - Linux' (author: Milad Cheraghi) tag attack.t1055.009",
+     "mapping_source": "sigma"
+    }
+   ],
+   "evidence_type": "behavioral",
+   "rule_source": "sigma:e497a24e-9345-4a62-9803-b06d7d7cb132",
+   "rule_family": "sigma:e497a24e-9345-4a62-9803-b06d7d7cb132"
+  },
+  {
+   "rule_id": "sigma:e497a24e-9345-4a62-9803-b06d7d7cb132:001",
+   "rule_version": "r2026-07-01",
+   "conditions": [
+    {
+     "field_path": "event.dataset",
+     "operator": "equals",
+     "value": "auditd.log"
+    },
+    {
+     "field_path": "host.os_type",
+     "operator": "equals",
+     "value": "linux"
+    },
+    {
+     "field_path": "audit.record_type",
+     "operator": "equals",
+     "value": "EXECVE",
+     "case_insensitive": true
+    },
+    {
+     "field_path": "audit.a0",
+     "operator": "equals",
+     "value": "sysctl",
+     "case_insensitive": true
+    },
+    {
+     "field_path": "audit.a1",
+     "operator": "equals",
+     "value": "-w",
+     "case_insensitive": true
+    },
+    {
+     "field_path": "audit.a2",
+     "operator": "equals",
+     "value": "kernel.randomize_va_space=0",
+     "case_insensitive": true
+    }
+   ],
+   "technique_mappings": [
+    {
+     "stix_id": "attack-pattern--bbde9781-60aa-4b8a-a911-895b0c1b3872",
+     "object_type": "attack-pattern",
+     "attack_kb_version": "enterprise-attack-19.2",
+     "external_id": "T1685",
+     "mapping_basis": "Sigma rule e497a24e-9345-4a62-9803-b06d7d7cb132 'ASLR Disabled Via Sysctl or Direct Syscall - Linux' (author: Milad Cheraghi) tag attack.t1685",
+     "mapping_source": "sigma"
+    },
+    {
+     "stix_id": "attack-pattern--d201d4cc-214d-4a74-a1ba-b3fa09fd4591",
+     "object_type": "attack-pattern",
+     "attack_kb_version": "enterprise-attack-19.2",
+     "external_id": "T1055.009",
+     "mapping_basis": "Sigma rule e497a24e-9345-4a62-9803-b06d7d7cb132 'ASLR Disabled Via Sysctl or Direct Syscall - Linux' (author: Milad Cheraghi) tag attack.t1055.009",
+     "mapping_source": "sigma"
+    }
+   ],
+   "evidence_type": "behavioral",
+   "rule_source": "sigma:e497a24e-9345-4a62-9803-b06d7d7cb132",
+   "rule_family": "sigma:e497a24e-9345-4a62-9803-b06d7d7cb132"
+  },
+  {
    "rule_id": "sigma:e49b5745-1064-4ac1-9a2e-f687bc2dd37e:000",
    "rule_version": "r2026-07-01",
    "conditions": [
@@ -712163,6 +716364,201 @@
    "rule_family": "sigma:ea5c131b-380d-49f9-aeb3-920694da4d4b"
   },
   {
+   "rule_id": "sigma:ea61bb82-a5e0-42e6-8537-91d29500f1b9:000",
+   "rule_version": "r2026-07-01",
+   "conditions": [
+    {
+     "field_path": "event.dataset",
+     "operator": "equals",
+     "value": "auditd.log"
+    },
+    {
+     "field_path": "host.os_type",
+     "operator": "equals",
+     "value": "linux"
+    },
+    {
+     "field_path": "audit.record_type",
+     "operator": "equals",
+     "value": "PATH",
+     "case_insensitive": true
+    },
+    {
+     "field_path": "audit.name",
+     "operator": "endswith",
+     "value": "/sysrq",
+     "case_insensitive": true
+    }
+   ],
+   "technique_mappings": [
+    {
+     "stix_id": "attack-pattern--20fb2507-d71c-455d-9b6d-6104461cf26b",
+     "object_type": "attack-pattern",
+     "attack_kb_version": "enterprise-attack-19.2",
+     "external_id": "T1489",
+     "mapping_basis": "Sigma rule ea61bb82-a5e0-42e6-8537-91d29500f1b9 'Potential Abuse of Linux Magic System Request Key' (author: Milad Cheraghi) tag attack.t1489",
+     "mapping_source": "sigma"
+    },
+    {
+     "stix_id": "attack-pattern--a9d4b653-6915-42af-98b2-5758c4ceee56",
+     "object_type": "attack-pattern",
+     "attack_kb_version": "enterprise-attack-19.2",
+     "external_id": "T1059.004",
+     "mapping_basis": "Sigma rule ea61bb82-a5e0-42e6-8537-91d29500f1b9 'Potential Abuse of Linux Magic System Request Key' (author: Milad Cheraghi) tag attack.t1059.004",
+     "mapping_source": "sigma"
+    },
+    {
+     "stix_id": "attack-pattern--c675646d-e204-4aa8-978d-e3d6d65885c4",
+     "object_type": "attack-pattern",
+     "attack_kb_version": "enterprise-attack-19.2",
+     "external_id": "T1499",
+     "mapping_basis": "Sigma rule ea61bb82-a5e0-42e6-8537-91d29500f1b9 'Potential Abuse of Linux Magic System Request Key' (author: Milad Cheraghi) tag attack.t1499",
+     "mapping_source": "sigma"
+    },
+    {
+     "stix_id": "attack-pattern--ff73aa03-0090-4464-83ac-f89e233c02bc",
+     "object_type": "attack-pattern",
+     "attack_kb_version": "enterprise-attack-19.2",
+     "external_id": "T1529",
+     "mapping_basis": "Sigma rule ea61bb82-a5e0-42e6-8537-91d29500f1b9 'Potential Abuse of Linux Magic System Request Key' (author: Milad Cheraghi) tag attack.t1529",
+     "mapping_source": "sigma"
+    }
+   ],
+   "evidence_type": "behavioral",
+   "rule_source": "sigma:ea61bb82-a5e0-42e6-8537-91d29500f1b9",
+   "rule_family": "sigma:ea61bb82-a5e0-42e6-8537-91d29500f1b9"
+  },
+  {
+   "rule_id": "sigma:ea61bb82-a5e0-42e6-8537-91d29500f1b9:001",
+   "rule_version": "r2026-07-01",
+   "conditions": [
+    {
+     "field_path": "event.dataset",
+     "operator": "equals",
+     "value": "auditd.log"
+    },
+    {
+     "field_path": "host.os_type",
+     "operator": "equals",
+     "value": "linux"
+    },
+    {
+     "field_path": "audit.record_type",
+     "operator": "equals",
+     "value": "PATH",
+     "case_insensitive": true
+    },
+    {
+     "field_path": "audit.name",
+     "operator": "endswith",
+     "value": "/sysctl.conf",
+     "case_insensitive": true
+    }
+   ],
+   "technique_mappings": [
+    {
+     "stix_id": "attack-pattern--20fb2507-d71c-455d-9b6d-6104461cf26b",
+     "object_type": "attack-pattern",
+     "attack_kb_version": "enterprise-attack-19.2",
+     "external_id": "T1489",
+     "mapping_basis": "Sigma rule ea61bb82-a5e0-42e6-8537-91d29500f1b9 'Potential Abuse of Linux Magic System Request Key' (author: Milad Cheraghi) tag attack.t1489",
+     "mapping_source": "sigma"
+    },
+    {
+     "stix_id": "attack-pattern--a9d4b653-6915-42af-98b2-5758c4ceee56",
+     "object_type": "attack-pattern",
+     "attack_kb_version": "enterprise-attack-19.2",
+     "external_id": "T1059.004",
+     "mapping_basis": "Sigma rule ea61bb82-a5e0-42e6-8537-91d29500f1b9 'Potential Abuse of Linux Magic System Request Key' (author: Milad Cheraghi) tag attack.t1059.004",
+     "mapping_source": "sigma"
+    },
+    {
+     "stix_id": "attack-pattern--c675646d-e204-4aa8-978d-e3d6d65885c4",
+     "object_type": "attack-pattern",
+     "attack_kb_version": "enterprise-attack-19.2",
+     "external_id": "T1499",
+     "mapping_basis": "Sigma rule ea61bb82-a5e0-42e6-8537-91d29500f1b9 'Potential Abuse of Linux Magic System Request Key' (author: Milad Cheraghi) tag attack.t1499",
+     "mapping_source": "sigma"
+    },
+    {
+     "stix_id": "attack-pattern--ff73aa03-0090-4464-83ac-f89e233c02bc",
+     "object_type": "attack-pattern",
+     "attack_kb_version": "enterprise-attack-19.2",
+     "external_id": "T1529",
+     "mapping_basis": "Sigma rule ea61bb82-a5e0-42e6-8537-91d29500f1b9 'Potential Abuse of Linux Magic System Request Key' (author: Milad Cheraghi) tag attack.t1529",
+     "mapping_source": "sigma"
+    }
+   ],
+   "evidence_type": "behavioral",
+   "rule_source": "sigma:ea61bb82-a5e0-42e6-8537-91d29500f1b9",
+   "rule_family": "sigma:ea61bb82-a5e0-42e6-8537-91d29500f1b9"
+  },
+  {
+   "rule_id": "sigma:ea61bb82-a5e0-42e6-8537-91d29500f1b9:002",
+   "rule_version": "r2026-07-01",
+   "conditions": [
+    {
+     "field_path": "event.dataset",
+     "operator": "equals",
+     "value": "auditd.log"
+    },
+    {
+     "field_path": "host.os_type",
+     "operator": "equals",
+     "value": "linux"
+    },
+    {
+     "field_path": "audit.record_type",
+     "operator": "equals",
+     "value": "PATH",
+     "case_insensitive": true
+    },
+    {
+     "field_path": "audit.name",
+     "operator": "endswith",
+     "value": "/sysrq-trigger",
+     "case_insensitive": true
+    }
+   ],
+   "technique_mappings": [
+    {
+     "stix_id": "attack-pattern--20fb2507-d71c-455d-9b6d-6104461cf26b",
+     "object_type": "attack-pattern",
+     "attack_kb_version": "enterprise-attack-19.2",
+     "external_id": "T1489",
+     "mapping_basis": "Sigma rule ea61bb82-a5e0-42e6-8537-91d29500f1b9 'Potential Abuse of Linux Magic System Request Key' (author: Milad Cheraghi) tag attack.t1489",
+     "mapping_source": "sigma"
+    },
+    {
+     "stix_id": "attack-pattern--a9d4b653-6915-42af-98b2-5758c4ceee56",
+     "object_type": "attack-pattern",
+     "attack_kb_version": "enterprise-attack-19.2",
+     "external_id": "T1059.004",
+     "mapping_basis": "Sigma rule ea61bb82-a5e0-42e6-8537-91d29500f1b9 'Potential Abuse of Linux Magic System Request Key' (author: Milad Cheraghi) tag attack.t1059.004",
+     "mapping_source": "sigma"
+    },
+    {
+     "stix_id": "attack-pattern--c675646d-e204-4aa8-978d-e3d6d65885c4",
+     "object_type": "attack-pattern",
+     "attack_kb_version": "enterprise-attack-19.2",
+     "external_id": "T1499",
+     "mapping_basis": "Sigma rule ea61bb82-a5e0-42e6-8537-91d29500f1b9 'Potential Abuse of Linux Magic System Request Key' (author: Milad Cheraghi) tag attack.t1499",
+     "mapping_source": "sigma"
+    },
+    {
+     "stix_id": "attack-pattern--ff73aa03-0090-4464-83ac-f89e233c02bc",
+     "object_type": "attack-pattern",
+     "attack_kb_version": "enterprise-attack-19.2",
+     "external_id": "T1529",
+     "mapping_basis": "Sigma rule ea61bb82-a5e0-42e6-8537-91d29500f1b9 'Potential Abuse of Linux Magic System Request Key' (author: Milad Cheraghi) tag attack.t1529",
+     "mapping_source": "sigma"
+    }
+   ],
+   "evidence_type": "behavioral",
+   "rule_source": "sigma:ea61bb82-a5e0-42e6-8537-91d29500f1b9",
+   "rule_family": "sigma:ea61bb82-a5e0-42e6-8537-91d29500f1b9"
+  },
+  {
    "rule_id": "sigma:eb1c4225-1c23-4241-8dd4-051389fde4ce:000",
    "rule_version": "r2026-07-01",
    "conditions": [
@@ -715924,6 +720320,144 @@
    "evidence_type": "behavioral",
    "rule_source": "sigma:eca49c87-8a75-4f13-9c73-a5a29e845f03",
    "rule_family": "sigma:eca49c87-8a75-4f13-9c73-a5a29e845f03"
+  },
+  {
+   "rule_id": "sigma:eca5e022-d368-4043-98e5-9736fb01f72f:000",
+   "rule_version": "r2026-07-01",
+   "conditions": [
+    {
+     "field_path": "event.dataset",
+     "operator": "equals",
+     "value": "auditd.log"
+    },
+    {
+     "field_path": "host.os_type",
+     "operator": "equals",
+     "value": "linux"
+    },
+    {
+     "field_path": "audit.record_type",
+     "operator": "equals",
+     "value": "SYSCALL",
+     "case_insensitive": true
+    },
+    {
+     "field_path": "audit.syscall_name",
+     "operator": "equals",
+     "value": "syslog",
+     "case_insensitive": true
+    },
+    {
+     "field_path": "audit.a0",
+     "operator": "equals",
+     "value": "4"
+    }
+   ],
+   "technique_mappings": [
+    {
+     "stix_id": "attack-pattern--5e29d64d-2b14-4f92-875e-4c9c498e213c",
+     "object_type": "attack-pattern",
+     "attack_kb_version": "enterprise-attack-19.2",
+     "external_id": "T1685.006",
+     "mapping_basis": "Sigma rule eca5e022-d368-4043-98e5-9736fb01f72f 'Clear or Disable Kernel Ring Buffer Logs via Syslog Syscall' (author: Milad Cheraghi) tag attack.t1685.006",
+     "mapping_source": "sigma"
+    }
+   ],
+   "evidence_type": "behavioral",
+   "rule_source": "sigma:eca5e022-d368-4043-98e5-9736fb01f72f",
+   "rule_family": "sigma:eca5e022-d368-4043-98e5-9736fb01f72f"
+  },
+  {
+   "rule_id": "sigma:eca5e022-d368-4043-98e5-9736fb01f72f:001",
+   "rule_version": "r2026-07-01",
+   "conditions": [
+    {
+     "field_path": "event.dataset",
+     "operator": "equals",
+     "value": "auditd.log"
+    },
+    {
+     "field_path": "host.os_type",
+     "operator": "equals",
+     "value": "linux"
+    },
+    {
+     "field_path": "audit.record_type",
+     "operator": "equals",
+     "value": "SYSCALL",
+     "case_insensitive": true
+    },
+    {
+     "field_path": "audit.syscall_name",
+     "operator": "equals",
+     "value": "syslog",
+     "case_insensitive": true
+    },
+    {
+     "field_path": "audit.a0",
+     "operator": "equals",
+     "value": "5"
+    }
+   ],
+   "technique_mappings": [
+    {
+     "stix_id": "attack-pattern--5e29d64d-2b14-4f92-875e-4c9c498e213c",
+     "object_type": "attack-pattern",
+     "attack_kb_version": "enterprise-attack-19.2",
+     "external_id": "T1685.006",
+     "mapping_basis": "Sigma rule eca5e022-d368-4043-98e5-9736fb01f72f 'Clear or Disable Kernel Ring Buffer Logs via Syslog Syscall' (author: Milad Cheraghi) tag attack.t1685.006",
+     "mapping_source": "sigma"
+    }
+   ],
+   "evidence_type": "behavioral",
+   "rule_source": "sigma:eca5e022-d368-4043-98e5-9736fb01f72f",
+   "rule_family": "sigma:eca5e022-d368-4043-98e5-9736fb01f72f"
+  },
+  {
+   "rule_id": "sigma:eca5e022-d368-4043-98e5-9736fb01f72f:002",
+   "rule_version": "r2026-07-01",
+   "conditions": [
+    {
+     "field_path": "event.dataset",
+     "operator": "equals",
+     "value": "auditd.log"
+    },
+    {
+     "field_path": "host.os_type",
+     "operator": "equals",
+     "value": "linux"
+    },
+    {
+     "field_path": "audit.record_type",
+     "operator": "equals",
+     "value": "SYSCALL",
+     "case_insensitive": true
+    },
+    {
+     "field_path": "audit.syscall_name",
+     "operator": "equals",
+     "value": "syslog",
+     "case_insensitive": true
+    },
+    {
+     "field_path": "audit.a0",
+     "operator": "equals",
+     "value": "6"
+    }
+   ],
+   "technique_mappings": [
+    {
+     "stix_id": "attack-pattern--5e29d64d-2b14-4f92-875e-4c9c498e213c",
+     "object_type": "attack-pattern",
+     "attack_kb_version": "enterprise-attack-19.2",
+     "external_id": "T1685.006",
+     "mapping_basis": "Sigma rule eca5e022-d368-4043-98e5-9736fb01f72f 'Clear or Disable Kernel Ring Buffer Logs via Syslog Syscall' (author: Milad Cheraghi) tag attack.t1685.006",
+     "mapping_source": "sigma"
+    }
+   ],
+   "evidence_type": "behavioral",
+   "rule_source": "sigma:eca5e022-d368-4043-98e5-9736fb01f72f",
+   "rule_family": "sigma:eca5e022-d368-4043-98e5-9736fb01f72f"
   },
   {
    "rule_id": "sigma:eca8ae39-5c3c-4321-b538-9e64fe25822e:000",

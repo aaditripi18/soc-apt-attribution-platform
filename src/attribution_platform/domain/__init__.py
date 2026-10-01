@@ -38,6 +38,7 @@ from __future__ import annotations
 from attribution_platform.domain.attack import AttackRef
 from attribution_platform.domain.entities import (
     AccountChangeRef,
+    AuditRef,
     CodeSignature,
     CredentialReadRef,
     DllRef,
@@ -76,6 +77,7 @@ from attribution_platform.domain.provenance import DerivationProvenance, SourceR
 from attribution_platform.domain.serialization import to_canonical_json, to_serializable
 
 __all__ = [
+    "AuditRef",
     "WfpFilterRef",
     "ServiceRef",
     "ScheduledTaskRef",

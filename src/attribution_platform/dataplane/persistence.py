@@ -76,6 +76,7 @@ from attribution_platform.domain import (
     OBSERVATION_SCHEMA_VERSION,
     AccountChangeRef,
     AttackRef,
+    AuditRef,
     CodeSignature,
     CredentialReadRef,
     DerivationProvenance,
@@ -214,6 +215,7 @@ def _observation_from_document(doc: Mapping[str, Any]) -> Observation:
             account_change=_flat_ref_from_dict(AccountChangeRef, doc.get("account_change")),
             credential_read=_flat_ref_from_dict(CredentialReadRef, doc.get("credential_read")),
             wfp_filter=_flat_ref_from_dict(WfpFilterRef, doc.get("wfp_filter")),
+            audit=_flat_ref_from_dict(AuditRef, doc.get("audit")),
             schema_version=schema_version,
         )
     except ElasticIntegrationError:

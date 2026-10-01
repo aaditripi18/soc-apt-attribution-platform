@@ -149,3 +149,38 @@ may label a Sandworm family is a labelling-rule decision for ADR-0006 / doc 15, 
   source-agnostic ✓ (same builders, OS from facts), correlation facts ✓ (process GUIDs), Sigma wiring ✓, evidence
   type ✓; auditd (D4) remains the next batch — its available real logs are `ausearch -i` output whose event time
   has no zone, so a trustworthy event time must be established first or those records refused.
+
+## Implementation record — auditd (2026-10-01)
+
+- *Adapter (D4):* `sources/auditd.py` — one Observation per raw `audit.log` record, `node=` optional, the
+  ENRICHED format's interpreted suffix (after the `\x1d` group separator) read for the syscall *name* and account
+  names only. Event time = `msg=audit(<epoch>.<ms>:…)`, UTC, millisecond precision. auditd's untrusted-string
+  encoding undone exactly (quoted literal / unquoted hex / `(null)`); split `aN_len` / `aN[i]` arguments,
+  duplicates, non-UTF-8 hex and non-records fail closed. Nested `msg='…'` (SERVICE_STOP, ADD_USER, …) is parsed;
+  a bare value there runs to the next `key=` — **found by the golden test:** auditd writes `op=adding user`
+  unquoted, which a whitespace tokenizer truncated to `op=adding`.
+- *Host:* the records name no host (no `node=`), and a host is never guessed. The pipeline gives the adapter the
+  host the recording's **source declaration** states for `auditd` (only when exactly one host declares it);
+  the report declares each dataset directory (one attack-range host) by its dataset path as `HostRef.id`.
+- *Time — real-data finding:* of 7,187 audit records in the cache, **6,348 are `ausearch -i` output**
+  (`msg=audit(MM/DD/YYYY hh:mm:ss.mmm:serial) :`): local time with **no zone**, so no trustworthy event time
+  exists — refused, as the zone-less round-1 Windows exports were. 2 records with bare unencoded arguments
+  (`a0=xclip`, which auditd never writes — a post-processed file) are refused. **837** raw records remain
+  (839 lines; one record appears twice in its dataset).
+- *Correlation:* ADR-0003 Amendment G — `SAME_AUDIT_EVENT` (structural; same host scope + event serial).
+- *Detection:* `linux/auditd` scoped by `event.dataset equals auditd.log` + the Linux OS scope
+  (`sigma-field-map/11`). auditd rules imported 0 → **19** (+2 partial; 5 free-text keyword rules and 2
+  empty-value rules stay translation gaps). Pack 1,539 → 1,558; ATT&CK ids with an imported rule 291 → 297;
+  group-used techniques **238 → 242 of 498**.
+- *Dataset labels:* Splunk's labels predate ATT&CK v19's renumbering (e.g. `T1562.004`, revoked by `T1686`).
+  `attack_knowledge/external_ids.py` (`ExternalIdResolver`) now holds the importer's `revoked-by` resolution
+  (moved, not copied — the import output is byte-identical) and the report resolves labels through it.
+- *Real-data results (report v2):* only Linux rules fire on either source. auditd: 8 detections by 4 rules
+  (kernel module via insmod, `ld.so.preload` modification, user creation, firewall disable); **4 of 48** labelled
+  datasets have their documented technique detected. Sysmon for Linux unchanged: 1 of 45. As before, the misses
+  are content gaps, and most auditd datasets hold only refused `ausearch -i` records.
+- *Acceptance (ADR-0008 D2):* exact mapping ✓, fail-closed ✓, real-sample golden tests ✓ (9 auditd records,
+  21 tests), source-agnostic ✓, correlation facts ✓ (`SAME_AUDIT_EVENT`; Sysmon ↔ auditd pid resolution only
+  where one host records both — not in the available data), Sigma wiring ✓, evidence type ✓. D5 (Sysmon-over-
+  auditd precedence) is not needed: auditd records are not classified as process starts, so no observation kind
+  is double-counted; it will be revisited if a process-start mapping is added.

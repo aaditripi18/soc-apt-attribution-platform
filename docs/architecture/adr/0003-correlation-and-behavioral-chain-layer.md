@@ -884,3 +884,27 @@ single-Evidence group per unmerged Evidence — the protected property is unchan
 **Cost.** More, smaller units per investigation (Empire 65); each is analysed independently. Noise from a broad
 rule (e.g. Password Policy Enumerated's 43 machine-account matches) becomes visible as low-support units rather
 than disappearing — the honest outcome under ADR-0007's "measure, don't suppress".
+
+## Amendment G (2026-10-01) — Records of one Linux Audit event are one instance (`SAME_AUDIT_EVENT`)
+
+**Status:** Accepted (owner delegation; with ADR-0010 D4).
+
+**Problem.** The Linux Audit framework writes one kernel event (one syscall) as several records — `SYSCALL`,
+`EXECVE`, `PATH`, `PROCTITLE`, … — and Sigma's auditd rules match single records (ADR-0010 D4: one Observation per
+record). Two records of one event that each raise Evidence would, under Amendment F, be two single-Evidence units —
+one behavior counted twice in `support(h)`, the double counting CR-1 exists to prevent.
+
+**Decision.** A fifth structural class, **`SAME_AUDIT_EVENT`**: two Observations with the same host scope and the
+same `audit.event_serial` (the serial the kernel assigns to one event) are one instance of execution — the
+kernel itself asserts the records belong together, exactly as `SHARED_OBSERVATION` is one piece of telemetry
+interpreted twice. Members are chained in (timestamp, Observation id, Evidence id) order (Amendment C1); Evidence on
+the *same* record stays `SHARED_OBSERVATION`. The host scope is the same structural host-scoping safeguard as for
+`entity_id` (§9): serials are per host, so the same serial on another host never links. Structural method
+1.3 → 1.4; vocabulary eleven → twelve classes (five structural).
+
+**Sequences.** Records of one event share its timestamp; the sequence engine gives a `SAME_AUDIT_EVENT` pair no
+ordering edge (as for `PROCESS_INTERACTION`), so no order is invented between simultaneous records.
+
+**Not decided here.** Linking an audit event to a Sysmon for Linux process instance needs pid resolution
+(Amendment B, with the B3 principal rule over the audit `uid`) on a host that records both sources; the available
+real data never has both on one host, so that path is exercised by tests only when such data exists.

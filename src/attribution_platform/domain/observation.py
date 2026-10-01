@@ -36,6 +36,7 @@ from datetime import datetime
 
 from attribution_platform.domain.entities import (
     AccountChangeRef,
+    AuditRef,
     CredentialReadRef,
     DllRef,
     DnsRef,
@@ -90,7 +91,7 @@ class Observation:
       / ``dns`` / ``file_stream`` / ``pipe`` / ``wmi`` / ``powershell`` /
       ``target_user`` / ``logon`` / ``object_access`` / ``share`` /
       ``service`` / ``kerberos`` / ``scheduled_task`` / ``privilege`` /
-      ``account_change`` / ``credential_read`` / ``wfp_filter`` — entity
+      ``account_change`` / ``credential_read`` / ``wfp_filter`` / ``audit`` — entity
       groups (added by ADR-0008 Wave 1 for image-load, registry,
       process-access, remote-thread, DNS, stream, pipe, WMI, PowerShell
       logging and Windows Security log events; ``target_process`` /
@@ -132,6 +133,7 @@ class Observation:
     account_change: AccountChangeRef | None = None
     credential_read: CredentialReadRef | None = None
     wfp_filter: WfpFilterRef | None = None
+    audit: AuditRef | None = None
     schema_version: str = field(default=OBSERVATION_SCHEMA_VERSION)
 
     def __post_init__(self) -> None:

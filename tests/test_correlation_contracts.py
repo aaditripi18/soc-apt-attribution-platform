@@ -55,6 +55,7 @@ _STRUCTURAL = (
     LinkClass.SAME_PROCESS_ENTITY,
     LinkClass.PROCESS_LINEAGE,
     LinkClass.PROCESS_INTERACTION,
+    LinkClass.SAME_AUDIT_EVENT,
 )
 _CONTEXTUAL = (
     LinkClass.SAME_HOST_ID,
@@ -110,11 +111,11 @@ def _link(
 
 
 # ===========================================================================
-# 1. LinkClass: the closed eleven-value vocabulary (ADR-0003 Amendment A5)
+# 1. LinkClass: the closed twelve-value vocabulary (ADR-0003 Amendments A5, G)
 # ===========================================================================
 
 
-def test_all_eleven_link_classes_exist() -> None:
+def test_all_twelve_link_classes_exist() -> None:
     expected = {
         "SHARED_OBSERVATION",
         "SAME_PROCESS_ENTITY",
@@ -127,16 +128,17 @@ def test_all_eleven_link_classes_exist() -> None:
         "TEMPORAL_PROXIMITY",
         "PROCESS_INTERACTION",
         "PROCESS_ACCESS_TARGET",
+        "SAME_AUDIT_EVENT",
     }
     assert {member.name for member in LinkClass} == expected
-    assert len(LinkClass) == 11
+    assert len(LinkClass) == 12
 
 
-def test_exactly_four_structural_and_seven_contextual() -> None:
+def test_exactly_five_structural_and_seven_contextual() -> None:
     structural = {member for member in LinkClass if member.is_structural}
     contextual = {member for member in LinkClass if not member.is_structural}
     assert structural == set(_STRUCTURAL)
-    assert len(structural) == 4
+    assert len(structural) == 5
     assert contextual == set(_CONTEXTUAL)
     assert len(contextual) == 7
     assert LinkClass.TEMPORAL_PROXIMITY in contextual

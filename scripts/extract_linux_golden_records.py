@@ -5,7 +5,8 @@
 Selection is deterministic: for every supported event ID, the first record in
 the pinned logs taken in sorted path order; plus the first process start of
 each Sandworm-attributed malware detonation (AcidRain, Cyclops Blink), and the
-first process start whose command line spans several lines. Records
+first process start whose command line spans several lines; and auditd records
+(the first raw record of each type, an enriched one, and two refusal cases). Records
 are written verbatim (the XML line), with their source path, to
 ``data/telemetry-samples/splunk-attack-data/golden-records.jsonl``. Re-running on
 the verified cache reproduces the file byte-for-byte. Apache-2.0 data (see the
@@ -20,6 +21,7 @@ import json
 import re
 import sys
 from pathlib import Path
+from typing import Any
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(REPO_ROOT / "src"))
@@ -31,6 +33,13 @@ OUT = REPO_ROOT / "data" / "telemetry-samples" / "splunk-attack-data" / "golden-
 EVENT_IDS = (1, 3, 5, 11, 23)
 MALWARE = ("acidrain", "cyclopsblink")
 _EVENT_ID = re.compile(r"<EventID>(\d+)</EventID>")
+_RAW_AUDIT = re.compile(r"type=(?P<type>[A-Z_]+) msg=audit\(\d+\.\d{3}:\d+\):")
+
+
+def _raw(line: str, record_type: str) -> bool:
+    """A raw audit.log record (epoch time) of ``record_type``."""
+    match = _RAW_AUDIT.match(line)
+    return match is not None and match["type"] == record_type
 
 
 def main() -> int:
@@ -71,6 +80,36 @@ def main() -> int:
             found[multiline] = (log.relative_to(CACHE).as_posix(), record)
             wanted[multiline] = ("", 1)
             break
+    # auditd (ADR-0010 D4): the first raw record of each type (raw lines only,
+    # file order over sorted paths), one enriched SYSCALL, one ausearch -i
+    # record and one post-processed record (both refused by the adapter).
+    audit_rules: dict[str, Any] = {
+        **{
+            f"auditd-{t.lower()}": (lambda line, t=t: _raw(line, t))
+            for t in ("SYSCALL", "EXECVE", "PATH", "PROCTITLE", "SERVICE_STOP", "ADD_USER")
+        },
+        "auditd-syscall-enriched": lambda line: _raw(line, "SYSCALL") and "\x1d" in line,
+        "auditd-interpreted": lambda line: line.startswith("type=") and "msg=audit(0" in line,
+        "auditd-bare-argument": lambda line: _raw(line, "EXECVE") and " a0=xclip " in line,
+    }
+    audit_logs = sorted(
+        (p for p in CACHE.rglob("*.log") if "sysmon" not in p.name),
+        key=lambda p: p.relative_to(CACHE).as_posix(),
+    )
+    for log in audit_logs:
+        pending = [g for g in audit_rules if g not in found]
+        if not pending:
+            break
+        with log.open(encoding="utf-8", errors="replace", newline="\n") as handle:
+            for raw in handle:
+                line = raw.rstrip("\r\n")
+                for golden_id in list(pending):
+                    if audit_rules[golden_id](line):
+                        found[golden_id] = (log.relative_to(CACHE).as_posix(), line)
+                        pending.remove(golden_id)
+                if not pending:
+                    break
+    wanted.update({g: ("", 0) for g in audit_rules})
     missing = sorted(set(wanted) - set(found))
     if missing:
         raise RuntimeError(f"no record for {missing}")

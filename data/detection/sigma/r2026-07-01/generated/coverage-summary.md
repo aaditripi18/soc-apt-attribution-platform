@@ -9,8 +9,8 @@ Counts only — not detection-efficacy or attribution-accuracy claims.
 
 | Status | All active techniques | Used by ≥ 1 active Group |
 |---|---|---|
-| `covered` | 283 | 238 |
-| `telemetry_gap` | 84 | 56 |
+| `covered` | 289 | 242 |
+| `telemetry_gap` | 78 | 52 |
 | `translation_gap` | 6 | 5 |
 | `not_endpoint_observable` | 160 | 91 |
 | `no_sigma_rule` | 164 | 108 |
@@ -30,8 +30,7 @@ Counts only — not detection-efficacy or attribution-accuracy claims.
 |---|---|---|---|---|
 | `logsource:aws/cloudtrail` | no | 12 | 9 | 59 |
 | `logsource:macos/process_creation` | no | 11 | 7 | 78 |
-| `logsource:linux/auditd` | no | 8 | 5 | 16 |
-| `logsource:/proxy` | no | 7 | 5 | 43 |
+| `logsource:/proxy` | no | 6 | 5 | 43 |
 | `logsource:github/audit` | no | 5 | 5 | 15 |
 | `logsource:okta/okta` | no | 5 | 5 | 13 |
 | `logsource:azure/auditlogs` | no | 5 | 4 | 12 |
@@ -43,3 +42,4 @@ Counts only — not detection-efficacy or attribution-accuracy claims.
 | `logsource:m365/audit` | no | 3 | 3 | 48 |
 | `logsource:m365/threat_management` | no | 3 | 3 | 17 |
 | `logsource:opencanary/application` | no | 3 | 3 | 28 |
+| `field:Initiated` | yes | 4 | 2 | 33 |

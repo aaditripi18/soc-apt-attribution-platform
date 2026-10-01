@@ -24,6 +24,7 @@ from attribution_platform.detection.rules import _resolve_field
 from attribution_platform.detection_content.sigma_field_map import FIELD_MAPS
 from attribution_platform.domain import (
     AccountChangeRef,
+    AuditRef,
     CodeSignature,
     CredentialReadRef,
     DllRef,
@@ -242,6 +243,7 @@ def _full_observation() -> Observation:
             **{f: "a" for f in CredentialReadRef.__dataclass_fields__}
         ),
         wfp_filter=WfpFilterRef(**{f: "a" for f in WfpFilterRef.__dataclass_fields__}),
+        audit=AuditRef(**{f: "a" for f in AuditRef.__dataclass_fields__}),
         file=FileRef(path="a"),
         dll=DllRef(
             path="a",

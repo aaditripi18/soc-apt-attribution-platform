@@ -129,7 +129,7 @@ from attribution_platform.domain import Evidence, Observation
 STRUCTURAL_CORRELATION_METHOD = "structural-correlation"
 #: 1.1: + PROCESS_INTERACTION; 1.2: resolved pid-only identities (Amendment B)
 #: and chain materialization of equivalence links (Amendment C).
-STRUCTURAL_CORRELATION_METHOD_VERSION = "1.3"  # 1.3: single-Evidence groups (Amendment F)
+STRUCTURAL_CORRELATION_METHOD_VERSION = "1.4"  # 1.4: SAME_AUDIT_EVENT (Amendment G)
 
 #: The (host-scope, entity-id) key process-entity dimensions are compared
 #: on. ``host_scope`` is itself ``(kind, value)`` where ``kind`` is
@@ -473,6 +473,51 @@ def _process_lineage_links(
     return links
 
 
+def _same_audit_event_links(
+    nodes: Sequence[_Node], *, method: str, method_version: str, method_content_hash: str | None
+) -> dict[str, CorrelationLink]:
+    """ADR-0003 Amendment G: Evidence on Linux Audit records of one kernel event
+    (same host scope, same ``audit.event_serial``), chained in
+    (timestamp, observation id, evidence id) order (Amendment C1). Two Evidence
+    on the *same* record are already ``SHARED_OBSERVATION``; only records of
+    different Observations are linked here."""
+    by_event: dict[tuple[_HostScope, str], list[_Node]] = {}
+    for node in nodes:
+        audit = node.observation.audit
+        scope = _host_scope_key(node.observation)
+        if audit is None or audit.event_serial is None or scope is None:
+            continue
+        by_event.setdefault((scope, audit.event_serial), []).append(node)
+    links: dict[str, CorrelationLink] = {}
+    for (_scope, serial), members in by_event.items():
+        ordered = sorted(
+            members,
+            key=lambda n: (
+                n.observation.timestamp,
+                n.observation.observation_id,
+                n.evidence.evidence_id,
+            ),
+        )
+        for node_a, node_b in zip(ordered, ordered[1:], strict=False):
+            if node_a.observation.observation_id == node_b.observation.observation_id:
+                continue  # same record: SHARED_OBSERVATION already joins them
+            link = _make_link(
+                node_a,
+                node_b,
+                link_class=LinkClass.SAME_AUDIT_EVENT,
+                field_path="audit.event_serial",
+                observed_value=serial,
+                observation_id_a=node_a.observation.observation_id,
+                observation_id_b=node_b.observation.observation_id,
+                uncertainty_note=None,
+                method=method,
+                method_version=method_version,
+                method_content_hash=method_content_hash,
+            )
+            links[link.link_id] = link
+    return links
+
+
 def _process_interaction_links(
     nodes: Sequence[_Node],
     context_observations: Sequence[Observation],
@@ -648,6 +693,15 @@ def correlate_structurally(
             nodes,
             context,
             index,
+            method=method,
+            method_version=method_version,
+            method_content_hash=method_content_hash,
+        )
+    )
+
+    all_links.update(
+        _same_audit_event_links(
+            nodes,
             method=method,
             method_version=method_version,
             method_content_hash=method_content_hash,

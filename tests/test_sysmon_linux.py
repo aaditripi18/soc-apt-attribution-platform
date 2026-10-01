@@ -51,7 +51,7 @@ def _golden(path: Path) -> dict[str, Any]:
     return {row["golden_id"]: row["record"] for row in rows}
 
 
-LINUX = _golden(LINUX_GOLDEN)
+LINUX = {g: r for g, r in _golden(LINUX_GOLDEN).items() if g.startswith("linux-sysmon")}
 WINDOWS = _golden(WINDOWS_GOLDEN)
 
 
@@ -247,7 +247,21 @@ def test_real_linux_report_conversion_and_os_scope() -> None:
     manifest = SAMPLES / "splunk-attack-data" / "manifest.json"
     assert report["source_manifest_sha256"] == hashlib.sha256(manifest.read_bytes()).hexdigest()
     assert report["sigma_pack_sha256"] == hashlib.sha256(PACK.read_bytes()).hexdigest()
-    assert report["observations"] == 246717  # unique ids; 157 events appear in two dataset files
-    assert report["refused_by_reason"] == {"SysmonSourceAdapter: unsupported winlog.event_id 9": 52}
-    assert report["os_types"] == ["linux"]
-    assert report["fired_rules"] and {r["product"] for r in report["fired_rules"]} == {"linux"}
+    sysmon, auditd = report["sysmon_for_linux"], report["auditd"]
+    assert sysmon["observations"] == 246717  # unique ids; 157 events appear in two dataset files
+    assert sysmon["refused_by_reason"] == {"SysmonSourceAdapter: unsupported winlog.event_id 9": 52}
+    assert auditd["observations"] == 837
+    assert set(auditd["refused_by_reason"].values()) == {6348, 2}  # ausearch -i; post-processed
+    for section in (sysmon, auditd):
+        assert section["os_types"] == ["linux"]
+        assert section["fired_rules"]
+        assert {r["product"] for r in section["fired_rules"]} == {"linux"}
+    # measured, documented-label recall (labels resolved through ATT&CK revoked-by)
+    assert (
+        sysmon["labelled_datasets_with_observations"],
+        sysmon["labelled_datasets_with_documented_technique_detected"],
+    ) == (45, 1)
+    assert (
+        auditd["labelled_datasets_with_observations"],
+        auditd["labelled_datasets_with_documented_technique_detected"],
+    ) == (48, 4)
