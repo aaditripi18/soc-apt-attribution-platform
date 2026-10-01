@@ -98,6 +98,7 @@ from attribution_platform.domain import (
     WmiRef,
 )
 from attribution_platform.sources.errors import SourceAdapterError
+from attribution_platform.sources.sysmon_xml import is_sysmon_event_xml, parse_sysmon_event_xml
 from attribution_platform.sources.winlogbeat import (
     channel_matches,
     is_winlogbeat6,
@@ -109,6 +110,10 @@ SYSMON_SOURCE_TYPE = "sysmon"
 
 #: The Windows event channel Sysmon writes to (checked for flat records).
 SYSMON_CHANNEL = "Microsoft-Windows-Sysmon/Operational"
+#: Sysmon for Linux's channel (ADR-0010 D1): same schema, written to syslog as XML.
+SYSMON_LINUX_CHANNEL = "Linux-Sysmon/Operational"
+#: The platform each channel proves (ECS ``host.os.type``, ADR-0010 D2).
+_CHANNEL_OS = {SYSMON_CHANNEL.casefold(): "windows", SYSMON_LINUX_CHANNEL.casefold(): "linux"}
 
 PROCESS_CREATE_EVENT_ID = 1
 PROCESS_TERMINATE_EVENT_ID = 5
@@ -381,10 +386,10 @@ def _require_computer_name(record: Mapping[str, Any]) -> str:
     return name
 
 
-def _host_ref(record: Mapping[str, Any], computer_name: str) -> HostRef:
+def _host_ref(record: Mapping[str, Any], computer_name: str, os_type: str | None) -> HostRef:
     ip_raw = _get(record, "host", "ip")
     ip = tuple(ip_raw) if isinstance(ip_raw, list) else ()
-    return HostRef(name=computer_name, ip=ip)
+    return HostRef(name=computer_name, ip=ip, os_type=os_type)
 
 
 def _event_data_or_ecs(record: Mapping[str, Any], event_data_key: str, *ecs_path: str) -> Any:
@@ -689,6 +694,8 @@ class SysmonSourceAdapter:
         return SYSMON_SOURCE_TYPE
 
     def to_observations(self, raw_record: Any) -> tuple[Observation, ...]:
+        if isinstance(raw_record, str) and is_sysmon_event_xml(raw_record):
+            raw_record = parse_sysmon_event_xml(raw_record)  # ADR-0010 D1 (Sysmon for Linux)
         if not isinstance(raw_record, Mapping):
             raise SourceAdapterError(
                 f"SysmonSourceAdapter expects a Mapping (a parsed Sysmon-module JSON event), "
@@ -702,10 +709,14 @@ class SysmonSourceAdapter:
         else:
             record = raw_record
         channel = _get(record, "winlog", "channel")
-        if channel is not None and not channel_matches(channel, SYSMON_CHANNEL):
-            raise SourceAdapterError(
-                f"SysmonSourceAdapter: channel {channel!r} is not {SYSMON_CHANNEL!r}"
-            )
+        os_type: str | None = None
+        if channel is not None:
+            os_type = _CHANNEL_OS.get(channel.casefold()) if isinstance(channel, str) else None
+            if os_type is None:
+                raise SourceAdapterError(
+                    f"SysmonSourceAdapter: channel {channel!r} is neither {SYSMON_CHANNEL!r} "
+                    f"nor {SYSMON_LINUX_CHANNEL!r}"
+                )
 
         event_id = _require_event_id(record)
         if event_id not in _SUPPORTED_EVENT_IDS:
@@ -726,7 +737,7 @@ class SysmonSourceAdapter:
 
         default_action = _get(record, "event", "action")
         entities: dict[str, Any] = {
-            "host": _host_ref(record, computer_name),
+            "host": _host_ref(record, computer_name, os_type),
             "user": _user_ref(record),
             "process": _process_ref(record, creation=event_id == PROCESS_CREATE_EVENT_ID),
         }

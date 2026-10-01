@@ -109,3 +109,43 @@ may label a Sandworm family is a labelling-rule decision for ADR-0006 / doc 15, 
 - **Auditbeat as the source of truth.** The real data available is raw; Auditbeat is a record shape to add later,
   not a reason to discard raw-auditd support.
 - **Synthetic Linux telemetry.** Rejected project-wide (ADR-0008): adapters are validated on real recordings.
+
+## Implementation record — Sysmon for Linux (2026-10-01)
+
+- *Data (D6):* owner-approved; 264 files (149 logs + 115 descriptors, 249,116,616 bytes) from `splunk/attack_data`
+  at `a28608b5`, every log verified against its Git LFS pointer's SHA-256 and size
+  (`scripts/acquire_linux_telemetry.py`, tracked `manifest.json` / `selection.txt`, cache git-ignored). The
+  selection came to ~238 MiB of logs, below the approved ~252 MiB (the ≤ 20 MiB bucket already held AcidRain).
+- *Record shape (D1):* `sources/sysmon_xml.py` parses one `<Event>` into the collector shape the existing Sysmon
+  builders read; DTD / entity declarations are refused before parsing; malformed, duplicate-`Data`, non-`Event`
+  and foreign-channel input fails closed. The channel `Linux-Sysmon/Operational` sets `host.os_type = linux`.
+- *Real-data finding — events span lines:* Sysmon for Linux writes a command line's own newlines verbatim (e.g.
+  a 17-line `sh -c` in the cron dataset, a multi-line `perl -e` in AcidRain). A line-based reader would have cut
+  those events and corrupted exactly the field detection reads. `iter_recording_records` now reassembles an XML
+  event from `<Event` to `</Event>` over raw lines (blank lines kept); an unterminated event is refused, never
+  cut. Plain `.log` / `.json` / `.jsonl` recordings are read directly.
+- *OS scope (D2):* `HostRef.os_type`; all Windows adapters set `windows` from their channel;
+  `PRODUCT_OS_SCOPES` adds the OS conditions after the indexed logsource scope (importer 1.7,
+  `sigma-field-map/10`). Proven three ways: unit-level (both products' rules carry their scope), real-record
+  level (the production pack's 4661 detection stops firing when the same Observation is labelled Linux), and
+  whole-cache level (only Linux rules fire on 246,717 Linux Observations).
+- *Coverage:* Linux rules imported 0 → **73** (67 process creation, 5 file, 1 network); pack 1,466 → 1,539;
+  ATT&CK ids with an imported rule 275 → 291 (+16, e.g. T1014, T1053.003, T1059.004, T1222.002, T1548.003);
+  group-used techniques **225 → 238 of 498**; every Windows rule's status unchanged. Remaining Linux
+  process-creation rejections are translation limits (DNF bound 5, regex 4) and `LogonId` (2, not captured).
+- *Real-data results* (`scripts/report_linux_telemetry.py` → tracked `conversion-report.json`; the test pins it
+  to the current manifest and pack): **246,717** Observations (unique ids; 157 events appear in two dataset
+  files); the only refusals are 52 Event 9 (raw access read, unsupported). 13 detections by 6 Linux rules
+  (sudoers access, chmod on sensitive directories, doas configuration, shell via find / apt / awk).
+  **Technique-level recall against the datasets' own labels is 1 of 45** (doas → T1548.003). Checked rather than
+  assumed: the misses are content gaps — no imported Linux rule targets T1003.008, T1016, T1068, T1485, T1489 or
+  T1547.006, and where one exists it targets other procedures (the cron rule requires a crontab loaded from
+  `/tmp/`, the dataset loads `/var/log/tasks`; the rootkit rule is for Triple Cross, the data is Medusa). The two
+  Sandworm-attributed detonations (AcidRain, Cyclops Blink) trigger **no** Sigma Linux rule.
+- *Consequence:* the Linux pipeline is exact and validated; Linux *detection content* is now the bottleneck, not
+  telemetry. Raising it means more content (the Sigma rules above the Core++ policy line, or reviewed local
+  rules), which is a content decision under ADR-0007, measured the same way.
+- *Acceptance (ADR-0008 D2):* exact mapping ✓, fail-closed ✓, real-sample golden tests ✓ (8 records, 25 tests),
+  source-agnostic ✓ (same builders, OS from facts), correlation facts ✓ (process GUIDs), Sigma wiring ✓, evidence
+  type ✓; auditd (D4) remains the next batch — its available real logs are `ausearch -i` output whose event time
+  has no zone, so a trustworthy event time must be established first or those records refused.

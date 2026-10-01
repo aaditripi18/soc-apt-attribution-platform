@@ -1,11 +1,11 @@
 {
  "provenance": {
-  "importer": "sigma-importer/1.6",
+  "importer": "sigma-importer/1.7",
   "sigma_release": "r2026-07-01",
   "sigma_archive": "sigma_core++.zip",
   "sigma_archive_sha256": "469d83e1d1bbdb4d7876466ff1a728550fae5a20115b91339d58d20e894e7477",
   "pysigma_version": "1.5.1",
-  "field_map_version": "sigma-field-map/9",
+  "field_map_version": "sigma-field-map/10",
   "attack_kb_version": "enterprise-attack-19.2",
   "dnf_bound": 64,
   "software_tag_review": {
@@ -32,32 +32,31 @@
  "summary": {
   "sigma_rules_total": 2842,
   "by_status": {
-   "imported": 1466,
-   "partial": 61,
-   "rejected": 1315
+   "imported": 1539,
+   "partial": 63,
+   "rejected": 1240
   },
   "rejected_by_reason": {
    "no_attack_mapping": 319,
-   "telemetry_gap": 740,
-   "translation_gap": 256
+   "telemetry_gap": 657,
+   "translation_gap": 264
   },
-  "generated_rules": 11280,
-  "attack_ids_with_imported_rule": 275,
+  "generated_rules": 11938,
+  "attack_ids_with_imported_rule": 291,
   "group_tags_ignored": 12,
   "software_tags_ignored": 42
  },
  "gap_reasons": {
   "translation_gap:interior_wildcard_or_empty": 293,
   "telemetry_gap:field:Hashes": 212,
-  "telemetry_gap:field:Initiated": 173,
-  "dnf_bound_exceeded:>64": 161,
-  "translation_gap:value_type:SigmaRegularExpression": 145,
+  "telemetry_gap:field:Initiated": 185,
+  "dnf_bound_exceeded:>64": 166,
+  "translation_gap:value_type:SigmaRegularExpression": 149,
   "translation_gap:single_char_wildcard": 109,
+  "translation_gap:value_type:SigmaCIDRExpression": 96,
   "telemetry_gap:field:CommandLine": 92,
-  "translation_gap:value_type:SigmaCIDRExpression": 86,
-  "logsource:linux/process_creation": 78,
+  "telemetry_gap:field:DestinationHostname": 90,
   "telemetry_gap:field:ParentImage": 70,
-  "telemetry_gap:field:DestinationHostname": 59,
   "logsource:windows/system": 51,
   "telemetry_gap:field:User": 49,
   "logsource:macos/process_creation": 42,
@@ -102,8 +101,6 @@
   "logsource:windows/file_access": 6,
   "logsource:zeek/smb_files": 6,
   "logsource:jvm/application": 5,
-  "logsource:linux/file_event": 5,
-  "logsource:linux/network_connection": 5,
   "logsource:windows/bits-client": 5,
   "logsource:windows/firewall-as": 5,
   "logsource:windows/ps_classic_start": 5,
@@ -121,6 +118,7 @@
   "logsource:windows/taskscheduler": 3,
   "logsource:zeek/dce_rpc": 3,
   "logsource:zeek/dns": 3,
+  "telemetry_gap:field:LogonId": 3,
   "logsource:/apache": 2,
   "logsource:kubernetes/audit": 2,
   "logsource:linux/syslog": 2,
@@ -190,7 +188,6 @@
   "telemetry_gap:field:AllowedToDelegateTo": 1,
   "telemetry_gap:field:FileVersion": 1,
   "telemetry_gap:field:Keywords": 1,
-  "telemetry_gap:field:LogonId": 1,
   "telemetry_gap:field:Provider_Name": 1,
   "telemetry_gap:field:ServicePrincipalNames": 1
  },
@@ -227,6 +224,7 @@
   "T1008",
   "T1010",
   "T1012",
+  "T1014",
   "T1016",
   "T1018",
   "T1020",
@@ -242,6 +240,7 @@
   "T1027.004",
   "T1027.005",
   "T1027.010",
+  "T1027.011",
   "T1033",
   "T1036",
   "T1036.002",
@@ -258,10 +257,12 @@
   "T1048.003",
   "T1053",
   "T1053.002",
+  "T1053.003",
   "T1053.005",
   "T1055",
   "T1055.001",
   "T1055.003",
+  "T1055.009",
   "T1055.012",
   "T1056.001",
   "T1056.002",
@@ -269,9 +270,11 @@
   "T1059",
   "T1059.001",
   "T1059.003",
+  "T1059.004",
   "T1059.005",
   "T1059.006",
   "T1059.007",
+  "T1059.012",
   "T1068",
   "T1069.001",
   "T1069.002",
@@ -323,6 +326,7 @@
   "T1134.004",
   "T1134.005",
   "T1135",
+  "T1136",
   "T1136.001",
   "T1136.002",
   "T1137",
@@ -366,6 +370,7 @@
   "T1220",
   "T1222",
   "T1222.001",
+  "T1222.002",
   "T1482",
   "T1484.001",
   "T1485",
@@ -415,6 +420,7 @@
   "T1547.015",
   "T1548",
   "T1548.002",
+  "T1548.003",
   "T1550.002",
   "T1550.003",
   "T1552",
@@ -450,6 +456,7 @@
   "T1564.004",
   "T1564.006",
   "T1565",
+  "T1565.001",
   "T1566",
   "T1566.001",
   "T1567",
@@ -470,17 +477,23 @@
   "T1587.001",
   "T1588.002",
   "T1590.001",
+  "T1592.004",
+  "T1593.003",
   "T1608",
   "T1614.001",
   "T1615",
   "T1620",
   "T1622",
   "T1649",
+  "T1653",
   "T1685",
   "T1685.001",
   "T1685.005",
+  "T1685.006",
+  "T1686",
   "T1686.003",
-  "T1689"
+  "T1689",
+  "T1690"
  ],
  "rules": [
   {
@@ -569,12 +582,12 @@
    "path": "rules/linux/process_creation/proc_creation_lnx_susp_curl_fileupload.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/linux/process_creation/proc_creation_lnx_susp_curl_fileupload.yml",
    "logsource": "linux/process_creation",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
+   "status": "partial",
+   "rejection": null,
+   "conjuncts_total": 5,
+   "conjuncts_imported": 4,
    "gap_reasons": {
-    "logsource:linux/process_creation": 1
+    "translation_gap:value_type:SigmaRegularExpression": 1
    },
    "attack_ids": [
     "T1567",
@@ -627,13 +640,11 @@
    "path": "rules/linux/file_event/file_event_lnx_doas_conf_creation.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/linux/file_event/file_event_lnx_doas_conf_creation.yml",
    "logsource": "linux/file_event",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:linux/file_event": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 1,
+   "conjuncts_imported": 1,
+   "gap_reasons": {},
    "attack_ids": [
     "T1548"
    ],
@@ -2227,13 +2238,11 @@
    "path": "rules/linux/process_creation/proc_creation_lnx_userdel.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/linux/process_creation/proc_creation_lnx_userdel.yml",
    "logsource": "linux/process_creation",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:linux/process_creation": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 1,
+   "conjuncts_imported": 1,
+   "gap_reasons": {},
    "attack_ids": [
     "T1531"
    ],
@@ -2321,13 +2330,11 @@
    "path": "rules/linux/process_creation/proc_creation_lnx_nice_shell_execution.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/linux/process_creation/proc_creation_lnx_nice_shell_execution.yml",
    "logsource": "linux/process_creation",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:linux/process_creation": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 5,
+   "conjuncts_imported": 5,
+   "gap_reasons": {},
    "attack_ids": [
     "T1083"
    ],
@@ -3140,13 +3147,11 @@
    "path": "rules/linux/process_creation/proc_creation_lnx_susp_recon_indicators.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/linux/process_creation/proc_creation_lnx_susp_recon_indicators.yml",
    "logsource": "linux/process_creation",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:linux/process_creation": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 2,
+   "conjuncts_imported": 2,
+   "gap_reasons": {},
    "attack_ids": [
     "T1592.004",
     "T1552.001"
@@ -3647,13 +3652,11 @@
    "path": "rules/linux/process_creation/proc_creation_lnx_susp_process_reading_sudoers.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/linux/process_creation/proc_creation_lnx_susp_process_reading_sudoers.yml",
    "logsource": "linux/process_creation",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:linux/process_creation": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 11,
+   "conjuncts_imported": 11,
+   "gap_reasons": {},
    "attack_ids": [
     "T1592.004"
    ],
@@ -4131,13 +4134,11 @@
    "path": "rules/linux/process_creation/proc_creation_lnx_susp_history_delete.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/linux/process_creation/proc_creation_lnx_susp_history_delete.yml",
    "logsource": "linux/process_creation",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:linux/process_creation": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 15,
+   "conjuncts_imported": 15,
+   "gap_reasons": {},
    "attack_ids": [
     "T1565.001"
    ],
@@ -5502,13 +5503,11 @@
    "path": "rules/linux/file_event/file_event_lnx_susp_filename_with_embedded_base64_command.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/linux/file_event/file_event_lnx_susp_filename_with_embedded_base64_command.yml",
    "logsource": "linux/file_event",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:linux/file_event": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 2,
+   "conjuncts_imported": 2,
+   "gap_reasons": {},
    "attack_ids": [
     "T1059.004",
     "T1027"
@@ -6062,10 +6061,10 @@
    "logsource": "linux/network_connection",
    "status": "rejected",
    "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
+   "conjuncts_total": 7,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "logsource:linux/network_connection": 1
+    "telemetry_gap:field:DestinationHostname": 7
    },
    "attack_ids": [
     "T1568.002",
@@ -6163,13 +6162,11 @@
    "path": "rules/linux/file_event/file_event_lnx_triple_cross_rootkit_persistence.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/linux/file_event/file_event_lnx_triple_cross_rootkit_persistence.yml",
    "logsource": "linux/file_event",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:linux/file_event": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 1,
+   "conjuncts_imported": 1,
+   "gap_reasons": {},
    "attack_ids": [
     "T1053.003"
    ],
@@ -7735,10 +7732,10 @@
    "logsource": "linux/process_creation",
    "status": "rejected",
    "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
+   "conjuncts_total": 1,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "logsource:linux/process_creation": 1
+    "telemetry_gap:field:LogonId": 1
    },
    "attack_ids": [
     "T1190",
@@ -7941,13 +7938,11 @@
    "path": "rules/linux/process_creation/proc_creation_lnx_triple_cross_rootkit_install.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/linux/process_creation/proc_creation_lnx_triple_cross_rootkit_install.yml",
    "logsource": "linux/process_creation",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:linux/process_creation": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 2,
+   "conjuncts_imported": 2,
+   "gap_reasons": {},
    "attack_ids": [
     "T1014"
    ],
@@ -9432,13 +9427,11 @@
    "path": "rules/linux/process_creation/proc_creation_lnx_rsync_shell_spawn.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/linux/process_creation/proc_creation_lnx_rsync_shell_spawn.yml",
    "logsource": "linux/process_creation",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:linux/process_creation": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 16,
+   "conjuncts_imported": 16,
+   "gap_reasons": {},
    "attack_ids": [
     "T1059",
     "T1203"
@@ -9494,13 +9487,11 @@
    "path": "rules/linux/process_creation/proc_creation_lnx_esxcli_vm_kill.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/linux/process_creation/proc_creation_lnx_esxcli_vm_kill.yml",
    "logsource": "linux/process_creation",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:linux/process_creation": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 1,
+   "conjuncts_imported": 1,
+   "gap_reasons": {},
    "attack_ids": [
     "T1059.012",
     "T1529"
@@ -9975,13 +9966,11 @@
    "path": "rules/linux/process_creation/proc_creation_lnx_python_shell_os_system.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/linux/process_creation/proc_creation_lnx_python_shell_os_system.yml",
    "logsource": "linux/process_creation",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:linux/process_creation": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 25,
+   "conjuncts_imported": 25,
+   "gap_reasons": {},
    "attack_ids": [
     "T1059"
    ],
@@ -10763,13 +10752,11 @@
    "path": "rules/linux/process_creation/proc_creation_lnx_susp_execution_tmp_folder.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/linux/process_creation/proc_creation_lnx_susp_execution_tmp_folder.yml",
    "logsource": "linux/process_creation",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:linux/process_creation": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 1,
+   "conjuncts_imported": 1,
+   "gap_reasons": {},
    "attack_ids": [
     "T1036"
    ],
@@ -10855,13 +10842,11 @@
    "path": "rules/linux/process_creation/proc_creation_lnx_touch_susp.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/linux/process_creation/proc_creation_lnx_touch_susp.yml",
    "logsource": "linux/process_creation",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:linux/process_creation": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 1,
+   "conjuncts_imported": 1,
+   "gap_reasons": {},
    "attack_ids": [
     "T1070.006"
    ],
@@ -11313,13 +11298,11 @@
    "path": "rules/linux/process_creation/proc_creation_lnx_esxcli_network_discovery.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/linux/process_creation/proc_creation_lnx_esxcli_network_discovery.yml",
    "logsource": "linux/process_creation",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:linux/process_creation": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 2,
+   "conjuncts_imported": 2,
+   "gap_reasons": {},
    "attack_ids": [
     "T1033",
     "T1007",
@@ -11482,13 +11465,11 @@
    "path": "rules/linux/process_creation/proc_creation_lnx_chattr_immutable_removal.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/linux/process_creation/proc_creation_lnx_chattr_immutable_removal.yml",
    "logsource": "linux/process_creation",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:linux/process_creation": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 1,
+   "conjuncts_imported": 1,
+   "gap_reasons": {},
    "attack_ids": [
     "T1222.002"
    ],
@@ -11693,13 +11674,11 @@
    "path": "rules/linux/file_event/file_event_lnx_wget_download_file_in_tmp_dir.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/linux/file_event/file_event_lnx_wget_download_file_in_tmp_dir.yml",
    "logsource": "linux/file_event",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:linux/file_event": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 2,
+   "conjuncts_imported": 2,
+   "gap_reasons": {},
    "attack_ids": [
     "T1105"
    ],
@@ -11868,13 +11847,11 @@
    "path": "rules/linux/process_creation/proc_creation_lnx_av_kaspersky_av_disabled.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/linux/process_creation/proc_creation_lnx_av_kaspersky_av_disabled.yml",
    "logsource": "linux/process_creation",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:linux/process_creation": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 3,
+   "conjuncts_imported": 3,
+   "gap_reasons": {},
    "attack_ids": [
     "T1685"
    ],
@@ -12392,13 +12369,11 @@
    "path": "rules/linux/process_creation/proc_creation_lnx_esxcli_syslog_config_change.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/linux/process_creation/proc_creation_lnx_esxcli_syslog_config_change.yml",
    "logsource": "linux/process_creation",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:linux/process_creation": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 1,
+   "conjuncts_imported": 1,
+   "gap_reasons": {},
    "attack_ids": [
     "T1690",
     "T1685",
@@ -13022,13 +12997,11 @@
    "path": "rules/linux/process_creation/proc_creation_lnx_iptables_flush_ufw.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/linux/process_creation/proc_creation_lnx_iptables_flush_ufw.yml",
    "logsource": "linux/process_creation",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:linux/process_creation": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 60,
+   "conjuncts_imported": 60,
+   "gap_reasons": {},
    "attack_ids": [
     "T1686"
    ],
@@ -13411,13 +13384,11 @@
    "path": "rules/linux/process_creation/proc_creation_lnx_python_http_server_execution.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/linux/process_creation/proc_creation_lnx_python_http_server_execution.yml",
    "logsource": "linux/process_creation",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:linux/process_creation": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 10,
+   "conjuncts_imported": 10,
+   "gap_reasons": {},
    "attack_ids": [
     "T1048.003"
    ],
@@ -13487,13 +13458,11 @@
    "path": "rules/linux/process_creation/proc_creation_lnx_clear_syslog.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/linux/process_creation/proc_creation_lnx_clear_syslog.yml",
    "logsource": "linux/process_creation",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:linux/process_creation": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 23,
+   "conjuncts_imported": 23,
+   "gap_reasons": {},
    "attack_ids": [
     "T1685.006"
    ],
@@ -15001,13 +14970,11 @@
    "path": "rules/linux/process_creation/proc_creation_lnx_git_shell_execution.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/linux/process_creation/proc_creation_lnx_git_shell_execution.yml",
    "logsource": "linux/process_creation",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:linux/process_creation": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 3,
+   "conjuncts_imported": 3,
+   "gap_reasons": {},
    "attack_ids": [
     "T1059"
    ],
@@ -15946,13 +15913,11 @@
    "path": "rules/linux/process_creation/proc_creation_lnx_flock_shell_execution.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/linux/process_creation/proc_creation_lnx_flock_shell_execution.yml",
    "logsource": "linux/process_creation",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:linux/process_creation": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 5,
+   "conjuncts_imported": 5,
+   "gap_reasons": {},
    "attack_ids": [
     "T1083"
    ],
@@ -16336,13 +16301,11 @@
    "path": "rules/linux/process_creation/proc_creation_lnx_dd_process_injection.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/linux/process_creation/proc_creation_lnx_dd_process_injection.yml",
    "logsource": "linux/process_creation",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:linux/process_creation": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 1,
+   "conjuncts_imported": 1,
+   "gap_reasons": {},
    "attack_ids": [
     "T1055.009"
    ],
@@ -16565,13 +16528,11 @@
    "path": "rules/linux/process_creation/proc_creation_lnx_xterm_reverse_shell.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/linux/process_creation/proc_creation_lnx_xterm_reverse_shell.yml",
    "logsource": "linux/process_creation",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:linux/process_creation": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 1,
+   "conjuncts_imported": 1,
+   "gap_reasons": {},
    "attack_ids": [
     "T1059"
    ],
@@ -18436,13 +18397,11 @@
    "path": "rules/linux/process_creation/proc_creation_lnx_python_base64_encoded_execution.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/linux/process_creation/proc_creation_lnx_python_base64_encoded_execution.yml",
    "logsource": "linux/process_creation",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:linux/process_creation": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 7,
+   "conjuncts_imported": 7,
+   "gap_reasons": {},
    "attack_ids": [
     "T1059.006",
     "T1027.010"
@@ -19724,13 +19683,11 @@
    "path": "rules/linux/process_creation/proc_creation_lnx_susp_exec_from_dev_shm.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/linux/process_creation/proc_creation_lnx_susp_exec_from_dev_shm.yml",
    "logsource": "linux/process_creation",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:linux/process_creation": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 1,
+   "conjuncts_imported": 1,
+   "gap_reasons": {},
    "attack_ids": [
     "T1027.011"
    ],
@@ -20095,13 +20052,11 @@
    "path": "rules/linux/process_creation/proc_creation_lnx_esxcli_vm_discovery.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/linux/process_creation/proc_creation_lnx_esxcli_vm_discovery.yml",
    "logsource": "linux/process_creation",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:linux/process_creation": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 1,
+   "conjuncts_imported": 1,
+   "gap_reasons": {},
    "attack_ids": [
     "T1033",
     "T1007",
@@ -21041,13 +20996,11 @@
    "path": "rules/linux/process_creation/proc_creation_lnx_chmod_targeting_sensitive_directories.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/linux/process_creation/proc_creation_lnx_chmod_targeting_sensitive_directories.yml",
    "logsource": "linux/process_creation",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:linux/process_creation": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 24,
+   "conjuncts_imported": 24,
+   "gap_reasons": {},
    "attack_ids": [
     "T1222.002"
    ],
@@ -22283,13 +22236,11 @@
    "path": "rules/linux/process_creation/proc_creation_lnx_find_shell_execution.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/linux/process_creation/proc_creation_lnx_find_shell_execution.yml",
    "logsource": "linux/process_creation",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:linux/process_creation": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 5,
+   "conjuncts_imported": 5,
+   "gap_reasons": {},
    "attack_ids": [
     "T1083"
    ],
@@ -22335,13 +22286,11 @@
    "path": "rules/linux/process_creation/proc_creation_lnx_schedule_task_job_cron.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/linux/process_creation/proc_creation_lnx_schedule_task_job_cron.yml",
    "logsource": "linux/process_creation",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:linux/process_creation": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 1,
+   "conjuncts_imported": 1,
+   "gap_reasons": {},
    "attack_ids": [
     "T1053.003"
    ],
@@ -23171,10 +23120,10 @@
    "logsource": "linux/process_creation",
    "status": "rejected",
    "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
+   "conjuncts_total": 1,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "logsource:linux/process_creation": 1
+    "telemetry_gap:field:LogonId": 1
    },
    "attack_ids": [
     "T1190",
@@ -23436,13 +23385,11 @@
    "path": "rules/linux/process_creation/proc_creation_lnx_install_suspicious_packages.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/linux/process_creation/proc_creation_lnx_install_suspicious_packages.yml",
    "logsource": "linux/process_creation",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:linux/process_creation": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 56,
+   "conjuncts_imported": 56,
+   "gap_reasons": {},
    "attack_ids": [
     "T1553.004"
    ],
@@ -25751,11 +25698,11 @@
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/linux/process_creation/proc_creation_lnx_vim_shell_execution.yml",
    "logsource": "linux/process_creation",
    "status": "rejected",
-   "rejection": "telemetry_gap",
+   "rejection": "translation_gap",
    "conjuncts_total": 0,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "logsource:linux/process_creation": 1
+    "dnf_bound_exceeded:>64": 1
    },
    "attack_ids": [
     "T1059",
@@ -26787,11 +26734,11 @@
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/linux/process_creation/proc_creation_lnx_netcat_reverse_shell.yml",
    "logsource": "linux/process_creation",
    "status": "rejected",
-   "rejection": "telemetry_gap",
+   "rejection": "translation_gap",
    "conjuncts_total": 0,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "logsource:linux/process_creation": 1
+    "dnf_bound_exceeded:>64": 1
    },
    "attack_ids": [
     "T1059"
@@ -26991,13 +26938,11 @@
    "path": "rules/linux/process_creation/proc_creation_lnx_clear_logs.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/linux/process_creation/proc_creation_lnx_clear_logs.yml",
    "logsource": "linux/process_creation",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:linux/process_creation": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 32,
+   "conjuncts_imported": 32,
+   "gap_reasons": {},
    "attack_ids": [
     "T1685.006"
    ],
@@ -27260,11 +27205,11 @@
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/linux/process_creation/proc_creation_lnx_webshell_detection.yml",
    "logsource": "linux/process_creation",
    "status": "rejected",
-   "rejection": "telemetry_gap",
+   "rejection": "translation_gap",
    "conjuncts_total": 0,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "logsource:linux/process_creation": 1
+    "dnf_bound_exceeded:>64": 1
    },
    "attack_ids": [
     "T1505.003"
@@ -27527,13 +27472,11 @@
    "path": "rules/linux/process_creation/proc_creation_lnx_susp_find_execution.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/linux/process_creation/proc_creation_lnx_susp_find_execution.yml",
    "logsource": "linux/process_creation",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:linux/process_creation": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 8,
+   "conjuncts_imported": 8,
+   "gap_reasons": {},
    "attack_ids": [
     "T1083"
    ],
@@ -27713,13 +27656,11 @@
    "path": "rules/linux/network_connection/net_connection_lnx_back_connect_shell_dev.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/linux/network_connection/net_connection_lnx_back_connect_shell_dev.yml",
    "logsource": "linux/network_connection",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:linux/network_connection": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 1,
+   "conjuncts_imported": 1,
+   "gap_reasons": {},
    "attack_ids": [
     "T1059.004"
    ],
@@ -27970,13 +27911,11 @@
    "path": "rules/linux/process_creation/proc_creation_lnx_disable_ufw.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/linux/process_creation/proc_creation_lnx_disable_ufw.yml",
    "logsource": "linux/process_creation",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:linux/process_creation": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 4,
+   "conjuncts_imported": 4,
+   "gap_reasons": {},
    "attack_ids": [
     "T1686"
    ],
@@ -28372,11 +28311,11 @@
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/linux/process_creation/proc_creation_lnx_susp_sensitive_file_access.yml",
    "logsource": "linux/process_creation",
    "status": "rejected",
-   "rejection": "telemetry_gap",
+   "rejection": "translation_gap",
    "conjuncts_total": 0,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "logsource:linux/process_creation": 1
+    "dnf_bound_exceeded:>64": 1
    },
    "attack_ids": [
     "T1565.001"
@@ -28546,13 +28485,11 @@
    "path": "rules/linux/process_creation/proc_creation_lnx_ssh_shell_execution.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/linux/process_creation/proc_creation_lnx_ssh_shell_execution.yml",
    "logsource": "linux/process_creation",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:linux/process_creation": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 21,
+   "conjuncts_imported": 21,
+   "gap_reasons": {},
    "attack_ids": [
     "T1059"
    ],
@@ -28664,13 +28601,11 @@
    "path": "rules/linux/process_creation/proc_creation_lnx_susp_pipe_shell.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/linux/process_creation/proc_creation_lnx_susp_pipe_shell.yml",
    "logsource": "linux/process_creation",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:linux/process_creation": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 16,
+   "conjuncts_imported": 16,
+   "gap_reasons": {},
    "attack_ids": [
     "T1140"
    ],
@@ -29173,13 +29108,11 @@
    "path": "rules/linux/process_creation/proc_creation_lnx_groupdel.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/linux/process_creation/proc_creation_lnx_groupdel.yml",
    "logsource": "linux/process_creation",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:linux/process_creation": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 1,
+   "conjuncts_imported": 1,
+   "gap_reasons": {},
    "attack_ids": [
     "T1531"
    ],
@@ -29525,13 +29458,11 @@
    "path": "rules/linux/process_creation/proc_creation_lnx_awk_shell_spawn.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/linux/process_creation/proc_creation_lnx_awk_shell_spawn.yml",
    "logsource": "linux/process_creation",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:linux/process_creation": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 20,
+   "conjuncts_imported": 20,
+   "gap_reasons": {},
    "attack_ids": [
     "T1059"
    ],
@@ -30346,13 +30277,11 @@
    "path": "rules/linux/process_creation/proc_creation_lnx_crypto_mining.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/linux/process_creation/proc_creation_lnx_crypto_mining.yml",
    "logsource": "linux/process_creation",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:linux/process_creation": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 17,
+   "conjuncts_imported": 17,
+   "gap_reasons": {},
    "attack_ids": [
     "T1496"
    ],
@@ -31670,13 +31599,11 @@
    "path": "rules/linux/process_creation/proc_creation_lnx_esxcli_permission_change_admin.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/linux/process_creation/proc_creation_lnx_esxcli_permission_change_admin.yml",
    "logsource": "linux/process_creation",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:linux/process_creation": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 1,
+   "conjuncts_imported": 1,
+   "gap_reasons": {},
    "attack_ids": [
     "T1098",
     "T1059.012"
@@ -32120,11 +32047,11 @@
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/linux/process_creation/proc_creation_lnx_pnscan_binary_cli_pattern.yml",
    "logsource": "linux/process_creation",
    "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
+   "rejection": "translation_gap",
+   "conjuncts_total": 1,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "logsource:linux/process_creation": 1
+    "translation_gap:value_type:SigmaRegularExpression": 1
    },
    "attack_ids": [
     "T1046"
@@ -32969,13 +32896,11 @@
    "path": "rules/linux/process_creation/proc_creation_lnx_gcc_shell_execution.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/linux/process_creation/proc_creation_lnx_gcc_shell_execution.yml",
    "logsource": "linux/process_creation",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:linux/process_creation": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 15,
+   "conjuncts_imported": 15,
+   "gap_reasons": {},
    "attack_ids": [
     "T1083"
    ],
@@ -34207,13 +34132,11 @@
    "path": "rules/linux/process_creation/proc_creation_lnx_susp_hktl_execution.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/linux/process_creation/proc_creation_lnx_susp_hktl_execution.yml",
    "logsource": "linux/process_creation",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:linux/process_creation": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 52,
+   "conjuncts_imported": 52,
+   "gap_reasons": {},
    "attack_ids": [
     "T1587"
    ],
@@ -34902,13 +34825,11 @@
    "path": "rules/linux/process_creation/proc_creation_lnx_curl_wget_exec_tmp.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/linux/process_creation/proc_creation_lnx_curl_wget_exec_tmp.yml",
    "logsource": "linux/process_creation",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:linux/process_creation": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 4,
+   "conjuncts_imported": 4,
+   "gap_reasons": {},
    "attack_ids": [
     "T1059.004",
     "T1203"
@@ -35168,10 +35089,10 @@
    "logsource": "linux/network_connection",
    "status": "rejected",
    "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
+   "conjuncts_total": 22,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "logsource:linux/network_connection": 1
+    "telemetry_gap:field:DestinationHostname": 22
    },
    "attack_ids": [
     "T1496"
@@ -38091,13 +38012,11 @@
    "path": "rules/linux/process_creation/proc_creation_lnx_esxcli_user_account_creation.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/linux/process_creation/proc_creation_lnx_esxcli_user_account_creation.yml",
    "logsource": "linux/process_creation",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:linux/process_creation": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 1,
+   "conjuncts_imported": 1,
+   "gap_reasons": {},
    "attack_ids": [
     "T1059.012",
     "T1136"
@@ -39373,13 +39292,11 @@
    "path": "rules/linux/process_creation/proc_creation_lnx_susp_curl_useragent.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/linux/process_creation/proc_creation_lnx_susp_curl_useragent.yml",
    "logsource": "linux/process_creation",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:linux/process_creation": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 2,
+   "conjuncts_imported": 2,
+   "gap_reasons": {},
    "attack_ids": [
     "T1071.001"
    ],
@@ -39862,13 +39779,11 @@
    "path": "rules/linux/process_creation/proc_creation_lnx_base64_execution.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/linux/process_creation/proc_creation_lnx_base64_execution.yml",
    "logsource": "linux/process_creation",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:linux/process_creation": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 8,
+   "conjuncts_imported": 8,
+   "gap_reasons": {},
    "attack_ids": [
     "T1140"
    ],
@@ -40087,13 +40002,11 @@
    "path": "rules/linux/process_creation/proc_creation_lnx_apt_shell_execution.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/linux/process_creation/proc_creation_lnx_apt_shell_execution.yml",
    "logsource": "linux/process_creation",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:linux/process_creation": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 2,
+   "conjuncts_imported": 2,
+   "gap_reasons": {},
    "attack_ids": [
     "T1083"
    ],
@@ -40664,11 +40577,11 @@
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/linux/process_creation/proc_creation_lnx_auditctl_clear_rules.yml",
    "logsource": "linux/process_creation",
    "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
+   "rejection": "translation_gap",
+   "conjuncts_total": 1,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "logsource:linux/process_creation": 1
+    "translation_gap:value_type:SigmaRegularExpression": 1
    },
    "attack_ids": [
     "T1685.004"
@@ -40706,13 +40619,11 @@
    "path": "rules/linux/process_creation/proc_creation_lnx_env_shell_invocation.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/linux/process_creation/proc_creation_lnx_env_shell_invocation.yml",
    "logsource": "linux/process_creation",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:linux/process_creation": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 5,
+   "conjuncts_imported": 5,
+   "gap_reasons": {},
    "attack_ids": [
     "T1059.004"
    ],
@@ -41222,13 +41133,11 @@
    "path": "rules/linux/process_creation/proc_creation_lnx_systemctl_mask_power_settings.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/linux/process_creation/proc_creation_lnx_systemctl_mask_power_settings.yml",
    "logsource": "linux/process_creation",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:linux/process_creation": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 3,
+   "conjuncts_imported": 3,
+   "gap_reasons": {},
    "attack_ids": [
     "T1653"
    ],
@@ -41761,13 +41670,11 @@
    "path": "rules/linux/process_creation/proc_creation_lnx_python_pty_spawn.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/linux/process_creation/proc_creation_lnx_python_pty_spawn.yml",
    "logsource": "linux/process_creation",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:linux/process_creation": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 10,
+   "conjuncts_imported": 10,
+   "gap_reasons": {},
    "attack_ids": [
     "T1059"
    ],
@@ -41877,10 +41784,11 @@
    "logsource": "linux/network_connection",
    "status": "rejected",
    "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
+   "conjuncts_total": 2,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "logsource:linux/network_connection": 1
+    "telemetry_gap:field:DestinationHostname": 2,
+    "telemetry_gap:field:Initiated": 2
    },
    "attack_ids": [
     "T1572",
@@ -44299,12 +44207,12 @@
    "path": "rules/linux/process_creation/proc_creation_lnx_wget_download_suspicious_directory.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/linux/process_creation/proc_creation_lnx_wget_download_suspicious_directory.yml",
    "logsource": "linux/process_creation",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
+   "status": "partial",
+   "rejection": null,
+   "conjuncts_total": 2,
+   "conjuncts_imported": 1,
    "gap_reasons": {
-    "logsource:linux/process_creation": 1
+    "translation_gap:value_type:SigmaRegularExpression": 1
    },
    "attack_ids": [
     "T1105"
@@ -44337,13 +44245,11 @@
    "path": "rules/linux/process_creation/proc_creation_lnx_susp_git_clone.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/linux/process_creation/proc_creation_lnx_susp_git_clone.yml",
    "logsource": "linux/process_creation",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:linux/process_creation": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 14,
+   "conjuncts_imported": 14,
+   "gap_reasons": {},
    "attack_ids": [
     "T1593.003"
    ],
@@ -44807,13 +44713,11 @@
    "path": "rules/linux/process_creation/proc_creation_lnx_susp_java_children.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/linux/process_creation/proc_creation_lnx_susp_java_children.yml",
    "logsource": "linux/process_creation",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:linux/process_creation": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 10,
+   "conjuncts_imported": 10,
+   "gap_reasons": {},
    "attack_ids": [
     "T1059"
    ],
@@ -45350,13 +45254,11 @@
    "path": "rules/linux/process_creation/proc_creation_lnx_esxcli_vsan_discovery.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/linux/process_creation/proc_creation_lnx_esxcli_vsan_discovery.yml",
    "logsource": "linux/process_creation",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:linux/process_creation": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 2,
+   "conjuncts_imported": 2,
+   "gap_reasons": {},
    "attack_ids": [
     "T1033",
     "T1007",
@@ -45764,13 +45666,11 @@
    "path": "rules/linux/process_creation/proc_creation_lnx_susp_history_recon.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/linux/process_creation/proc_creation_lnx_susp_history_recon.yml",
    "logsource": "linux/process_creation",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:linux/process_creation": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 20,
+   "conjuncts_imported": 20,
+   "gap_reasons": {},
    "attack_ids": [
     "T1592.004"
    ],
@@ -45840,13 +45740,11 @@
    "path": "rules/linux/process_creation/proc_creation_lnx_pua_trufflehog.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/linux/process_creation/proc_creation_lnx_pua_trufflehog.yml",
    "logsource": "linux/process_creation",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:linux/process_creation": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 10,
+   "conjuncts_imported": 10,
+   "gap_reasons": {},
    "attack_ids": [
     "T1083",
     "T1552.001"
@@ -46428,13 +46326,11 @@
    "path": "rules/linux/process_creation/proc_creation_lnx_capsh_shell_invocation.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/linux/process_creation/proc_creation_lnx_capsh_shell_invocation.yml",
    "logsource": "linux/process_creation",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:linux/process_creation": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 1,
+   "conjuncts_imported": 1,
+   "gap_reasons": {},
    "attack_ids": [
     "T1059"
    ],
@@ -46587,11 +46483,12 @@
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/linux/network_connection/net_connection_lnx_susp_malware_callback_port.yml",
    "logsource": "linux/network_connection",
    "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
+   "rejection": "translation_gap",
+   "conjuncts_total": 10,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "logsource:linux/network_connection": 1
+    "telemetry_gap:field:Initiated": 10,
+    "translation_gap:value_type:SigmaCIDRExpression": 10
    },
    "attack_ids": [
     "T1571"
@@ -46857,13 +46754,11 @@
    "path": "rules/linux/file_event/file_event_lnx_persistence_sudoers_files.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/linux/file_event/file_event_lnx_persistence_sudoers_files.yml",
    "logsource": "linux/file_event",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:linux/file_event": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 2,
+   "conjuncts_imported": 2,
+   "gap_reasons": {},
    "attack_ids": [
     "T1548.003"
    ],
@@ -46988,11 +46883,11 @@
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/linux/process_creation/proc_creation_lnx_services_stop_and_disable.yml",
    "logsource": "linux/process_creation",
    "status": "rejected",
-   "rejection": "telemetry_gap",
+   "rejection": "translation_gap",
    "conjuncts_total": 0,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "logsource:linux/process_creation": 1
+    "dnf_bound_exceeded:>64": 1
    },
    "attack_ids": [
     "T1489",
@@ -47884,13 +47779,11 @@
    "path": "rules/linux/process_creation/proc_creation_lnx_rsync_shell_execution.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/linux/process_creation/proc_creation_lnx_rsync_shell_execution.yml",
    "logsource": "linux/process_creation",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:linux/process_creation": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 32,
+   "conjuncts_imported": 32,
+   "gap_reasons": {},
    "attack_ids": [
     "T1059"
    ],
@@ -48147,13 +48040,11 @@
    "path": "rules/linux/process_creation/proc_creation_lnx_malware_gobrat_grep_payload_discovery.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/linux/process_creation/proc_creation_lnx_malware_gobrat_grep_payload_discovery.yml",
    "logsource": "linux/process_creation",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:linux/process_creation": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 4,
+   "conjuncts_imported": 4,
+   "gap_reasons": {},
    "attack_ids": [
     "T1082"
    ],
@@ -48235,13 +48126,11 @@
    "path": "rules/linux/process_creation/proc_creation_lnx_security_tools_disabling.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/linux/process_creation/proc_creation_lnx_security_tools_disabling.yml",
    "logsource": "linux/process_creation",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:linux/process_creation": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 13,
+   "conjuncts_imported": 13,
+   "gap_reasons": {},
    "attack_ids": [
     "T1686"
    ],
@@ -48504,13 +48393,11 @@
    "path": "rules/linux/process_creation/proc_creation_lnx_nohup.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/linux/process_creation/proc_creation_lnx_nohup.yml",
    "logsource": "linux/process_creation",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:linux/process_creation": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 1,
+   "conjuncts_imported": 1,
+   "gap_reasons": {},
    "attack_ids": [
     "T1059.004"
    ],
@@ -49135,13 +49022,11 @@
    "path": "rules/linux/process_creation/proc_creation_lnx_esxcli_system_discovery.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/linux/process_creation/proc_creation_lnx_esxcli_system_discovery.yml",
    "logsource": "linux/process_creation",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:linux/process_creation": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 2,
+   "conjuncts_imported": 2,
+   "gap_reasons": {},
    "attack_ids": [
     "T1033",
     "T1007",
@@ -49621,13 +49506,11 @@
    "path": "rules/linux/process_creation/proc_creation_lnx_susp_interactive_bash.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/linux/process_creation/proc_creation_lnx_susp_interactive_bash.yml",
    "logsource": "linux/process_creation",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:linux/process_creation": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 8,
+   "conjuncts_imported": 8,
+   "gap_reasons": {},
    "attack_ids": [
     "T1036",
     "T1059.004"
@@ -49994,13 +49877,11 @@
    "path": "rules/linux/process_creation/proc_creation_lnx_mount_hidepid.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/linux/process_creation/proc_creation_lnx_mount_hidepid.yml",
    "logsource": "linux/process_creation",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:linux/process_creation": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 1,
+   "conjuncts_imported": 1,
+   "gap_reasons": {},
    "attack_ids": [
     "T1564"
    ],
@@ -50800,13 +50681,11 @@
    "path": "rules/linux/process_creation/proc_creation_lnx_susp_script_interpretor_spawn_credential_scanner.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/linux/process_creation/proc_creation_lnx_susp_script_interpretor_spawn_credential_scanner.yml",
    "logsource": "linux/process_creation",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:linux/process_creation": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 8,
+   "conjuncts_imported": 8,
+   "gap_reasons": {},
    "attack_ids": [
     "T1005",
     "T1552",
@@ -51728,13 +51607,11 @@
    "path": "rules/linux/process_creation/proc_creation_lnx_esxcli_storage_discovery.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/linux/process_creation/proc_creation_lnx_esxcli_storage_discovery.yml",
    "logsource": "linux/process_creation",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:linux/process_creation": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 2,
+   "conjuncts_imported": 2,
+   "gap_reasons": {},
    "attack_ids": [
     "T1033",
     "T1007",
@@ -52630,13 +52507,11 @@
    "path": "rules/linux/process_creation/proc_creation_lnx_bpftrace_unsafe_option_usage.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/linux/process_creation/proc_creation_lnx_bpftrace_unsafe_option_usage.yml",
    "logsource": "linux/process_creation",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:linux/process_creation": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 1,
+   "conjuncts_imported": 1,
+   "gap_reasons": {},
    "attack_ids": [
     "T1059.004"
    ],
@@ -52964,13 +52839,11 @@
    "path": "rules/linux/process_creation/proc_creation_lnx_ssm_agent_abuse.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/linux/process_creation/proc_creation_lnx_ssm_agent_abuse.yml",
    "logsource": "linux/process_creation",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:linux/process_creation": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 1,
+   "conjuncts_imported": 1,
+   "gap_reasons": {},
    "attack_ids": [
     "T1219.002"
    ],
@@ -53113,13 +52986,11 @@
    "path": "rules/linux/process_creation/proc_creation_lnx_cp_passwd_or_shadow_tmp.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/linux/process_creation/proc_creation_lnx_cp_passwd_or_shadow_tmp.yml",
    "logsource": "linux/process_creation",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:linux/process_creation": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 2,
+   "conjuncts_imported": 2,
+   "gap_reasons": {},
    "attack_ids": [
     "T1552.001"
    ],
@@ -53800,13 +53671,11 @@
    "path": "rules/linux/process_creation/proc_creation_lnx_base64_shebang_cli.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/linux/process_creation/proc_creation_lnx_base64_shebang_cli.yml",
    "logsource": "linux/process_creation",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:linux/process_creation": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 5,
+   "conjuncts_imported": 5,
+   "gap_reasons": {},
    "attack_ids": [
     "T1140"
    ],

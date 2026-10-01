@@ -600,7 +600,7 @@ class WindowsSecuritySourceAdapter:
                     code=str(event_id),
                     dataset=SECURITY_DATASET,
                 ),
-                host=HostRef(name=computer),
+                host=HostRef(name=computer, os_type="windows"),
                 user=user,
                 **fields,
             ),

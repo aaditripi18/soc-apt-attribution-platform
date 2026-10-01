@@ -23,6 +23,9 @@ adds ``ps_script`` (PowerShell 4104) and ``ps_module`` (PowerShell 4103).
 batch B (ADR-0008): failed and explicit-credential logons, Kerberos, service
 installation, scheduled tasks, privileges, registry / directory-service object
 operations, account management, Credential Manager reads and WFP filters.
+``/10`` (ADR-0010) scopes every product by operating system (``PRODUCT_OS_SCOPES``)
+and adds Linux ``process_creation`` / ``file_event`` / ``network_connection``
+(Sysmon for Linux).
 
 Anything else is a *telemetry gap*, reported per rule by the importer — never
 approximated. ``UNMAPPED_FIELD_REASONS`` records why the most frequent
@@ -38,7 +41,7 @@ from __future__ import annotations
 
 from types import MappingProxyType
 
-FIELD_MAP_VERSION = "sigma-field-map/9"
+FIELD_MAP_VERSION = "sigma-field-map/10"
 
 #: ``(product, category)`` → the ``(field_path, operator, value)`` scope
 #: conditions an Observation must satisfy to be the kind of event the Sigma
@@ -134,6 +137,39 @@ LOGSOURCE_SCOPES: MappingProxyType[tuple[str, str], tuple[tuple[str, str, str], 
             ),
             # Sigma service: security = the Windows Security channel.
             ("windows", "security"): (("event.dataset", "equals", "system.security"),),
+            # Linux (ADR-0010): the same ECS kinds; the platform is told apart by
+            # PRODUCT_OS_SCOPES, never by these conditions.
+            ("linux", "process_creation"): (
+                ("event.category", "has_element", "process"),
+                ("event.type", "has_element", "start"),
+            ),
+            ("linux", "file_event"): (
+                ("event.category", "has_element", "file"),
+                ("event.type", "has_element", "creation"),
+                ("event.action", "equals", "file_create"),
+            ),
+            ("linux", "network_connection"): (
+                ("event.category", "has_element", "network"),
+                ("event.type", "has_element", "connection"),
+            ),
+        }
+    )
+)
+
+#: Sigma product → ``(field_path, operator, value, negate)`` conditions every
+#: rule of that product also carries (ADR-0010 D2), placed after the logsource
+#: scope so the engine's first-condition index is unchanged. Linux rules require
+#: a Linux host; Windows rules require the host **not** to be Linux or macOS, so
+#: Windows Observations that predate ``host.os_type`` (fixtures) still match. A
+#: Windows rule can therefore never fire on a Linux process, nor the reverse.
+PRODUCT_OS_SCOPES: MappingProxyType[str, tuple[tuple[str, str, str, bool], ...]] = (
+    MappingProxyType(
+        {
+            "windows": (
+                ("host.os_type", "equals", "linux", True),
+                ("host.os_type", "equals", "macos", True),
+            ),
+            "linux": (("host.os_type", "equals", "linux", False),),
         }
     )
 )
@@ -270,6 +306,31 @@ FIELD_MAPS: MappingProxyType[tuple[str, str], MappingProxyType[str, str]] = Mapp
                 "QueryName": "dns.question_name",
                 "QueryStatus": "dns.query_status",
                 "QueryResults": "dns.results",
+            }
+        ),
+        # Sysmon for Linux field names (ADR-0010 D3): POSIX paths as logged;
+        # ``User`` is the plain account name (no DOMAIN\ part on Linux).
+        ("linux", "process_creation"): MappingProxyType(
+            {
+                "Image": "process.executable",
+                "CommandLine": "process.command_line",
+                "ParentImage": "process.parent_executable",
+                "ParentCommandLine": "process.parent_command_line",
+                "CurrentDirectory": "process.working_directory",
+                "User": "user.name",
+            }
+        ),
+        ("linux", "file_event"): MappingProxyType(
+            {"Image": "process.executable", "TargetFilename": "file.path"}
+        ),
+        ("linux", "network_connection"): MappingProxyType(
+            {
+                "Image": "process.executable",
+                "DestinationIp": "network.destination.ip",
+                "DestinationPort": "network.destination.port",
+                "SourceIp": "network.source.ip",
+                "SourcePort": "network.source.port",
+                "Protocol": "network.transport",
             }
         ),
         ("windows", "security"): MappingProxyType(
@@ -440,6 +501,7 @@ __all__ = [
     "LOGSOURCE_SCOPES",
     "FIELD_MAPS",
     "SUPPORTED_EVENT_CODES",
+    "PRODUCT_OS_SCOPES",
     "CODED_VALUE_FIELDS",
     "UNMAPPED_FIELD_REASONS",
 ]

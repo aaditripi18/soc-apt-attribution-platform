@@ -46,11 +46,18 @@ from attribution_platform.sources.errors import SourceAdapterError
 from attribution_platform.sources.powershell import PowerShellSourceAdapter
 from attribution_platform.sources.precedence import apply_source_precedence
 from attribution_platform.sources.sysmon import SysmonSourceAdapter
+from attribution_platform.sources.sysmon_xml import is_sysmon_event_xml
 from attribution_platform.sources.windows_security import WindowsSecuritySourceAdapter
 
-#: Windows channel (case-folded) -> the adapter that reads it.
+#: Channel (case-folded) -> the adapter that reads it. XML event lines (Sysmon
+#: for Linux, ADR-0010 D1) are routed by :data:`XML_EVENT_CHANNEL`; the Sysmon
+#: adapter parses them and checks their real channel itself.
+XML_EVENT_CHANNEL = "<sysmon-xml>"
+_SYSMON = SysmonSourceAdapter()
 DEFAULT_CHANNEL_ADAPTERS: Mapping[str, Any] = {
-    "microsoft-windows-sysmon/operational": SysmonSourceAdapter(),
+    "microsoft-windows-sysmon/operational": _SYSMON,
+    "linux-sysmon/operational": _SYSMON,
+    XML_EVENT_CHANNEL: _SYSMON,
     "microsoft-windows-powershell/operational": PowerShellSourceAdapter(),
     "security": WindowsSecuritySourceAdapter(),
 }
@@ -117,36 +124,66 @@ def _verify(source: RecordingSource) -> None:
         )
 
 
-def iter_recording_lines(path: Path) -> Iterator[str]:
-    """Stream the non-blank lines of a ``.zip`` / ``.tar.gz`` recording (read
-    as data, never extracted to disk), members in name order."""
+def _iter_raw_lines(path: Path) -> Iterator[str]:
+    """Every line of a recording, line ending kept (blank lines included)."""
     if path.suffix == ".zip":
         with zipfile.ZipFile(path) as archive:
             for name in sorted(archive.namelist()):
                 with archive.open(name) as handle:
-                    for line in io.TextIOWrapper(handle, encoding="utf-8", errors="replace"):
-                        if line.strip():
-                            yield line
+                    yield from io.TextIOWrapper(handle, encoding="utf-8", errors="replace")
     elif path.name.endswith(".tar.gz"):
         with tarfile.open(path, "r:gz") as archive:
             for member in sorted(archive.getmembers(), key=lambda m: m.name):
                 extracted = archive.extractfile(member) if member.isfile() else None
                 if extracted is not None:
-                    for line in io.TextIOWrapper(extracted, encoding="utf-8", errors="replace"):
-                        if line.strip():
-                            yield line
+                    yield from io.TextIOWrapper(extracted, encoding="utf-8", errors="replace")
+    elif path.suffix in (".log", ".json", ".jsonl"):
+        with path.open(encoding="utf-8", errors="replace") as handle:
+            yield from handle
     else:
         raise ReplayError(f"unsupported recording archive type: {path.name}")
 
 
-def iter_recording_records(path: Path) -> Iterator[dict[str, Any]]:
-    """Stream the JSON-lines records of a recording (see
-    :func:`iter_recording_lines`)."""
-    for line in iter_recording_lines(path):
-        yield json.loads(line)
+def iter_recording_lines(path: Path) -> Iterator[str]:
+    """Stream the non-blank lines of a ``.zip`` / ``.tar.gz`` recording (read
+    as data, never extracted to disk, members in name order) or of a plain
+    ``.log`` / ``.json`` / ``.jsonl`` text recording."""
+    for line in _iter_raw_lines(path):
+        if line.strip():
+            yield line
 
 
-def _channel(record: Mapping[str, Any]) -> str:
+def iter_recording_records(path: Path) -> Iterator[dict[str, Any] | str]:
+    """Stream the records of a recording: JSON lines parsed, and Sysmon XML
+    events passed through as text for the Sysmon adapter to parse (so a
+    malformed one is that adapter's refusal, counted like any other).
+
+    One XML event may span several physical lines: Sysmon for Linux writes a
+    command line's own newlines verbatim (seen in the real AcidRain and
+    Atomic Red Team captures). An event therefore runs from a line starting
+    ``<Event`` to the line ending ``</Event>``, rejoined exactly as written —
+    blank lines and line breaks included — never cut at a line boundary."""
+    pending: list[str] = []
+    for line in _iter_raw_lines(path):
+        if pending:
+            pending.append(line)
+            if line.rstrip().endswith("</Event>"):
+                yield "".join(pending).strip()
+                pending = []
+        elif is_sysmon_event_xml(line):
+            if line.rstrip().endswith("</Event>"):
+                yield line.strip()
+            else:
+                pending = [line]
+        elif line.strip():
+            yield json.loads(line)
+    if pending:
+        yield "".join(pending).strip()  # unterminated: the adapter refuses it
+
+
+def _channel(record: Mapping[str, Any] | str) -> str:
+    if isinstance(record, str):
+        return XML_EVENT_CHANNEL
     winlog = record.get("winlog")
     value = (
         winlog.get("channel")

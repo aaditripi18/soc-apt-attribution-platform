@@ -10,7 +10,7 @@
  "evidence": 50,
  "units": [
   {
-   "group_id": "corr-group::add50c402114c474ebb41e33fad100a8e70d14f8fa765a8a32b5870125fa3974",
+   "group_id": "corr-group::32614c98e9183d6b6ced20590bc1b36f021321c11cc944690ea67030ac89998e",
    "anchor_observation_id": "sysmon:ACCT01.pandalab.com:sha256:207a0d1199001f263b0427379513717ee44db267084987fc085f1ddaadfdd272",
    "evidence": 26,
    "observations": 10,
@@ -49,7 +49,7 @@
    }
   },
   {
-   "group_id": "corr-group::4b78717a45ccfc0a4d5bde240224a656f416b1cb6c5a16fb18bdcdb00a3bfaa7",
+   "group_id": "corr-group::d3cf227a51e933229438ca59cb4e8c7e2e2cb65c40c895ba1ffec3916920db15",
    "anchor_observation_id": "sysmon:ACCT01.pandalab.com:sha256:3cb8952dd1e230f98d56691298019a8e0ad18112138054010cbe06a6c4838fd6",
    "evidence": 18,
    "observations": 9,
@@ -76,7 +76,7 @@
    }
   },
   {
-   "group_id": "corr-group::b690cefa300c6e8fcb834b553a6f3bb14e86c09461a091b3dd743c5ac07578bc",
+   "group_id": "corr-group::01092bdba0e214a529304a3ef0e0ed5a57fad0ea2a81bd7f71d247b4991b5748",
    "anchor_observation_id": "sysmon:ACCT01.pandalab.com:sha256:7ce03a8f191ef42ff00ac296e5da75cae817c0f24934a2936720ed200e7e40cf",
    "evidence": 3,
    "observations": 3,
@@ -99,7 +99,30 @@
    }
   },
   {
-   "group_id": "corr-group::8a6d67a5f5befcefb8c9325b42c8ae08b3be9adf8041b995e2bb0d3b5d6b72be",
+   "group_id": "corr-group::02023f15d53e01af3d8eac035c7ab8ddb4b930e409d901c784e29ab4f2997ac0",
+   "anchor_observation_id": "sysmon:ACCT01.pandalab.com:sha256:effad8b31d51717f1c7ce5012ed02e9ab59c55759655b1fabe94812d03f6543a",
+   "evidence": 1,
+   "observations": 1,
+   "hosts": [
+    "ACCT01.pandalab.com"
+   ],
+   "first": "2023-08-16T00:34:31.589000+00:00",
+   "last": "2023-08-16T00:34:31.589000+00:00",
+   "process_images": {
+    "C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe": 1
+   },
+   "image_names": [
+    "msedge.exe"
+   ],
+   "techniques": [
+    "T1564.004"
+   ],
+   "rule_families": {
+    "sigma:b69888d4-380c-45ce-9cf9-d9ce46e67821": 1
+   }
+  },
+  {
+   "group_id": "corr-group::9ceb9a784c14d2cf9baef6f667cfa78ed75c374e28bd51ef4c329163d2c1d731",
    "anchor_observation_id": "sysmon:ACCT01.pandalab.com:sha256:fdf205098aed53e40a225c246c34c664da9b12891486bc830b5eb7625397f45d",
    "evidence": 1,
    "observations": 1,
@@ -122,7 +145,7 @@
    }
   },
   {
-   "group_id": "corr-group::b651b16175893fd87f52ebb37cd06b5fe587228c1228cdedbd6898b0c0d580a8",
+   "group_id": "corr-group::e510c0e77d619d1e58a2f1463643e2e800a37732d70ab032e5cfcfdbfb04da7a",
    "anchor_observation_id": "sysmon:ACCT01.pandalab.com:sha256:e5ee5037fd447d69d221ef5b19782e6bb4c7606920f8049e0fedbeb163a0e21a",
    "evidence": 1,
    "observations": 1,
@@ -142,29 +165,6 @@
    ],
    "rule_families": {
     "sigma:e56d3073-83ff-4021-90fe-c658e0709e72": 1
-   }
-  },
-  {
-   "group_id": "corr-group::e87b4d0046f98c63218bc19e36b0fda6d78be68eec96f577546a34d5c73af984",
-   "anchor_observation_id": "sysmon:ACCT01.pandalab.com:sha256:effad8b31d51717f1c7ce5012ed02e9ab59c55759655b1fabe94812d03f6543a",
-   "evidence": 1,
-   "observations": 1,
-   "hosts": [
-    "ACCT01.pandalab.com"
-   ],
-   "first": "2023-08-16T00:34:31.589000+00:00",
-   "last": "2023-08-16T00:34:31.589000+00:00",
-   "process_images": {
-    "C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe": 1
-   },
-   "image_names": [
-    "msedge.exe"
-   ],
-   "techniques": [
-    "T1564.004"
-   ],
-   "rule_families": {
-    "sigma:b69888d4-380c-45ce-9cf9-d9ce46e67821": 1
    }
   }
  ]

@@ -58,16 +58,16 @@
   {
    "unit_id": "v2-apt29-day2-u04",
    "anchor_scenario_ids": [
-    "sysmon:UTICA.dmevals.local:987756"
+    "sysmon:UTICA.dmevals.local:1008901"
    ],
-   "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: windowsazuretelemetryservice.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
+   "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: antimalwareconfig.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
   },
   {
    "unit_id": "v2-apt29-day2-u05",
    "anchor_scenario_ids": [
-    "sysmon:UTICA.dmevals.local:1008901"
+    "sysmon:UTICA.dmevals.local:987756"
    ],
-   "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: antimalwareconfig.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
+   "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: windowsazuretelemetryservice.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
   },
   {
    "unit_id": "v2-apt29-day2-u06",
@@ -152,65 +152,65 @@
   {
    "unit_id": "v2-apt29-day2-u14",
    "anchor_scenario_ids": [
-    "sysmon:UTICA.dmevals.local:944437"
+    "sysmon:UTICA.dmevals.local:944543"
    ],
    "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: rundll32.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
   },
   {
    "unit_id": "v2-apt29-day2-u15",
    "anchor_scenario_ids": [
-    "sysmon:NEWYORK.dmevals.local:318662"
+    "sysmon:SCRANTON.dmevals.local:294209"
    ],
    "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: svchost.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
   },
   {
    "unit_id": "v2-apt29-day2-u16",
    "anchor_scenario_ids": [
-    "sysmon:UTICA.dmevals.local:958833"
+    "sysmon:UTICA.dmevals.local:944437"
    ],
-   "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: netsh.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
+   "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: rundll32.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
   },
   {
    "unit_id": "v2-apt29-day2-u17",
-   "anchor_scenario_ids": [
-    "windows_security:NEWYORK.dmevals.local:201065"
-   ],
-   "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: lsass.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
-  },
-  {
-   "unit_id": "v2-apt29-day2-u18",
    "anchor_scenario_ids": [
     "sysmon:UTICA.dmevals.local:1000880"
    ],
    "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: rundll32.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
   },
   {
-   "unit_id": "v2-apt29-day2-u19",
+   "unit_id": "v2-apt29-day2-u18",
    "anchor_scenario_ids": [
-    "sysmon:SCRANTON.dmevals.local:294209"
+    "sysmon:UTICA.dmevals.local:932845"
    ],
-   "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: svchost.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
+   "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: outlook.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
   },
   {
-   "unit_id": "v2-apt29-day2-u20",
+   "unit_id": "v2-apt29-day2-u19",
    "anchor_scenario_ids": [
     "sysmon:UTICA.dmevals.local:884175"
    ],
    "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: svchost.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
   },
   {
+   "unit_id": "v2-apt29-day2-u20",
+   "anchor_scenario_ids": [
+    "sysmon:UTICA.dmevals.local:958833"
+   ],
+   "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: netsh.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
+  },
+  {
    "unit_id": "v2-apt29-day2-u21",
    "anchor_scenario_ids": [
-    "sysmon:UTICA.dmevals.local:944543"
+    "windows_security:NEWYORK.dmevals.local:201065"
    ],
-   "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: rundll32.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
+   "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: lsass.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
   },
   {
    "unit_id": "v2-apt29-day2-u22",
    "anchor_scenario_ids": [
-    "sysmon:UTICA.dmevals.local:932845"
+    "sysmon:NEWYORK.dmevals.local:318662"
    ],
-   "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: outlook.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
+   "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: svchost.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
   }
  ]
 }

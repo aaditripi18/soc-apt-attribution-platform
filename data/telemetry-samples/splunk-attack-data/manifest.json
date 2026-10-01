@@ -1,0 +1,2125 @@
+{
+  "source": "splunk/attack_data (Linux: Sysmon for Linux and auditd)",
+  "license": "Apache-2.0",
+  "license_url": "https://github.com/splunk/attack_data/blob/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/LICENSE",
+  "source_repository": "splunk/attack_data",
+  "source_commit": "a28608b53aa3d8222052e8f3ada59e2d9a4adfff",
+  "retrieved_at_utc": "2026-10-01T10:32:38Z",
+  "method": "scripts/acquire_linux_telemetry.py (commit-pinned; LFS content verified against each pointer's SHA-256 and size)",
+  "approval": "owner, 2026-10-01 (ADR-0010 D6)",
+  "cache": "data/cache/splunk-attack-data/ (git-ignored; rebuild with this script)",
+  "files": [
+    {
+      "source_path": "datasets/attack_techniques/T1003.008/copy_file_stdoutpipe/sysmon_linux.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1003.008/copy_file_stdoutpipe/sysmon_linux.log",
+      "size_bytes": 11130080,
+      "sha256": "c18efef784e7754f6fd498900656f7e1969e97d32e23c4bb6488e8df63ba39a6",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1003.008/copy_file_stdoutpipe/sysmon_linux.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1003.008/linux_auditd_access_credential/auditd_proctitle_access_cred.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1003.008/linux_auditd_access_credential/auditd_proctitle_access_cred.log",
+      "size_bytes": 8874,
+      "sha256": "28f04ee54387630994d5c5be34ae44f31bf161dd8648242b7bdcd356a3664ff4",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1003.008/linux_auditd_access_credential/auditd_proctitle_access_cred.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1003.008/linux_auditd_access_credential/linux_auditd_access_credential.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1003.008/linux_auditd_access_credential/linux_auditd_access_credential.log",
+      "size_bytes": 1366,
+      "sha256": "b155bfd88abe3861db6fb7b6591f1c414e441327485f00a6621cc738c63607b3",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1003.008/linux_auditd_access_credential/linux_auditd_access_credential.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1014/medusa_rootkit/sysmon_linux.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1014/medusa_rootkit/sysmon_linux.log",
+      "size_bytes": 6275,
+      "sha256": "092f23c31aaa9c2f26d38c083255ade96bd953e0b5110443e9c1d39ae487bf63",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1014/medusa_rootkit/sysmon_linux.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1016/atomic_red_team/linux_net_discovery/sysmon_linux.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1016/atomic_red_team/linux_net_discovery/sysmon_linux.log",
+      "size_bytes": 18169846,
+      "sha256": "62d24162917cdd531b6a6479d953091ace7e377ff5d5fa78c35e0895728b9e91",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1016/atomic_red_team/linux_net_discovery/sysmon_linux.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1016/linux_auditd_net_tool/linux_auditd_net_tool.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1016/linux_auditd_net_tool/linux_auditd_net_tool.log",
+      "size_bytes": 12321,
+      "sha256": "d416f83636399c4fc3d16e05cf8865ad4b37ad09b1e9b24b2c3edf3d02f13431",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1016/linux_auditd_net_tool/linux_auditd_net_tool.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1016/linux_auditd_net_tool_new/linux_auditd_net_tool_bucket_new.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1016/linux_auditd_net_tool_new/linux_auditd_net_tool_bucket_new.log",
+      "size_bytes": 265569,
+      "sha256": "7b0f24e6f490a5f59bb92aa09740b6f0d1b5898cca788f00aff5c3efb80199a3",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1016/linux_auditd_net_tool_new/linux_auditd_net_tool_bucket_new.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1030/linux_auditd_split_b_exec/auditd_execve_split.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1030/linux_auditd_split_b_exec/auditd_execve_split.log",
+      "size_bytes": 229,
+      "sha256": "6594f2541ea8143fb7f11b1f38496888f7603d2ba91002a40914d1e4a9977e05",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1030/linux_auditd_split_b_exec/auditd_execve_split.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1030/linux_auditd_split_b_exec/linux_auditd_split_b_exec.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1030/linux_auditd_split_b_exec/linux_auditd_split_b_exec.log",
+      "size_bytes": 216,
+      "sha256": "b2f0dfda44132b9491d9986a579ebbc8efc7f670e38939cf52fdc7929edab110",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1030/linux_auditd_split_b_exec/linux_auditd_split_b_exec.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1030/linux_auditd_split_syscall/linux_auditd_split_syscall.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1030/linux_auditd_split_syscall/linux_auditd_split_syscall.log",
+      "size_bytes": 459,
+      "sha256": "b7227fbdfb54ddb683f099b96e014e186408c84d0adb7536ce892ee4b1dc1e8c",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1030/linux_auditd_split_syscall/linux_auditd_split_syscall.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1030/linux_auditd_split_syscall_new/linux_auditd_new_split.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1030/linux_auditd_split_syscall_new/linux_auditd_new_split.log",
+      "size_bytes": 716,
+      "sha256": "cc26e035942fb454da59b44fb73ea95ddcc5abcb8f9fa739ab69dad15f0c3456",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1030/linux_auditd_split_syscall_new/linux_auditd_new_split.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1033/linux_auditd_whoami/linux_auditd_whoami.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1033/linux_auditd_whoami/linux_auditd_whoami.log",
+      "size_bytes": 1510,
+      "sha256": "fef8907e640641740bddba145768e43423be04c14fee57fe9d19293b1e5ac921",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1033/linux_auditd_whoami/linux_auditd_whoami.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1033/linux_auditd_whoami_new/linux_auditd_new_whoami.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1033/linux_auditd_whoami_new/linux_auditd_new_whoami.log",
+      "size_bytes": 1127,
+      "sha256": "431929147fc4596b4e48f911a06543036a9c91546eacf10d00ad3b085afa8348",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1033/linux_auditd_whoami_new/linux_auditd_new_whoami.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1053.002/linux_auditd_at/linux_auditd_at_execution.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1053.002/linux_auditd_at/linux_auditd_at_execution.log",
+      "size_bytes": 6406,
+      "sha256": "e6478ab9531b3fe594ec6116c85eca43e1d4a05f711eb608a8f5d4ea50734bb6",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1053.002/linux_auditd_at/linux_auditd_at_execution.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1053.002/linux_auditd_chown_root/auditd_proctitle_chown_root.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1053.002/linux_auditd_chown_root/auditd_proctitle_chown_root.log",
+      "size_bytes": 1718,
+      "sha256": "605a6d045c86b3593bb09eb1371cf99a91b8d4428ce167c272e4cff585f44b83",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1053.002/linux_auditd_chown_root/auditd_proctitle_chown_root.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1053.002/linux_auditd_chown_root/linux_auditd_chown_root.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1053.002/linux_auditd_chown_root/linux_auditd_chown_root.log",
+      "size_bytes": 112,
+      "sha256": "a88b00f47da47319a41e5fa5df43b9d0f23a8e34a0986c58996f2f7822477532",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1053.002/linux_auditd_chown_root/linux_auditd_chown_root.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1053.002/linux_new_auditd_at/linux_auditd_new_at.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1053.002/linux_new_auditd_at/linux_auditd_new_at.log",
+      "size_bytes": 3279,
+      "sha256": "8f8a8fcd8664f1b2179686e42069bb1e6c0a11e69f0483d95ceec1f5185ba616",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1053.002/linux_new_auditd_at/linux_auditd_new_at.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1053.003/auditd_path_cron/path_cron.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1053.003/auditd_path_cron/path_cron.log",
+      "size_bytes": 2790,
+      "sha256": "d1781b8eef7b1b634222d6cbc00044798f5ccadd1130de8517059f39ccec57cc",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1053.003/auditd_path_cron/path_cron.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1053.003/cronjobs_entry/sysmon_linux_cron_append.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1053.003/cronjobs_entry/sysmon_linux_cron_append.log",
+      "size_bytes": 7622749,
+      "sha256": "a85c1f37adf0cb8cdbadcc5c34e92e4cdb724938b4a4d83dd19e3528374e82ed",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1053.003/cronjobs_entry/sysmon_linux_cron_append.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1053.003/crontab_list_parameter/sysmon_linux.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1053.003/crontab_list_parameter/sysmon_linux.log",
+      "size_bytes": 394625,
+      "sha256": "3db8d0c36b2a4be1aa9563132c24139c48babb27ade3fe3879cc6d8ac6bc9a33",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1053.003/crontab_list_parameter/sysmon_linux.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1053.003/linux_auditd_cron_file_audited/linux_auditd_cron_file_audited2.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1053.003/linux_auditd_cron_file_audited/linux_auditd_cron_file_audited2.log",
+      "size_bytes": 4335,
+      "sha256": "f1edad351746ee0492e9d5dd5566ac85e018d7a8e12bc9b290ea7dfbf0f8fd1b",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1053.003/linux_auditd_cron_file_audited/linux_auditd_cron_file_audited2.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1053.003/linux_auditd_cron_file_audited/linux_path_cron.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1053.003/linux_auditd_cron_file_audited/linux_path_cron.log",
+      "size_bytes": 10247,
+      "sha256": "eca54b2aecb6a55dd1b57437c99fe106d631e2fa7515a005893bdb2d66f96f63",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1053.003/linux_auditd_cron_file_audited/linux_path_cron.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1053.003/linux_auditd_crontab_edit/linux_auditd_crontab_edit.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1053.003/linux_auditd_crontab_edit/linux_auditd_crontab_edit.log",
+      "size_bytes": 926,
+      "sha256": "232783bb63a77d9392d28adbbcdf381455083e399e9c9e7dcfa64072899b3217",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1053.003/linux_auditd_crontab_edit/linux_auditd_crontab_edit.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1053.003/linux_auditd_crontab_edit_new/linux_auditd_new_crontab.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1053.003/linux_auditd_crontab_edit_new/linux_auditd_new_crontab.log",
+      "size_bytes": 1116,
+      "sha256": "85029e322d6526382d393a06fa1b08263d673774c6060805c4a9fe5c9db5fe15",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1053.003/linux_auditd_crontab_edit_new/linux_auditd_new_crontab.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1053.006/linux_services_restart/auditd_proctitle_service_restart.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1053.006/linux_services_restart/auditd_proctitle_service_restart.log",
+      "size_bytes": 12951,
+      "sha256": "915ab50ad7b5cbf4bb435f1e5eed29d37d6e475da0d7ec2e776fd82fb96f3818",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1053.006/linux_services_restart/auditd_proctitle_service_restart.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1059.004/linux_discovery_tools/sysmon_linux.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1059.004/linux_discovery_tools/sysmon_linux.log",
+      "size_bytes": 2850747,
+      "sha256": "045e49f0528173351671de2e12817670d5be95485c6fc1c4a8aad80c620215f7",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1059.004/linux_discovery_tools/sysmon_linux.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1068/linux_auditd_copy_fail/auth.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1068/linux_auditd_copy_fail/auth.log",
+      "size_bytes": 233,
+      "sha256": "d5e309f236340f39d5825c3d1b1c630086051be5a7668e483f2d48a8810dc9d2",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1068/linux_auditd_copy_fail/auth.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1068/linux_auditd_copy_fail/kern.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1068/linux_auditd_copy_fail/kern.log",
+      "size_bytes": 72834,
+      "sha256": "9ac4f910e111124407e3c0424fdefc51396b24265e6aae0b97f0c4195218b75a",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1068/linux_auditd_copy_fail/kern.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1068/linux_auditd_copy_fail/linux_auditd.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1068/linux_auditd_copy_fail/linux_auditd.log",
+      "size_bytes": 78230,
+      "sha256": "9311e1e79cbbfdd2ff8c626c581832663263fe1c5cd2db2fb86a66be95749a03",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1068/linux_auditd_copy_fail/linux_auditd.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1068/linux_pedit/linux_auditd.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1068/linux_pedit/linux_auditd.log",
+      "size_bytes": 307,
+      "sha256": "157ce9fb84cff672a094a5d976535a4ab369e3f05a7dbcf98a7b69c17f08c2c9",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1068/linux_pedit/linux_auditd.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1068/linux_pedit/sysmon_linux.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1068/linux_pedit/sysmon_linux.log",
+      "size_bytes": 1684,
+      "sha256": "d258c995d79098be6fafefc6a5fcc9220b7bae11bf8256427591f60c1f817af7",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1068/linux_pedit/sysmon_linux.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1082/linux_auditd_lsmod/linux_auditd_lsmod.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1082/linux_auditd_lsmod/linux_auditd_lsmod.log",
+      "size_bytes": 450,
+      "sha256": "e4003e81ed575aebe7dfd0bb0ce7de4b7968e29206592a1b46db80fbaf52b24b",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1082/linux_auditd_lsmod/linux_auditd_lsmod.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1082/linux_auditd_lsmod_new/linux_auditd_new_lsmod.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1082/linux_auditd_lsmod_new/linux_auditd_new_lsmod.log",
+      "size_bytes": 355,
+      "sha256": "abf7f579f94d3e6f0298870555cb985f36e65c29eb9b470b50e1d1f94ed54a9a",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1082/linux_auditd_lsmod_new/linux_auditd_new_lsmod.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1083/linux_auditd_find_db/linux_auditd_find_db.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1083/linux_auditd_find_db/linux_auditd_find_db.log",
+      "size_bytes": 2383,
+      "sha256": "75b966d793aa00b6ab7df0ad35964b7a1cc9afca230942640ef12a09a50925b3",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1083/linux_auditd_find_db/linux_auditd_find_db.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1083/linux_auditd_find_document/auditd_execve_file_dir_discovery.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1083/linux_auditd_find_document/auditd_execve_file_dir_discovery.log",
+      "size_bytes": 24628,
+      "sha256": "bb5c8a5ff93ec2b5606c95f5ea6f0f0fe02450c424263bde43df5b0347b1dbce",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1083/linux_auditd_find_document/auditd_execve_file_dir_discovery.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1083/linux_auditd_find_document/linux_auditd_find_document.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1083/linux_auditd_find_document/linux_auditd_find_document.log",
+      "size_bytes": 5645,
+      "sha256": "55fa7daac007ece847f8dac8804732e0829782dc25096cb6bdc9a76fdc64a14d",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1083/linux_auditd_find_document/linux_auditd_find_document.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1083/linux_auditd_find_virtual_disk/auditd_execve_find_vhd.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1083/linux_auditd_find_virtual_disk/auditd_execve_find_vhd.log",
+      "size_bytes": 2267,
+      "sha256": "c9563e19e0f5611caf878855d1a0b33cf5d7f08484c5cfe733306e8ff2707387",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1083/linux_auditd_find_virtual_disk/auditd_execve_find_vhd.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1083/linux_auditd_find_virtual_disk/linux_auditd_find_virtual_disk.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1083/linux_auditd_find_virtual_disk/linux_auditd_find_virtual_disk.log",
+      "size_bytes": 879,
+      "sha256": "f10fde38957559cae8545fa6a961311fdc7943010da01e0486aff60cc7440cb7",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1083/linux_auditd_find_virtual_disk/linux_auditd_find_virtual_disk.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1083/linux_auditd_hidden_file/auditd_execve_hidden_file.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1083/linux_auditd_hidden_file/auditd_execve_hidden_file.log",
+      "size_bytes": 198,
+      "sha256": "382e50e2763bd1f80e539f9fce3ebc11a25574c6aeb0e93cf5b4e12807debc90",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1083/linux_auditd_hidden_file/auditd_execve_hidden_file.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1083/linux_auditd_hidden_file/linux_auditd_hidden_file.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1083/linux_auditd_hidden_file/linux_auditd_hidden_file.log",
+      "size_bytes": 192,
+      "sha256": "768a104f5b14df965637308e2c767b33519fb7565a19d26e4429ba16d63abf76",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1083/linux_auditd_hidden_file/linux_auditd_hidden_file.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1098.004/auditd_path_ssh_config/path_ssh_config.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1098.004/auditd_path_ssh_config/path_ssh_config.log",
+      "size_bytes": 1441,
+      "sha256": "221486c9e0f0e8101de8d8f2198586f3119bf6e6548de6804aa00da26e2ea8e4",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1098.004/auditd_path_ssh_config/path_ssh_config.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1098.004/linux_auditd_nopasswd/linux_auditd_ssh_config.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1098.004/linux_auditd_nopasswd/linux_auditd_ssh_config.log",
+      "size_bytes": 918,
+      "sha256": "311c89f78444a9c1105abef551c4414aba12e09673d12c25d6054781f7bd6176",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1098.004/linux_auditd_nopasswd/linux_auditd_ssh_config.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1098.004/linux_auditd_nopasswd/linux_path_ssh_config.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1098.004/linux_auditd_nopasswd/linux_path_ssh_config.log",
+      "size_bytes": 227,
+      "sha256": "8bba8bf433dc7a54aa26411092ecc6946e635fd282bffa63f36c2076246bba9c",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1098.004/linux_auditd_nopasswd/linux_path_ssh_config.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1098.004/ssh_authorized_keys/sysmon_linux.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1098.004/ssh_authorized_keys/sysmon_linux.log",
+      "size_bytes": 14612253,
+      "sha256": "54f44dde127ccb048ef43b9e4978e5d17710b30da3b7df45b8a3adaac841bb77",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1098.004/ssh_authorized_keys/sysmon_linux.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1115/linux_auditd_xclip/linux_auditd_xclip.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1115/linux_auditd_xclip/linux_auditd_xclip.log",
+      "size_bytes": 280,
+      "sha256": "468d823900749e03d37f827d4dd558c84c8c8ebb643a16fdf68dc2fd93599f1c",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1115/linux_auditd_xclip/linux_auditd_xclip.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1115/linux_auditd_xclip/linux_auditd_xclip2.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1115/linux_auditd_xclip/linux_auditd_xclip2.log",
+      "size_bytes": 268,
+      "sha256": "245dbecaf3a5076c8d3952252fb80a0c6d00114e94c1fa144ecfbe3c793a4188",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1115/linux_auditd_xclip/linux_auditd_xclip2.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1136.001/linux_auditd_add_user/auditd_proctitle_user_add.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1136.001/linux_auditd_add_user/auditd_proctitle_user_add.log",
+      "size_bytes": 13150,
+      "sha256": "2c8aa9b3b97046d45ef98ff93b569ab7aa7337f28965a2b08c47ab3850b663a1",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1136.001/linux_auditd_add_user/auditd_proctitle_user_add.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1136.001/linux_auditd_add_user/linux_auditd_add_user.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1136.001/linux_auditd_add_user/linux_auditd_add_user.log",
+      "size_bytes": 6784,
+      "sha256": "458c29d6d742cb1777fafd24aeb9b00fbe0396cf2c8623d45b3daf92b9b5783d",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1136.001/linux_auditd_add_user/linux_auditd_add_user.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1136.001/linux_auditd_add_user_type/linux_auditd_add_user_type.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1136.001/linux_auditd_add_user_type/linux_auditd_add_user_type.log",
+      "size_bytes": 243,
+      "sha256": "02a215dce6d3fe714956104aa529a7a608840f53419b38d69efa1e752d91de82",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1136.001/linux_auditd_add_user_type/linux_auditd_add_user_type.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1140/linux_auditd_base64/auditd_execve_base64.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1140/linux_auditd_base64/auditd_execve_base64.log",
+      "size_bytes": 2240,
+      "sha256": "776ebe4caeb3b8fdf8b54716aebc8337434f9cd9e8d9c7e50a22e539b1ac3f84",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1140/linux_auditd_base64/auditd_execve_base64.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1140/linux_auditd_base64/linux_auditd_base64.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1140/linux_auditd_base64/linux_auditd_base64.log",
+      "size_bytes": 439,
+      "sha256": "ee6bca5dcdc8766a9ce4b14c7b66c58f448b703d97a5e70cbfe3695c5eea6323",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1140/linux_auditd_base64/linux_auditd_base64.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1200/linux_auditd_swapoff/linux_auditd_swapoff.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1200/linux_auditd_swapoff/linux_auditd_swapoff.log",
+      "size_bytes": 78,
+      "sha256": "c5007ebc34ad6ebbf79bc470fefab6c8360bda2e26c500d42c40c578895745d8",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1200/linux_auditd_swapoff/linux_auditd_swapoff.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1200/linux_auditd_swapoff/linux_auditd_swapoff2.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1200/linux_auditd_swapoff/linux_auditd_swapoff2.log",
+      "size_bytes": 79,
+      "sha256": "7fccce1818f30ab35984be83d6c509feb5ce93f8e68e0c173b92949634f3e808",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1200/linux_auditd_swapoff/linux_auditd_swapoff2.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1222.002/linux_auditd_chattr_i/auditd_proctitle_chattr.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1222.002/linux_auditd_chattr_i/auditd_proctitle_chattr.log",
+      "size_bytes": 4262,
+      "sha256": "7a04bee8117fe563b70b190b7d555671056c6f7e9e6e49c0d4c6c1ff114697ef",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1222.002/linux_auditd_chattr_i/auditd_proctitle_chattr.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1222.002/linux_auditd_chattr_i/linux_auditd_chattr_i.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1222.002/linux_auditd_chattr_i/linux_auditd_chattr_i.log",
+      "size_bytes": 86,
+      "sha256": "9c2fe861e7d984777ee8ed1d6bf38335ca5ad1c0f7f45505634109bc4278ae7e",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1222.002/linux_auditd_chattr_i/linux_auditd_chattr_i.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1222.002/linux_auditd_chmod_exec_attrib/auditd_proctitle_chmod.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1222.002/linux_auditd_chmod_exec_attrib/auditd_proctitle_chmod.log",
+      "size_bytes": 362,
+      "sha256": "6631f0af4bebed6da16499ea456695cabf8f0d40078d49360fa84f40a611e5ff",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1222.002/linux_auditd_chmod_exec_attrib/auditd_proctitle_chmod.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1222.002/linux_auditd_chmod_exec_attrib/linux_auditd_chmod_exec_attrib.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1222.002/linux_auditd_chmod_exec_attrib/linux_auditd_chmod_exec_attrib.log",
+      "size_bytes": 86,
+      "sha256": "eccbd9f448e6c22e5e8f15299e86ade743ed5a8dce95b6780c72ce648d412712",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1222.002/linux_auditd_chmod_exec_attrib/linux_auditd_chmod_exec_attrib.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1485/linux_auditd_dd_overwrite/auditd_proctitle_dd_overwrite.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1485/linux_auditd_dd_overwrite/auditd_proctitle_dd_overwrite.log",
+      "size_bytes": 102,
+      "sha256": "23d12d5b34047b15cbb1afcd2dbe37d2a175c19d62cd403fa52fafd5f02002c1",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1485/linux_auditd_dd_overwrite/auditd_proctitle_dd_overwrite.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1485/linux_auditd_dd_overwrite/linux_auditd_dd_overwrite.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1485/linux_auditd_dd_overwrite/linux_auditd_dd_overwrite.log",
+      "size_bytes": 126,
+      "sha256": "283af48f6ea43983e8dd2b835a3a90759c234abcc72a7817fccf60a7ffcc37d0",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1485/linux_auditd_dd_overwrite/linux_auditd_dd_overwrite.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1485/linux_auditd_no_preserve_root/auditd_proctitle_rm_rf.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1485/linux_auditd_no_preserve_root/auditd_proctitle_rm_rf.log",
+      "size_bytes": 208,
+      "sha256": "d8378d294001f47ad1102bb3d6a19f9be2b09c33563d2e8a94eb5c5c4ff420d3",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1485/linux_auditd_no_preserve_root/auditd_proctitle_rm_rf.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1485/linux_auditd_no_preserve_root/linux_auditd_no_preserve_root.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1485/linux_auditd_no_preserve_root/linux_auditd_no_preserve_root.log",
+      "size_bytes": 327,
+      "sha256": "41c5dfa7f38716d82ebf36295a59c89baa66079b4afbc992fb7560763eead382",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1485/linux_auditd_no_preserve_root/linux_auditd_no_preserve_root.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1485/linux_auditd_shred/auditd_proctitle_shred.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1485/linux_auditd_shred/auditd_proctitle_shred.log",
+      "size_bytes": 266,
+      "sha256": "b56f11257d79b23dda6a48b466e9a4e6ce843e44e8f6256c9989e3154a4eff56",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1485/linux_auditd_shred/auditd_proctitle_shred.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1485/linux_auditd_shred/linux_auditd_shred.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1485/linux_auditd_shred/linux_auditd_shred.log",
+      "size_bytes": 94,
+      "sha256": "2f161843d58cb9c7e60e33c359fd0481f36174802fb10b21bc92b3b2f981496a",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1485/linux_auditd_shred/linux_auditd_shred.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1485/linux_dd_file_overwrite/sysmon_linux.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1485/linux_dd_file_overwrite/sysmon_linux.log",
+      "size_bytes": 6945937,
+      "sha256": "fae1004c0fbba3c4852d202052f87803a9e19f032e0982339f789baf4fd9d322",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1485/linux_dd_file_overwrite/sysmon_linux.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1485/rm_boot_dir/sysmon_linux.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1485/rm_boot_dir/sysmon_linux.log",
+      "size_bytes": 713119,
+      "sha256": "fcdb695b0184227a23383aa1ff9b515f9641a9c4dad868bb6553cc2c5e8437c5",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1485/rm_boot_dir/sysmon_linux.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1485/rm_shred_critical_dir/sysmon_linux.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1485/rm_shred_critical_dir/sysmon_linux.log",
+      "size_bytes": 706546,
+      "sha256": "fd68e3aa47dce4f07bb2701cadaa41461b42893f18a9085a1bde0ef89cce7a28",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1485/rm_shred_critical_dir/sysmon_linux.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1489/linux_auditd_auditd_service_stop/linux_auditd_auditd_service_stop.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1489/linux_auditd_auditd_service_stop/linux_auditd_auditd_service_stop.log",
+      "size_bytes": 1906,
+      "sha256": "7ee1d10da00560c5e1055f10b1869d6abafd83ad8d0e7bb794c203fff931968c",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1489/linux_auditd_auditd_service_stop/linux_auditd_auditd_service_stop.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1489/linux_auditd_osquerd_service_stop/linux_auditd_osquerd_service_stop.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1489/linux_auditd_osquerd_service_stop/linux_auditd_osquerd_service_stop.log",
+      "size_bytes": 1919,
+      "sha256": "f45a192703a8b5d79ed28f66d4c91942044f93ceecc3cd3edeb51813c3b58428",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1489/linux_auditd_osquerd_service_stop/linux_auditd_osquerd_service_stop.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1489/linux_auditd_service_stop/linux_auditd_service_stop.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1489/linux_auditd_service_stop/linux_auditd_service_stop.log",
+      "size_bytes": 235,
+      "sha256": "2694c3bd995ba0c49f3e0a92b5988411a5b7439442288a3d22730d77e24fe2be",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1489/linux_auditd_service_stop/linux_auditd_service_stop.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1489/linux_auditd_sysmon_service_stop/linux_auditd_sysmon_service_stop.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1489/linux_auditd_sysmon_service_stop/linux_auditd_sysmon_service_stop.log",
+      "size_bytes": 1903,
+      "sha256": "368123d10bcd09ee1f864df5020523c554c72f572e25c1d215633b0cfd9720ec",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1489/linux_auditd_sysmon_service_stop/linux_auditd_sysmon_service_stop.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1489/linux_service_stop_disable/sysmon_linux.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1489/linux_service_stop_disable/sysmon_linux.log",
+      "size_bytes": 3733763,
+      "sha256": "a09ca8540de4c00cdc24b077e00935a5ca537eb2e0cf869fa307c3428d6759aa",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1489/linux_service_stop_disable/sysmon_linux.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1529/auditd_path_sysrq/path_sysrq.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1529/auditd_path_sysrq/path_sysrq.log",
+      "size_bytes": 523,
+      "sha256": "6c4ca9e6150c822cf1b12e8a1090e0f1007b084fb0f8ab0c330d289516f7d823",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1529/auditd_path_sysrq/path_sysrq.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1546.004/linux_auditd_unix_shell_mod_config/linux_auditd_unix_shell_mod_config.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1546.004/linux_auditd_unix_shell_mod_config/linux_auditd_unix_shell_mod_config.log",
+      "size_bytes": 1537,
+      "sha256": "b02161c0052fad3f8fea4b1c134f5d6b10193492ec3fc156402665e311b69bba",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1546.004/linux_auditd_unix_shell_mod_config/linux_auditd_unix_shell_mod_config.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1546.004/linux_auditd_unix_shell_mod_config/linux_path_profile_d.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1546.004/linux_auditd_unix_shell_mod_config/linux_path_profile_d.log",
+      "size_bytes": 655,
+      "sha256": "c232815151609ba6854ae5e90b08ee8bfb83cf2c75ea783ac28986f92b9d1cba",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1546.004/linux_auditd_unix_shell_mod_config/linux_path_profile_d.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1547.006/linux_auditd_insmod/linux_auditd_insmod.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1547.006/linux_auditd_insmod/linux_auditd_insmod.log",
+      "size_bytes": 887,
+      "sha256": "147f792277947580082163e324752125d1ecfd7896d9b541d9d02970ca590170",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1547.006/linux_auditd_insmod/linux_auditd_insmod.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1547.006/linux_auditd_insmod_new/linux_auditd_new_insmod.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1547.006/linux_auditd_insmod_new/linux_auditd_new_insmod.log",
+      "size_bytes": 356,
+      "sha256": "f939165e2452c6059498b09a1a5da8be7d26588c68ac022b11402b5010266799",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1547.006/linux_auditd_insmod_new/linux_auditd_new_insmod.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1547.006/linux_auditd_modprobe/linux_auditd_modprobe.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1547.006/linux_auditd_modprobe/linux_auditd_modprobe.log",
+      "size_bytes": 1359,
+      "sha256": "6d4c89ec69099398eaecb9fc559fdb4dc75f6f97f4dc0fe1ae10ad2288c045a3",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1547.006/linux_auditd_modprobe/linux_auditd_modprobe.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1547.006/linux_auditd_modprobe_new/linux_auditd_new_modprobe.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1547.006/linux_auditd_modprobe_new/linux_auditd_new_modprobe.log",
+      "size_bytes": 358,
+      "sha256": "66aefc5e9518639993c9739948451a6593899d63e6ee93b0b685191c02627caf",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1547.006/linux_auditd_modprobe_new/linux_auditd_new_modprobe.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1547.006/linux_auditd_modprobe_unload_module/auditd_execve_modprobe.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1547.006/linux_auditd_modprobe_unload_module/auditd_execve_modprobe.log",
+      "size_bytes": 774,
+      "sha256": "d9ba18feae86b3b66eb3c7ae048b59d926d6739a0a224c2ee650730b05cbdce8",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1547.006/linux_auditd_modprobe_unload_module/auditd_execve_modprobe.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1547.006/linux_auditd_modprobe_unload_module/linux_auditd_modprobe_unload_module.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1547.006/linux_auditd_modprobe_unload_module/linux_auditd_modprobe_unload_module.log",
+      "size_bytes": 182,
+      "sha256": "9e4277a603566ed1ef9599cadd3ec0a3b39da81ed49f2b88e14473b307e23642",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1547.006/linux_auditd_modprobe_unload_module/linux_auditd_modprobe_unload_module.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1547.006/linux_auditd_rmmod/linux_auditd_rmmod.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1547.006/linux_auditd_rmmod/linux_auditd_rmmod.log",
+      "size_bytes": 899,
+      "sha256": "1245f630d928509e5fa07d27f6fed37afa523861f5523443cdb050af7b72d484",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1547.006/linux_auditd_rmmod/linux_auditd_rmmod.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1547.006/linux_auditd_rmmod_new/linux_auditd_new_rmmod.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1547.006/linux_auditd_rmmod_new/linux_auditd_new_rmmod.log",
+      "size_bytes": 355,
+      "sha256": "e91fbe80f2070c0d70f873469594e82bec126c58dab5e5e678417a78ff08336f",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1547.006/linux_auditd_rmmod_new/linux_auditd_new_rmmod.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1547.006/loading_linux_kernel_module/sysmon_linux.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1547.006/loading_linux_kernel_module/sysmon_linux.log",
+      "size_bytes": 15685780,
+      "sha256": "c9f85796fb875ab6448d0fe53f713076bf66cf3647753962fc01b0672f2fbba1",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1547.006/loading_linux_kernel_module/sysmon_linux.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1548.001/linux_auditd_setuid/auditd_execve_setcap.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1548.001/linux_auditd_setuid/auditd_execve_setcap.log",
+      "size_bytes": 434,
+      "sha256": "b56927e1e5472b1eb1d9f7e842077a7253d01fec8d94582958efd6996bb6869d",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1548.001/linux_auditd_setuid/auditd_execve_setcap.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1548.001/linux_auditd_setuid/auditd_proctitle_setuid.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1548.001/linux_auditd_setuid/auditd_proctitle_setuid.log",
+      "size_bytes": 2654,
+      "sha256": "9934f3739626099b1fb5341ed94eabd149297451d9beb6c4bdb99389881d1718",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1548.001/linux_auditd_setuid/auditd_proctitle_setuid.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1548.001/linux_auditd_setuid/linux_auditd_setcap_priv.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1548.001/linux_auditd_setuid/linux_auditd_setcap_priv.log",
+      "size_bytes": 618,
+      "sha256": "57ceda6e7ff7d610dc310fe50bb62c125188a6d19baff5589b63c6a0633f3ad4",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1548.001/linux_auditd_setuid/linux_auditd_setcap_priv.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1548.001/linux_auditd_setuid/linux_auditd_setuid.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1548.001/linux_auditd_setuid/linux_auditd_setuid.log",
+      "size_bytes": 1410,
+      "sha256": "70488f10b094fe31a42e94c60d58918046fb36d86f6c4981b556a3d7848441d7",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1548.001/linux_auditd_setuid/linux_auditd_setuid.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1548.001/linux_setcap/sysmon_linux.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1548.001/linux_setcap/sysmon_linux.log",
+      "size_bytes": 16056784,
+      "sha256": "bfbde5e079ebbe1f3ee9e04c84c14b1cc9fb1a3637d7d3740589cc147c5d3035",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1548.001/linux_setcap/sysmon_linux.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1548.003/auditd_path_cwd_doas_conf/path_doas.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1548.003/auditd_path_cwd_doas_conf/path_doas.log",
+      "size_bytes": 1206,
+      "sha256": "42b3a666077a4b1f6335788d5cc3d358b6a9e83c8cf2ef3f309f9727bed6fa0a",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1548.003/auditd_path_cwd_doas_conf/path_doas.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1548.003/auditd_path_sudoers/path_sudoers.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1548.003/auditd_path_sudoers/path_sudoers.log",
+      "size_bytes": 765,
+      "sha256": "31daf0628fc00efcb59f410b9376b6f9220d12eac5137bd58eee91a97b2c22cc",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1548.003/auditd_path_sudoers/path_sudoers.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1548.003/doas/sysmon_linux.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1548.003/doas/sysmon_linux.log",
+      "size_bytes": 7610886,
+      "sha256": "f868bd7956a7484ea2ee66e9b3045cdfd1cfd5f9c8a30412e10c586ff1e60d91",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1548.003/doas/sysmon_linux.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1548.003/doas_exec/sysmon_linux.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1548.003/doas_exec/sysmon_linux.log",
+      "size_bytes": 14927346,
+      "sha256": "adc40b5daba429f5d99dc2353407680848c6cef1f8279d02f90469e6f3ef9dc9",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1548.003/doas_exec/sysmon_linux.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1548.003/linux_adduser/sysmon_linux.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1548.003/linux_adduser/sysmon_linux.log",
+      "size_bytes": 11455124,
+      "sha256": "4f346e6c52caa614b86d4a8a778c6165e02b2948a5f14b155757f93e6228947e",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1548.003/linux_adduser/sysmon_linux.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1548.003/linux_auditd_doas/linux_auditd_doas.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1548.003/linux_auditd_doas/linux_auditd_doas.log",
+      "size_bytes": 4671,
+      "sha256": "6f47fa76dfbb1c666d0866d13b3399f7de692fae19d723ac468cbf31c523184c",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1548.003/linux_auditd_doas/linux_auditd_doas.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1548.003/linux_auditd_doas_new/linux_auditd_new_doas.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1548.003/linux_auditd_doas_new/linux_auditd_new_doas.log",
+      "size_bytes": 2906,
+      "sha256": "4fb92111f170a7d99ce7e151a1a99edd3d99510b0c7f44735a8f6dd9fcc352e0",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1548.003/linux_auditd_doas_new/linux_auditd_new_doas.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1548.003/linux_auditd_nopasswd/linux_auditd_nopasswd.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1548.003/linux_auditd_nopasswd/linux_auditd_nopasswd.log",
+      "size_bytes": 266,
+      "sha256": "c46630dc6902cf3f4ba09fec417327d70f0670b6dc40dd460938ee054bef941b",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1548.003/linux_auditd_nopasswd/linux_auditd_nopasswd.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1548.003/linux_auditd_nopasswd/linux_auditd_nopasswd2.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1548.003/linux_auditd_nopasswd/linux_auditd_nopasswd2.log",
+      "size_bytes": 109,
+      "sha256": "e972c9035a39ee1eb85b9f2b3e7d1fd3d3603714005e34b55e36b1e721b1e117",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1548.003/linux_auditd_nopasswd/linux_auditd_nopasswd2.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1548.003/linux_auditd_sudo_su/auditd_proctitle_sudo.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1548.003/linux_auditd_sudo_su/auditd_proctitle_sudo.log",
+      "size_bytes": 691263,
+      "sha256": "89b3f1cf164dbb0d8d8262ccef3398e510b95531c16bdee58d8c3d90f11d6a10",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1548.003/linux_auditd_sudo_su/auditd_proctitle_sudo.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1548.003/linux_auditd_sudo_su/linux_auditd_sudo_su.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1548.003/linux_auditd_sudo_su/linux_auditd_sudo_su.log",
+      "size_bytes": 14472,
+      "sha256": "897cd0434f7c13f27b61bebc9bed66545506bee652c06554ebbbe1a7e21303e1",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1548.003/linux_auditd_sudo_su/linux_auditd_sudo_su.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1548.003/linux_auditd_sudoers_access/linux_auditd_sudoers_access.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1548.003/linux_auditd_sudoers_access/linux_auditd_sudoers_access.log",
+      "size_bytes": 221,
+      "sha256": "233454c8a67dbaf36d1d8f5402802cbec6a4e18b00a8f6e2dcbffa167ef954cb",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1548.003/linux_auditd_sudoers_access/linux_auditd_sudoers_access.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1548.003/linux_auditd_sudoers_access/linux_path_sudoers.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1548.003/linux_auditd_sudoers_access/linux_path_sudoers.log",
+      "size_bytes": 660,
+      "sha256": "66ddf50daa9a4e2fab2548e98f7a82cc9bd3c78d04789f7e5afa1ba54cd66de8",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1548.003/linux_auditd_sudoers_access/linux_path_sudoers.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1548.003/sudo_su/sysmon_linux.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1548.003/sudo_su/sysmon_linux.log",
+      "size_bytes": 12282656,
+      "sha256": "b4ba4d224069b42e71d9c2c3385d256b9bf790ac6a9596fcdda109076c6aa6b0",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1548.003/sudo_su/sysmon_linux.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1548.003/sudoers_temp/sysmon_linux.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1548.003/sudoers_temp/sysmon_linux.log",
+      "size_bytes": 6766084,
+      "sha256": "3ce7e20055615c87a32fc88bb557d390cc1e2f9f640a2cae04872ecdcbea8b82",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1548.003/sudoers_temp/sysmon_linux.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1548/apt/sysmon_linux.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1548/apt/sysmon_linux.log",
+      "size_bytes": 54813,
+      "sha256": "cea5b60ced5751742b16341e41197106c1f92fa4c955a9a36379c957e5fce665",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1548/apt/sysmon_linux.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1548/apt_get/sysmon_linux.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1548/apt_get/sysmon_linux.log",
+      "size_bytes": 3024,
+      "sha256": "abc543b761b52c1003fd61c5fbd9017914953ce0f7701dfd4a491641dd269dc9",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1548/apt_get/sysmon_linux.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1548/awk/sysmon_linux.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1548/awk/sysmon_linux.log",
+      "size_bytes": 26505,
+      "sha256": "0b3d4895b73f06f77339e62b8f29248ccec14a3dcc0a0606bcb94c15832e2b52",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1548/awk/sysmon_linux.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1548/busybox/sysmon_linux.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1548/busybox/sysmon_linux.log",
+      "size_bytes": 2938,
+      "sha256": "a0167e6232a9bd293d36a58a996581e917d4c6efe81cee2e68f7b2fd8eef9bb1",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1548/busybox/sysmon_linux.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1548/c89/sysmon_linux.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1548/c89/sysmon_linux.log",
+      "size_bytes": 14927,
+      "sha256": "0864c729df3a740bb86c474d18d53c3ee48a2e17f5e15ade19d172175d1d1462",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1548/c89/sysmon_linux.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1548/c99/sysmon_linux.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1548/c99/sysmon_linux.log",
+      "size_bytes": 4485,
+      "sha256": "1c6f8f9fd08952d4ae33d2094a7be0ae12557482fa94522e4d91a9a839dbab9a",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1548/c99/sysmon_linux.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1548/composer/sysmon_linux.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1548/composer/sysmon_linux.log",
+      "size_bytes": 9007,
+      "sha256": "8b8c81a556bf1df09f5516ea733b833bb4e392443827d02b3cb8edd240e773a5",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1548/composer/sysmon_linux.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1548/cpulimit/sysmon_linux.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1548/cpulimit/sysmon_linux.log",
+      "size_bytes": 13335,
+      "sha256": "a2ea8aebcb33bd736f41b00fe5757d5def38ff38f6e41a247cbad1083e9658c5",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1548/cpulimit/sysmon_linux.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1548/csvtool/sysmon_linux.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1548/csvtool/sysmon_linux.log",
+      "size_bytes": 5946,
+      "sha256": "f2d6148157cf5f2569672581a1fa555825669fe839c08a3e2f929a3fb177dd58",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1548/csvtool/sysmon_linux.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1548/docker/sysmon_linux.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1548/docker/sysmon_linux.log",
+      "size_bytes": 578106,
+      "sha256": "c3d05a9d1e9af62773268d3655a073f6268a4ecd32b814313d403d834f725f2e",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1548/docker/sysmon_linux.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1548/emacs/sysmon_linux.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1548/emacs/sysmon_linux.log",
+      "size_bytes": 29729,
+      "sha256": "f09a2fa4c685d10515e882f58f2efbaf0650248f5d4fd173f879c343ec69ab08",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1548/emacs/sysmon_linux.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1548/find/sysmon_linux.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1548/find/sysmon_linux.log",
+      "size_bytes": 8919,
+      "sha256": "d8b7ccba84d3d1c7ec679d4b4d71a206e96f1f46214509cc58444374b0f6eb51",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1548/find/sysmon_linux.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1548/gawk/sysmon_linux.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1548/gawk/sysmon_linux.log",
+      "size_bytes": 5998,
+      "sha256": "29e1e299dc1a5a229ff5c027de8b4e8b45b91f6d2a73792dd67e4e01d44da799",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1548/gawk/sysmon_linux.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1548/gdb/sysmon_linux.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1548/gdb/sysmon_linux.log",
+      "size_bytes": 19245,
+      "sha256": "5aa13d3befdc98f2e962183667ff765a993148b203b7355d47b3e8788c1cf01a",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1548/gdb/sysmon_linux.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1548/gem/sysmon_linux.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1548/gem/sysmon_linux.log",
+      "size_bytes": 6026,
+      "sha256": "d8bee11058f7b2e1a1fc291df401af58f9274b91a4ace70fcd707c9bd2ff43e8",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1548/gem/sysmon_linux.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1548/make/sysmon_linux.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1548/make/sysmon_linux.log",
+      "size_bytes": 7410,
+      "sha256": "5cc7a4f1359761adf21f99f212c8a1149e198cb749058470f6e99022947024b4",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1548/make/sysmon_linux.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1548/mysql/sysmon_linux.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1548/mysql/sysmon_linux.log",
+      "size_bytes": 12009,
+      "sha256": "76e048a0fa814602e87dca01d81d2eb29cf54cdd7802b4b49d1ddac192b4d6c0",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1548/mysql/sysmon_linux.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1548/node/sysmon_linux.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1548/node/sysmon_linux.log",
+      "size_bytes": 16342,
+      "sha256": "258564f3095d844874fa1ff720f7a5c08f7eac21c1fd5bb0c39296b16ae4c7c6",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1548/node/sysmon_linux.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1548/octave/sysmon_linux.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1548/octave/sysmon_linux.log",
+      "size_bytes": 8975,
+      "sha256": "f32e36cbc7a6c6e4b1a3eff743278ab7b487a1c2838342cee668a80ef678e83c",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1548/octave/sysmon_linux.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1548/openvpn/sysmon_linux.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1548/openvpn/sysmon_linux.log",
+      "size_bytes": 12002,
+      "sha256": "e33ce65607f3f5381405639584394edcc46abf9e6bf48abc0abd196702ad0fc8",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1548/openvpn/sysmon_linux.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1548/php/sysmon_linux.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1548/php/sysmon_linux.log",
+      "size_bytes": 14882,
+      "sha256": "254ab254afffb771350efb09b7c5f9fd229343ffaa425c89b1174095688acc35",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1548/php/sysmon_linux.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1548/puppet/sysmon_linux.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1548/puppet/sysmon_linux.log",
+      "size_bytes": 6318,
+      "sha256": "fbd862ea1e87b450920ec32633c99437d3b674d8ce32ec817a0817c36ca1c454",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1548/puppet/sysmon_linux.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1548/rpm/sysmon_linux.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1548/rpm/sysmon_linux.log",
+      "size_bytes": 3022,
+      "sha256": "7dba1c2cb5deb5d194e7d0db15115fba8d147a498fbd1ff0a8827c4b1db3c4e1",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1548/rpm/sysmon_linux.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1548/ruby/sysmon_linux.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1548/ruby/sysmon_linux.log",
+      "size_bytes": 8907,
+      "sha256": "ee7539fcec50396fa18bc803d10284f8d339d9c1a8413e6b4f67c8f4ff68ab7b",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1548/ruby/sysmon_linux.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1548/sqlite3/sysmon_linux.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1548/sqlite3/sysmon_linux.log",
+      "size_bytes": 11920,
+      "sha256": "b386156cb7d13a99e081cbb1058f892530a71f9b8e134ec31d6a7f95a5ea51cc",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1548/sqlite3/sysmon_linux.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1548/telnet/sysmon_linux.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1548/telnet/sysmon_linux.log",
+      "size_bytes": 1629,
+      "sha256": "ad92be6bb2eaedc68b093184eee05d421c3bcc9b289f4b7f3042988d360fad76",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1548/telnet/sysmon_linux.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1552.004/linux_auditd_find_gpg/auditd_execve_find_gpg.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1552.004/linux_auditd_find_gpg/auditd_execve_find_gpg.log",
+      "size_bytes": 12929,
+      "sha256": "c7937b08874c4e368f98e9ee47567953cbc72d51d751db061e5093291ca6739f",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1552.004/linux_auditd_find_gpg/auditd_execve_find_gpg.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1552.004/linux_auditd_find_gpg/linux_auditd_find_gpg.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1552.004/linux_auditd_find_gpg/linux_auditd_find_gpg.log",
+      "size_bytes": 1373,
+      "sha256": "e1dcc47d89000df567292e4f2b909caf66cb72d21804f0f490a8773b38bbae57",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1552.004/linux_auditd_find_gpg/linux_auditd_find_gpg.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1552.004/linux_auditd_find_ssh_files/auditd_execve_find_ssh.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1552.004/linux_auditd_find_ssh_files/auditd_execve_find_ssh.log",
+      "size_bytes": 6030,
+      "sha256": "e0173cb75d255d82004af19d065bb4da9515b15679444c200ecc292ff3baa81f",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1552.004/linux_auditd_find_ssh_files/auditd_execve_find_ssh.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1552.004/linux_auditd_find_ssh_files/linux_auditd_find_ssh_files.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1552.004/linux_auditd_find_ssh_files/linux_auditd_find_ssh_files.log",
+      "size_bytes": 40829,
+      "sha256": "3e9643cb954549ab14bfd444f69e298e94a4b3b4941900ec71c433908a57d436",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1552.004/linux_auditd_find_ssh_files/linux_auditd_find_ssh_files.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1555.005/linux_auditd_find_credentials/auditd_execve_find_creds.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1555.005/linux_auditd_find_credentials/auditd_execve_find_creds.log",
+      "size_bytes": 99275,
+      "sha256": "506f463799ea28a65bed5ce26298f1b6d882f1871a4cee30da2c7dccba757b6b",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1555.005/linux_auditd_find_credentials/auditd_execve_find_creds.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1555.005/linux_auditd_find_credentials/linux_auditd_find_credentials.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1555.005/linux_auditd_find_credentials/linux_auditd_find_credentials.log",
+      "size_bytes": 60433,
+      "sha256": "f4325b3e26ef9bdf073a0a4fe1ff29dec4aa7477b1f51b89b4d49605cc7fd2fa",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1555.005/linux_auditd_find_credentials/linux_auditd_find_credentials.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1555.005/linux_auditd_find_password_db/auditd_execve_pwd_mgr.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1555.005/linux_auditd_find_password_db/auditd_execve_pwd_mgr.log",
+      "size_bytes": 2926,
+      "sha256": "39db8895bc4dca2bd908f9dc09e1a0701c5827f3ee8090c5cb07ca2052f1cc9e",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1555.005/linux_auditd_find_password_db/auditd_execve_pwd_mgr.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1555.005/linux_auditd_find_password_db/linux_auditd_find_password_db.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1555.005/linux_auditd_find_password_db/linux_auditd_find_password_db.log",
+      "size_bytes": 1095,
+      "sha256": "2a5b38630bfe729883ce3023aaf8a5b3b7fda044887c897398717557b401831a",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1555.005/linux_auditd_find_password_db/linux_auditd_find_password_db.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1562.004/linux_auditd_disable_firewall/linux_auditd_disable_firewall.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1562.004/linux_auditd_disable_firewall/linux_auditd_disable_firewall.log",
+      "size_bytes": 242,
+      "sha256": "a8a78f7b79d3d633336ba6073f7725fe91cd0a7adcc25eeec77b828d865793ba",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1562.004/linux_auditd_disable_firewall/linux_auditd_disable_firewall.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1562.012/auditd_daemon_end/linux_daemon_end.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1562.012/auditd_daemon_end/linux_daemon_end.log",
+      "size_bytes": 348,
+      "sha256": "3cdf867e571d67baaa6f88269f524f82dd34c101ceca3939b9e8a10f7d47a2db",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1562.012/auditd_daemon_end/linux_daemon_end.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1562.012/auditd_daemon_type/linux_auditd_daemon.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1562.012/auditd_daemon_type/linux_auditd_daemon.log",
+      "size_bytes": 11762,
+      "sha256": "711ee340179d64281c7d018b1aea954b17d68bfc4baf557adb0c39d6996de4c6",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1562.012/auditd_daemon_type/linux_auditd_daemon.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1564.001/linux_auditd_hidden_file/linux_auditd_hidden_file.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1564.001/linux_auditd_hidden_file/linux_auditd_hidden_file.log",
+      "size_bytes": 192,
+      "sha256": "768a104f5b14df965637308e2c767b33519fb7565a19d26e4429ba16d63abf76",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1564.001/linux_auditd_hidden_file/linux_auditd_hidden_file.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1569.002/linux_service_start/auditd_proctitle_service_start.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1569.002/linux_service_start/auditd_proctitle_service_start.log",
+      "size_bytes": 21703,
+      "sha256": "c9d8fbd9884d75b4b630bf9f1012765fce5747243f5140eeb7a71d264043d2c3",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1569.002/linux_service_start/auditd_proctitle_service_start.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1574.006/auditd_path_preload_file/path_preload.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1574.006/auditd_path_preload_file/path_preload.log",
+      "size_bytes": 1488,
+      "sha256": "bf0e1802bdc54ca88f641f7e33088f48596afd026d4955bc52a0d8b6c5c720f3",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1574.006/auditd_path_preload_file/path_preload.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1574.006/linux_auditd_ldpreload/auditd_execve_ldpreload.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1574.006/linux_auditd_ldpreload/auditd_execve_ldpreload.log",
+      "size_bytes": 326,
+      "sha256": "0f15d8f4ab478fced636deb40670b193093eda718d7ffea88b267e1aec3c91ed",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1574.006/linux_auditd_ldpreload/auditd_execve_ldpreload.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1574.006/linux_auditd_ldpreload/linux_auditd_ldpreload.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1574.006/linux_auditd_ldpreload/linux_auditd_ldpreload.log",
+      "size_bytes": 103,
+      "sha256": "d099d0ad3048d26db17cd8060a6aceb66ae2b53cb58f165424a848dfa8bf1b00",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1574.006/linux_auditd_ldpreload/linux_auditd_ldpreload.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1574.006/linux_auditd_preload_file/linux_auditd_preload_file.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1574.006/linux_auditd_preload_file/linux_auditd_preload_file.log",
+      "size_bytes": 1365,
+      "sha256": "b32a15ad4eea8121f58e95d0997f9e6d4b922e2c9ea1ea6441ba898768a476c7",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1574.006/linux_auditd_preload_file/linux_auditd_preload_file.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1574.006/linux_auditd_preload_file/linux_path_preload.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1574.006/linux_auditd_preload_file/linux_path_preload.log",
+      "size_bytes": 227,
+      "sha256": "81fb829014c6a0a08024a304c9f25ae5380054b5060e3768ffeb31b664566d08",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1574.006/linux_auditd_preload_file/linux_path_preload.log"
+    },
+    {
+      "source_path": "datasets/malware/acidrain/sysmon_linux.log",
+      "cache_path": "data/cache/splunk-attack-data/malware/acidrain/sysmon_linux.log",
+      "size_bytes": 14767284,
+      "sha256": "b0caf3d8189fa904442328a53c33159779167931662f64dad5a42281724beb51",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/malware/acidrain/sysmon_linux.log"
+    },
+    {
+      "source_path": "datasets/malware/cyclopsblink/sysmon_linux.log",
+      "cache_path": "data/cache/splunk-attack-data/malware/cyclopsblink/sysmon_linux.log",
+      "size_bytes": 80180920,
+      "sha256": "5cb8e756cbf65b1feb803f42cec143dec2dd31eb9006cab617bc292241056645",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/malware/cyclopsblink/sysmon_linux.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1003.008/copy_file_stdoutpipe/copy_file_stdoutpipe.yml",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1003.008/copy_file_stdoutpipe/copy_file_stdoutpipe.yml",
+      "size_bytes": 433,
+      "sha256": "6b83a299c72dd6f3a7865cd118934e56f3146c1d3de7b090f380952eae3e4575",
+      "lfs": false,
+      "download_url": "https://raw.githubusercontent.com/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1003.008/copy_file_stdoutpipe/copy_file_stdoutpipe.yml"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1003.008/linux_auditd_access_credential/linux_auditd_access_credential.yml",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1003.008/linux_auditd_access_credential/linux_auditd_access_credential.yml",
+      "size_bytes": 661,
+      "sha256": "a12c1d9aa54b19df16c961743d75a4a9ecb9b77c672dd62f8984453fb47660d7",
+      "lfs": false,
+      "download_url": "https://raw.githubusercontent.com/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1003.008/linux_auditd_access_credential/linux_auditd_access_credential.yml"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1014/medusa_rootkit/medusa.yml",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1014/medusa_rootkit/medusa.yml",
+      "size_bytes": 399,
+      "sha256": "9910d5e42c7ea06082ebe5b291d5d994412fab3b9dcdcc8bdcb844ba65ec87cd",
+      "lfs": false,
+      "download_url": "https://raw.githubusercontent.com/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1014/medusa_rootkit/medusa.yml"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1016/atomic_red_team/linux_net_discovery/linux_net_discovery.yml",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1016/atomic_red_team/linux_net_discovery/linux_net_discovery.yml",
+      "size_bytes": 438,
+      "sha256": "668cba2f1c05f5e7776e9adbb10f80aeac0033775e6030c15b00782110ed20d4",
+      "lfs": false,
+      "download_url": "https://raw.githubusercontent.com/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1016/atomic_red_team/linux_net_discovery/linux_net_discovery.yml"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1016/linux_auditd_net_tool/linux_auditd_net_tool.yml",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1016/linux_auditd_net_tool/linux_auditd_net_tool.yml",
+      "size_bytes": 423,
+      "sha256": "66b79ea598fb50ef0e4c0d36e4c5fca3e5acafcc2d44284e83c9b9f54f1b5749",
+      "lfs": false,
+      "download_url": "https://raw.githubusercontent.com/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1016/linux_auditd_net_tool/linux_auditd_net_tool.yml"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1016/linux_auditd_net_tool_new/linux_auditd_net_tool_new.yml",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1016/linux_auditd_net_tool_new/linux_auditd_net_tool_new.yml",
+      "size_bytes": 457,
+      "sha256": "55bbe936b6cc1806e0db75245f9dfc94fdb4a5c91ce519ad4d653293b973d73b",
+      "lfs": false,
+      "download_url": "https://raw.githubusercontent.com/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1016/linux_auditd_net_tool_new/linux_auditd_net_tool_new.yml"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1030/linux_auditd_split_b_exec/linux_auditd_split_b_exec.yml",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1030/linux_auditd_split_b_exec/linux_auditd_split_b_exec.yml",
+      "size_bytes": 601,
+      "sha256": "3c67cc93ac6eeabe2b4afa6f8ea3f92ce5d8eb39d724bd803f27dce451d2e2e6",
+      "lfs": false,
+      "download_url": "https://raw.githubusercontent.com/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1030/linux_auditd_split_b_exec/linux_auditd_split_b_exec.yml"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1030/linux_auditd_split_syscall/linux_auditd_split_syscall.yml",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1030/linux_auditd_split_syscall/linux_auditd_split_syscall.yml",
+      "size_bytes": 448,
+      "sha256": "dcee956b67af3058729c4e0eb16fdcde239f28128785105bcef58637d34a42f6",
+      "lfs": false,
+      "download_url": "https://raw.githubusercontent.com/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1030/linux_auditd_split_syscall/linux_auditd_split_syscall.yml"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1030/linux_auditd_split_syscall_new/linux_auditd_split_syscall_new.yml",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1030/linux_auditd_split_syscall_new/linux_auditd_split_syscall_new.yml",
+      "size_bytes": 452,
+      "sha256": "fa8e27d7969ffaf16bb078d4388724d9e8fd8dd33c0cc347987d8de47c19a4d3",
+      "lfs": false,
+      "download_url": "https://raw.githubusercontent.com/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1030/linux_auditd_split_syscall_new/linux_auditd_split_syscall_new.yml"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1033/linux_auditd_whoami/linux_auditd_whoami.yml",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1033/linux_auditd_whoami/linux_auditd_whoami.yml",
+      "size_bytes": 413,
+      "sha256": "1bddddf417ad95e5ef472e1c06fb570113bd8b4695d434de22c2fede715baad0",
+      "lfs": false,
+      "download_url": "https://raw.githubusercontent.com/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1033/linux_auditd_whoami/linux_auditd_whoami.yml"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1033/linux_auditd_whoami_new/linux_auditd_whoami_new.yml",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1033/linux_auditd_whoami_new/linux_auditd_whoami_new.yml",
+      "size_bytes": 433,
+      "sha256": "8906333c5ebe0908cfc0f44309b62b6cc382316f120f2610eb59558ee92c14e1",
+      "lfs": false,
+      "download_url": "https://raw.githubusercontent.com/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1033/linux_auditd_whoami_new/linux_auditd_whoami_new.yml"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1053.002/linux_auditd_at/linux_auditd_at.yml",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1053.002/linux_auditd_at/linux_auditd_at.yml",
+      "size_bytes": 421,
+      "sha256": "da7a607afbd844795e3db7ea9ef11a3b7d2471f31a985758a01b402ed4aaddb5",
+      "lfs": false,
+      "download_url": "https://raw.githubusercontent.com/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1053.002/linux_auditd_at/linux_auditd_at.yml"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1053.002/linux_auditd_chown_root/linux_auditd_chown_root.yml",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1053.002/linux_auditd_chown_root/linux_auditd_chown_root.yml",
+      "size_bytes": 617,
+      "sha256": "4aa5549906607259905929671c466993ae13a6607d4e2adf7f5996f88d8e7493",
+      "lfs": false,
+      "download_url": "https://raw.githubusercontent.com/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1053.002/linux_auditd_chown_root/linux_auditd_chown_root.yml"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1053.002/linux_new_auditd_at/linux_new_auditd_at.yml",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1053.002/linux_new_auditd_at/linux_new_auditd_at.yml",
+      "size_bytes": 421,
+      "sha256": "ac9da98282a135835d160f8578cd5e3acdc51c75f8acf13ffd3a1b6c99672420",
+      "lfs": false,
+      "download_url": "https://raw.githubusercontent.com/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1053.002/linux_new_auditd_at/linux_new_auditd_at.yml"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1053.003/auditd_path_cron/auditd_path_cron.yml",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1053.003/auditd_path_cron/auditd_path_cron.yml",
+      "size_bytes": 399,
+      "sha256": "8666e89b5d5e3193756e5800d35eb3e434247fdebb0722f88fed561a637080ff",
+      "lfs": false,
+      "download_url": "https://raw.githubusercontent.com/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1053.003/auditd_path_cron/auditd_path_cron.yml"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1053.003/cronjobs_entry/cronjobs_entry.yml",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1053.003/cronjobs_entry/cronjobs_entry.yml",
+      "size_bytes": 607,
+      "sha256": "6824286c9907053ed68d8a511fbbd01a0f39d7c6ac74e7e29af3bace48ba2d55",
+      "lfs": false,
+      "download_url": "https://raw.githubusercontent.com/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1053.003/cronjobs_entry/cronjobs_entry.yml"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1053.003/crontab_list_parameter/crontab_list_parameter.yml",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1053.003/crontab_list_parameter/crontab_list_parameter.yml",
+      "size_bytes": 439,
+      "sha256": "228b286f41828222cb159863562e9ea990a5b313cac1fcd9d4f9267d80c0f30f",
+      "lfs": false,
+      "download_url": "https://raw.githubusercontent.com/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1053.003/crontab_list_parameter/crontab_list_parameter.yml"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1053.003/linux_auditd_cron_file_audited/linux_auditd_cron_file_audited.yml",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1053.003/linux_auditd_cron_file_audited/linux_auditd_cron_file_audited.yml",
+      "size_bytes": 478,
+      "sha256": "6377c1c722ac3cea66e41b3dee17f6dd8681fcbc3162511c9cae656ae7272c64",
+      "lfs": false,
+      "download_url": "https://raw.githubusercontent.com/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1053.003/linux_auditd_cron_file_audited/linux_auditd_cron_file_audited.yml"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1053.003/linux_auditd_crontab_edit/linux_auditd_crontab_edit.yml",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1053.003/linux_auditd_crontab_edit/linux_auditd_crontab_edit.yml",
+      "size_bytes": 451,
+      "sha256": "06c8753ece89d70b2c853e12992503f276f09f6bcc568099c8c68060833f1b7c",
+      "lfs": false,
+      "download_url": "https://raw.githubusercontent.com/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1053.003/linux_auditd_crontab_edit/linux_auditd_crontab_edit.yml"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1053.003/linux_auditd_crontab_edit_new/linux_auditd_crontab_edit_new.yml",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1053.003/linux_auditd_crontab_edit_new/linux_auditd_crontab_edit_new.yml",
+      "size_bytes": 461,
+      "sha256": "7b3bc93b2d6b69b9c63bb714f7e19c792ff018884e56748533eae99d94494c85",
+      "lfs": false,
+      "download_url": "https://raw.githubusercontent.com/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1053.003/linux_auditd_crontab_edit_new/linux_auditd_crontab_edit_new.yml"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1053.006/linux_services_restart/linux_services_restart.yml",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1053.006/linux_services_restart/linux_services_restart.yml",
+      "size_bytes": 456,
+      "sha256": "00229918fb90a9f340703b19312707f27487a5266f326b963b5b6e300bd7d3af",
+      "lfs": false,
+      "download_url": "https://raw.githubusercontent.com/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1053.006/linux_services_restart/linux_services_restart.yml"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1059.004/linux_discovery_tools/linux_discovery_tools.yml",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1059.004/linux_discovery_tools/linux_discovery_tools.yml",
+      "size_bytes": 427,
+      "sha256": "9db31248812d194902af978e6b67bee6c3ce44c3c74b04e2a11b2c91c18399d8",
+      "lfs": false,
+      "download_url": "https://raw.githubusercontent.com/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1059.004/linux_discovery_tools/linux_discovery_tools.yml"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1068/linux_auditd_copy_fail/linux_auditd.yml",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1068/linux_auditd_copy_fail/linux_auditd.yml",
+      "size_bytes": 709,
+      "sha256": "e697c840ae30a7b4b8a79d454f6c73a699b70a9c6aa727bfd1cde30a6b8042ad",
+      "lfs": false,
+      "download_url": "https://raw.githubusercontent.com/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1068/linux_auditd_copy_fail/linux_auditd.yml"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1068/linux_pedit/linux_pedit.yml",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1068/linux_pedit/linux_pedit.yml",
+      "size_bytes": 713,
+      "sha256": "478c98fba3c1bf5c9765a12be51cd92eb5117527f8dc5a35ab47df879dfe2370",
+      "lfs": false,
+      "download_url": "https://raw.githubusercontent.com/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1068/linux_pedit/linux_pedit.yml"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1082/linux_auditd_lsmod/linux_auditd_lsmod.yml",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1082/linux_auditd_lsmod/linux_auditd_lsmod.yml",
+      "size_bytes": 408,
+      "sha256": "d93eee9ee7b5f8613d2cf55bdc0be33f2b90ce7f40b816de1f58df76b01a5ca0",
+      "lfs": false,
+      "download_url": "https://raw.githubusercontent.com/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1082/linux_auditd_lsmod/linux_auditd_lsmod.yml"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1082/linux_auditd_lsmod_new/linux_auditd_lsmod_new.yml",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1082/linux_auditd_lsmod_new/linux_auditd_lsmod_new.yml",
+      "size_bytes": 428,
+      "sha256": "1989a9ee1dbcd4486d29141e563871df12e6b182ae09b75aa85167a3ac1a1d16",
+      "lfs": false,
+      "download_url": "https://raw.githubusercontent.com/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1082/linux_auditd_lsmod_new/linux_auditd_lsmod_new.yml"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1083/linux_auditd_find_db/linux_auditd_find_db.yml",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1083/linux_auditd_find_db/linux_auditd_find_db.yml",
+      "size_bytes": 418,
+      "sha256": "db9a21ec04e71b16344b7e72e42aca50ec8f91839274736fcbdff6e71509ce21",
+      "lfs": false,
+      "download_url": "https://raw.githubusercontent.com/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1083/linux_auditd_find_db/linux_auditd_find_db.yml"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1083/linux_auditd_find_document/linux_auditd_find_document.yml",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1083/linux_auditd_find_document/linux_auditd_find_document.yml",
+      "size_bytes": 633,
+      "sha256": "77044bccd41097081a050b145bf4b5798efb1658cf773cc03f4421b917352cdb",
+      "lfs": false,
+      "download_url": "https://raw.githubusercontent.com/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1083/linux_auditd_find_document/linux_auditd_find_document.yml"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1083/linux_auditd_find_virtual_disk/linux_auditd_find_virtual_disk.yml",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1083/linux_auditd_find_virtual_disk/linux_auditd_find_virtual_disk.yml",
+      "size_bytes": 637,
+      "sha256": "4341725414b323414951aafd29f18abc20da2da5ae910a16f48d84639b9e2d54",
+      "lfs": false,
+      "download_url": "https://raw.githubusercontent.com/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1083/linux_auditd_find_virtual_disk/linux_auditd_find_virtual_disk.yml"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1083/linux_auditd_hidden_file/linux_auditd_hidden_file.yml",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1083/linux_auditd_hidden_file/linux_auditd_hidden_file.yml",
+      "size_bytes": 607,
+      "sha256": "68d98b49a822ddebc563d9aaf73c3a6cef025b578492b96d9732f29de1f61559",
+      "lfs": false,
+      "download_url": "https://raw.githubusercontent.com/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1083/linux_auditd_hidden_file/linux_auditd_hidden_file.yml"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1098.004/auditd_path_ssh_config/auditd_path_ssh_config.yml",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1098.004/auditd_path_ssh_config/auditd_path_ssh_config.yml",
+      "size_bytes": 429,
+      "sha256": "e560b696f8d178d7aa438c146bc5f70678617d8a69e00e9d822eaf1b342ddce0",
+      "lfs": false,
+      "download_url": "https://raw.githubusercontent.com/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1098.004/auditd_path_ssh_config/auditd_path_ssh_config.yml"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1098.004/linux_auditd_nopasswd/linux_auditd_nopasswd.yml",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1098.004/linux_auditd_nopasswd/linux_auditd_nopasswd.yml",
+      "size_bytes": 435,
+      "sha256": "6f5f136973358ec6b63ab3a1e9af3d7c0746b2dcb4d278f14bb29c6681d36aa0",
+      "lfs": false,
+      "download_url": "https://raw.githubusercontent.com/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1098.004/linux_auditd_nopasswd/linux_auditd_nopasswd.yml"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1098.004/ssh_authorized_keys/ssh_authorized_keys.yml",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1098.004/ssh_authorized_keys/ssh_authorized_keys.yml",
+      "size_bytes": 600,
+      "sha256": "ad1fbad7f15f131757c38a5d59aed0cf006944ebaeabbd7e5af3cc10063aafe6",
+      "lfs": false,
+      "download_url": "https://raw.githubusercontent.com/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1098.004/ssh_authorized_keys/ssh_authorized_keys.yml"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1115/linux_auditd_xclip/linux_auditd_xclip.yml",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1115/linux_auditd_xclip/linux_auditd_xclip.yml",
+      "size_bytes": 559,
+      "sha256": "3739ced25f8fe640e0a03476b699b55d92b020ce2c211074c4ac7b633b0d3f7e",
+      "lfs": false,
+      "download_url": "https://raw.githubusercontent.com/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1115/linux_auditd_xclip/linux_auditd_xclip.yml"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1136.001/linux_auditd_add_user/linux_auditd_add_user.yml",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1136.001/linux_auditd_add_user/linux_auditd_add_user.yml",
+      "size_bytes": 601,
+      "sha256": "806c9a31b425348ab85cea3ac5267385d7bd92cf3a220ddff3a322b57b2842f3",
+      "lfs": false,
+      "download_url": "https://raw.githubusercontent.com/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1136.001/linux_auditd_add_user/linux_auditd_add_user.yml"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1136.001/linux_auditd_add_user_type/linux_auditd_add_user_type.yml",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1136.001/linux_auditd_add_user_type/linux_auditd_add_user_type.yml",
+      "size_bytes": 456,
+      "sha256": "8ff3652dc64d910faa5d889b55c2ffd5eb4bf8fcf999d84c30139e3eaff3fd49",
+      "lfs": false,
+      "download_url": "https://raw.githubusercontent.com/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1136.001/linux_auditd_add_user_type/linux_auditd_add_user_type.yml"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1140/linux_auditd_base64/linux_auditd_base64.yml",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1140/linux_auditd_base64/linux_auditd_base64.yml",
+      "size_bytes": 567,
+      "sha256": "dc1922b2df3a1da9f37325d7a0fa1a5756c6671fbb0a07a32792038d7f898a84",
+      "lfs": false,
+      "download_url": "https://raw.githubusercontent.com/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1140/linux_auditd_base64/linux_auditd_base64.yml"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1200/linux_auditd_swapoff/linux_auditd_swapoff.yml",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1200/linux_auditd_swapoff/linux_auditd_swapoff.yml",
+      "size_bytes": 575,
+      "sha256": "1a18adc1592fc77069c17b12958ef8e1dbf431c9098967fcbefc4ec4ec1b2eb0",
+      "lfs": false,
+      "download_url": "https://raw.githubusercontent.com/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1200/linux_auditd_swapoff/linux_auditd_swapoff.yml"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1222.002/linux_auditd_chattr_i/linux_auditd_chattr_i.yml",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1222.002/linux_auditd_chattr_i/linux_auditd_chattr_i.yml",
+      "size_bytes": 597,
+      "sha256": "c5598209a0c60908a2737dc470d3209223d536677fa243fe7c47189b669d21fd",
+      "lfs": false,
+      "download_url": "https://raw.githubusercontent.com/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1222.002/linux_auditd_chattr_i/linux_auditd_chattr_i.yml"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1222.002/linux_auditd_chmod_exec_attrib/linux_auditd_chmod_exec_attrib.yml",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1222.002/linux_auditd_chmod_exec_attrib/linux_auditd_chmod_exec_attrib.yml",
+      "size_bytes": 649,
+      "sha256": "d85d184646feb119c395402c3700eea03e52715e3a8db255ea52849d817c281e",
+      "lfs": false,
+      "download_url": "https://raw.githubusercontent.com/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1222.002/linux_auditd_chmod_exec_attrib/linux_auditd_chmod_exec_attrib.yml"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1485/linux_auditd_dd_overwrite/linux_auditd_dd_overwrite.yml",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1485/linux_auditd_dd_overwrite/linux_auditd_dd_overwrite.yml",
+      "size_bytes": 621,
+      "sha256": "0c45b773e42bcb1d98983fab97e8605c33760494f9598449b7d0a0557d65d032",
+      "lfs": false,
+      "download_url": "https://raw.githubusercontent.com/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1485/linux_auditd_dd_overwrite/linux_auditd_dd_overwrite.yml"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1485/linux_auditd_no_preserve_root/linux_auditd_no_preserve_root.yml",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1485/linux_auditd_no_preserve_root/linux_auditd_no_preserve_root.yml",
+      "size_bytes": 631,
+      "sha256": "690a4e25a17cda994813bd438619e25a0acb1b034969a7a79be65449f8fbcd98",
+      "lfs": false,
+      "download_url": "https://raw.githubusercontent.com/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1485/linux_auditd_no_preserve_root/linux_auditd_no_preserve_root.yml"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1485/linux_auditd_shred/linux_auditd_shred.yml",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1485/linux_auditd_shred/linux_auditd_shred.yml",
+      "size_bytes": 565,
+      "sha256": "32aa68543f6fc3238927c9dcba100b19c1e033c7bbaa0316149d72f5e1a49bc7",
+      "lfs": false,
+      "download_url": "https://raw.githubusercontent.com/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1485/linux_auditd_shred/linux_auditd_shred.yml"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1485/linux_dd_file_overwrite/linux_dd_file_overwrite.yml",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1485/linux_dd_file_overwrite/linux_dd_file_overwrite.yml",
+      "size_bytes": 434,
+      "sha256": "a4c860ac524791950a29e587e6a3c6ab17435bd91ddac05cb1fdb0da10dcb2af",
+      "lfs": false,
+      "download_url": "https://raw.githubusercontent.com/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1485/linux_dd_file_overwrite/linux_dd_file_overwrite.yml"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1485/rm_boot_dir/rm_boot_dir.yml",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1485/rm_boot_dir/rm_boot_dir.yml",
+      "size_bytes": 398,
+      "sha256": "9b3849e348b81219f58ef439f6102c0556aee8f750d5a54708dd1dcf9cdd769a",
+      "lfs": false,
+      "download_url": "https://raw.githubusercontent.com/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1485/rm_boot_dir/rm_boot_dir.yml"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1485/rm_shred_critical_dir/rm_shred_critical_dir.yml",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1485/rm_shred_critical_dir/rm_shred_critical_dir.yml",
+      "size_bytes": 428,
+      "sha256": "f1dd5ed5145945ff5260bb0bd8299bca55725caf530de938a83e21995023ea55",
+      "lfs": false,
+      "download_url": "https://raw.githubusercontent.com/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1485/rm_shred_critical_dir/rm_shred_critical_dir.yml"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1489/linux_auditd_auditd_service_stop/linux_auditd_auditd_service_stop.yml",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1489/linux_auditd_auditd_service_stop/linux_auditd_auditd_service_stop.yml",
+      "size_bytes": 478,
+      "sha256": "0ab6b361712c97e8c2fa62990f35c200cbd2b14a289d4ca24896ae3cc424a7fd",
+      "lfs": false,
+      "download_url": "https://raw.githubusercontent.com/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1489/linux_auditd_auditd_service_stop/linux_auditd_auditd_service_stop.yml"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1489/linux_auditd_osquerd_service_stop/linux_auditd_osquerd_service_stop.yml",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1489/linux_auditd_osquerd_service_stop/linux_auditd_osquerd_service_stop.yml",
+      "size_bytes": 483,
+      "sha256": "fd938336a4d8f6a8fd7aa64ec79e1c0cfa668ccb11b513e01ca27c1cf7ad8e6b",
+      "lfs": false,
+      "download_url": "https://raw.githubusercontent.com/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1489/linux_auditd_osquerd_service_stop/linux_auditd_osquerd_service_stop.yml"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1489/linux_auditd_service_stop/linux_auditd_service_stop.yml",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1489/linux_auditd_service_stop/linux_auditd_service_stop.yml",
+      "size_bytes": 443,
+      "sha256": "3ed15ac8d9f892652bfb4367c650f9175d83d567c07fca2c9f3cc9ac79ce9eb4",
+      "lfs": false,
+      "download_url": "https://raw.githubusercontent.com/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1489/linux_auditd_service_stop/linux_auditd_service_stop.yml"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1489/linux_auditd_sysmon_service_stop/linux_auditd_sysmon_service_stop.yml",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1489/linux_auditd_sysmon_service_stop/linux_auditd_sysmon_service_stop.yml",
+      "size_bytes": 484,
+      "sha256": "307ee490050c480a27bf27e2430328a6344c4b80195a4e91d3c8fac83e06a7bb",
+      "lfs": false,
+      "download_url": "https://raw.githubusercontent.com/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1489/linux_auditd_sysmon_service_stop/linux_auditd_sysmon_service_stop.yml"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1489/linux_service_stop_disable/linux_service_stop_disable.yml",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1489/linux_service_stop_disable/linux_service_stop_disable.yml",
+      "size_bytes": 443,
+      "sha256": "ee685b3f326ecfc67ae7b9560f9a3393efbe2cf682451fd0e388eda415f5076e",
+      "lfs": false,
+      "download_url": "https://raw.githubusercontent.com/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1489/linux_service_stop_disable/linux_service_stop_disable.yml"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1529/auditd_path_sysrq/auditd_path_sysrq.yml",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1529/auditd_path_sysrq/auditd_path_sysrq.yml",
+      "size_bytes": 396,
+      "sha256": "5446dda8b87d7383dee57e2b1913be4f34b877a1dbcf75cee3133354ba6931e0",
+      "lfs": false,
+      "download_url": "https://raw.githubusercontent.com/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1529/auditd_path_sysrq/auditd_path_sysrq.yml"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1546.004/linux_auditd_unix_shell_mod_config/linux_auditd_unix_shell_mod_config.yml",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1546.004/linux_auditd_unix_shell_mod_config/linux_auditd_unix_shell_mod_config.yml",
+      "size_bytes": 496,
+      "sha256": "4960caa09461a7f78c3a77021ff5e763411f009b9381943c6eec09b206fb289d",
+      "lfs": false,
+      "download_url": "https://raw.githubusercontent.com/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1546.004/linux_auditd_unix_shell_mod_config/linux_auditd_unix_shell_mod_config.yml"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1547.006/linux_auditd_insmod/linux_auditd_insmod.yml",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1547.006/linux_auditd_insmod/linux_auditd_insmod.yml",
+      "size_bytes": 421,
+      "sha256": "acba157b204104c054bede4934a355a887f7c268cbc5b492b4d418186c6041a3",
+      "lfs": false,
+      "download_url": "https://raw.githubusercontent.com/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1547.006/linux_auditd_insmod/linux_auditd_insmod.yml"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1547.006/linux_auditd_insmod_new/linux_auditd_insmod_new.yml",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1547.006/linux_auditd_insmod_new/linux_auditd_insmod_new.yml",
+      "size_bytes": 441,
+      "sha256": "cf1adadf4c22bcd5d3bad14c81648ad3c36e82c3201fcb9013bd4f648801caa5",
+      "lfs": false,
+      "download_url": "https://raw.githubusercontent.com/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1547.006/linux_auditd_insmod_new/linux_auditd_insmod_new.yml"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1547.006/linux_auditd_modprobe/linux_auditd_modprobe.yml",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1547.006/linux_auditd_modprobe/linux_auditd_modprobe.yml",
+      "size_bytes": 431,
+      "sha256": "961658c056d3132124d2c153e4797594bfc0abfb913634a651b713553495db28",
+      "lfs": false,
+      "download_url": "https://raw.githubusercontent.com/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1547.006/linux_auditd_modprobe/linux_auditd_modprobe.yml"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1547.006/linux_auditd_modprobe_new/linux_auditd_modprobe_new.yml",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1547.006/linux_auditd_modprobe_new/linux_auditd_modprobe_new.yml",
+      "size_bytes": 451,
+      "sha256": "c15a6f8fd73a968e8cdd6cadfd985a7c9628cbaf3d3057fd63dcee3529ef7382",
+      "lfs": false,
+      "download_url": "https://raw.githubusercontent.com/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1547.006/linux_auditd_modprobe_new/linux_auditd_modprobe_new.yml"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1547.006/linux_auditd_modprobe_unload_module/linux_auditd_modprobe_unload_module.yml",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1547.006/linux_auditd_modprobe_unload_module/linux_auditd_modprobe_unload_module.yml",
+      "size_bytes": 681,
+      "sha256": "7047e79a20af155238332c215b26dc1fee088a11fc9d7e141b1dcaf4c30c4258",
+      "lfs": false,
+      "download_url": "https://raw.githubusercontent.com/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1547.006/linux_auditd_modprobe_unload_module/linux_auditd_modprobe_unload_module.yml"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1547.006/linux_auditd_rmmod/linux_auditd_rmmod.yml",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1547.006/linux_auditd_rmmod/linux_auditd_rmmod.yml",
+      "size_bytes": 416,
+      "sha256": "8662f38cafe510127d0fe2d95a0dd425e5818a9e88fc7b34e3af9b405c04cfb4",
+      "lfs": false,
+      "download_url": "https://raw.githubusercontent.com/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1547.006/linux_auditd_rmmod/linux_auditd_rmmod.yml"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1547.006/linux_auditd_rmmod_new/linux_auditd_rmmod_new.yml",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1547.006/linux_auditd_rmmod_new/linux_auditd_rmmod_new.yml",
+      "size_bytes": 436,
+      "sha256": "b1f7586d29130c8150c1b4a648f7183dd2774725cd446365072120fce1e4dcab",
+      "lfs": false,
+      "download_url": "https://raw.githubusercontent.com/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1547.006/linux_auditd_rmmod_new/linux_auditd_rmmod_new.yml"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1547.006/loading_linux_kernel_module/loading_linux_kernel_module.yml",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1547.006/loading_linux_kernel_module/loading_linux_kernel_module.yml",
+      "size_bytes": 454,
+      "sha256": "6d1df4df14a7baf6736aca3bb0b3928bf092ee29a354bb32b3db67049691d47f",
+      "lfs": false,
+      "download_url": "https://raw.githubusercontent.com/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1547.006/loading_linux_kernel_module/loading_linux_kernel_module.yml"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1548.001/linux_auditd_setuid/linux_auditd_setuid.yml",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1548.001/linux_auditd_setuid/linux_auditd_setuid.yml",
+      "size_bytes": 909,
+      "sha256": "39ed45822dae4e931b904850c4daf5cab10e07963d408533fb77864ca3489fda",
+      "lfs": false,
+      "download_url": "https://raw.githubusercontent.com/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1548.001/linux_auditd_setuid/linux_auditd_setuid.yml"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1548.001/linux_setcap/linux_setcap.yml",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1548.001/linux_setcap/linux_setcap.yml",
+      "size_bytes": 409,
+      "sha256": "cffe462d3578ed1dbff5af2662da2e7c2131dcbba3d480dce26f2187692b973c",
+      "lfs": false,
+      "download_url": "https://raw.githubusercontent.com/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1548.001/linux_setcap/linux_setcap.yml"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1548.003/auditd_path_cwd_doas_conf/auditd_path_cwd_doas_conf.yml",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1548.003/auditd_path_cwd_doas_conf/auditd_path_cwd_doas_conf.yml",
+      "size_bytes": 426,
+      "sha256": "f5d4b44adc49fb5b9893eb2f2aed896903bea1306fbd64d5b50b3eeee71378c9",
+      "lfs": false,
+      "download_url": "https://raw.githubusercontent.com/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1548.003/auditd_path_cwd_doas_conf/auditd_path_cwd_doas_conf.yml"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1548.003/auditd_path_sudoers/auditd_path_sudoers.yml",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1548.003/auditd_path_sudoers/auditd_path_sudoers.yml",
+      "size_bytes": 414,
+      "sha256": "498b797df1f57003bcf69474b405f1f6cd26ae3e07c036a264ca609bd496911d",
+      "lfs": false,
+      "download_url": "https://raw.githubusercontent.com/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1548.003/auditd_path_sudoers/auditd_path_sudoers.yml"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1548.003/doas/doas.yml",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1548.003/doas/doas.yml",
+      "size_bytes": 385,
+      "sha256": "f69a91defaf47e0a8811e5cc22ed62aecc76a1cd1524898968b5360711ffe3c8",
+      "lfs": false,
+      "download_url": "https://raw.githubusercontent.com/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1548.003/doas/doas.yml"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1548.003/doas_exec/doas_exec.yml",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1548.003/doas_exec/doas_exec.yml",
+      "size_bytes": 400,
+      "sha256": "e99c9f62e0c5e0343fa3dd82945c380c0c86cbf658da0fe0163774bae4f627ea",
+      "lfs": false,
+      "download_url": "https://raw.githubusercontent.com/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1548.003/doas_exec/doas_exec.yml"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1548.003/linux_adduser/linux_adduser.yml",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1548.003/linux_adduser/linux_adduser.yml",
+      "size_bytes": 412,
+      "sha256": "194d8be371126d13d54fd9411ccb6c5bbe057c7b3d30d59803540dabed5706bc",
+      "lfs": false,
+      "download_url": "https://raw.githubusercontent.com/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1548.003/linux_adduser/linux_adduser.yml"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1548.003/linux_auditd_doas/linux_auditd_doas.yml",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1548.003/linux_auditd_doas/linux_auditd_doas.yml",
+      "size_bytes": 411,
+      "sha256": "4699c3bbd6f9d04b6fe2c42927445c0ad28658bd70c0eabcd823e06637939f29",
+      "lfs": false,
+      "download_url": "https://raw.githubusercontent.com/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1548.003/linux_auditd_doas/linux_auditd_doas.yml"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1548.003/linux_auditd_doas_new/linux_auditd_doas_new.yml",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1548.003/linux_auditd_doas_new/linux_auditd_doas_new.yml",
+      "size_bytes": 431,
+      "sha256": "1fca3ebbf1627488f925a243880dbc64c7a7444d541125b2b2d8b02890106761",
+      "lfs": false,
+      "download_url": "https://raw.githubusercontent.com/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1548.003/linux_auditd_doas_new/linux_auditd_doas_new.yml"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1548.003/linux_auditd_nopasswd/linux_auditd_nopasswd.yml",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1548.003/linux_auditd_nopasswd/linux_auditd_nopasswd.yml",
+      "size_bytes": 595,
+      "sha256": "de3f489c321141f3c5bd5379759c556402b2d15326490dc9add362e7978182e1",
+      "lfs": false,
+      "download_url": "https://raw.githubusercontent.com/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1548.003/linux_auditd_nopasswd/linux_auditd_nopasswd.yml"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1548.003/linux_auditd_sudo_su/linux_auditd_sudo_su.yml",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1548.003/linux_auditd_sudo_su/linux_auditd_sudo_su.yml",
+      "size_bytes": 587,
+      "sha256": "a0196231425e3236ff6ed07a713027ee04a91c6b64cc8c30d62c3f552c995b4f",
+      "lfs": false,
+      "download_url": "https://raw.githubusercontent.com/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1548.003/linux_auditd_sudo_su/linux_auditd_sudo_su.yml"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1548.003/linux_auditd_sudoers_access/linux_auditd_sudoers_access.yml",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1548.003/linux_auditd_sudoers_access/linux_auditd_sudoers_access.yml",
+      "size_bytes": 461,
+      "sha256": "4179c01149ae92c98fd986f9287124647c8837345ece1f575a36a5930bf3416c",
+      "lfs": false,
+      "download_url": "https://raw.githubusercontent.com/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1548.003/linux_auditd_sudoers_access/linux_auditd_sudoers_access.yml"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1548.003/sudo_su/sudo_su.yml",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1548.003/sudo_su/sudo_su.yml",
+      "size_bytes": 394,
+      "sha256": "29e08aa2e2985ffb3ac465cacf0333150a45a75e79ee63844f577e3e08d918f0",
+      "lfs": false,
+      "download_url": "https://raw.githubusercontent.com/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1548.003/sudo_su/sudo_su.yml"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1548.003/sudoers_temp/sudoers_temp.yml",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1548.003/sudoers_temp/sudoers_temp.yml",
+      "size_bytes": 409,
+      "sha256": "620781db6f001a2d861c498bb71a6378c942ef6f70c96ffacf76577f7e44034b",
+      "lfs": false,
+      "download_url": "https://raw.githubusercontent.com/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1548.003/sudoers_temp/sudoers_temp.yml"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1548/apt/apt.yml",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1548/apt/apt.yml",
+      "size_bytes": 396,
+      "sha256": "80e48ae16dd2baa8e1f04f58afdf499b080e5779cde03eabec9a6126b2aa9305",
+      "lfs": false,
+      "download_url": "https://raw.githubusercontent.com/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1548/apt/apt.yml"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1548/apt_get/apt_get.yml",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1548/apt_get/apt_get.yml",
+      "size_bytes": 568,
+      "sha256": "624aa0f3e649cb63c40166f2189f4e0b6d9018237498aa70f9c68c38e4d584e8",
+      "lfs": false,
+      "download_url": "https://raw.githubusercontent.com/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1548/apt_get/apt_get.yml"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1548/awk/awk.yml",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1548/awk/awk.yml",
+      "size_bytes": 396,
+      "sha256": "5d43c2aa62476d307b0224e233e06d469c3ca6fd49d3b2d462d501805df20222",
+      "lfs": false,
+      "download_url": "https://raw.githubusercontent.com/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1548/awk/awk.yml"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1548/busybox/busybox.yml",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1548/busybox/busybox.yml",
+      "size_bytes": 408,
+      "sha256": "8f7313906db29e1c0f112615a426dbc2f4d7bdcfa936e0afb480fca28ae413dc",
+      "lfs": false,
+      "download_url": "https://raw.githubusercontent.com/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1548/busybox/busybox.yml"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1548/c89/c89.yml",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1548/c89/c89.yml",
+      "size_bytes": 396,
+      "sha256": "b371d1cb57dc5bffeea04aaf37106a4dd0c043c39a4b4f54f57676ba6d184e46",
+      "lfs": false,
+      "download_url": "https://raw.githubusercontent.com/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1548/c89/c89.yml"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1548/c99/c99.yml",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1548/c99/c99.yml",
+      "size_bytes": 396,
+      "sha256": "254561b2208aaf6826b97b0cb414d48021afd88b43f80fcf5917c68457e49bdc",
+      "lfs": false,
+      "download_url": "https://raw.githubusercontent.com/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1548/c99/c99.yml"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1548/composer/composer.yml",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1548/composer/composer.yml",
+      "size_bytes": 411,
+      "sha256": "41f4ba7a6b1ac8623d07d3129b97c37ee163423708ce55b25aa758c0b7aa3205",
+      "lfs": false,
+      "download_url": "https://raw.githubusercontent.com/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1548/composer/composer.yml"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1548/cpulimit/cpulimit.yml",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1548/cpulimit/cpulimit.yml",
+      "size_bytes": 411,
+      "sha256": "a8931d73282c78e5520984b11c8cba0f781563330cabac8b5cc17a29870caa8c",
+      "lfs": false,
+      "download_url": "https://raw.githubusercontent.com/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1548/cpulimit/cpulimit.yml"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1548/csvtool/csvtool.yml",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1548/csvtool/csvtool.yml",
+      "size_bytes": 408,
+      "sha256": "570b1f0b26180f1b30234ba9a412f827b5959d474e6563febbf7f76be976b814",
+      "lfs": false,
+      "download_url": "https://raw.githubusercontent.com/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1548/csvtool/csvtool.yml"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1548/docker/docker.yml",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1548/docker/docker.yml",
+      "size_bytes": 405,
+      "sha256": "0f71949997ec360dbed20874764d72579964799466969b3389ef3e3ec7797c23",
+      "lfs": false,
+      "download_url": "https://raw.githubusercontent.com/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1548/docker/docker.yml"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1548/emacs/emacs.yml",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1548/emacs/emacs.yml",
+      "size_bytes": 402,
+      "sha256": "65c0715ddf6b6aaff86b59a1b7fd002bc689e7f260ff1e562bc5a5fbf502222d",
+      "lfs": false,
+      "download_url": "https://raw.githubusercontent.com/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1548/emacs/emacs.yml"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1548/find/find.yml",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1548/find/find.yml",
+      "size_bytes": 399,
+      "sha256": "b2eaa19f22e4fafeb2a27356f88abee498a9fd9b0aa8a40fc523b9d920ff6277",
+      "lfs": false,
+      "download_url": "https://raw.githubusercontent.com/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1548/find/find.yml"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1548/gawk/gawk.yml",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1548/gawk/gawk.yml",
+      "size_bytes": 402,
+      "sha256": "bd8fd4c7261a04b1ba794218740de329f24438be25de3848e8d2b85e13377931",
+      "lfs": false,
+      "download_url": "https://raw.githubusercontent.com/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1548/gawk/gawk.yml"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1548/gdb/gdb.yml",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1548/gdb/gdb.yml",
+      "size_bytes": 396,
+      "sha256": "4aeac2fec526b06d60ae4f149d7b2e5331743859a7036fdefb36a4b19412f3b7",
+      "lfs": false,
+      "download_url": "https://raw.githubusercontent.com/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1548/gdb/gdb.yml"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1548/gem/gem.yml",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1548/gem/gem.yml",
+      "size_bytes": 396,
+      "sha256": "de319fec279be7205e4cbd327bbc2597980486df585abdb091a5111d9a2d89b9",
+      "lfs": false,
+      "download_url": "https://raw.githubusercontent.com/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1548/gem/gem.yml"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1548/make/make.yml",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1548/make/make.yml",
+      "size_bytes": 399,
+      "sha256": "e215c81f2883ef022fc207f3ba6aa63391b4ae41fe17535a2130ed49dd5a59f0",
+      "lfs": false,
+      "download_url": "https://raw.githubusercontent.com/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1548/make/make.yml"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1548/mysql/mysql.yml",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1548/mysql/mysql.yml",
+      "size_bytes": 402,
+      "sha256": "d5d14ad2ef5e65f27cce5320217adad7ce1bdbdd6b24f65db12150d9e06dd3aa",
+      "lfs": false,
+      "download_url": "https://raw.githubusercontent.com/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1548/mysql/mysql.yml"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1548/node/node.yml",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1548/node/node.yml",
+      "size_bytes": 399,
+      "sha256": "81e93d7458ab21178bd4f80d6974b458fbeebfab5af0148ca1a83a36da349f38",
+      "lfs": false,
+      "download_url": "https://raw.githubusercontent.com/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1548/node/node.yml"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1548/octave/octave.yml",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1548/octave/octave.yml",
+      "size_bytes": 405,
+      "sha256": "d7a0876e3cfa6cbf008aa2799a949c2a0d153a0d71f3be1f12e2fdb25a344975",
+      "lfs": false,
+      "download_url": "https://raw.githubusercontent.com/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1548/octave/octave.yml"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1548/openvpn/openvpn.yml",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1548/openvpn/openvpn.yml",
+      "size_bytes": 408,
+      "sha256": "ed9b8019572ec7dac7aa03b2644047511240ffc7b7e189a3ddca9a54fe084731",
+      "lfs": false,
+      "download_url": "https://raw.githubusercontent.com/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1548/openvpn/openvpn.yml"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1548/php/php.yml",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1548/php/php.yml",
+      "size_bytes": 396,
+      "sha256": "3446354bfc08619cb0a5dbfdb497a0ef710ef53f6daccaec7b1caf73b0a217e8",
+      "lfs": false,
+      "download_url": "https://raw.githubusercontent.com/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1548/php/php.yml"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1548/puppet/puppet.yml",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1548/puppet/puppet.yml",
+      "size_bytes": 405,
+      "sha256": "7694a7690930dfefa87191013f250b7c116205246d84d7ae044f7024c7126ae6",
+      "lfs": false,
+      "download_url": "https://raw.githubusercontent.com/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1548/puppet/puppet.yml"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1548/rpm/rpm.yml",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1548/rpm/rpm.yml",
+      "size_bytes": 396,
+      "sha256": "feb05223dab5c599920aee26d99d56f32017be48042a9e05808284212e967ea9",
+      "lfs": false,
+      "download_url": "https://raw.githubusercontent.com/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1548/rpm/rpm.yml"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1548/ruby/ruby.yml",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1548/ruby/ruby.yml",
+      "size_bytes": 399,
+      "sha256": "094e076eb2d129bd92d19f4909e0d0f8fc15aad4b31f1a67e9c10cfa9767f56f",
+      "lfs": false,
+      "download_url": "https://raw.githubusercontent.com/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1548/ruby/ruby.yml"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1548/sqlite3/sqlite3.yml",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1548/sqlite3/sqlite3.yml",
+      "size_bytes": 408,
+      "sha256": "097518dbb3e2c3038ae0e115140c4748519781b1d6bf3b96433c47514cfd1df8",
+      "lfs": false,
+      "download_url": "https://raw.githubusercontent.com/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1548/sqlite3/sqlite3.yml"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1548/telnet/telnet.yml",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1548/telnet/telnet.yml",
+      "size_bytes": 390,
+      "sha256": "fee55c823db8487c37cadaf2f9b6b8306e3774017a55f9cff91f81939a3cd355",
+      "lfs": false,
+      "download_url": "https://raw.githubusercontent.com/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1548/telnet/telnet.yml"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1552.004/linux_auditd_find_gpg/linux_auditd_find_gpg.yml",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1552.004/linux_auditd_find_gpg/linux_auditd_find_gpg.yml",
+      "size_bytes": 595,
+      "sha256": "2b43379d21a222bb0a97dd87da1d903024edb18c3cbf31c0acc5619ab7aad2bc",
+      "lfs": false,
+      "download_url": "https://raw.githubusercontent.com/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1552.004/linux_auditd_find_gpg/linux_auditd_find_gpg.yml"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1552.004/linux_auditd_find_ssh_files/linux_auditd_find_ssh_files.yml",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1552.004/linux_auditd_find_ssh_files/linux_auditd_find_ssh_files.yml",
+      "size_bytes": 631,
+      "sha256": "bb77c87238d4479d7606b1fc85b6944de5199f9cf09b6ca46a104f787eeffa23",
+      "lfs": false,
+      "download_url": "https://raw.githubusercontent.com/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1552.004/linux_auditd_find_ssh_files/linux_auditd_find_ssh_files.yml"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1555.005/linux_auditd_find_credentials/linux_auditd_find_credentials.yml",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1555.005/linux_auditd_find_credentials/linux_auditd_find_credentials.yml",
+      "size_bytes": 647,
+      "sha256": "5fa8a0dc2393935967c1a8726403a7c57579188fc89b7ced7279f6fa81caffe0",
+      "lfs": false,
+      "download_url": "https://raw.githubusercontent.com/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1555.005/linux_auditd_find_credentials/linux_auditd_find_credentials.yml"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1555.005/linux_auditd_find_password_db/linux_auditd_find_password_db.yml",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1555.005/linux_auditd_find_password_db/linux_auditd_find_password_db.yml",
+      "size_bytes": 641,
+      "sha256": "751306dd83b391b65d744d243879a947e3a7bcf20da0dda2183b91a830345e4a",
+      "lfs": false,
+      "download_url": "https://raw.githubusercontent.com/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1555.005/linux_auditd_find_password_db/linux_auditd_find_password_db.yml"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1562.004/linux_auditd_disable_firewall/linux_auditd_disable_firewall.yml",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1562.004/linux_auditd_disable_firewall/linux_auditd_disable_firewall.yml",
+      "size_bytes": 471,
+      "sha256": "e67f6decf2d3502c411e80d446553cfefd57b9ab535d5f238ce0b366fa74042a",
+      "lfs": false,
+      "download_url": "https://raw.githubusercontent.com/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1562.004/linux_auditd_disable_firewall/linux_auditd_disable_firewall.yml"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1562.012/auditd_daemon_end/auditd_daemon_end_old.yml",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1562.012/auditd_daemon_end/auditd_daemon_end_old.yml",
+      "size_bytes": 496,
+      "sha256": "869d7d09746d36bf38fa4d0d53ce00c2e94e64e25f50f4bad963218f6fb80634",
+      "lfs": false,
+      "download_url": "https://raw.githubusercontent.com/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1562.012/auditd_daemon_end/auditd_daemon_end_old.yml"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1562.012/auditd_daemon_type/auditd_daemon_type.yml",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1562.012/auditd_daemon_type/auditd_daemon_type.yml",
+      "size_bytes": 418,
+      "sha256": "a0a947fd3d0618333ffcad29670f56dfc04906258b1d8421555d06f6330c6e20",
+      "lfs": false,
+      "download_url": "https://raw.githubusercontent.com/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1562.012/auditd_daemon_type/auditd_daemon_type.yml"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1564.001/linux_auditd_hidden_file/linux_auditd_hidden_file.yml",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1564.001/linux_auditd_hidden_file/linux_auditd_hidden_file.yml",
+      "size_bytes": 446,
+      "sha256": "c1f1d0bcecba67864b835fb840a50d0675c009522ee16ba4af9ee091b3634195",
+      "lfs": false,
+      "download_url": "https://raw.githubusercontent.com/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1564.001/linux_auditd_hidden_file/linux_auditd_hidden_file.yml"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1569.002/linux_service_start/linux_service_start.yml",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1569.002/linux_service_start/linux_service_start.yml",
+      "size_bytes": 443,
+      "sha256": "30b764566d50fbb0522089dd3e6a7dac9f10fd20fcaf353725d4fc0678018df8",
+      "lfs": false,
+      "download_url": "https://raw.githubusercontent.com/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1569.002/linux_service_start/linux_service_start.yml"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1574.006/auditd_path_preload_file/auditd_path_preload_file.yml",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1574.006/auditd_path_preload_file/auditd_path_preload_file.yml",
+      "size_bytes": 429,
+      "sha256": "bcba277607a2a282202086aa534937a22c6d026f1c5ad34f2cbc1cbd99f75e17",
+      "lfs": false,
+      "download_url": "https://raw.githubusercontent.com/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1574.006/auditd_path_preload_file/auditd_path_preload_file.yml"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1574.006/linux_auditd_ldpreload/linux_auditd_ldpreload.yml",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1574.006/linux_auditd_ldpreload/linux_auditd_ldpreload.yml",
+      "size_bytes": 603,
+      "sha256": "1e83f503e44868b4edd6394053ca22e4663f06b4255d528122fe847f586fca69",
+      "lfs": false,
+      "download_url": "https://raw.githubusercontent.com/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1574.006/linux_auditd_ldpreload/linux_auditd_ldpreload.yml"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1574.006/linux_auditd_preload_file/linux_auditd_preload_file.yml",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1574.006/linux_auditd_preload_file/linux_auditd_preload_file.yml",
+      "size_bytes": 451,
+      "sha256": "14cfa6ed7c7ffad3273f8e0833dfbe4c910e9667ae7927c440fa4819b5344d9f",
+      "lfs": false,
+      "download_url": "https://raw.githubusercontent.com/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1574.006/linux_auditd_preload_file/linux_auditd_preload_file.yml"
+    },
+    {
+      "source_path": "datasets/malware/acidrain/acidrain.yml",
+      "cache_path": "data/cache/splunk-attack-data/malware/acidrain/acidrain.yml",
+      "size_bytes": 368,
+      "sha256": "136e0a5d03d65d62c55a39f1b30be80374ddbba2860041b625ebb2570c61e037",
+      "lfs": false,
+      "download_url": "https://raw.githubusercontent.com/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/malware/acidrain/acidrain.yml"
+    },
+    {
+      "source_path": "datasets/malware/cyclopsblink/cyclopsblink.yml",
+      "cache_path": "data/cache/splunk-attack-data/malware/cyclopsblink/cyclopsblink.yml",
+      "size_bytes": 360,
+      "sha256": "65ba361d272e875df3106a217ee6463e5456fb11104d48f4a178adccd8f74a10",
+      "lfs": false,
+      "download_url": "https://raw.githubusercontent.com/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/malware/cyclopsblink/cyclopsblink.yml"
+    }
+  ]
+}

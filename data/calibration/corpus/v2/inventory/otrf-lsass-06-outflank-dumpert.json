@@ -10,7 +10,7 @@
  "evidence": 10,
  "units": [
   {
-   "group_id": "corr-group::afc03e076e59bda1fef2cf7c71955ea49433ba472ce2ce59b5dc0670cc1eacf0",
+   "group_id": "corr-group::77e2548ab705ffe07da1ba8ce2327dc3da07d889a402ea44d0222661623b8b0e",
    "anchor_observation_id": "sysmon:MKT01.pandalab.com:sha256:0967445647eeaf0bc439e1001c2777c54bb54d7013938d8ba7e1a454e1936763",
    "evidence": 5,
    "observations": 3,
@@ -36,7 +36,7 @@
    }
   },
   {
-   "group_id": "corr-group::1cff1e9bbab110d5be4761f0292cbf29578abd6159ccb371eb854d95d09aa36c",
+   "group_id": "corr-group::73d01b296c22fbc83c42423715d72559c5c5e1a78eb4611659a60026de2526c9",
    "anchor_observation_id": "sysmon:MKT01.pandalab.com:sha256:c9297fc80d48c48cf74b2c0e29a671f4c084e6f8124abab0d43b7496016ee7cf",
    "evidence": 3,
    "observations": 3,
@@ -59,30 +59,7 @@
    }
   },
   {
-   "group_id": "corr-group::543dc87e04ea4c921b49fe78419200ed185ff46360a6804747e902907a03965e",
-   "anchor_observation_id": "sysmon:MKT01.pandalab.com:sha256:abdae7e01523ac10cbbe5e416ee6fbdfa57bd06c9613dc54319a95b99cc5d565",
-   "evidence": 1,
-   "observations": 1,
-   "hosts": [
-    "MKT01.pandalab.com"
-   ],
-   "first": "2023-09-06T05:45:52.075000+00:00",
-   "last": "2023-09-06T05:45:52.075000+00:00",
-   "process_images": {
-    "C:\\Windows\\System32\\whoami.exe": 1
-   },
-   "image_names": [
-    "whoami.exe"
-   ],
-   "techniques": [
-    "T1033"
-   ],
-   "rule_families": {
-    "sigma:bd8b828d-0dca-48e1-8a63-8a58ecf2644f": 1
-   }
-  },
-  {
-   "group_id": "corr-group::abe215e5203904e81e5525d5e36c14827b879db4992a5a91070211416f2f57dd",
+   "group_id": "corr-group::690b1c452fee9bbc6a27379cf1ee7caefcbee845e22554a59f3cc8244e89f3fe",
    "anchor_observation_id": "sysmon:MKT01.pandalab.com:sha256:c1de7da8b6892da3872832b6b0a930692bfd3c07097787f93be7b9687d2e486a",
    "evidence": 1,
    "observations": 1,
@@ -102,6 +79,29 @@
    ],
    "rule_families": {
     "sigma:b69888d4-380c-45ce-9cf9-d9ce46e67821": 1
+   }
+  },
+  {
+   "group_id": "corr-group::9650ff5064cdabffec600c8080f05e4cda441ad7e7db8f0645755fc07d9a2a59",
+   "anchor_observation_id": "sysmon:MKT01.pandalab.com:sha256:abdae7e01523ac10cbbe5e416ee6fbdfa57bd06c9613dc54319a95b99cc5d565",
+   "evidence": 1,
+   "observations": 1,
+   "hosts": [
+    "MKT01.pandalab.com"
+   ],
+   "first": "2023-09-06T05:45:52.075000+00:00",
+   "last": "2023-09-06T05:45:52.075000+00:00",
+   "process_images": {
+    "C:\\Windows\\System32\\whoami.exe": 1
+   },
+   "image_names": [
+    "whoami.exe"
+   ],
+   "techniques": [
+    "T1033"
+   ],
+   "rule_families": {
+    "sigma:bd8b828d-0dca-48e1-8a63-8a58ecf2644f": 1
    }
   }
  ]

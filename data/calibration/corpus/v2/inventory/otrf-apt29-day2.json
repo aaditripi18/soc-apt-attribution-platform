@@ -10,7 +10,7 @@
  "evidence": 3220,
  "units": [
   {
-   "group_id": "corr-group::6285b0021b8202f2b6909e41cf9ca64a7d962ed8567356830884c64060c1ce40",
+   "group_id": "corr-group::cbca5a0fe9a6d5c720811bea848d4d350c3a91f07bd73c8158e94429985a879a",
    "anchor_observation_id": "powershell:UTICA.dmevals.local:3541",
    "evidence": 2111,
    "observations": 2092,
@@ -66,7 +66,7 @@
    }
   },
   {
-   "group_id": "corr-group::38f7aaef2e661ae01825ceb518a90db8a8af1e2f5d9e8d6d016993df181e6bfc",
+   "group_id": "corr-group::399978432af723e0ff7a92a7866f2f4d51ce7152f5ceda1d7dd47897bff81469",
    "anchor_observation_id": "powershell:NEWYORK.dmevals.local:18403",
    "evidence": 539,
    "observations": 539,
@@ -87,7 +87,7 @@
    }
   },
   {
-   "group_id": "corr-group::8f42909b4a0e92f748a227ff952a82f4dc084d3353c37001afd2dde84e7b7a52",
+   "group_id": "corr-group::462dea487839733e83d21e68cf9b6b36b250c8d0bce3f4081ea0d858b7d6919f",
    "anchor_observation_id": "powershell:NEWYORK.dmevals.local:19104",
    "evidence": 415,
    "observations": 415,
@@ -108,7 +108,7 @@
    }
   },
   {
-   "group_id": "corr-group::c09227eb156c7e6ec288630fd7bbc52ec7ce15bece1e48603fc28d778a046d95",
+   "group_id": "corr-group::2e863257f4d0afa8c28e83ad37a90866871047787f0196dadb398493da823a27",
    "anchor_observation_id": "sysmon:UTICA.dmevals.local:984177",
    "evidence": 38,
    "observations": 19,
@@ -145,30 +145,7 @@
    }
   },
   {
-   "group_id": "corr-group::10f7d9e6e27a3a764290bc635c48434a8d3648c41eedb4303fbc6862faa97ec9",
-   "anchor_observation_id": "sysmon:UTICA.dmevals.local:987756",
-   "evidence": 19,
-   "observations": 19,
-   "hosts": [
-    "UTICA.dmevals.local"
-   ],
-   "first": "2020-05-02T08:13:20.766000+00:00",
-   "last": "2020-05-02T08:14:04.462000+00:00",
-   "process_images": {
-    "C:\\WindowsAzure\\Packages\\Telemetry\\WindowsAzureTelemetryService.exe": 19
-   },
-   "image_names": [
-    "windowsazuretelemetryservice.exe"
-   ],
-   "techniques": [
-    "T1685.001"
-   ],
-   "rule_families": {
-    "sigma:d29ada0f-af45-4f27-8f32-f7b77c3dbc4e": 19
-   }
-  },
-  {
-   "group_id": "corr-group::a7759023d11c6e5422b9f2c8e00755d997e069bc9c9b1a080ae769179190d45e",
+   "group_id": "corr-group::25c981308735cf52ff76bc6d79514a480996994723f6e477a88e1004c00f7015",
    "anchor_observation_id": "sysmon:UTICA.dmevals.local:1008901",
    "evidence": 19,
    "observations": 19,
@@ -191,7 +168,30 @@
    }
   },
   {
-   "group_id": "corr-group::fe826d3996d2b43fccccffb273efce26b9deb0808c79326097e97cc17d1e9458",
+   "group_id": "corr-group::2c97dfbd973e96e553fbfa192e4adfefaeeb68bd7cc89732abba3cec236346ef",
+   "anchor_observation_id": "sysmon:UTICA.dmevals.local:987756",
+   "evidence": 19,
+   "observations": 19,
+   "hosts": [
+    "UTICA.dmevals.local"
+   ],
+   "first": "2020-05-02T08:13:20.766000+00:00",
+   "last": "2020-05-02T08:14:04.462000+00:00",
+   "process_images": {
+    "C:\\WindowsAzure\\Packages\\Telemetry\\WindowsAzureTelemetryService.exe": 19
+   },
+   "image_names": [
+    "windowsazuretelemetryservice.exe"
+   ],
+   "techniques": [
+    "T1685.001"
+   ],
+   "rule_families": {
+    "sigma:d29ada0f-af45-4f27-8f32-f7b77c3dbc4e": 19
+   }
+  },
+  {
+   "group_id": "corr-group::e1c79edb5740ffffae237f6dc1638417bfda7645dc12fffd58ec0e9bc80b9f09",
    "anchor_observation_id": "sysmon:UTICA.dmevals.local:782026",
    "evidence": 15,
    "observations": 15,
@@ -214,7 +214,7 @@
    }
   },
   {
-   "group_id": "corr-group::aff3627546050f14475450689a4722171afacdb017f4909a70d487dbec6e47d4",
+   "group_id": "corr-group::af1b637efc29520f8ee4e5dd742ebfb85af11f9863c34e4a5189a39c2dc7125e",
    "anchor_observation_id": "sysmon:UTICA.dmevals.local:1012651",
    "evidence": 13,
    "observations": 13,
@@ -237,7 +237,7 @@
    }
   },
   {
-   "group_id": "corr-group::236911846336237888d46c89d29a579522d63d40c17505874cd86fccc0c6fec2",
+   "group_id": "corr-group::d5cd3c733cc2906449c67e37170236de3ce70709805f16e2a4f5392dce641197",
    "anchor_observation_id": "sysmon:NEWYORK.dmevals.local:317743",
    "evidence": 12,
    "observations": 4,
@@ -274,7 +274,7 @@
    }
   },
   {
-   "group_id": "corr-group::99ac22377658db80bcd037fc9c09e2c9e78c4b5388a9c51fbe38858baa7b08c6",
+   "group_id": "corr-group::66e9ad9421aee2ac189e4226f71e7fa3c3d75bb7d7ce3b09cd37c1cf30d3d320",
    "anchor_observation_id": "sysmon:UTICA.dmevals.local:787306",
    "evidence": 11,
    "observations": 3,
@@ -312,7 +312,7 @@
    }
   },
   {
-   "group_id": "corr-group::1f359af5d21f73663d32a510582f88917bc1382c0f87e10b96d332f3ab78a16d",
+   "group_id": "corr-group::ecfed0aa64a8acf0462df1935ec4f13767558d465eed4bcdc76e59377d26d381",
    "anchor_observation_id": "sysmon:UTICA.dmevals.local:792928",
    "evidence": 9,
    "observations": 9,
@@ -335,7 +335,7 @@
    }
   },
   {
-   "group_id": "corr-group::5a49de4d93232527b3fda54e6e2a56cdba944d5fef67d0333a18fed6fc39b743",
+   "group_id": "corr-group::b4e537152b70b5ba058ae15f6709c1e5637aa0fe36c78ba8a6ed5d3f1b2d8cee",
    "anchor_observation_id": "sysmon:SCRANTON.dmevals.local:343878",
    "evidence": 6,
    "observations": 3,
@@ -365,7 +365,7 @@
    }
   },
   {
-   "group_id": "corr-group::570d073753dc6cceb9e06c7fd01a77e9f88b045b116b958c838129c416cc2f46",
+   "group_id": "corr-group::2804fcfd6449293ac6414a9590ae1b180aa104f437c4d489d45fe341c0f51fe6",
    "anchor_observation_id": "sysmon:SCRANTON.dmevals.local:333581",
    "evidence": 2,
    "observations": 2,
@@ -388,7 +388,7 @@
    }
   },
   {
-   "group_id": "corr-group::d09c79625e902bb98c766493ec15d3172b657727f642569a19f118971f79271a",
+   "group_id": "corr-group::dc255a09b949e030c8533f0bfd9c2c5ca3008902497ccea478e56a16f2b2d91f",
    "anchor_observation_id": "sysmon:SCRANTON.dmevals.local:343422",
    "evidence": 2,
    "observations": 1,
@@ -412,168 +412,7 @@
    }
   },
   {
-   "group_id": "corr-group::19d40ac975ec20dd9f4a51e27731604ae3b0875fa01dcbcfc40a07b02b88d712",
-   "anchor_observation_id": "sysmon:UTICA.dmevals.local:944437",
-   "evidence": 1,
-   "observations": 1,
-   "hosts": [
-    "UTICA.dmevals.local"
-   ],
-   "first": "2020-05-02T08:10:05.244000+00:00",
-   "last": "2020-05-02T08:10:05.244000+00:00",
-   "process_images": {
-    "C:\\Windows\\System32\\rundll32.exe": 1
-   },
-   "image_names": [
-    "rundll32.exe"
-   ],
-   "techniques": [
-    "T1048.003"
-   ],
-   "rule_families": {
-    "sigma:2dbd9d3d-9e27-42a8-b8df-f13825c6c3d5": 1
-   }
-  },
-  {
-   "group_id": "corr-group::2b1135a66ed8919b678d52fa2f68bf6519aeae8d2523c2e17b1cf6756235c03e",
-   "anchor_observation_id": "sysmon:NEWYORK.dmevals.local:318662",
-   "evidence": 1,
-   "observations": 1,
-   "hosts": [
-    "NEWYORK.dmevals.local"
-   ],
-   "first": "2020-05-02T08:04:25.678000+00:00",
-   "last": "2020-05-02T08:04:25.678000+00:00",
-   "process_images": {
-    "C:\\windows\\system32\\svchost.exe": 1
-   },
-   "image_names": [
-    "svchost.exe"
-   ],
-   "techniques": [
-    "T1490"
-   ],
-   "rule_families": {
-    "sigma:d223b46b-5621-4037-88fe-fda32eead684": 1
-   }
-  },
-  {
-   "group_id": "corr-group::3c64f56bbf72b9f5e81a8116922f8ffe27258824f23f12bb0e535c5d56050fc2",
-   "anchor_observation_id": "sysmon:UTICA.dmevals.local:958833",
-   "evidence": 1,
-   "observations": 1,
-   "hosts": [
-    "UTICA.dmevals.local"
-   ],
-   "first": "2020-05-02T08:12:44.634000+00:00",
-   "last": "2020-05-02T08:12:44.634000+00:00",
-   "process_images": {
-    "C:\\Windows\\System32\\netsh.exe": 1
-   },
-   "image_names": [
-    "netsh.exe"
-   ],
-   "techniques": [
-    "T1040"
-   ],
-   "rule_families": {
-    "sigma:d3c3861d-c504-4c77-ba55-224ba82d0118": 1
-   }
-  },
-  {
-   "group_id": "corr-group::560142ccab7e51fd764d8ac4444e1743929d5df015a32428ffddf7f746860cec",
-   "anchor_observation_id": "windows_security:NEWYORK.dmevals.local:201065",
-   "evidence": 1,
-   "observations": 1,
-   "hosts": [
-    "NEWYORK.dmevals.local"
-   ],
-   "first": "2020-05-02T08:04:25+00:00",
-   "last": "2020-05-02T08:04:25+00:00",
-   "process_images": {
-    "C:\\Windows\\System32\\lsass.exe": 1
-   },
-   "image_names": [
-    "lsass.exe"
-   ],
-   "techniques": [
-    "T1201"
-   ],
-   "rule_families": {
-    "sigma:12ba6a38-adb3-4d6b-91ba-a7fb248e3199": 1
-   }
-  },
-  {
-   "group_id": "corr-group::56b37879a63a067362b4a0d5018ebfad3f992254fd2ff8889e8eeb54cb6e1ed9",
-   "anchor_observation_id": "sysmon:UTICA.dmevals.local:1000880",
-   "evidence": 1,
-   "observations": 1,
-   "hosts": [
-    "UTICA.dmevals.local"
-   ],
-   "first": "2020-05-02T08:14:17.937000+00:00",
-   "last": "2020-05-02T08:14:17.937000+00:00",
-   "process_images": {
-    "C:\\Windows\\System32\\rundll32.exe": 1
-   },
-   "image_names": [
-    "rundll32.exe"
-   ],
-   "techniques": [
-    "T1059.001"
-   ],
-   "rule_families": {
-    "sigma:58cb02d5-78ce-4692-b3e1-dce850aae41a": 1
-   }
-  },
-  {
-   "group_id": "corr-group::cbc7b3c8f4a58644b3d636c00e0829725106058c8f737e52e65c5c3ba3239ecd",
-   "anchor_observation_id": "sysmon:SCRANTON.dmevals.local:294209",
-   "evidence": 1,
-   "observations": 1,
-   "hosts": [
-    "SCRANTON.dmevals.local"
-   ],
-   "first": "2020-05-02T07:50:54.297000+00:00",
-   "last": "2020-05-02T07:50:54.297000+00:00",
-   "process_images": {
-    "C:\\windows\\system32\\svchost.exe": 1
-   },
-   "image_names": [
-    "svchost.exe"
-   ],
-   "techniques": [
-    "T1490"
-   ],
-   "rule_families": {
-    "sigma:d223b46b-5621-4037-88fe-fda32eead684": 1
-   }
-  },
-  {
-   "group_id": "corr-group::cf9286476f3cf68cc5e2d9e08b7da888b83cefd5d617525286e6ae27d48fb786",
-   "anchor_observation_id": "sysmon:UTICA.dmevals.local:884175",
-   "evidence": 1,
-   "observations": 1,
-   "hosts": [
-    "UTICA.dmevals.local"
-   ],
-   "first": "2020-05-02T08:02:26.192000+00:00",
-   "last": "2020-05-02T08:02:26.192000+00:00",
-   "process_images": {
-    "C:\\windows\\system32\\svchost.exe": 1
-   },
-   "image_names": [
-    "svchost.exe"
-   ],
-   "techniques": [
-    "T1490"
-   ],
-   "rule_families": {
-    "sigma:d223b46b-5621-4037-88fe-fda32eead684": 1
-   }
-  },
-  {
-   "group_id": "corr-group::e19ffc1d3cd9968613e6aa8ed22deda0a9f4e056c5faf6fa3c410730ccd87db1",
+   "group_id": "corr-group::12666b6e56abdc1128401fad1971094a997054b5c1321df4a15c7d876e31f6be",
    "anchor_observation_id": "sysmon:UTICA.dmevals.local:944543",
    "evidence": 1,
    "observations": 1,
@@ -596,7 +435,76 @@
    }
   },
   {
-   "group_id": "corr-group::fae0242d23ab2ac7b866abdadb3971f2a9a40b034417c76020330d80b6a5051d",
+   "group_id": "corr-group::1354ff29aacc054787dc7996a75457a321b058a318914883fd0d589ffa336f8a",
+   "anchor_observation_id": "sysmon:SCRANTON.dmevals.local:294209",
+   "evidence": 1,
+   "observations": 1,
+   "hosts": [
+    "SCRANTON.dmevals.local"
+   ],
+   "first": "2020-05-02T07:50:54.297000+00:00",
+   "last": "2020-05-02T07:50:54.297000+00:00",
+   "process_images": {
+    "C:\\windows\\system32\\svchost.exe": 1
+   },
+   "image_names": [
+    "svchost.exe"
+   ],
+   "techniques": [
+    "T1490"
+   ],
+   "rule_families": {
+    "sigma:d223b46b-5621-4037-88fe-fda32eead684": 1
+   }
+  },
+  {
+   "group_id": "corr-group::1c0f381674c859dc6aff28cbd0d1494babffc47efd4878de844f6d6f3abcf5fd",
+   "anchor_observation_id": "sysmon:UTICA.dmevals.local:944437",
+   "evidence": 1,
+   "observations": 1,
+   "hosts": [
+    "UTICA.dmevals.local"
+   ],
+   "first": "2020-05-02T08:10:05.244000+00:00",
+   "last": "2020-05-02T08:10:05.244000+00:00",
+   "process_images": {
+    "C:\\Windows\\System32\\rundll32.exe": 1
+   },
+   "image_names": [
+    "rundll32.exe"
+   ],
+   "techniques": [
+    "T1048.003"
+   ],
+   "rule_families": {
+    "sigma:2dbd9d3d-9e27-42a8-b8df-f13825c6c3d5": 1
+   }
+  },
+  {
+   "group_id": "corr-group::26d5dec3c8511dc676042dab0eb7f988d8c47eec58912f23b2568419e14c2cee",
+   "anchor_observation_id": "sysmon:UTICA.dmevals.local:1000880",
+   "evidence": 1,
+   "observations": 1,
+   "hosts": [
+    "UTICA.dmevals.local"
+   ],
+   "first": "2020-05-02T08:14:17.937000+00:00",
+   "last": "2020-05-02T08:14:17.937000+00:00",
+   "process_images": {
+    "C:\\Windows\\System32\\rundll32.exe": 1
+   },
+   "image_names": [
+    "rundll32.exe"
+   ],
+   "techniques": [
+    "T1059.001"
+   ],
+   "rule_families": {
+    "sigma:58cb02d5-78ce-4692-b3e1-dce850aae41a": 1
+   }
+  },
+  {
+   "group_id": "corr-group::5196528dc1933cdfaa1e13c0fa953025a70ae792f748d1477d499b96e1722925",
    "anchor_observation_id": "sysmon:UTICA.dmevals.local:932845",
    "evidence": 1,
    "observations": 1,
@@ -616,6 +524,98 @@
    ],
    "rule_families": {
     "sigma:e2e01011-5910-4267-9c3b-4149ed5479cf": 1
+   }
+  },
+  {
+   "group_id": "corr-group::720e9ebb27ef2950d704420d92ca98d074f8307824a6c666bc11dd70b8228bb0",
+   "anchor_observation_id": "sysmon:UTICA.dmevals.local:884175",
+   "evidence": 1,
+   "observations": 1,
+   "hosts": [
+    "UTICA.dmevals.local"
+   ],
+   "first": "2020-05-02T08:02:26.192000+00:00",
+   "last": "2020-05-02T08:02:26.192000+00:00",
+   "process_images": {
+    "C:\\windows\\system32\\svchost.exe": 1
+   },
+   "image_names": [
+    "svchost.exe"
+   ],
+   "techniques": [
+    "T1490"
+   ],
+   "rule_families": {
+    "sigma:d223b46b-5621-4037-88fe-fda32eead684": 1
+   }
+  },
+  {
+   "group_id": "corr-group::8e01a74e6d7945a1923a2ee88a1d23c7ab5097c4a3c9cb390e409b0b78801cda",
+   "anchor_observation_id": "sysmon:UTICA.dmevals.local:958833",
+   "evidence": 1,
+   "observations": 1,
+   "hosts": [
+    "UTICA.dmevals.local"
+   ],
+   "first": "2020-05-02T08:12:44.634000+00:00",
+   "last": "2020-05-02T08:12:44.634000+00:00",
+   "process_images": {
+    "C:\\Windows\\System32\\netsh.exe": 1
+   },
+   "image_names": [
+    "netsh.exe"
+   ],
+   "techniques": [
+    "T1040"
+   ],
+   "rule_families": {
+    "sigma:d3c3861d-c504-4c77-ba55-224ba82d0118": 1
+   }
+  },
+  {
+   "group_id": "corr-group::bb86536a89a605cdf4a0ff42778f1748300160fe2c149a2050975bd459606674",
+   "anchor_observation_id": "windows_security:NEWYORK.dmevals.local:201065",
+   "evidence": 1,
+   "observations": 1,
+   "hosts": [
+    "NEWYORK.dmevals.local"
+   ],
+   "first": "2020-05-02T08:04:25+00:00",
+   "last": "2020-05-02T08:04:25+00:00",
+   "process_images": {
+    "C:\\Windows\\System32\\lsass.exe": 1
+   },
+   "image_names": [
+    "lsass.exe"
+   ],
+   "techniques": [
+    "T1201"
+   ],
+   "rule_families": {
+    "sigma:12ba6a38-adb3-4d6b-91ba-a7fb248e3199": 1
+   }
+  },
+  {
+   "group_id": "corr-group::c1b60ddcb906d2effedc57a543ad258fa84fe19a4d2bc5cd9d32297eddd4fdff",
+   "anchor_observation_id": "sysmon:NEWYORK.dmevals.local:318662",
+   "evidence": 1,
+   "observations": 1,
+   "hosts": [
+    "NEWYORK.dmevals.local"
+   ],
+   "first": "2020-05-02T08:04:25.678000+00:00",
+   "last": "2020-05-02T08:04:25.678000+00:00",
+   "process_images": {
+    "C:\\windows\\system32\\svchost.exe": 1
+   },
+   "image_names": [
+    "svchost.exe"
+   ],
+   "techniques": [
+    "T1490"
+   ],
+   "rule_families": {
+    "sigma:d223b46b-5621-4037-88fe-fda32eead684": 1
    }
   }
  ]

@@ -239,7 +239,7 @@ def test_http_get_observation_success(running_server: tuple[str, FakeElasticClie
     status, body = _http_get(base_url, "/observations/o1")
     assert status == 200
     assert body["observation_id"] == "o1"
-    assert body["host"] == {"id": "h1", "name": "host-1", "ip": []}
+    assert body["host"] == {"id": "h1", "name": "host-1", "ip": [], "os_type": None}
 
 
 def test_http_get_evidence_success(running_server: tuple[str, FakeElasticClient]) -> None:

@@ -82,7 +82,7 @@
   {
    "unit_id": "v2-apt3-empire-u04",
    "anchor_scenario_ids": [
-    "windows_security:HFDC01.shire.com:11688005"
+    "windows_security:HFDC01.shire.com:11687882"
    ],
    "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: lsass.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
   },
@@ -96,245 +96,245 @@
   {
    "unit_id": "v2-apt3-empire-u06",
    "anchor_scenario_ids": [
-    "windows_security:HFDC01.shire.com:11687191"
+    "windows_security:HFDC01.shire.com:11682774"
    ],
    "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: lsass.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
   },
   {
    "unit_id": "v2-apt3-empire-u07",
    "anchor_scenario_ids": [
-    "windows_security:HFDC01.shire.com:11682799"
+    "windows_security:HFDC01.shire.com:11683539"
    ],
    "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: lsass.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
   },
   {
    "unit_id": "v2-apt3-empire-u08",
    "anchor_scenario_ids": [
-    "windows_security:HFDC01.shire.com:11683533"
+    "windows_security:HFDC01.shire.com:11682806"
    ],
    "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: lsass.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
   },
   {
    "unit_id": "v2-apt3-empire-u09",
    "anchor_scenario_ids": [
-    "windows_security:HFDC01.shire.com:11687187"
+    "windows_security:HFDC01.shire.com:11682699"
    ],
    "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: lsass.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
   },
   {
    "unit_id": "v2-apt3-empire-u10",
    "anchor_scenario_ids": [
-    "windows_security:HFDC01.shire.com:11687203"
+    "windows_security:HFDC01.shire.com:11687207"
    ],
    "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: lsass.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
   },
   {
    "unit_id": "v2-apt3-empire-u11",
    "anchor_scenario_ids": [
-    "windows_security:HFDC01.shire.com:11688009"
+    "windows_security:HFDC01.shire.com:11682804"
    ],
    "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: lsass.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
   },
   {
    "unit_id": "v2-apt3-empire-u12",
    "anchor_scenario_ids": [
-    "windows_security:HFDC01.shire.com:11687189"
+    "windows_security:HFDC01.shire.com:11687201"
    ],
    "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: lsass.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
   },
   {
    "unit_id": "v2-apt3-empire-u13",
    "anchor_scenario_ids": [
-    "windows_security:HFDC01.shire.com:11687209"
+    "windows_security:HFDC01.shire.com:11687213"
    ],
    "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: lsass.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
   },
   {
    "unit_id": "v2-apt3-empire-u14",
    "anchor_scenario_ids": [
-    "windows_security:HFDC01.shire.com:11682765"
+    "windows_security:HFDC01.shire.com:11682691"
    ],
    "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: lsass.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
   },
   {
    "unit_id": "v2-apt3-empire-u15",
    "anchor_scenario_ids": [
-    "windows_security:HFDC01.shire.com:11687980"
+    "windows_security:HFDC01.shire.com:11688005"
    ],
    "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: lsass.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
   },
   {
    "unit_id": "v2-apt3-empire-u16",
    "anchor_scenario_ids": [
-    "windows_security:HFDC01.shire.com:11688001"
+    "windows_security:HFDC01.shire.com:11687187"
    ],
    "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: lsass.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
   },
   {
    "unit_id": "v2-apt3-empire-u17",
    "anchor_scenario_ids": [
-    "windows_security:HFDC01.shire.com:11687880"
+    "windows_security:HFDC01.shire.com:11687203"
    ],
    "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: lsass.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
   },
   {
    "unit_id": "v2-apt3-empire-u18",
    "anchor_scenario_ids": [
-    "windows_security:HFDC01.shire.com:11687197"
+    "windows_security:HFDC01.shire.com:11682773"
    ],
    "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: lsass.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
   },
   {
    "unit_id": "v2-apt3-empire-u19",
    "anchor_scenario_ids": [
-    "windows_security:HFDC01.shire.com:11682860"
+    "windows_security:HFDC01.shire.com:11683537"
    ],
    "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: lsass.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
   },
   {
    "unit_id": "v2-apt3-empire-u20",
    "anchor_scenario_ids": [
-    "windows_security:HFDC01.shire.com:11687878"
+    "windows_security:HFDC01.shire.com:11683544"
    ],
    "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: lsass.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
   },
   {
    "unit_id": "v2-apt3-empire-u21",
    "anchor_scenario_ids": [
-    "windows_security:HFDC01.shire.com:11682859"
+    "windows_security:HFDC01.shire.com:11682764"
    ],
    "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: lsass.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
   },
   {
    "unit_id": "v2-apt3-empire-u22",
    "anchor_scenario_ids": [
-    "windows_security:HFDC01.shire.com:11682699"
+    "windows_security:HFDC01.shire.com:11683533"
    ],
    "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: lsass.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
   },
   {
    "unit_id": "v2-apt3-empire-u23",
    "anchor_scenario_ids": [
-    "windows_security:HFDC01.shire.com:11682691"
+    "windows_security:HFDC01.shire.com:11683535"
    ],
    "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: lsass.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
   },
   {
    "unit_id": "v2-apt3-empire-u24",
    "anchor_scenario_ids": [
-    "windows_security:HFDC01.shire.com:11680897"
+    "windows_security:HFDC01.shire.com:11687197"
    ],
    "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: lsass.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
   },
   {
    "unit_id": "v2-apt3-empire-u25",
    "anchor_scenario_ids": [
-    "windows_security:HFDC01.shire.com:11682798"
+    "windows_security:HFDC01.shire.com:11687980"
    ],
    "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: lsass.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
   },
   {
    "unit_id": "v2-apt3-empire-u26",
    "anchor_scenario_ids": [
-    "windows_security:HFDC01.shire.com:11683537"
+    "windows_security:HFDC01.shire.com:11682860"
    ],
    "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: lsass.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
   },
   {
    "unit_id": "v2-apt3-empire-u27",
    "anchor_scenario_ids": [
-    "windows_security:HFDC01.shire.com:11687882"
+    "windows_security:HFDC01.shire.com:11683543"
    ],
    "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: lsass.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
   },
   {
    "unit_id": "v2-apt3-empire-u28",
    "anchor_scenario_ids": [
-    "windows_security:HFDC01.shire.com:11687213"
+    "windows_security:HFDC01.shire.com:11683541"
    ],
    "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: lsass.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
   },
   {
    "unit_id": "v2-apt3-empire-u29",
    "anchor_scenario_ids": [
-    "windows_security:HFDC01.shire.com:11687971"
+    "windows_security:HFDC01.shire.com:11687880"
    ],
    "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: lsass.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
   },
   {
    "unit_id": "v2-apt3-empire-u30",
    "anchor_scenario_ids": [
-    "windows_security:HFDC01.shire.com:11687195"
+    "windows_security:HFDC01.shire.com:11687878"
    ],
    "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: lsass.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
   },
   {
    "unit_id": "v2-apt3-empire-u31",
    "anchor_scenario_ids": [
-    "windows_security:HFDC01.shire.com:11682775"
+    "windows_security:HFDC01.shire.com:11682695"
    ],
    "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: lsass.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
   },
   {
    "unit_id": "v2-apt3-empire-u32",
    "anchor_scenario_ids": [
-    "windows_security:HFDC01.shire.com:11687217"
+    "windows_security:HFDC01.shire.com:11688001"
    ],
    "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: lsass.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
   },
   {
    "unit_id": "v2-apt3-empire-u33",
    "anchor_scenario_ids": [
-    "windows_security:HFDC01.shire.com:11682800"
+    "windows_security:HFDC01.shire.com:11682780"
    ],
    "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: lsass.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
   },
   {
    "unit_id": "v2-apt3-empire-u34",
    "anchor_scenario_ids": [
-    "windows_security:HFDC01.shire.com:11683532"
+    "windows_security:HFDC01.shire.com:11682799"
    ],
    "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: lsass.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
   },
   {
    "unit_id": "v2-apt3-empire-u35",
    "anchor_scenario_ids": [
-    "windows_security:HFDC01.shire.com:11687201"
+    "windows_security:HFDC01.shire.com:11687215"
    ],
    "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: lsass.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
   },
   {
    "unit_id": "v2-apt3-empire-u36",
    "anchor_scenario_ids": [
-    "windows_security:HFDC01.shire.com:11682781"
+    "windows_security:HFDC01.shire.com:11687217"
    ],
    "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: lsass.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
   },
   {
    "unit_id": "v2-apt3-empire-u37",
    "anchor_scenario_ids": [
-    "windows_security:HFDC01.shire.com:11682763"
+    "windows_security:HFDC01.shire.com:11687874"
    ],
    "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: lsass.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
   },
   {
    "unit_id": "v2-apt3-empire-u38",
    "anchor_scenario_ids": [
-    "windows_security:HFDC01.shire.com:11683518"
+    "windows_security:HFDC01.shire.com:11687191"
    ],
-   "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: none recorded); not identifiable as the emulated activity \u2014 excluded, not guessed."
+   "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: lsass.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
   },
   {
    "unit_id": "v2-apt3-empire-u39",
    "anchor_scenario_ids": [
-    "windows_security:HFDC01.shire.com:11682806"
+    "windows_security:HFDC01.shire.com:11682763"
    ],
    "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: lsass.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
   },
   {
    "unit_id": "v2-apt3-empire-u40",
    "anchor_scenario_ids": [
-    "windows_security:HFDC01.shire.com:11682780"
+    "windows_security:HFDC01.shire.com:11682779"
    ],
    "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: lsass.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
   },
@@ -348,161 +348,161 @@
   {
    "unit_id": "v2-apt3-empire-u42",
    "anchor_scenario_ids": [
-    "windows_security:HFDC01.shire.com:11688013"
+    "windows_security:HFDC01.shire.com:11687189"
    ],
    "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: lsass.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
   },
   {
    "unit_id": "v2-apt3-empire-u43",
    "anchor_scenario_ids": [
-    "windows_security:HFDC01.shire.com:11687207"
+    "windows_security:HFDC01.shire.com:11688011"
    ],
    "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: lsass.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
   },
   {
    "unit_id": "v2-apt3-empire-u44",
    "anchor_scenario_ids": [
-    "windows_security:HFDC01.shire.com:11688007"
+    "windows_security:HFDC01.shire.com:11687971"
    ],
    "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: lsass.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
   },
   {
    "unit_id": "v2-apt3-empire-u45",
    "anchor_scenario_ids": [
-    "windows_security:HFDC01.shire.com:11683544"
+    "windows_security:HFDC01.shire.com:11683518"
    ],
-   "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: lsass.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
+   "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: none recorded); not identifiable as the emulated activity \u2014 excluded, not guessed."
   },
   {
    "unit_id": "v2-apt3-empire-u46",
    "anchor_scenario_ids": [
-    "windows_security:HFDC01.shire.com:11682773"
+    "windows_security:HFDC01.shire.com:11682775"
    ],
    "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: lsass.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
   },
   {
    "unit_id": "v2-apt3-empire-u47",
    "anchor_scenario_ids": [
-    "windows_security:HFDC01.shire.com:11687317"
+    "windows_security:HFDC01.shire.com:11687978"
    ],
    "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: lsass.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
   },
   {
    "unit_id": "v2-apt3-empire-u48",
    "anchor_scenario_ids": [
-    "windows_security:HFDC01.shire.com:11688011"
+    "windows_security:HFDC01.shire.com:11682858"
    ],
    "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: lsass.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
   },
   {
    "unit_id": "v2-apt3-empire-u49",
    "anchor_scenario_ids": [
-    "windows_security:HFDC01.shire.com:11683539"
+    "windows_security:HFDC01.shire.com:11680897"
    ],
    "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: lsass.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
   },
   {
    "unit_id": "v2-apt3-empire-u50",
    "anchor_scenario_ids": [
-    "windows_security:HFDC01.shire.com:11683541"
+    "windows_security:HFDC01.shire.com:11682781"
    ],
    "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: lsass.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
   },
   {
    "unit_id": "v2-apt3-empire-u51",
    "anchor_scenario_ids": [
-    "windows_security:HFDC01.shire.com:11682805"
+    "windows_security:HFDC01.shire.com:11682798"
    ],
    "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: lsass.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
   },
   {
    "unit_id": "v2-apt3-empire-u52",
    "anchor_scenario_ids": [
-    "windows_security:HFDC01.shire.com:11687978"
+    "windows_security:HFDC01.shire.com:11687317"
    ],
    "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: lsass.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
   },
   {
    "unit_id": "v2-apt3-empire-u53",
    "anchor_scenario_ids": [
-    "windows_security:HFDC01.shire.com:11683543"
+    "windows_security:HFDC01.shire.com:11680892"
    ],
    "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: lsass.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
   },
   {
    "unit_id": "v2-apt3-empire-u54",
    "anchor_scenario_ids": [
-    "windows_security:HFDC01.shire.com:11682764"
+    "windows_security:HFDC01.shire.com:11688007"
    ],
    "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: lsass.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
   },
   {
    "unit_id": "v2-apt3-empire-u55",
    "anchor_scenario_ids": [
-    "windows_security:HFDC01.shire.com:11687215"
+    "windows_security:HFDC01.shire.com:11682697"
    ],
    "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: lsass.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
   },
   {
    "unit_id": "v2-apt3-empire-u56",
    "anchor_scenario_ids": [
-    "windows_security:HFDC01.shire.com:11680892"
+    "windows_security:HFDC01.shire.com:11682805"
    ],
    "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: lsass.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
   },
   {
    "unit_id": "v2-apt3-empire-u57",
    "anchor_scenario_ids": [
-    "windows_security:HFDC01.shire.com:11682858"
+    "windows_security:HFDC01.shire.com:11687195"
    ],
    "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: lsass.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
   },
   {
    "unit_id": "v2-apt3-empire-u58",
    "anchor_scenario_ids": [
-    "windows_security:HFDC01.shire.com:11687874"
+    "windows_security:HFDC01.shire.com:11688009"
    ],
    "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: lsass.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
   },
   {
    "unit_id": "v2-apt3-empire-u59",
    "anchor_scenario_ids": [
-    "windows_security:HFDC01.shire.com:11682774"
+    "windows_security:HFDC01.shire.com:11688013"
    ],
    "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: lsass.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
   },
   {
    "unit_id": "v2-apt3-empire-u60",
    "anchor_scenario_ids": [
-    "windows_security:HFDC01.shire.com:11683535"
+    "windows_security:HFDC01.shire.com:11682765"
    ],
    "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: lsass.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
   },
   {
    "unit_id": "v2-apt3-empire-u61",
    "anchor_scenario_ids": [
-    "windows_security:HFDC01.shire.com:11682695"
+    "windows_security:HFDC01.shire.com:11682859"
    ],
    "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: lsass.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
   },
   {
    "unit_id": "v2-apt3-empire-u62",
    "anchor_scenario_ids": [
-    "windows_security:HFDC01.shire.com:11682779"
+    "windows_security:HFDC01.shire.com:11687209"
    ],
    "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: lsass.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
   },
   {
    "unit_id": "v2-apt3-empire-u63",
    "anchor_scenario_ids": [
-    "windows_security:HFDC01.shire.com:11682804"
+    "windows_security:HFDC01.shire.com:11682800"
    ],
    "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: lsass.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
   },
   {
    "unit_id": "v2-apt3-empire-u64",
    "anchor_scenario_ids": [
-    "windows_security:HFDC01.shire.com:11682697"
+    "windows_security:HFDC01.shire.com:11683532"
    ],
    "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: lsass.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
   }

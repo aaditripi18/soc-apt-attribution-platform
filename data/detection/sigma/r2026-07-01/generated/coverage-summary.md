@@ -9,9 +9,9 @@ Counts only — not detection-efficacy or attribution-accuracy claims.
 
 | Status | All active techniques | Used by ≥ 1 active Group |
 |---|---|---|
-| `covered` | 267 | 225 |
-| `telemetry_gap` | 101 | 69 |
-| `translation_gap` | 5 | 5 |
+| `covered` | 283 | 238 |
+| `telemetry_gap` | 84 | 56 |
+| `translation_gap` | 6 | 5 |
 | `not_endpoint_observable` | 160 | 91 |
 | `no_sigma_rule` | 164 | 108 |
 | **total** | **697** | **498** |
@@ -21,25 +21,25 @@ Counts only — not detection-efficacy or attribution-accuracy claims.
 - Active Groups: 176
 - With 0 covered techniques: 8 (of which 4 have no active techniques in ATT&CK at all, so no detection work can cover them)
 - With ≥ 2 covered (necessary, not sufficient, to attribute): 163
-- With ≥ 5 covered: 143
-- With ≥ 10 covered: 108
+- With ≥ 5 covered: 144
+- With ≥ 10 covered: 109
 
 ## Top 15 telemetry blockers (upper bounds; v1 = Windows endpoint)
 
 | Blocker | v1 scope | Techniques | Group-used techniques | Groups touched |
 |---|---|---|---|---|
-| `logsource:linux/process_creation` | no | 16 | 13 | 29 |
-| `logsource:aws/cloudtrail` | no | 13 | 10 | 66 |
-| `logsource:linux/auditd` | no | 13 | 9 | 29 |
-| `logsource:macos/process_creation` | no | 13 | 9 | 82 |
-| `logsource:azure/activitylogs` | no | 8 | 5 | 14 |
+| `logsource:aws/cloudtrail` | no | 12 | 9 | 59 |
+| `logsource:macos/process_creation` | no | 11 | 7 | 78 |
+| `logsource:linux/auditd` | no | 8 | 5 | 16 |
 | `logsource:/proxy` | no | 7 | 5 | 43 |
 | `logsource:github/audit` | no | 5 | 5 | 15 |
 | `logsource:okta/okta` | no | 5 | 5 | 13 |
-| `logsource:cisco/aaa` | no | 8 | 4 | 7 |
 | `logsource:azure/auditlogs` | no | 5 | 4 | 12 |
 | `logsource:bitbucket/audit` | no | 5 | 4 | 16 |
+| `logsource:cisco/aaa` | no | 7 | 3 | 7 |
+| `logsource:azure/activitylogs` | no | 6 | 3 | 12 |
 | `field:DestinationHostname` | yes | 4 | 3 | 35 |
 | `logsource:azure/signinlogs` | no | 3 | 3 | 12 |
-| `logsource:linux/` | no | 3 | 3 | 12 |
 | `logsource:m365/audit` | no | 3 | 3 | 48 |
+| `logsource:m365/threat_management` | no | 3 | 3 | 17 |
+| `logsource:opencanary/application` | no | 3 | 3 | 28 |

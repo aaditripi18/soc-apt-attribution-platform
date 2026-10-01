@@ -54,16 +54,16 @@
   {
    "unit_id": "v2-lsass-06-outflank-dumpert-u02",
    "anchor_scenario_ids": [
-    "sysmon:MKT01.pandalab.com:sha256:abdae7e01523ac10cbbe5e416ee6fbdfa57bd06c9613dc54319a95b99cc5d565"
+    "sysmon:MKT01.pandalab.com:sha256:c1de7da8b6892da3872832b6b0a930692bfd3c07097787f93be7b9687d2e486a"
    ],
-   "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: whoami.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
+   "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: msedge.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
   },
   {
    "unit_id": "v2-lsass-06-outflank-dumpert-u03",
    "anchor_scenario_ids": [
-    "sysmon:MKT01.pandalab.com:sha256:c1de7da8b6892da3872832b6b0a930692bfd3c07097787f93be7b9687d2e486a"
+    "sysmon:MKT01.pandalab.com:sha256:abdae7e01523ac10cbbe5e416ee6fbdfa57bd06c9613dc54319a95b99cc5d565"
    ],
-   "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: msedge.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
+   "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: whoami.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
   }
  ]
 }

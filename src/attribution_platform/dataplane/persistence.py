@@ -338,7 +338,9 @@ def _time_span_from_dict(d: Mapping[str, Any] | None) -> TimeSpan | None:
 def _host_ref_from_dict(d: Mapping[str, Any] | None) -> HostRef | None:
     if d is None:
         return None
-    return HostRef(id=d.get("id"), name=d.get("name"), ip=tuple(d.get("ip", ())))
+    return HostRef(
+        id=d.get("id"), name=d.get("name"), ip=tuple(d.get("ip", ())), os_type=d.get("os_type")
+    )
 
 
 def _user_ref_from_dict(d: Mapping[str, Any] | None) -> UserRef | None:

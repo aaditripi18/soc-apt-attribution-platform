@@ -109,7 +109,9 @@ def _import(
 
 
 def _conditions(result: SigmaImportResult) -> list[list[tuple[Any, ...]]]:
-    """Non-scope conditions of each generated rule, as comparable tuples."""
+    """Non-scope conditions of each generated rule, as comparable tuples
+    (the logsource scope and the ADR-0010 OS scope on ``host.os_type`` are
+    left out; ``test_rules_carry_the_os_scope`` pins the latter)."""
     out = []
     for rule in result.pack["rules"]:
         out.append(
@@ -122,7 +124,7 @@ def _conditions(result: SigmaImportResult) -> list[list[tuple[Any, ...]]]:
                     c.get("negate", False),
                 )
                 for c in rule["conditions"]
-                if c["operator"] != "has_element"
+                if c["operator"] != "has_element" and c["field_path"] != "host.os_type"
             ]
         )
     return out
@@ -177,6 +179,36 @@ def test_scope_conditions_come_from_logsource(tmp_path: Path, knowledge: AttackK
         if c["operator"] == "has_element"
     ]
     assert scope == [("event.category", "process"), ("event.type", "start")]
+
+
+def test_rules_carry_the_os_scope(tmp_path: Path, knowledge: AttackKnowledge) -> None:
+    """ADR-0010 D2: a Windows rule refuses Linux / macOS hosts; a Linux rule
+    requires a Linux host. Placed after the indexed logsource scope."""
+    result = _import(
+        tmp_path,
+        knowledge,
+        _rule_yaml("sel:\n  Image|endswith: '\\a.exe'\ncondition: sel"),
+        _rule_yaml(
+            "sel:\n  Image|endswith: '/bash'\ncondition: sel",
+            rule_id="22222222-2222-2222-2222-222222222222",
+            product="linux",
+        ),
+    )
+    by_family = {r["rule_family"]: r["conditions"] for r in result.pack["rules"]}
+    os_scope = {
+        family: [
+            (c["value"], c.get("negate", False))
+            for c in conditions
+            if c["field_path"] == "host.os_type"
+        ]
+        for family, conditions in by_family.items()
+    }
+    assert sorted(os_scope.values()) == [
+        [("linux", False)],
+        [("linux", True), ("macos", True)],
+    ]
+    for conditions in by_family.values():
+        assert conditions[0]["field_path"] == "event.category"  # the index key stays first
 
 
 def test_cased_modifier_is_case_sensitive(tmp_path: Path, knowledge: AttackKnowledge) -> None:
@@ -388,7 +420,7 @@ def test_unsupported_logsource_is_telemetry_gap(tmp_path: Path, knowledge: Attac
         _rule_yaml(
             "sel:\n  Image|endswith: '/bash'\ncondition: sel",
             rule_id="22222222-2222-2222-2222-222222222222",
-            product="linux",
+            product="macos",  # linux/process_creation is supported since ADR-0010
         ),
     )
     assert result.pack["rules"] == []

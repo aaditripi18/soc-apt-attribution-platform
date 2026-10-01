@@ -205,7 +205,7 @@ class PowerShellSourceAdapter:
                 event=EventMetadata(
                     kind="event", category=("process",), type=("info",), action=action
                 ),
-                host=HostRef(name=computer),
+                host=HostRef(name=computer, os_type="windows"),
                 user=UserRef(id=user_sid) if isinstance(user_sid, str) and user_sid else None,
                 process=ProcessRef(pid=pid_value) if pid_value is not None else None,
                 powershell=powershell,

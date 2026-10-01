@@ -393,11 +393,15 @@ class ProcessRef:
 @dataclass(frozen=True)
 class HostRef:
     """A host/asset identity (all optional). ``ip`` is a tuple (a host may
-    have several addresses); order is preserved as supplied."""
+    have several addresses); order is preserved as supplied. ``os_type`` is
+    ECS ``host.os.type`` (``windows`` / ``linux`` / ``macos``), set by an
+    adapter only from a fact it reads (the channel or provider proves the
+    platform); detection content is scoped by it (ADR-0010 D2)."""
 
     id: str | None = None
     name: str | None = None
     ip: tuple[str, ...] = ()
+    os_type: str | None = None
 
 
 @dataclass(frozen=True)
