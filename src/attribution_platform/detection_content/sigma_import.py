@@ -84,6 +84,10 @@ DEFAULT_DNF_BOUND = 64
 #: ADR-0007 D2 Core++ scope.
 ELIGIBLE_STATUSES = frozenset({"experimental", "test", "stable"})
 ELIGIBLE_LEVELS = frozenset({"medium", "high", "critical"})
+#: ADR-0007 Amendment A: the enrich tier — generic rules below the Core++ level,
+#: imported only from a separately pinned archive, whose Evidence is LOW quality
+#: and never forms a unit on its own (ADR-0003 Amendment H).
+ENRICH_LEVELS = frozenset({"low", "informational"})
 
 _TECHNIQUE_TYPE = "attack-pattern"
 _SOFTWARE_TYPES = frozenset({"malware", "tool"})
@@ -174,9 +178,12 @@ class RuleOutcome:
     ignored_group_tags: tuple[str, ...] = ()
     ignored_software_tags: tuple[str, ...] = ()
     dropped_tags: tuple[str, ...] = ()
+    content_tier: str = "core"
 
     def to_json(self, release_tag: str) -> dict[str, Any]:
+        enrich = {"content_tier": "enrich"} if self.content_tier == "enrich" else {}
         return {
+            **enrich,
             "sigma_id": self.sigma_id,
             "title": self.title,
             "path": self.path,
@@ -412,6 +419,7 @@ def _import_rule(
     release_tag: str,
     bound: int,
     software_review: Mapping[tuple[str, str], bool],
+    tier: str = "core",
 ) -> tuple[RuleOutcome, list[dict[str, Any]]]:
     sigma_id = str(rule.id)
     product, category = _logsource_key(rule)
@@ -424,7 +432,9 @@ def _import_rule(
     )
     status = str(rule.status.name).lower() if rule.status else ""
     level = str(rule.level.name).lower() if rule.level else ""
-    if status not in ELIGIBLE_STATUSES or level not in ELIGIBLE_LEVELS:
+    outcome.content_tier = tier
+    levels = ENRICH_LEVELS if tier == "enrich" else ELIGIBLE_LEVELS
+    if status not in ELIGIBLE_STATUSES or level not in levels:
         outcome.rejection = RejectionReason.EXCLUDED_BY_POLICY
         outcome.reasons = {f"policy:{status or 'none'}/{level or 'none'}": 1}
         return outcome, []
@@ -540,6 +550,7 @@ def _import_rule(
                 "rule_source": f"sigma:{sigma_id}",
                 # Conjuncts of one Sigma rule are one detection (engine dedups).
                 "rule_family": f"sigma:{sigma_id}",
+                **({"evidence_quality": "low"} if tier == "enrich" else {}),
             }
         )
     outcome.conjuncts_imported = len(rules)
@@ -561,36 +572,26 @@ def _import_rule(
 # ===========================================================================
 
 
-def import_sigma_archive(
-    archive_path: Path,
+def _import_archive(
+    path: Path,
+    expected_sha256: str,
+    tier: str,
     *,
+    index: _AttackIndex,
     knowledge: AttackKnowledge,
     release_tag: str,
-    archive_sha256: str,
-    dnf_bound: int = DEFAULT_DNF_BOUND,
-    software_tag_review: Path | None = None,
-) -> SigmaImportResult:
-    """Import every rule in the pinned archive. Returns the rule pack (loadable
-    by ``detection.load_rule_pack``) and the import report. Pure function of
-    its inputs; nothing is written here.
-
-    ``software_tag_review`` is the reviewed decision file for Sigma software
-    tags (ADR-0007 D3 amendment). Without it, **no** software tag becomes a
-    mapping — the safe default."""
-    software_review = (
-        load_software_tag_review(software_tag_review) if software_tag_review is not None else {}
-    )
-    if dnf_bound < 1:
-        raise SigmaImportError("dnf_bound must be >= 1")
-    raw = archive_path.read_bytes()
+    dnf_bound: int,
+    software_review: Mapping[tuple[str, str], bool],
+    outcomes: list[RuleOutcome],
+    rules: list[dict[str, Any]],
+) -> None:
+    """Import every rule of one pinned archive as ``tier`` (``core`` / ``enrich``)."""
+    raw = path.read_bytes()
     actual = hashlib.sha256(raw).hexdigest()
-    if actual != archive_sha256:
+    if actual != expected_sha256:
         raise SigmaImportError(
-            f"{archive_path}: SHA-256 {actual} does not match the pinned {archive_sha256}"
+            f"{path}: SHA-256 {actual} does not match the pinned {expected_sha256}"
         )
-    index = _AttackIndex(knowledge)
-    outcomes: list[RuleOutcome] = []
-    rules: list[dict[str, Any]] = []
     with zipfile.ZipFile(io.BytesIO(raw)) as archive:
         members = sorted(n for n in archive.namelist() if n.endswith((".yml", ".yaml")))
         for member in members:
@@ -607,6 +608,7 @@ def import_sigma_archive(
                         status=RuleStatus.REJECTED,
                         reasons={f"parse_error:{type(exc).__name__}": 1},
                         rejection=RejectionReason.TRANSLATION_GAP,
+                        content_tier=tier,
                     )
                 )
                 continue
@@ -618,9 +620,68 @@ def import_sigma_archive(
                 release_tag=release_tag,
                 bound=dnf_bound,
                 software_review=software_review,
+                tier=tier,
             )
             outcomes.append(outcome)
             rules.extend(rule_dicts)
+
+
+def import_sigma_archive(
+    archive_path: Path,
+    *,
+    knowledge: AttackKnowledge,
+    release_tag: str,
+    archive_sha256: str,
+    dnf_bound: int = DEFAULT_DNF_BOUND,
+    software_tag_review: Path | None = None,
+    enrich_archive: Path | None = None,
+    enrich_archive_sha256: str | None = None,
+) -> SigmaImportResult:
+    """Import every rule in the pinned archive. Returns the rule pack (loadable
+    by ``detection.load_rule_pack``) and the import report. Pure function of
+    its inputs; nothing is written here.
+
+    ``software_tag_review`` is the reviewed decision file for Sigma software
+    tags (ADR-0007 D3 amendment). Without it, **no** software tag becomes a
+    mapping — the safe default.
+
+    ``enrich_archive`` (ADR-0007 Amendment A) is a second, separately pinned
+    archive of generic rules below the Core++ level: only its ``low`` /
+    ``informational`` rules are imported, as the enrich tier (Evidence quality
+    ``low``); a rule id present in both archives is refused."""
+    software_review = (
+        load_software_tag_review(software_tag_review) if software_tag_review is not None else {}
+    )
+    if dnf_bound < 1:
+        raise SigmaImportError("dnf_bound must be >= 1")
+    sources: list[tuple[Path, str, str]] = [(archive_path, archive_sha256, "core")]
+    if (enrich_archive is None) != (enrich_archive_sha256 is None):
+        raise SigmaImportError("enrich_archive and enrich_archive_sha256 go together")
+    if enrich_archive is not None and enrich_archive_sha256 is not None:
+        sources.append((enrich_archive, enrich_archive_sha256, "enrich"))
+    index = _AttackIndex(knowledge)
+    outcomes: list[RuleOutcome] = []
+    rules: list[dict[str, Any]] = []
+    for source_path, source_sha256, tier in sources:
+        _import_archive(
+            source_path,
+            source_sha256,
+            tier,
+            index=index,
+            knowledge=knowledge,
+            release_tag=release_tag,
+            dnf_bound=dnf_bound,
+            software_review=software_review,
+            outcomes=outcomes,
+            rules=rules,
+        )
+    seen_ids: dict[str, str] = {}
+    for outcome in outcomes:
+        if outcome.sigma_id.startswith("unparsed:"):
+            continue
+        if outcome.sigma_id in seen_ids and seen_ids[outcome.sigma_id] != outcome.content_tier:
+            raise SigmaImportError(f"rule {outcome.sigma_id} appears in both archives")
+        seen_ids[outcome.sigma_id] = outcome.content_tier
 
     outcomes.sort(key=lambda o: (o.sigma_id, o.path))
     rules.sort(key=lambda r: str(r["rule_id"]))
@@ -646,6 +707,11 @@ def import_sigma_archive(
         ),
         "license": "Sigma rules: Detection Rule License (DRL) 1.1 — see NOTICE.md",
     }
+    if enrich_archive is not None:  # absent otherwise: the core-only pack stays byte-identical
+        provenance["enrich_archive"] = {
+            "file": enrich_archive.name,
+            "sha256": enrich_archive_sha256,
+        }
     pack = {
         "pack_id": f"sigma-{release_tag}-{archive_path.stem}",
         "description": (

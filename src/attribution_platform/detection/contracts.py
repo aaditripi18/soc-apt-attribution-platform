@@ -57,7 +57,7 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 
 from attribution_platform.detection.errors import DetectionError
-from attribution_platform.domain import AttackRef, EvidenceType, TimeSpan
+from attribution_platform.domain import AttackRef, EvidenceQuality, EvidenceType, TimeSpan
 from attribution_platform.extraction.detection_match import RuleRef
 
 #: Version of THIS DetectionResult contract (our schema).
@@ -264,6 +264,9 @@ class DetectionResult:
     evidence_type: EvidenceType = EvidenceType.BEHAVIORAL
     time_span: TimeSpan | None = None
     rule_pack_content_hash: str | None = None
+    #: ADR-0007 Amendment A: the firing rule's Evidence quality (``LOW`` for the
+    #: enrich tier), passed to every Evidence derived from this detection.
+    evidence_quality: EvidenceQuality | None = None
     schema_version: str = field(default=DETECTION_RESULT_SCHEMA_VERSION)
 
     def __post_init__(self) -> None:

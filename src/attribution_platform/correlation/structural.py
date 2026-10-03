@@ -119,7 +119,7 @@ from attribution_platform.correlation.process_identity import (
     resolve_process_identities,
 )
 from attribution_platform.correlation.timing import is_confidently_before
-from attribution_platform.domain import Evidence, Observation
+from attribution_platform.domain import Evidence, EvidenceQuality, Observation
 
 #: Default ``CorrelationProvenance.method``/``method_version`` this engine
 #: stamps onto every link/group it produces, unless the caller overrides
@@ -129,7 +129,7 @@ from attribution_platform.domain import Evidence, Observation
 STRUCTURAL_CORRELATION_METHOD = "structural-correlation"
 #: 1.1: + PROCESS_INTERACTION; 1.2: resolved pid-only identities (Amendment B)
 #: and chain materialization of equivalence links (Amendment C).
-STRUCTURAL_CORRELATION_METHOD_VERSION = "1.4"  # 1.4: SAME_AUDIT_EVENT (Amendment G)
+STRUCTURAL_CORRELATION_METHOD_VERSION = "1.5"  # 1.5: enrich-only Evidence (Amendment H)
 
 #: The (host-scope, entity-id) key process-entity dimensions are compared
 #: on. ``host_scope`` is itself ``(kind, value)`` where ``kind`` is
@@ -718,6 +718,13 @@ def correlate_structurally(
         links_by_component.setdefault(component_of[link.anchor_a], []).append(link)
     groups: list[CorrelationGroup] = []
     for position, member_ids in enumerate(components):
+        # ADR-0003 Amendment H: enrich-tier Evidence (quality LOW) joins a unit
+        # only through a structural link to other Evidence; a component made
+        # of it alone is not a unit.
+        if all(
+            nodes_by_evidence_id[eid].evidence.quality is EvidenceQuality.LOW for eid in member_ids
+        ):
+            continue
         component_links = tuple(links_by_component.get(position, ()))
         member_observation_ids = tuple(
             sorted({nodes_by_evidence_id[eid].observation.observation_id for eid in member_ids})

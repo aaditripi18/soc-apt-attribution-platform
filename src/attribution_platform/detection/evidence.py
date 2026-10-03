@@ -114,6 +114,7 @@ def derive_evidence_from_detection(
             knowledge=knowledge,
             time_span=detection.time_span,
             method_content_hash=detection.rule_pack_content_hash,
+            quality=detection.evidence_quality,
         )
         return (evidence,)
 
@@ -131,6 +132,7 @@ def derive_evidence_from_detection(
             knowledge=knowledge,
             time_span=detection.time_span,
             method_content_hash=detection.rule_pack_content_hash,
+            quality=detection.evidence_quality,
         )
         evidences.append(evidence)
     return tuple(evidences)

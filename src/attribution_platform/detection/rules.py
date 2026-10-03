@@ -96,6 +96,7 @@ from attribution_platform.detection.errors import DetectionError
 from attribution_platform.domain import (
     AttackRef,
     DomainContractError,
+    EvidenceQuality,
     EvidenceType,
     Observation,
     TimeSpan,
@@ -334,6 +335,7 @@ class DetectionRule:
     rule_source: str = "platform-rules"
     content_hash: str | None = None
     rule_family: str | None = None
+    evidence_quality: EvidenceQuality | None = None
 
     def __post_init__(self) -> None:
         if not isinstance(self.rule_ref, RuleRef):
@@ -369,6 +371,10 @@ class DetectionRule:
             )
         if not isinstance(self.rule_source, str) or not self.rule_source.strip():
             raise DetectionError("DetectionRule.rule_source must be a non-empty string")
+        if self.evidence_quality is not None and not isinstance(
+            self.evidence_quality, EvidenceQuality
+        ):
+            raise DetectionError("DetectionRule.evidence_quality must be an EvidenceQuality")
         if self.content_hash is not None and (
             not isinstance(self.content_hash, str) or not self.content_hash.strip()
         ):
@@ -431,6 +437,7 @@ class DetectionRule:
             evidence_type=self.evidence_type,
             time_span=time_span,
             rule_pack_content_hash=self.content_hash,
+            evidence_quality=self.evidence_quality,
         )
 
 
@@ -748,6 +755,18 @@ def _rule_from_dict(
     if rule_family is not None and (not isinstance(rule_family, str) or not rule_family.strip()):
         raise DetectionError(f"{where}: 'rule_family' must be a non-empty string if present")
 
+    # ADR-0007 Amendment A: an enrich-tier rule's Evidence is marked LOW quality
+    # (ADR-0003 Amendment H: it never forms a unit on its own).
+    evidence_quality_raw = d.get("evidence_quality")
+    try:
+        evidence_quality = (
+            EvidenceQuality(evidence_quality_raw) if evidence_quality_raw is not None else None
+        )
+    except ValueError as exc:
+        raise DetectionError(
+            f"{where}: invalid evidence_quality {evidence_quality_raw!r}: {exc}"
+        ) from exc
+
     return DetectionRule(
         rule_ref=rule_ref,
         conditions=conditions,
@@ -756,6 +775,7 @@ def _rule_from_dict(
         rule_source=rule_source,
         content_hash=content_hash,
         rule_family=rule_family,
+        evidence_quality=evidence_quality,
     )
 
 

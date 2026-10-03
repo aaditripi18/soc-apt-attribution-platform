@@ -908,3 +908,22 @@ ordering edge (as for `PROCESS_INTERACTION`), so no order is invented between si
 **Not decided here.** Linking an audit event to a Sysmon for Linux process instance needs pid resolution
 (Amendment B, with the B3 principal rule over the audit `uid`) on a host that records both sources; the available
 real data never has both on one host, so that path is exercised by tests only when such data exists.
+
+## Amendment H (2026-10-03) — Enrich-tier Evidence joins units but never forms one
+
+**Status:** Accepted (owner decision on ADR-0007 Amendment A).
+
+**Decision.** Evidence from the enrich content tier (generic Sigma rules below the Core++ level, ADR-0007
+Amendment A) carries `quality = LOW`. A connected component whose Evidence is **all** `LOW` forms no
+`CorrelationGroup`; `LOW` Evidence inside a component that also holds other Evidence is a full member. Linking is
+unchanged — only structural links join Evidence — so low-level Evidence enters a unit exactly when it is the same
+process instance, a direct parent/child, an injection, or the same audit event as other evidence. Structural
+method 1.4 → 1.5. (`EvidenceQuality` already existed on Evidence; nothing consumed it before.)
+
+**Why.** Measured on the real recordings (ADR-0007 Amendment A): admitting low-level rules as ordinary Evidence
+turned a hard-negative LSASS run from 6 units into 92, almost all from one benign rule; the useful low-level
+evidence lands inside the attack's own process chains. With this rule, across the 11 real Windows recordings the
+hard-negative runs keep their unit counts exactly (LSASS 01: 6 → 6, 3 of 92 low-level Evidence joining existing
+units), while on the attack recordings 97 % of low-level Evidence joins attack units (APT29 day 1: 685 of 703;
+Empire: 222 of 227). APT29 day 1 goes from 65 to 60 units: low-level Evidence on bridging processes structurally
+connects chains that previously had no detected link — genuine instance / lineage facts, not a new rule.
