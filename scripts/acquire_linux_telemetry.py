@@ -1,5 +1,8 @@
 #!/usr/bin/env python3
-"""Acquire pinned, real Linux telemetry from ``splunk/attack_data`` (ADR-0010 D6).
+"""Acquire pinned, real telemetry from ``splunk/attack_data`` (ADR-0010 D6, ADR-0011).
+
+``--set linux`` (default) or ``--set cloud`` selects an owner-approved file set,
+each with its own ``selection.txt`` and ``manifest.json``.
 
 Runs only when a human invokes it — never at application runtime. The owner
 approved this download on 2026-10-01: the reviewed file list is
@@ -33,10 +36,21 @@ from pathlib import Path, PurePosixPath
 REPO_ROOT = Path(__file__).resolve().parents[1]
 REPO = "splunk/attack_data"
 COMMIT = "a28608b53aa3d8222052e8f3ada59e2d9a4adfff"
-SAMPLES = REPO_ROOT / "data" / "telemetry-samples" / "splunk-attack-data"
-SELECTION = SAMPLES / "selection.txt"
-MANIFEST = SAMPLES / "manifest.json"
 CACHE = REPO_ROOT / "data" / "cache" / "splunk-attack-data"
+#: Reviewed, owner-approved file sets: --set NAME -> (samples dir, description, approval).
+SETS = {
+    "linux": (
+        REPO_ROOT / "data" / "telemetry-samples" / "splunk-attack-data",
+        "splunk/attack_data (Linux: Sysmon for Linux and auditd)",
+        "owner, 2026-10-01 (ADR-0010 D6)",
+    ),
+    "cloud": (
+        REPO_ROOT / "data" / "telemetry-samples" / "splunk-attack-data-cloud",
+        "splunk/attack_data (cloud: AWS CloudTrail, Azure / Entra ID, Office 365, Okta, "
+        "GitHub, GCP / Google Workspace, Kubernetes)",
+        "owner, 2026-10-06 (ADR-0011)",
+    ),
+}
 _POINTER = re.compile(
     r"\Aversion https://git-lfs\.github\.com/spec/v1\noid sha256:([0-9a-f]{64})\nsize (\d+)\n\Z"
 )
@@ -57,8 +71,20 @@ def _safe(path: str) -> str:
     return path
 
 
-def _verify() -> int:
-    manifest = json.loads(MANIFEST.read_text(encoding="utf-8"))
+def _git_blob_id(content: bytes) -> str:
+    return hashlib.sha1(b"blob %d\0" % len(content) + content).hexdigest()  # noqa: S324 - git's id
+
+
+def _tree_blob_ids() -> dict[str, str]:
+    """``path -> git blob id`` for every file at the pinned commit."""
+    tree = json.loads(_get(f"https://api.github.com/repos/{REPO}/git/trees/{COMMIT}?recursive=1"))
+    if tree.get("truncated"):
+        raise RuntimeError("the tree listing is truncated — refusing to verify against it")
+    return {e["path"]: e["sha"] for e in tree["tree"] if e["type"] == "blob"}
+
+
+def _verify(manifest_path: Path) -> int:
+    manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
     for entry in manifest["files"]:
         digest = hashlib.sha256((REPO_ROOT / entry["cache_path"]).read_bytes()).hexdigest()
         if digest != entry["sha256"]:
@@ -69,26 +95,37 @@ def _verify() -> int:
 
 
 def main(argv: list[str]) -> int:
+    name = argv[argv.index("--set") + 1] if "--set" in argv else "linux"
+    samples, description, approval = SETS[name]
+    selection, manifest_path = samples / "selection.txt", samples / "manifest.json"
     if "--verify" in argv:
-        return _verify()
-    paths = [_safe(line.strip()) for line in SELECTION.read_text(encoding="utf-8").splitlines()]
+        return _verify(manifest_path)
+    paths = [
+        _safe(line.strip())
+        for line in selection.read_text(encoding="utf-8").splitlines()
+        if line.strip()
+    ]
+    blob_ids = _tree_blob_ids()
     raw = f"https://raw.githubusercontent.com/{REPO}/{COMMIT}/"
     media = f"https://media.githubusercontent.com/media/{REPO}/{COMMIT}/"
     entries = []
     for path in paths:
         dest = CACHE / path.removeprefix("datasets/")
-        if path.endswith(".yml"):
+        stored = _get(raw + path)  # the git blob: an LFS pointer, or the file itself
+        if _git_blob_id(stored) != blob_ids.get(path):
+            raise RuntimeError(f"{path}: content does not match the commit's git blob — refusing")
+        match = _POINTER.match(stored.decode("utf-8", errors="replace"))
+        if match is None:  # a plain git file (descriptors, small logs): verified above
             url, expected_sha, expected_size = raw + path, None, None
+            if not (dest.is_file() and dest.read_bytes() == stored):
+                stored.decode("utf-8")  # text only
+                dest.parent.mkdir(parents=True, exist_ok=True)
+                dest.write_bytes(stored)
+                print(f"fetched {path}")
         else:
-            pointer = _get(raw + path).decode("ascii")
-            match = _POINTER.match(pointer)
-            if match is None:
-                raise RuntimeError(f"{path}: not a Git LFS pointer at {COMMIT}")
             url, expected_sha, expected_size = media + path, match[1], int(match[2])
-        if not (
-            dest.is_file()
-            and expected_sha is not None
-            and hashlib.sha256(dest.read_bytes()).hexdigest() == expected_sha
+        if expected_sha is not None and not (
+            dest.is_file() and hashlib.sha256(dest.read_bytes()).hexdigest() == expected_sha
         ):
             data = _get(url)
             if expected_size is not None and len(data) != expected_size:
@@ -113,7 +150,7 @@ def main(argv: list[str]) -> int:
             }
         )
     manifest = {
-        "source": "splunk/attack_data (Linux: Sysmon for Linux and auditd)",
+        "source": description,
         "license": "Apache-2.0",
         "license_url": f"https://github.com/{REPO}/blob/{COMMIT}/LICENSE",
         "source_repository": REPO,
@@ -121,13 +158,13 @@ def main(argv: list[str]) -> int:
         "retrieved_at_utc": dt.datetime.now(dt.UTC).strftime("%Y-%m-%dT%H:%M:%SZ"),
         "method": "scripts/acquire_linux_telemetry.py (commit-pinned; LFS content verified "
         "against each pointer's SHA-256 and size)",
-        "approval": "owner, 2026-10-01 (ADR-0010 D6)",
+        "approval": approval,
         "cache": "data/cache/splunk-attack-data/ (git-ignored; rebuild with this script)",
         "files": entries,
     }
-    MANIFEST.write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8", newline="\n")
+    manifest_path.write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8", newline="\n")
     total = sum(int(e["size_bytes"]) for e in entries)  # type: ignore[call-overload]
-    print(f"{len(entries)} files, {total:,} bytes; manifest {MANIFEST.relative_to(REPO_ROOT)}")
+    print(f"{len(entries)} files, {total:,} bytes; manifest {manifest_path.relative_to(REPO_ROOT)}")
     return 0
 
 
