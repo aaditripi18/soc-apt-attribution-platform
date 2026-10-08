@@ -6,9 +6,10 @@ they exist only in the repository tree. This script, run only by a human (the
 owner approved the download on 2026-10-03), takes them from the tree at the
 commit the pinned release tag points to:
 
-- **selection:** every ``rules/windows/**.yml`` and ``rules/linux/**.yml`` at that
-  commit that is not in the vendored Core++ archive; each must be ``low`` or
-  ``informational`` level, else the script refuses (nothing is guessed);
+- **selection:** every ``rules/windows/**.yml``, ``rules/linux/**.yml`` and
+  ``rules/macos/**.yml`` (added 2026-10-08, ADR-0014) at that commit that is not
+  in the vendored Core++ archive; each must be ``low`` or ``informational``
+  level, else the script refuses (nothing is guessed);
 - **verification:** each file's content must hash to the git blob id the tree
   lists for it (``sha1("blob <size>\\0" + content)``) — the commit's own
   statement of the content;
@@ -41,7 +42,7 @@ CORE = OUT_DIR / "sigma_core++.zip"
 ARCHIVE = OUT_DIR / "sigma_enrich_low.zip"
 MANIFEST = OUT_DIR / "manifest-sigma_enrich_low.json"
 ENRICH_LEVELS = {"low", "informational"}
-PRODUCT_DIRS = ("rules/windows/", "rules/linux/")
+PRODUCT_DIRS = ("rules/windows/", "rules/linux/", "rules/macos/")
 _FIXED_TIME = (1980, 1, 1, 0, 0, 0)
 
 
@@ -113,7 +114,9 @@ def main() -> int:
             "repository": REPO,
             "release_tag": TAG,
             "commit": commit,
-            "selection": "rules/windows and rules/linux at the commit, minus Core++ members",
+            "selection": (
+                "rules/windows, rules/linux and rules/macos at the commit, minus Core++ members"
+            ),
         },
         "artifact": {
             "filename": ARCHIVE.name,

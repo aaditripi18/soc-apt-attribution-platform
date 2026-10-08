@@ -5,17 +5,17 @@
     "repository": "SigmaHQ/sigma",
     "release_tag": "r2026-07-01",
     "commit": "552f3fee420ef232a8e5790c4fae591847e32347",
-    "selection": "rules/windows and rules/linux at the commit, minus Core++ members"
+    "selection": "rules/windows, rules/linux and rules/macos at the commit, minus Core++ members"
   },
   "artifact": {
     "filename": "sigma_enrich_low.zip",
     "relative_path": "data/detection/sigma/r2026-07-01/sigma_enrich_low.zip",
-    "size_bytes": 188728,
-    "sha256": "20d01c02ef88b2a88b50ab4a402c5227afe5aab7d52a6756dfb4cb2184fe1bce",
-    "members": 224
+    "size_bytes": 204642,
+    "sha256": "27bba0091094c511736447053d9d5ce306e5cf7100791d88b6c6118e142205dd",
+    "members": 245
   },
   "acquisition": {
-    "retrieved_at_utc": "2026-10-03T14:14:36Z",
+    "retrieved_at_utc": "2026-10-08T17:28:46Z",
     "method": "scripts/acquire_sigma_enrich_rules.py (each file verified against the commit's git blob id; reproducible zip)",
     "approval": "owner, 2026-10-03"
   },
@@ -450,6 +450,153 @@
       "sha256": "a7b4fa79d7eff4112be7a51b0bb1ce697a63561393e550c7b545fefae9b7b0c9",
       "size_bytes": 950,
       "level": "informational"
+    },
+    {
+      "path": "rules/macos/file_event/file_event_macos_susp_startup_item_created.yml",
+      "git_blob_id": "9a9e0ec58ea95a5b8964866bcfe8733585e589ea",
+      "sha256": "5320c34abc7ffcd93d0092f8e6cd92025f6cf21e1ea80aa62ded774337d9df6c",
+      "size_bytes": 1360,
+      "level": "low"
+    },
+    {
+      "path": "rules/macos/process_creation/proc_creation_macos_base64_decode.yml",
+      "git_blob_id": "0f911b3c22ca82d5f20223dea40f2d80ecc1ea8f",
+      "sha256": "795592ecb08c30766043d1e218078060c9b7c1d802ad5cc14b3e423b610ef34e",
+      "size_bytes": 677,
+      "level": "low"
+    },
+    {
+      "path": "rules/macos/process_creation/proc_creation_macos_create_account.yml",
+      "git_blob_id": "b6c287a97d20c6529f58cc422ddffe4bfdf5898e",
+      "sha256": "dead2ec096d7681f144d8c25839f743dbe3b4622466debc978b92791378fb693",
+      "size_bytes": 964,
+      "level": "low"
+    },
+    {
+      "path": "rules/macos/process_creation/proc_creation_macos_csrutil_status.yml",
+      "git_blob_id": "f3b61dfce3b6d56544bd761dbcd8f3ac39ac1829",
+      "sha256": "b80e7e9dab586a599a11a5f1c9099a8a4a70f8e10bbd28e7e96aeab7c6f3548a",
+      "size_bytes": 1008,
+      "level": "low"
+    },
+    {
+      "path": "rules/macos/process_creation/proc_creation_macos_file_and_directory_discovery.yml",
+      "git_blob_id": "0594770a53648a6ccf0ed100a8ef6ecb98b0a9d9",
+      "sha256": "3d53ad198421099f3e315ea5974aa7e5b6e32f4fdb3cf17ab9df90d85499694a",
+      "size_bytes": 1050,
+      "level": "informational"
+    },
+    {
+      "path": "rules/macos/process_creation/proc_creation_macos_gui_input_capture.yml",
+      "git_blob_id": "de4987432ff78a007eee11c0998d5f39508da97a",
+      "sha256": "f88a09d358f44d106e39197b58b8ffc6f3428680e2c9d4babc7dbc20ca17d01c",
+      "size_bytes": 1195,
+      "level": "low"
+    },
+    {
+      "path": "rules/macos/process_creation/proc_creation_macos_jamf_usage.yml",
+      "git_blob_id": "6f407c9e7e8ff6b245e459ae1c2fbf5e73ed1ccf",
+      "sha256": "ac638efb16c3ff17f2edad48e00d1528b78cae1777d7358d14d26e9f574e9d3c",
+      "size_bytes": 1137,
+      "level": "low"
+    },
+    {
+      "path": "rules/macos/process_creation/proc_creation_macos_local_account.yml",
+      "git_blob_id": "b9b4b48634afc01e6be68e020defba9b012b9552",
+      "sha256": "7436fe41d03dbec681b4b247e6bc50d01b46591fc95ce265ed5def932976029c",
+      "size_bytes": 2063,
+      "level": "low"
+    },
+    {
+      "path": "rules/macos/process_creation/proc_creation_macos_local_groups.yml",
+      "git_blob_id": "a25fadffc4488f12575fab42d523c6696c9f0131",
+      "sha256": "a9259a4460cb4566969a83c0735f6f8722c1e50099b93eccc2c0ea9a6a216421",
+      "size_bytes": 969,
+      "level": "informational"
+    },
+    {
+      "path": "rules/macos/process_creation/proc_creation_macos_network_service_scanning.yml",
+      "git_blob_id": "7a0c704e8f8fbae9b3bf83ef9112ab7ced71dab6",
+      "sha256": "73b23229cafc5f7c7b88b7e2d7fd2f29dfa7e05e63289ff74276224bf9647ae5",
+      "size_bytes": 842,
+      "level": "low"
+    },
+    {
+      "path": "rules/macos/process_creation/proc_creation_macos_network_sniffing.yml",
+      "git_blob_id": "c4b0eccc68b09a1f03a17a4412ea149c99f8ec68",
+      "sha256": "09b3eb3fcb5668baa944d87ed1610c954d25601078bf01f0da021e359c4fc4e3",
+      "size_bytes": 890,
+      "level": "informational"
+    },
+    {
+      "path": "rules/macos/process_creation/proc_creation_macos_remote_access_tools_teamviewer_incoming_connection.yml",
+      "git_blob_id": "e0b101e136108de52a57be3f66c2fe280b5e2dca",
+      "sha256": "5b8689beaf3ab3a1d37e94266f418a110fe61d61bab027a37bcd402b8d4ccdae",
+      "size_bytes": 1058,
+      "level": "low"
+    },
+    {
+      "path": "rules/macos/process_creation/proc_creation_macos_remote_system_discovery.yml",
+      "git_blob_id": "19f8bf9e9cf887c0954ab37bbe566bf8c3fc74e2",
+      "sha256": "abf5443667fd7fe7c332791ef360c142cd75424bdb20d15d80cdb7ac92a1e28c",
+      "size_bytes": 1331,
+      "level": "informational"
+    },
+    {
+      "path": "rules/macos/process_creation/proc_creation_macos_screencapture.yml",
+      "git_blob_id": "572ad6d4ad547ab397f31d6abe6cf7b4580f3203",
+      "sha256": "f981cd894c5300a5d2a665121c1d206c0aad383b34b7054b04a56345c2c1bb73",
+      "size_bytes": 791,
+      "level": "low"
+    },
+    {
+      "path": "rules/macos/process_creation/proc_creation_macos_space_after_filename.yml",
+      "git_blob_id": "e105779b0152667223f85fcc4f8e8a7ea1d74358",
+      "sha256": "0f5b47bd69f7b6348f4440542ebde9cfadeefdb78a701a08b033d7ff331c3118",
+      "size_bytes": 748,
+      "level": "low"
+    },
+    {
+      "path": "rules/macos/process_creation/proc_creation_macos_split_file_into_pieces.yml",
+      "git_blob_id": "feec9c3f46e042de31903168b6e490a6fc902ce7",
+      "sha256": "df5ed43f04f3ddea9e24fb659428add34c744552ea65d6c274cc599974f2c123",
+      "size_bytes": 672,
+      "level": "low"
+    },
+    {
+      "path": "rules/macos/process_creation/proc_creation_macos_susp_system_network_discovery.yml",
+      "git_blob_id": "85806dcdeab9fe9d966421f144c0bff1a184742b",
+      "sha256": "dc1b4572e8955ba693819bd393791ba07464ab5fc256543118f3e7f3c69cca34",
+      "size_bytes": 1036,
+      "level": "informational"
+    },
+    {
+      "path": "rules/macos/process_creation/proc_creation_macos_sysadminctl_enable_guest_account.yml",
+      "git_blob_id": "011c853a495fd77bf1e44a25e4e082f929600fd7",
+      "sha256": "86e01ae89d859893a6b1a628a32e60bac9aeb2ae5671404bbf1cd20403f4d0aa",
+      "size_bytes": 779,
+      "level": "low"
+    },
+    {
+      "path": "rules/macos/process_creation/proc_creation_macos_system_network_connections_discovery.yml",
+      "git_blob_id": "f5de845711c0abb4bf2b2b3f33c96b642f59e306",
+      "sha256": "d61dd9d937e25ca53c7b2b7fd6fc0b128f101685fe093a0ef1924da1ba30d405",
+      "size_bytes": 766,
+      "level": "informational"
+    },
+    {
+      "path": "rules/macos/process_creation/proc_creation_macos_system_shutdown_reboot.yml",
+      "git_blob_id": "407bdd4e19f149389be7163a979193419c9378f3",
+      "sha256": "aca52ed858c72e16f96a0501baa7f07b14221520df84c76fc5f64ed35f857807",
+      "size_bytes": 768,
+      "level": "informational"
+    },
+    {
+      "path": "rules/macos/process_creation/proc_creation_macos_xattr_gatekeeper_bypass.yml",
+      "git_blob_id": "14ed4ac49a85a0f99863db19593456517788f02f",
+      "sha256": "d23c6b4a3a3271d993bb851049f35c7946408445a9dcf914367856cd8ea6cd9c",
+      "size_bytes": 772,
+      "level": "low"
     },
     {
       "path": "rules/windows/builtin/application/msiinstaller/win_builtin_remove_application.yml",

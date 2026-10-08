@@ -6,7 +6,7 @@
   "rule_packs": [
    {
     "pack_id": "sigma-r2026-07-01-sigma_core++",
-    "content_hash": "c9fb02b5adc0e7bcea613fccdc0d81f493331174d8db2fe03a7e9189a40cbb9a"
+    "content_hash": "8b9e2cba85a166c003ebcabc110b2793cdeadfa89213316dd7ee1335c8399e09"
    }
   ],
   "sigma_import": {
@@ -15,12 +15,12 @@
    "sigma_archive": "sigma_core++.zip",
    "sigma_archive_sha256": "469d83e1d1bbdb4d7876466ff1a728550fae5a20115b91339d58d20e894e7477",
    "pysigma_version": "1.5.1",
-   "field_map_version": "sigma-field-map/13",
+   "field_map_version": "sigma-field-map/14",
    "attack_kb_version": "enterprise-attack-19.2",
    "dnf_bound": 64,
    "software_tag_review": {
     "file": "software-tag-review.json",
-    "sha256": "c49e8436f8b194abbee6c44d464a4ef1c93345744b10bd512ecb206ca53f3248",
+    "sha256": "30b59fce10d8b72c73819185c0aa032b058011f93ce3a9f44c96d23a80b82ffb",
     "accepted": [
      "1de68c67-af5c-4097-9c85-fe5578e09e67:attack.s0005",
      "259e5a6a-b8d2-4c38-86e2-26c5e651361d:attack.s0029",
@@ -41,7 +41,7 @@
    "license": "Sigma rules: Detection Rule License (DRL) 1.1 — see NOTICE.md",
    "enrich_archive": {
     "file": "sigma_enrich_low.zip",
-    "sha256": "20d01c02ef88b2a88b50ab4a402c5227afe5aab7d52a6756dfb4cb2184fe1bce"
+    "sha256": "27bba0091094c511736447053d9d5ce306e5cf7100791d88b6c6118e142205dd"
    }
   },
   "supported_platforms": [
@@ -52,7 +52,8 @@
    "Office 365",
    "Office Suite",
    "SaaS",
-   "Windows"
+   "Windows",
+   "macOS"
   ]
  },
  "notes": [
@@ -66,21 +67,21 @@
   "group_used_techniques": 498,
   "active_groups": 176,
   "techniques_by_status": {
-   "covered": 328,
-   "telemetry_gap": 50,
-   "translation_gap": 5,
-   "not_observable_on_supported_platforms": 103,
-   "no_sigma_rule": 211
+   "covered": 336,
+   "telemetry_gap": 44,
+   "translation_gap": 6,
+   "not_observable_on_supported_platforms": 92,
+   "no_sigma_rule": 219
   },
   "group_used_techniques_by_status": {
-   "covered": 273,
-   "telemetry_gap": 30,
-   "translation_gap": 4,
+   "covered": 276,
+   "telemetry_gap": 27,
+   "translation_gap": 5,
    "not_observable_on_supported_platforms": 68,
-   "no_sigma_rule": 123
+   "no_sigma_rule": 122
   },
   "groups_with_empty_technique_profile": 4,
-  "groups_with_zero_covered": 7,
+  "groups_with_zero_covered": 6,
   "groups_with_at_least_2_covered": 163,
   "groups_with_at_least_5_covered": 145,
   "groups_with_at_least_10_covered": 111
@@ -94,16 +95,9 @@
    "groups_touched_upper_bound": 43
   },
   {
-   "blocker": "logsource:macos/process_creation",
-   "supported_product": false,
-   "techniques_upper_bound": 8,
-   "group_used_techniques_upper_bound": 4,
-   "groups_touched_upper_bound": 37
-  },
-  {
    "blocker": "logsource:cisco/aaa",
    "supported_product": false,
-   "techniques_upper_bound": 7,
+   "techniques_upper_bound": 6,
    "group_used_techniques_upper_bound": 3,
    "groups_touched_upper_bound": 7
   },
@@ -241,13 +235,6 @@
    "groups_touched_upper_bound": 1
   },
   {
-   "blocker": "field:param1",
-   "supported_product": true,
-   "techniques_upper_bound": 1,
-   "group_used_techniques_upper_bound": 1,
-   "groups_touched_upper_bound": 8
-  },
-  {
    "blocker": "logsource:/dns",
    "supported_product": false,
    "techniques_upper_bound": 1,
@@ -309,6 +296,13 @@
    "techniques_upper_bound": 1,
    "group_used_techniques_upper_bound": 1,
    "groups_touched_upper_bound": 2
+  },
+  {
+   "blocker": "logsource:macos/file_event",
+   "supported_product": true,
+   "techniques_upper_bound": 2,
+   "group_used_techniques_upper_bound": 0,
+   "groups_touched_upper_bound": 0
   },
   {
    "blocker": "event_code:4741",
@@ -381,13 +375,6 @@
    "groups_touched_upper_bound": 0
   },
   {
-   "blocker": "logsource:macos/file_event",
-   "supported_product": false,
-   "techniques_upper_bound": 1,
-   "group_used_techniques_upper_bound": 0,
-   "groups_touched_upper_bound": 0
-  },
-  {
    "blocker": "logsource:windows/dns-server",
    "supported_product": true,
    "techniques_upper_bound": 1,
@@ -442,20 +429,15 @@
    "attack_id": "G0002",
    "name": "Moafee",
    "profile_techniques": 1,
-   "covered": 0,
+   "covered": 1,
    "by_status": {
-    "covered": 0,
-    "telemetry_gap": 1,
+    "covered": 1,
+    "telemetry_gap": 0,
     "translation_gap": 0,
     "not_observable_on_supported_platforms": 0,
     "no_sigma_rule": 0
    },
-   "uncovered": [
-    {
-     "attack_id": "T1027.001",
-     "status": "telemetry_gap"
-    }
-   ]
+   "uncovered": []
   },
   {
    "attack_id": "G0003",
@@ -899,10 +881,10 @@
    "attack_id": "G0016",
    "name": "APT29",
    "profile_techniques": 66,
-   "covered": 44,
+   "covered": 45,
    "by_status": {
-    "covered": 44,
-    "telemetry_gap": 7,
+    "covered": 45,
+    "telemetry_gap": 6,
     "translation_gap": 0,
     "not_observable_on_supported_platforms": 3,
     "no_sigma_rule": 12
@@ -911,10 +893,6 @@
     {
      "attack_id": "T1016.001",
      "status": "no_sigma_rule"
-    },
-    {
-     "attack_id": "T1027.001",
-     "status": "telemetry_gap"
     },
     {
      "attack_id": "T1027.006",
@@ -1745,19 +1723,15 @@
    "attack_id": "G0040",
    "name": "Patchwork",
    "profile_techniques": 41,
-   "covered": 34,
+   "covered": 35,
    "by_status": {
-    "covered": 34,
-    "telemetry_gap": 4,
+    "covered": 35,
+    "telemetry_gap": 3,
     "translation_gap": 0,
     "not_observable_on_supported_platforms": 2,
     "no_sigma_rule": 1
    },
    "uncovered": [
-    {
-     "attack_id": "T1027.001",
-     "status": "telemetry_gap"
-    },
     {
      "attack_id": "T1074.001",
      "status": "telemetry_gap"
@@ -2425,19 +2399,15 @@
    "attack_id": "G0060",
    "name": "BRONZE BUTLER",
    "profile_techniques": 40,
-   "covered": 35,
+   "covered": 36,
    "by_status": {
-    "covered": 35,
-    "telemetry_gap": 3,
+    "covered": 36,
+    "telemetry_gap": 2,
     "translation_gap": 0,
     "not_observable_on_supported_platforms": 0,
     "no_sigma_rule": 2
    },
    "uncovered": [
-    {
-     "attack_id": "T1027.001",
-     "status": "telemetry_gap"
-    },
     {
      "attack_id": "T1080",
      "status": "no_sigma_rule"
@@ -2550,19 +2520,15 @@
    "attack_id": "G0065",
    "name": "Leviathan",
    "profile_techniques": 50,
-   "covered": 31,
+   "covered": 32,
    "by_status": {
-    "covered": 31,
-    "telemetry_gap": 6,
+    "covered": 32,
+    "telemetry_gap": 5,
     "translation_gap": 0,
     "not_observable_on_supported_platforms": 9,
     "no_sigma_rule": 4
    },
    "uncovered": [
-    {
-     "attack_id": "T1027.001",
-     "status": "telemetry_gap"
-    },
     {
      "attack_id": "T1027.013",
      "status": "no_sigma_rule"
@@ -3000,14 +2966,14 @@
    "by_status": {
     "covered": 48,
     "telemetry_gap": 4,
-    "translation_gap": 0,
+    "translation_gap": 1,
     "not_observable_on_supported_platforms": 1,
-    "no_sigma_rule": 3
+    "no_sigma_rule": 2
    },
    "uncovered": [
     {
      "attack_id": "T1036.006",
-     "status": "no_sigma_rule"
+     "status": "translation_gap"
     },
     {
      "attack_id": "T1189",
@@ -3310,19 +3276,15 @@
    "attack_id": "G0094",
    "name": "Kimsuky",
    "profile_techniques": 130,
-   "covered": 81,
+   "covered": 82,
    "by_status": {
-    "covered": 81,
-    "telemetry_gap": 5,
+    "covered": 82,
+    "telemetry_gap": 4,
     "translation_gap": 2,
     "not_observable_on_supported_platforms": 21,
     "no_sigma_rule": 21
    },
    "uncovered": [
-    {
-     "attack_id": "T1027.001",
-     "status": "telemetry_gap"
-    },
     {
      "attack_id": "T1027.007",
      "status": "no_sigma_rule"
@@ -4294,19 +4256,15 @@
    "attack_id": "G0126",
    "name": "Higaisa",
    "profile_techniques": 28,
-   "covered": 20,
+   "covered": 21,
    "by_status": {
-    "covered": 20,
-    "telemetry_gap": 2,
+    "covered": 21,
+    "telemetry_gap": 1,
     "translation_gap": 1,
     "not_observable_on_supported_platforms": 0,
     "no_sigma_rule": 5
    },
    "uncovered": [
-    {
-     "attack_id": "T1027.001",
-     "status": "telemetry_gap"
-    },
     {
      "attack_id": "T1027.013",
      "status": "no_sigma_rule"
@@ -5931,19 +5889,15 @@
    "attack_id": "G1024",
    "name": "Akira",
    "profile_techniques": 17,
-   "covered": 14,
+   "covered": 15,
    "by_status": {
-    "covered": 14,
-    "telemetry_gap": 1,
+    "covered": 15,
+    "telemetry_gap": 0,
     "translation_gap": 0,
     "not_observable_on_supported_platforms": 0,
     "no_sigma_rule": 2
    },
    "uncovered": [
-    {
-     "attack_id": "T1027.001",
-     "status": "telemetry_gap"
-    },
     {
      "attack_id": "T1213.002",
      "status": "no_sigma_rule"
@@ -6841,10 +6795,10 @@
    "attack_id": "G1052",
    "name": "Contagious Interview",
    "profile_techniques": 54,
-   "covered": 27,
+   "covered": 29,
    "by_status": {
-    "covered": 27,
-    "telemetry_gap": 3,
+    "covered": 29,
+    "telemetry_gap": 1,
     "translation_gap": 0,
     "not_observable_on_supported_platforms": 14,
     "no_sigma_rule": 10
@@ -6875,16 +6829,8 @@
      "status": "no_sigma_rule"
     },
     {
-     "attack_id": "T1543.001",
-     "status": "telemetry_gap"
-    },
-    {
      "attack_id": "T1547.013",
      "status": "no_sigma_rule"
-    },
-    {
-     "attack_id": "T1555.001",
-     "status": "telemetry_gap"
     },
     {
      "attack_id": "T1566.003",
@@ -7325,7 +7271,8 @@
    "rejected_rules_blocked_by": [],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -7337,7 +7284,8 @@
    "rejected_rules_blocked_by": [],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -7349,7 +7297,8 @@
    "rejected_rules_blocked_by": [],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -7364,7 +7313,8 @@
    ],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -7380,7 +7330,8 @@
    ],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -7510,7 +7461,8 @@
    ],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -7535,7 +7487,8 @@
    "rejected_rules_blocked_by": [],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -7547,7 +7500,8 @@
    "rejected_rules_blocked_by": [],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -7559,7 +7513,8 @@
    "rejected_rules_blocked_by": [],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -7571,7 +7526,8 @@
    "rejected_rules_blocked_by": [],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -7583,7 +7539,8 @@
    "rejected_rules_blocked_by": [],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -7606,7 +7563,8 @@
    "rejected_rules_blocked_by": [],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -7616,11 +7574,13 @@
    "status": "covered",
    "rule_sources": 4,
    "rejected_rules_blocked_by": [
+    "field:ParentImage",
     "logsource:opencanary/application"
    ],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -7632,7 +7592,8 @@
    "rejected_rules_blocked_by": [],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -7644,7 +7605,8 @@
    "rejected_rules_blocked_by": [],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -7652,11 +7614,12 @@
    "attack_id": "T1018",
    "name": "Remote System Discovery",
    "status": "covered",
-   "rule_sources": 11,
+   "rule_sources": 12,
    "rejected_rules_blocked_by": [],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -7668,7 +7631,8 @@
    "rejected_rules_blocked_by": [],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -7694,7 +7658,8 @@
    "supported_platforms": [
     "IaaS",
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -7760,7 +7725,8 @@
     "logsource:windows/openssh"
    ],
    "supported_platforms": [
-    "Linux"
+    "Linux",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -7772,7 +7738,8 @@
    "rejected_rules_blocked_by": [],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -7825,7 +7792,8 @@
    "rejected_rules_blocked_by": [],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -7833,28 +7801,29 @@
    "attack_id": "T1027",
    "name": "Obfuscated Files or Information",
    "status": "covered",
-   "rule_sources": 45,
+   "rule_sources": 46,
    "rejected_rules_blocked_by": [
     "logsource:windows/system"
    ],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
   {
    "attack_id": "T1027.001",
    "name": "Binary Padding",
-   "status": "telemetry_gap",
-   "rule_sources": 0,
+   "status": "covered",
+   "rule_sources": 1,
    "rejected_rules_blocked_by": [
-    "field:param1",
-    "logsource:macos/process_creation"
+    "field:param1"
    ],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -7866,7 +7835,8 @@
    "rejected_rules_blocked_by": [],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -7878,7 +7848,8 @@
    "rejected_rules_blocked_by": [],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -7890,7 +7861,8 @@
    "rejected_rules_blocked_by": [],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -7902,7 +7874,8 @@
    "rejected_rules_blocked_by": [],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -7914,7 +7887,8 @@
    "rejected_rules_blocked_by": [],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -7937,7 +7911,8 @@
    "rejected_rules_blocked_by": [],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -7949,7 +7924,8 @@
    "rejected_rules_blocked_by": [],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -7961,7 +7937,8 @@
    "rejected_rules_blocked_by": [],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -7996,7 +7973,8 @@
    "rejected_rules_blocked_by": [],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -8008,7 +7986,8 @@
    "rejected_rules_blocked_by": [],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -8020,7 +7999,8 @@
    "rejected_rules_blocked_by": [],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -8032,7 +8012,8 @@
    "rejected_rules_blocked_by": [],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -8044,7 +8025,8 @@
    "rejected_rules_blocked_by": [],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -8056,7 +8038,8 @@
    "rejected_rules_blocked_by": [],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -8068,7 +8051,8 @@
    "rejected_rules_blocked_by": [],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -8076,11 +8060,12 @@
    "attack_id": "T1030",
    "name": "Data Transfer Size Limits",
    "status": "covered",
-   "rule_sources": 1,
+   "rule_sources": 2,
    "rejected_rules_blocked_by": [],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -8095,7 +8080,8 @@
    ],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -8111,7 +8097,8 @@
    "supported_platforms": [
     "Containers",
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -8122,7 +8109,8 @@
    "rule_sources": 0,
    "rejected_rules_blocked_by": [],
    "supported_platforms": [
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -8134,7 +8122,8 @@
    "rejected_rules_blocked_by": [],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -8142,14 +8131,14 @@
    "attack_id": "T1036.003",
    "name": "Rename Legitimate Utilities",
    "status": "covered",
-   "rule_sources": 17,
+   "rule_sources": 18,
    "rejected_rules_blocked_by": [
-    "logsource:macos/process_creation",
     "logsource:windows/ps_classic_start"
    ],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -8161,7 +8150,8 @@
    "rejected_rules_blocked_by": [],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -8176,18 +8166,20 @@
    "supported_platforms": [
     "Containers",
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
   {
    "attack_id": "T1036.006",
    "name": "Space after Filename",
-   "status": "no_sigma_rule",
+   "status": "translation_gap",
    "rule_sources": 0,
    "rejected_rules_blocked_by": [],
    "supported_platforms": [
-    "Linux"
+    "Linux",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -8210,7 +8202,8 @@
    "rejected_rules_blocked_by": [],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -8221,7 +8214,8 @@
    "rule_sources": 0,
    "rejected_rules_blocked_by": [],
    "supported_platforms": [
-    "Linux"
+    "Linux",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -8238,7 +8232,8 @@
     "Linux",
     "Office Suite",
     "SaaS",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -8261,7 +8256,8 @@
    "rejected_rules_blocked_by": [],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -8273,7 +8269,8 @@
    "rejected_rules_blocked_by": [],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -8291,10 +8288,12 @@
   {
    "attack_id": "T1037.002",
    "name": "Login Hook",
-   "status": "not_observable_on_supported_platforms",
+   "status": "no_sigma_rule",
    "rule_sources": 0,
    "rejected_rules_blocked_by": [],
-   "supported_platforms": [],
+   "supported_platforms": [
+    "macOS"
+   ],
    "has_data_component": true
   },
   {
@@ -8315,17 +8314,22 @@
    "rule_sources": 0,
    "rejected_rules_blocked_by": [],
    "supported_platforms": [
-    "Linux"
+    "Linux",
+    "macOS"
    ],
    "has_data_component": true
   },
   {
    "attack_id": "T1037.005",
    "name": "Startup Items",
-   "status": "not_observable_on_supported_platforms",
+   "status": "telemetry_gap",
    "rule_sources": 0,
-   "rejected_rules_blocked_by": [],
-   "supported_platforms": [],
+   "rejected_rules_blocked_by": [
+    "logsource:macos/file_event"
+   ],
+   "supported_platforms": [
+    "macOS"
+   ],
    "has_data_component": true
   },
   {
@@ -8336,7 +8340,8 @@
    "rejected_rules_blocked_by": [],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -8344,14 +8349,15 @@
    "attack_id": "T1040",
    "name": "Network Sniffing",
    "status": "covered",
-   "rule_sources": 7,
+   "rule_sources": 8,
    "rejected_rules_blocked_by": [
     "logsource:cisco/aaa"
    ],
    "supported_platforms": [
     "IaaS",
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -8367,7 +8373,8 @@
    ],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -8375,7 +8382,7 @@
    "attack_id": "T1046",
    "name": "Network Service Discovery",
    "status": "covered",
-   "rule_sources": 11,
+   "rule_sources": 12,
    "rejected_rules_blocked_by": [
     "field:CommandLine",
     "field:Initiated",
@@ -8386,7 +8393,8 @@
     "Containers",
     "IaaS",
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -8419,7 +8427,8 @@
     "Linux",
     "Office Suite",
     "SaaS",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -8431,7 +8440,8 @@
    "rejected_rules_blocked_by": [],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -8443,7 +8453,8 @@
    "rejected_rules_blocked_by": [],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -8458,7 +8469,8 @@
    ],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -8466,14 +8478,15 @@
    "attack_id": "T1049",
    "name": "System Network Connections Discovery",
    "status": "covered",
-   "rule_sources": 3,
+   "rule_sources": 4,
    "rejected_rules_blocked_by": [
     "logsource:windows/ps_classic_start"
    ],
    "supported_platforms": [
     "IaaS",
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -8485,7 +8498,8 @@
    "rejected_rules_blocked_by": [],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -8497,7 +8511,8 @@
    "rejected_rules_blocked_by": [],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -8513,7 +8528,8 @@
    "supported_platforms": [
     "Containers",
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -8528,7 +8544,8 @@
    ],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -8536,13 +8553,13 @@
    "attack_id": "T1053.003",
    "name": "Cron",
    "status": "covered",
-   "rule_sources": 4,
+   "rule_sources": 5,
    "rejected_rules_blocked_by": [
-    "logsource:linux/cron",
-    "logsource:macos/process_creation"
+    "logsource:linux/cron"
    ],
    "supported_platforms": [
-    "Linux"
+    "Linux",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -8592,7 +8609,8 @@
    "rejected_rules_blocked_by": [],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -8740,7 +8758,8 @@
    "rejected_rules_blocked_by": [],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -8752,7 +8771,8 @@
    "rejected_rules_blocked_by": [],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -8760,11 +8780,12 @@
    "attack_id": "T1056.002",
    "name": "GUI Input Capture",
    "status": "covered",
-   "rule_sources": 2,
+   "rule_sources": 3,
    "rejected_rules_blocked_by": [],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -8776,7 +8797,8 @@
    "rejected_rules_blocked_by": [],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -8788,7 +8810,8 @@
    "rejected_rules_blocked_by": [],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -8800,7 +8823,8 @@
    "rejected_rules_blocked_by": [],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -8808,9 +8832,9 @@
    "attack_id": "T1059",
    "name": "Command and Scripting Interpreter",
    "status": "covered",
-   "rule_sources": 59,
+   "rule_sources": 60,
    "rejected_rules_blocked_by": [
-    "logsource:macos/process_creation",
+    "field:ParentImage",
     "logsource:windows/windefend"
    ],
    "supported_platforms": [
@@ -8820,7 +8844,8 @@
     "Linux",
     "Office Suite",
     "SaaS",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -8849,12 +8874,14 @@
   {
    "attack_id": "T1059.002",
    "name": "AppleScript",
-   "status": "telemetry_gap",
-   "rule_sources": 0,
+   "status": "covered",
+   "rule_sources": 4,
    "rejected_rules_blocked_by": [
-    "logsource:macos/process_creation"
+    "field:ParentImage"
    ],
-   "supported_platforms": [],
+   "supported_platforms": [
+    "macOS"
+   ],
    "has_data_component": true
   },
   {
@@ -8881,7 +8908,8 @@
     "logsource:linux/"
    ],
    "supported_platforms": [
-    "Linux"
+    "Linux",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -8895,7 +8923,8 @@
    ],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -8909,7 +8938,8 @@
    ],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -8917,14 +8947,15 @@
    "attack_id": "T1059.007",
    "name": "JavaScript",
    "status": "covered",
-   "rule_sources": 14,
+   "rule_sources": 16,
    "rejected_rules_blocked_by": [
-    "logsource:macos/process_creation",
+    "field:ParentImage",
     "logsource:windows/applocker"
    ],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -8972,7 +9003,8 @@
    "rejected_rules_blocked_by": [],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -9010,7 +9042,8 @@
    "supported_platforms": [
     "Containers",
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -9027,7 +9060,8 @@
     "Linux",
     "Office Suite",
     "SaaS",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -9035,11 +9069,12 @@
    "attack_id": "T1069.001",
    "name": "Local Groups",
    "status": "covered",
-   "rule_sources": 11,
+   "rule_sources": 12,
    "rejected_rules_blocked_by": [],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -9053,7 +9088,8 @@
    ],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -9083,7 +9119,8 @@
     "Containers",
     "Linux",
     "Office Suite",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -9098,7 +9135,8 @@
    ],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -9113,7 +9151,8 @@
    ],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -9132,14 +9171,14 @@
    "attack_id": "T1070.006",
    "name": "Timestomp",
    "status": "covered",
-   "rule_sources": 2,
+   "rule_sources": 3,
    "rejected_rules_blocked_by": [
-    "event_code:4616",
-    "logsource:macos/process_creation"
+    "event_code:4616"
    ],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -9151,7 +9190,8 @@
    "rejected_rules_blocked_by": [],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -9164,7 +9204,8 @@
    "supported_platforms": [
     "Linux",
     "Office Suite",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -9176,7 +9217,8 @@
    "rejected_rules_blocked_by": [],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -9188,7 +9230,8 @@
    "rejected_rules_blocked_by": [],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -9198,11 +9241,12 @@
    "status": "covered",
    "rule_sources": 3,
    "rejected_rules_blocked_by": [
-    "logsource:macos/process_creation"
+    "field:ParentImage"
    ],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -9212,13 +9256,14 @@
    "status": "covered",
    "rule_sources": 10,
    "rejected_rules_blocked_by": [
+    "field:ParentImage",
     "logsource:/dns",
-    "logsource:/proxy",
-    "logsource:macos/process_creation"
+    "logsource:/proxy"
    ],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -9230,7 +9275,8 @@
    "rejected_rules_blocked_by": [],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -9242,7 +9288,8 @@
    "rejected_rules_blocked_by": [],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -9258,7 +9305,8 @@
    ],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -9270,7 +9318,8 @@
    "rejected_rules_blocked_by": [],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -9285,7 +9334,8 @@
    "supported_platforms": [
     "Linux",
     "SaaS",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -9300,7 +9350,8 @@
    "supported_platforms": [
     "IaaS",
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -9314,7 +9365,8 @@
    ],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -9327,7 +9379,8 @@
    "supported_platforms": [
     "IaaS",
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -9335,7 +9388,7 @@
    "attack_id": "T1078",
    "name": "Valid Accounts",
    "status": "covered",
-   "rule_sources": 19,
+   "rule_sources": 21,
    "rejected_rules_blocked_by": [
     "field:Count",
     "field:DeviceDetail.trusttype",
@@ -9348,7 +9401,6 @@
     "logsource:gcp/gcp.audit",
     "logsource:gcp/google_workspace.login",
     "logsource:m365/threat_management",
-    "logsource:macos/process_creation",
     "logsource:opencanary/application"
    ],
    "supported_platforms": [
@@ -9358,7 +9410,8 @@
     "Linux",
     "Office Suite",
     "SaaS",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -9366,10 +9419,8 @@
    "attack_id": "T1078.001",
    "name": "Default Accounts",
    "status": "covered",
-   "rule_sources": 1,
-   "rejected_rules_blocked_by": [
-    "logsource:macos/process_creation"
-   ],
+   "rule_sources": 3,
+   "rejected_rules_blocked_by": [],
    "supported_platforms": [
     "Containers",
     "IaaS",
@@ -9377,7 +9428,8 @@
     "Linux",
     "Office Suite",
     "SaaS",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -9389,7 +9441,8 @@
    "rejected_rules_blocked_by": [],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -9397,14 +9450,13 @@
    "attack_id": "T1078.003",
    "name": "Local Accounts",
    "status": "covered",
-   "rule_sources": 1,
-   "rejected_rules_blocked_by": [
-    "logsource:macos/process_creation"
-   ],
+   "rule_sources": 5,
+   "rejected_rules_blocked_by": [],
    "supported_platforms": [
     "Containers",
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -9449,7 +9501,8 @@
     "Linux",
     "Office Suite",
     "SaaS",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -9457,15 +9510,15 @@
    "attack_id": "T1082",
    "name": "System Information Discovery",
    "status": "covered",
-   "rule_sources": 23,
+   "rule_sources": 27,
    "rejected_rules_blocked_by": [
-    "logsource:bitbucket/audit",
-    "logsource:macos/process_creation"
+    "logsource:bitbucket/audit"
    ],
    "supported_platforms": [
     "IaaS",
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -9473,14 +9526,14 @@
    "attack_id": "T1083",
    "name": "File and Directory Discovery",
    "status": "covered",
-   "rule_sources": 16,
+   "rule_sources": 18,
    "rejected_rules_blocked_by": [
-    "logsource:/webserver",
-    "logsource:macos/process_creation"
+    "logsource:/webserver"
    ],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -9499,7 +9552,8 @@
     "Linux",
     "Office Suite",
     "SaaS",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -9507,11 +9561,12 @@
    "attack_id": "T1087.001",
    "name": "Local Account",
    "status": "covered",
-   "rule_sources": 4,
+   "rule_sources": 5,
    "rejected_rules_blocked_by": [],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -9525,7 +9580,8 @@
    ],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -9568,7 +9624,8 @@
    ],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -9587,7 +9644,8 @@
    ],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -9608,7 +9666,8 @@
    ],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -9622,7 +9681,8 @@
    ],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -9634,7 +9694,8 @@
    "rejected_rules_blocked_by": [],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -9660,7 +9721,8 @@
    "rejected_rules_blocked_by": [],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -9676,7 +9738,8 @@
    ],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -9711,7 +9774,8 @@
     "Linux",
     "Office Suite",
     "SaaS",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -9769,7 +9833,8 @@
    "rejected_rules_blocked_by": [],
    "supported_platforms": [
     "IaaS",
-    "Linux"
+    "Linux",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -9808,7 +9873,8 @@
    "rejected_rules_blocked_by": [],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -9823,7 +9889,8 @@
    ],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -9837,7 +9904,8 @@
    ],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -9852,7 +9920,8 @@
    ],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -9866,7 +9935,8 @@
    ],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -9878,7 +9948,8 @@
    "rejected_rules_blocked_by": [],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -9886,7 +9957,7 @@
    "attack_id": "T1105",
    "name": "Ingress Tool Transfer",
    "status": "covered",
-   "rule_sources": 42,
+   "rule_sources": 45,
    "rejected_rules_blocked_by": [
     "field:DestinationHostname",
     "field:Initiated",
@@ -9895,12 +9966,12 @@
     "field:resp_mime_types",
     "logsource:/proxy",
     "logsource:linux/",
-    "logsource:macos/process_creation",
     "logsource:windows/ps_classic_start"
    ],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -9912,7 +9983,8 @@
    "rejected_rules_blocked_by": [],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -9940,7 +10012,8 @@
     "Linux",
     "Office Suite",
     "SaaS",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -9959,7 +10032,8 @@
     "Linux",
     "Office Suite",
     "SaaS",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -9973,7 +10047,8 @@
     "Identity Provider",
     "Linux",
     "Office Suite",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -9990,7 +10065,8 @@
     "Linux",
     "Office Suite",
     "SaaS",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -10007,7 +10083,8 @@
     "Linux",
     "Office Suite",
     "SaaS",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -10019,7 +10096,8 @@
    "rejected_rules_blocked_by": [],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -10041,11 +10119,12 @@
    "attack_id": "T1113",
    "name": "Screen Capture",
    "status": "covered",
-   "rule_sources": 8,
+   "rule_sources": 9,
    "rejected_rules_blocked_by": [],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -10060,7 +10139,8 @@
    "supported_platforms": [
     "Linux",
     "Office Suite",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -10098,7 +10178,8 @@
    "supported_platforms": [
     "Linux",
     "Office Suite",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -10106,13 +10187,12 @@
    "attack_id": "T1115",
    "name": "Clipboard Data",
    "status": "covered",
-   "rule_sources": 6,
-   "rejected_rules_blocked_by": [
-    "logsource:macos/process_creation"
-   ],
+   "rule_sources": 7,
+   "rejected_rules_blocked_by": [],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -10127,7 +10207,8 @@
     "Linux",
     "Office Suite",
     "SaaS",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -10139,7 +10220,8 @@
    "rejected_rules_blocked_by": [],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -10153,7 +10235,8 @@
    ],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -10165,7 +10248,8 @@
    "rejected_rules_blocked_by": [],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -10177,7 +10261,8 @@
    "rejected_rules_blocked_by": [],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -10235,7 +10320,8 @@
    "rejected_rules_blocked_by": [],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -10247,7 +10333,8 @@
    "rejected_rules_blocked_by": [],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -10259,7 +10346,8 @@
    "rejected_rules_blocked_by": [],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -10271,7 +10359,8 @@
    "rejected_rules_blocked_by": [],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -10281,6 +10370,7 @@
    "status": "covered",
    "rule_sources": 7,
    "rejected_rules_blocked_by": [
+    "field:ParentImage",
     "logsource:fortigate/event",
     "logsource:opencanary/application",
     "logsource:windows/file_change"
@@ -10288,7 +10378,8 @@
    "supported_platforms": [
     "Containers",
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -10370,7 +10461,8 @@
    "rejected_rules_blocked_by": [],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -10387,7 +10479,8 @@
     "Linux",
     "Office Suite",
     "SaaS",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -10395,7 +10488,7 @@
    "attack_id": "T1136.001",
    "name": "Local Account",
    "status": "covered",
-   "rule_sources": 9,
+   "rule_sources": 10,
    "rejected_rules_blocked_by": [
     "logsource:cisco/aaa",
     "logsource:fortigate/event",
@@ -10404,7 +10497,8 @@
    "supported_platforms": [
     "Containers",
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -10416,7 +10510,8 @@
    "rejected_rules_blocked_by": [],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -10466,7 +10561,7 @@
    "status": "covered",
    "rule_sources": 1,
    "rejected_rules_blocked_by": [
-    "logsource:macos/process_creation"
+    "field:ParentImage"
    ],
    "supported_platforms": [
     "Office Suite",
@@ -10526,13 +10621,12 @@
    "attack_id": "T1140",
    "name": "Deobfuscate/Decode Files or Information",
    "status": "covered",
-   "rule_sources": 10,
-   "rejected_rules_blocked_by": [
-    "logsource:macos/process_creation"
-   ],
+   "rule_sources": 12,
+   "rejected_rules_blocked_by": [],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -10544,7 +10638,8 @@
    "rejected_rules_blocked_by": [],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -10556,7 +10651,8 @@
    "rejected_rules_blocked_by": [],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -10568,7 +10664,8 @@
    "rejected_rules_blocked_by": [],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -10601,13 +10698,13 @@
    "rule_sources": 0,
    "rejected_rules_blocked_by": [
     "logsource:/proxy",
-    "logsource:/webserver",
-    "logsource:macos/process_creation"
+    "logsource:/webserver"
    ],
    "supported_platforms": [
     "Identity Provider",
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -10641,7 +10738,8 @@
     "Containers",
     "IaaS",
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -10654,7 +10752,8 @@
    "supported_platforms": [
     "Linux",
     "SaaS",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -10666,7 +10765,8 @@
    "rejected_rules_blocked_by": [],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -10678,7 +10778,8 @@
    "rejected_rules_blocked_by": [],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -10690,7 +10791,8 @@
    "rejected_rules_blocked_by": [],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -10722,7 +10824,8 @@
     "Linux",
     "Office Suite",
     "SaaS",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -10739,7 +10842,8 @@
    ],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -10755,7 +10859,8 @@
     "Linux",
     "Office Suite",
     "SaaS",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -10780,12 +10885,12 @@
    "rejected_rules_blocked_by": [
     "field:LogonId",
     "logsource:/antivirus",
-    "logsource:macos/process_creation",
     "logsource:windows/application"
    ],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -10793,16 +10898,17 @@
    "attack_id": "T1204",
    "name": "User Execution",
    "status": "covered",
-   "rule_sources": 4,
+   "rule_sources": 5,
    "rejected_rules_blocked_by": [
-    "logsource:/antivirus",
-    "logsource:macos/process_creation"
+    "field:ParentImage",
+    "logsource:/antivirus"
    ],
    "supported_platforms": [
     "Containers",
     "IaaS",
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -10812,12 +10918,13 @@
    "status": "covered",
    "rule_sources": 2,
    "rejected_rules_blocked_by": [
-    "logsource:linux/",
-    "logsource:macos/process_creation"
+    "field:ParentImage",
+    "logsource:linux/"
    ],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -10827,14 +10934,15 @@
    "status": "covered",
    "rule_sources": 16,
    "rejected_rules_blocked_by": [
+    "field:ParentImage",
     "logsource:/proxy",
-    "logsource:macos/process_creation",
     "logsource:windows/applocker",
     "logsource:windows/appxdeployment-server"
    ],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -10858,7 +10966,8 @@
    "rejected_rules_blocked_by": [],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -10870,7 +10979,8 @@
    "rejected_rules_blocked_by": [],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -10882,7 +10992,8 @@
    "rejected_rules_blocked_by": [],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -10894,7 +11005,8 @@
    "rejected_rules_blocked_by": [],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -10906,7 +11018,8 @@
    "rejected_rules_blocked_by": [],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -10939,7 +11052,8 @@
    ],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -10955,7 +11069,8 @@
     "IaaS",
     "Linux",
     "SaaS",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -10971,7 +11086,8 @@
    "supported_platforms": [
     "Identity Provider",
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -10989,7 +11105,8 @@
     "Linux",
     "Office Suite",
     "SaaS",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -11062,7 +11179,8 @@
     "IaaS",
     "Linux",
     "SaaS",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -11109,7 +11227,8 @@
    ],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -11117,18 +11236,18 @@
    "attack_id": "T1218",
    "name": "System Binary Proxy Execution",
    "status": "covered",
-   "rule_sources": 111,
+   "rule_sources": 112,
    "rejected_rules_blocked_by": [
     "field:Hashes",
     "field:Initiated",
-    "logsource:macos/process_creation",
     "logsource:windows/application",
     "logsource:windows/file_executable_detected",
     "logsource:windows/powershell-classic"
    ],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -11287,7 +11406,8 @@
    "rejected_rules_blocked_by": [],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -11299,7 +11419,8 @@
    "rejected_rules_blocked_by": [],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -11311,7 +11432,8 @@
    "rejected_rules_blocked_by": [],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -11319,19 +11441,19 @@
    "attack_id": "T1219.002",
    "name": "Remote Desktop Software",
    "status": "covered",
-   "rule_sources": 30,
+   "rule_sources": 32,
    "rejected_rules_blocked_by": [
     "field:Initiated",
     "field:User",
     "logsource:/antivirus",
-    "logsource:macos/process_creation",
     "logsource:windows/application",
     "logsource:windows/ntlm",
     "logsource:windows/system"
    ],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -11343,7 +11465,8 @@
    "rejected_rules_blocked_by": [],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -11379,7 +11502,8 @@
    "rejected_rules_blocked_by": [],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -11401,7 +11525,8 @@
    "rule_sources": 4,
    "rejected_rules_blocked_by": [],
    "supported_platforms": [
-    "Linux"
+    "Linux",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -11413,7 +11538,8 @@
    "rejected_rules_blocked_by": [],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -11425,7 +11551,8 @@
    "rejected_rules_blocked_by": [],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -11437,7 +11564,8 @@
    "rejected_rules_blocked_by": [],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -11507,7 +11635,8 @@
     "Containers",
     "IaaS",
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -11535,7 +11664,8 @@
    "supported_platforms": [
     "IaaS",
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -11551,7 +11681,8 @@
    "supported_platforms": [
     "IaaS",
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -11559,19 +11690,19 @@
    "attack_id": "T1490",
    "name": "Inhibit System Recovery",
    "status": "covered",
-   "rule_sources": 15,
+   "rule_sources": 18,
    "rejected_rules_blocked_by": [
     "field:CommandLine",
     "field:requestParameters",
     "logsource:cisco/aaa",
-    "logsource:macos/process_creation",
     "logsource:windows/ps_classic_start"
    ],
    "supported_platforms": [
     "Containers",
     "IaaS",
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -11584,7 +11715,8 @@
    "supported_platforms": [
     "IaaS",
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -11596,7 +11728,8 @@
    "rejected_rules_blocked_by": [],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -11609,7 +11742,8 @@
    "supported_platforms": [
     "IaaS",
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -11623,7 +11757,8 @@
    ],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -11641,7 +11776,8 @@
     "IaaS",
     "Linux",
     "SaaS",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -11655,7 +11791,8 @@
     "Containers",
     "IaaS",
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -11669,7 +11806,8 @@
     "Containers",
     "IaaS",
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -11703,7 +11841,8 @@
    "rejected_rules_blocked_by": [],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -11711,13 +11850,12 @@
    "attack_id": "T1497.001",
    "name": "System Checks",
    "status": "covered",
-   "rule_sources": 1,
-   "rejected_rules_blocked_by": [
-    "logsource:macos/process_creation"
-   ],
+   "rule_sources": 3,
+   "rejected_rules_blocked_by": [],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -11729,7 +11867,8 @@
    "rejected_rules_blocked_by": [],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -11741,7 +11880,8 @@
    "rejected_rules_blocked_by": [],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -11757,7 +11897,8 @@
     "Containers",
     "IaaS",
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -11770,7 +11911,8 @@
    "supported_platforms": [
     "IaaS",
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -11783,7 +11925,8 @@
    "supported_platforms": [
     "IaaS",
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -11797,7 +11940,8 @@
     "Containers",
     "IaaS",
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -11811,7 +11955,8 @@
    ],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -11824,7 +11969,8 @@
    "supported_platforms": [
     "IaaS",
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -11837,7 +11983,8 @@
    "supported_platforms": [
     "IaaS",
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -11854,7 +12001,8 @@
    "supported_platforms": [
     "IaaS",
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -11868,7 +12016,8 @@
    ],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -11914,7 +12063,8 @@
    ],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -11960,7 +12110,8 @@
    "supported_platforms": [
     "IaaS",
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -11968,14 +12119,13 @@
    "attack_id": "T1518.001",
    "name": "Security Software Discovery",
    "status": "covered",
-   "rule_sources": 2,
-   "rejected_rules_blocked_by": [
-    "logsource:macos/process_creation"
-   ],
+   "rule_sources": 5,
+   "rejected_rules_blocked_by": [],
    "supported_platforms": [
     "IaaS",
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -11987,7 +12137,8 @@
    "rejected_rules_blocked_by": [],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -12042,13 +12193,14 @@
    "attack_id": "T1529",
    "name": "System Shutdown/Reboot",
    "status": "covered",
-   "rule_sources": 5,
+   "rule_sources": 6,
    "rejected_rules_blocked_by": [
     "logsource:cisco/aaa"
    ],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -12081,7 +12233,8 @@
     "Linux",
     "Office Suite",
     "SaaS",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -12095,7 +12248,8 @@
     "Linux",
     "Office Suite",
     "SaaS",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -12149,7 +12303,8 @@
     "Linux",
     "Office Suite",
     "SaaS",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -12161,7 +12316,8 @@
    "rejected_rules_blocked_by": [],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -12184,7 +12340,8 @@
    "rejected_rules_blocked_by": [],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -12231,19 +12388,20 @@
    "supported_platforms": [
     "Containers",
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
   {
    "attack_id": "T1543.001",
    "name": "Launch Agent",
-   "status": "telemetry_gap",
-   "rule_sources": 0,
-   "rejected_rules_blocked_by": [
-    "logsource:macos/process_creation"
+   "status": "covered",
+   "rule_sources": 2,
+   "rejected_rules_blocked_by": [],
+   "supported_platforms": [
+    "macOS"
    ],
-   "supported_platforms": [],
    "has_data_component": true
   },
   {
@@ -12274,12 +12432,12 @@
   {
    "attack_id": "T1543.004",
    "name": "Launch Daemon",
-   "status": "telemetry_gap",
-   "rule_sources": 0,
-   "rejected_rules_blocked_by": [
-    "logsource:macos/process_creation"
+   "status": "covered",
+   "rule_sources": 2,
+   "rejected_rules_blocked_by": [],
+   "supported_platforms": [
+    "macOS"
    ],
-   "supported_platforms": [],
    "has_data_component": true
   },
   {
@@ -12304,7 +12462,8 @@
     "Linux",
     "Office Suite",
     "SaaS",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -12351,7 +12510,8 @@
    "rule_sources": 1,
    "rejected_rules_blocked_by": [],
    "supported_platforms": [
-    "Linux"
+    "Linux",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -12362,17 +12522,20 @@
    "rule_sources": 0,
    "rejected_rules_blocked_by": [],
    "supported_platforms": [
-    "Linux"
+    "Linux",
+    "macOS"
    ],
    "has_data_component": true
   },
   {
    "attack_id": "T1546.006",
    "name": "LC_LOAD_DYLIB Addition",
-   "status": "not_observable_on_supported_platforms",
+   "status": "no_sigma_rule",
    "rule_sources": 0,
    "rejected_rules_blocked_by": [],
-   "supported_platforms": [],
+   "supported_platforms": [
+    "macOS"
+   ],
    "has_data_component": true
   },
   {
@@ -12460,7 +12623,9 @@
    "rejected_rules_blocked_by": [
     "logsource:macos/file_event"
    ],
-   "supported_platforms": [],
+   "supported_platforms": [
+    "macOS"
+   ],
    "has_data_component": true
   },
   {
@@ -12482,7 +12647,8 @@
    "rejected_rules_blocked_by": [],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -12505,7 +12671,8 @@
    "rejected_rules_blocked_by": [],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -12517,7 +12684,8 @@
    "rejected_rules_blocked_by": [],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -12583,17 +12751,20 @@
    "rule_sources": 1,
    "rejected_rules_blocked_by": [],
    "supported_platforms": [
-    "Linux"
+    "Linux",
+    "macOS"
    ],
    "has_data_component": true
   },
   {
    "attack_id": "T1547.007",
    "name": "Re-opened Applications",
-   "status": "not_observable_on_supported_platforms",
+   "status": "no_sigma_rule",
    "rule_sources": 0,
    "rejected_rules_blocked_by": [],
-   "supported_platforms": [],
+   "supported_platforms": [
+    "macOS"
+   ],
    "has_data_component": true
   },
   {
@@ -12670,7 +12841,9 @@
    "status": "covered",
    "rule_sources": 1,
    "rejected_rules_blocked_by": [],
-   "supported_platforms": [],
+   "supported_platforms": [
+    "macOS"
+   ],
    "has_data_component": true
   },
   {
@@ -12688,7 +12861,8 @@
     "Identity Provider",
     "Linux",
     "Office Suite",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -12699,7 +12873,8 @@
    "rule_sources": 1,
    "rejected_rules_blocked_by": [],
    "supported_platforms": [
-    "Linux"
+    "Linux",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -12723,17 +12898,20 @@
    "rule_sources": 1,
    "rejected_rules_blocked_by": [],
    "supported_platforms": [
-    "Linux"
+    "Linux",
+    "macOS"
    ],
    "has_data_component": true
   },
   {
    "attack_id": "T1548.004",
    "name": "Elevated Execution with Prompt",
-   "status": "not_observable_on_supported_platforms",
+   "status": "no_sigma_rule",
    "rule_sources": 0,
    "rejected_rules_blocked_by": [],
-   "supported_platforms": [],
+   "supported_platforms": [
+    "macOS"
+   ],
    "has_data_component": true
   },
   {
@@ -12752,10 +12930,12 @@
   {
    "attack_id": "T1548.006",
    "name": "TCC Manipulation",
-   "status": "not_observable_on_supported_platforms",
+   "status": "no_sigma_rule",
    "rule_sources": 0,
    "rejected_rules_blocked_by": [],
-   "supported_platforms": [],
+   "supported_platforms": [
+    "macOS"
+   ],
    "has_data_component": true
   },
   {
@@ -12846,7 +13026,8 @@
     "Linux",
     "Office Suite",
     "SaaS",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -12854,15 +13035,14 @@
    "attack_id": "T1552.001",
    "name": "Credentials In Files",
    "status": "covered",
-   "rule_sources": 14,
-   "rejected_rules_blocked_by": [
-    "logsource:macos/process_creation"
-   ],
+   "rule_sources": 16,
+   "rejected_rules_blocked_by": [],
    "supported_platforms": [
     "Containers",
     "IaaS",
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -12880,15 +13060,15 @@
   {
    "attack_id": "T1552.003",
    "name": "Shell History",
-   "status": "telemetry_gap",
-   "rule_sources": 0,
+   "status": "covered",
+   "rule_sources": 1,
    "rejected_rules_blocked_by": [
-    "logsource:cisco/aaa",
-    "logsource:macos/process_creation"
+    "logsource:cisco/aaa"
    ],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -12902,7 +13082,8 @@
    ],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -12961,21 +13142,24 @@
    "status": "covered",
    "rule_sources": 1,
    "rejected_rules_blocked_by": [
-    "logsource:macos/process_creation"
+    "field:ParentImage"
    ],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
   {
    "attack_id": "T1553.001",
    "name": "Gatekeeper Bypass",
-   "status": "not_observable_on_supported_platforms",
-   "rule_sources": 0,
+   "status": "covered",
+   "rule_sources": 1,
    "rejected_rules_blocked_by": [],
-   "supported_platforms": [],
+   "supported_platforms": [
+    "macOS"
+   ],
    "has_data_component": true
   },
   {
@@ -12985,7 +13169,8 @@
    "rule_sources": 1,
    "rejected_rules_blocked_by": [],
    "supported_platforms": [
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -13011,7 +13196,8 @@
    ],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -13035,7 +13221,8 @@
    "rule_sources": 0,
    "rejected_rules_blocked_by": [],
    "supported_platforms": [
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -13049,7 +13236,8 @@
    ],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -13062,19 +13250,20 @@
    "supported_platforms": [
     "IaaS",
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
   {
    "attack_id": "T1555.001",
    "name": "Keychain",
-   "status": "telemetry_gap",
-   "rule_sources": 0,
-   "rejected_rules_blocked_by": [
-    "logsource:macos/process_creation"
+   "status": "covered",
+   "rule_sources": 1,
+   "rejected_rules_blocked_by": [],
+   "supported_platforms": [
+    "macOS"
    ],
-   "supported_platforms": [],
    "has_data_component": true
   },
   {
@@ -13084,7 +13273,8 @@
    "rule_sources": 0,
    "rejected_rules_blocked_by": [],
    "supported_platforms": [
-    "Linux"
+    "Linux",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -13098,7 +13288,8 @@
    ],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -13123,7 +13314,8 @@
    "rejected_rules_blocked_by": [],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -13155,7 +13347,8 @@
     "Linux",
     "Office Suite",
     "SaaS",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -13188,7 +13381,8 @@
    "rule_sources": 0,
    "rejected_rules_blocked_by": [],
    "supported_platforms": [
-    "Linux"
+    "Linux",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -13226,7 +13420,8 @@
     "Linux",
     "Office Suite",
     "SaaS",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -13278,7 +13473,8 @@
    ],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -13304,7 +13500,8 @@
    "rejected_rules_blocked_by": [],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -13316,7 +13513,8 @@
    "rejected_rules_blocked_by": [],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -13341,7 +13539,8 @@
    ],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -13401,7 +13600,8 @@
    "rule_sources": 0,
    "rejected_rules_blocked_by": [],
    "supported_platforms": [
-    "Linux"
+    "Linux",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -13413,7 +13613,8 @@
    "rejected_rules_blocked_by": [],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -13444,10 +13645,12 @@
   {
    "attack_id": "T1559.003",
    "name": "XPC Services",
-   "status": "not_observable_on_supported_platforms",
+   "status": "no_sigma_rule",
    "rule_sources": 0,
    "rejected_rules_blocked_by": [],
-   "supported_platforms": [],
+   "supported_platforms": [
+    "macOS"
+   ],
    "has_data_component": true
   },
   {
@@ -13458,7 +13661,8 @@
    "rejected_rules_blocked_by": [],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -13466,13 +13670,12 @@
    "attack_id": "T1560.001",
    "name": "Archive via Utility",
    "status": "covered",
-   "rule_sources": 10,
-   "rejected_rules_blocked_by": [
-    "logsource:macos/process_creation"
-   ],
+   "rule_sources": 11,
+   "rejected_rules_blocked_by": [],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -13484,7 +13687,8 @@
    "rejected_rules_blocked_by": [],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -13496,7 +13700,8 @@
    "rejected_rules_blocked_by": [],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -13508,7 +13713,8 @@
    "rejected_rules_blocked_by": [],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -13522,7 +13728,8 @@
    ],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -13536,7 +13743,8 @@
    ],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -13548,7 +13756,8 @@
    "rejected_rules_blocked_by": [],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -13559,7 +13768,8 @@
    "rule_sources": 0,
    "rejected_rules_blocked_by": [],
    "supported_platforms": [
-    "Linux"
+    "Linux",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -13586,7 +13796,8 @@
    "supported_platforms": [
     "Linux",
     "Office Suite",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -13598,7 +13809,8 @@
    "rejected_rules_blocked_by": [],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -13606,13 +13818,12 @@
    "attack_id": "T1564.002",
    "name": "Hidden Users",
    "status": "covered",
-   "rule_sources": 3,
-   "rejected_rules_blocked_by": [
-    "logsource:macos/process_creation"
-   ],
+   "rule_sources": 4,
+   "rejected_rules_blocked_by": [],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -13624,7 +13835,8 @@
    "rejected_rules_blocked_by": [],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -13632,10 +13844,8 @@
    "attack_id": "T1564.004",
    "name": "NTFS File Attributes",
    "status": "covered",
-   "rule_sources": 12,
-   "rejected_rules_blocked_by": [
-    "logsource:macos/process_creation"
-   ],
+   "rule_sources": 13,
+   "rejected_rules_blocked_by": [],
    "supported_platforms": [
     "Windows"
    ],
@@ -13649,7 +13859,8 @@
    "rejected_rules_blocked_by": [],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -13661,7 +13872,8 @@
    "rejected_rules_blocked_by": [],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -13673,7 +13885,8 @@
    "rejected_rules_blocked_by": [],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -13686,17 +13899,20 @@
    "supported_platforms": [
     "Linux",
     "Office Suite",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
   {
    "attack_id": "T1564.009",
    "name": "Resource Forking",
-   "status": "not_observable_on_supported_platforms",
+   "status": "no_sigma_rule",
    "rule_sources": 0,
    "rejected_rules_blocked_by": [],
-   "supported_platforms": [],
+   "supported_platforms": [
+    "macOS"
+   ],
    "has_data_component": true
   },
   {
@@ -13718,7 +13934,8 @@
    "rejected_rules_blocked_by": [],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -13730,7 +13947,8 @@
    "rejected_rules_blocked_by": [],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -13752,7 +13970,8 @@
    "rule_sources": 0,
    "rejected_rules_blocked_by": [],
    "supported_platforms": [
-    "Linux"
+    "Linux",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -13766,7 +13985,8 @@
    ],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -13781,7 +14001,8 @@
    ],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -13796,7 +14017,8 @@
    ],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -13808,7 +14030,8 @@
    "rejected_rules_blocked_by": [],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -13818,15 +14041,16 @@
    "status": "covered",
    "rule_sources": 5,
    "rejected_rules_blocked_by": [
-    "logsource:/proxy",
-    "logsource:macos/process_creation"
+    "field:ParentImage",
+    "logsource:/proxy"
    ],
    "supported_platforms": [
     "Identity Provider",
     "Linux",
     "Office Suite",
     "SaaS",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -13834,13 +14058,12 @@
    "attack_id": "T1566.001",
    "name": "Spearphishing Attachment",
    "status": "covered",
-   "rule_sources": 14,
-   "rejected_rules_blocked_by": [
-    "logsource:macos/process_creation"
-   ],
+   "rule_sources": 15,
+   "rejected_rules_blocked_by": [],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -13850,14 +14073,15 @@
    "status": "covered",
    "rule_sources": 2,
    "rejected_rules_blocked_by": [
-    "logsource:macos/process_creation"
+    "field:ParentImage"
    ],
    "supported_platforms": [
     "Identity Provider",
     "Linux",
     "Office Suite",
     "SaaS",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -13869,7 +14093,8 @@
    "rejected_rules_blocked_by": [],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -13882,7 +14107,8 @@
    "supported_platforms": [
     "Identity Provider",
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -13900,7 +14126,8 @@
     "Linux",
     "Office Suite",
     "SaaS",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -13915,7 +14142,8 @@
    ],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -13932,7 +14160,8 @@
    ],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -13944,7 +14173,8 @@
    "rejected_rules_blocked_by": [],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -13958,7 +14188,8 @@
     "Linux",
     "Office Suite",
     "SaaS",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -13972,7 +14203,8 @@
    ],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -13984,7 +14216,8 @@
    "rejected_rules_blocked_by": [],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -13998,7 +14231,8 @@
    ],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -14010,7 +14244,8 @@
    "rejected_rules_blocked_by": [],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -14022,19 +14257,20 @@
    "rejected_rules_blocked_by": [],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
   {
    "attack_id": "T1569.001",
    "name": "Launchctl",
-   "status": "telemetry_gap",
-   "rule_sources": 0,
-   "rejected_rules_blocked_by": [
-    "logsource:macos/process_creation"
+   "status": "covered",
+   "rule_sources": 1,
+   "rejected_rules_blocked_by": [],
+   "supported_platforms": [
+    "macOS"
    ],
-   "supported_platforms": [],
    "has_data_component": true
   },
   {
@@ -14071,7 +14307,8 @@
    "rejected_rules_blocked_by": [],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -14086,7 +14323,8 @@
    ],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -14101,7 +14339,8 @@
    ],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -14116,7 +14355,8 @@
    ],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -14128,7 +14368,8 @@
    "rejected_rules_blocked_by": [],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -14140,7 +14381,8 @@
    "rejected_rules_blocked_by": [],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -14152,7 +14394,8 @@
    "rejected_rules_blocked_by": [],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -14174,10 +14417,12 @@
   {
    "attack_id": "T1574.004",
    "name": "Dylib Hijacking",
-   "status": "not_observable_on_supported_platforms",
+   "status": "no_sigma_rule",
    "rule_sources": 0,
    "rejected_rules_blocked_by": [],
-   "supported_platforms": [],
+   "supported_platforms": [
+    "macOS"
+   ],
    "has_data_component": true
   },
   {
@@ -14200,7 +14445,8 @@
     "logsource:linux/"
    ],
    "supported_platforms": [
-    "Linux"
+    "Linux",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -14212,7 +14458,8 @@
    "rejected_rules_blocked_by": [],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -15252,7 +15499,8 @@
     "Linux",
     "Office Suite",
     "SaaS",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -15266,7 +15514,8 @@
     "IaaS",
     "Linux",
     "SaaS",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -15416,7 +15665,8 @@
    "supported_platforms": [
     "IaaS",
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -15428,7 +15678,8 @@
    "rejected_rules_blocked_by": [],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -15462,7 +15713,8 @@
    "rejected_rules_blocked_by": [],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -15480,7 +15732,8 @@
     "Linux",
     "Office Suite",
     "SaaS",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -15492,17 +15745,20 @@
    "rejected_rules_blocked_by": [],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
   {
    "attack_id": "T1647",
    "name": "Plist File Modification",
-   "status": "not_observable_on_supported_platforms",
+   "status": "no_sigma_rule",
    "rule_sources": 0,
    "rejected_rules_blocked_by": [],
-   "supported_platforms": [],
+   "supported_platforms": [
+    "macOS"
+   ],
    "has_data_component": true
   },
   {
@@ -15530,7 +15786,8 @@
    "supported_platforms": [
     "Identity Provider",
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -15562,7 +15819,8 @@
    "rejected_rules_blocked_by": [],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -15574,7 +15832,8 @@
    "rejected_rules_blocked_by": [],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -15587,7 +15846,8 @@
    "supported_platforms": [
     "IaaS",
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -15601,7 +15861,8 @@
     "Linux",
     "Office Suite",
     "SaaS",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -15613,7 +15874,8 @@
    "rejected_rules_blocked_by": [],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -15625,7 +15887,8 @@
    "rejected_rules_blocked_by": [],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -15649,7 +15912,8 @@
    "supported_platforms": [
     "Linux",
     "Office Suite",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -15661,7 +15925,8 @@
    "rejected_rules_blocked_by": [],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -15673,7 +15938,8 @@
    "rejected_rules_blocked_by": [],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -15697,7 +15963,8 @@
    "rejected_rules_blocked_by": [],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -15709,7 +15976,8 @@
    "rejected_rules_blocked_by": [],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -15741,7 +16009,8 @@
    "rejected_rules_blocked_by": [],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -15765,7 +16034,8 @@
    "supported_platforms": [
     "IaaS",
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -15824,7 +16094,8 @@
     "Linux",
     "Office Suite",
     "SaaS",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -15838,7 +16109,8 @@
     "Linux",
     "Office Suite",
     "SaaS",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -15851,7 +16123,8 @@
    "supported_platforms": [
     "Linux",
     "Office Suite",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -15859,12 +16132,11 @@
    "attack_id": "T1685",
    "name": "Disable or Modify Tools",
    "status": "covered",
-   "rule_sources": 118,
+   "rule_sources": 119,
    "rejected_rules_blocked_by": [
     "logsource:bitbucket/audit",
     "logsource:cisco/aaa",
     "logsource:gcp/gcp.audit",
-    "logsource:macos/process_creation",
     "logsource:windows/application",
     "logsource:windows/ps_classic_provider_start",
     "logsource:windows/system",
@@ -15874,7 +16146,8 @@
     "Containers",
     "IaaS",
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -15916,7 +16189,8 @@
    "rejected_rules_blocked_by": [],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -15951,12 +16225,11 @@
    "attack_id": "T1685.006",
    "name": "Clear Linux or Mac System Logs",
    "status": "covered",
-   "rule_sources": 3,
-   "rejected_rules_blocked_by": [
-    "logsource:macos/process_creation"
-   ],
+   "rule_sources": 4,
+   "rejected_rules_blocked_by": [],
    "supported_platforms": [
-    "Linux"
+    "Linux",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -15970,7 +16243,8 @@
    ],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -16019,7 +16293,8 @@
     "IaaS",
     "Linux",
     "SaaS",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -16042,7 +16317,8 @@
    "rejected_rules_blocked_by": [],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   },
@@ -16054,7 +16330,8 @@
    "rejected_rules_blocked_by": [],
    "supported_platforms": [
     "Linux",
-    "Windows"
+    "Windows",
+    "macOS"
    ],
    "has_data_component": true
   }

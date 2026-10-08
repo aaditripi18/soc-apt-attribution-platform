@@ -425,7 +425,8 @@ def test_unsupported_logsource_is_telemetry_gap(tmp_path: Path, knowledge: Attac
         _rule_yaml(
             "sel:\n  Image|endswith: '/bash'\ncondition: sel",
             rule_id="22222222-2222-2222-2222-222222222222",
-            product="macos",  # linux/process_creation is supported since ADR-0010
+            # linux / macos process_creation are supported since ADR-0010 / ADR-0014
+            product="aix",
         ),
     )
     assert result.pack["rules"] == []
@@ -706,7 +707,9 @@ def test_report_lists_every_archive_rule_with_a_link() -> None:
         MANIFEST["archive_contents"]["yaml_rule_files"] + enrich["artifact"]["members"]
     )
     tiers = [row.get("content_tier", "core") for row in report["rules"]]
-    assert tiers.count("enrich") == enrich["artifact"]["members"] == 224
+    assert (
+        tiers.count("enrich") == enrich["artifact"]["members"] == 245
+    )  # Windows 163, Linux 61, macOS 21 (ADR-0014)
     for row in report["rules"]:
         assert row["rule_url"].startswith("https://github.com/SigmaHQ/sigma/blob/r2026-07-01/")
 

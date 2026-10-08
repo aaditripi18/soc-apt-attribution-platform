@@ -5,12 +5,12 @@
   "sigma_archive": "sigma_core++.zip",
   "sigma_archive_sha256": "469d83e1d1bbdb4d7876466ff1a728550fae5a20115b91339d58d20e894e7477",
   "pysigma_version": "1.5.1",
-  "field_map_version": "sigma-field-map/13",
+  "field_map_version": "sigma-field-map/14",
   "attack_kb_version": "enterprise-attack-19.2",
   "dnf_bound": 64,
   "software_tag_review": {
    "file": "software-tag-review.json",
-   "sha256": "c49e8436f8b194abbee6c44d464a4ef1c93345744b10bd512ecb206ca53f3248",
+   "sha256": "30b59fce10d8b72c73819185c0aa032b058011f93ce3a9f44c96d23a80b82ffb",
    "accepted": [
     "1de68c67-af5c-4097-9c85-fe5578e09e67:attack.s0005",
     "259e5a6a-b8d2-4c38-86e2-26c5e651361d:attack.s0029",
@@ -31,40 +31,39 @@
   "license": "Sigma rules: Detection Rule License (DRL) 1.1 — see NOTICE.md",
   "enrich_archive": {
    "file": "sigma_enrich_low.zip",
-   "sha256": "20d01c02ef88b2a88b50ab4a402c5227afe5aab7d52a6756dfb4cb2184fe1bce"
+   "sha256": "27bba0091094c511736447053d9d5ce306e5cf7100791d88b6c6118e142205dd"
   }
  },
  "summary": {
-  "sigma_rules_total": 3066,
+  "sigma_rules_total": 3087,
   "by_status": {
-   "imported": 1836,
-   "partial": 69,
-   "rejected": 1161
+   "imported": 1883,
+   "partial": 75,
+   "rejected": 1129
   },
   "rejected_by_reason": {
-   "no_attack_mapping": 333,
-   "telemetry_gap": 541,
-   "translation_gap": 287
+   "no_attack_mapping": 334,
+   "telemetry_gap": 506,
+   "translation_gap": 289
   },
-  "generated_rules": 13141,
-  "attack_ids_with_imported_rule": 336,
+  "generated_rules": 13388,
+  "attack_ids_with_imported_rule": 344,
   "group_tags_ignored": 12,
   "software_tags_ignored": 43
  },
  "gap_reasons": {
-  "translation_gap:interior_wildcard_or_empty": 328,
+  "translation_gap:interior_wildcard_or_empty": 331,
   "telemetry_gap:field:Hashes": 212,
+  "telemetry_gap:field:ParentImage": 195,
   "telemetry_gap:field:Initiated": 187,
-  "translation_gap:value_type:SigmaRegularExpression": 172,
-  "dnf_bound_exceeded:>64": 170,
+  "translation_gap:value_type:SigmaRegularExpression": 174,
+  "dnf_bound_exceeded:>64": 171,
   "translation_gap:single_char_wildcard": 109,
   "translation_gap:value_type:SigmaCIDRExpression": 96,
   "telemetry_gap:field:DestinationHostname": 94,
   "telemetry_gap:field:CommandLine": 92,
-  "telemetry_gap:field:ParentImage": 70,
   "logsource:windows/system": 55,
   "telemetry_gap:field:User": 52,
-  "logsource:macos/process_creation": 42,
   "translation_gap:keyword_search": 34,
   "telemetry_gap:field:properties.message": 33,
   "telemetry_gap:field:AuditPolicyChanges": 31,
@@ -123,6 +122,7 @@
   "telemetry_gap:field:targetResources.type": 3,
   "logsource:/apache": 2,
   "logsource:linux/syslog": 2,
+  "logsource:macos/file_event": 2,
   "logsource:spring/application": 2,
   "logsource:windows/applocker": 2,
   "logsource:windows/appxdeployment-server": 2,
@@ -158,7 +158,6 @@
   "logsource:linux/vsftpd": 1,
   "logsource:m365/exchange": 1,
   "logsource:m365/threat_detection": 1,
-  "logsource:macos/file_event": 1,
   "logsource:nodejs/application": 1,
   "logsource:python/application": 1,
   "logsource:ruby_on_rails/application": 1,
@@ -214,6 +213,7 @@
   "telemetry_gap:field:Initiatedby": 1,
   "telemetry_gap:field:Keywords": 1,
   "telemetry_gap:field:Location": 1,
+  "telemetry_gap:field:OriginalFileName": 1,
   "telemetry_gap:field:Provider_Name": 1,
   "telemetry_gap:field:RequestType": 1,
   "telemetry_gap:field:Resultdescription": 1,
@@ -236,6 +236,7 @@
   "DestinationHostname": "destination hostname is not captured on NetworkInfo",
   "Hashes": "Sigma matches Sysmon's combined 'SHA1=..,MD5=..,IMPHASH=..' string (often IMPHASH, which no adapter captures); no exact mapping onto structured hashes",
   "Initiated": "Sysmon 'Initiated' → ECS network.direction mapping is not verified",
+  "ParentImage": "macOS osquery es_process_events rows carry only the parent pid; resolving it to an executable needs another event (correlation), not the field map",
   "ParentUser": "the parent process's user is not captured",
   "RequestType": "an ExtendedProperties name/value entry of O365 Entra ID logon records, not a top-level field",
   "SourceCommandLine": "Sysmon 8 carries no source command line",
@@ -289,6 +290,7 @@
   "T1021.006",
   "T1021.007",
   "T1027",
+  "T1027.001",
   "T1027.002",
   "T1027.003",
   "T1027.004",
@@ -327,6 +329,7 @@
   "T1057",
   "T1059",
   "T1059.001",
+  "T1059.002",
   "T1059.003",
   "T1059.004",
   "T1059.005",
@@ -467,8 +470,10 @@
   "T1542.001",
   "T1542.003",
   "T1543",
+  "T1543.001",
   "T1543.002",
   "T1543.003",
+  "T1543.004",
   "T1546",
   "T1546.001",
   "T1546.002",
@@ -505,16 +510,19 @@
   "T1552",
   "T1552.001",
   "T1552.002",
+  "T1552.003",
   "T1552.004",
   "T1552.006",
   "T1552.007",
   "T1553",
+  "T1553.001",
   "T1553.002",
   "T1553.003",
   "T1553.004",
   "T1553.005",
   "T1554",
   "T1555",
+  "T1555.001",
   "T1555.003",
   "T1555.004",
   "T1555.005",
@@ -545,6 +553,7 @@
   "T1567",
   "T1567.002",
   "T1569",
+  "T1569.001",
   "T1569.002",
   "T1570",
   "T1571",
@@ -1011,11 +1020,11 @@
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/macos/process_creation/proc_creation_macos_susp_browser_child_process.yml",
    "logsource": "macos/process_creation",
    "status": "rejected",
-   "rejection": "telemetry_gap",
+   "rejection": "translation_gap",
    "conjuncts_total": 0,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "logsource:macos/process_creation": 1
+    "dnf_bound_exceeded:>64": 1
    },
    "attack_ids": [
     "T1059",
@@ -2427,6 +2436,46 @@
    "dropped_tags": []
   },
   {
+   "content_tier": "enrich",
+   "sigma_id": "0877ed01-da46-4c49-8476-d49cdd80dfa7",
+   "title": "Screen Capture - macOS",
+   "path": "rules/macos/process_creation/proc_creation_macos_screencapture.yml",
+   "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/macos/process_creation/proc_creation_macos_screencapture.yml",
+   "logsource": "macos/process_creation",
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 1,
+   "conjuncts_imported": 1,
+   "gap_reasons": {},
+   "attack_ids": [
+    "T1113"
+   ],
+   "ignored_group_tags": [],
+   "ignored_software_tags": [],
+   "dropped_tags": []
+  },
+  {
+   "content_tier": "enrich",
+   "sigma_id": "089dbdf6-b960-4bcc-90e3-ffc3480c20f6",
+   "title": "File and Directory Discovery - MacOS",
+   "path": "rules/macos/process_creation/proc_creation_macos_file_and_directory_discovery.yml",
+   "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/macos/process_creation/proc_creation_macos_file_and_directory_discovery.yml",
+   "logsource": "macos/process_creation",
+   "status": "partial",
+   "rejection": null,
+   "conjuncts_total": 5,
+   "conjuncts_imported": 4,
+   "gap_reasons": {
+    "translation_gap:value_type:SigmaRegularExpression": 1
+   },
+   "attack_ids": [
+    "T1083"
+   ],
+   "ignored_group_tags": [],
+   "ignored_software_tags": [],
+   "dropped_tags": []
+  },
+  {
    "sigma_id": "089fc3d2-71e8-4763-a8a5-c97fbb0a403e",
    "title": "Regsvr32 DLL Execution With Suspicious File Extension",
    "path": "rules/windows/process_creation/proc_creation_win_regsvr32_susp_extensions.yml",
@@ -2749,13 +2798,11 @@
    "path": "rules/macos/process_creation/proc_creation_macos_tail_base64_decode_from_image.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/macos/process_creation/proc_creation_macos_tail_base64_decode_from_image.yml",
    "logsource": "macos/process_creation",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:macos/process_creation": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 10,
+   "conjuncts_imported": 10,
+   "gap_reasons": {},
    "attack_ids": [
     "T1140"
    ],
@@ -3854,13 +3901,11 @@
    "path": "rules/macos/process_creation/proc_creation_macos_security_software_discovery.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/macos/process_creation/proc_creation_macos_security_software_discovery.yml",
    "logsource": "macos/process_creation",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:macos/process_creation": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 12,
+   "conjuncts_imported": 12,
+   "gap_reasons": {},
    "attack_ids": [
     "T1518.001"
    ],
@@ -4259,6 +4304,25 @@
    "attack_ids": [
     "T1203",
     "T1219.002"
+   ],
+   "ignored_group_tags": [],
+   "ignored_software_tags": [],
+   "dropped_tags": []
+  },
+  {
+   "content_tier": "enrich",
+   "sigma_id": "10227522-8429-47e6-a301-f2b2d014e7ad",
+   "title": "Macos Remote System Discovery",
+   "path": "rules/macos/process_creation/proc_creation_macos_remote_system_discovery.yml",
+   "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/macos/process_creation/proc_creation_macos_remote_system_discovery.yml",
+   "logsource": "macos/process_creation",
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 21,
+   "conjuncts_imported": 21,
+   "gap_reasons": {},
+   "attack_ids": [
+    "T1018"
    ],
    "ignored_group_tags": [],
    "ignored_software_tags": [],
@@ -5127,13 +5191,11 @@
    "path": "rules/macos/process_creation/proc_creation_macos_susp_in_memory_download_and_compile.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/macos/process_creation/proc_creation_macos_susp_in_memory_download_and_compile.yml",
    "logsource": "macos/process_creation",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:macos/process_creation": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 1,
+   "conjuncts_imported": 1,
+   "gap_reasons": {},
    "attack_ids": [
     "T1059.007",
     "T1105"
@@ -7126,12 +7188,12 @@
    "path": "rules/macos/process_creation/proc_creation_macos_applescript.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/macos/process_creation/proc_creation_macos_applescript.yml",
    "logsource": "macos/process_creation",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
+   "status": "partial",
+   "rejection": null,
+   "conjuncts_total": 15,
+   "conjuncts_imported": 12,
    "gap_reasons": {
-    "logsource:macos/process_creation": 1
+    "telemetry_gap:field:ParentImage": 3
    },
    "attack_ids": [
     "T1059.002"
@@ -8836,13 +8898,11 @@
    "path": "rules/macos/process_creation/proc_creation_macos_remote_access_tools_meshagent_arguments.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/macos/process_creation/proc_creation_macos_remote_access_tools_meshagent_arguments.yml",
    "logsource": "macos/process_creation",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:macos/process_creation": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 1,
+   "conjuncts_imported": 1,
+   "gap_reasons": {},
    "attack_ids": [
     "T1219.002"
    ],
@@ -8926,13 +8986,11 @@
    "path": "rules/macos/process_creation/proc_creation_macos_payload_decoded_and_decrypted.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/macos/process_creation/proc_creation_macos_payload_decoded_and_decrypted.yml",
    "logsource": "macos/process_creation",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:macos/process_creation": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 1,
+   "conjuncts_imported": 1,
+   "gap_reasons": {},
    "attack_ids": [
     "T1140",
     "T1059",
@@ -10772,13 +10830,11 @@
    "path": "rules/macos/process_creation/proc_creation_macos_tmutil_disable_backup.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/macos/process_creation/proc_creation_macos_tmutil_disable_backup.yml",
    "logsource": "macos/process_creation",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:macos/process_creation": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 2,
+   "conjuncts_imported": 2,
+   "gap_reasons": {},
    "attack_ids": [
     "T1490"
    ],
@@ -10961,13 +11017,11 @@
    "path": "rules/macos/process_creation/proc_creation_macos_ioreg_discovery.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/macos/process_creation/proc_creation_macos_ioreg_discovery.yml",
    "logsource": "macos/process_creation",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:macos/process_creation": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 28,
+   "conjuncts_imported": 28,
+   "gap_reasons": {},
    "attack_ids": [
     "T1082"
    ],
@@ -12799,13 +12853,11 @@
    "path": "rules/macos/process_creation/proc_creation_macos_csrutil_disable.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/macos/process_creation/proc_creation_macos_csrutil_disable.yml",
    "logsource": "macos/process_creation",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:macos/process_creation": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 1,
+   "conjuncts_imported": 1,
+   "gap_reasons": {},
    "attack_ids": [
     "T1518.001"
    ],
@@ -13970,13 +14022,11 @@
    "path": "rules/macos/process_creation/proc_creation_macos_chflags_hidden_flag.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/macos/process_creation/proc_creation_macos_chflags_hidden_flag.yml",
    "logsource": "macos/process_creation",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:macos/process_creation": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 1,
+   "conjuncts_imported": 1,
+   "gap_reasons": {},
    "attack_ids": [
     "T1218",
     "T1552.001",
@@ -14892,6 +14942,25 @@
    "attack_ids": [
     "T1003.002",
     "T1003.003"
+   ],
+   "ignored_group_tags": [],
+   "ignored_software_tags": [],
+   "dropped_tags": []
+  },
+  {
+   "content_tier": "enrich",
+   "sigma_id": "40b1fbe2-18ea-4ee7-be47-0294285811de",
+   "title": "System Shutdown/Reboot - MacOs",
+   "path": "rules/macos/process_creation/proc_creation_macos_system_shutdown_reboot.yml",
+   "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/macos/process_creation/proc_creation_macos_system_shutdown_reboot.yml",
+   "logsource": "macos/process_creation",
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 3,
+   "conjuncts_imported": 3,
+   "gap_reasons": {},
+   "attack_ids": [
+    "T1529"
    ],
    "ignored_group_tags": [],
    "ignored_software_tags": [],
@@ -15891,13 +15960,11 @@
    "path": "rules/macos/process_creation/proc_creation_macos_tmutil_delete_backup.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/macos/process_creation/proc_creation_macos_tmutil_delete_backup.yml",
    "logsource": "macos/process_creation",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:macos/process_creation": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 2,
+   "conjuncts_imported": 2,
+   "gap_reasons": {},
    "attack_ids": [
     "T1490"
    ],
@@ -16403,13 +16470,11 @@
    "path": "rules/macos/process_creation/proc_creation_macos_system_profiler_discovery.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/macos/process_creation/proc_creation_macos_system_profiler_discovery.yml",
    "logsource": "macos/process_creation",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:macos/process_creation": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 8,
+   "conjuncts_imported": 8,
+   "gap_reasons": {},
    "attack_ids": [
     "T1497.001",
     "T1082"
@@ -18520,13 +18585,11 @@
    "path": "rules/macos/process_creation/proc_creation_macos_susp_histfile_operations.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/macos/process_creation/proc_creation_macos_susp_histfile_operations.yml",
    "logsource": "macos/process_creation",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:macos/process_creation": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 6,
+   "conjuncts_imported": 6,
+   "gap_reasons": {},
    "attack_ids": [
     "T1552.003"
    ],
@@ -18812,6 +18875,25 @@
    },
    "attack_ids": [
     "T1505.003"
+   ],
+   "ignored_group_tags": [],
+   "ignored_software_tags": [],
+   "dropped_tags": []
+  },
+  {
+   "content_tier": "enrich",
+   "sigma_id": "51719bf5-e4fd-4e44-8ba8-b830e7ac0731",
+   "title": "Creation Of A Local User Account",
+   "path": "rules/macos/process_creation/proc_creation_macos_create_account.yml",
+   "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/macos/process_creation/proc_creation_macos_create_account.yml",
+   "logsource": "macos/process_creation",
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 2,
+   "conjuncts_imported": 2,
+   "gap_reasons": {},
+   "attack_ids": [
+    "T1136.001"
    ],
    "ignored_group_tags": [],
    "ignored_software_tags": [],
@@ -19255,6 +19337,25 @@
    "dropped_tags": []
   },
   {
+   "content_tier": "enrich",
+   "sigma_id": "53821412-17b0-4147-ade0-14faae67d54b",
+   "title": "System Integrity Protection (SIP) Enumeration",
+   "path": "rules/macos/process_creation/proc_creation_macos_csrutil_status.yml",
+   "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/macos/process_creation/proc_creation_macos_csrutil_status.yml",
+   "logsource": "macos/process_creation",
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 1,
+   "conjuncts_imported": 1,
+   "gap_reasons": {},
+   "attack_ids": [
+    "T1518.001"
+   ],
+   "ignored_group_tags": [],
+   "ignored_software_tags": [],
+   "dropped_tags": []
+  },
+  {
    "sigma_id": "5394fcc7-aeb2-43b5-9a09-cac9fc5edcd5",
    "title": "Suspicious Execution Location Of Wermgr.EXE",
    "path": "rules/windows/process_creation/proc_creation_win_wermgr_susp_exec_location.yml",
@@ -19314,13 +19415,11 @@
    "path": "rules/macos/process_creation/proc_creation_macos_find_cred_in_files.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/macos/process_creation/proc_creation_macos_find_cred_in_files.yml",
    "logsource": "macos/process_creation",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:macos/process_creation": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 2,
+   "conjuncts_imported": 2,
+   "gap_reasons": {},
    "attack_ids": [
     "T1552.001"
    ],
@@ -20339,6 +20438,27 @@
    "dropped_tags": []
   },
   {
+   "content_tier": "enrich",
+   "sigma_id": "58800443-f9fc-4d55-ae0c-98a3966dfb97",
+   "title": "System Network Discovery - macOS",
+   "path": "rules/macos/process_creation/proc_creation_macos_susp_system_network_discovery.yml",
+   "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/macos/process_creation/proc_creation_macos_susp_system_network_discovery.yml",
+   "logsource": "macos/process_creation",
+   "status": "rejected",
+   "rejection": "telemetry_gap",
+   "conjuncts_total": 6,
+   "conjuncts_imported": 0,
+   "gap_reasons": {
+    "telemetry_gap:field:ParentImage": 6
+   },
+   "attack_ids": [
+    "T1016"
+   ],
+   "ignored_group_tags": [],
+   "ignored_software_tags": [],
+   "dropped_tags": []
+  },
+  {
    "sigma_id": "589ac73f-8e12-409c-964e-31a2f5775ae2",
    "title": "HackTool - WSASS Execution",
    "path": "rules/windows/process_creation/proc_creation_win_hktl_wsass.yml",
@@ -21294,13 +21414,11 @@
    "path": "rules/macos/process_creation/proc_creation_macos_dseditgroup_add_to_admin_group.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/macos/process_creation/proc_creation_macos_dseditgroup_add_to_admin_group.yml",
    "logsource": "macos/process_creation",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:macos/process_creation": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 1,
+   "conjuncts_imported": 1,
+   "gap_reasons": {},
    "attack_ids": [
     "T1078.003"
    ],
@@ -21405,13 +21523,11 @@
    "path": "rules/macos/process_creation/proc_creation_macos_swvers_discovery.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/macos/process_creation/proc_creation_macos_swvers_discovery.yml",
    "logsource": "macos/process_creation",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:macos/process_creation": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 3,
+   "conjuncts_imported": 3,
+   "gap_reasons": {},
    "attack_ids": [
     "T1082"
    ],
@@ -21977,6 +22093,25 @@
    "gap_reasons": {},
    "attack_ids": [
     "T1218"
+   ],
+   "ignored_group_tags": [],
+   "ignored_software_tags": [],
+   "dropped_tags": []
+  },
+  {
+   "content_tier": "enrich",
+   "sigma_id": "60f1ce20-484e-41bd-85f4-ac4afec2c541",
+   "title": "GUI Input Capture - macOS",
+   "path": "rules/macos/process_creation/proc_creation_macos_gui_input_capture.yml",
+   "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/macos/process_creation/proc_creation_macos_gui_input_capture.yml",
+   "logsource": "macos/process_creation",
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 8,
+   "conjuncts_imported": 8,
+   "gap_reasons": {},
+   "attack_ids": [
+    "T1056.002"
    ],
    "ignored_group_tags": [],
    "ignored_software_tags": [],
@@ -22934,13 +23069,11 @@
    "path": "rules/macos/process_creation/proc_creation_macos_sysadminctl_add_user_to_admin_group.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/macos/process_creation/proc_creation_macos_sysadminctl_add_user_to_admin_group.yml",
    "logsource": "macos/process_creation",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:macos/process_creation": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 1,
+   "conjuncts_imported": 1,
+   "gap_reasons": {},
    "attack_ids": [
     "T1078.003"
    ],
@@ -23068,13 +23201,11 @@
    "path": "rules/macos/process_creation/proc_creation_macos_persistence_via_plistbuddy.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/macos/process_creation/proc_creation_macos_persistence_via_plistbuddy.yml",
    "logsource": "macos/process_creation",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:macos/process_creation": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 2,
+   "conjuncts_imported": 2,
+   "gap_reasons": {},
    "attack_ids": [
     "T1543.004",
     "T1543.001"
@@ -23737,10 +23868,10 @@
    "logsource": "macos/process_creation",
    "status": "rejected",
    "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
+   "conjuncts_total": 44,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "logsource:macos/process_creation": 1
+    "telemetry_gap:field:ParentImage": 44
    },
    "attack_ids": [
     "T1204.002",
@@ -24616,13 +24747,11 @@
    "path": "rules/macos/process_creation/proc_creation_macos_nscurl_usage.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/macos/process_creation/proc_creation_macos_nscurl_usage.yml",
    "logsource": "macos/process_creation",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:macos/process_creation": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 7,
+   "conjuncts_imported": 7,
+   "gap_reasons": {},
    "attack_ids": [
     "T1105"
    ],
@@ -24789,10 +24918,10 @@
    "logsource": "macos/process_creation",
    "status": "rejected",
    "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
+   "conjuncts_total": 20,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "logsource:macos/process_creation": 1
+    "telemetry_gap:field:ParentImage": 20
    },
    "attack_ids": [
     "T1566.002",
@@ -25243,13 +25372,11 @@
    "path": "rules/macos/process_creation/proc_creation_macos_sysctl_discovery.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/macos/process_creation/proc_creation_macos_sysctl_discovery.yml",
    "logsource": "macos/process_creation",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:macos/process_creation": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 6,
+   "conjuncts_imported": 6,
+   "gap_reasons": {},
    "attack_ids": [
     "T1497.001",
     "T1082"
@@ -25664,6 +25791,25 @@
    },
    "attack_ids": [
     "T1071.001"
+   ],
+   "ignored_group_tags": [],
+   "ignored_software_tags": [],
+   "dropped_tags": []
+  },
+  {
+   "content_tier": "enrich",
+   "sigma_id": "719c22d7-c11a-4f2c-93a6-2cfdd5412f68",
+   "title": "Decode Base64 Encoded Text -MacOs",
+   "path": "rules/macos/process_creation/proc_creation_macos_base64_decode.yml",
+   "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/macos/process_creation/proc_creation_macos_base64_decode.yml",
+   "logsource": "macos/process_creation",
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 1,
+   "conjuncts_imported": 1,
+   "gap_reasons": {},
+   "attack_ids": [
+    "T1027"
    ],
    "ignored_group_tags": [],
    "ignored_software_tags": [],
@@ -26996,12 +27142,12 @@
    "path": "rules/macos/process_creation/proc_creation_macos_clipboard_access_via_osascript.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/macos/process_creation/proc_creation_macos_clipboard_access_via_osascript.yml",
    "logsource": "macos/process_creation",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
+   "status": "partial",
+   "rejection": null,
+   "conjuncts_total": 5,
+   "conjuncts_imported": 4,
    "gap_reasons": {
-    "logsource:macos/process_creation": 1
+    "telemetry_gap:field:ParentImage": 1
    },
    "attack_ids": [
     "T1115",
@@ -28062,13 +28208,11 @@
    "path": "rules/macos/process_creation/proc_creation_macos_schedule_task_job_cron.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/macos/process_creation/proc_creation_macos_schedule_task_job_cron.yml",
    "logsource": "macos/process_creation",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:macos/process_creation": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 1,
+   "conjuncts_imported": 1,
+   "gap_reasons": {},
    "attack_ids": [
     "T1053.003"
    ],
@@ -28813,6 +28957,25 @@
    "dropped_tags": []
   },
   {
+   "content_tier": "enrich",
+   "sigma_id": "7f2bb9d5-6395-4de5-969c-70c11fbe6b12",
+   "title": "Split A File Into Pieces",
+   "path": "rules/macos/process_creation/proc_creation_macos_split_file_into_pieces.yml",
+   "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/macos/process_creation/proc_creation_macos_split_file_into_pieces.yml",
+   "logsource": "macos/process_creation",
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 1,
+   "conjuncts_imported": 1,
+   "gap_reasons": {},
+   "attack_ids": [
+    "T1030"
+   ],
+   "ignored_group_tags": [],
+   "ignored_software_tags": [],
+   "dropped_tags": []
+  },
+  {
    "sigma_id": "7f3a9c2d-4e8b-4a7f-9d3e-5c6f8a9b2e1d",
    "title": "OpenEDR Spawning Command Shell",
    "path": "rules/windows/process_creation/proc_creation_win_comodo_ssh_shellhost_cmd_spawn.yml",
@@ -29531,13 +29694,11 @@
    "path": "rules/macos/process_creation/proc_creation_macos_dsenableroot_enable_root_account.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/macos/process_creation/proc_creation_macos_dsenableroot_enable_root_account.yml",
    "logsource": "macos/process_creation",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:macos/process_creation": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 1,
+   "conjuncts_imported": 1,
+   "gap_reasons": {},
    "attack_ids": [
     "T1078.001",
     "T1078",
@@ -30091,6 +30252,25 @@
    "dropped_tags": []
   },
   {
+   "content_tier": "enrich",
+   "sigma_id": "84bae5d4-b518-4ae0-b331-6d4afd34d00f",
+   "title": "MacOS Network Service Scanning",
+   "path": "rules/macos/process_creation/proc_creation_macos_network_service_scanning.yml",
+   "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/macos/process_creation/proc_creation_macos_network_service_scanning.yml",
+   "logsource": "macos/process_creation",
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 4,
+   "conjuncts_imported": 4,
+   "gap_reasons": {},
+   "attack_ids": [
+    "T1046"
+   ],
+   "ignored_group_tags": [],
+   "ignored_software_tags": [],
+   "dropped_tags": []
+  },
+  {
    "sigma_id": "84c174ab-d3ef-481f-9c86-a50d0b8e3edb",
    "title": "PowerShell Get-Process LSASS in ScriptBlock",
    "path": "rules/windows/powershell/powershell_script/posh_ps_susp_getprocess_lsass.yml",
@@ -30474,13 +30654,11 @@
    "path": "rules/macos/process_creation/proc_creation_macos_susp_find_execution.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/macos/process_creation/proc_creation_macos_susp_find_execution.yml",
    "logsource": "macos/process_creation",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:macos/process_creation": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 8,
+   "conjuncts_imported": 8,
+   "gap_reasons": {},
    "attack_ids": [
     "T1083"
    ],
@@ -31081,13 +31259,11 @@
    "path": "rules/macos/process_creation/proc_creation_macos_change_file_time_attr.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/macos/process_creation/proc_creation_macos_change_file_time_attr.yml",
    "logsource": "macos/process_creation",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:macos/process_creation": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 4,
+   "conjuncts_imported": 4,
+   "gap_reasons": {},
    "attack_ids": [
     "T1070.006"
    ],
@@ -31262,6 +31438,25 @@
    "gap_reasons": {},
    "attack_ids": [
     "T1548.002"
+   ],
+   "ignored_group_tags": [],
+   "ignored_software_tags": [],
+   "dropped_tags": []
+  },
+  {
+   "content_tier": "enrich",
+   "sigma_id": "89bb1f97-c7b9-40e8-b52b-7d6afbd67276",
+   "title": "Local Groups Discovery - MacOs",
+   "path": "rules/macos/process_creation/proc_creation_macos_local_groups.yml",
+   "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/macos/process_creation/proc_creation_macos_local_groups.yml",
+   "logsource": "macos/process_creation",
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 3,
+   "conjuncts_imported": 3,
+   "gap_reasons": {},
+   "attack_ids": [
+    "T1069.001"
    ],
    "ignored_group_tags": [],
    "ignored_software_tags": [],
@@ -33686,13 +33881,11 @@
    "path": "rules/macos/process_creation/proc_creation_macos_binary_padding.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/macos/process_creation/proc_creation_macos_binary_padding.yml",
    "logsource": "macos/process_creation",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:macos/process_creation": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 4,
+   "conjuncts_imported": 4,
+   "gap_reasons": {},
    "attack_ids": [
     "T1027.001"
    ],
@@ -35243,6 +35436,25 @@
    "dropped_tags": []
   },
   {
+   "content_tier": "enrich",
+   "sigma_id": "9a7a0393-2144-4626-9bf1-7c2f5a7321db",
+   "title": "System Network Connections Discovery - MacOs",
+   "path": "rules/macos/process_creation/proc_creation_macos_system_network_connections_discovery.yml",
+   "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/macos/process_creation/proc_creation_macos_system_network_connections_discovery.yml",
+   "logsource": "macos/process_creation",
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 5,
+   "conjuncts_imported": 5,
+   "gap_reasons": {},
+   "attack_ids": [
+    "T1049"
+   ],
+   "ignored_group_tags": [],
+   "ignored_software_tags": [],
+   "dropped_tags": []
+  },
+  {
    "sigma_id": "9aa5106d-bce3-4b13-86df-3a20f1d5cf0b",
    "title": "Forfiles Command Execution",
    "path": "rules/windows/process_creation/proc_creation_win_forfiles_proxy_execution_.yml",
@@ -35325,13 +35537,11 @@
    "path": "rules/macos/process_creation/proc_creation_macos_tmutil_exclude_file_from_backup.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/macos/process_creation/proc_creation_macos_tmutil_exclude_file_from_backup.yml",
    "logsource": "macos/process_creation",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:macos/process_creation": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 2,
+   "conjuncts_imported": 2,
+   "gap_reasons": {},
    "attack_ids": [
     "T1490"
    ],
@@ -38416,10 +38626,10 @@
    "logsource": "macos/process_creation",
    "status": "rejected",
    "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
+   "conjuncts_total": 2,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "logsource:macos/process_creation": 1
+    "telemetry_gap:field:ParentImage": 2
    },
    "attack_ids": [
     "T1059.002"
@@ -39473,13 +39683,11 @@
    "path": "rules/macos/process_creation/proc_creation_macos_clear_system_logs.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/macos/process_creation/proc_creation_macos_clear_system_logs.yml",
    "logsource": "macos/process_creation",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:macos/process_creation": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 6,
+   "conjuncts_imported": 6,
+   "gap_reasons": {},
    "attack_ids": [
     "T1685.006"
    ],
@@ -39666,6 +39874,25 @@
    "gap_reasons": {},
    "attack_ids": [
     "T1484.001"
+   ],
+   "ignored_group_tags": [],
+   "ignored_software_tags": [],
+   "dropped_tags": []
+  },
+  {
+   "content_tier": "enrich",
+   "sigma_id": "adc9bcc4-c39c-4f6b-a711-1884017bf043",
+   "title": "Network Sniffing - MacOs",
+   "path": "rules/macos/process_creation/proc_creation_macos_network_sniffing.yml",
+   "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/macos/process_creation/proc_creation_macos_network_sniffing.yml",
+   "logsource": "macos/process_creation",
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 2,
+   "conjuncts_imported": 2,
+   "gap_reasons": {},
+   "attack_ids": [
+    "T1040"
    ],
    "ignored_group_tags": [],
    "ignored_software_tags": [],
@@ -39885,13 +40112,11 @@
    "path": "rules/macos/process_creation/proc_creation_macos_launchctl_execution.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/macos/process_creation/proc_creation_macos_launchctl_execution.yml",
    "logsource": "macos/process_creation",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:macos/process_creation": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 3,
+   "conjuncts_imported": 3,
+   "gap_reasons": {},
    "attack_ids": [
     "T1543.004",
     "T1569.001",
@@ -40384,13 +40609,11 @@
    "path": "rules/macos/process_creation/proc_creation_macos_creds_from_keychain.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/macos/process_creation/proc_creation_macos_creds_from_keychain.yml",
    "logsource": "macos/process_creation",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:macos/process_creation": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 4,
+   "conjuncts_imported": 4,
+   "gap_reasons": {},
    "attack_ids": [
     "T1555.001"
    ],
@@ -40784,12 +41007,12 @@
    "path": "rules/macos/process_creation/proc_creation_macos_create_hidden_account.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/macos/process_creation/proc_creation_macos_create_hidden_account.yml",
    "logsource": "macos/process_creation",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
+   "status": "partial",
+   "rejection": null,
+   "conjuncts_total": 4,
+   "conjuncts_imported": 3,
    "gap_reasons": {
-    "logsource:macos/process_creation": 1
+    "translation_gap:value_type:SigmaRegularExpression": 1
    },
    "attack_ids": [
     "T1564.002"
@@ -42043,6 +42266,27 @@
    "dropped_tags": []
   },
   {
+   "content_tier": "enrich",
+   "sigma_id": "b6e2a2e3-2d30-43b1-a4ea-071e36595690",
+   "title": "Space After Filename - macOS",
+   "path": "rules/macos/process_creation/proc_creation_macos_space_after_filename.yml",
+   "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/macos/process_creation/proc_creation_macos_space_after_filename.yml",
+   "logsource": "macos/process_creation",
+   "status": "rejected",
+   "rejection": "translation_gap",
+   "conjuncts_total": 2,
+   "conjuncts_imported": 0,
+   "gap_reasons": {
+    "translation_gap:interior_wildcard_or_empty": 2
+   },
+   "attack_ids": [
+    "T1036.006"
+   ],
+   "ignored_group_tags": [],
+   "ignored_software_tags": [],
+   "dropped_tags": []
+  },
+  {
    "sigma_id": "b6ea3cc7-542f-43ef-bbe4-980fbed444c7",
    "title": "Remote Server Service Abuse",
    "path": "rules/application/rpc_firewall/rpc_firewall_remote_server_service_abuse.yml",
@@ -42123,13 +42367,11 @@
    "path": "rules/macos/process_creation/proc_creation_macos_dscl_add_user_to_admin_group.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/macos/process_creation/proc_creation_macos_dscl_add_user_to_admin_group.yml",
    "logsource": "macos/process_creation",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:macos/process_creation": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 1,
+   "conjuncts_imported": 1,
+   "gap_reasons": {},
    "attack_ids": [
     "T1078.003"
    ],
@@ -42648,13 +42890,11 @@
    "path": "rules/macos/process_creation/proc_creation_macos_osacompile_runonly_execution.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/macos/process_creation/proc_creation_macos_osacompile_runonly_execution.yml",
    "logsource": "macos/process_creation",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:macos/process_creation": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 1,
+   "conjuncts_imported": 1,
+   "gap_reasons": {},
    "attack_ids": [
     "T1059.002"
    ],
@@ -43447,12 +43687,12 @@
    "path": "rules/macos/process_creation/proc_creation_macos_remote_access_tools_renamed_meshagent_execution.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/macos/process_creation/proc_creation_macos_remote_access_tools_renamed_meshagent_execution.yml",
    "logsource": "macos/process_creation",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
+   "status": "partial",
+   "rejection": null,
+   "conjuncts_total": 2,
+   "conjuncts_imported": 1,
    "gap_reasons": {
-    "logsource:macos/process_creation": 1
+    "telemetry_gap:field:OriginalFileName": 1
    },
    "attack_ids": [
     "T1036.003",
@@ -43601,6 +43841,23 @@
    "attack_ids": [
     "T1059"
    ],
+   "ignored_group_tags": [],
+   "ignored_software_tags": [],
+   "dropped_tags": []
+  },
+  {
+   "content_tier": "enrich",
+   "sigma_id": "be2e3a5c-9cc7-4d02-842a-68e9cb26ec49",
+   "title": "JAMF MDM Execution",
+   "path": "rules/macos/process_creation/proc_creation_macos_jamf_usage.yml",
+   "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/macos/process_creation/proc_creation_macos_jamf_usage.yml",
+   "logsource": "macos/process_creation",
+   "status": "rejected",
+   "rejection": "no_attack_mapping",
+   "conjuncts_total": 0,
+   "conjuncts_imported": 0,
+   "gap_reasons": {},
+   "attack_ids": [],
    "ignored_group_tags": [],
    "ignored_software_tags": [],
    "dropped_tags": []
@@ -43806,13 +44063,11 @@
    "path": "rules/macos/process_creation/proc_creation_macos_hdiutil_mount.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/macos/process_creation/proc_creation_macos_hdiutil_mount.yml",
    "logsource": "macos/process_creation",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:macos/process_creation": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 2,
+   "conjuncts_imported": 2,
+   "gap_reasons": {},
    "attack_ids": [
     "T1560.001",
     "T1566.001"
@@ -49065,6 +49320,26 @@
    "dropped_tags": []
   },
   {
+   "content_tier": "enrich",
+   "sigma_id": "d7329412-13bd-44ba-a072-3387f804a106",
+   "title": "Guest Account Enabled Via Sysadminctl",
+   "path": "rules/macos/process_creation/proc_creation_macos_sysadminctl_enable_guest_account.yml",
+   "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/macos/process_creation/proc_creation_macos_sysadminctl_enable_guest_account.yml",
+   "logsource": "macos/process_creation",
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 1,
+   "conjuncts_imported": 1,
+   "gap_reasons": {},
+   "attack_ids": [
+    "T1078.001",
+    "T1078"
+   ],
+   "ignored_group_tags": [],
+   "ignored_software_tags": [],
+   "dropped_tags": []
+  },
+  {
    "sigma_id": "d7553d7b-f485-479c-b192-cdac6edd83a4",
    "title": "OpenCanary - NMAP XMAS Scan",
    "path": "rules/application/opencanary/opencanary_portscan_nmap_xmas_scan.yml",
@@ -50432,6 +50707,27 @@
    "dropped_tags": []
   },
   {
+   "content_tier": "enrich",
+   "sigma_id": "ddf36b67-e872-4507-ab2e-46bda21b842c",
+   "title": "Local System Accounts Discovery - MacOs",
+   "path": "rules/macos/process_creation/proc_creation_macos_local_account.yml",
+   "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/macos/process_creation/proc_creation_macos_local_account.yml",
+   "logsource": "macos/process_creation",
+   "status": "partial",
+   "rejection": null,
+   "conjuncts_total": 20,
+   "conjuncts_imported": 19,
+   "gap_reasons": {
+    "translation_gap:interior_wildcard_or_empty": 1
+   },
+   "attack_ids": [
+    "T1087.001"
+   ],
+   "ignored_group_tags": [],
+   "ignored_software_tags": [],
+   "dropped_tags": []
+  },
+  {
    "sigma_id": "de16d92c-c446-4d53-8938-10aeef41c8b6",
    "title": "Computer Password Change Via Ksetup.EXE",
    "path": "rules/windows/process_creation/proc_creation_win_ksetup_password_change_computer.yml",
@@ -50850,6 +51146,27 @@
    "dropped_tags": []
   },
   {
+   "content_tier": "enrich",
+   "sigma_id": "dfe8b941-4e54-4242-b674-6b613d521962",
+   "title": "Startup Item File Created - MacOS",
+   "path": "rules/macos/file_event/file_event_macos_susp_startup_item_created.yml",
+   "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/macos/file_event/file_event_macos_susp_startup_item_created.yml",
+   "logsource": "macos/file_event",
+   "status": "rejected",
+   "rejection": "telemetry_gap",
+   "conjuncts_total": 0,
+   "conjuncts_imported": 0,
+   "gap_reasons": {
+    "logsource:macos/file_event": 1
+   },
+   "attack_ids": [
+    "T1037.005"
+   ],
+   "ignored_group_tags": [],
+   "ignored_software_tags": [],
+   "dropped_tags": []
+  },
+  {
    "sigma_id": "dff1e1cc-d3fd-47c8-bfc2-aeb878a754c0",
    "title": "Shell Process Spawned by Java.EXE",
    "path": "rules/windows/process_creation/proc_creation_win_java_susp_child_process_2.yml",
@@ -51100,10 +51417,10 @@
    "logsource": "macos/process_creation",
    "status": "rejected",
    "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
+   "conjuncts_total": 48,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "logsource:macos/process_creation": 1
+    "telemetry_gap:field:ParentImage": 48
    },
    "attack_ids": [
     "T1059.007",
@@ -54884,13 +55201,11 @@
    "path": "rules/macos/process_creation/proc_creation_macos_jxa_in_memory_execution.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/macos/process_creation/proc_creation_macos_jxa_in_memory_execution.yml",
    "logsource": "macos/process_creation",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:macos/process_creation": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 2,
+   "conjuncts_imported": 2,
+   "gap_reasons": {},
    "attack_ids": [
     "T1059.007",
     "T1059.002"
@@ -55696,6 +56011,27 @@
    "dropped_tags": []
   },
   {
+   "content_tier": "enrich",
+   "sigma_id": "f459ccb4-9805-41ea-b5b2-55e279e2424a",
+   "title": "Remote Access Tool - Team Viewer Session Started On MacOS Host",
+   "path": "rules/macos/process_creation/proc_creation_macos_remote_access_tools_teamviewer_incoming_connection.yml",
+   "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/macos/process_creation/proc_creation_macos_remote_access_tools_teamviewer_incoming_connection.yml",
+   "logsource": "macos/process_creation",
+   "status": "rejected",
+   "rejection": "telemetry_gap",
+   "conjuncts_total": 1,
+   "conjuncts_imported": 0,
+   "gap_reasons": {
+    "telemetry_gap:field:ParentImage": 1
+   },
+   "attack_ids": [
+    "T1133"
+   ],
+   "ignored_group_tags": [],
+   "ignored_software_tags": [],
+   "dropped_tags": []
+  },
+  {
    "sigma_id": "f4a623c2-4ef5-4c33-b811-0642f702c9f1",
    "title": "Visual Studio Code Tunnel Shell Execution",
    "path": "rules/windows/process_creation/proc_creation_win_vscode_tunnel_remote_shell_.yml",
@@ -55803,6 +56139,25 @@
    },
    "attack_ids": [
     "T1003.002"
+   ],
+   "ignored_group_tags": [],
+   "ignored_software_tags": [],
+   "dropped_tags": []
+  },
+  {
+   "content_tier": "enrich",
+   "sigma_id": "f5141b6d-9f42-41c6-a7bf-2a780678b29b",
+   "title": "Gatekeeper Bypass via Xattr",
+   "path": "rules/macos/process_creation/proc_creation_macos_xattr_gatekeeper_bypass.yml",
+   "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/macos/process_creation/proc_creation_macos_xattr_gatekeeper_bypass.yml",
+   "logsource": "macos/process_creation",
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 1,
+   "conjuncts_imported": 1,
+   "gap_reasons": {},
+   "attack_ids": [
+    "T1553.001"
    ],
    "ignored_group_tags": [],
    "ignored_software_tags": [],
@@ -58162,13 +58517,11 @@
    "path": "rules/macos/process_creation/proc_creation_macos_disable_security_tools.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules/macos/process_creation/proc_creation_macos_disable_security_tools.yml",
    "logsource": "macos/process_creation",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:macos/process_creation": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 16,
+   "conjuncts_imported": 16,
+   "gap_reasons": {},
    "attack_ids": [
     "T1685"
    ],

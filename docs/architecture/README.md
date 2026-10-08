@@ -42,6 +42,7 @@ the later ADRs below record each subsystem as it was designed, measured and buil
 | [adr/0011-cloud-telemetry.md](adr/0011-cloud-telemetry.md) | Cloud and SaaS telemetry: Entra ID, Office 365, AWS CloudTrail, Azure Activity, Okta, GitHub, Kubernetes audit | **ACCEPTED** (2026-10-06), implemented (batches A–C) |
 | [adr/0012-network-telemetry.md](adr/0012-network-telemetry.md) | Network telemetry: Zeek (JSON and TSV), the sensor product scope; network ↔ host link measured and not adopted | **ACCEPTED** (2026-10-06), implemented |
 | [adr/0013-indicator-intelligence-layer.md](adr/0013-indicator-intelligence-layer.md) | Indicator (IOC) intelligence layer — contextual-only recommended | **PROPOSED** — owner decision required |
+| [adr/0014-macos-telemetry.md](adr/0014-macos-telemetry.md) | macOS telemetry: Endpoint Security process events via osquery; enrich tier extended to macOS | **ACCEPTED** (2026-10-08), implemented |
 
 ## The one-paragraph summary
 

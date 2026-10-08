@@ -45,8 +45,10 @@ Gate status:
   exact value readers.
 - **ADR-0012 (implemented):** ``zeek`` — Zeek JSON and TSV logs from a
   network sensor (``observer``, never a host).
+- **ADR-0014 (implemented):** ``osquery_es`` — macOS Endpoint Security
+  process events from osquery's ``es_process_events`` table.
 - **Not yet implemented:** System and Defender logs, journald, Suricata,
-  macOS, Google Workspace / GCP (ADR-0011 D1).
+  Google Workspace / GCP (ADR-0011 D1).
 """
 
 from __future__ import annotations

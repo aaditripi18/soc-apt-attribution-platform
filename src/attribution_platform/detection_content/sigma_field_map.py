@@ -50,6 +50,8 @@ no cloud account and are scoped by their own dataset alone.
 ``/13`` (ADR-0012) adds the Zeek logsources (``zeek/dns``, ``dce_rpc``,
 ``smb_files``, ``kerberos``, ``http``) in Zeek's own field names; a sensor is
 not an endpoint, so endpoint products also require **no** ``observer.product``.
+``/14`` (ADR-0014) adds ``macos/process_creation`` (Endpoint Security exec events
+via osquery) with the macOS product scope.
 
 Anything else is a *telemetry gap*, reported per rule by the importer — never
 approximated. ``UNMAPPED_FIELD_REASONS`` records why the most frequent
@@ -65,7 +67,7 @@ from __future__ import annotations
 
 from types import MappingProxyType
 
-FIELD_MAP_VERSION = "sigma-field-map/13"
+FIELD_MAP_VERSION = "sigma-field-map/14"
 
 #: ``(product, category)`` → the ``(field_path, operator, value)`` scope
 #: conditions an Observation must satisfy to be the kind of event the Sigma
@@ -190,6 +192,10 @@ LOGSOURCE_SCOPES: MappingProxyType[tuple[str, str], tuple[tuple[str, str, str], 
             ("kubernetes", "audit"): (("event.dataset", "equals", "kubernetes.audit_logs"),),
             ("kubernetes", "application"): (("event.dataset", "equals", "kubernetes.audit_logs"),),
             # Zeek (ADR-0012): Elastic's Zeek data-stream names.
+            ("macos", "process_creation"): (
+                ("event.category", "has_element", "process"),
+                ("event.type", "has_element", "start"),
+            ),
             ("zeek", "dns"): (("event.dataset", "equals", "zeek.dns"),),
             ("zeek", "dce_rpc"): (("event.dataset", "equals", "zeek.dce_rpc"),),
             ("zeek", "smb_files"): (("event.dataset", "equals", "zeek.smb_files"),),
@@ -232,6 +238,12 @@ PRODUCT_OS_SCOPES: MappingProxyType[str, tuple[tuple[str, str, str | None, bool]
             "okta": (),
             "github": (),
             "kubernetes": (),
+            # macOS endpoint (ADR-0014 D4).
+            "macos": (
+                ("host.os_type", "equals", "macos", False),
+                ("cloud.account_id", "exists", None, True),
+                ("observer.product", "exists", None, True),
+            ),
             # A network sensor (ADR-0012 D5).
             "zeek": (("observer.product", "equals", "zeek", False),),
         }
@@ -531,6 +543,14 @@ FIELD_MAPS: MappingProxyType[tuple[str, str], MappingProxyType[str, str]] = Mapp
         ("github", "audit"): MappingProxyType({"action": "github.action"}),
         ("kubernetes", "audit"): _KUBERNETES_AUDIT_FIELDS,
         ("kubernetes", "application"): _KUBERNETES_AUDIT_FIELDS,
+        # macOS (ADR-0014): osquery es_process_events exec rows.
+        ("macos", "process_creation"): MappingProxyType(
+            {
+                "Image": "process.executable",
+                "CommandLine": "process.command_line",
+                "CurrentDirectory": "process.working_directory",
+            }
+        ),
         # Zeek (ADR-0012): Zeek's own field names, per log.
         ("zeek", "dns"): MappingProxyType(
             {
@@ -719,6 +739,10 @@ UNMAPPED_FIELD_REASONS: MappingProxyType[str, str] = MappingProxyType(
         ),
         "User": "UserRef splits domain and name; Sigma matches the combined 'DOMAIN\\user' string",
         "ParentUser": "the parent process's user is not captured",
+        "ParentImage": (
+            "macOS osquery es_process_events rows carry only the parent pid; resolving it to "
+            "an executable needs another event (correlation), not the field map"
+        ),
         "DestinationHostname": "destination hostname is not captured on NetworkInfo",
         "Data": (
             "classic 'Windows PowerShell' channel (400/600/800) rules read the event's Data "

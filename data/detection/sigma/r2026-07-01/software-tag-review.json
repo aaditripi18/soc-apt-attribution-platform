@@ -1,264 +1,280 @@
 {
- "review_version": "software-tag-review/1",
- "sigma_release": "r2026-07-01",
- "reviewed_on": "2026-09-25",
- "policy": "ADR-0007 D3 amendment (2026-09-25): a Sigma attack.sNNNN (software) tag becomes evidence only if this review accepts it for that rule; accepted only when every branch of the rule's detection logic identifies that specific tool. Unreviewed or rejected software tags are recorded and ignored, like Group tags. Technique tags are unaffected.",
- "decisions": [
-  {
-   "sigma_id": "058f4380-962d-40a5-afce-50207d36d7e2",
-   "title": "HackTool - CrackMapExec Execution Patterns",
-   "tag": "attack.s0106",
-   "software": "cmd",
-   "decision": "reject",
-   "reason": "Some branches match powershell.exe command lines, not cmd; the rule identifies CrackMapExec patterns, not the cmd tool."
-  },
-  {
-   "sigma_id": "304afd73-55a5-4bb9-8c21-0b1fc84ea9e4",
-   "title": "PSEXEC Remote Execution File Artefact",
-   "tag": "attack.s0029",
-   "software": "PsExec",
-   "decision": "accept",
-   "reason": "C:\\Windows\\PSEXEC-*.key is an artefact written by Sysinternals PsExec itself."
-  },
-  {
-   "sigma_id": "3ceb2083-a27f-449a-be33-14ec1b7cc973",
-   "title": "Silence.EDA Detection",
-   "tag": "attack.s0363",
-   "software": "Empire",
-   "decision": "reject",
-   "reason": "Requires Empire-derived strings AND dnscat2 tunnelling functions in one script block, which identifies the Silence group's Silence.EDA tool, not the Empire framework in general; the Empire tag would spread the evidence over all 17 Empire-using Groups. Reviewed 2026-09-25 when ps_script became importable."
-  },
-  {
-   "sigma_id": "41504465-5e3a-4a5b-a5b4-2a0baadd4463",
-   "title": "PsExec Tool Execution From Suspicious Locations - PipeName",
-   "tag": "attack.s0029",
-   "software": "PsExec",
-   "decision": "accept",
-   "reason": "Requires the \\PSEXESVC named pipe, created by the Sysinternals PsExec service itself. Reviewed 2026-09-25 when pipe_created became importable (ADR-0008 batch C)."
-  },
-  {
-   "sigma_id": "4e2ed651-1906-4a59-a78a-18220fca1b22",
-   "title": "PUA - NirCmd Execution",
-   "tag": "attack.s0029",
-   "software": "PsExec",
-   "decision": "reject",
-   "reason": "Detects NirCmd (image/OriginalFileName NirCmd.exe or its command verbs), a different tool from PsExec."
-  },
-  {
-   "sigma_id": "56321594-9087-49d9-bf10-524fe8479452",
-   "title": "Potential Persistence Via Netsh Helper DLL",
-   "tag": "attack.s0108",
-   "software": "netsh",
-   "decision": "accept",
-   "reason": "Every branch requires netsh.exe (image or OriginalFileName)."
-  },
-  {
-   "sigma_id": "56c217c3-2de2-479b-990f-5c109ba8458f",
-   "title": "HackTool - Default PowerSploit/Empire Scheduled Task Creation",
-   "tag": "attack.s0111",
-   "software": "schtasks",
-   "decision": "accept",
-   "reason": "Requires schtasks.exe as the process image."
-  },
-  {
-   "sigma_id": "57c4bf16-227f-4394-8ec7-1b745ee061c3",
-   "title": "Firewall Disabled via Netsh.EXE",
-   "tag": "attack.s0108",
-   "software": "netsh",
-   "decision": "accept",
-   "reason": "Every branch requires netsh.exe (image or OriginalFileName)."
-  },
-  {
-   "sigma_id": "7aa7009a-28b9-4344-8c1f-159489a390df",
-   "title": "HackTool - Windows Credential Editor (WCE) Execution",
-   "tag": "attack.s0005",
-   "software": "Windows Credential Editor",
-   "decision": "accept",
-   "reason": "Branches are WCE.exe/WCE64.exe images or WCE import hashes; both identify WCE (the hash branch is not translatable today and is dropped by the importer)."
-  },
-  {
-   "sigma_id": "7df1713a-1a5b-4a4b-a071-dc83b144a101",
-   "title": "Esentutl Gather Credentials",
-   "tag": "attack.s0404",
-   "software": "esentutl",
-   "decision": "accept",
-   "reason": "Requires the esentutl invocation in the command line."
-  },
-  {
-   "sigma_id": "7eff1a7f-dd45-4c20-877a-f21e342a7611",
-   "title": "RemCom Service File Creation",
-   "tag": "attack.s0029",
-   "software": "PsExec",
-   "decision": "reject",
-   "reason": "RemComSvc.exe belongs to RemCom, an open-source PsExec alternative, not PsExec."
-  },
-  {
-   "sigma_id": "93199800-b52a-4dec-b762-75212c196542",
-   "title": "PUA - RunXCmd Execution",
-   "tag": "attack.s0029",
-   "software": "PsExec",
-   "decision": "reject",
-   "reason": "Detects RunXCmd command-line flags, a different tool from PsExec."
-  },
-  {
-   "sigma_id": "99c840f2-2012-46fd-9141-c761987550ef",
-   "title": "Suspicious Download From Direct IP Via Bitsadmin",
-   "tag": "attack.s0190",
-   "software": "BITSAdmin",
-   "decision": "accept",
-   "reason": "Requires bitsadmin.exe (image or OriginalFileName)."
-  },
-  {
-   "sigma_id": "9bd012ee-0dff-44d7-84a0-aa698cfd87a3",
-   "title": "LSASS Memory Access by Tool With Dump Keyword In Name",
-   "tag": "attack.s0002",
-   "software": "Mimikatz",
-   "decision": "reject",
-   "reason": "Matches any source image containing 'dump' (e.g. Outflank-Dumpert.exe in the OTRF sample); does not identify Mimikatz."
-  },
-  {
-   "sigma_id": "9ef27c24-4903-4192-881a-3adde7ff92a5",
-   "title": "Renamed Remote Utilities RAT (RURAT) Execution",
-   "tag": "attack.s0592",
-   "software": "RemoteUtilities",
-   "decision": "accept",
-   "reason": "Requires PE Product 'Remote Utilities', i.e. the Remote Utilities binary itself (renamed)."
-  },
-  {
-   "sigma_id": "a6b33c02-8305-488f-8585-03cb2a7763f2",
-   "title": "Windows Credential Editor Registry",
-   "tag": "attack.s0005",
-   "software": "Windows Credential Editor",
-   "decision": "accept",
-   "reason": "The WCESERVICE service key is created by WCE itself."
-  },
-  {
-   "sigma_id": "aa35a627-33fb-4d04-a165-d33b4afca3e8",
-   "title": "Remote LSASS Process Access Through Windows Remote Management",
-   "tag": "attack.s0002",
-   "software": "Mimikatz",
-   "decision": "reject",
-   "reason": "Any tool run over WinRM (wsmprovhost.exe) reading LSASS matches; Mimikatz is one possibility, not identified."
-  },
-  {
-   "sigma_id": "b69888d4-380c-45ce-9cf9-d9ce46e67821",
-   "title": "Hidden Executable In NTFS Alternate Data Stream",
-   "tag": "attack.s0139",
-   "software": "PowerDuke",
-   "decision": "reject",
-   "reason": "Fires on any executable (any IMPHASH) written to an alternate data stream; it does not identify PowerDuke. S0139 is used by exactly one Group (APT29) in v19.2, so accepting it would turn a common technique into near-maximum-diagnosticity evidence for APT29. Reviewed 2026-09-25 when create_stream_hash became importable."
-  },
-  {
-   "sigma_id": "d059842b-6b9d-4ed1-b5c3-5b89143c6ede",
-   "title": "File Download Via Bitsadmin",
-   "tag": "attack.s0190",
-   "software": "BITSAdmin",
-   "decision": "accept",
-   "reason": "Requires bitsadmin.exe (image or OriginalFileName)."
-  },
-  {
-   "sigma_id": "d9047477-0359-48c9-b8c7-792cedcdc9c4",
-   "title": "PUA - NirCmd Execution As LOCAL SYSTEM",
-   "tag": "attack.s0029",
-   "software": "PsExec",
-   "decision": "reject",
-   "reason": "Detects NirCmd's 'runassystem' verb, a different tool from PsExec."
-  },
-  {
-   "sigma_id": "e5b33f7d-eb93-48b6-9851-09e1e610b6d7",
-   "title": "Credential Dumping Attempt Via WerFault",
-   "tag": "attack.s0002",
-   "software": "Mimikatz",
-   "decision": "reject",
-   "reason": "Detects WerFault.exe opening LSASS with full access; does not identify Mimikatz."
-  },
-  {
-   "sigma_id": "e7be6119-fc37-43f0-ad4f-1f3f99be2f9f",
-   "title": "Copying Sensitive Files with Credential Data",
-   "tag": "attack.s0404",
-   "software": "esentutl",
-   "decision": "reject",
-   "reason": "Condition is 'all of selection_esent_* or selection_susp_paths': the sensitive-path branch fires without esentutl."
-  },
-  {
-   "sigma_id": "f0e2b768-5220-47dd-b891-d57b96fc0ec1",
-   "title": "CSExec Service File Creation",
-   "tag": "attack.s0029",
-   "software": "PsExec",
-   "decision": "reject",
-   "reason": "csexecsvc.exe belongs to CSExec, a C# PsExec alternative, not PsExec."
-  },
-  {
-   "sigma_id": "f5e3b62f-e577-4e59-931e-0a15b2b94e1e",
-   "title": "HackTool - Htran/NATBypass Execution",
-   "tag": "attack.s0040",
-   "software": "HTRAN",
-   "decision": "reject",
-   "reason": "Also matches lcx.exe and the -tran/-slave syntax shared by other port-forwarders; HTRAN is not uniquely identified."
-  },
-  {
-   "sigma_id": "f8be3e82-46a3-4e4e-ada5-8e538ae8b9c9",
-   "title": "Credential Dumping Activity By Python Based Tool",
-   "tag": "attack.s0349",
-   "software": "LaZagne",
-   "decision": "reject",
-   "reason": "Any Python tool reading LSASS via ctypes matches (e.g. pypykatz); LaZagne is not identified."
-  },
-  {
-   "sigma_id": "192a0330-c20b-4356-90b6-7b7049ae0b87",
-   "title": "Successful Overpass the Hash Attempt",
-   "tag": "attack.s0002",
-   "software": "Mimikatz",
-   "decision": "reject",
-   "reason": "Rule matches a 4624 LogonType 9 logon with LogonProcessName seclogo and Negotiate - the logon Windows itself records for 'runas /netonly' as well as for Mimikatz sekurlsa::pth. The pattern is not Mimikatz-specific, so it is technique evidence (T1550.002) only, never software evidence."
-  },
-  {
-   "sigma_id": "1de68c67-af5c-4097-9c85-fe5578e09e67",
-   "title": "WCE wceaux.dll Access",
-   "tag": "attack.s0005",
-   "software": "Windows Credential Editor",
-   "decision": "accept",
-   "reason": "Rule matches handle requests/accesses to an object named wceaux.dll - Windows Credential Editor's own auxiliary DLL, an artifact specific to the tool."
-  },
-  {
-   "sigma_id": "39a80702-d7ca-4a83-b776-525b1f86a36d",
-   "title": "Potential Secure Deletion with SDelete",
-   "tag": "attack.s0195",
-   "software": "SDelete",
-   "decision": "accept",
-   "reason": "Rule matches object names ending .AAA / .ZZZ - the rename sequence SDelete itself applies to a file before deleting it; the rule is built around that tool's artifact."
-  },
-  {
-   "sigma_id": "611eab06-a145-4dfa-a295-3ccc5c20f59a",
-   "title": "Mimikatz DC Sync",
-   "tag": "attack.s0002",
-   "software": "Mimikatz",
-   "decision": "reject",
-   "reason": "The rule matches a 4662 directory-replication extended-right request by a non-machine account; any DCSync implementation (e.g. Impacket secretsdump, DSInternals) produces the identical event, so it does not identify Mimikatz. (Security batch B, 2026-09-30.)"
-  },
-  {
-   "sigma_id": "968eef52-9cff-4454-8992-1e74b9cbad6c",
-   "title": "Reconnaissance Activity",
-   "tag": "attack.s0039",
-   "software": "Net",
-   "decision": "reject",
-   "reason": "The rule matches 4661 SAM_USER / SAM_GROUP handle requests for the -500 / -512 principals; any SAMR client (net.exe, PowerView, AD administration tools) produces them, so it does not identify Net. (Security batch B, 2026-09-30.)"
-  },
-  {
-   "sigma_id": "f0d1feba-4344-4ca9-8121-a6c97bd6df52",
-   "title": "Credential Dumping Tools Service Execution - Security",
-   "tag": "attack.s0005",
-   "software": "Windows Credential Editor",
-   "decision": "reject",
-   "reason": "The rule's branches match the service image names of several different tools (cachedump, dumpsvc, fgexec, gsecdump, mimidrv, pwdump, servpw); not every branch identifies Windows Credential Editor. (Security batch B, 2026-09-30.)"
-  },
-  {
-   "sigma_id": "259e5a6a-b8d2-4c38-86e2-26c5e651361d",
-   "title": "PsExec Service File Creation",
-   "tag": "attack.s0029",
-   "software": "PsExec",
-   "decision": "accept",
-   "reason": "Its single branch matches the creation of \\PSEXESVC.exe, the service binary Sysinternals PsExec writes by default; other remote-execution tools (Impacket, Metasploit, RemCom, CSExec, PAExec) use different names, and a renamed PsExec does not match (a miss, never a misattribution). Enrich tier (ADR-0007 Amendment A), 2026-10-03."
-  }
- ]
+  "review_version": "software-tag-review/1",
+  "sigma_release": "r2026-07-01",
+  "reviewed_on": "2026-09-25",
+  "policy": "ADR-0007 D3 amendment (2026-09-25): a Sigma attack.sNNNN (software) tag becomes evidence only if this review accepts it for that rule; accepted only when every branch of the rule's detection logic identifies that specific tool. Unreviewed or rejected software tags are recorded and ignored, like Group tags. Technique tags are unaffected.",
+  "decisions": [
+    {
+      "sigma_id": "058f4380-962d-40a5-afce-50207d36d7e2",
+      "title": "HackTool - CrackMapExec Execution Patterns",
+      "tag": "attack.s0106",
+      "software": "cmd",
+      "decision": "reject",
+      "reason": "Some branches match powershell.exe command lines, not cmd; the rule identifies CrackMapExec patterns, not the cmd tool."
+    },
+    {
+      "sigma_id": "192a0330-c20b-4356-90b6-7b7049ae0b87",
+      "title": "Successful Overpass the Hash Attempt",
+      "tag": "attack.s0002",
+      "software": "Mimikatz",
+      "decision": "reject",
+      "reason": "Rule matches a 4624 LogonType 9 logon with LogonProcessName seclogo and Negotiate - the logon Windows itself records for 'runas /netonly' as well as for Mimikatz sekurlsa::pth. The pattern is not Mimikatz-specific, so it is technique evidence (T1550.002) only, never software evidence."
+    },
+    {
+      "sigma_id": "1de68c67-af5c-4097-9c85-fe5578e09e67",
+      "title": "WCE wceaux.dll Access",
+      "tag": "attack.s0005",
+      "software": "Windows Credential Editor",
+      "decision": "accept",
+      "reason": "Rule matches handle requests/accesses to an object named wceaux.dll - Windows Credential Editor's own auxiliary DLL, an artifact specific to the tool."
+    },
+    {
+      "sigma_id": "234dc5df-40b5-49d1-bf53-0d44ce778eca",
+      "title": "Payload Decoded and Decrypted via Built-in Utilities",
+      "tag": "attack.s0402",
+      "software": "OSX/Shlayer",
+      "decision": "reject",
+      "reason": "The rule matches a generic technique (openssl base64-decoding a payload from a mounted DMG volume); its own description says the behaviour is only 'consistent with' families such as Bundlore and Shlayer, so a match is not evidence of this specific software."
+    },
+    {
+      "sigma_id": "234dc5df-40b5-49d1-bf53-0d44ce778eca",
+      "title": "Payload Decoded and Decrypted via Built-in Utilities",
+      "tag": "attack.s0482",
+      "software": "Bundlore",
+      "decision": "reject",
+      "reason": "The rule matches a generic technique (openssl base64-decoding a payload from a mounted DMG volume); its own description says the behaviour is only 'consistent with' families such as Bundlore and Shlayer, so a match is not evidence of this specific software."
+    },
+    {
+      "sigma_id": "259e5a6a-b8d2-4c38-86e2-26c5e651361d",
+      "title": "PsExec Service File Creation",
+      "tag": "attack.s0029",
+      "software": "PsExec",
+      "decision": "accept",
+      "reason": "Its single branch matches the creation of \\PSEXESVC.exe, the service binary Sysinternals PsExec writes by default; other remote-execution tools (Impacket, Metasploit, RemCom, CSExec, PAExec) use different names, and a renamed PsExec does not match (a miss, never a misattribution). Enrich tier (ADR-0007 Amendment A), 2026-10-03."
+    },
+    {
+      "sigma_id": "304afd73-55a5-4bb9-8c21-0b1fc84ea9e4",
+      "title": "PSEXEC Remote Execution File Artefact",
+      "tag": "attack.s0029",
+      "software": "PsExec",
+      "decision": "accept",
+      "reason": "C:\\Windows\\PSEXEC-*.key is an artefact written by Sysinternals PsExec itself."
+    },
+    {
+      "sigma_id": "39a80702-d7ca-4a83-b776-525b1f86a36d",
+      "title": "Potential Secure Deletion with SDelete",
+      "tag": "attack.s0195",
+      "software": "SDelete",
+      "decision": "accept",
+      "reason": "Rule matches object names ending .AAA / .ZZZ - the rename sequence SDelete itself applies to a file before deleting it; the rule is built around that tool's artifact."
+    },
+    {
+      "sigma_id": "3ceb2083-a27f-449a-be33-14ec1b7cc973",
+      "title": "Silence.EDA Detection",
+      "tag": "attack.s0363",
+      "software": "Empire",
+      "decision": "reject",
+      "reason": "Requires Empire-derived strings AND dnscat2 tunnelling functions in one script block, which identifies the Silence group's Silence.EDA tool, not the Empire framework in general; the Empire tag would spread the evidence over all 17 Empire-using Groups. Reviewed 2026-09-25 when ps_script became importable."
+    },
+    {
+      "sigma_id": "41504465-5e3a-4a5b-a5b4-2a0baadd4463",
+      "title": "PsExec Tool Execution From Suspicious Locations - PipeName",
+      "tag": "attack.s0029",
+      "software": "PsExec",
+      "decision": "accept",
+      "reason": "Requires the \\PSEXESVC named pipe, created by the Sysinternals PsExec service itself. Reviewed 2026-09-25 when pipe_created became importable (ADR-0008 batch C)."
+    },
+    {
+      "sigma_id": "4e2ed651-1906-4a59-a78a-18220fca1b22",
+      "title": "PUA - NirCmd Execution",
+      "tag": "attack.s0029",
+      "software": "PsExec",
+      "decision": "reject",
+      "reason": "Detects NirCmd (image/OriginalFileName NirCmd.exe or its command verbs), a different tool from PsExec."
+    },
+    {
+      "sigma_id": "56321594-9087-49d9-bf10-524fe8479452",
+      "title": "Potential Persistence Via Netsh Helper DLL",
+      "tag": "attack.s0108",
+      "software": "netsh",
+      "decision": "accept",
+      "reason": "Every branch requires netsh.exe (image or OriginalFileName)."
+    },
+    {
+      "sigma_id": "56c217c3-2de2-479b-990f-5c109ba8458f",
+      "title": "HackTool - Default PowerSploit/Empire Scheduled Task Creation",
+      "tag": "attack.s0111",
+      "software": "schtasks",
+      "decision": "accept",
+      "reason": "Requires schtasks.exe as the process image."
+    },
+    {
+      "sigma_id": "57c4bf16-227f-4394-8ec7-1b745ee061c3",
+      "title": "Firewall Disabled via Netsh.EXE",
+      "tag": "attack.s0108",
+      "software": "netsh",
+      "decision": "accept",
+      "reason": "Every branch requires netsh.exe (image or OriginalFileName)."
+    },
+    {
+      "sigma_id": "611eab06-a145-4dfa-a295-3ccc5c20f59a",
+      "title": "Mimikatz DC Sync",
+      "tag": "attack.s0002",
+      "software": "Mimikatz",
+      "decision": "reject",
+      "reason": "The rule matches a 4662 directory-replication extended-right request by a non-machine account; any DCSync implementation (e.g. Impacket secretsdump, DSInternals) produces the identical event, so it does not identify Mimikatz. (Security batch B, 2026-09-30.)"
+    },
+    {
+      "sigma_id": "7aa7009a-28b9-4344-8c1f-159489a390df",
+      "title": "HackTool - Windows Credential Editor (WCE) Execution",
+      "tag": "attack.s0005",
+      "software": "Windows Credential Editor",
+      "decision": "accept",
+      "reason": "Branches are WCE.exe/WCE64.exe images or WCE import hashes; both identify WCE (the hash branch is not translatable today and is dropped by the importer)."
+    },
+    {
+      "sigma_id": "7df1713a-1a5b-4a4b-a071-dc83b144a101",
+      "title": "Esentutl Gather Credentials",
+      "tag": "attack.s0404",
+      "software": "esentutl",
+      "decision": "accept",
+      "reason": "Requires the esentutl invocation in the command line."
+    },
+    {
+      "sigma_id": "7eff1a7f-dd45-4c20-877a-f21e342a7611",
+      "title": "RemCom Service File Creation",
+      "tag": "attack.s0029",
+      "software": "PsExec",
+      "decision": "reject",
+      "reason": "RemComSvc.exe belongs to RemCom, an open-source PsExec alternative, not PsExec."
+    },
+    {
+      "sigma_id": "93199800-b52a-4dec-b762-75212c196542",
+      "title": "PUA - RunXCmd Execution",
+      "tag": "attack.s0029",
+      "software": "PsExec",
+      "decision": "reject",
+      "reason": "Detects RunXCmd command-line flags, a different tool from PsExec."
+    },
+    {
+      "sigma_id": "968eef52-9cff-4454-8992-1e74b9cbad6c",
+      "title": "Reconnaissance Activity",
+      "tag": "attack.s0039",
+      "software": "Net",
+      "decision": "reject",
+      "reason": "The rule matches 4661 SAM_USER / SAM_GROUP handle requests for the -500 / -512 principals; any SAMR client (net.exe, PowerView, AD administration tools) produces them, so it does not identify Net. (Security batch B, 2026-09-30.)"
+    },
+    {
+      "sigma_id": "99c840f2-2012-46fd-9141-c761987550ef",
+      "title": "Suspicious Download From Direct IP Via Bitsadmin",
+      "tag": "attack.s0190",
+      "software": "BITSAdmin",
+      "decision": "accept",
+      "reason": "Requires bitsadmin.exe (image or OriginalFileName)."
+    },
+    {
+      "sigma_id": "9bd012ee-0dff-44d7-84a0-aa698cfd87a3",
+      "title": "LSASS Memory Access by Tool With Dump Keyword In Name",
+      "tag": "attack.s0002",
+      "software": "Mimikatz",
+      "decision": "reject",
+      "reason": "Matches any source image containing 'dump' (e.g. Outflank-Dumpert.exe in the OTRF sample); does not identify Mimikatz."
+    },
+    {
+      "sigma_id": "9ef27c24-4903-4192-881a-3adde7ff92a5",
+      "title": "Renamed Remote Utilities RAT (RURAT) Execution",
+      "tag": "attack.s0592",
+      "software": "RemoteUtilities",
+      "decision": "accept",
+      "reason": "Requires PE Product 'Remote Utilities', i.e. the Remote Utilities binary itself (renamed)."
+    },
+    {
+      "sigma_id": "a6b33c02-8305-488f-8585-03cb2a7763f2",
+      "title": "Windows Credential Editor Registry",
+      "tag": "attack.s0005",
+      "software": "Windows Credential Editor",
+      "decision": "accept",
+      "reason": "The WCESERVICE service key is created by WCE itself."
+    },
+    {
+      "sigma_id": "aa35a627-33fb-4d04-a165-d33b4afca3e8",
+      "title": "Remote LSASS Process Access Through Windows Remote Management",
+      "tag": "attack.s0002",
+      "software": "Mimikatz",
+      "decision": "reject",
+      "reason": "Any tool run over WinRM (wsmprovhost.exe) reading LSASS matches; Mimikatz is one possibility, not identified."
+    },
+    {
+      "sigma_id": "b69888d4-380c-45ce-9cf9-d9ce46e67821",
+      "title": "Hidden Executable In NTFS Alternate Data Stream",
+      "tag": "attack.s0139",
+      "software": "PowerDuke",
+      "decision": "reject",
+      "reason": "Fires on any executable (any IMPHASH) written to an alternate data stream; it does not identify PowerDuke. S0139 is used by exactly one Group (APT29) in v19.2, so accepting it would turn a common technique into near-maximum-diagnosticity evidence for APT29. Reviewed 2026-09-25 when create_stream_hash became importable."
+    },
+    {
+      "sigma_id": "d059842b-6b9d-4ed1-b5c3-5b89143c6ede",
+      "title": "File Download Via Bitsadmin",
+      "tag": "attack.s0190",
+      "software": "BITSAdmin",
+      "decision": "accept",
+      "reason": "Requires bitsadmin.exe (image or OriginalFileName)."
+    },
+    {
+      "sigma_id": "d9047477-0359-48c9-b8c7-792cedcdc9c4",
+      "title": "PUA - NirCmd Execution As LOCAL SYSTEM",
+      "tag": "attack.s0029",
+      "software": "PsExec",
+      "decision": "reject",
+      "reason": "Detects NirCmd's 'runassystem' verb, a different tool from PsExec."
+    },
+    {
+      "sigma_id": "e5b33f7d-eb93-48b6-9851-09e1e610b6d7",
+      "title": "Credential Dumping Attempt Via WerFault",
+      "tag": "attack.s0002",
+      "software": "Mimikatz",
+      "decision": "reject",
+      "reason": "Detects WerFault.exe opening LSASS with full access; does not identify Mimikatz."
+    },
+    {
+      "sigma_id": "e7be6119-fc37-43f0-ad4f-1f3f99be2f9f",
+      "title": "Copying Sensitive Files with Credential Data",
+      "tag": "attack.s0404",
+      "software": "esentutl",
+      "decision": "reject",
+      "reason": "Condition is 'all of selection_esent_* or selection_susp_paths': the sensitive-path branch fires without esentutl."
+    },
+    {
+      "sigma_id": "f0d1feba-4344-4ca9-8121-a6c97bd6df52",
+      "title": "Credential Dumping Tools Service Execution - Security",
+      "tag": "attack.s0005",
+      "software": "Windows Credential Editor",
+      "decision": "reject",
+      "reason": "The rule's branches match the service image names of several different tools (cachedump, dumpsvc, fgexec, gsecdump, mimidrv, pwdump, servpw); not every branch identifies Windows Credential Editor. (Security batch B, 2026-09-30.)"
+    },
+    {
+      "sigma_id": "f0e2b768-5220-47dd-b891-d57b96fc0ec1",
+      "title": "CSExec Service File Creation",
+      "tag": "attack.s0029",
+      "software": "PsExec",
+      "decision": "reject",
+      "reason": "csexecsvc.exe belongs to CSExec, a C# PsExec alternative, not PsExec."
+    },
+    {
+      "sigma_id": "f5e3b62f-e577-4e59-931e-0a15b2b94e1e",
+      "title": "HackTool - Htran/NATBypass Execution",
+      "tag": "attack.s0040",
+      "software": "HTRAN",
+      "decision": "reject",
+      "reason": "Also matches lcx.exe and the -tran/-slave syntax shared by other port-forwarders; HTRAN is not uniquely identified."
+    },
+    {
+      "sigma_id": "f8be3e82-46a3-4e4e-ada5-8e538ae8b9c9",
+      "title": "Credential Dumping Activity By Python Based Tool",
+      "tag": "attack.s0349",
+      "software": "LaZagne",
+      "decision": "reject",
+      "reason": "Any Python tool reading LSASS via ctypes matches (e.g. pypykatz); LaZagne is not identified."
+    }
+  ]
 }
