@@ -310,7 +310,7 @@ def test_real_injection_chain_forms_one_group(
     real: list[Observation], knowledge: AttackKnowledge
 ) -> None:
     engine = DetectionEngine(rules=load_rule_pack(SIGMA_PACK, knowledge=knowledge).rules)
-    detections = engine.evaluate(real)
+    detections = [d for d in engine.evaluate(real) if d.evidence_quality is None]  # core tier
     (detected_id,) = {d.supporting_observation_ids for d in detections}
     mavinject_start = next(o for o in real if o.observation_id == detected_id[0])
     injection = _real_injection(real)

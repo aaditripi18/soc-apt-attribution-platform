@@ -7,12 +7,12 @@
   "windows_security": 2043
  },
  "suppressed_by_precedence": 0,
- "evidence": 9,
+ "evidence": 21,
  "units": [
   {
-   "group_id": "corr-group::066c1c5cb28306dd7d7902c0faa24c79c0789eba2426d67f8535947d50077b23",
+   "group_id": "corr-group::0e465d013f2bcc4efafcea6e26d58af86fd7245a6e3117e9c46470bb57fcc660",
    "anchor_observation_id": "sysmon:IT01.pandalab.com:sha256:b14554585eb57730dc0b309eaacc317bf4cfb0a4f9d32936c2384bd2967b4e7c",
-   "evidence": 4,
+   "evidence": 5,
    "observations": 3,
    "hosts": [
     "IT01.pandalab.com"
@@ -33,11 +33,12 @@
    "rule_families": {
     "sigma:9f5c1d59-33be-4e60-bcab-85d2f566effd": 2,
     "sigma:58cb02d5-78ce-4692-b3e1-dce850aae41a": 1,
-    "sigma:a5a2d357-1ab8-4675-a967-ef9990a59391": 1
+    "sigma:a5a2d357-1ab8-4675-a967-ef9990a59391": 1,
+    "sigma:ac7102b4-9e1e-4802-9b4f-17c5524c015c": 1
    }
   },
   {
-   "group_id": "corr-group::b1191ff44d72a069bea395e65c1043735642cec9cb10ad88a7d9af057318cc97",
+   "group_id": "corr-group::55b2a3a351de247c42eb5ba7999693ce0b0439d65209e90d1f40c9459221a77f",
    "anchor_observation_id": "sysmon:IT01.pandalab.com:sha256:3fba920491d3bf1695cc686fa3088d6825a827fbf11785ed5eca41eaeebc1e1c",
    "evidence": 3,
    "observations": 3,
@@ -60,9 +61,9 @@
    }
   },
   {
-   "group_id": "corr-group::a52dfdfbe3a3f2cb461e3de4e2165cf8afc9b62db9378d4a3cedc634b0af80c5",
+   "group_id": "corr-group::a4d0a4d22b800057e89f3db315fbb1818452432a8d6988e936d5b19e2ff18550",
    "anchor_observation_id": "sysmon:IT01.pandalab.com:sha256:79df03fab1545d83614b6084331c0442fa2482753480dab1ab818f24bd688732",
-   "evidence": 1,
+   "evidence": 3,
    "observations": 1,
    "hosts": [
     "IT01.pandalab.com"
@@ -76,14 +77,16 @@
     "whoami.exe"
    ],
    "techniques": [
-    "T1033"
+    "T1033",
+    "T1087.001"
    ],
    "rule_families": {
+    "sigma:502b42de-4306-40b4-9596-6f590c81f073": 2,
     "sigma:bd8b828d-0dca-48e1-8a63-8a58ecf2644f": 1
    }
   },
   {
-   "group_id": "corr-group::fa06bec8a101cfc4cdbb90aa20419128d553c24a15ac6537b6dcb21d832f2b7f",
+   "group_id": "corr-group::e7dfbbc21637f6d35c97fe127e5ae7fcad13ca0e8091365e64f9204b3ec6dbcb",
    "anchor_observation_id": "sysmon:IT01.pandalab.com:sha256:26ded9754bda49514b1cd69388c712d8c5046e644108eeee5e4801d70e161536",
    "evidence": 1,
    "observations": 1,

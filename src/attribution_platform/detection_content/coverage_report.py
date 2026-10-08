@@ -13,9 +13,12 @@ Status rules (deterministic, first match wins):
    field no adapter produces). Fixable by adapter/domain work.
 3. ``translation_gap`` — eligible Sigma rules exist but every one needs a
    construct with no exact translation (regex, CIDR, interior wildcard, ...).
-4. ``not_endpoint_observable`` — no eligible Sigma rule, and ATT&CK itself gives
-   no data component for it or does not list the Windows platform (v1 scope:
-   Windows endpoint, ADR-0001 D13).
+4. ``not_observable_on_supported_platforms`` — no eligible Sigma rule, and
+   ATT&CK itself gives no data component for it, or lists none of the platforms
+   the platform has telemetry for. Supported platforms are derived from the
+   field map's products (:data:`PRODUCT_PLATFORMS`) — never a fixed scope — so
+   the classification follows the adapters (report version 2; version 1 used a
+   fixed "v1 = Windows endpoint" scope).
 5. ``no_sigma_rule`` — observable in principle, but no eligible Sigma rule exists.
 
 Reads no pySigma: inputs are the pinned KB, the loaded rule packs and the
@@ -39,11 +42,35 @@ from attribution_platform.attack_knowledge.traversal import (
     techniques_used_by,
 )
 from attribution_platform.detection.rules import RulePack
+from attribution_platform.detection_content.sigma_field_map import PRODUCT_OS_SCOPES
 
-COVERAGE_REPORT_VERSION = "coverage-report/1"
+COVERAGE_REPORT_VERSION = "coverage-report/2"
 
-#: Platform in v1 endpoint scope (ADR-0001 D13, doc 12).
-V1_ENDPOINT_PLATFORM = "Windows"
+#: Sigma product -> the ATT&CK platforms (``x_mitre_platforms``) its telemetry
+#: observes. Products without an ATT&CK platform of their own (a network sensor
+#: observes hosts' traffic, not ATT&CK's "Network Devices") map to none.
+PRODUCT_PLATFORMS: Mapping[str, tuple[str, ...]] = {
+    "windows": ("Windows",),
+    "linux": ("Linux",),
+    "macos": ("macOS",),
+    "azure": ("Identity Provider", "IaaS"),
+    "m365": ("Office Suite", "Office 365", "SaaS"),
+    "aws": ("IaaS",),
+    "okta": ("Identity Provider", "SaaS"),
+    "github": ("SaaS",),
+    "kubernetes": ("Containers",),
+    "zeek": (),
+}
+
+
+def supported_platforms() -> tuple[str, ...]:
+    """ATT&CK platforms with telemetry: those of every product the field map
+    scopes (``PRODUCT_OS_SCOPES``). A product with no entry here fails closed."""
+    unknown = sorted(set(PRODUCT_OS_SCOPES) - set(PRODUCT_PLATFORMS))
+    if unknown:
+        raise ValueError(f"no ATT&CK platform mapping for Sigma products {unknown}")
+    return tuple(sorted({p for product in PRODUCT_OS_SCOPES for p in PRODUCT_PLATFORMS[product]}))
+
 
 #: Minimum distinct observed features before the engine may attribute at all
 #: (ADR-0002 CR / ADR-0005: no attribution from a single technique). Used only
@@ -55,7 +82,7 @@ class TechniqueStatus(enum.Enum):
     COVERED = "covered"
     TELEMETRY_GAP = "telemetry_gap"
     TRANSLATION_GAP = "translation_gap"
-    NOT_ENDPOINT_OBSERVABLE = "not_endpoint_observable"
+    NOT_OBSERVABLE = "not_observable_on_supported_platforms"
     NO_SIGMA_RULE = "no_sigma_rule"
 
 
@@ -81,10 +108,13 @@ def _telemetry_units(gap_reasons: Mapping[str, int]) -> tuple[str, ...]:
     return tuple(sorted(units))
 
 
-def _in_v1_scope(unit: str) -> bool:
-    """A blocker is in v1 (Windows endpoint) scope if it is a Windows logsource
-    or a field of an already-supported Windows logsource."""
-    return unit.startswith(("logsource:windows/", "field:"))
+def _supported_product(unit: str) -> bool:
+    """A blocker belongs to a supported product if it is a field gap (of a
+    logsource that is already read) or a logsource of a product with telemetry."""
+    if unit.startswith("field:"):
+        return True
+    product = unit.removeprefix("logsource:").split("/", 1)[0]
+    return product in PRODUCT_OS_SCOPES
 
 
 def build_coverage_report(
@@ -134,6 +164,7 @@ def build_coverage_report(
             else:
                 translation[stix_id] = translation.get(stix_id, 0) + 1
 
+    platforms_with_telemetry = supported_platforms()
     statuses: dict[str, TechniqueStatus] = {}
     technique_rows: list[dict[str, Any]] = []
     for obj in techniques:
@@ -146,8 +177,8 @@ def build_coverage_report(
             status = TechniqueStatus.TELEMETRY_GAP
         elif stix_id in translation:
             status = TechniqueStatus.TRANSLATION_GAP
-        elif not data_components or V1_ENDPOINT_PLATFORM not in platforms:
-            status = TechniqueStatus.NOT_ENDPOINT_OBSERVABLE
+        elif not data_components or not set(platforms) & set(platforms_with_telemetry):
+            status = TechniqueStatus.NOT_OBSERVABLE
         else:
             status = TechniqueStatus.NO_SIGMA_RULE
         statuses[stix_id] = status
@@ -162,7 +193,7 @@ def build_coverage_report(
                 "rejected_rules_blocked_by": sorted(
                     {u for units in telemetry_only.get(stix_id, []) for u in units}
                 ),
-                "windows_platform": V1_ENDPOINT_PLATFORM in platforms,
+                "supported_platforms": sorted(set(platforms) & set(platforms_with_telemetry)),
                 "has_data_component": bool(data_components),
             }
         )
@@ -202,7 +233,7 @@ def build_coverage_report(
     ranking_rows: list[dict[str, Any]] = [
         {
             "blocker": unit,
-            "in_v1_scope": _in_v1_scope(unit),
+            "supported_product": _supported_product(unit),
             "techniques_upper_bound": len(stix_ids),
             "group_used_techniques_upper_bound": sum(1 for t in stix_ids if group_users.get(t)),
             "groups_touched_upper_bound": len(
@@ -254,7 +285,7 @@ def build_coverage_report(
                 for p in sorted(packs, key=lambda p: p.pack_id)
             ],
             "sigma_import": dict(sigma_import_report["provenance"]),
-            "v1_endpoint_platform": V1_ENDPOINT_PLATFORM,
+            "supported_platforms": list(platforms_with_telemetry),
         },
         "notes": [
             "Counts only; not detection-efficacy or attribution-accuracy claims (ADR-0006 §D14).",
@@ -283,7 +314,7 @@ def render_coverage_summary(report: Mapping[str, Any], *, top_gaps: int = 15) ->
         "",
         f"ATT&CK `{report['provenance']['attack_kb_version']}`; Sigma "
         f"`{report['provenance']['sigma_import']['sigma_release']}`; "
-        f"v1 endpoint platform: {report['provenance']['v1_endpoint_platform']}.",
+        "Platforms with telemetry: " + ", ".join(report["provenance"]["supported_platforms"]) + ".",
         "Counts only — not detection-efficacy or attribution-accuracy claims.",
         "",
         "## Techniques",
@@ -310,14 +341,14 @@ def render_coverage_summary(report: Mapping[str, Any], *, top_gaps: int = 15) ->
         f"- With ≥ 5 covered: {s['groups_with_at_least_5_covered']}",
         f"- With ≥ 10 covered: {s['groups_with_at_least_10_covered']}",
         "",
-        f"## Top {top_gaps} telemetry blockers (upper bounds; v1 = Windows endpoint)",
+        f"## Top {top_gaps} telemetry blockers (upper bounds)",
         "",
-        "| Blocker | v1 scope | Techniques | Group-used techniques | Groups touched |",
+        "| Blocker | Supported product | Techniques | Group-used techniques | Groups touched |",
         "|---|---|---|---|---|",
     ]
     for row in report["gap_ranking"][:top_gaps]:
         lines.append(
-            f"| `{row['blocker']}` | {'yes' if row['in_v1_scope'] else 'no'} | "
+            f"| `{row['blocker']}` | {'yes' if row['supported_product'] else 'no'} | "
             f"{row['techniques_upper_bound']} | {row['group_used_techniques_upper_bound']} | "
             f"{row['groups_touched_upper_bound']} |"
         )
@@ -327,7 +358,8 @@ def render_coverage_summary(report: Mapping[str, Any], *, top_gaps: int = 15) ->
 
 __all__ = [
     "COVERAGE_REPORT_VERSION",
-    "V1_ENDPOINT_PLATFORM",
+    "PRODUCT_PLATFORMS",
+    "supported_platforms",
     "MIN_FEATURES_TO_ATTRIBUTE",
     "TechniqueStatus",
     "build_coverage_report",

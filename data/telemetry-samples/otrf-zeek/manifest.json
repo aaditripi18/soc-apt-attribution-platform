@@ -1,0 +1,853 @@
+{
+  "source": "OTRF Security-Datasets (compound datasets: Zeek logs recorded during the corpus runs)",
+  "license": "MIT",
+  "license_url": "https://github.com/OTRF/Security-Datasets/blob/d9d40ef123d2c87d5d3df28c96bcab4f0faccc87/LICENSE",
+  "source_repository": "OTRF/Security-Datasets",
+  "source_commit": "d9d40ef123d2c87d5d3df28c96bcab4f0faccc87",
+  "retrieved_at_utc": "2026-10-05T20:56:37Z",
+  "method": "scripts/acquire_corpus_telemetry.py (commit-pinned raw URLs, size-checked against the GitHub tree API; archives inspected as data, never extracted)",
+  "cache": "data/cache/otrf-compound/ (git-ignored; rebuild with this script)",
+  "approval": "owner standing instruction, 2026-10-06 (ADR-0012 D1)",
+  "verification": "each file's size and git blob id equal the pinned commit's tree",
+  "files": [
+    {
+      "source_path": "datasets/compound/LSASS_campaign_01/metasploit_logonpasswords_lsass_memory_dump_zeek_logs.zip",
+      "cache_path": "data/cache/otrf-compound/LSASS_campaign_01/metasploit_logonpasswords_lsass_memory_dump_zeek_logs.zip",
+      "size_bytes": 14474,
+      "sha256": "56bd2798ab32cf6525634c63e1ad1f568171c23e414ac9df8c8f3e86a2541ffe",
+      "members": [
+        {
+          "name": "analyzer.log",
+          "size_bytes": 1131
+        },
+        {
+          "name": "conn.log",
+          "size_bytes": 13515
+        },
+        {
+          "name": "dns.log",
+          "size_bytes": 12720
+        },
+        {
+          "name": "files.log",
+          "size_bytes": 1050
+        },
+        {
+          "name": "http.log",
+          "size_bytes": 1190
+        },
+        {
+          "name": "kerberos.log",
+          "size_bytes": 2092
+        },
+        {
+          "name": "packet_filter.log",
+          "size_bytes": 278
+        },
+        {
+          "name": "pe.log",
+          "size_bytes": 562
+        },
+        {
+          "name": "smb_mapping.log",
+          "size_bytes": 387
+        },
+        {
+          "name": "ssl.log",
+          "size_bytes": 1455
+        },
+        {
+          "name": "weird.log",
+          "size_bytes": 2754
+        },
+        {
+          "name": "x509.log",
+          "size_bytes": 1110
+        }
+      ],
+      "download_url": "https://raw.githubusercontent.com/OTRF/Security-Datasets/d9d40ef123d2c87d5d3df28c96bcab4f0faccc87/datasets/compound/LSASS_campaign_01/metasploit_logonpasswords_lsass_memory_dump_zeek_logs.zip"
+    },
+    {
+      "source_path": "datasets/compound/LSASS_campaign_02/metasploit_procdump_lsass_memory_dump_zeek_logs.zip",
+      "cache_path": "data/cache/otrf-compound/LSASS_campaign_02/metasploit_procdump_lsass_memory_dump_zeek_logs.zip",
+      "size_bytes": 10874,
+      "sha256": "b3fba904c0e7785f641628f4c1602fb803ee0557f62625715ea7c291a766ed43",
+      "members": [
+        {
+          "name": "conn.log",
+          "size_bytes": 13753
+        },
+        {
+          "name": "dns.log",
+          "size_bytes": 18430
+        },
+        {
+          "name": "files.log",
+          "size_bytes": 884
+        },
+        {
+          "name": "http.log",
+          "size_bytes": 1159
+        },
+        {
+          "name": "packet_filter.log",
+          "size_bytes": 278
+        },
+        {
+          "name": "weird.log",
+          "size_bytes": 899
+        }
+      ],
+      "download_url": "https://raw.githubusercontent.com/OTRF/Security-Datasets/d9d40ef123d2c87d5d3df28c96bcab4f0faccc87/datasets/compound/LSASS_campaign_02/metasploit_procdump_lsass_memory_dump_zeek_logs.zip"
+    },
+    {
+      "source_path": "datasets/compound/LSASS_campaign_03/metasploit_comsvcs_lsass_memory_dump_zeek_logs.zip",
+      "cache_path": "data/cache/otrf-compound/LSASS_campaign_03/metasploit_comsvcs_lsass_memory_dump_zeek_logs.zip",
+      "size_bytes": 13648,
+      "sha256": "9246f23472343e490462a80fd83d21afb1230a3630baffdce7ac791ef9afa025",
+      "members": [
+        {
+          "name": "analyzer.log",
+          "size_bytes": 524
+        },
+        {
+          "name": "conn.log",
+          "size_bytes": 14919
+        },
+        {
+          "name": "dns.log",
+          "size_bytes": 18956
+        },
+        {
+          "name": "files.log",
+          "size_bytes": 739
+        },
+        {
+          "name": "http.log",
+          "size_bytes": 869
+        },
+        {
+          "name": "kerberos.log",
+          "size_bytes": 1225
+        },
+        {
+          "name": "packet_filter.log",
+          "size_bytes": 278
+        },
+        {
+          "name": "pe.log",
+          "size_bytes": 562
+        },
+        {
+          "name": "smb_mapping.log",
+          "size_bytes": 388
+        },
+        {
+          "name": "weird.log",
+          "size_bytes": 2328
+        }
+      ],
+      "download_url": "https://raw.githubusercontent.com/OTRF/Security-Datasets/d9d40ef123d2c87d5d3df28c96bcab4f0faccc87/datasets/compound/LSASS_campaign_03/metasploit_comsvcs_lsass_memory_dump_zeek_logs.zip"
+    },
+    {
+      "source_path": "datasets/compound/LSASS_campaign_04/metasploit_out-minidump_lsass_memory_dump_zeek_logs.zip",
+      "cache_path": "data/cache/otrf-compound/LSASS_campaign_04/metasploit_out-minidump_lsass_memory_dump_zeek_logs.zip",
+      "size_bytes": 12512,
+      "sha256": "e9ef9c5bc0996d4fd45e91862e8761cc74312ca9b43fc4f0462fb177c8d9c924",
+      "members": [
+        {
+          "name": "conn.log",
+          "size_bytes": 13605
+        },
+        {
+          "name": "dns.log",
+          "size_bytes": 15536
+        },
+        {
+          "name": "files.log",
+          "size_bytes": 1214
+        },
+        {
+          "name": "http.log",
+          "size_bytes": 1352
+        },
+        {
+          "name": "kerberos.log",
+          "size_bytes": 595
+        },
+        {
+          "name": "packet_filter.log",
+          "size_bytes": 278
+        },
+        {
+          "name": "pe.log",
+          "size_bytes": 561
+        },
+        {
+          "name": "smb_mapping.log",
+          "size_bytes": 387
+        },
+        {
+          "name": "weird.log",
+          "size_bytes": 2223
+        }
+      ],
+      "download_url": "https://raw.githubusercontent.com/OTRF/Security-Datasets/d9d40ef123d2c87d5d3df28c96bcab4f0faccc87/datasets/compound/LSASS_campaign_04/metasploit_out-minidump_lsass_memory_dump_zeek_logs.zip"
+    },
+    {
+      "source_path": "datasets/compound/LSASS_campaign_05/metasploit_sharpdump_lsass_memory_dump_zeek_logs.zip",
+      "cache_path": "data/cache/otrf-compound/LSASS_campaign_05/metasploit_sharpdump_lsass_memory_dump_zeek_logs.zip",
+      "size_bytes": 70351,
+      "sha256": "d1ea135073e92bbeec64e641f9ec450895f3abfbd31c7520b55968c625bc52ab",
+      "members": [
+        {
+          "name": "analyzer.log",
+          "size_bytes": 2251
+        },
+        {
+          "name": "conn.log",
+          "size_bytes": 107507
+        },
+        {
+          "name": "dns.log",
+          "size_bytes": 347907
+        },
+        {
+          "name": "files.log",
+          "size_bytes": 1054
+        },
+        {
+          "name": "http.log",
+          "size_bytes": 1194
+        },
+        {
+          "name": "kerberos.log",
+          "size_bytes": 1301
+        },
+        {
+          "name": "packet_filter.log",
+          "size_bytes": 278
+        },
+        {
+          "name": "pe.log",
+          "size_bytes": 562
+        },
+        {
+          "name": "smb_mapping.log",
+          "size_bytes": 389
+        },
+        {
+          "name": "ssl.log",
+          "size_bytes": 896
+        },
+        {
+          "name": "weird.log",
+          "size_bytes": 3160
+        },
+        {
+          "name": "x509.log",
+          "size_bytes": 1100
+        }
+      ],
+      "download_url": "https://raw.githubusercontent.com/OTRF/Security-Datasets/d9d40ef123d2c87d5d3df28c96bcab4f0faccc87/datasets/compound/LSASS_campaign_05/metasploit_sharpdump_lsass_memory_dump_zeek_logs.zip"
+    },
+    {
+      "source_path": "datasets/compound/LSASS_campaign_06/metasploit_outflank-dumpert_lsass_memory_dump_zeek_logs.zip",
+      "cache_path": "data/cache/otrf-compound/LSASS_campaign_06/metasploit_outflank-dumpert_lsass_memory_dump_zeek_logs.zip",
+      "size_bytes": 62094,
+      "sha256": "3323a3de4a618d0d02124f5595e95bff7a275d64adf4a905ebdc296514976419",
+      "members": [
+        {
+          "name": "analyzer.log",
+          "size_bytes": 2846
+        },
+        {
+          "name": "conn.log",
+          "size_bytes": 92859
+        },
+        {
+          "name": "dns.log",
+          "size_bytes": 280342
+        },
+        {
+          "name": "files.log",
+          "size_bytes": 1052
+        },
+        {
+          "name": "http.log",
+          "size_bytes": 1192
+        },
+        {
+          "name": "kerberos.log",
+          "size_bytes": 1300
+        },
+        {
+          "name": "packet_filter.log",
+          "size_bytes": 278
+        },
+        {
+          "name": "pe.log",
+          "size_bytes": 562
+        },
+        {
+          "name": "smb_mapping.log",
+          "size_bytes": 390
+        },
+        {
+          "name": "ssl.log",
+          "size_bytes": 896
+        },
+        {
+          "name": "weird.log",
+          "size_bytes": 3266
+        },
+        {
+          "name": "x509.log",
+          "size_bytes": 1100
+        }
+      ],
+      "download_url": "https://raw.githubusercontent.com/OTRF/Security-Datasets/d9d40ef123d2c87d5d3df28c96bcab4f0faccc87/datasets/compound/LSASS_campaign_06/metasploit_outflank-dumpert_lsass_memory_dump_zeek_logs.zip"
+    },
+    {
+      "source_path": "datasets/compound/LSASS_campaign_07/metasploit_nanodump_lsass_memory_dump_zeek_logs.zip",
+      "cache_path": "data/cache/otrf-compound/LSASS_campaign_07/metasploit_nanodump_lsass_memory_dump_zeek_logs.zip",
+      "size_bytes": 47103,
+      "sha256": "32b265a9f4126424ab820a1325c0f29a5c95e947ade2595acecdd9e56b15892f",
+      "members": [
+        {
+          "name": "analyzer.log",
+          "size_bytes": 2125
+        },
+        {
+          "name": "conn.log",
+          "size_bytes": 67707
+        },
+        {
+          "name": "dns.log",
+          "size_bytes": 185077
+        },
+        {
+          "name": "files.log",
+          "size_bytes": 1054
+        },
+        {
+          "name": "http.log",
+          "size_bytes": 1194
+        },
+        {
+          "name": "kerberos.log",
+          "size_bytes": 1302
+        },
+        {
+          "name": "packet_filter.log",
+          "size_bytes": 278
+        },
+        {
+          "name": "pe.log",
+          "size_bytes": 562
+        },
+        {
+          "name": "smb_mapping.log",
+          "size_bytes": 390
+        },
+        {
+          "name": "ssl.log",
+          "size_bytes": 895
+        },
+        {
+          "name": "weird.log",
+          "size_bytes": 3694
+        },
+        {
+          "name": "x509.log",
+          "size_bytes": 1100
+        }
+      ],
+      "download_url": "https://raw.githubusercontent.com/OTRF/Security-Datasets/d9d40ef123d2c87d5d3df28c96bcab4f0faccc87/datasets/compound/LSASS_campaign_07/metasploit_nanodump_lsass_memory_dump_zeek_logs.zip"
+    },
+    {
+      "source_path": "datasets/compound/apt29/day1/zeek/NASHUA-zeek_logs.zip",
+      "cache_path": "data/cache/otrf-compound/apt29/day1/zeek/NASHUA-zeek_logs.zip",
+      "size_bytes": 71772,
+      "sha256": "e1ade3d4f2c9a1ef8ad5567ea321de7c995b2118a3f4cf5bd9c11e433ea186a8",
+      "members": [
+        {
+          "name": "conn.log",
+          "size_bytes": 233889
+        },
+        {
+          "name": "dce_rpc.log",
+          "size_bytes": 17205
+        },
+        {
+          "name": "dns.log",
+          "size_bytes": 9598
+        },
+        {
+          "name": "dpd.log",
+          "size_bytes": 2019
+        },
+        {
+          "name": "files.log",
+          "size_bytes": 189132
+        },
+        {
+          "name": "kerberos.log",
+          "size_bytes": 4292
+        },
+        {
+          "name": "notice.log",
+          "size_bytes": 560
+        },
+        {
+          "name": "smb_files.log",
+          "size_bytes": 3114
+        },
+        {
+          "name": "smb_mapping.log",
+          "size_bytes": 1304
+        },
+        {
+          "name": "ssl.log",
+          "size_bytes": 316342
+        },
+        {
+          "name": "weird.log",
+          "size_bytes": 991
+        },
+        {
+          "name": "x509.log",
+          "size_bytes": 270204
+        }
+      ],
+      "download_url": "https://raw.githubusercontent.com/OTRF/Security-Datasets/d9d40ef123d2c87d5d3df28c96bcab4f0faccc87/datasets/compound/apt29/day1/zeek/NASHUA-zeek_logs.zip"
+    },
+    {
+      "source_path": "datasets/compound/apt29/day1/zeek/SCRANTON-zeek_logs.zip",
+      "cache_path": "data/cache/otrf-compound/apt29/day1/zeek/SCRANTON-zeek_logs.zip",
+      "size_bytes": 24653,
+      "sha256": "aae9d0d8c9970d9b9a6db0402d0ed9a5ade9e38564e474743629f2b02888335d",
+      "members": [
+        {
+          "name": "conn.log",
+          "size_bytes": 64367
+        },
+        {
+          "name": "dce_rpc.log",
+          "size_bytes": 20773
+        },
+        {
+          "name": "dns.log",
+          "size_bytes": 15821
+        },
+        {
+          "name": "dpd.log",
+          "size_bytes": 2085
+        },
+        {
+          "name": "files.log",
+          "size_bytes": 35236
+        },
+        {
+          "name": "http.log",
+          "size_bytes": 39289
+        },
+        {
+          "name": "kerberos.log",
+          "size_bytes": 7616
+        },
+        {
+          "name": "notice.log",
+          "size_bytes": 557
+        },
+        {
+          "name": "pe.log",
+          "size_bytes": 472
+        },
+        {
+          "name": "smb_files.log",
+          "size_bytes": 3186
+        },
+        {
+          "name": "smb_mapping.log",
+          "size_bytes": 1624
+        },
+        {
+          "name": "ssl.log",
+          "size_bytes": 1588
+        },
+        {
+          "name": "weird.log",
+          "size_bytes": 1189
+        },
+        {
+          "name": "x509.log",
+          "size_bytes": 1408
+        }
+      ],
+      "download_url": "https://raw.githubusercontent.com/OTRF/Security-Datasets/d9d40ef123d2c87d5d3df28c96bcab4f0faccc87/datasets/compound/apt29/day1/zeek/SCRANTON-zeek_logs.zip"
+    },
+    {
+      "source_path": "datasets/compound/apt29/day1/zeek/combined_zeek.log",
+      "cache_path": "data/cache/otrf-compound/apt29/day1/zeek/combined_zeek.log",
+      "size_bytes": 1243861,
+      "sha256": "2b3268dd04f54e0bc3d6b11fdec85e821a0be7b4754b71d7fd7c9595a7d235d1",
+      "members": [],
+      "download_url": "https://raw.githubusercontent.com/OTRF/Security-Datasets/d9d40ef123d2c87d5d3df28c96bcab4f0faccc87/datasets/compound/apt29/day1/zeek/combined_zeek.log"
+    },
+    {
+      "source_path": "datasets/compound/apt29/day2/zeek/NEWYORK-zeek_logs.zip",
+      "cache_path": "data/cache/otrf-compound/apt29/day2/zeek/NEWYORK-zeek_logs.zip",
+      "size_bytes": 44042,
+      "sha256": "6cd3b5de581cadf2a875b317e07bcded2aa75c49d0d971e733bd07d67c5ea008",
+      "members": [
+        {
+          "name": "capture_loss.log",
+          "size_bytes": 368
+        },
+        {
+          "name": "conn.log",
+          "size_bytes": 147187
+        },
+        {
+          "name": "dce_rpc.log",
+          "size_bytes": 78546
+        },
+        {
+          "name": "dns.log",
+          "size_bytes": 75457
+        },
+        {
+          "name": "kerberos.log",
+          "size_bytes": 20458
+        },
+        {
+          "name": "loaded_scripts.log",
+          "size_bytes": 64832
+        },
+        {
+          "name": "packet_filter.log",
+          "size_bytes": 152
+        },
+        {
+          "name": "reporter.log",
+          "size_bytes": 2064
+        },
+        {
+          "name": "smb_files.log",
+          "size_bytes": 4426
+        },
+        {
+          "name": "smb_mapping.log",
+          "size_bytes": 3973
+        },
+        {
+          "name": "stats.log",
+          "size_bytes": 2852
+        },
+        {
+          "name": "weird.log",
+          "size_bytes": 3006
+        }
+      ],
+      "download_url": "https://raw.githubusercontent.com/OTRF/Security-Datasets/d9d40ef123d2c87d5d3df28c96bcab4f0faccc87/datasets/compound/apt29/day2/zeek/NEWYORK-zeek_logs.zip"
+    },
+    {
+      "source_path": "datasets/compound/apt29/day2/zeek/SCRANTON-zeek_logs.zip",
+      "cache_path": "data/cache/otrf-compound/apt29/day2/zeek/SCRANTON-zeek_logs.zip",
+      "size_bytes": 13071,
+      "sha256": "94fbaac25809001f2ccf0c9395d0721bea48e63378e140f3f3768aaa50786266",
+      "members": [
+        {
+          "name": "capture_loss.log",
+          "size_bytes": 336
+        },
+        {
+          "name": "conn.log",
+          "size_bytes": 24748
+        },
+        {
+          "name": "dce_rpc.log",
+          "size_bytes": 10172
+        },
+        {
+          "name": "dns.log",
+          "size_bytes": 8696
+        },
+        {
+          "name": "kerberos.log",
+          "size_bytes": 3323
+        },
+        {
+          "name": "loaded_scripts.log",
+          "size_bytes": 64844
+        },
+        {
+          "name": "packet_filter.log",
+          "size_bytes": 152
+        },
+        {
+          "name": "reporter.log",
+          "size_bytes": 1877
+        },
+        {
+          "name": "smb_mapping.log",
+          "size_bytes": 743
+        },
+        {
+          "name": "stats.log",
+          "size_bytes": 1874
+        },
+        {
+          "name": "weird.log",
+          "size_bytes": 528
+        }
+      ],
+      "download_url": "https://raw.githubusercontent.com/OTRF/Security-Datasets/d9d40ef123d2c87d5d3df28c96bcab4f0faccc87/datasets/compound/apt29/day2/zeek/SCRANTON-zeek_logs.zip"
+    },
+    {
+      "source_path": "datasets/compound/apt29/day2/zeek/UTICA-A-zeek_logs.zip",
+      "cache_path": "data/cache/otrf-compound/apt29/day2/zeek/UTICA-A-zeek_logs.zip",
+      "size_bytes": 42753,
+      "sha256": "c77dcd800e28044ef39a1957e78d58ebe2795d71860b7e3ac0602d6d4d4f0180",
+      "members": [
+        {
+          "name": "capture_loss.log",
+          "size_bytes": 185
+        },
+        {
+          "name": "conn.log",
+          "size_bytes": 168041
+        },
+        {
+          "name": "dce_rpc.log",
+          "size_bytes": 17237
+        },
+        {
+          "name": "dns.log",
+          "size_bytes": 27920
+        },
+        {
+          "name": "files.log",
+          "size_bytes": 1573
+        },
+        {
+          "name": "http.log",
+          "size_bytes": 486
+        },
+        {
+          "name": "kerberos.log",
+          "size_bytes": 2813
+        },
+        {
+          "name": "loaded_scripts.log",
+          "size_bytes": 64832
+        },
+        {
+          "name": "notice.log",
+          "size_bytes": 510
+        },
+        {
+          "name": "packet_filter.log",
+          "size_bytes": 152
+        },
+        {
+          "name": "pe.log",
+          "size_bytes": 479
+        },
+        {
+          "name": "reporter.log",
+          "size_bytes": 3313
+        },
+        {
+          "name": "smb_mapping.log",
+          "size_bytes": 740
+        },
+        {
+          "name": "ssl.log",
+          "size_bytes": 105890
+        },
+        {
+          "name": "stats.log",
+          "size_bytes": 1426
+        },
+        {
+          "name": "weird.log",
+          "size_bytes": 923
+        },
+        {
+          "name": "x509.log",
+          "size_bytes": 1183
+        }
+      ],
+      "download_url": "https://raw.githubusercontent.com/OTRF/Security-Datasets/d9d40ef123d2c87d5d3df28c96bcab4f0faccc87/datasets/compound/apt29/day2/zeek/UTICA-A-zeek_logs.zip"
+    },
+    {
+      "source_path": "datasets/compound/apt29/day2/zeek/UTICA-C-zeek_logs.zip",
+      "cache_path": "data/cache/otrf-compound/apt29/day2/zeek/UTICA-C-zeek_logs.zip",
+      "size_bytes": 9859,
+      "sha256": "e3671125fc080cc928b25316ec5c5b88b2d3565d7933dadfa2c6534ceb396e9b",
+      "members": [
+        {
+          "name": "capture_loss.log",
+          "size_bytes": 183
+        },
+        {
+          "name": "conn.log",
+          "size_bytes": 14804
+        },
+        {
+          "name": "dns.log",
+          "size_bytes": 579
+        },
+        {
+          "name": "kerberos.log",
+          "size_bytes": 189
+        },
+        {
+          "name": "loaded_scripts.log",
+          "size_bytes": 64844
+        },
+        {
+          "name": "packet_filter.log",
+          "size_bytes": 152
+        },
+        {
+          "name": "reporter.log",
+          "size_bytes": 1680
+        },
+        {
+          "name": "smb_mapping.log",
+          "size_bytes": 253
+        },
+        {
+          "name": "ssl.log",
+          "size_bytes": 10777
+        },
+        {
+          "name": "stats.log",
+          "size_bytes": 465
+        },
+        {
+          "name": "weird.log",
+          "size_bytes": 263
+        }
+      ],
+      "download_url": "https://raw.githubusercontent.com/OTRF/Security-Datasets/d9d40ef123d2c87d5d3df28c96bcab4f0faccc87/datasets/compound/apt29/day2/zeek/UTICA-C-zeek_logs.zip"
+    },
+    {
+      "source_path": "datasets/compound/apt29/day2/zeek/UTICA-D-zeek_logs.zip",
+      "cache_path": "data/cache/otrf-compound/apt29/day2/zeek/UTICA-D-zeek_logs.zip",
+      "size_bytes": 35682,
+      "sha256": "dd66d51057dee0425bc5ae6551ea7a7ccd08f1ed64eab86db291bbc0778d8010",
+      "members": [
+        {
+          "name": "capture_loss.log",
+          "size_bytes": 184
+        },
+        {
+          "name": "conn.log",
+          "size_bytes": 169931
+        },
+        {
+          "name": "dce_rpc.log",
+          "size_bytes": 6779
+        },
+        {
+          "name": "dns.log",
+          "size_bytes": 7121
+        },
+        {
+          "name": "kerberos.log",
+          "size_bytes": 1176
+        },
+        {
+          "name": "loaded_scripts.log",
+          "size_bytes": 64844
+        },
+        {
+          "name": "packet_filter.log",
+          "size_bytes": 152
+        },
+        {
+          "name": "reporter.log",
+          "size_bytes": 1677
+        },
+        {
+          "name": "ssl.log",
+          "size_bytes": 117067
+        },
+        {
+          "name": "stats.log",
+          "size_bytes": 950
+        },
+        {
+          "name": "weird.log",
+          "size_bytes": 262
+        }
+      ],
+      "download_url": "https://raw.githubusercontent.com/OTRF/Security-Datasets/d9d40ef123d2c87d5d3df28c96bcab4f0faccc87/datasets/compound/apt29/day2/zeek/UTICA-D-zeek_logs.zip"
+    },
+    {
+      "source_path": "datasets/compound/apt29/day2/zeek/UTICA-ONE-DRIVE-zeek_logs.zip",
+      "cache_path": "data/cache/otrf-compound/apt29/day2/zeek/UTICA-ONE-DRIVE-zeek_logs.zip",
+      "size_bytes": 17017,
+      "sha256": "fbe32c91ee1754157033daadf9421592e4948c248c144fb39f86834eb5f3e59c",
+      "members": [
+        {
+          "name": "capture_loss.log",
+          "size_bytes": 169
+        },
+        {
+          "name": "conn.log",
+          "size_bytes": 30506
+        },
+        {
+          "name": "dns.log",
+          "size_bytes": 3258
+        },
+        {
+          "name": "files.log",
+          "size_bytes": 15724
+        },
+        {
+          "name": "loaded_scripts.log",
+          "size_bytes": 64844
+        },
+        {
+          "name": "packet_filter.log",
+          "size_bytes": 152
+        },
+        {
+          "name": "reporter.log",
+          "size_bytes": 1671
+        },
+        {
+          "name": "ssl.log",
+          "size_bytes": 26029
+        },
+        {
+          "name": "stats.log",
+          "size_bytes": 466
+        },
+        {
+          "name": "weird.log",
+          "size_bytes": 133
+        },
+        {
+          "name": "x509.log",
+          "size_bytes": 16961
+        }
+      ],
+      "download_url": "https://raw.githubusercontent.com/OTRF/Security-Datasets/d9d40ef123d2c87d5d3df28c96bcab4f0faccc87/datasets/compound/apt29/day2/zeek/UTICA-ONE-DRIVE-zeek_logs.zip"
+    },
+    {
+      "source_path": "datasets/compound/apt29/day2/zeek/combined_zeek.log",
+      "cache_path": "data/cache/otrf-compound/apt29/day2/zeek/combined_zeek.log",
+      "size_bytes": 1542562,
+      "sha256": "218a40ec39926efd4e2cb482f9bdb699f9ff92cdecbb85c6e8c6fd53ea1652ec",
+      "members": [],
+      "download_url": "https://raw.githubusercontent.com/OTRF/Security-Datasets/d9d40ef123d2c87d5d3df28c96bcab4f0faccc87/datasets/compound/apt29/day2/zeek/combined_zeek.log"
+    }
+  ]
+}

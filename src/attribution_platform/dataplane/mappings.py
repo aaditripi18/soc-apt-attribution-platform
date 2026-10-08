@@ -110,6 +110,17 @@ OBSERVATIONS_MAPPING: dict[str, Any] = {
     "credential_read": {"type": "object"},
     "wfp_filter": {"type": "object"},
     "audit": {"type": "object"},
+    "cloud": {"type": "object"},
+    "user_agent": {"type": "object"},
+    "entra": {"type": "object"},
+    "o365": {"type": "object"},
+    "aws_cloudtrail": {"type": "object"},
+    "okta": {"type": "object"},
+    "github": {"type": "object"},
+    "kubernetes_audit": {"type": "object"},
+    "azure_activity": {"type": "object"},
+    "observer": {"type": "object"},
+    "zeek": {"type": "object"},
 }
 
 #: Explicit field mappings for the Evidence index (Elasticsearch "properties").

@@ -7,36 +7,40 @@
   "windows_security": 1215
  },
  "suppressed_by_precedence": 0,
- "evidence": 10,
+ "evidence": 20,
  "units": [
   {
-   "group_id": "corr-group::77e2548ab705ffe07da1ba8ce2327dc3da07d889a402ea44d0222661623b8b0e",
-   "anchor_observation_id": "sysmon:MKT01.pandalab.com:sha256:0967445647eeaf0bc439e1001c2777c54bb54d7013938d8ba7e1a454e1936763",
-   "evidence": 5,
-   "observations": 3,
+   "group_id": "corr-group::12977f81575b4f64d2d26067418c3117fc1efddb93d75c7adad4bc7aaa403a33",
+   "anchor_observation_id": "sysmon:MKT01.pandalab.com:sha256:8615e333aff9ad5d8c6cf0131c31d30bc63a5c8d2a828a9d3e29a310e995e140",
+   "evidence": 6,
+   "observations": 4,
    "hosts": [
     "MKT01.pandalab.com"
    ],
-   "first": "2023-09-06T05:47:37.667000+00:00",
+   "first": "2023-09-06T05:47:37.579000+00:00",
    "last": "2023-09-06T05:47:42.621000+00:00",
    "process_images": {
-    "C:\\Windows\\Temp\\Outflank-Dumpert.exe": 3
+    "C:\\Windows\\Temp\\Outflank-Dumpert.exe": 3,
+    "C:\\Windows\\System32\\conhost.exe": 1
    },
    "image_names": [
+    "conhost.exe",
     "outflank-dumpert.exe"
    ],
    "techniques": [
     "T1003.001",
+    "T1202",
     "T1685"
    ],
    "rule_families": {
     "sigma:9bd012ee-0dff-44d7-84a0-aa698cfd87a3": 2,
     "sigma:9f5c1d59-33be-4e60-bcab-85d2f566effd": 2,
+    "sigma:3037d961-21e9-4732-b27a-637bcc7bf539": 1,
     "sigma:93d94efc-d7ad-4161-ad7d-1638c4f908d8": 1
    }
   },
   {
-   "group_id": "corr-group::73d01b296c22fbc83c42423715d72559c5c5e1a78eb4611659a60026de2526c9",
+   "group_id": "corr-group::8c541b0b939d32bacd991d234f9519e38218402a254784cb197f5ddb3feb4875",
    "anchor_observation_id": "sysmon:MKT01.pandalab.com:sha256:c9297fc80d48c48cf74b2c0e29a671f4c084e6f8124abab0d43b7496016ee7cf",
    "evidence": 3,
    "observations": 3,
@@ -59,7 +63,32 @@
    }
   },
   {
-   "group_id": "corr-group::690b1c452fee9bbc6a27379cf1ee7caefcbee845e22554a59f3cc8244e89f3fe",
+   "group_id": "corr-group::eb93fe3661602028f1680f5b082643c67c9f2d0ba7b2b17337176ff1f7f7704c",
+   "anchor_observation_id": "sysmon:MKT01.pandalab.com:sha256:abdae7e01523ac10cbbe5e416ee6fbdfa57bd06c9613dc54319a95b99cc5d565",
+   "evidence": 3,
+   "observations": 1,
+   "hosts": [
+    "MKT01.pandalab.com"
+   ],
+   "first": "2023-09-06T05:45:52.075000+00:00",
+   "last": "2023-09-06T05:45:52.075000+00:00",
+   "process_images": {
+    "C:\\Windows\\System32\\whoami.exe": 1
+   },
+   "image_names": [
+    "whoami.exe"
+   ],
+   "techniques": [
+    "T1033",
+    "T1087.001"
+   ],
+   "rule_families": {
+    "sigma:502b42de-4306-40b4-9596-6f590c81f073": 2,
+    "sigma:bd8b828d-0dca-48e1-8a63-8a58ecf2644f": 1
+   }
+  },
+  {
+   "group_id": "corr-group::4bfa1af32044e219d1fa5f3817fc841e7f0f348cac11a65ee95d86ec4cd990dc",
    "anchor_observation_id": "sysmon:MKT01.pandalab.com:sha256:c1de7da8b6892da3872832b6b0a930692bfd3c07097787f93be7b9687d2e486a",
    "evidence": 1,
    "observations": 1,
@@ -79,29 +108,6 @@
    ],
    "rule_families": {
     "sigma:b69888d4-380c-45ce-9cf9-d9ce46e67821": 1
-   }
-  },
-  {
-   "group_id": "corr-group::9650ff5064cdabffec600c8080f05e4cda441ad7e7db8f0645755fc07d9a2a59",
-   "anchor_observation_id": "sysmon:MKT01.pandalab.com:sha256:abdae7e01523ac10cbbe5e416ee6fbdfa57bd06c9613dc54319a95b99cc5d565",
-   "evidence": 1,
-   "observations": 1,
-   "hosts": [
-    "MKT01.pandalab.com"
-   ],
-   "first": "2023-09-06T05:45:52.075000+00:00",
-   "last": "2023-09-06T05:45:52.075000+00:00",
-   "process_images": {
-    "C:\\Windows\\System32\\whoami.exe": 1
-   },
-   "image_names": [
-    "whoami.exe"
-   ],
-   "techniques": [
-    "T1033"
-   ],
-   "rule_families": {
-    "sigma:bd8b828d-0dca-48e1-8a63-8a58ecf2644f": 1
    }
   }
  ]

@@ -109,3 +109,115 @@ validate parsing and rules, not attribution of a cloud intrusion.
   container for unrelated actions.
 - **Consuming the OCSF Security Lake records first.** A second normalization layer over the same events; the
   native CloudTrail records are the authoritative source and Sigma's rules are written against them.
+
+## Amendments (implementation, 2026-10-06)
+
+**A1 — D4, the endpoint exclusion uses the cloud account, not the provider.** Elastic's own Office 365 pipeline
+sets no `cloud.provider`, and the O365 records state none, so none is invented. Every cloud adapter instead sets
+the tenant / organization / account the record belongs to (`cloud.account_id`: Entra `tenantId`, O365
+`OrganizationId`, CloudTrail `recipientAccountId` — a fact in every record). Endpoint products (`windows`,
+`linux`) carry a negated `cloud.account_id exists`; `azure` rules require `cloud.provider = azure`, `aws` rules
+`cloud.provider = aws`, `m365` rules a cloud account. (The field path is the Observation's own
+`cloud.account_id`, the ECS `cloud.account.id`.)
+
+**A2 — D5, documented UTC.** O365 `CreationTime` is written without a zone, and Microsoft's common schema defines
+it as UTC. A zone stated by the source's documentation is not an assumption: the value is read as UTC, the
+documentation is cited in the adapter, and a `CreationTime` that carries a zone keeps it. An undocumented
+zone-less value is still refused (e.g. Entra `RiskyUsers` `time = "4/26/2023 6:58:15 PM"`).
+
+**A3 — Event time per Entra category,** from the field Microsoft documents for the event, not the export's
+`time`: sign-ins `properties.createdDateTime` (sign-in initiated), audit `properties.activityDateTime`, risk
+detections `properties.activityDateTime` (when the risky activity happened, not when it was detected).
+
+## Record — batch A: Entra ID and Office 365 (2026-10-06)
+
+- *Adapters:* `sources/entra.py` (Azure Monitor diagnostic export; sign-in, non-interactive, service-principal
+  and managed-identity sign-ins → `azure.signinlogs`; audit → `azure.auditlogs`; user / service-principal risk
+  events → `azure.identity_protection`) and `sources/o365.py` (Management Activity API → `o365.audit`). Other Entra
+  categories (Graph activity, risky-user state, …) have no Sigma logsource and are refused, counted. Domain groups
+  `cloud`, `user_agent`, `entra`, `o365` (`observation/1` extended, persistence and mapping wired). Records are
+  recognised by their own schema in the pipeline (`ENTRA_CHANNEL`, `O365_CHANNEL`), never by guess.
+- *Field map `sigma-field-map/12`:* the Azure rules use Log Analytics column names; the export carries the same
+  values under its own names (one diagnostic setting feeds both destinations). Mapped one-to-one only:
+  sign-ins `ResultType`, `ResultDescription`, `AuthenticationRequirement`, `RiskState`, `ResourceDisplayName`,
+  `AppId`, `HomeTenantId`, `ResourceTenantId`, `conditionalAccessStatus`, `DeviceDetail.isCompliant`,
+  `userAgent`; audit `OperationName` / `operationName`, `Category` (the audit record's own category),
+  `ActivityDisplayName`, `LoggedByService`, `properties.result`; risk `riskEventType`; O365 `Operation`,
+  `Workload`, `ResultStatus`, `ObjectId`, `ApplicationId`, `Directionality`, `DeliveryAction`.
+  **Gaps, by reason:** `properties.message` (23 audit rules, 2 sign-in rules) is in no Microsoft schema and is not
+  mapped by SigmaHQ's own Kusto backend (`pySigma-backend-kusto` `azuremonitor/mappings.py`), so its intended
+  column is undocumented; `Status` in sign-in rules is a JSON object compared to a string; `TargetResources` /
+  `InitiatedBy` are arrays / objects; `m365/threat_management`, `m365/exchange` read `eventSource` / `eventName` /
+  `status`, which are not Management Activity fields; `RequestType` is an `ExtendedProperties` entry;
+  `azure/pim` and `azure/activitylogs` have no source in the data.
+- *Real data (`scripts/report_cloud_telemetry.py`):* Entra **579** unique Observations (refused: 39 Graph
+  activity, 2 risky-user state records); O365 **1,413** (refused: 2 records with `CreationTime …17:08:65`, an
+  impossible time). **Only `azure` rules fire on Entra and only `m365` rules on O365** (D4 parity). Documented-
+  label recall: Entra **6 / 40** labelled datasets, O365 **2 / 50**. The misses are content gaps, checked one by
+  one: the AzureHound dataset is Graph-activity only; the federation dataset logs `Set domain authentication`
+  where the rule expects `Set federation settings on domain`; the role-assignment rules need `TargetResources`;
+  the O365 alert rules read fields the API does not have; most labelled datasets are behaviours Sigma has no
+  single-event rule for (password spray, high-volume access, consent grants).
+
+## Record — batch B: AWS CloudTrail (2026-10-06)
+
+- *Adapter:* `sources/cloudtrail.py`, native records only (`class_uid` marks OCSF, not read — D1).
+  `eventTime` must carry a zone. `aws_cloudtrail` group: CloudTrail's own fields plus the nested values Sigma
+  reads (`additionalEventData.MFAUsed`, `responseElements.ConsoleLogin`, `requestParameters.attribute` /
+  `enable`, `responseElements.publiclyAccessible`, `…pendingModifiedValues.masterUserPassword`).
+  `sourceIPAddress` keeps CloudTrail's meaning — **in the data 21,422 of 43,152 records carry
+  `eks.amazonaws.com` there** — and is copied to `network.source.ip` only when it is an IP address.
+  `event.outcome`: `failure` for an `errorCode`, else a sign-in's own `ConsoleLogin` result (a failed console
+  login has no `errorCode`), else absent.
+- *Field map:* `aws/cloudtrail` uses CloudTrail's paths as-is (`eventSource`, `eventName`, `eventType`,
+  `errorCode`, `errorMessage`, `sourceIPAddress`, `userAgent`, `userIdentity.type` / `.arn`, and the nested values
+  above). Gaps: `requestParameters` matched as a whole (substring over a JSON object), container-definition
+  commands (an array inside an array), `status` (not a CloudTrail field); a field-reference and a regular
+  expression stay translation gaps.
+- *Real data:* **21,690** unique Observations from 43,152 records, none refused; **only `aws` rules fire**;
+  documented-label recall **9 / 40** labelled datasets.
+
+## Record — batch C: Azure Activity, Okta, GitHub, Kubernetes (2026-10-06)
+
+- *Adapters:* `sources/azure_activity.py` (Activity Log, Azure Monitor REST form; `.value` of each localizable
+  object = the Log Analytics `AzureActivity` columns), `sources/okta.py` (System Log), `sources/github_audit.py`
+  (enterprise / organization audit-log export; `@timestamp` epoch milliseconds, exact integer arithmetic),
+  `sources/kubernetes_audit.py` (`audit.k8s.io/v1` events; id = `auditID` + `stage`; event time
+  `requestReceivedTimestamp`). Shared exact readers moved to `sources/json_values.py` (the batch A/B adapters
+  now use them too; doing so caught Entra's `callerIpAddress` being copied to `network.source.ip` unchecked —
+  it is now copied only when it is an IP address).
+- *Scope (A1 refined):* Okta, GitHub and Kubernetes events name **no** cloud account (an Okta System Log event
+  carries no org id; a Kubernetes audit event no cluster id), so none is invented: they set no `cloud` group,
+  their product scope is empty and their dataset scope (`okta.system`, `github.audit`,
+  `kubernetes.audit_logs`) is the whole scope. No endpoint rule can match them: endpoint logsources require an
+  `event.category` / Windows dataset these adapters never set — proven on every real record (each golden record
+  fires at most its own product).
+- *Field map:* `okta/okta` (`eventType`, `legacyEventType`, `displayMessage`, `actor.alternateId`,
+  `outcome.result` / `.reason`, `securityContext.isProxy`, `debugContext.debugData.behaviors` /
+  `.logOnlySecurityData`), `github/audit` (`action`), `kubernetes/{audit,application}` (`verb`, `requestURI`,
+  `userAgent`, `responseStatus.code`, `objectRef.*`), `azure/activitylogs` (`operationName` /
+  `OperationNameValue`, `CategoryValue`, `ResourceProviderValue`, `ResourceId`, `properties.message` — which
+  this schema does carry). Gaps: Okta `target.displayName` (an array of objects), a top-level `apiGroup`
+  (not a Kubernetes audit field), regular-expression and keyword rules (translation gaps).
+- *Real data:* Azure Activity 17, Okta 98, GitHub 16, Kubernetes 12 unique Observations, **none refused**; each
+  source fires only its own product. Documented-label recall: Okta **1 / 16**; Azure Activity 0 / 3 (all three
+  datasets are Automation runbook operations, for which Sigma has no rule); Kubernetes 0 / 6 (scanning, cron
+  jobs, daemonsets — no matching single-event rule); GitHub not measurable — its datasets ship **no YAML
+  descriptor** at the pinned commit, the technique appears only in the directory path, and labels are taken
+  from descriptors only. Detection on these sources is therefore proven by golden tests on real records with
+  one labelled change (Key Vault delete, pod in `kube-system`, `exec`, proxied Okta session).
+- *Not now (D1 refined):* **Google Workspace and GCP.** Sigma's `gcp/google_workspace.*` rules read the Cloud
+  Logging export form (`protoPayload.*`, `eventService: admin.googleapis.com`); the available data is the Admin
+  SDK Reports API form (`kind: admin#reports#activity`, `events[].name`). No exact correspondence is documented
+  between the two, and no GCP audit records are in the data — both wait for matching data. Bitbucket: no data.
+
+## Result — batches A–C
+
+Pack imported rules 1,715 → **1,825** (+110: Azure / M365 38, CloudTrail 31, Activity / Okta / GitHub /
+Kubernetes 41), ATT&CK ids with an imported rule 310 → **336**, nothing lost. Active techniques covered 302 →
+**328**; **group-used techniques covered 252 → 273 of 498**; Groups with ≥ 5 covered 144 → 145, ≥ 10 covered
+109 → 111. As D8 states, these datasets are short single-technique simulations: they validate parsing, scoping
+and rules — not attribution of a cloud intrusion. D6 is unchanged: cloud Evidence forms single-Evidence units
+with user and identity as contextual links. A Kubernetes `auditID` (shared by one request's stage events) is a
+provider-asserted operation-instance identifier of the kind D6 anticipates; it is not adopted as a structural
+link yet because the data holds one stage per request (no two Observations to link) — recorded for when it does.

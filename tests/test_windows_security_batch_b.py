@@ -257,7 +257,11 @@ def test_unmodified_real_records_raise_only_the_discovery_detection(
 ) -> None:
     fired = {g: _fired(engine, RECORDS[g]) for g in BATCH_B}
     assert {g: f for g, f in fired.items() if f} == {
-        "b-4661": {"sigma:12ba6a38-adb3-4d6b-91ba-a7fb248e3199": {"T1201"}}
+        "b-4661": {"sigma:12ba6a38-adb3-4d6b-91ba-a7fb248e3199": {"T1201"}},
+        # enrich tier (LOW quality, ADR-0007 Amendment A): the APT29 day-2 account
+        # creation and group membership of "toby" by kmalone
+        "b-4720": {"sigma:66b6be3d-55d0-4f47-9855-d69df21740ea": {"T1136.001"}},
+        "b-4728": {"sigma:c43c26be-2e87-46c7-8661-284588c5a53e": {"T1098"}},
     }
 
 

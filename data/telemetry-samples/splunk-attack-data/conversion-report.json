@@ -1,7 +1,7 @@
 {
  "report_version": 2,
  "source_manifest_sha256": "088f96422e3201b28c5309ff0907e771ebc6fb820979bd997acf2abb856411e5",
- "sigma_pack_sha256": "380b92d3910ce2bf243658bdb12db197c7d1bd56a2cf7472b86d7f6f94a67fdf",
+ "sigma_pack_sha256": "c9fb02b5adc0e7bcea613fccdc0d81f493331174d8db2fe03a7e9189a40cbb9a",
  "sysmon_for_linux": {
   "observations": 246717,
   "os_types": [
@@ -23,8 +23,48 @@
    },
    {
     "product": "linux",
+    "title": "Crontab Enumeration",
+    "detections": 32
+   },
+   {
+    "product": "linux",
+    "title": "File Deletion",
+    "detections": 216
+   },
+   {
+    "product": "linux",
+    "title": "File and Directory Discovery - Linux",
+    "detections": 88
+   },
+   {
+    "product": "linux",
     "title": "Linux Doas Conf File Creation",
     "detections": 1
+   },
+   {
+    "product": "linux",
+    "title": "Linux Doas Tool Execution",
+    "detections": 1
+   },
+   {
+    "product": "linux",
+    "title": "Linux Remote System Discovery",
+    "detections": 1
+   },
+   {
+    "product": "linux",
+    "title": "Linux Setuid Capability Set on a Binary via Setcap Utility",
+    "detections": 1
+   },
+   {
+    "product": "linux",
+    "title": "Local Groups Discovery - Linux",
+    "detections": 4
+   },
+   {
+    "product": "linux",
+    "title": "New Cron File Created",
+    "detections": 10
    },
    {
     "product": "linux",
@@ -40,10 +80,25 @@
     "product": "linux",
     "title": "Suspicious Invocation of Shell via AWK - Linux",
     "detections": 3
+   },
+   {
+    "product": "linux",
+    "title": "System Information Discovery",
+    "detections": 27
+   },
+   {
+    "product": "linux",
+    "title": "System Network Connections Discovery - Linux",
+    "detections": 9
+   },
+   {
+    "product": "linux",
+    "title": "System Network Discovery - Linux",
+    "detections": 6
    }
   ],
   "labelled_datasets_with_observations": 45,
-  "labelled_datasets_with_documented_technique_detected": 1,
+  "labelled_datasets_with_documented_technique_detected": 5,
   "datasets": [
    {
     "dataset": "attack_techniques/T1003.008/copy_file_stdoutpipe",
@@ -89,8 +144,15 @@
     "documented_techniques_current": [
      "T1016"
     ],
-    "detected_techniques": [],
-    "documented_technique_detected": false
+    "detected_techniques": [
+     "T1016",
+     "T1018",
+     "T1049",
+     "T1070.004",
+     "T1082",
+     "T1083"
+    ],
+    "documented_technique_detected": true
    },
    {
     "dataset": "attack_techniques/T1053.003/cronjobs_entry",
@@ -104,8 +166,10 @@
     "documented_techniques_current": [
      "T1053.003"
     ],
-    "detected_techniques": [],
-    "documented_technique_detected": false
+    "detected_techniques": [
+     "T1053.003"
+    ],
+    "documented_technique_detected": true
    },
    {
     "dataset": "attack_techniques/T1053.003/crontab_list_parameter",
@@ -119,7 +183,10 @@
     "documented_techniques_current": [
      "T1053.003"
     ],
-    "detected_techniques": [],
+    "detected_techniques": [
+     "T1007",
+     "T1070.004"
+    ],
     "documented_technique_detected": false
    },
    {
@@ -135,6 +202,9 @@
      "T1059.004"
     ],
     "detected_techniques": [
+     "T1007",
+     "T1082",
+     "T1083",
      "T1592.004"
     ],
     "documented_technique_detected": false
@@ -196,7 +266,9 @@
     "documented_techniques_current": [
      "T1485"
     ],
-    "detected_techniques": [],
+    "detected_techniques": [
+     "T1070.004"
+    ],
     "documented_technique_detected": false
    },
    {
@@ -211,7 +283,13 @@
     "documented_techniques_current": [
      "T1485"
     ],
-    "detected_techniques": [],
+    "detected_techniques": [
+     "T1016",
+     "T1049",
+     "T1070.004",
+     "T1082",
+     "T1083"
+    ],
     "documented_technique_detected": false
    },
    {
@@ -227,6 +305,9 @@
      "T1489"
     ],
     "detected_techniques": [
+     "T1070.004",
+     "T1082",
+     "T1083",
      "T1222.002"
     ],
     "documented_technique_detected": false
@@ -243,7 +324,10 @@
     "documented_techniques_current": [
      "T1547.006"
     ],
-    "detected_techniques": [],
+    "detected_techniques": [
+     "T1082",
+     "T1083"
+    ],
     "documented_technique_detected": false
    },
    {
@@ -258,8 +342,11 @@
     "documented_techniques_current": [
      "T1548.001"
     ],
-    "detected_techniques": [],
-    "documented_technique_detected": false
+    "detected_techniques": [
+     "T1548",
+     "T1554"
+    ],
+    "documented_technique_detected": true
    },
    {
     "dataset": "attack_techniques/T1548.003/doas",
@@ -274,6 +361,7 @@
      "T1548.003"
     ],
     "detected_techniques": [
+     "T1069.001",
      "T1548"
     ],
     "documented_technique_detected": true
@@ -290,8 +378,10 @@
     "documented_techniques_current": [
      "T1548.003"
     ],
-    "detected_techniques": [],
-    "documented_technique_detected": false
+    "detected_techniques": [
+     "T1548"
+    ],
+    "documented_technique_detected": true
    },
    {
     "dataset": "attack_techniques/T1548.003/linux_adduser",
@@ -305,7 +395,9 @@
     "documented_techniques_current": [
      "T1548.003"
     ],
-    "detected_techniques": [],
+    "detected_techniques": [
+     "T1083"
+    ],
     "documented_technique_detected": false
    },
    {
@@ -320,7 +412,11 @@
     "documented_techniques_current": [
      "T1548.003"
     ],
-    "detected_techniques": [],
+    "detected_techniques": [
+     "T1049",
+     "T1069.001",
+     "T1082"
+    ],
     "documented_technique_detected": false
    },
    {
@@ -491,7 +587,9 @@
     "documented_techniques_current": [
      "T1548"
     ],
-    "detected_techniques": [],
+    "detected_techniques": [
+     "T1053.003"
+    ],
     "documented_technique_detected": false
    },
    {
@@ -746,7 +844,12 @@
     "observations": 15416,
     "documented_techniques": [],
     "documented_techniques_current": [],
-    "detected_techniques": [],
+    "detected_techniques": [
+     "T1049",
+     "T1070.004",
+     "T1082",
+     "T1083"
+    ],
     "documented_technique_detected": false
    },
    {
@@ -757,7 +860,13 @@
     "observations": 80457,
     "documented_techniques": [],
     "documented_techniques_current": [],
-    "detected_techniques": [],
+    "detected_techniques": [
+     "T1049",
+     "T1069.001",
+     "T1070.004",
+     "T1082",
+     "T1083"
+    ],
     "documented_technique_detected": false
    }
   ]
@@ -791,10 +900,15 @@
     "product": "linux",
     "title": "Modification of ld.so.preload",
     "detections": 4
+   },
+   {
+    "product": "linux",
+    "title": "Split A File Into Pieces - Linux",
+    "detections": 1
    }
   ],
   "labelled_datasets_with_observations": 48,
-  "labelled_datasets_with_documented_technique_detected": 4,
+  "labelled_datasets_with_documented_technique_detected": 5,
   "datasets": [
    {
     "dataset": "attack_techniques/T1003.008/linux_auditd_access_credential",
@@ -870,8 +984,10 @@
     "documented_techniques_current": [
      "T1030"
     ],
-    "detected_techniques": [],
-    "documented_technique_detected": false
+    "detected_techniques": [
+     "T1030"
+    ],
+    "documented_technique_detected": true
    },
    {
     "dataset": "attack_techniques/T1030/linux_auditd_split_syscall_new",

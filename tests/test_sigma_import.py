@@ -52,6 +52,7 @@ GENERATED = RELEASE_DIR / "generated"
 PACK_PATH = GENERATED / "sigma-r2026-07-01-sigma_core++.rules.json"
 REPORT_PATH = GENERATED / "sigma-r2026-07-01-sigma_core++.import-report.json"
 REVIEW_PATH = RELEASE_DIR / "software-tag-review.json"
+ENRICH_MANIFEST_PATH = RELEASE_DIR / "manifest-sigma_enrich_low.json"
 
 
 @pytest.fixture(scope="module")
@@ -108,9 +109,13 @@ def _import(
     )
 
 
+_PRODUCT_SCOPE_FIELDS = frozenset({"host.os_type", "cloud.account_id", "observer.product"})
+
+
 def _conditions(result: SigmaImportResult) -> list[list[tuple[Any, ...]]]:
     """Non-scope conditions of each generated rule, as comparable tuples
-    (the logsource scope and the ADR-0010 OS scope on ``host.os_type`` are
+    (the logsource scope and the product scope — ``host.os_type`` (ADR-0010),
+    ``cloud.account_id`` (ADR-0011) and ``observer.product`` (ADR-0012) — are
     left out; ``test_rules_carry_the_os_scope`` pins the latter)."""
     out = []
     for rule in result.pack["rules"]:
@@ -124,7 +129,7 @@ def _conditions(result: SigmaImportResult) -> list[list[tuple[Any, ...]]]:
                     c.get("negate", False),
                 )
                 for c in rule["conditions"]
-                if c["operator"] != "has_element" and c["field_path"] != "host.os_type"
+                if c["operator"] != "has_element" and c["field_path"] not in _PRODUCT_SCOPE_FIELDS
             ]
         )
     return out
@@ -582,7 +587,7 @@ def test_real_review_covers_every_imported_software_tag_and_is_applied() -> None
         if m["object_type"] != "attack-pattern"
     }
     assert in_pack == accepted
-    assert len(accepted) == 13  # + WCE wceaux.dll, SDelete rename artifact (Security batch A)
+    assert len(accepted) == 14  # + WCE wceaux.dll, SDelete (batch A); PSEXESVC.exe (enrich tier)
 
 
 # ===========================================================================
@@ -636,12 +641,15 @@ def _render(data: dict[str, Any]) -> str:
 def test_committed_pack_and_report_regenerate_byte_identically(
     knowledge: AttackKnowledge,
 ) -> None:
+    enrich = json.loads(ENRICH_MANIFEST_PATH.read_text(encoding="utf-8"))
     result = import_sigma_archive(
         ARCHIVE,
         knowledge=knowledge,
         release_tag="r2026-07-01",
         archive_sha256=MANIFEST["artifact"]["sha256"],
         software_tag_review=REVIEW_PATH,
+        enrich_archive=ARCHIVE.parent / enrich["artifact"]["filename"],
+        enrich_archive_sha256=enrich["artifact"]["sha256"],
     )
     assert _render(result.pack) == PACK_PATH.read_text(encoding="utf-8")
     assert _render(result.report) == REPORT_PATH.read_text(encoding="utf-8")
@@ -693,7 +701,12 @@ def test_real_pack_scope_keeps_process_rules_off_network_events(
 
 def test_report_lists_every_archive_rule_with_a_link() -> None:
     report = json.loads(REPORT_PATH.read_text(encoding="utf-8"))
-    assert report["summary"]["sigma_rules_total"] == MANIFEST["archive_contents"]["yaml_rule_files"]
+    enrich = json.loads(ENRICH_MANIFEST_PATH.read_text(encoding="utf-8"))
+    assert report["summary"]["sigma_rules_total"] == (
+        MANIFEST["archive_contents"]["yaml_rule_files"] + enrich["artifact"]["members"]
+    )
+    tiers = [row.get("content_tier", "core") for row in report["rules"]]
+    assert tiers.count("enrich") == enrich["artifact"]["members"] == 224
     for row in report["rules"]:
         assert row["rule_url"].startswith("https://github.com/SigmaHQ/sigma/blob/r2026-07-01/")
 

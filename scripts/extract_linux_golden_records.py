@@ -20,6 +20,7 @@ from __future__ import annotations
 import json
 import re
 import sys
+from collections.abc import Iterator
 from pathlib import Path
 from typing import Any
 
@@ -42,6 +43,11 @@ def _raw(line: str, record_type: str) -> bool:
     return match is not None and match["type"] == record_type
 
 
+def _text_records(log: Path) -> Iterator[str]:
+    """The text (XML event) records of a log, through the pipeline's own reader."""
+    return (r for r in iter_recording_records(log) if isinstance(r, str))
+
+
 def main() -> int:
     logs = sorted(CACHE.rglob("sysmon_linux*.log"), key=lambda p: p.relative_to(CACHE).as_posix())
     wanted: dict[str, tuple[str, int]] = {f"linux-sysmon-{i}": ("", i) for i in EVENT_IDS}
@@ -55,8 +61,8 @@ def main() -> int:
         if not pending:
             continue
         # The pipeline's own reader: a multi-line XML event is one record.
-        for record in iter_recording_records(log):
-            match = _EVENT_ID.search(record) if isinstance(record, str) else None
+        for record in _text_records(log):
+            match = _EVENT_ID.search(record)
             if match is None:
                 continue
             for golden_id in list(pending):
@@ -68,16 +74,12 @@ def main() -> int:
     # The first event whose command line spans several lines (reassembly proof).
     multiline = "linux-sysmon-1-multiline"
     for log in logs:
-        record = next(
-            (
-                r
-                for r in iter_recording_records(log)
-                if isinstance(r, str) and "\n" in r and "<EventID>1</EventID>" in r
-            ),
+        multiline_record: str | None = next(
+            (r for r in _text_records(log) if "\n" in r and "<EventID>1</EventID>" in r),
             None,
         )
-        if record is not None:
-            found[multiline] = (log.relative_to(CACHE).as_posix(), record)
+        if multiline_record is not None:
+            found[multiline] = (log.relative_to(CACHE).as_posix(), multiline_record)
             wanted[multiline] = ("", 1)
             break
     # auditd (ADR-0010 D4): the first raw record of each type (raw lines only,

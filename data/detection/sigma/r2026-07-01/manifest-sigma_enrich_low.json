@@ -1,0 +1,1596 @@
+{
+  "package": "sigma_enrich_low.zip",
+  "purpose": "ADR-0007 Amendment A enrich tier (low / informational generic rules)",
+  "source": {
+    "repository": "SigmaHQ/sigma",
+    "release_tag": "r2026-07-01",
+    "commit": "552f3fee420ef232a8e5790c4fae591847e32347",
+    "selection": "rules/windows and rules/linux at the commit, minus Core++ members"
+  },
+  "artifact": {
+    "filename": "sigma_enrich_low.zip",
+    "relative_path": "data/detection/sigma/r2026-07-01/sigma_enrich_low.zip",
+    "size_bytes": 188728,
+    "sha256": "20d01c02ef88b2a88b50ab4a402c5227afe5aab7d52a6756dfb4cb2184fe1bce",
+    "members": 224
+  },
+  "acquisition": {
+    "retrieved_at_utc": "2026-10-03T14:14:36Z",
+    "method": "scripts/acquire_sigma_enrich_rules.py (each file verified against the commit's git blob id; reproducible zip)",
+    "approval": "owner, 2026-10-03"
+  },
+  "license": {
+    "rules": "Detection Rule License (DRL) 1.1",
+    "notice_file": "data/detection/sigma/r2026-07-01/NOTICE.md"
+  },
+  "files": [
+    {
+      "path": "rules/linux/auditd/execve/lnx_auditd_capabilities_discovery.yml",
+      "git_blob_id": "f6b76ba1d15e0a1eeaac0a223a1d4a18c57a6b87",
+      "sha256": "3da7104c23a1f936c80cc1c9786a549ae4982f3fd02bcdd8e8de0f96575239d7",
+      "size_bytes": 959,
+      "level": "low"
+    },
+    {
+      "path": "rules/linux/auditd/execve/lnx_auditd_clipboard_collection.yml",
+      "git_blob_id": "5a9df6314428444055092b0e84748e6ffdb13065",
+      "sha256": "ca55e716f94d7031b1c6fb841af822d792d5111231cafb7ca42f8ea0cb044935",
+      "size_bytes": 947,
+      "level": "low"
+    },
+    {
+      "path": "rules/linux/auditd/execve/lnx_auditd_clipboard_image_collection.yml",
+      "git_blob_id": "006ea96d06e69f3c1de1b00867efd4ddaad8197e",
+      "sha256": "e8e66d9c95cd2a57656c356a3862abfb195466fae023cd942d321f4dc0e904d7",
+      "size_bytes": 916,
+      "level": "low"
+    },
+    {
+      "path": "rules/linux/auditd/execve/lnx_auditd_data_compressed.yml",
+      "git_blob_id": "f16de36cdc9c22ef5c1aaf05c20aea8b199f9d6b",
+      "sha256": "128191e589c1462d01c76513d90109cf069ee0cef82979c72ab562279ecef556",
+      "size_bytes": 969,
+      "level": "low"
+    },
+    {
+      "path": "rules/linux/auditd/execve/lnx_auditd_dd_delete_file.yml",
+      "git_blob_id": "6fa3ffb31e71cf9db45faff2c0bbbac99538041f",
+      "sha256": "52b3ce61990b7ee3a36fa48afbe41f57e7863c2df1152e22fea69b7372e7a22f",
+      "size_bytes": 746,
+      "level": "low"
+    },
+    {
+      "path": "rules/linux/auditd/execve/lnx_auditd_file_or_folder_permissions.yml",
+      "git_blob_id": "596d0e03d01f8737d2b0ca97de5ceb3ab3c2858f",
+      "sha256": "9a1b88e8d1bd9d264a063056d614ff50c337a7cf80ab7bd594d89e865fc85dfe",
+      "size_bytes": 721,
+      "level": "low"
+    },
+    {
+      "path": "rules/linux/auditd/execve/lnx_auditd_hidden_files_directories.yml",
+      "git_blob_id": "c68eb4dfcaa31130985dd5334834f96f9d71bdfd",
+      "sha256": "98e9c83ba23ee97df42a3069479b687b5e011a7bccf8ff758093b3ebb91885b2",
+      "size_bytes": 864,
+      "level": "low"
+    },
+    {
+      "path": "rules/linux/auditd/execve/lnx_auditd_hidden_zip_files_steganography.yml",
+      "git_blob_id": "ea6f7bb12f4bd3fa1ffc848cdb722c8dd9b05bd1",
+      "sha256": "f9f4435695227436ce3833948741dfaaf145123bbd9c86889e20f017f281697a",
+      "size_bytes": 655,
+      "level": "low"
+    },
+    {
+      "path": "rules/linux/auditd/execve/lnx_auditd_network_sniffing.yml",
+      "git_blob_id": "0a41e4b26e7d0952283a511ea48b90d2bbb6d91e",
+      "sha256": "2d5c98de09ecc02736e835c1a8b8c6c071ee2da1becd635ffb1d2fd517980f56",
+      "size_bytes": 1125,
+      "level": "low"
+    },
+    {
+      "path": "rules/linux/auditd/execve/lnx_auditd_screencapture_import.yml",
+      "git_blob_id": "2192ebadc58b6a19d4f5355c870df61f923d825f",
+      "sha256": "83f91d59ded0078c90bcfcf01dcc1886c94360274b6a430c6ea8e342ea3578b6",
+      "size_bytes": 1156,
+      "level": "low"
+    },
+    {
+      "path": "rules/linux/auditd/execve/lnx_auditd_screencaputre_xwd.yml",
+      "git_blob_id": "409f8b1ea5b7ae5bab6abd371e489cb4c1868653",
+      "sha256": "f31872b21db8dab99abcc2e9355f4cc6fea2d7ea4cb1c0e4ac80ae854ed00209",
+      "size_bytes": 959,
+      "level": "low"
+    },
+    {
+      "path": "rules/linux/auditd/execve/lnx_auditd_steghide_embed_steganography.yml",
+      "git_blob_id": "1eeeca3d2c2df1c3176546db0485a4342e802af8",
+      "sha256": "1164009b584234c91043d663eed3a1d3d42813b7ff752daa48c59e2ebb9986fa",
+      "size_bytes": 782,
+      "level": "low"
+    },
+    {
+      "path": "rules/linux/auditd/execve/lnx_auditd_steghide_extract_steganography.yml",
+      "git_blob_id": "539d51f58a4b0bb6c24a6e6c7d34b017ef064a6d",
+      "sha256": "9aa0d2054f87d0a1ac5bf32524b660f8a3acba5058af398ddf85dd5b0516819f",
+      "size_bytes": 765,
+      "level": "low"
+    },
+    {
+      "path": "rules/linux/auditd/execve/lnx_auditd_susp_service_reload_or_restart.yml",
+      "git_blob_id": "8226ea3ec4bd1c8cd2fe5f69418d74673890991b",
+      "sha256": "5246ff79ed2f3617139591d2c1e87c099cb93cf346785afef96dcda6d97403f5",
+      "size_bytes": 898,
+      "level": "low"
+    },
+    {
+      "path": "rules/linux/auditd/execve/lnx_auditd_system_shutdown_reboot.yml",
+      "git_blob_id": "e5770d53dffb0dc84adedd04bf6fe5bd067096cb",
+      "sha256": "b18af7835c492443e2676fd414e28590393d152083e0dade8235d6f77197cdef",
+      "size_bytes": 894,
+      "level": "informational"
+    },
+    {
+      "path": "rules/linux/auditd/execve/lnx_auditd_unzip_hidden_zip_files_steganography.yml",
+      "git_blob_id": "76fb2cfda4d08a9655afabfb2f82896603b6ea25",
+      "sha256": "af9dbfe7d5d0b086af9f6b4d9f8d82193b50c94a47ea26c40eea8a21ea08be14",
+      "size_bytes": 628,
+      "level": "low"
+    },
+    {
+      "path": "rules/linux/auditd/execve/lnx_auditd_user_discovery.yml",
+      "git_blob_id": "ef872106c4e78fb569cc916c934e17e01f6eb705",
+      "sha256": "6a7f81c3aa7dee9a7e155720be3439a927011c2f78922ca0f3245c6bc9ab9f13",
+      "size_bytes": 1063,
+      "level": "low"
+    },
+    {
+      "path": "rules/linux/auditd/lnx_auditd_audio_capture.yml",
+      "git_blob_id": "e26afeff1d32c52659d2dd74a643c9b3fc682cad",
+      "sha256": "37d202d941715b2498efdc5499bfd08041d3499f645d40893d4b75fae4519bfd",
+      "size_bytes": 946,
+      "level": "low"
+    },
+    {
+      "path": "rules/linux/auditd/lnx_auditd_password_policy_discovery.yml",
+      "git_blob_id": "02e3e50a4214cd58d54c32789229ac23662e9837",
+      "sha256": "6946c5790868c7451cf21b344c5ebafd2fc60349f31c43fd5f8f92fbbcd2fef2",
+      "size_bytes": 1358,
+      "level": "low"
+    },
+    {
+      "path": "rules/linux/auditd/lnx_auditd_system_info_discovery.yml",
+      "git_blob_id": "24a2ee31f5b9d0de5cb11223a7158b84cb71b9cb",
+      "sha256": "cc31eeb6f65b1b52cd38f9852bb55d74004a823747c7ec1a48c2004bc7b26a2c",
+      "size_bytes": 1063,
+      "level": "low"
+    },
+    {
+      "path": "rules/linux/auditd/path/lnx_auditd_hidden_binary_execution.yml",
+      "git_blob_id": "1d39161cc769bacdc13412d2df6e64b1d83b9068",
+      "sha256": "ae26fca91a26687422ff6c79dd9c2c33f539a9107ccf4896ffd031d0e3d2aa8f",
+      "size_bytes": 943,
+      "level": "low"
+    },
+    {
+      "path": "rules/linux/auditd/path/lnx_auditd_system_info_discovery2.yml",
+      "git_blob_id": "09289371e7e0d5486d4283bbf3a0cfbefb1a84e6",
+      "sha256": "9d6a2f70383b469ac458db7aa771e81384e882caaf0ee88f75a1a6f16b43f925",
+      "size_bytes": 1085,
+      "level": "informational"
+    },
+    {
+      "path": "rules/linux/auditd/syscall/lnx_auditd_network_service_scanning.yml",
+      "git_blob_id": "498333b0a100231658bc608b6fad804f70ffb1e5",
+      "sha256": "1cf8f8bdf14232c618b499415187043afb24c35202a2f5017fa4e4cb1b90a942",
+      "size_bytes": 1040,
+      "level": "low"
+    },
+    {
+      "path": "rules/linux/auditd/syscall/lnx_auditd_split_file_into_pieces.yml",
+      "git_blob_id": "96c850cde1bf0df7d6e9bca8fe1804b3a1bee1fa",
+      "sha256": "34ee1fbfe80a1c3ceee767e58d404f75ad65347225a7eb3535dc73126b2743b0",
+      "size_bytes": 669,
+      "level": "low"
+    },
+    {
+      "path": "rules/linux/auditd/syscall/lnx_auditd_susp_discovery_sysinfo_syscall.yml",
+      "git_blob_id": "2dcbe91d10db3ab66073cea4e6044ac15b8b3319",
+      "sha256": "db335a709533393176e73b109c70242a541381363c9e417e3aa5b27d4b3aa022",
+      "size_bytes": 1314,
+      "level": "low"
+    },
+    {
+      "path": "rules/linux/auditd/syscall/lnx_auditd_susp_special_file_creation_via_mknod_syscall.yml",
+      "git_blob_id": "5f7a0cb206cf8baeaf75bfb5fd2cffa9633d4741",
+      "sha256": "ed033360d0682c68bb8264a21570ec86d51dff40bf7ebb654615371e48ab7399",
+      "size_bytes": 1207,
+      "level": "low"
+    },
+    {
+      "path": "rules/linux/builtin/lnx_file_copy.yml",
+      "git_blob_id": "d1f053849b0346416bd2fd4f5df99a62d9f0312f",
+      "sha256": "5e7382c57d359df1ba9389a00fd8cfdc26a432a93ccbfe632f81f2a08f82ba21",
+      "size_bytes": 605,
+      "level": "low"
+    },
+    {
+      "path": "rules/linux/file_event/file_event_lnx_susp_cron_file_created.yml",
+      "git_blob_id": "79e182d923badfd162d2a8e8e3880d36f7913ddf",
+      "sha256": "4eaf424d886d933be880e31432b1dae378ee222b602ed07aa26fd148c6406c35",
+      "size_bytes": 2771,
+      "level": "low"
+    },
+    {
+      "path": "rules/linux/file_event/file_event_lnx_susp_shell_script_under_profile_directory.yml",
+      "git_blob_id": "c3043b6c577fa7cc888b0f773c8a551fa05d3be6",
+      "sha256": "b2a6fa71e9d399f5222943dfb19a55ee0504f499eb8dd8def702312be27206b7",
+      "size_bytes": 1295,
+      "level": "low"
+    },
+    {
+      "path": "rules/linux/process_creation/proc_creation_lnx_at_command.yml",
+      "git_blob_id": "6267fabcd5365c061365c991518be492e5493201",
+      "sha256": "07b42b8e62025f1cf82f51d7042fd6f06818bef7cbf4f3fed4dd892816d8ac9d",
+      "size_bytes": 902,
+      "level": "low"
+    },
+    {
+      "path": "rules/linux/process_creation/proc_creation_lnx_base64_decode.yml",
+      "git_blob_id": "1b3d690659f2b8767306b58c4d36c5ffe5602509",
+      "sha256": "5f19210a426f49e15a3906295928895f4d5e81800f9eb5a2328ce973cfc50d48",
+      "size_bytes": 696,
+      "level": "low"
+    },
+    {
+      "path": "rules/linux/process_creation/proc_creation_lnx_bash_interactive_shell.yml",
+      "git_blob_id": "739fda4b3575116249b5ba0911cf007e15acf1f7",
+      "sha256": "99121a4366c8625719fc4de631c71dc59f78c477e03d5ff62c14d9d6c3e01faa",
+      "size_bytes": 613,
+      "level": "low"
+    },
+    {
+      "path": "rules/linux/process_creation/proc_creation_lnx_cap_setgid.yml",
+      "git_blob_id": "fb947313103c62100998b8258f24ffce52a9f213",
+      "sha256": "3adfaa6ae3a47372f87a4209d84926884a1987b03475cc031055cd6525776b86",
+      "size_bytes": 1139,
+      "level": "low"
+    },
+    {
+      "path": "rules/linux/process_creation/proc_creation_lnx_cap_setuid.yml",
+      "git_blob_id": "535fa6ebed0f4aa06bdf691e1c1e8878b5a2caf6",
+      "sha256": "b79a8ce2abdcc3acc053218ab0e83a3a226a90da599a33a143e8e5246a5747a0",
+      "size_bytes": 1137,
+      "level": "low"
+    },
+    {
+      "path": "rules/linux/process_creation/proc_creation_lnx_capa_discovery.yml",
+      "git_blob_id": "4916afd19d33f74f4a2a0b7f094021885cd21534",
+      "sha256": "cc46db8bc81860e2c0ecd59f4590d9cb2bbbfa48203ecaf6ebe83dea23238a8a",
+      "size_bytes": 804,
+      "level": "low"
+    },
+    {
+      "path": "rules/linux/process_creation/proc_creation_lnx_chroot_execution.yml",
+      "git_blob_id": "f8b798ccc9f142ab89d3f6fb7b324c288fd9b6af",
+      "sha256": "db8911e31e661b34c46d79c856e996e2a0ca5082e309795d5641e6b5d682c4a2",
+      "size_bytes": 1352,
+      "level": "low"
+    },
+    {
+      "path": "rules/linux/process_creation/proc_creation_lnx_clipboard_collection.yml",
+      "git_blob_id": "65df521210d17ad571474f906f41866d4140597e",
+      "sha256": "0bf5c63d8a5e343064f4a6aedba5c7dab7c5ad6b8df0e1df4b268b5fbf802ec2",
+      "size_bytes": 907,
+      "level": "low"
+    },
+    {
+      "path": "rules/linux/process_creation/proc_creation_lnx_crontab_enumeration.yml",
+      "git_blob_id": "7966a068cd3354ecc2b026d6aac1e7517063d88c",
+      "sha256": "26afa648428dc61c9b499be116337362bdf67a76eac328d95fb3a25da468a23b",
+      "size_bytes": 863,
+      "level": "low"
+    },
+    {
+      "path": "rules/linux/process_creation/proc_creation_lnx_curl_usage.yml",
+      "git_blob_id": "2799dbbc50c4acc30d4fd80729c9eb3a347b46b8",
+      "sha256": "e12fced783a0827d25143117b9e6fe407f980bf4e39b25b298964f7eee592c6a",
+      "size_bytes": 737,
+      "level": "low"
+    },
+    {
+      "path": "rules/linux/process_creation/proc_creation_lnx_dd_file_overwrite.yml",
+      "git_blob_id": "73e15abcbe98ac93fc1b0477f75287bde5abce8a",
+      "sha256": "864cc354ce1607b884e7ab011be852890374b425e9695b2b2d579491feb22a11",
+      "size_bytes": 910,
+      "level": "low"
+    },
+    {
+      "path": "rules/linux/process_creation/proc_creation_lnx_doas_execution.yml",
+      "git_blob_id": "900d56296e6c68b66690f54b3fb28122925f6d86",
+      "sha256": "78f8e051bb342d74b0a78af55560e3d757f5fe589f3fb9638b9c1a6c8b8a925c",
+      "size_bytes": 693,
+      "level": "low"
+    },
+    {
+      "path": "rules/linux/process_creation/proc_creation_lnx_file_and_directory_discovery.yml",
+      "git_blob_id": "64a3c4b5289a665c5bb482e02d65366ae078d051",
+      "sha256": "1cdabc93d6008c54258cd5fb82180dbb37503b56865ead1a53e7c44910a9e110",
+      "size_bytes": 1224,
+      "level": "informational"
+    },
+    {
+      "path": "rules/linux/process_creation/proc_creation_lnx_file_deletion.yml",
+      "git_blob_id": "4f80c1d9fd5fb1669b9d22686c3ea11b425ef7be",
+      "sha256": "b04df68365821d699fe47bb38276c1132199746e9941c735495b8ee9722c5906",
+      "size_bytes": 838,
+      "level": "informational"
+    },
+    {
+      "path": "rules/linux/process_creation/proc_creation_lnx_grep_os_arch_discovery.yml",
+      "git_blob_id": "fff00b0951b9ad14ae95253106df635f7c0a740b",
+      "sha256": "0f2b9c818e3248ec64bcc2964d7d3958dd0c868075c7cb20658b919f0da0c596",
+      "size_bytes": 1145,
+      "level": "low"
+    },
+    {
+      "path": "rules/linux/process_creation/proc_creation_lnx_install_root_certificate.yml",
+      "git_blob_id": "14412b982b9d49c8387149660e38968a9f5f74fd",
+      "sha256": "8e7af70ca8e0aeea873015d891cf423f175d0053fd861b8cef64920ee5046db8",
+      "size_bytes": 801,
+      "level": "low"
+    },
+    {
+      "path": "rules/linux/process_creation/proc_creation_lnx_local_account.yml",
+      "git_blob_id": "ab8923381f8062cfeeebb94a28574ef6f7a4ffb9",
+      "sha256": "2288be23b4893e92496d29b07610a99b4cd186ef87849186ed30a9b17b3422d5",
+      "size_bytes": 1589,
+      "level": "low"
+    },
+    {
+      "path": "rules/linux/process_creation/proc_creation_lnx_local_groups.yml",
+      "git_blob_id": "3f9de5e00281f4414462e8fc684f6f6e883c59db",
+      "sha256": "82ebbe2ee4d7f5dc230b32975a007f6e2a96e00d880dc3bdddfbb6edbe3c31fb",
+      "size_bytes": 1013,
+      "level": "low"
+    },
+    {
+      "path": "rules/linux/process_creation/proc_creation_lnx_mkfifo_named_pipe_creation.yml",
+      "git_blob_id": "9f7174fcfa3d10c6405e71a75979a1b51ac362e3",
+      "sha256": "b8661f6d0fc19f4567439f15c04cc19dee30948bed3d83ef1797c1c2609b0929",
+      "size_bytes": 620,
+      "level": "low"
+    },
+    {
+      "path": "rules/linux/process_creation/proc_creation_lnx_proxy_connection.yml",
+      "git_blob_id": "03cc352a7d8126eb7f360a33e73a4316d2fc9115",
+      "sha256": "e1716fa736e1d30049566d9834a60eabe184d31669d8b9aa90525ed22800f8ea",
+      "size_bytes": 513,
+      "level": "low"
+    },
+    {
+      "path": "rules/linux/process_creation/proc_creation_lnx_remote_access_tools_teamviewer_incoming_connection.yml",
+      "git_blob_id": "bda4b4b7d66ef4c08827a9b3649bd74c096a8231",
+      "sha256": "e635367dbba8c68d6003850cfd6b161edba388381cf171d50391d01a812a28c5",
+      "size_bytes": 1058,
+      "level": "low"
+    },
+    {
+      "path": "rules/linux/process_creation/proc_creation_lnx_remote_system_discovery.yml",
+      "git_blob_id": "23052b47d8bf97e8e014c069e3c2cfafc55f07d7",
+      "sha256": "8b48e90fd66ff59fe12af188cdd7c23c607352bfa805fc2f973ad6b70d2696b5",
+      "size_bytes": 1321,
+      "level": "low"
+    },
+    {
+      "path": "rules/linux/process_creation/proc_creation_lnx_remove_package.yml",
+      "git_blob_id": "623972981ec905023ab03a13dc77ca627c91f3d8",
+      "sha256": "5e9e0b95b8072ac8178b12f1e33cf271790da0e52a9303f7f5ad2b16b9e99b97",
+      "size_bytes": 1343,
+      "level": "low"
+    },
+    {
+      "path": "rules/linux/process_creation/proc_creation_lnx_security_software_discovery.yml",
+      "git_blob_id": "bf3d1b3bde6e3e969bc4df6e91344208078642ef",
+      "sha256": "10acbe8bcbd9c6bd511da1f788315406fe923b1761af604682c14e0aa6919b0c",
+      "size_bytes": 1283,
+      "level": "low"
+    },
+    {
+      "path": "rules/linux/process_creation/proc_creation_lnx_setgid_setuid.yml",
+      "git_blob_id": "723a159906c52aa7e562c601130ddda17a833882",
+      "sha256": "35a84705cc67f7a1c545d9d1880030934e49cbb6a8b8ecc58722b443efa12c9f",
+      "size_bytes": 799,
+      "level": "low"
+    },
+    {
+      "path": "rules/linux/process_creation/proc_creation_lnx_susp_container_residence_discovery.yml",
+      "git_blob_id": "4403c74abce9e29b4ea5bc81a44f8f13d926b123",
+      "sha256": "9bc91159b4b8822216b996186341a165b1c93b22373df22f7b9c384edfd942cd",
+      "size_bytes": 1422,
+      "level": "low"
+    },
+    {
+      "path": "rules/linux/process_creation/proc_creation_lnx_susp_dockerenv_recon.yml",
+      "git_blob_id": "f0729ae0ee0cf53f516ab0ff6e635c81e4eeb8bd",
+      "sha256": "47eda2228690e3d31ee08fc3202031bf61c7573405c91f606ffe094f3fe56d7d",
+      "size_bytes": 1129,
+      "level": "low"
+    },
+    {
+      "path": "rules/linux/process_creation/proc_creation_lnx_susp_inod_listing.yml",
+      "git_blob_id": "4107596cbfd48f9d7d21a2b423d4fbc2f00c87b6",
+      "sha256": "c92b7b7ad8ed9c4c2d632195ed70edd6ff05c33dae5a8c29e6b1f190911e0cf0",
+      "size_bytes": 1301,
+      "level": "low"
+    },
+    {
+      "path": "rules/linux/process_creation/proc_creation_lnx_susp_network_utilities_execution.yml",
+      "git_blob_id": "3dbfbf8e3cf12b6344534cb73388f675bbe92038",
+      "sha256": "5fa056ac54b8a796dc558300c4ab277c2e559c87ed8e3d51413ee7313f3ece4c",
+      "size_bytes": 1561,
+      "level": "low"
+    },
+    {
+      "path": "rules/linux/process_creation/proc_creation_lnx_system_info_discovery.yml",
+      "git_blob_id": "ec5d3f4a7e7883b24f739d44696a23298bc3926a",
+      "sha256": "b9ab4e09bf027bbaf8f58404b4414251219ee7b200321218ea755e40590d01d3",
+      "size_bytes": 793,
+      "level": "informational"
+    },
+    {
+      "path": "rules/linux/process_creation/proc_creation_lnx_system_network_connections_discovery.yml",
+      "git_blob_id": "7beb43031ba5839c97b121c7e2c37f73e8a91f19",
+      "sha256": "d7a66b5fb27d8c9f6366c84825bc79c90cc90669695281c7b1827893505c039a",
+      "size_bytes": 904,
+      "level": "low"
+    },
+    {
+      "path": "rules/linux/process_creation/proc_creation_lnx_system_network_discovery.yml",
+      "git_blob_id": "647835e76bae193cd8e8623a7cbe39e0256f2bd0",
+      "sha256": "a7b4fa79d7eff4112be7a51b0bb1ce697a63561393e550c7b545fefae9b7b0c9",
+      "size_bytes": 950,
+      "level": "informational"
+    },
+    {
+      "path": "rules/windows/builtin/application/msiinstaller/win_builtin_remove_application.yml",
+      "git_blob_id": "ebfe282d258a9762bc0de66c3a206225b17e69d7",
+      "sha256": "70b248b4e5cedd7b4151bfe8532d64e5bfef9e81efaadab4146f657dc3c6c7ff",
+      "size_bytes": 977,
+      "level": "low"
+    },
+    {
+      "path": "rules/windows/builtin/application/mssqlserver/win_mssql_failed_logon.yml",
+      "git_blob_id": "cf944997358e6b0a8bc86692c34b509a9caf8037",
+      "sha256": "1998dae08584c37fb27aa431b688d1b6aeaa00f54500586ad55a50e86e2e6070",
+      "size_bytes": 1185,
+      "level": "low"
+    },
+    {
+      "path": "rules/windows/builtin/application/screenconnect/win_app_remote_access_tools_screenconnect_command_exec.yml",
+      "git_blob_id": "5709cd6b86f1e66e8f14c411883d8cea04c497c3",
+      "sha256": "0b0cf3f8be2a028a5ded4a8e407e65b71765878ca91cd82f72b40c071679151b",
+      "size_bytes": 781,
+      "level": "low"
+    },
+    {
+      "path": "rules/windows/builtin/application/screenconnect/win_app_remote_access_tools_screenconnect_file_transfer.yml",
+      "git_blob_id": "7e4d942d715f37232aef1e8f9ef66d3b67413ecf",
+      "sha256": "28309f30f9c0af40a533b56a85917a344e20547c430ec07d698975f1ea2f014d",
+      "size_bytes": 785,
+      "level": "low"
+    },
+    {
+      "path": "rules/windows/builtin/appmodel_runtime/win_appmodel_runtime_sysinternals_tools_appx_execution.yml",
+      "git_blob_id": "083cb52db5b80f8f51f0707b3745a35c97c141f7",
+      "sha256": "4fd9ec7a54f8af6826a4465b480672f5bedd66dac3899ed7cd95d4dc64d6f479",
+      "size_bytes": 1003,
+      "level": "low"
+    },
+    {
+      "path": "rules/windows/builtin/bits_client/win_bits_client_new_job_via_bitsadmin.yml",
+      "git_blob_id": "540c47b28823dbbad4d5e9275e86cd72230aaf75",
+      "sha256": "f58728456d69026c0f7a11cee403d15aec21955d0370b4be3c995317f047a3ad",
+      "size_bytes": 784,
+      "level": "low"
+    },
+    {
+      "path": "rules/windows/builtin/bits_client/win_bits_client_new_job_via_powershell.yml",
+      "git_blob_id": "c532c8af3be81fec810af34a5e9992b7dcb83825",
+      "sha256": "f0ed742ac73539a632d20fbd7d9b1789b22a26895d758ff0960046d46f36ebbc",
+      "size_bytes": 727,
+      "level": "low"
+    },
+    {
+      "path": "rules/windows/builtin/code_integrity/win_codeintegrity_attempted_dll_load.yml",
+      "git_blob_id": "1eb88f5d7b8d647f95988162b0a850ee93376ea0",
+      "sha256": "1b84d854199d0cd229294a7d7bb9f69584c103c36b0c30213b9a61ac07d14f9d",
+      "size_bytes": 7992,
+      "level": "low"
+    },
+    {
+      "path": "rules/windows/builtin/dns_client/win_dns_client_ufile_io.yml",
+      "git_blob_id": "5665769bd8ac197956bf5db347598f2a10cb8dd1",
+      "sha256": "dbe92e553aa3bde0672df9cc7a2c8d8f5154ec4fda2b3af41a58b61512c53b19",
+      "size_bytes": 1002,
+      "level": "low"
+    },
+    {
+      "path": "rules/windows/builtin/driverframeworks/win_usb_device_plugged.yml",
+      "git_blob_id": "d49dd6119bdf01bd700f2f74d0ef41da3f609958",
+      "sha256": "78e2c9ec4ffc8a34bf4e8efbbb04adf4560a247b8f1116d3aca5cfcd98b4cbfb",
+      "size_bytes": 912,
+      "level": "low"
+    },
+    {
+      "path": "rules/windows/builtin/firewall_as/win_firewall_as_failed_load_gpo.yml",
+      "git_blob_id": "be5bf98582f5577e11c088f3eb6cfa89272fdc2a",
+      "sha256": "8087734d5f4ce9fa591e4c350d14e88eb89d77c89232d834cb7ed31cb237b422",
+      "size_bytes": 688,
+      "level": "low"
+    },
+    {
+      "path": "rules/windows/builtin/firewall_as/win_firewall_as_reset_config.yml",
+      "git_blob_id": "169a24342e225c87d6b661b661082d0779b9c891",
+      "sha256": "e26a58f09c2d45c0c3ae637a04b5b205302e8eb0d8a5cec05181fc94fc922838",
+      "size_bytes": 819,
+      "level": "low"
+    },
+    {
+      "path": "rules/windows/builtin/firewall_as/win_firewall_as_setting_change.yml",
+      "git_blob_id": "6ffcb27560009d44cfc2ec9a12a20e2c4c0c9452",
+      "sha256": "177b010cec31ea8e3152b3f1128b89d9326083bfb3be3771ba02ca97e595186f",
+      "size_bytes": 1129,
+      "level": "low"
+    },
+    {
+      "path": "rules/windows/builtin/iis-configuration/win_iis_module_removed.yml",
+      "git_blob_id": "b3e99a28749c151810077595e9858720ed4b95ce",
+      "sha256": "ca39539ab4205dc1185b577e3c7e2a794cbac909df9996442d46672079de8247",
+      "size_bytes": 1122,
+      "level": "low"
+    },
+    {
+      "path": "rules/windows/builtin/ntlm/win_susp_ntlm_auth.yml",
+      "git_blob_id": "856952d4e0559cb9a3e59db63a9390846be7befc",
+      "sha256": "69a61bde5ec22bd3cc5888dab2974d989d33e240738830470e055660b4c867c3",
+      "size_bytes": 618,
+      "level": "low"
+    },
+    {
+      "path": "rules/windows/builtin/security/account_management/win_security_admin_rdp_login.yml",
+      "git_blob_id": "e3cc51ab999c4beda3b31ed63d864379b138bfdd",
+      "sha256": "476b371e5a0af1baebcd7ba5553bc36a4e0949aab8226ec23e5f4ed54eca31d7",
+      "size_bytes": 1007,
+      "level": "low"
+    },
+    {
+      "path": "rules/windows/builtin/security/account_management/win_security_member_added_security_enabled_global_group.yml",
+      "git_blob_id": "96b6bdb1bc85420cee9fcc1dbea5f24de0225916",
+      "sha256": "736fb719c542cf616e84ad34ac086aed1288c42a7ef82fae945abb1e5c4908ea",
+      "size_bytes": 1125,
+      "level": "low"
+    },
+    {
+      "path": "rules/windows/builtin/security/account_management/win_security_member_removed_security_enabled_global_group.yml",
+      "git_blob_id": "a2b8cf818014cec9b8bf2a3eec196268c9272a0d",
+      "sha256": "d74ceda9bc8a5eae25dbbe03ad2ab74259cc61cd4bdbc35295a0b6cff095bcca",
+      "size_bytes": 1139,
+      "level": "low"
+    },
+    {
+      "path": "rules/windows/builtin/security/account_management/win_security_security_enabled_global_group_deleted.yml",
+      "git_blob_id": "30a947717f3f8ef30aa4363fb28118c1579dcb89",
+      "sha256": "66e231df2ecb0b90e1a1525bbb1396ad1fe56008b9f6952231492a90cb2d0d1c",
+      "size_bytes": 1090,
+      "level": "low"
+    },
+    {
+      "path": "rules/windows/builtin/security/account_management/win_security_susp_logon_newcredentials.yml",
+      "git_blob_id": "c142da2bde3007c85f9d3876b3cb12f3068b941b",
+      "sha256": "2c4a331dcbd8b1079a277d9bf86dcffc4def1c536baa99cdc2d0eaa77465e9a0",
+      "size_bytes": 573,
+      "level": "low"
+    },
+    {
+      "path": "rules/windows/builtin/security/account_management/win_security_susp_wmi_login.yml",
+      "git_blob_id": "8d42dd8fe5437fd59804500230ad7c588a585577",
+      "sha256": "0c4361f16da6a09c495330bb63cdb4bbf51f09cd4979d3fa8fe966319742fe72",
+      "size_bytes": 568,
+      "level": "low"
+    },
+    {
+      "path": "rules/windows/builtin/security/win_security_adcs_certificate_template_configuration_vulnerability.yml",
+      "git_blob_id": "0c0eebd08e5c001d6321821a854ae413f9add2b1",
+      "sha256": "82f1c480ffdbc12a5a50736ef5f092f466850af7efcf198a3aa6b624e5e595c3",
+      "size_bytes": 1122,
+      "level": "low"
+    },
+    {
+      "path": "rules/windows/builtin/security/win_security_add_remove_computer.yml",
+      "git_blob_id": "42048ac8e55cd9f7cf985fde8d8cf12cf87916b5",
+      "sha256": "0e2f3eefd6f579ea0f7d6fc5e777fbb3563a3668cb0238adadd5830dc608f3eb",
+      "size_bytes": 947,
+      "level": "low"
+    },
+    {
+      "path": "rules/windows/builtin/security/win_security_admin_share_access.yml",
+      "git_blob_id": "a9031cc89ba5aea4cf90617359f5bd421baf2a2d",
+      "sha256": "7942d656ac9042507e0e94c6de00ec372245666baf82c9c4aacc0de3d1966f83",
+      "size_bytes": 880,
+      "level": "low"
+    },
+    {
+      "path": "rules/windows/builtin/security/win_security_codeintegrity_check_failure.yml",
+      "git_blob_id": "b98014ad89a8d2e22620d403da498f976f90bdb5",
+      "sha256": "fbe43e46701a13a2a9c8e1c16915875f241e1de62ddb0b7d15d0563cc6d3af8e",
+      "size_bytes": 1228,
+      "level": "informational"
+    },
+    {
+      "path": "rules/windows/builtin/security/win_security_disable_event_auditing.yml",
+      "git_blob_id": "8455fa9d3faaa989071f1adabb8f83461d1fb10c",
+      "sha256": "99ac00be54aede209446f25755eda6b8a754fdf3ac4a0166b39acc881fd6abd6",
+      "size_bytes": 3053,
+      "level": "low"
+    },
+    {
+      "path": "rules/windows/builtin/security/win_security_external_device.yml",
+      "git_blob_id": "b05dc01ab0500283c4663834af3bb7f9e9294226",
+      "sha256": "607a2f082171444aac232bd5654aa28b201c84ed7ceeb84a48246d2edc281157",
+      "size_bytes": 794,
+      "level": "low"
+    },
+    {
+      "path": "rules/windows/builtin/security/win_security_registry_permissions_weakness_check.yml",
+      "git_blob_id": "27536529ba98549781a096bdfc2563a717d01fc4",
+      "sha256": "131643e0d9d75361e7a9d4a594b09f3b6e1caa6149e24c515b00065415944466",
+      "size_bytes": 1569,
+      "level": "low"
+    },
+    {
+      "path": "rules/windows/builtin/security/win_security_susp_time_modification.yml",
+      "git_blob_id": "4211052d9ecfefc9e4443dd9b17dfea781121298",
+      "sha256": "e2caeb0b98e80fd21eb6bd31e7e67aa69eb6f11a8c0f4a4febeaa488c2bd4c37",
+      "size_bytes": 1555,
+      "level": "low"
+    },
+    {
+      "path": "rules/windows/builtin/security/win_security_tap_driver_installation.yml",
+      "git_blob_id": "8fcc028fd866b90ac495a36373cb016dde99bd0c",
+      "sha256": "7b7a289cdc647e65677fde953d3be03518be7947d7c8740b70762e6fd10c2c43",
+      "size_bytes": 939,
+      "level": "low"
+    },
+    {
+      "path": "rules/windows/builtin/security/win_security_user_creation.yml",
+      "git_blob_id": "9e88f7cc078abee01fe2da162c5286de6b86c45d",
+      "sha256": "07e4a4b8899f265946a0f17b524526e3350fb64e0a6751975272df84ef96df85",
+      "size_bytes": 747,
+      "level": "low"
+    },
+    {
+      "path": "rules/windows/builtin/security/win_security_user_logoff.yml",
+      "git_blob_id": "d4a82efaa74abb059eeac91849f0935cc4358963",
+      "sha256": "9f84873739f933781b3d4e5acf6a1e66d4294b864c3eda305af5a6787376cef3",
+      "size_bytes": 922,
+      "level": "informational"
+    },
+    {
+      "path": "rules/windows/builtin/security/win_security_vssaudit_secevent_source_registration.yml",
+      "git_blob_id": "0782981c61e918aeacce65f5e48fa5599b4966c7",
+      "sha256": "69d1a4727d1df48f17ab4cb96698a6a4b37e0de475f0d62f728938ac080f30f8",
+      "size_bytes": 940,
+      "level": "informational"
+    },
+    {
+      "path": "rules/windows/builtin/security/win_security_workstation_was_locked.yml",
+      "git_blob_id": "0c3c3f7f02f703ca6f0668aa5bf3854952eb4078",
+      "sha256": "7429adc74181378cb660430dfa3b3e8f8575e7f7ae905c36649c260e2492a0a3",
+      "size_bytes": 1416,
+      "level": "informational"
+    },
+    {
+      "path": "rules/windows/builtin/system/microsoft_windows_certification_authority/win_system_adcs_enrollment_request_denied.yml",
+      "git_blob_id": "98ba29b6cbeb2ec6b4601f8d422252aa3e82bed7",
+      "sha256": "e4454e983557c2bfde27d5d720f6d097a99e9a08070667208d04905dc251d6d5",
+      "size_bytes": 964,
+      "level": "low"
+    },
+    {
+      "path": "rules/windows/builtin/system/microsoft_windows_kerberos_key_distribution_center/win_system_kdcsvc_tgs_no_suitable_encryption_key_found.yml",
+      "git_blob_id": "a07b1e46ae729771f578aa1903398cea4a94f610",
+      "sha256": "6a9a3ec9843b2eedea598571c11fa2deacf2abd89435543625ca8ab453cdafb3",
+      "size_bytes": 1272,
+      "level": "low"
+    },
+    {
+      "path": "rules/windows/builtin/system/microsoft_windows_ntfs/win_system_volume_shadow_copy_mount.yml",
+      "git_blob_id": "f32b7aa939cd54b3013160364d82c6d393353caf",
+      "sha256": "9480ecca2732fd81492e1c84e339cb74756df6b0d4b1efb16b19196d7439f4f6",
+      "size_bytes": 815,
+      "level": "low"
+    },
+    {
+      "path": "rules/windows/builtin/system/microsoft_windows_windows_update_client/win_system_susp_system_update_error.yml",
+      "git_blob_id": "1df102e8e9a78d180ad37cc69c74eca93c3adbcf",
+      "sha256": "349399503da437f94f99e330d1cfcc5065ae43422262468415e4988c1d7c1ecd",
+      "size_bytes": 1432,
+      "level": "informational"
+    },
+    {
+      "path": "rules/windows/builtin/system/service_control_manager/win_system_service_terminated_error_generic.yml",
+      "git_blob_id": "0dc2b87a1c22ea4d2e35041f0675cb694a1e15a1",
+      "sha256": "95fcf153f38b6113b1896964f7f8ff0f71fd90b60b81a547e6eadb09796146a5",
+      "size_bytes": 861,
+      "level": "low"
+    },
+    {
+      "path": "rules/windows/builtin/windefend/win_defender_config_change_sample_submission_consent.yml",
+      "git_blob_id": "7a1e5eeecedc287cc7b5f9f9a227f7d1cb16bcc8",
+      "sha256": "9564cb47ac86ef4c752ede232ad98d5772277096a760f63b132a941c59fba41c",
+      "size_bytes": 1104,
+      "level": "low"
+    },
+    {
+      "path": "rules/windows/builtin/windefend/win_defender_history_delete.yml",
+      "git_blob_id": "d973f1ab9aa81977a657401c15ecf8f93a127f62",
+      "sha256": "0a759dc7dd6850bc14984c6158afb681b1c9e4d5fec8a34bdf60a875dca08ebf",
+      "size_bytes": 948,
+      "level": "informational"
+    },
+    {
+      "path": "rules/windows/dns_query/dns_query_win_dns_server_discovery_via_ldap_query.yml",
+      "git_blob_id": "0c711beac22cab4ace74f31991a0301e6460e8e0",
+      "sha256": "ac4c207dbcfbd2b449d7397256cd4a279f1da27fa2e85cd6192c8f841eefb68e",
+      "size_bytes": 1713,
+      "level": "low"
+    },
+    {
+      "path": "rules/windows/dns_query/dns_query_win_onelaunch_update_service.yml",
+      "git_blob_id": "917a9043cef0c7f65f96bc1fd930f7a237e136a9",
+      "sha256": "a760822ce1d7697b89b96ffa03b70ec913a6624cea8415594a2736a33920cffe",
+      "size_bytes": 953,
+      "level": "low"
+    },
+    {
+      "path": "rules/windows/dns_query/dns_query_win_quickassist.yml",
+      "git_blob_id": "5ab11aded6d4eccf3f828ac63133597e22e098cc",
+      "sha256": "6c15a3ed0bfd264a944d4c0777ab0b0bc00c700c9e5e09fb286034f289d5a186",
+      "size_bytes": 1220,
+      "level": "low"
+    },
+    {
+      "path": "rules/windows/dns_query/dns_query_win_ufile_io_query.yml",
+      "git_blob_id": "195bc7ba2314b6b1e74f359efc4a2df72e872ee9",
+      "sha256": "94024dae793a7a5c9a49b510edc37ad40e17b94538e3a993cdda3856433067f4",
+      "size_bytes": 801,
+      "level": "low"
+    },
+    {
+      "path": "rules/windows/driver_load/driver_load_win_vuln_drivers_names.yml",
+      "git_blob_id": "c0bfc2dae9bc6a536dd18cb7d73ee93fca75ee54",
+      "sha256": "a18e1df01861cbb9c99aee5de4f2544723073369a99e58b831fea437651bba3f",
+      "size_bytes": 9145,
+      "level": "low"
+    },
+    {
+      "path": "rules/windows/file/file_access/file_access_win_susp_process_access_browser_cred_files.yml",
+      "git_blob_id": "fc33d6b65e9a7371eed461847774ffafb1682907",
+      "sha256": "497cdabe84fa601014ccb8ece37736862b4b3d0b9f4fcfb281c2e72f7f26751e",
+      "size_bytes": 6570,
+      "level": "low"
+    },
+    {
+      "path": "rules/windows/file/file_delete/file_delete_win_delete_teamviewer_logs.yml",
+      "git_blob_id": "5067aa890df9e57928e87f9591bdc3d5c3c9c513",
+      "sha256": "f222ae84ad7cc726b6bc750583ba19d821b33000d41fe912741584ae912a4154",
+      "size_bytes": 769,
+      "level": "low"
+    },
+    {
+      "path": "rules/windows/file/file_event/file_event_win_creation_deno.yml",
+      "git_blob_id": "5f463f9c160dc8f785eb952d637170e58ad0337a",
+      "sha256": "0f078e59f845b74685e2dc10baea920f717baf8feb7c0957b88ca7d58fe8456f",
+      "size_bytes": 1007,
+      "level": "low"
+    },
+    {
+      "path": "rules/windows/file/file_event/file_event_win_csharp_compile_artefact.yml",
+      "git_blob_id": "f5b8ef7d6cbfcdb71a1f293129b59f034bb9bcc9",
+      "sha256": "5f29bfc04d27f5cee70d70d1edf513c2709d8b2e70e18ebf6bd241208ce7eb70",
+      "size_bytes": 837,
+      "level": "low"
+    },
+    {
+      "path": "rules/windows/file/file_event/file_event_win_ntds_dit_creation.yml",
+      "git_blob_id": "76e0a90a910d26d71029dfa12018410672432083",
+      "sha256": "d264d04f841912bf26bd016e399e9895afc713f39ea48e58dc6d5c7e4296390a",
+      "size_bytes": 519,
+      "level": "low"
+    },
+    {
+      "path": "rules/windows/file/file_event/file_event_win_office_macro_files_created.yml",
+      "git_blob_id": "c28e43430f405c7b26aef66b58172574da2389f8",
+      "sha256": "c318ab8e5860dc72e90baae80feeadc55b7ba47a531caa4357257f5e7b99dbe5",
+      "size_bytes": 1371,
+      "level": "low"
+    },
+    {
+      "path": "rules/windows/file/file_event/file_event_win_office_macro_files_downloaded.yml",
+      "git_blob_id": "97d78f4d9c79d636018232367c91d12a5f2d362c",
+      "sha256": "51e427a9c78b91506f789b74f7978f8c5862395f1f691907b27e940d4cb819a8",
+      "size_bytes": 2105,
+      "level": "low"
+    },
+    {
+      "path": "rules/windows/file/file_event/file_event_win_powershell_drop_powershell.yml",
+      "git_blob_id": "89aaacc7d239c9f08374a16cfa2e1657216b22f4",
+      "sha256": "b8f55695a73bccc08174a109055d1abdc8d3e4a1fe9130fd4591d31342ac5012",
+      "size_bytes": 1177,
+      "level": "low"
+    },
+    {
+      "path": "rules/windows/file/file_event/file_event_win_powershell_module_creation.yml",
+      "git_blob_id": "a808ce7553a03b18513de91bfabb8d9ae734064b",
+      "sha256": "fbb27a66898489e9ef292cb8dba6356e253e7586ebaee8b952103549182465ad",
+      "size_bytes": 812,
+      "level": "low"
+    },
+    {
+      "path": "rules/windows/file/file_event/file_event_win_remote_access_tools_screenconnect_remote_file.yml",
+      "git_blob_id": "03026bda38f8a98a791b4a7d9004f43d888b9bc2",
+      "sha256": "cfafb63825f4d48e58b1552b641991d3b98334767458572c06805a8e66aa5273",
+      "size_bytes": 978,
+      "level": "low"
+    },
+    {
+      "path": "rules/windows/file/file_event/file_event_win_sysinternals_psexec_service.yml",
+      "git_blob_id": "0ec3dfec3f2242f740231d0e46c3a3210c8d07f0",
+      "sha256": "1ec5a841d0d7b26fcd9403c660fc74b3833b2606b60b7af9d0b9b7c93aab03b6",
+      "size_bytes": 738,
+      "level": "low"
+    },
+    {
+      "path": "rules/windows/image_load/image_load_dll_azure_microsoft_account_token_provider_dll_load.yml",
+      "git_blob_id": "74ae5259ffa01af4339523d9dfd75d389c20c18b",
+      "sha256": "8a6c33b31b57d35958e06a11634e4be1f1695e85e2019d98116a5c21cd27e550",
+      "size_bytes": 2606,
+      "level": "low"
+    },
+    {
+      "path": "rules/windows/image_load/image_load_dll_rstrtmgr_uncommon_load.yml",
+      "git_blob_id": "54424752ec5f5dbd1754233d052e09ace7940c5c",
+      "sha256": "d9935ecbc6c3a35e01a3d3ce1a915d7e9467c8f01edfecf691fffcc3a86a0ef9",
+      "size_bytes": 2532,
+      "level": "low"
+    },
+    {
+      "path": "rules/windows/image_load/image_load_side_load_7za.yml",
+      "git_blob_id": "7ec3a71f7519993cf32d748b081cfbb44194595d",
+      "sha256": "dc5a49a0293d02c6ed35d5ed7925535f75548cf4cbb620625e08b6e277b23fd3",
+      "size_bytes": 1032,
+      "level": "low"
+    },
+    {
+      "path": "rules/windows/image_load/image_load_susp_python_image_load.yml",
+      "git_blob_id": "47d121b760e5207f6efd10dabee3d58b63157beb",
+      "sha256": "66ba5f3a70a49d8f83914673b5764a65615cc5532e3dbf00450f873d3ba0e666",
+      "size_bytes": 1574,
+      "level": "low"
+    },
+    {
+      "path": "rules/windows/network_connection/net_connection_win_domain_mega_nz.yml",
+      "git_blob_id": "1739d5a0c2094a0f448fa590348aa52946376a95",
+      "sha256": "82c67957109ac524fc47a56d6f2164624ec8cdc29e9e267e1762727ffeda4da1",
+      "size_bytes": 980,
+      "level": "low"
+    },
+    {
+      "path": "rules/windows/network_connection/net_connection_win_domain_notion_api_susp_communication.yml",
+      "git_blob_id": "c1d89c1abdda8ecafce262b8ac38371260767de6",
+      "sha256": "d7d719b17c911e554fc4747152ab3c77fb696a5974d625b24f9938012a3c2e2a",
+      "size_bytes": 2651,
+      "level": "low"
+    },
+    {
+      "path": "rules/windows/pipe_created/pipe_created_powershell_execution_pipe.yml",
+      "git_blob_id": "79c3a26baf3d6d763ae8ac982719aa93ef4653a4",
+      "sha256": "e539b45c9eb41cb8d0f0aa689ea99276fd22d9217006ca2256069eb946ccabc8",
+      "size_bytes": 1383,
+      "level": "informational"
+    },
+    {
+      "path": "rules/windows/powershell/powershell_classic/posh_pc_download_via_webclient.yml",
+      "git_blob_id": "cb92c53cdd62285b392c2d8123e47733a8464121",
+      "sha256": "66bef8fdc9ecf4b3ca7b1375f06a30f987bc4728d19151f555f12dcbbbadb7ba",
+      "size_bytes": 1191,
+      "level": "low"
+    },
+    {
+      "path": "rules/windows/powershell/powershell_classic/posh_pc_remote_powershell_session.yml",
+      "git_blob_id": "98d6a90b42e1991bb91b8841a67b40205f253ee5",
+      "sha256": "bfa7734fa20bdc4d8281dc4f83083ff6e4f3d050244cb0ef473ad8efd1d61aca",
+      "size_bytes": 898,
+      "level": "low"
+    },
+    {
+      "path": "rules/windows/powershell/powershell_classic/posh_pc_renamed_powershell.yml",
+      "git_blob_id": "7459c3149336dfcc18bcb67b687726869721d8cf",
+      "sha256": "1f3397375c076be34da35a9a4d547e8a8264ba27013e7120cdaf233860495fa6",
+      "size_bytes": 2176,
+      "level": "low"
+    },
+    {
+      "path": "rules/windows/powershell/powershell_classic/posh_pc_susp_get_nettcpconnection.yml",
+      "git_blob_id": "983de0d924bc3e5072eed425718c4dacbd1358bf",
+      "sha256": "5aaea3363ae381c7ed1299467e940fdc4fc5bfa6830ee73f64f69d12a642fc24",
+      "size_bytes": 802,
+      "level": "low"
+    },
+    {
+      "path": "rules/windows/powershell/powershell_module/posh_pm_decompress_commands.yml",
+      "git_blob_id": "169c0642dd40f1d8155b18f185b5cb8882759a99",
+      "sha256": "b2728904de0dd6798342e85e72161b1e3286d5e19866ba3ddea4f9d5c2fa371c",
+      "size_bytes": 967,
+      "level": "informational"
+    },
+    {
+      "path": "rules/windows/powershell/powershell_module/posh_pm_susp_ad_group_reco.yml",
+      "git_blob_id": "b7554b77310c9697fd7a1b445038ff1f2e586995",
+      "sha256": "429d6f73233cad8a676bbd8f9422c9cab0a37b934d8d7b68d3b1e7c1498b95ee",
+      "size_bytes": 1413,
+      "level": "low"
+    },
+    {
+      "path": "rules/windows/powershell/powershell_module/posh_pm_susp_get_nettcpconnection.yml",
+      "git_blob_id": "11a53006dc800940af4b580d7fc6ee89bef95726",
+      "sha256": "cc16b3865417c1778898abeb7696c60e8379c2fd0a4b3856cc649c1d1de1063a",
+      "size_bytes": 875,
+      "level": "low"
+    },
+    {
+      "path": "rules/windows/powershell/powershell_module/posh_pm_susp_local_group_reco.yml",
+      "git_blob_id": "fc25d2ad88e0780116ad7b507e17e142be78fe40",
+      "sha256": "ccc02f66a85103d1ae70f774cfab3af3a0960ea18d7c6acb0c3f5771b6a138b3",
+      "size_bytes": 1607,
+      "level": "low"
+    },
+    {
+      "path": "rules/windows/powershell/powershell_module/posh_pm_susp_smb_share_reco.yml",
+      "git_blob_id": "274c237f43fb539df9328be4364c60db8d56ee35",
+      "sha256": "6d40beb128b1ddb2740b81ed8160ff3c1766df24aa0da83bb90d23970a850101",
+      "size_bytes": 1063,
+      "level": "low"
+    },
+    {
+      "path": "rules/windows/powershell/powershell_script/posh_ps_get_adcomputer.yml",
+      "git_blob_id": "28aceb18ed93be16c1a90515ef564740d6e57978",
+      "sha256": "8abff1b3dcceec9dc0cf92f18247cafc1ed140f1959b5e0e6ca87b36f7118955",
+      "size_bytes": 1136,
+      "level": "low"
+    },
+    {
+      "path": "rules/windows/powershell/powershell_script/posh_ps_get_adgroup.yml",
+      "git_blob_id": "7f3662162294b82ac4a381aee1ec3c0756c96dcd",
+      "sha256": "76606aa13365dd7d2abb98d284f51e9fa6926d437bb1adb51b1dc19d351cf781",
+      "size_bytes": 761,
+      "level": "low"
+    },
+    {
+      "path": "rules/windows/powershell/powershell_script/posh_ps_get_childitem_bookmarks.yml",
+      "git_blob_id": "dd63a2504efa317c28ebcc0ecd7d36a03b04e68d",
+      "sha256": "4f285fe9d52b5ff4e8e593acf7830a4fbd1814d5dacdf613842449a93dc58844",
+      "size_bytes": 1145,
+      "level": "low"
+    },
+    {
+      "path": "rules/windows/powershell/powershell_script/posh_ps_modification_of_dmsa_link_attribute.yml",
+      "git_blob_id": "bdfba2754b233c0988c859ea316736071bba5a12",
+      "sha256": "af566b45640475635b7a4c0e06b89eb3f6e424d53b41592c064c3a39ee7ab694",
+      "size_bytes": 1200,
+      "level": "low"
+    },
+    {
+      "path": "rules/windows/powershell/powershell_script/posh_ps_script_with_upload_capabilities.yml",
+      "git_blob_id": "0a44b8cdba70a9a254d2ccb265015e50b684080c",
+      "sha256": "227a8809e5e4ec6a163a2cb4b8a9f18222b5ecae2739d4688accbeea907b9149",
+      "size_bytes": 1259,
+      "level": "low"
+    },
+    {
+      "path": "rules/windows/powershell/powershell_script/posh_ps_set_acl.yml",
+      "git_blob_id": "aee40e9b4853fde9ff0d6d32ccd5f6b16c02ddbd",
+      "sha256": "449daa5c12848b20ac6248b71683d5070a8110b038eb47cb99472b5cd731769a",
+      "size_bytes": 1049,
+      "level": "low"
+    },
+    {
+      "path": "rules/windows/powershell/powershell_script/posh_ps_susp_ad_group_reco.yml",
+      "git_blob_id": "52799cf751fb3ba3449d19dc330fa1a798229080",
+      "sha256": "695b84b032461b14ba8ef4621ca46f49bcef8b617bfedbaa6a70aed2ad146abe",
+      "size_bytes": 1173,
+      "level": "low"
+    },
+    {
+      "path": "rules/windows/powershell/powershell_script/posh_ps_susp_alias_obfscuation.yml",
+      "git_blob_id": "2198be46575940a318e5cc179002c25b64ca1f1b",
+      "sha256": "e731d5ced65dc5f0c49785c98de883c65a07791ed776c4c4b7959a30d1d7bc76",
+      "size_bytes": 1014,
+      "level": "low"
+    },
+    {
+      "path": "rules/windows/powershell/powershell_script/posh_ps_susp_get_addefaultdomainpasswordpolicy.yml",
+      "git_blob_id": "96f84a70b1c3f5eaebbe9ae1396086ebb646639c",
+      "sha256": "5e88b036248385a5594fe79670e8fdff47c0736fb97f393f4d9546f350e870ad",
+      "size_bytes": 1041,
+      "level": "low"
+    },
+    {
+      "path": "rules/windows/powershell/powershell_script/posh_ps_susp_get_current_user.yml",
+      "git_blob_id": "9f941ab3605e84423c3afcdbfd41fb5576488b16",
+      "sha256": "1b7cf01d85dd0f2748e17a55f6f28cdc021ff89a778469ff712d6c8d327c1f43",
+      "size_bytes": 1060,
+      "level": "low"
+    },
+    {
+      "path": "rules/windows/powershell/powershell_script/posh_ps_susp_get_gpo.yml",
+      "git_blob_id": "6465f1ba54929d544d72315f45716aff32b4121b",
+      "sha256": "fcb9aee539397bb9f618a2e83a713b15cf6a8fec103aa399ec086bc2916ac120",
+      "size_bytes": 779,
+      "level": "low"
+    },
+    {
+      "path": "rules/windows/powershell/powershell_script/posh_ps_susp_get_process.yml",
+      "git_blob_id": "5eb7353530493f6696e3ea9176b42f6658243c0a",
+      "sha256": "fc05a6f8d01b1e8c2da3c6947ade2f1bb7570f96f0c62e123e7d9c7353bf0a3c",
+      "size_bytes": 849,
+      "level": "low"
+    },
+    {
+      "path": "rules/windows/powershell/powershell_script/posh_ps_susp_local_group_reco.yml",
+      "git_blob_id": "55be977a5a29336d81196a560ad42cf6f5659d9d",
+      "sha256": "1cf1b2a00aa28996b954b06fa03201b9d432f1cae9bb17392dde1f5067905bf4",
+      "size_bytes": 1396,
+      "level": "low"
+    },
+    {
+      "path": "rules/windows/powershell/powershell_script/posh_ps_susp_mount_diskimage.yml",
+      "git_blob_id": "933be2a849a7614533bd2571bd7d0f047af0c5ea",
+      "sha256": "a5a76b2e30b34519efe68a65f5683f16a6521bcec8628b080b070b35557aa14f",
+      "size_bytes": 963,
+      "level": "low"
+    },
+    {
+      "path": "rules/windows/powershell/powershell_script/posh_ps_susp_networkcredential.yml",
+      "git_blob_id": "78ec28c36f7b5e0aff38419901c6228ba58a021f",
+      "sha256": "835eb5fa683a17c60463e60b6848c37d14b6922f2769a16d9b59668ce884a893",
+      "size_bytes": 1224,
+      "level": "low"
+    },
+    {
+      "path": "rules/windows/powershell/powershell_script/posh_ps_susp_set_alias.yml",
+      "git_blob_id": "beb74da56f443a54096980d5231d976b3183c34c",
+      "sha256": "5554fe86ff8f718c48c30bb79ede18ebbe8a396256ebfe9bd3f396e890050090",
+      "size_bytes": 2318,
+      "level": "low"
+    },
+    {
+      "path": "rules/windows/powershell/powershell_script/posh_ps_susp_smb_share_reco.yml",
+      "git_blob_id": "25f9a78a5d42b31e7029dbbebe096dc8fa905794",
+      "sha256": "230a4d90b9a777a88ac2202155c452972b7da74c872753eb10531c1635e92f62",
+      "size_bytes": 1007,
+      "level": "low"
+    },
+    {
+      "path": "rules/windows/powershell/powershell_script/posh_ps_susp_ssl_keyword.yml",
+      "git_blob_id": "5a89b714d0fbd2c2adbad12b77c48a9a63f087c3",
+      "sha256": "a5b7e19bef10c2ca0541649f39024a6d910d26962040a071a48c2ce187aa1dc3",
+      "size_bytes": 1060,
+      "level": "low"
+    },
+    {
+      "path": "rules/windows/powershell/powershell_script/posh_ps_susp_wallpaper.yml",
+      "git_blob_id": "74e82f481d776ada990bb4ccceb62d8d6d130ea2",
+      "sha256": "66ead16a3b97a58d32f2c6e5acf2c3a0244e722abdb6b2c6f5d2c9d4b8a66048",
+      "size_bytes": 1080,
+      "level": "low"
+    },
+    {
+      "path": "rules/windows/powershell/powershell_script/posh_ps_susp_win32_pnpentity.yml",
+      "git_blob_id": "c72ca7b6d20179d8d9a9e5cb5384d462c66b0ad3",
+      "sha256": "d2574fc14bf5d1e94cecc738f5840591cc2a80dcad3123cb7a4d24080a69c6c5",
+      "size_bytes": 748,
+      "level": "low"
+    },
+    {
+      "path": "rules/windows/process_access/proc_access_win_susp_all_access_uncommon_target.yml",
+      "git_blob_id": "58a1e7c0457684b7b93db57fbad496519c671b63",
+      "sha256": "a2cd30b3cdbad276c2c1fcf313880826f6ea248e88fd8a691603e5ec17043065",
+      "size_bytes": 1131,
+      "level": "low"
+    },
+    {
+      "path": "rules/windows/process_creation/proc_creation_win_bitlockertogo_execution.yml",
+      "git_blob_id": "695b2a63cc64be5b22d12dafdd08a7bfb1589f11",
+      "sha256": "b00c8fcc1460bedc25d8d54f578eaf3fe4aa365495fae65759eb977ec172d592",
+      "size_bytes": 1355,
+      "level": "low"
+    },
+    {
+      "path": "rules/windows/process_creation/proc_creation_win_browsers_chromium_headless_exec.yml",
+      "git_blob_id": "315706a40409247bb9e85d5b72ca540feb115b38",
+      "sha256": "45c33efa86a8de595a80fde45f0c945376b5c2e40923311088927d0d131af7cc",
+      "size_bytes": 974,
+      "level": "low"
+    },
+    {
+      "path": "rules/windows/process_creation/proc_creation_win_clip_execution.yml",
+      "git_blob_id": "da97a7b3150a3942cbb53f5ecf02ba0b8e68e974",
+      "sha256": "254678f691f8678df1d5ec600a58d94156345b071e52ab961dc1fa7eccc63898",
+      "size_bytes": 1157,
+      "level": "low"
+    },
+    {
+      "path": "rules/windows/process_creation/proc_creation_win_cmd_assoc_execution.yml",
+      "git_blob_id": "baa92e247b79284c90d1eaecd29c0f3246c1c076",
+      "sha256": "5fcbb55bc7f8f3af2f6af638cc3ca0cc710a638a2e643c3493e2e9e48bc0e5ba",
+      "size_bytes": 1477,
+      "level": "low"
+    },
+    {
+      "path": "rules/windows/process_creation/proc_creation_win_cmd_del_execution.yml",
+      "git_blob_id": "0d8b49d19b435fac784d4b773ef7f7bf7deaafb0",
+      "sha256": "b3d22aa6b6d19865f292bdc1d15a94010bc0ff5aca481de419abc1f5e1fd3798",
+      "size_bytes": 1690,
+      "level": "low"
+    },
+    {
+      "path": "rules/windows/process_creation/proc_creation_win_cmd_dir_execution.yml",
+      "git_blob_id": "26ac36b65ba9818b007672813a1165d8f52859b0",
+      "sha256": "e792c662640131dd811070535000c40fdf14503b001314f6b34ee6e2705e72c0",
+      "size_bytes": 1259,
+      "level": "low"
+    },
+    {
+      "path": "rules/windows/process_creation/proc_creation_win_cmd_rmdir_execution.yml",
+      "git_blob_id": "94fe9dde6e32aa89585710f97acaf1610dbc5575",
+      "sha256": "a91eac3946cc46ce606285319307ff3bdc3ae5288e77e042d561580928a75f6b",
+      "size_bytes": 1427,
+      "level": "low"
+    },
+    {
+      "path": "rules/windows/process_creation/proc_creation_win_conhost_legacy_option.yml",
+      "git_blob_id": "45673419f59b44a34e70eb48e2f495183b4994c3",
+      "sha256": "6523116c59112f00565d70cee92267740f84a4f90acd35c6c32ec5bca91ad776",
+      "size_bytes": 1126,
+      "level": "informational"
+    },
+    {
+      "path": "rules/windows/process_creation/proc_creation_win_dirlister_execution.yml",
+      "git_blob_id": "05cbc5bbf62a798a9dd620dc3177667e77622d53",
+      "sha256": "cc4949b49dc16a29ed91ca12f38d09a24673330d3341a3c7c35f00780d1cc5b4",
+      "size_bytes": 1162,
+      "level": "low"
+    },
+    {
+      "path": "rules/windows/process_creation/proc_creation_win_discovery_via_reg_queries.yml",
+      "git_blob_id": "a8258538463bb9517a3041285519a064a8d3b824",
+      "sha256": "b454666572a9afba3b5f746f5a52c6792f98ccc0733196b6ea7889cb27caefcf",
+      "size_bytes": 2227,
+      "level": "low"
+    },
+    {
+      "path": "rules/windows/process_creation/proc_creation_win_findstr_subfolder_search.yml",
+      "git_blob_id": "27118ad3de9f0ca0ee3e15567a4f5e20027aab75",
+      "sha256": "3dd232234e34b5cc3c43ec66c6598af692577a03d80bb9f7b727a4b353eff29a",
+      "size_bytes": 1538,
+      "level": "low"
+    },
+    {
+      "path": "rules/windows/process_creation/proc_creation_win_fsutil_drive_enumeration.yml",
+      "git_blob_id": "20d69f6bc9122ac90e4b3b146df3a34b9304303b",
+      "sha256": "3f4d9119c5c72efa28f23af210c6e9fbdacc66bf563ad07c7bb5c89de0de335a",
+      "size_bytes": 904,
+      "level": "low"
+    },
+    {
+      "path": "rules/windows/process_creation/proc_creation_win_hh_chm_execution.yml",
+      "git_blob_id": "1199c3547cfd4f2e6749a7830a31365473e0beec",
+      "sha256": "80788d0b9ba4b120302d57df1e33451238e696bce1235aadaac1f2f548fb2cc5",
+      "size_bytes": 1121,
+      "level": "low"
+    },
+    {
+      "path": "rules/windows/process_creation/proc_creation_win_hostname_execution.yml",
+      "git_blob_id": "20d7d441df0eb3884fb336bdd7bb9c20542dac35",
+      "sha256": "68a20aca7def5223ee642b0c6ea89e35a116767271b682aeb9d631f6d4a07a4f",
+      "size_bytes": 692,
+      "level": "low"
+    },
+    {
+      "path": "rules/windows/process_creation/proc_creation_win_jsc_execution.yml",
+      "git_blob_id": "cd0d7ce5bc42b528acafdec95539670d0d133ccb",
+      "sha256": "07552b3fa5fcdf4f413eee2716e21e9b2cbdf11e733597ca6adbf94645fc70d7",
+      "size_bytes": 984,
+      "level": "low"
+    },
+    {
+      "path": "rules/windows/process_creation/proc_creation_win_lolbin_pcwrun.yml",
+      "git_blob_id": "0d3869978c922f4442ff173437b8fd4fa4313664",
+      "sha256": "9d034a4ca92fd6447aca939d92adf4535baef4b96872fb92de04e9acd8a595d6",
+      "size_bytes": 834,
+      "level": "low"
+    },
+    {
+      "path": "rules/windows/process_creation/proc_creation_win_msix_ai_stub_execution.yml",
+      "git_blob_id": "c9691682fc6930c4cbca0d3dd82f1452270a4424",
+      "sha256": "f83d8453e8576e833a514eafd32c728da52c8654c680b10ff2e0e0e3880a1b31",
+      "size_bytes": 1544,
+      "level": "low"
+    },
+    {
+      "path": "rules/windows/process_creation/proc_creation_win_mstsc_run_local_rdp_file.yml",
+      "git_blob_id": "d73ad341cf7e6bf0d9718218ad52bf1601246242",
+      "sha256": "f3642e54fd643729c9ce22428056c3c18f9c4d587c9bec53ccf0e7be0276b9aa",
+      "size_bytes": 1137,
+      "level": "low"
+    },
+    {
+      "path": "rules/windows/process_creation/proc_creation_win_net_share_unmount.yml",
+      "git_blob_id": "0c57e461c8a838c35ac7784971f8bb516832fe03",
+      "sha256": "7da867e3d7644428bb6af65906aedb42cc090078ecaab1cb5deb3e25b611cc61",
+      "size_bytes": 1036,
+      "level": "low"
+    },
+    {
+      "path": "rules/windows/process_creation/proc_creation_win_net_start_service.yml",
+      "git_blob_id": "cf36f28400b6c2536db398a4e97ae4d92a9d544e",
+      "sha256": "08118757a3b593579d3ce96f1b949e1b99b3288320da3699db0e8f0b3bf714a5",
+      "size_bytes": 1081,
+      "level": "low"
+    },
+    {
+      "path": "rules/windows/process_creation/proc_creation_win_net_stop_service.yml",
+      "git_blob_id": "1a2ef92249726ee7ad15bedbebe4538fe8c7c411",
+      "sha256": "6afdaae1f0d66f773e9c807263fce47c38ccdac6f4ed069d00ec9b1e004154a5",
+      "size_bytes": 989,
+      "level": "low"
+    },
+    {
+      "path": "rules/windows/process_creation/proc_creation_win_net_use_mount_share.yml",
+      "git_blob_id": "5938a14a93d9cf69bdf6269f435613a175343ba1",
+      "sha256": "6430573abec3cbd97b58de0656ee9a5ac294983e7ee98ce1a79ef7edc0e8237e",
+      "size_bytes": 943,
+      "level": "low"
+    },
+    {
+      "path": "rules/windows/process_creation/proc_creation_win_net_use_network_connections_discovery.yml",
+      "git_blob_id": "abad8b802227c4da80dadec5456deddc6df0fa37",
+      "sha256": "587ddac96c64ddbb4b51f3a80060faadeb7b1aef1d817de092786e06be0f4fd8",
+      "size_bytes": 1126,
+      "level": "low"
+    },
+    {
+      "path": "rules/windows/process_creation/proc_creation_win_net_view_share_and_sessions_enum.yml",
+      "git_blob_id": "8b815cfdfca470cfc7151bfb7d7c4d6f203391c3",
+      "sha256": "46d7533fce00b99829f510a7b9f464315b6b1bf1316c951e016cf8cd54200a1f",
+      "size_bytes": 1099,
+      "level": "low"
+    },
+    {
+      "path": "rules/windows/process_creation/proc_creation_win_netsh_fw_rules_discovery.yml",
+      "git_blob_id": "3f5b18893d5580c77d6398980c55ef59812c582a",
+      "sha256": "bd8e9861b0acd621c336576ac1553da61b0956105146b4052dcf1bd736070c4e",
+      "size_bytes": 1160,
+      "level": "low"
+    },
+    {
+      "path": "rules/windows/process_creation/proc_creation_win_nltest_execution.yml",
+      "git_blob_id": "7e89691109b5b1d0da11751400e6d6bc245f428a",
+      "sha256": "1210867b8d10a3d3f10d34a95e80d7fa87240377e0ba4cb05b9859e56bb3c6f7",
+      "size_bytes": 783,
+      "level": "low"
+    },
+    {
+      "path": "rules/windows/process_creation/proc_creation_win_notepad_local_passwd_discovery.yml",
+      "git_blob_id": "fa911a8f9af5ac30afbd0a511f612329fa0af294",
+      "sha256": "70653418593828626e573955ee5a5858058266916901c7abca418b58d243aa47",
+      "size_bytes": 1255,
+      "level": "low"
+    },
+    {
+      "path": "rules/windows/process_creation/proc_creation_win_powershell_create_service.yml",
+      "git_blob_id": "7d2daed45bffca5efced3e7c8fe70dc890215657",
+      "sha256": "3a5279c648d11188884c32ec31bc830192dd16be0bc2136220e1a20327f76200",
+      "size_bytes": 914,
+      "level": "low"
+    },
+    {
+      "path": "rules/windows/process_creation/proc_creation_win_powershell_encoding_patterns.yml",
+      "git_blob_id": "e7dfb9a6ea8dee61910f5918ea38a1debafea861",
+      "sha256": "4f0ec8ff7fa1ecbc8f6d0988afb9c9dce97512381e8f7de77ec821903ac8ef66",
+      "size_bytes": 1496,
+      "level": "low"
+    },
+    {
+      "path": "rules/windows/process_creation/proc_creation_win_powershell_non_interactive_execution.yml",
+      "git_blob_id": "16bae367d8b9582861aa23a191ae2bb534d0a445",
+      "sha256": "e4310d2179dec258be5c8c294f3b8cb1bd67ff4db587a3d04339303c2e04aeb7",
+      "size_bytes": 2138,
+      "level": "low"
+    },
+    {
+      "path": "rules/windows/process_creation/proc_creation_win_powershell_stop_service.yml",
+      "git_blob_id": "2a5ffa784f30cbf176e1bc57722d532b1d0555d3",
+      "sha256": "101522a7aa45cc04005256b7940a6ef91cbfe5b05cadd02e4174d263c5cc3d8c",
+      "size_bytes": 1131,
+      "level": "low"
+    },
+    {
+      "path": "rules/windows/process_creation/proc_creation_win_python_adidnsdump.yml",
+      "git_blob_id": "ec4518f83a14587f675069fd0eccf0ce6cc8e64a",
+      "sha256": "9e2f9e646312e9fe2cf0cd0dc7010107b88324b65fd0d30936f686dbbbdd875c",
+      "size_bytes": 873,
+      "level": "low"
+    },
+    {
+      "path": "rules/windows/process_creation/proc_creation_win_quickassist_execution.yml",
+      "git_blob_id": "922387bda9ff44b0281f4e16761b0489088c0228",
+      "sha256": "f28b61681487a23c4414a005486a287e8f73d2d1ac66c26d6a2aaf62f07b91e6",
+      "size_bytes": 1059,
+      "level": "low"
+    },
+    {
+      "path": "rules/windows/process_creation/proc_creation_win_rar_compress_data.yml",
+      "git_blob_id": "6b758af75391156a496d0eb3d57f48378ef7c1c4",
+      "sha256": "d1a4f9b9e1b9ae599ba5d092c17c3540271ce7760dcb990307375ff17f9fe5e5",
+      "size_bytes": 1051,
+      "level": "low"
+    },
+    {
+      "path": "rules/windows/process_creation/proc_creation_win_reg_machineguid.yml",
+      "git_blob_id": "cebb669b61662dec868aaa95817f6abb586cdb81",
+      "sha256": "2d5dbf40573c4ba23d271ffb4e67f1e6f5dd3392c5eaaa2511129784ffcbb65d",
+      "size_bytes": 730,
+      "level": "low"
+    },
+    {
+      "path": "rules/windows/process_creation/proc_creation_win_regasm_no_flag_or_dll_execution.yml",
+      "git_blob_id": "45cfbd01f77c0959c13781b9a5467779ec4dac4c",
+      "sha256": "1d74a5328768213273575722cb6a414ef95e82abfa86a1d88ed28971fe8b97cd",
+      "size_bytes": 1434,
+      "level": "low"
+    },
+    {
+      "path": "rules/windows/process_creation/proc_creation_win_regedit_export_keys.yml",
+      "git_blob_id": "b1afc0a3e312c3afa1043e4ed7131f5e90b74ff6",
+      "sha256": "d7f88555bfbff4bbc7433fcaaacb00bc55c60920e9a9da4c5f6f1ffa61d79a92",
+      "size_bytes": 1181,
+      "level": "low"
+    },
+    {
+      "path": "rules/windows/process_creation/proc_creation_win_regini_execution.yml",
+      "git_blob_id": "ddf566dabd6a94343557acb46eb79d4b579a2ca0",
+      "sha256": "09218fe7f889c5d124e0b7a93b2fd0d0ef9efbad8290667fb0694eda09e3d492",
+      "size_bytes": 1104,
+      "level": "low"
+    },
+    {
+      "path": "rules/windows/process_creation/proc_creation_win_remote_access_tools_screenconnect_remote_execution.yml",
+      "git_blob_id": "7848faadace673a8e575ae8e326fa195d5398a8e",
+      "sha256": "c3bb61765ff013e164a387919ed25fed306c6bc9efb5435f6575cb97b32a5ac7",
+      "size_bytes": 1071,
+      "level": "low"
+    },
+    {
+      "path": "rules/windows/process_creation/proc_creation_win_remote_access_tools_teamviewer_incoming_connection.yml",
+      "git_blob_id": "b487f7b289cee2af5f86e2b4dab92d76855bddb8",
+      "sha256": "d365fe22ef17912ed7feea4bdaf3933656ac5221d62e1a515483ee3eb32e349b",
+      "size_bytes": 1053,
+      "level": "low"
+    },
+    {
+      "path": "rules/windows/process_creation/proc_creation_win_remote_time_discovery.yml",
+      "git_blob_id": "db3c5946e404e294b3c57f204a3c545a35f04262",
+      "sha256": "19b7e7b02bea54e191bd756f846070af6359eca260eb1edf17214693b4509085",
+      "size_bytes": 1124,
+      "level": "low"
+    },
+    {
+      "path": "rules/windows/process_creation/proc_creation_win_runonce_execution.yml",
+      "git_blob_id": "25d4cf2d13eceef408692bad6fb44599d51af8f7",
+      "sha256": "19d6d2f84d8a30effb30d6e1d26b583f962fa4016c673414b9196976bdd5b68e",
+      "size_bytes": 1008,
+      "level": "low"
+    },
+    {
+      "path": "rules/windows/process_creation/proc_creation_win_sc_create_service.yml",
+      "git_blob_id": "db435bc12f5559f8fa998a55f29ec7fdee38496d",
+      "sha256": "59b24c516a54ae18a6ea8e47f710e608f069b7fb422659f83b8a1f40ff5bfdac",
+      "size_bytes": 1207,
+      "level": "low"
+    },
+    {
+      "path": "rules/windows/process_creation/proc_creation_win_sc_query_interesting_services.yml",
+      "git_blob_id": "5246b770ed51e6e504979c28e9381e74d40f3c8b",
+      "sha256": "08d2d595d16d79b613e8d917950c381bad869d45e36119231e120f0659513ccb",
+      "size_bytes": 1078,
+      "level": "low"
+    },
+    {
+      "path": "rules/windows/process_creation/proc_creation_win_sc_stop_service.yml",
+      "git_blob_id": "5f1e4f072af22be5bfb28ec9f069227d9bb476f7",
+      "sha256": "092eae0cfe74d9bec42a0f646deea0ce19fc8d0403cca44b3c000d5fb63e6829",
+      "size_bytes": 1114,
+      "level": "low"
+    },
+    {
+      "path": "rules/windows/process_creation/proc_creation_win_schtasks_creation.yml",
+      "git_blob_id": "caeba9bad23ced5b4dfd99dc697bf0f59cddfca0",
+      "sha256": "2f8ca8539179e6851171dd23f0d2e5a690e59b30d949aa6e29d04e7b33f82227",
+      "size_bytes": 1649,
+      "level": "low"
+    },
+    {
+      "path": "rules/windows/process_creation/proc_creation_win_security_susp_node_js_execution.yml",
+      "git_blob_id": "b3c92f81d2fcdcab79afd2aab9e7a3739edaaad1",
+      "sha256": "b8165d5298cbb594794051b5a91a4ce87bf34e20dfd6ee17a129721ef3a2b07b",
+      "size_bytes": 1454,
+      "level": "low"
+    },
+    {
+      "path": "rules/windows/process_creation/proc_creation_win_susp_local_system_owner_account_discovery.yml",
+      "git_blob_id": "01e15362edcb406cbaeb5c491a3c37354bb14611",
+      "sha256": "ddb20029d804c7a434cc6600659aaac2b646b67cd150470e9b1ef4be47c16e06",
+      "size_bytes": 2643,
+      "level": "low"
+    },
+    {
+      "path": "rules/windows/process_creation/proc_creation_win_susp_network_command.yml",
+      "git_blob_id": "a37e8bba8fab509845f5f3e989c7cefd7ee42e46",
+      "sha256": "ea9b3d15a8419787940b14991faf715c0dd05628c311e18ac9d1558e7fbe120d",
+      "size_bytes": 1015,
+      "level": "low"
+    },
+    {
+      "path": "rules/windows/process_creation/proc_creation_win_susp_proc_wrong_parent.yml",
+      "git_blob_id": "055257b76367e3689faa4520a164c200b5fcacc7",
+      "sha256": "c9e45b12e36d1381bce6ddbd22ee1a4dbdd7be1a455836387746d15fbc967597",
+      "size_bytes": 1614,
+      "level": "low"
+    },
+    {
+      "path": "rules/windows/process_creation/proc_creation_win_susp_use_of_te_bin.yml",
+      "git_blob_id": "c62eb6fe8a148ef2702357d6f2fc03b7fce0d7a4",
+      "sha256": "0b60dbe6b03a527e451286b05c803a710b29aba4080a4d502271815e123fdeeb",
+      "size_bytes": 1127,
+      "level": "low"
+    },
+    {
+      "path": "rules/windows/process_creation/proc_creation_win_sysinternals_eula_accepted.yml",
+      "git_blob_id": "6521fcd779abfe65b6dfe5061e6d371dbb15c9d4",
+      "sha256": "4d210f07bc3184f1931966bc7a19714ef18b3b4667aa04fa30805a63ee9741f2",
+      "size_bytes": 798,
+      "level": "low"
+    },
+    {
+      "path": "rules/windows/process_creation/proc_creation_win_systeminfo_execution.yml",
+      "git_blob_id": "fc2a8f6f0c16b96460316b0595b3744cb182f8bb",
+      "sha256": "932bbd8e70ad177d6de617aee50942dec1264453e89dcd3ca84aca65c771920f",
+      "size_bytes": 796,
+      "level": "low"
+    },
+    {
+      "path": "rules/windows/process_creation/proc_creation_win_tar_compression.yml",
+      "git_blob_id": "f33ea772d1c4412388d18cfe03558ab83d7bc191",
+      "sha256": "30b00053198de4eaed1579cf57c0954e4a4d10225171b179d26d24032504b348",
+      "size_bytes": 1045,
+      "level": "low"
+    },
+    {
+      "path": "rules/windows/process_creation/proc_creation_win_tar_extraction.yml",
+      "git_blob_id": "bee906158cbc270f8d312503d81c613aa0f102db",
+      "sha256": "7c165ccf25c89fdc79709792a85bca1bbd3eeed1eb19e5563b7106f3c382b085",
+      "size_bytes": 951,
+      "level": "low"
+    },
+    {
+      "path": "rules/windows/process_creation/proc_creation_win_taskmgr_susp_child_process.yml",
+      "git_blob_id": "f6b55e0bd1f9e38562d493ff6b8bae199a0c3d75",
+      "sha256": "52de85cb84f8a86a3183a4d919ea25d864bcd61c3303f5bc19bc97dcff755e13",
+      "size_bytes": 845,
+      "level": "low"
+    },
+    {
+      "path": "rules/windows/process_creation/proc_creation_win_virtualbox_execution.yml",
+      "git_blob_id": "92da877bb378408604eacf75197c4be485dd794b",
+      "sha256": "5d9d1a21a36c7749091be3de5772b2e52879f1aa0fe6fa6f4d528fe2ae986bc7",
+      "size_bytes": 1132,
+      "level": "low"
+    },
+    {
+      "path": "rules/windows/process_creation/proc_creation_win_where_browser_data_recon.yml",
+      "git_blob_id": "597f26199208e39232c2fb3a91881512bfea4468",
+      "sha256": "66a8302d512d1b14512bcf10c4360d5b71f9af567f7090ffb981ecf0ceaaa8de",
+      "size_bytes": 1358,
+      "level": "low"
+    },
+    {
+      "path": "rules/windows/process_creation/proc_creation_win_wmic_recon_group.yml",
+      "git_blob_id": "8a432d8fa202d4754791e3ef744716e4a7026215",
+      "sha256": "a57e3608848147ce1606b59cd56970cd65f087034c49beec4235fb254fb0665f",
+      "size_bytes": 1226,
+      "level": "low"
+    },
+    {
+      "path": "rules/windows/raw_access_thread/raw_access_thread_susp_disk_access_using_uncommon_tools.yml",
+      "git_blob_id": "fa0cf60116c1185697f6a1195c4ca9d9a2ba8c84",
+      "sha256": "4036d2a68c163f608433bc050b413f20527a16215766077e762ddd3a47e650ac",
+      "size_bytes": 2606,
+      "level": "low"
+    },
+    {
+      "path": "rules/windows/registry/registry_set/registry_set_new_application_appcompat.yml",
+      "git_blob_id": "2c78c7d2310db75a437fb427a07e06c0dc6c1d81",
+      "sha256": "b1b40080b430cbef36ff4fdd5a0ea2c980d94957d0ac1852d8c0b9b23fe58c15",
+      "size_bytes": 1052,
+      "level": "informational"
+    },
+    {
+      "path": "rules/windows/registry/registry_set/registry_set_odbc_driver_registered.yml",
+      "git_blob_id": "844b7568b2ec73c713a9af4e8561551519ea1c45",
+      "sha256": "508e3aa82cced61a7e19c013b44141bb66ecd21e5a391ff5a967c2f5172a5c17",
+      "size_bytes": 1126,
+      "level": "low"
+    },
+    {
+      "path": "rules/windows/registry/registry_set/registry_set_optimize_file_sharing_network.yml",
+      "git_blob_id": "ac45664b55148c50510f2dffb2967eb5d269ea8b",
+      "sha256": "528eb2aa32e692e603f9dc131008f23c0a6f32840dd740fb78b9df90006bfde4",
+      "size_bytes": 1283,
+      "level": "low"
+    },
+    {
+      "path": "rules/windows/registry/registry_set/registry_set_persistence_ie.yml",
+      "git_blob_id": "a1dfdff970490c56ed98477e59d1600ca2022e0f",
+      "sha256": "129fa12dff840443e02a4aa48a2ca52c21c2ddaacb0179925014f4d12dd77e3e",
+      "size_bytes": 1759,
+      "level": "low"
+    },
+    {
+      "path": "rules/windows/registry/registry_set/registry_set_powershell_enablescripts_enabled.yml",
+      "git_blob_id": "77f0c5311c4ffab50001e27d4d068f63d5ec733e",
+      "sha256": "ef4e4d06f6d7d24bcb8c8523b3563eaa82866fbc467bc8b81b1dd87790547d7a",
+      "size_bytes": 810,
+      "level": "low"
+    },
+    {
+      "path": "rules/windows/registry/registry_set/registry_set_pua_sysinternals_execution_via_eula.yml",
+      "git_blob_id": "fe2b9207a50e2f3d12041fd3fe581a1b81c62b02",
+      "sha256": "ad933a28b409c87df9f947f9af6e7c928c3d648ccf689843271144011a735a1f",
+      "size_bytes": 812,
+      "level": "low"
+    },
+    {
+      "path": "rules/windows/registry/registry_set/registry_set_rpcrt4_etw_tamper.yml",
+      "git_blob_id": "d697fb3b5733afb8aac259b8b0723fbcee8b0f4f",
+      "sha256": "dbd920f0f17e766808a378518ce31e08c0ff52abe61853539c8db5cccadd923a",
+      "size_bytes": 879,
+      "level": "low"
+    },
+    {
+      "path": "rules/windows/registry/registry_set/registry_set_services_etw_tamper.yml",
+      "git_blob_id": "a4d9cb9d33f2d0256b0cfd35f3d93923c5f2ad66",
+      "sha256": "e142c3f0bdbac504e3826b27e9884e64738bdfc5cb9c26830a23b4dadde2dcdf",
+      "size_bytes": 826,
+      "level": "low"
+    },
+    {
+      "path": "rules/windows/registry/registry_set/registry_set_winget_admin_settings_tampering.yml",
+      "git_blob_id": "a7da72b2fd49656e0b3e0618feded253397c3270",
+      "sha256": "09bf3c7e08835c7fe00952f0032708889fcab63fa522a1baa1df27b8f1fa4339",
+      "size_bytes": 1082,
+      "level": "low"
+    }
+  ]
+}

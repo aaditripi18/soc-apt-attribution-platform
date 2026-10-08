@@ -36,21 +36,35 @@ def _write_json(path: Path, data: object) -> None:
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--tag", default=DEFAULT_TAG)
+    parser.add_argument(
+        "--out-dir", type=Path, default=None, help="write elsewhere (e.g. to measure a change)"
+    )
     args = parser.parse_args()
 
     release_dir = REPO_ROOT / "data" / "detection" / "sigma" / args.tag
     manifest = json.loads((release_dir / "manifest.json").read_text(encoding="utf-8"))
     archive = release_dir / manifest["artifact"]["filename"]
 
+    # ADR-0007 Amendment A: the enrich tier, when its pinned archive is vendored.
+    enrich_manifest_path = release_dir / "manifest-sigma_enrich_low.json"
+    enrich_manifest = (
+        json.loads(enrich_manifest_path.read_text(encoding="utf-8"))
+        if enrich_manifest_path.is_file()
+        else None
+    )
     result = import_sigma_archive(
         archive,
         knowledge=load_attack_knowledge(),
         release_tag=args.tag,
         archive_sha256=manifest["artifact"]["sha256"],
         software_tag_review=release_dir / "software-tag-review.json",
+        enrich_archive=(
+            release_dir / enrich_manifest["artifact"]["filename"] if enrich_manifest else None
+        ),
+        enrich_archive_sha256=enrich_manifest["artifact"]["sha256"] if enrich_manifest else None,
     )
     pack_id = result.pack["pack_id"]
-    out_dir = release_dir / "generated"
+    out_dir = args.out_dir or release_dir / "generated"
     _write_json(out_dir / f"{pack_id}.rules.json", result.pack)
     _write_json(out_dir / f"{pack_id}.import-report.json", result.report)
     print(json.dumps(result.report["summary"], indent=1))

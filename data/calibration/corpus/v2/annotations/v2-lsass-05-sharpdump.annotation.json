@@ -32,19 +32,12 @@
    "anchor_scenario_ids": [
     "sysmon:MKT01.pandalab.com:sha256:e19c9de5efcf9377d6c2eed27404a35d64492696fa9caad48ca463ba3629d4b9"
    ],
-   "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: cscript.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
+   "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: conhost.exe, cscript.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
   },
   {
    "unit_id": "v2-lsass-05-sharpdump-u01",
    "anchor_scenario_ids": [
-    "sysmon:MKT01.pandalab.com:sha256:1e44557fdca882206b7f8b1cb006de52d5a56e547e185d847976646bc3e0a5f1"
-   ],
-   "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: msedge.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
-  },
-  {
-   "unit_id": "v2-lsass-05-sharpdump-u02",
-   "anchor_scenario_ids": [
-    "sysmon:MKT01.pandalab.com:sha256:fa913ccc030a3d6c07cc7d48b56d0986066d461295d475f5aae7202a4a208217"
+    "sysmon:MKT01.pandalab.com:sha256:4bb587cded018f0559d25d60095647afe40aa4cd8981ba878830e99a8528e372"
    ],
    "expected_output_shape": {
     "outcome": "insufficient_evidence",
@@ -58,18 +51,25 @@
    ]
   },
   {
+   "unit_id": "v2-lsass-05-sharpdump-u02",
+   "anchor_scenario_ids": [
+    "sysmon:MKT01.pandalab.com:sha256:7c726a3a5755a4394ae13dc1e707d1fc9883f1cfba66b60e32fa16b05f0a42f4"
+   ],
+   "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: whoami.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
+  },
+  {
    "unit_id": "v2-lsass-05-sharpdump-u03",
    "anchor_scenario_ids": [
-    "sysmon:MKT01.pandalab.com:sha256:6be73eb67f6ad2ff07e45b5e80953706ea9178bbd742dabd26e738ae5dd7645a"
+    "sysmon:MKT01.pandalab.com:sha256:1e44557fdca882206b7f8b1cb006de52d5a56e547e185d847976646bc3e0a5f1"
    ],
    "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: msedge.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
   },
   {
    "unit_id": "v2-lsass-05-sharpdump-u04",
    "anchor_scenario_ids": [
-    "sysmon:MKT01.pandalab.com:sha256:7c726a3a5755a4394ae13dc1e707d1fc9883f1cfba66b60e32fa16b05f0a42f4"
+    "sysmon:MKT01.pandalab.com:sha256:6be73eb67f6ad2ff07e45b5e80953706ea9178bbd742dabd26e738ae5dd7645a"
    ],
-   "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: whoami.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
+   "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: msedge.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
   },
   {
    "unit_id": "v2-lsass-05-sharpdump-u05",

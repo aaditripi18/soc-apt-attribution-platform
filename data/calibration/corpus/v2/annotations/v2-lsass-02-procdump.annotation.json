@@ -50,7 +50,7 @@
    "anchor_scenario_ids": [
     "sysmon:ACCT01.pandalab.com:sha256:3cb8952dd1e230f98d56691298019a8e0ad18112138054010cbe06a6c4838fd6"
    ],
-   "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: cscript.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
+   "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: conhost.exe, cscript.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
   },
   {
    "unit_id": "v2-lsass-02-procdump-u02",
@@ -62,23 +62,23 @@
   {
    "unit_id": "v2-lsass-02-procdump-u03",
    "anchor_scenario_ids": [
-    "sysmon:ACCT01.pandalab.com:sha256:effad8b31d51717f1c7ce5012ed02e9ab59c55759655b1fabe94812d03f6543a"
-   ],
-   "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: msedge.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
-  },
-  {
-   "unit_id": "v2-lsass-02-procdump-u04",
-   "anchor_scenario_ids": [
     "sysmon:ACCT01.pandalab.com:sha256:fdf205098aed53e40a225c246c34c664da9b12891486bc830b5eb7625397f45d"
    ],
    "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: whoami.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
   },
   {
-   "unit_id": "v2-lsass-02-procdump-u05",
+   "unit_id": "v2-lsass-02-procdump-u04",
    "anchor_scenario_ids": [
     "sysmon:ACCT01.pandalab.com:sha256:e5ee5037fd447d69d221ef5b19782e6bb4c7606920f8049e0fedbeb163a0e21a"
    ],
    "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: gpresult.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
+  },
+  {
+   "unit_id": "v2-lsass-02-procdump-u05",
+   "anchor_scenario_ids": [
+    "sysmon:ACCT01.pandalab.com:sha256:effad8b31d51717f1c7ce5012ed02e9ab59c55759655b1fabe94812d03f6543a"
+   ],
+   "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: msedge.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
   }
  ]
 }

@@ -46,23 +46,23 @@
   {
    "unit_id": "v2-lsass-07-nanodump-u01",
    "anchor_scenario_ids": [
-    "sysmon:MKT01.pandalab.com:sha256:b11d52069b876e5e5ccb7d1c65ceae7bb90ec0f3f969c27b4dce638290756c34"
+    "sysmon:MKT01.pandalab.com:sha256:a7c2f8f05fabef8cfa6e16534abe07df54115c736a1372073dda4fe32374f000"
    ],
-   "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: msedge.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
+   "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: whoami.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
   },
   {
    "unit_id": "v2-lsass-07-nanodump-u02",
    "anchor_scenario_ids": [
-    "sysmon:MKT01.pandalab.com:sha256:e9487f5b80c4acad9c8b76e74871df69199b80e3407cbe68c175e5bd3905055d"
+    "sysmon:MKT01.pandalab.com:sha256:b11d52069b876e5e5ccb7d1c65ceae7bb90ec0f3f969c27b4dce638290756c34"
    ],
    "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: msedge.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
   },
   {
    "unit_id": "v2-lsass-07-nanodump-u03",
    "anchor_scenario_ids": [
-    "sysmon:MKT01.pandalab.com:sha256:a7c2f8f05fabef8cfa6e16534abe07df54115c736a1372073dda4fe32374f000"
+    "sysmon:MKT01.pandalab.com:sha256:e9487f5b80c4acad9c8b76e74871df69199b80e3407cbe68c175e5bd3905055d"
    ],
-   "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: whoami.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
+   "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: msedge.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
   }
  ]
 }

@@ -26,6 +26,30 @@ operations, account management, Credential Manager reads and WFP filters.
 ``/10`` (ADR-0010) scopes every product by operating system (``PRODUCT_OS_SCOPES``)
 and adds Linux ``process_creation`` / ``file_event`` / ``network_connection``
 (Sysmon for Linux). ``/11`` adds ``linux/auditd`` (raw Linux Audit records).
+``/12`` (ADR-0011 batch A) adds the Entra ID ``azure/signinlogs``,
+``azure/auditlogs`` and ``azure/riskdetection`` logsources (Azure Monitor
+diagnostic export) and Office 365 ``m365/audit``; the endpoint products now
+also require the record **not** to belong to a cloud account
+(``cloud.account_id``), so no endpoint rule can fire on a cloud record.
+
+Azure rules are written against the Log Analytics / Sentinel table columns
+(``ResultType``, ``OperationName``, ``Category``…). Microsoft's diagnostic
+export carries the same values under the export's names (top-level
+``resultType`` / ``resultDescription`` / ``operationName``; the rest under
+``properties`` in camelCase); one diagnostic setting feeds both. Only those
+one-to-one columns are mapped; a column holding a JSON
+object (``Status``, ``TargetResources``, ``InitiatedBy``) compared to a string,
+and names in no Microsoft schema (``properties.message``), are telemetry gaps.
+Batch B adds ``aws/cloudtrail`` (native CloudTrail, whose
+field names Sigma uses as-is); ``sourceIPAddress`` keeps CloudTrail's meaning (an
+IP *or* a service name). Batch C adds ``okta/okta``, ``github/audit``,
+``kubernetes/{audit,application}`` (each source's own field names) and
+``azure/activitylogs`` (the REST form's ``.value`` fields, which are the Log
+Analytics ``AzureActivity`` columns). Okta, GitHub and Kubernetes records belong to
+no cloud account and are scoped by their own dataset alone.
+``/13`` (ADR-0012) adds the Zeek logsources (``zeek/dns``, ``dce_rpc``,
+``smb_files``, ``kerberos``, ``http``) in Zeek's own field names; a sensor is
+not an endpoint, so endpoint products also require **no** ``observer.product``.
 
 Anything else is a *telemetry gap*, reported per rule by the importer — never
 approximated. ``UNMAPPED_FIELD_REASONS`` records why the most frequent
@@ -41,7 +65,7 @@ from __future__ import annotations
 
 from types import MappingProxyType
 
-FIELD_MAP_VERSION = "sigma-field-map/11"
+FIELD_MAP_VERSION = "sigma-field-map/13"
 
 #: ``(product, category)`` → the ``(field_path, operator, value)`` scope
 #: conditions an Observation must satisfy to be the kind of event the Sigma
@@ -154,6 +178,23 @@ LOGSOURCE_SCOPES: MappingProxyType[tuple[str, str], tuple[tuple[str, str, str], 
             ),
             # Sigma service: auditd = Linux Audit records (one per record).
             ("linux", "auditd"): (("event.dataset", "equals", "auditd.log"),),
+            # Cloud (ADR-0011 D4): one Elastic data-stream name per log.
+            ("azure", "signinlogs"): (("event.dataset", "equals", "azure.signinlogs"),),
+            ("azure", "auditlogs"): (("event.dataset", "equals", "azure.auditlogs"),),
+            ("azure", "riskdetection"): (("event.dataset", "equals", "azure.identity_protection"),),
+            ("m365", "audit"): (("event.dataset", "equals", "o365.audit"),),
+            ("aws", "cloudtrail"): (("event.dataset", "equals", "aws.cloudtrail"),),
+            ("azure", "activitylogs"): (("event.dataset", "equals", "azure.activitylogs"),),
+            ("okta", "okta"): (("event.dataset", "equals", "okta.system"),),
+            ("github", "audit"): (("event.dataset", "equals", "github.audit"),),
+            ("kubernetes", "audit"): (("event.dataset", "equals", "kubernetes.audit_logs"),),
+            ("kubernetes", "application"): (("event.dataset", "equals", "kubernetes.audit_logs"),),
+            # Zeek (ADR-0012): Elastic's Zeek data-stream names.
+            ("zeek", "dns"): (("event.dataset", "equals", "zeek.dns"),),
+            ("zeek", "dce_rpc"): (("event.dataset", "equals", "zeek.dce_rpc"),),
+            ("zeek", "smb_files"): (("event.dataset", "equals", "zeek.smb_files"),),
+            ("zeek", "kerberos"): (("event.dataset", "equals", "zeek.kerberos"),),
+            ("zeek", "http"): (("event.dataset", "equals", "zeek.http"),),
         }
     )
 )
@@ -164,14 +205,37 @@ LOGSOURCE_SCOPES: MappingProxyType[tuple[str, str], tuple[tuple[str, str, str], 
 #: a Linux host; Windows rules require the host **not** to be Linux or macOS, so
 #: Windows Observations that predate ``host.os_type`` (fixtures) still match. A
 #: Windows rule can therefore never fire on a Linux process, nor the reverse.
-PRODUCT_OS_SCOPES: MappingProxyType[str, tuple[tuple[str, str, str, bool], ...]] = MappingProxyType(
-    {
-        "windows": (
-            ("host.os_type", "equals", "linux", True),
-            ("host.os_type", "equals", "macos", True),
-        ),
-        "linux": (("host.os_type", "equals", "linux", False),),
-    }
+#: Endpoint rules also require no ``cloud.account_id`` (every cloud adapter
+#: sets it, ADR-0011 D4); Azure rules require ``cloud.provider`` ``azure``;
+#: Microsoft 365 rules a cloud account (the O365 source states no provider).
+#: Endpoint rules also require no ``observer.product``: a network sensor's
+#: record (Zeek, ADR-0012 D5) is not an endpoint event.
+PRODUCT_OS_SCOPES: MappingProxyType[str, tuple[tuple[str, str, str | None, bool], ...]] = (
+    MappingProxyType(
+        {
+            "windows": (
+                ("host.os_type", "equals", "linux", True),
+                ("host.os_type", "equals", "macos", True),
+                ("cloud.account_id", "exists", None, True),
+                ("observer.product", "exists", None, True),
+            ),
+            "linux": (
+                ("host.os_type", "equals", "linux", False),
+                ("cloud.account_id", "exists", None, True),
+                ("observer.product", "exists", None, True),
+            ),
+            "azure": (("cloud.provider", "equals", "azure", False),),
+            "m365": (("cloud.account_id", "exists", None, False),),
+            "aws": (("cloud.provider", "equals", "aws", False),),
+            # SaaS / cluster sources: their dataset scope is the whole scope (no
+            # cloud account, no host to scope by).
+            "okta": (),
+            "github": (),
+            "kubernetes": (),
+            # A network sensor (ADR-0012 D5).
+            "zeek": (("observer.product", "equals", "zeek", False),),
+        }
+    )
 )
 
 #: Registry fields shared by every ``registry_*`` logsource. ``EventType`` is
@@ -183,6 +247,21 @@ _REGISTRY_FIELDS: MappingProxyType[str, str] = MappingProxyType(
         "TargetObject": "registry.path",
         "Details": "registry.data",
         "EventType": "event.action",
+    }
+)
+
+#: Kubernetes API-server audit events (``audit.k8s.io/v1``): Sigma reads the
+#: event's own paths, under either logsource category.
+_KUBERNETES_AUDIT_FIELDS: MappingProxyType[str, str] = MappingProxyType(
+    {
+        "verb": "kubernetes_audit.verb",
+        "requestURI": "kubernetes_audit.request_uri",
+        "userAgent": "user_agent.original",
+        "responseStatus.code": "kubernetes_audit.response_code",
+        "objectRef.resource": "kubernetes_audit.object_resource",
+        "objectRef.subresource": "kubernetes_audit.object_subresource",
+        "objectRef.namespace": "kubernetes_audit.object_namespace",
+        "objectRef.apiGroup": "kubernetes_audit.object_api_group",
     }
 )
 
@@ -357,6 +436,138 @@ FIELD_MAPS: MappingProxyType[tuple[str, str], MappingProxyType[str, str]] = Mapp
                 "ppid": "process.parent_pid",
             }
         ),
+        # Entra ID sign-ins: Log Analytics ``SigninLogs`` column (and the export's
+        # own camelCase name where a rule uses it) -> the diagnostic-export value.
+        ("azure", "signinlogs"): MappingProxyType(
+            {
+                "ResultType": "entra.result_type",
+                "ResultDescription": "entra.result_description",
+                "AuthenticationRequirement": "entra.authentication_requirement",
+                "RiskState": "entra.risk_state",
+                "ResourceDisplayName": "entra.resource_display_name",
+                "AppId": "entra.app_id",
+                "HomeTenantId": "entra.home_tenant_id",
+                "ResourceTenantId": "entra.resource_tenant_id",
+                "conditionalAccessStatus": "entra.conditional_access_status",
+                "DeviceDetail.isCompliant": "entra.device_is_compliant",
+                "userAgent": "user_agent.original",
+                "UserAgent": "user_agent.original",
+            }
+        ),
+        # Entra ID audit: ``AuditLogs`` columns; ``Category`` is the audit
+        # record's own category, ``properties.result`` the export's own path.
+        ("azure", "auditlogs"): MappingProxyType(
+            {
+                "OperationName": "entra.operation_name",
+                "operationName": "entra.operation_name",
+                "Category": "entra.audit_category",
+                "ActivityDisplayName": "entra.activity_display_name",
+                "LoggedByService": "entra.logged_by_service",
+                "properties.result": "entra.result",
+            }
+        ),
+        # Entra ID Protection risk detections (``AADUserRiskEvents``).
+        ("azure", "riskdetection"): MappingProxyType({"riskEventType": "entra.risk_event_type"}),
+        # Office 365 Management Activity: the API's own field names.
+        ("m365", "audit"): MappingProxyType(
+            {
+                "Operation": "o365.operation",
+                "Workload": "o365.workload",
+                "ResultStatus": "o365.result_status",
+                "ObjectId": "o365.object_id",
+                "ApplicationId": "o365.application_id",
+                "Directionality": "o365.directionality",
+                "DeliveryAction": "o365.delivery_action",
+            }
+        ),
+        # AWS CloudTrail (native): Sigma uses CloudTrail's own paths.
+        ("aws", "cloudtrail"): MappingProxyType(
+            {
+                "eventSource": "aws_cloudtrail.event_source",
+                "eventName": "aws_cloudtrail.event_name",
+                "eventType": "aws_cloudtrail.event_type",
+                "errorCode": "aws_cloudtrail.error_code",
+                "errorMessage": "aws_cloudtrail.error_message",
+                "sourceIPAddress": "aws_cloudtrail.source_ip_address",
+                "userAgent": "user_agent.original",
+                "userIdentity.type": "aws_cloudtrail.user_identity_type",
+                "userIdentity.arn": "aws_cloudtrail.user_identity_arn",
+                "additionalEventData.MFAUsed": "aws_cloudtrail.mfa_used",
+                "responseElements.ConsoleLogin": "aws_cloudtrail.console_login",
+                "requestParameters.attribute": "aws_cloudtrail.request_attribute",
+                "requestParameters.enable": "aws_cloudtrail.request_enable",
+                "responseElements.publiclyAccessible": (
+                    "aws_cloudtrail.response_publicly_accessible"
+                ),
+                "responseElements.pendingModifiedValues.masterUserPassword": (
+                    "aws_cloudtrail.response_pending_master_user_password"
+                ),
+            }
+        ),
+        # Azure Activity Log (REST form): AzureActivity columns -> ``.value``.
+        ("azure", "activitylogs"): MappingProxyType(
+            {
+                "operationName": "azure_activity.operation_name",
+                "OperationNameValue": "azure_activity.operation_name",
+                "CategoryValue": "azure_activity.category",
+                "ResourceProviderValue": "azure_activity.resource_provider",
+                "ResourceId": "azure_activity.resource_id",
+                "properties.message": "azure_activity.properties_message",
+            }
+        ),
+        ("okta", "okta"): MappingProxyType(
+            {
+                "eventType": "okta.event_type",
+                "legacyEventType": "okta.legacy_event_type",
+                "displayMessage": "okta.display_message",
+                "actor.alternateId": "okta.actor_alternate_id",
+                "outcome.result": "okta.outcome_result",
+                "outcome.reason": "okta.outcome_reason",
+                "securityContext.isProxy": "okta.security_is_proxy",
+                "debugContext.debugData.behaviors": "okta.debug_behaviors",
+                "debugContext.debugData.logOnlySecurityData": ("okta.debug_log_only_security_data"),
+            }
+        ),
+        ("github", "audit"): MappingProxyType({"action": "github.action"}),
+        ("kubernetes", "audit"): _KUBERNETES_AUDIT_FIELDS,
+        ("kubernetes", "application"): _KUBERNETES_AUDIT_FIELDS,
+        # Zeek (ADR-0012): Zeek's own field names, per log.
+        ("zeek", "dns"): MappingProxyType(
+            {
+                "query": "zeek.query",
+                "qtype_name": "zeek.qtype_name",
+                "rcode_name": "zeek.rcode_name",
+                "Z": "zeek.z",
+            }
+        ),
+        ("zeek", "dce_rpc"): MappingProxyType(
+            {
+                "endpoint": "zeek.endpoint",
+                "operation": "zeek.operation",
+                "named_pipe": "zeek.named_pipe",
+            }
+        ),
+        ("zeek", "smb_files"): MappingProxyType(
+            {"path": "zeek.smb_path", "name": "zeek.smb_name", "action": "zeek.smb_action"}
+        ),
+        ("zeek", "kerberos"): MappingProxyType(
+            {
+                "request_type": "zeek.request_type",
+                "client": "zeek.krb_client",
+                "service": "zeek.krb_service",
+                "cipher": "zeek.cipher",
+                "success": "zeek.success",
+            }
+        ),
+        ("zeek", "http"): MappingProxyType(
+            {
+                "method": "zeek.method",
+                "host": "zeek.http_host",
+                "uri": "zeek.uri",
+                "user_agent": "user_agent.original",
+                "status_code": "zeek.status_code",
+            }
+        ),
         ("windows", "security"): MappingProxyType(
             {
                 "EventID": "event.code",
@@ -517,6 +728,39 @@ UNMAPPED_FIELD_REASONS: MappingProxyType[str, str] = MappingProxyType(
         "SourceParentImage": "Sysmon 8 carries no source-parent image",
         "SourceCommandLine": "Sysmon 8 carries no source command line",
         "Initiated": "Sysmon 'Initiated' → ECS network.direction mapping is not verified",
+        "properties.message": (
+            "not a field of Microsoft's Entra ID diagnostic or Log Analytics schemas (nor "
+            "mapped by SigmaHQ's own Kusto backend); its intended column is not documented"
+        ),
+        "Status": (
+            "Entra SigninLogs.Status is a JSON object (errorCode, failureReason, …); a "
+            "string comparison has no exact meaning"
+        ),
+        "TargetResources": "a JSON array of objects; substring matching over it is not exact",
+        "eventSource": (
+            "not an Office 365 Management Activity field (alerts carry their name in "
+            "AlertTriggered records' 'Name')"
+        ),
+        "requestParameters": (
+            "CloudTrail's whole request object; substring matching over its JSON text is not "
+            "exact"
+        ),
+        "requestParameters.containerDefinitions.command": (
+            "an array inside an array of objects; no exact scalar value"
+        ),
+        "target.displayName": (
+            "Okta's 'target' is an array of objects; which element a rule means is not stated"
+        ),
+        "apiGroup": (
+            "not a Kubernetes audit-event field (the event's API group is objectRef.apiGroup)"
+        ),
+        "c-uri": "a W3C proxy-log field name; Zeek's http log calls the URI 'uri'",
+        "c-useragent": "a W3C proxy-log field name; Zeek's http log has 'user_agent'",
+        "resp_mime_types": "a Zeek vector; substring matching over its joined text is not exact",
+        "RequestType": (
+            "an ExtendedProperties name/value entry of O365 Entra ID logon records, not a "
+            "top-level field"
+        ),
     }
 )
 

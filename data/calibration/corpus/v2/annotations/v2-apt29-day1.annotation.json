@@ -32,43 +32,17 @@
    "anchor_scenario_ids": [
     "powershell:NEWYORK.dmevals.local:19894"
    ],
-   "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: none recorded); not identifiable as the emulated activity \u2014 excluded, not guessed."
+   "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: wmiprvse.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
   },
   {
    "unit_id": "v2-apt29-day1-u01",
    "anchor_scenario_ids": [
     "powershell:NEWYORK.dmevals.local:20598"
    ],
-   "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: none recorded); not identifiable as the emulated activity \u2014 excluded, not guessed."
+   "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: wmiprvse.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
   },
   {
    "unit_id": "v2-apt29-day1-u02",
-   "anchor_scenario_ids": [
-    "sysmon:NASHUA.dmevals.local:346370"
-   ],
-   "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: wsmprovhost.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
-  },
-  {
-   "unit_id": "v2-apt29-day1-u03",
-   "anchor_scenario_ids": [
-    "powershell:SCRANTON.dmevals.local:10620"
-   ],
-   "expected_output_shape": {
-    "outcome": "leading_hypothesis",
-    "authorship_provenance": "Authored from the dataset's documented procedure (mitre-attack/attack-arsenal@201db70f adversary_emulation/APT29/Emulation_Plan/Day 1/README.md), step: psexec64.exe: Step 8 - Lateral Movement; NOT ATT&CK-derived and NOT derived from the engine's detections.",
-    "expected_likelihood_band": "AUTHORED-LEADING",
-    "expected_confidence_band": "AUTHORED-HIGH"
-   },
-   "documented_tools": [
-    "psexec64.exe"
-   ],
-   "categories": [
-    "multiple_distinct_observation",
-    "repeated_detection"
-   ]
-  },
-  {
-   "unit_id": "v2-apt29-day1-u04",
    "anchor_scenario_ids": [
     "sysmon:SCRANTON.dmevals.local:360619"
    ],
@@ -87,18 +61,44 @@
    ]
   },
   {
-   "unit_id": "v2-apt29-day1-u05",
+   "unit_id": "v2-apt29-day1-u03",
    "anchor_scenario_ids": [
-    "sysmon:SCRANTON.dmevals.local:425127"
+    "sysmon:NASHUA.dmevals.local:346370"
    ],
-   "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: msmpeng.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
+   "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: wsmprovhost.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
   },
   {
-   "unit_id": "v2-apt29-day1-u06",
+   "unit_id": "v2-apt29-day1-u04",
+   "anchor_scenario_ids": [
+    "powershell:SCRANTON.dmevals.local:10620"
+   ],
+   "expected_output_shape": {
+    "outcome": "leading_hypothesis",
+    "authorship_provenance": "Authored from the dataset's documented procedure (mitre-attack/attack-arsenal@201db70f adversary_emulation/APT29/Emulation_Plan/Day 1/README.md), step: psexec64.exe: Step 8 - Lateral Movement; NOT ATT&CK-derived and NOT derived from the engine's detections.",
+    "expected_likelihood_band": "AUTHORED-LEADING",
+    "expected_confidence_band": "AUTHORED-HIGH"
+   },
+   "documented_tools": [
+    "psexec64.exe"
+   ],
+   "categories": [
+    "multiple_distinct_observation",
+    "repeated_detection"
+   ]
+  },
+  {
+   "unit_id": "v2-apt29-day1-u05",
    "anchor_scenario_ids": [
     "sysmon:SCRANTON.dmevals.local:423500"
    ],
    "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: antimalwareconfig.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
+  },
+  {
+   "unit_id": "v2-apt29-day1-u06",
+   "anchor_scenario_ids": [
+    "sysmon:SCRANTON.dmevals.local:425127"
+   ],
+   "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: msmpeng.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
   },
   {
    "unit_id": "v2-apt29-day1-u07",
@@ -110,7 +110,7 @@
   {
    "unit_id": "v2-apt29-day1-u08",
    "anchor_scenario_ids": [
-    "sysmon:SCRANTON.dmevals.local:439372"
+    "sysmon:SCRANTON.dmevals.local:438941"
    ],
    "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: powershell.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
   },
@@ -174,33 +174,59 @@
   {
    "unit_id": "v2-apt29-day1-u12",
    "anchor_scenario_ids": [
+    "sysmon:NASHUA.dmevals.local:351719"
+   ],
+   "expected_output_shape": {
+    "outcome": "leading_hypothesis",
+    "authorship_provenance": "Authored from the dataset's documented procedure (mitre-attack/attack-arsenal@201db70f adversary_emulation/APT29/Emulation_Plan/Day 1/README.md), step: rar.exe: Step 9 - Collection; NOT ATT&CK-derived and NOT derived from the engine's detections.",
+    "expected_likelihood_band": "AUTHORED-LEADING",
+    "expected_confidence_band": "AUTHORED-HIGH"
+   },
+   "documented_tools": [
+    "rar.exe"
+   ],
+   "categories": [
+    "multiple_distinct_observation",
+    "repeated_detection"
+   ]
+  },
+  {
+   "unit_id": "v2-apt29-day1-u13",
+   "anchor_scenario_ids": [
+    "powershell:SCRANTON.dmevals.local:10681"
+   ],
+   "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: none recorded); not identifiable as the emulated activity \u2014 excluded, not guessed."
+  },
+  {
+   "unit_id": "v2-apt29-day1-u14",
+   "anchor_scenario_ids": [
+    "sysmon:SCRANTON.dmevals.local:348021"
+   ],
+   "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: powershell.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
+  },
+  {
+   "unit_id": "v2-apt29-day1-u15",
+   "anchor_scenario_ids": [
     "sysmon:SCRANTON.dmevals.local:395806"
    ],
    "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: rundll32.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
   },
   {
-   "unit_id": "v2-apt29-day1-u13",
-   "anchor_scenario_ids": [
-    "sysmon:SCRANTON.dmevals.local:349718"
-   ],
-   "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: csc.exe, powershell.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
-  },
-  {
-   "unit_id": "v2-apt29-day1-u14",
+   "unit_id": "v2-apt29-day1-u16",
    "anchor_scenario_ids": [
     "sysmon:NASHUA.dmevals.local:336787"
    ],
    "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: lsass.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
   },
   {
-   "unit_id": "v2-apt29-day1-u15",
+   "unit_id": "v2-apt29-day1-u17",
    "anchor_scenario_ids": [
     "powershell:SCRANTON.dmevals.local:12726"
    ],
    "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: none recorded); not identifiable as the emulated activity \u2014 excluded, not guessed."
   },
   {
-   "unit_id": "v2-apt29-day1-u16",
+   "unit_id": "v2-apt29-day1-u18",
    "anchor_scenario_ids": [
     "sysmon:SCRANTON.dmevals.local:348988"
    ],
@@ -218,127 +244,102 @@
    ]
   },
   {
-   "unit_id": "v2-apt29-day1-u17",
-   "anchor_scenario_ids": [
-    "powershell:SCRANTON.dmevals.local:10681"
-   ],
-   "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: none recorded); not identifiable as the emulated activity \u2014 excluded, not guessed."
-  },
-  {
-   "unit_id": "v2-apt29-day1-u18",
-   "anchor_scenario_ids": [
-    "windows_security:NEWYORK.dmevals.local:151231"
-   ],
-   "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: lsass.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
-  },
-  {
    "unit_id": "v2-apt29-day1-u19",
    "anchor_scenario_ids": [
-    "windows_security:NASHUA.dmevals.local:67280"
+    "sysmon:SCRANTON.dmevals.local:349718"
    ],
-   "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: services.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
+   "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: csc.exe, powershell.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
   },
   {
    "unit_id": "v2-apt29-day1-u20",
    "anchor_scenario_ids": [
-    "windows_security:NASHUA.dmevals.local:65653"
+    "windows_security:NASHUA.dmevals.local:65405"
    ],
-   "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: none recorded); not identifiable as the emulated activity \u2014 excluded, not guessed."
+   "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: services.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
   },
   {
    "unit_id": "v2-apt29-day1-u21",
-   "anchor_scenario_ids": [
-    "windows_security:NEWYORK.dmevals.local:151227"
-   ],
-   "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: lsass.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
-  },
-  {
-   "unit_id": "v2-apt29-day1-u22",
-   "anchor_scenario_ids": [
-    "sysmon:NASHUA.dmevals.local:353030"
-   ],
-   "expected_output_shape": {
-    "outcome": "leading_hypothesis",
-    "authorship_provenance": "Authored from the dataset's documented procedure (mitre-attack/attack-arsenal@201db70f adversary_emulation/APT29/Emulation_Plan/Day 1/README.md), step: rar.exe: Step 9 - Collection; NOT ATT&CK-derived and NOT derived from the engine's detections.",
-    "expected_likelihood_band": "AUTHORED-LEADING",
-    "expected_confidence_band": "AUTHORED-HIGH"
-   },
-   "documented_tools": [
-    "rar.exe"
-   ],
-   "categories": [
-    "one_observation"
-   ]
-  },
-  {
-   "unit_id": "v2-apt29-day1-u23",
-   "anchor_scenario_ids": [
-    "windows_security:NEWYORK.dmevals.local:151225"
-   ],
-   "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: lsass.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
-  },
-  {
-   "unit_id": "v2-apt29-day1-u24",
-   "anchor_scenario_ids": [
-    "windows_security:NASHUA.dmevals.local:65527"
-   ],
-   "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: none recorded); not identifiable as the emulated activity \u2014 excluded, not guessed."
-  },
-  {
-   "unit_id": "v2-apt29-day1-u25",
-   "anchor_scenario_ids": [
-    "windows_security:NEWYORK.dmevals.local:151259"
-   ],
-   "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: lsass.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
-  },
-  {
-   "unit_id": "v2-apt29-day1-u26",
-   "anchor_scenario_ids": [
-    "windows_security:NASHUA.dmevals.local:65526"
-   ],
-   "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: none recorded); not identifiable as the emulated activity \u2014 excluded, not guessed."
-  },
-  {
-   "unit_id": "v2-apt29-day1-u27",
    "anchor_scenario_ids": [
     "windows_security:NASHUA.dmevals.local:65419"
    ],
    "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: none recorded); not identifiable as the emulated activity \u2014 excluded, not guessed."
   },
   {
-   "unit_id": "v2-apt29-day1-u28",
+   "unit_id": "v2-apt29-day1-u22",
    "anchor_scenario_ids": [
-    "sysmon:SCRANTON.dmevals.local:384919"
+    "sysmon:SCRANTON.dmevals.local:384991"
    ],
    "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: rundll32.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
   },
   {
-   "unit_id": "v2-apt29-day1-u29",
+   "unit_id": "v2-apt29-day1-u23",
    "anchor_scenario_ids": [
-    "powershell:SCRANTON.dmevals.local:12727"
+    "windows_security:NASHUA.dmevals.local:65590"
+   ],
+   "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: services.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
+  },
+  {
+   "unit_id": "v2-apt29-day1-u24",
+   "anchor_scenario_ids": [
+    "windows_security:NASHUA.dmevals.local:65526"
    ],
    "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: none recorded); not identifiable as the emulated activity \u2014 excluded, not guessed."
+  },
+  {
+   "unit_id": "v2-apt29-day1-u25",
+   "anchor_scenario_ids": [
+    "windows_security:NASHUA.dmevals.local:65718"
+   ],
+   "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: services.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
+  },
+  {
+   "unit_id": "v2-apt29-day1-u26",
+   "anchor_scenario_ids": [
+    "sysmon:NASHUA.dmevals.local:353206"
+   ],
+   "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: svchost.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
+  },
+  {
+   "unit_id": "v2-apt29-day1-u27",
+   "anchor_scenario_ids": [
+    "windows_security:NASHUA.dmevals.local:65422"
+   ],
+   "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: none recorded); not identifiable as the emulated activity \u2014 excluded, not guessed."
+  },
+  {
+   "unit_id": "v2-apt29-day1-u28",
+   "anchor_scenario_ids": [
+    "windows_security:NEWYORK.dmevals.local:151237"
+   ],
+   "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: lsass.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
+  },
+  {
+   "unit_id": "v2-apt29-day1-u29",
+   "anchor_scenario_ids": [
+    "windows_security:NASHUA.dmevals.local:65636"
+   ],
+   "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: services.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
   },
   {
    "unit_id": "v2-apt29-day1-u30",
    "anchor_scenario_ids": [
-    "windows_security:NASHUA.dmevals.local:65652"
+    "windows_security:NEWYORK.dmevals.local:151267"
    ],
-   "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: none recorded); not identifiable as the emulated activity \u2014 excluded, not guessed."
+   "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: lsass.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
   },
   {
    "unit_id": "v2-apt29-day1-u31",
    "anchor_scenario_ids": [
-    "windows_security:NASHUA.dmevals.local:66067"
+    "windows_security:NEWYORK.dmevals.local:151227"
    ],
-   "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: none recorded); not identifiable as the emulated activity \u2014 excluded, not guessed."
+   "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: lsass.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
   },
   {
    "unit_id": "v2-apt29-day1-u32",
    "anchor_scenario_ids": [
-    "windows_security:NASHUA.dmevals.local:65405"
+    "sysmon:SCRANTON.dmevals.local:385063"
    ],
-   "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: services.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
+   "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: rundll32.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
   },
   {
    "unit_id": "v2-apt29-day1-u33",
@@ -350,219 +351,219 @@
   {
    "unit_id": "v2-apt29-day1-u34",
    "anchor_scenario_ids": [
-    "windows_security:NASHUA.dmevals.local:65423"
+    "windows_security:NASHUA.dmevals.local:66067"
    ],
    "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: none recorded); not identifiable as the emulated activity \u2014 excluded, not guessed."
   },
   {
    "unit_id": "v2-apt29-day1-u35",
    "anchor_scenario_ids": [
-    "windows_security:NASHUA.dmevals.local:65421"
+    "windows_security:NASHUA.dmevals.local:65654"
    ],
    "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: none recorded); not identifiable as the emulated activity \u2014 excluded, not guessed."
   },
   {
    "unit_id": "v2-apt29-day1-u36",
    "anchor_scenario_ids": [
-    "sysmon:SCRANTON.dmevals.local:385063"
+    "sysmon:SCRANTON.dmevals.local:384518"
    ],
    "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: rundll32.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
   },
   {
    "unit_id": "v2-apt29-day1-u37",
    "anchor_scenario_ids": [
-    "powershell:SCRANTON.dmevals.local:10637"
+    "windows_security:NASHUA.dmevals.local:66065"
    ],
    "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: none recorded); not identifiable as the emulated activity \u2014 excluded, not guessed."
   },
   {
    "unit_id": "v2-apt29-day1-u38",
    "anchor_scenario_ids": [
-    "sysmon:NASHUA.dmevals.local:353206"
-   ],
-   "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: svchost.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
-  },
-  {
-   "unit_id": "v2-apt29-day1-u39",
-   "anchor_scenario_ids": [
-    "windows_security:NASHUA.dmevals.local:66066"
-   ],
-   "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: none recorded); not identifiable as the emulated activity \u2014 excluded, not guessed."
-  },
-  {
-   "unit_id": "v2-apt29-day1-u40",
-   "anchor_scenario_ids": [
-    "sysmon:SCRANTON.dmevals.local:384518"
-   ],
-   "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: rundll32.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
-  },
-  {
-   "unit_id": "v2-apt29-day1-u41",
-   "anchor_scenario_ids": [
-    "windows_security:NASHUA.dmevals.local:65484"
-   ],
-   "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: services.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
-  },
-  {
-   "unit_id": "v2-apt29-day1-u42",
-   "anchor_scenario_ids": [
-    "windows_security:NEWYORK.dmevals.local:151266"
-   ],
-   "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: lsass.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
-  },
-  {
-   "unit_id": "v2-apt29-day1-u43",
-   "anchor_scenario_ids": [
-    "sysmon:SCRANTON.dmevals.local:384991"
-   ],
-   "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: rundll32.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
-  },
-  {
-   "unit_id": "v2-apt29-day1-u44",
-   "anchor_scenario_ids": [
-    "windows_security:NASHUA.dmevals.local:65590"
-   ],
-   "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: services.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
-  },
-  {
-   "unit_id": "v2-apt29-day1-u45",
-   "anchor_scenario_ids": [
-    "windows_security:NASHUA.dmevals.local:65636"
-   ],
-   "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: services.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
-  },
-  {
-   "unit_id": "v2-apt29-day1-u46",
-   "anchor_scenario_ids": [
-    "windows_security:NASHUA.dmevals.local:66063"
-   ],
-   "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: none recorded); not identifiable as the emulated activity \u2014 excluded, not guessed."
-  },
-  {
-   "unit_id": "v2-apt29-day1-u47",
-   "anchor_scenario_ids": [
-    "windows_security:NEWYORK.dmevals.local:151267"
-   ],
-   "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: lsass.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
-  },
-  {
-   "unit_id": "v2-apt29-day1-u48",
-   "anchor_scenario_ids": [
     "sysmon:SCRANTON.dmevals.local:384438"
    ],
    "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: rundll32.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
   },
   {
-   "unit_id": "v2-apt29-day1-u49",
-   "anchor_scenario_ids": [
-    "windows_security:NASHUA.dmevals.local:65528"
-   ],
-   "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: none recorded); not identifiable as the emulated activity \u2014 excluded, not guessed."
-  },
-  {
-   "unit_id": "v2-apt29-day1-u50",
-   "anchor_scenario_ids": [
-    "sysmon:SCRANTON.dmevals.local:396706"
-   ],
-   "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: netsh.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
-  },
-  {
-   "unit_id": "v2-apt29-day1-u51",
-   "anchor_scenario_ids": [
-    "windows_security:NASHUA.dmevals.local:65718"
-   ],
-   "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: services.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
-  },
-  {
-   "unit_id": "v2-apt29-day1-u52",
-   "anchor_scenario_ids": [
-    "windows_security:NASHUA.dmevals.local:66065"
-   ],
-   "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: none recorded); not identifiable as the emulated activity \u2014 excluded, not guessed."
-  },
-  {
-   "unit_id": "v2-apt29-day1-u53",
-   "anchor_scenario_ids": [
-    "windows_security:NASHUA.dmevals.local:65524"
-   ],
-   "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: none recorded); not identifiable as the emulated activity \u2014 excluded, not guessed."
-  },
-  {
-   "unit_id": "v2-apt29-day1-u54",
-   "anchor_scenario_ids": [
-    "sysmon:SCRANTON.dmevals.local:348647"
-   ],
-   "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: powershell.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
-  },
-  {
-   "unit_id": "v2-apt29-day1-u55",
-   "anchor_scenario_ids": [
-    "windows_security:NASHUA.dmevals.local:65510"
-   ],
-   "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: services.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
-  },
-  {
-   "unit_id": "v2-apt29-day1-u56",
-   "anchor_scenario_ids": [
-    "windows_security:NASHUA.dmevals.local:65650"
-   ],
-   "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: none recorded); not identifiable as the emulated activity \u2014 excluded, not guessed."
-  },
-  {
-   "unit_id": "v2-apt29-day1-u57",
-   "anchor_scenario_ids": [
-    "windows_security:NEWYORK.dmevals.local:151262"
-   ],
-   "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: lsass.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
-  },
-  {
-   "unit_id": "v2-apt29-day1-u58",
-   "anchor_scenario_ids": [
-    "windows_security:NEWYORK.dmevals.local:151270"
-   ],
-   "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: lsass.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
-  },
-  {
-   "unit_id": "v2-apt29-day1-u59",
-   "anchor_scenario_ids": [
-    "windows_security:NASHUA.dmevals.local:66049"
-   ],
-   "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: services.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
-  },
-  {
-   "unit_id": "v2-apt29-day1-u60",
-   "anchor_scenario_ids": [
-    "windows_security:NASHUA.dmevals.local:65422"
-   ],
-   "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: none recorded); not identifiable as the emulated activity \u2014 excluded, not guessed."
-  },
-  {
-   "unit_id": "v2-apt29-day1-u61",
-   "anchor_scenario_ids": [
-    "windows_security:NEWYORK.dmevals.local:151237"
-   ],
-   "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: lsass.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
-  },
-  {
-   "unit_id": "v2-apt29-day1-u62",
-   "anchor_scenario_ids": [
-    "windows_security:NEWYORK.dmevals.local:151236"
-   ],
-   "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: lsass.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
-  },
-  {
-   "unit_id": "v2-apt29-day1-u63",
+   "unit_id": "v2-apt29-day1-u39",
    "anchor_scenario_ids": [
     "windows_security:NEWYORK.dmevals.local:151258"
    ],
    "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: lsass.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
   },
   {
-   "unit_id": "v2-apt29-day1-u64",
+   "unit_id": "v2-apt29-day1-u40",
    "anchor_scenario_ids": [
-    "windows_security:NASHUA.dmevals.local:65654"
+    "windows_security:NASHUA.dmevals.local:66066"
    ],
    "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: none recorded); not identifiable as the emulated activity \u2014 excluded, not guessed."
+  },
+  {
+   "unit_id": "v2-apt29-day1-u41",
+   "anchor_scenario_ids": [
+    "windows_security:NASHUA.dmevals.local:66063"
+   ],
+   "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: none recorded); not identifiable as the emulated activity \u2014 excluded, not guessed."
+  },
+  {
+   "unit_id": "v2-apt29-day1-u42",
+   "anchor_scenario_ids": [
+    "windows_security:NEWYORK.dmevals.local:151262"
+   ],
+   "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: lsass.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
+  },
+  {
+   "unit_id": "v2-apt29-day1-u43",
+   "anchor_scenario_ids": [
+    "windows_security:NEWYORK.dmevals.local:151231"
+   ],
+   "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: lsass.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
+  },
+  {
+   "unit_id": "v2-apt29-day1-u44",
+   "anchor_scenario_ids": [
+    "windows_security:NEWYORK.dmevals.local:151236"
+   ],
+   "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: lsass.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
+  },
+  {
+   "unit_id": "v2-apt29-day1-u45",
+   "anchor_scenario_ids": [
+    "windows_security:NASHUA.dmevals.local:65421"
+   ],
+   "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: none recorded); not identifiable as the emulated activity \u2014 excluded, not guessed."
+  },
+  {
+   "unit_id": "v2-apt29-day1-u46",
+   "anchor_scenario_ids": [
+    "windows_security:NASHUA.dmevals.local:65653"
+   ],
+   "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: none recorded); not identifiable as the emulated activity \u2014 excluded, not guessed."
+  },
+  {
+   "unit_id": "v2-apt29-day1-u47",
+   "anchor_scenario_ids": [
+    "windows_security:NEWYORK.dmevals.local:151270"
+   ],
+   "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: lsass.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
+  },
+  {
+   "unit_id": "v2-apt29-day1-u48",
+   "anchor_scenario_ids": [
+    "windows_security:NASHUA.dmevals.local:65524"
+   ],
+   "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: none recorded); not identifiable as the emulated activity \u2014 excluded, not guessed."
+  },
+  {
+   "unit_id": "v2-apt29-day1-u49",
+   "anchor_scenario_ids": [
+    "sysmon:SCRANTON.dmevals.local:384919"
+   ],
+   "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: rundll32.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
+  },
+  {
+   "unit_id": "v2-apt29-day1-u50",
+   "anchor_scenario_ids": [
+    "windows_security:NASHUA.dmevals.local:65528"
+   ],
+   "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: none recorded); not identifiable as the emulated activity \u2014 excluded, not guessed."
+  },
+  {
+   "unit_id": "v2-apt29-day1-u51",
+   "anchor_scenario_ids": [
+    "sysmon:SCRANTON.dmevals.local:396706"
+   ],
+   "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: netsh.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
+  },
+  {
+   "unit_id": "v2-apt29-day1-u52",
+   "anchor_scenario_ids": [
+    "windows_security:NASHUA.dmevals.local:65423"
+   ],
+   "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: none recorded); not identifiable as the emulated activity \u2014 excluded, not guessed."
+  },
+  {
+   "unit_id": "v2-apt29-day1-u53",
+   "anchor_scenario_ids": [
+    "windows_security:NASHUA.dmevals.local:66049"
+   ],
+   "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: services.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
+  },
+  {
+   "unit_id": "v2-apt29-day1-u54",
+   "anchor_scenario_ids": [
+    "windows_security:NEWYORK.dmevals.local:151225"
+   ],
+   "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: lsass.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
+  },
+  {
+   "unit_id": "v2-apt29-day1-u55",
+   "anchor_scenario_ids": [
+    "windows_security:NASHUA.dmevals.local:65527"
+   ],
+   "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: none recorded); not identifiable as the emulated activity \u2014 excluded, not guessed."
+  },
+  {
+   "unit_id": "v2-apt29-day1-u56",
+   "anchor_scenario_ids": [
+    "windows_security:NASHUA.dmevals.local:65652"
+   ],
+   "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: none recorded); not identifiable as the emulated activity \u2014 excluded, not guessed."
+  },
+  {
+   "unit_id": "v2-apt29-day1-u57",
+   "anchor_scenario_ids": [
+    "windows_security:NASHUA.dmevals.local:67280"
+   ],
+   "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: services.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
+  },
+  {
+   "unit_id": "v2-apt29-day1-u58",
+   "anchor_scenario_ids": [
+    "windows_security:NASHUA.dmevals.local:65650"
+   ],
+   "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: none recorded); not identifiable as the emulated activity \u2014 excluded, not guessed."
+  },
+  {
+   "unit_id": "v2-apt29-day1-u59",
+   "anchor_scenario_ids": [
+    "powershell:SCRANTON.dmevals.local:12727"
+   ],
+   "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: none recorded); not identifiable as the emulated activity \u2014 excluded, not guessed."
+  },
+  {
+   "unit_id": "v2-apt29-day1-u60",
+   "anchor_scenario_ids": [
+    "windows_security:NASHUA.dmevals.local:65484"
+   ],
+   "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: services.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
+  },
+  {
+   "unit_id": "v2-apt29-day1-u61",
+   "anchor_scenario_ids": [
+    "windows_security:NASHUA.dmevals.local:65510"
+   ],
+   "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: services.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
+  },
+  {
+   "unit_id": "v2-apt29-day1-u62",
+   "anchor_scenario_ids": [
+    "windows_security:NEWYORK.dmevals.local:151259"
+   ],
+   "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: lsass.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
+  },
+  {
+   "unit_id": "v2-apt29-day1-u63",
+   "anchor_scenario_ids": [
+    "powershell:SCRANTON.dmevals.local:10637"
+   ],
+   "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: none recorded); not identifiable as the emulated activity \u2014 excluded, not guessed."
+  },
+  {
+   "unit_id": "v2-apt29-day1-u64",
+   "anchor_scenario_ids": [
+    "windows_security:NEWYORK.dmevals.local:151266"
+   ],
+   "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: lsass.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
   }
  ]
 }

@@ -7,30 +7,31 @@
   "windows_security": 21713
  },
  "suppressed_by_precedence": 556,
- "evidence": 3220,
+ "evidence": 3300,
  "units": [
   {
-   "group_id": "corr-group::cbca5a0fe9a6d5c720811bea848d4d350c3a91f07bd73c8158e94429985a879a",
-   "anchor_observation_id": "powershell:UTICA.dmevals.local:3541",
-   "evidence": 2111,
-   "observations": 2092,
+   "group_id": "corr-group::ce46f4a7cba5ddf29dc11160b4daf0566cca78e9e33e2dbcb4db5af440b33934",
+   "anchor_observation_id": "sysmon:UTICA.dmevals.local:772804",
+   "evidence": 2146,
+   "observations": 2106,
    "hosts": [
     "UTICA.dmevals.local"
    ],
-   "first": "2020-05-02T07:55:17+00:00",
+   "first": "2020-05-02T07:55:09.957000+00:00",
    "last": "2020-05-02T08:11:41+00:00",
    "process_images": {
-    "?": 2071,
-    "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe": 10,
+    "?": 2078,
+    "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe": 15,
+    "C:\\windows\\system32\\WindowsPowerShell\\v1.0\\PowerShell.exe": 4,
     "C:\\Windows\\Microsoft.NET\\Framework64\\v4.0.30319\\csc.exe": 4,
-    "C:\\windows\\system32\\WindowsPowerShell\\v1.0\\PowerShell.exe": 3,
-    "C:\\Windows\\System32\\sdclt.exe": 1,
     "C:\\Windows\\System32\\net.exe": 1,
-    "C:\\Windows\\System32\\certutil.exe": 1,
-    "C:\\Windows\\System32\\control.exe": 1
+    "C:\\Windows\\System32\\conhost.exe": 1,
+    "C:\\Windows\\System32\\sdclt.exe": 1,
+    "C:\\Windows\\System32\\certutil.exe": 1
    },
    "image_names": [
     "certutil.exe",
+    "conhost.exe",
     "control.exe",
     "csc.exe",
     "net.exe",
@@ -43,11 +44,17 @@
     "T1021.006",
     "T1027",
     "T1027.004",
+    "T1033",
+    "T1049",
+    "T1057",
     "T1059.001",
     "T1070.006",
     "T1078",
+    "T1087.001",
     "T1114.001",
+    "T1120",
     "T1140",
+    "T1202",
     "T1497.001",
     "T1546.003",
     "T1548.002",
@@ -56,71 +63,86 @@
    ],
    "rule_families": {
     "sigma:64e8e417-c19a-475a-8d19-98ea705394cc": 2046,
+    "sigma:af4c87ce-bdda-4215-b998-15220772e993": 9,
     "sigma:403c2cc0-7f6b-4925-9423-bfa573bed7eb": 8,
     "sigma:941e5c45-cda7-4864-8cea-bbb7458d194a": 8,
+    "sigma:4096a49c-7de4-4da0-a230-c66ccd56ea5a": 6,
     "sigma:1f49f2ab-26bc-48b3-96cc-dcffbc93eadf": 5,
     "sigma:313fbb0a-a341-4682-848d-6d6f8c4fab7c": 4,
-    "sigma:ae7fbf8e-f3cb-49fd-8db4-5f3bed522c71": 4,
-    "sigma:dcaa3f04-70c3-427a-80b4-b870d73c94c4": 4,
-    "sigma:f62176f3-8128-4faa-bf6c-83261322e5eb": 4
+    "sigma:96cd126d-f970-49c4-848a-da3a09f55c55": 4
    }
   },
   {
-   "group_id": "corr-group::399978432af723e0ff7a92a7866f2f4d51ce7152f5ceda1d7dd47897bff81469",
+   "group_id": "corr-group::0a753040f2955786fe2b8e073365c5486ee5795c7e5510c2c30ddbca46af0520",
    "anchor_observation_id": "powershell:NEWYORK.dmevals.local:18403",
-   "evidence": 539,
-   "observations": 539,
+   "evidence": 543,
+   "observations": 542,
    "hosts": [
     "NEWYORK.dmevals.local"
    ],
    "first": "2020-05-02T08:05:52+00:00",
    "last": "2020-05-02T08:06:03+00:00",
    "process_images": {
-    "?": 539
+    "?": 541,
+    "C:\\windows\\system32\\wbem\\wmiprvse.exe": 1
    },
-   "image_names": [],
+   "image_names": [
+    "wmiprvse.exe"
+   ],
    "techniques": [
-    "T1059.001"
+    "T1027",
+    "T1059.001",
+    "T1201"
    ],
    "rule_families": {
-    "sigma:64e8e417-c19a-475a-8d19-98ea705394cc": 539
+    "sigma:64e8e417-c19a-475a-8d19-98ea705394cc": 539,
+    "sigma:96cd126d-f970-49c4-848a-da3a09f55c55": 2,
+    "sigma:ac7102b4-9e1e-4802-9b4f-17c5524c015c": 1,
+    "sigma:bbb9495b-58fc-4016-b9df-9a3a1b67ca82": 1
    }
   },
   {
-   "group_id": "corr-group::462dea487839733e83d21e68cf9b6b36b250c8d0bce3f4081ea0d858b7d6919f",
+   "group_id": "corr-group::4b020146316bcc68337d031a087b4fd71343cbcc3f724b0d6a4f4e6cf04222e8",
    "anchor_observation_id": "powershell:NEWYORK.dmevals.local:19104",
-   "evidence": 415,
-   "observations": 415,
+   "evidence": 418,
+   "observations": 417,
    "hosts": [
     "NEWYORK.dmevals.local"
    ],
    "first": "2020-05-02T08:20:52+00:00",
    "last": "2020-05-02T08:20:58+00:00",
    "process_images": {
-    "?": 415
+    "?": 416,
+    "C:\\windows\\system32\\wbem\\wmiprvse.exe": 1
    },
-   "image_names": [],
+   "image_names": [
+    "wmiprvse.exe"
+   ],
    "techniques": [
+    "T1027",
     "T1059.001"
    ],
    "rule_families": {
-    "sigma:64e8e417-c19a-475a-8d19-98ea705394cc": 415
+    "sigma:64e8e417-c19a-475a-8d19-98ea705394cc": 415,
+    "sigma:96cd126d-f970-49c4-848a-da3a09f55c55": 2,
+    "sigma:ac7102b4-9e1e-4802-9b4f-17c5524c015c": 1
    }
   },
   {
-   "group_id": "corr-group::2e863257f4d0afa8c28e83ad37a90866871047787f0196dadb398493da823a27",
-   "anchor_observation_id": "sysmon:UTICA.dmevals.local:984177",
-   "evidence": 38,
-   "observations": 19,
+   "group_id": "corr-group::19479bacf7862b8528b85856fac268ee8825a63db58251f3115974522d19fab1",
+   "anchor_observation_id": "windows_security:UTICA.dmevals.local:152181",
+   "evidence": 58,
+   "observations": 31,
    "hosts": [
     "UTICA.dmevals.local"
    ],
-   "first": "2020-05-02T08:12:54.923000+00:00",
+   "first": "2020-05-02T08:12:54+00:00",
    "last": "2020-05-02T08:18:37+00:00",
    "process_images": {
-    "?": 15,
+    "?": 21,
+    "C:\\Windows\\System32\\wbem\\WmiPrvSE.exe": 4,
     "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe": 3,
-    "C:\\Windows\\System32\\wbem\\WmiPrvSE.exe": 1
+    "C:\\windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe": 3
    },
    "image_names": [
     "powershell.exe",
@@ -128,24 +150,26 @@
    ],
    "techniques": [
     "T1021.006",
+    "T1033",
     "T1047",
+    "T1057",
     "T1059.001",
     "T1140",
     "T1546.003"
    ],
    "rule_families": {
     "sigma:403c2cc0-7f6b-4925-9423-bfa573bed7eb": 7,
+    "sigma:4096a49c-7de4-4da0-a230-c66ccd56ea5a": 6,
     "sigma:692f0bec-83ba-4d04-af7e-e884a96059b6": 6,
     "sigma:ae7fbf8e-f3cb-49fd-8db4-5f3bed522c71": 6,
     "sigma:fdb62a13-9a81-4e5c-a38f-ea93a16f6d7c": 6,
+    "sigma:af4c87ce-bdda-4215-b998-15220772e993": 5,
     "sigma:f62176f3-8128-4faa-bf6c-83261322e5eb": 5,
-    "sigma:7b836d7f-179c-4ba4-90a7-a7e60afb48e6": 3,
-    "sigma:fb843269-508c-4b76-8b8d-88679db22ce7": 3,
-    "sigma:05936ce2-ee05-4dae-9d03-9a391cf2d2c6": 1
+    "sigma:5af54681-df95-4c26-854f-2565e13cfab0": 3
    }
   },
   {
-   "group_id": "corr-group::25c981308735cf52ff76bc6d79514a480996994723f6e477a88e1004c00f7015",
+   "group_id": "corr-group::3af81149b6436cc4540fc757f25a9b84d175cffcddf7929bff21337ee9697381",
    "anchor_observation_id": "sysmon:UTICA.dmevals.local:1008901",
    "evidence": 19,
    "observations": 19,
@@ -168,7 +192,7 @@
    }
   },
   {
-   "group_id": "corr-group::2c97dfbd973e96e553fbfa192e4adfefaeeb68bd7cc89732abba3cec236346ef",
+   "group_id": "corr-group::c1c933280a02868d4e89a7321fc5dee2ca5a6e5c384641c1e86800f44d98e7dd",
    "anchor_observation_id": "sysmon:UTICA.dmevals.local:987756",
    "evidence": 19,
    "observations": 19,
@@ -191,7 +215,7 @@
    }
   },
   {
-   "group_id": "corr-group::e1c79edb5740ffffae237f6dc1638417bfda7645dc12fffd58ec0e9bc80b9f09",
+   "group_id": "corr-group::93f9c5af2a8e7ffbb53d6e83baf14413cd59e84d901c70b2e2bcad493d2af2c8",
    "anchor_observation_id": "sysmon:UTICA.dmevals.local:782026",
    "evidence": 15,
    "observations": 15,
@@ -214,7 +238,94 @@
    }
   },
   {
-   "group_id": "corr-group::af1b637efc29520f8ee4e5dd742ebfb85af11f9863c34e4a5189a39c2dc7125e",
+   "group_id": "corr-group::a07c1bdf17ed993e5a2c5b6bee8450506ba8e349a5922ebd6f0ac8b84c5e97f7",
+   "anchor_observation_id": "sysmon:UTICA.dmevals.local:787306",
+   "evidence": 14,
+   "observations": 5,
+   "hosts": [
+    "UTICA.dmevals.local"
+   ],
+   "first": "2020-05-02T07:59:09.928000+00:00",
+   "last": "2020-05-02T07:59:10.752000+00:00",
+   "process_images": {
+    "?": 1,
+    "C:\\Windows\\System32\\conhost.exe": 1,
+    "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe": 1,
+    "C:\\Windows\\System32\\m.exe": 1,
+    "C:\\windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe": 1
+   },
+   "image_names": [
+    "conhost.exe",
+    "m.exe",
+    "powershell.exe"
+   ],
+   "techniques": [
+    "T1003",
+    "T1003.001",
+    "T1003.002",
+    "T1003.004",
+    "T1003.005",
+    "T1003.006",
+    "T1047",
+    "T1059.001",
+    "T1202"
+   ],
+   "rule_families": {
+    "sigma:a642964e-bead-4bed-8910-1bb4d63e3b4d": 5,
+    "sigma:692f0bec-83ba-4d04-af7e-e884a96059b6": 2,
+    "sigma:189e3b02-82b2-4b90-9662-411eb64486d4": 1,
+    "sigma:3037d961-21e9-4732-b27a-637bcc7bf539": 1,
+    "sigma:403c2cc0-7f6b-4925-9423-bfa573bed7eb": 1,
+    "sigma:ac7102b4-9e1e-4802-9b4f-17c5524c015c": 1,
+    "sigma:ca2092a1-c273-4878-9b4b-0d60115bf5ea": 1,
+    "sigma:f4bbd493-b796-416e-bbf2-121235348529": 1
+   }
+  },
+  {
+   "group_id": "corr-group::ea62a20abf35608aee030cc3e6c0d3b4e835ad804351806a01da5d64b485a029",
+   "anchor_observation_id": "sysmon:NEWYORK.dmevals.local:317743",
+   "evidence": 14,
+   "observations": 6,
+   "hosts": [
+    "NEWYORK.dmevals.local"
+   ],
+   "first": "2020-05-02T08:02:44.470000+00:00",
+   "last": "2020-05-02T08:04:25.642000+00:00",
+   "process_images": {
+    "?": 2,
+    "C:\\Windows\\System32\\conhost.exe": 1,
+    "C:\\Windows\\System32\\wsmprovhost.exe": 1,
+    "C:\\Windows\\System32\\m.exe": 1,
+    "C:\\windows\\system32\\wsmprovhost.exe": 1
+   },
+   "image_names": [
+    "conhost.exe",
+    "m.exe",
+    "wsmprovhost.exe"
+   ],
+   "techniques": [
+    "T1003.001",
+    "T1003.002",
+    "T1003.004",
+    "T1003.005",
+    "T1003.006",
+    "T1021.006",
+    "T1059.001",
+    "T1070.006",
+    "T1202",
+    "T1564.004"
+   ],
+   "rule_families": {
+    "sigma:a642964e-bead-4bed-8910-1bb4d63e3b4d": 5,
+    "sigma:734f8d9b-42b8-41b2-bcf5-abaf49d5a3c8": 4,
+    "sigma:8c521530-5169-495d-a199-0a3a881ad24e": 2,
+    "sigma:3037d961-21e9-4732-b27a-637bcc7bf539": 1,
+    "sigma:ac7102b4-9e1e-4802-9b4f-17c5524c015c": 1,
+    "sigma:c6438007-e081-42ce-9483-b067fbef33c3": 1
+   }
+  },
+  {
+   "group_id": "corr-group::a8bb27afc9b2fe7fb91df91fa1eb8d74f64c981f7cddbfaf29235ff18eba5568",
    "anchor_observation_id": "sysmon:UTICA.dmevals.local:1012651",
    "evidence": 13,
    "observations": 13,
@@ -237,82 +348,7 @@
    }
   },
   {
-   "group_id": "corr-group::d5cd3c733cc2906449c67e37170236de3ce70709805f16e2a4f5392dce641197",
-   "anchor_observation_id": "sysmon:NEWYORK.dmevals.local:317743",
-   "evidence": 12,
-   "observations": 4,
-   "hosts": [
-    "NEWYORK.dmevals.local"
-   ],
-   "first": "2020-05-02T08:02:44.470000+00:00",
-   "last": "2020-05-02T08:04:25.616000+00:00",
-   "process_images": {
-    "?": 2,
-    "C:\\Windows\\System32\\wsmprovhost.exe": 1,
-    "C:\\Windows\\System32\\m.exe": 1
-   },
-   "image_names": [
-    "m.exe",
-    "wsmprovhost.exe"
-   ],
-   "techniques": [
-    "T1003.001",
-    "T1003.002",
-    "T1003.004",
-    "T1003.005",
-    "T1003.006",
-    "T1021.006",
-    "T1059.001",
-    "T1070.006",
-    "T1564.004"
-   ],
-   "rule_families": {
-    "sigma:a642964e-bead-4bed-8910-1bb4d63e3b4d": 5,
-    "sigma:734f8d9b-42b8-41b2-bcf5-abaf49d5a3c8": 4,
-    "sigma:8c521530-5169-495d-a199-0a3a881ad24e": 2,
-    "sigma:c6438007-e081-42ce-9483-b067fbef33c3": 1
-   }
-  },
-  {
-   "group_id": "corr-group::66e9ad9421aee2ac189e4226f71e7fa3c3d75bb7d7ce3b09cd37c1cf30d3d320",
-   "anchor_observation_id": "sysmon:UTICA.dmevals.local:787306",
-   "evidence": 11,
-   "observations": 3,
-   "hosts": [
-    "UTICA.dmevals.local"
-   ],
-   "first": "2020-05-02T07:59:09.928000+00:00",
-   "last": "2020-05-02T07:59:10.752000+00:00",
-   "process_images": {
-    "?": 1,
-    "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe": 1,
-    "C:\\Windows\\System32\\m.exe": 1
-   },
-   "image_names": [
-    "m.exe",
-    "powershell.exe"
-   ],
-   "techniques": [
-    "T1003",
-    "T1003.001",
-    "T1003.002",
-    "T1003.004",
-    "T1003.005",
-    "T1003.006",
-    "T1047",
-    "T1059.001"
-   ],
-   "rule_families": {
-    "sigma:a642964e-bead-4bed-8910-1bb4d63e3b4d": 5,
-    "sigma:692f0bec-83ba-4d04-af7e-e884a96059b6": 2,
-    "sigma:189e3b02-82b2-4b90-9662-411eb64486d4": 1,
-    "sigma:403c2cc0-7f6b-4925-9423-bfa573bed7eb": 1,
-    "sigma:ca2092a1-c273-4878-9b4b-0d60115bf5ea": 1,
-    "sigma:fb843269-508c-4b76-8b8d-88679db22ce7": 1
-   }
-  },
-  {
-   "group_id": "corr-group::ecfed0aa64a8acf0462df1935ec4f13767558d465eed4bcdc76e59377d26d381",
+   "group_id": "corr-group::4b72b9ebee4b918906b579625c520b9fa076ecff36bb858acee3e5bec127bd3d",
    "anchor_observation_id": "sysmon:UTICA.dmevals.local:792928",
    "evidence": 9,
    "observations": 9,
@@ -335,21 +371,24 @@
    }
   },
   {
-   "group_id": "corr-group::b4e537152b70b5ba058ae15f6709c1e5637aa0fe36c78ba8a6ed5d3f1b2d8cee",
+   "group_id": "corr-group::e8ba505702ffc369c6b258aa335fb98e13a17cad4395c81b46b32e1f2a3cf986",
    "anchor_observation_id": "sysmon:SCRANTON.dmevals.local:343878",
-   "evidence": 6,
-   "observations": 3,
+   "evidence": 8,
+   "observations": 5,
    "hosts": [
     "SCRANTON.dmevals.local"
    ],
    "first": "2020-05-02T08:18:37.350000+00:00",
    "last": "2020-05-02T08:18:37.761000+00:00",
    "process_images": {
+    "C:\\Windows\\System32\\conhost.exe": 1,
     "C:\\Windows\\System32\\wsmprovhost.exe": 1,
     "C:\\Windows\\System32\\net.exe": 1,
+    "C:\\windows\\system32\\wsmprovhost.exe": 1,
     "C:\\Windows\\System32\\net1.exe": 1
    },
    "image_names": [
+    "conhost.exe",
     "net.exe",
     "net1.exe",
     "wsmprovhost.exe"
@@ -357,15 +396,70 @@
    "techniques": [
     "T1021.006",
     "T1059.001",
-    "T1136.001"
+    "T1136.001",
+    "T1202"
    ],
    "rule_families": {
     "sigma:734f8d9b-42b8-41b2-bcf5-abaf49d5a3c8": 4,
-    "sigma:cd219ff3-fa99-45d4-8380-a7d15116c6dc": 2
+    "sigma:cd219ff3-fa99-45d4-8380-a7d15116c6dc": 2,
+    "sigma:3037d961-21e9-4732-b27a-637bcc7bf539": 1,
+    "sigma:ac7102b4-9e1e-4802-9b4f-17c5524c015c": 1
    }
   },
   {
-   "group_id": "corr-group::2804fcfd6449293ac6414a9590ae1b180aa104f437c4d489d45fe341c0f51fe6",
+   "group_id": "corr-group::433a712adf5b7730e2e92a6071242bf68d7fb56f48d1290541de8af5cd520616",
+   "anchor_observation_id": "sysmon:UTICA.dmevals.local:931209",
+   "evidence": 3,
+   "observations": 2,
+   "hosts": [
+    "UTICA.dmevals.local"
+   ],
+   "first": "2020-05-02T08:05:20.834000+00:00",
+   "last": "2020-05-02T08:05:29.522000+00:00",
+   "process_images": {
+    "C:\\Program Files\\Microsoft Office\\root\\Office16\\OUTLOOK.EXE": 2
+   },
+   "image_names": [
+    "outlook.exe"
+   ],
+   "techniques": [
+    "T1486",
+    "T1574.001",
+    "T1685"
+   ],
+   "rule_families": {
+    "sigma:3669afd2-9891-4534-a626-e5cf03810a61": 2,
+    "sigma:e2e01011-5910-4267-9c3b-4149ed5479cf": 1
+   }
+  },
+  {
+   "group_id": "corr-group::54c78d9bba4cbf6a756d321c1b8d0586ccb53bd00d3d4547d6909511c85e9da0",
+   "anchor_observation_id": "sysmon:SCRANTON.dmevals.local:343422",
+   "evidence": 3,
+   "observations": 2,
+   "hosts": [
+    "SCRANTON.dmevals.local"
+   ],
+   "first": "2020-05-02T08:18:16.334000+00:00",
+   "last": "2020-05-02T08:18:20.543000+00:00",
+   "process_images": {
+    "C:\\Windows\\System32\\wsmprovhost.exe": 1,
+    "C:\\windows\\system32\\wsmprovhost.exe": 1
+   },
+   "image_names": [
+    "wsmprovhost.exe"
+   ],
+   "techniques": [
+    "T1021.006",
+    "T1059.001"
+   ],
+   "rule_families": {
+    "sigma:734f8d9b-42b8-41b2-bcf5-abaf49d5a3c8": 2,
+    "sigma:ac7102b4-9e1e-4802-9b4f-17c5524c015c": 1
+   }
+  },
+  {
+   "group_id": "corr-group::0298605098c69c7ac95cc0df409b767a349ece61b29c76a58a1897af06d43247",
    "anchor_observation_id": "sysmon:SCRANTON.dmevals.local:333581",
    "evidence": 2,
    "observations": 2,
@@ -388,102 +482,9 @@
    }
   },
   {
-   "group_id": "corr-group::dc255a09b949e030c8533f0bfd9c2c5ca3008902497ccea478e56a16f2b2d91f",
-   "anchor_observation_id": "sysmon:SCRANTON.dmevals.local:343422",
-   "evidence": 2,
-   "observations": 1,
-   "hosts": [
-    "SCRANTON.dmevals.local"
-   ],
-   "first": "2020-05-02T08:18:16.334000+00:00",
-   "last": "2020-05-02T08:18:16.334000+00:00",
-   "process_images": {
-    "C:\\Windows\\System32\\wsmprovhost.exe": 1
-   },
-   "image_names": [
-    "wsmprovhost.exe"
-   ],
-   "techniques": [
-    "T1021.006",
-    "T1059.001"
-   ],
-   "rule_families": {
-    "sigma:734f8d9b-42b8-41b2-bcf5-abaf49d5a3c8": 2
-   }
-  },
-  {
-   "group_id": "corr-group::12666b6e56abdc1128401fad1971094a997054b5c1321df4a15c7d876e31f6be",
-   "anchor_observation_id": "sysmon:UTICA.dmevals.local:944543",
-   "evidence": 1,
-   "observations": 1,
-   "hosts": [
-    "UTICA.dmevals.local"
-   ],
-   "first": "2020-05-02T08:10:05.478000+00:00",
-   "last": "2020-05-02T08:10:05.478000+00:00",
-   "process_images": {
-    "C:\\Windows\\System32\\rundll32.exe": 1
-   },
-   "image_names": [
-    "rundll32.exe"
-   ],
-   "techniques": [
-    "T1048.003"
-   ],
-   "rule_families": {
-    "sigma:2dbd9d3d-9e27-42a8-b8df-f13825c6c3d5": 1
-   }
-  },
-  {
-   "group_id": "corr-group::1354ff29aacc054787dc7996a75457a321b058a318914883fd0d589ffa336f8a",
-   "anchor_observation_id": "sysmon:SCRANTON.dmevals.local:294209",
-   "evidence": 1,
-   "observations": 1,
-   "hosts": [
-    "SCRANTON.dmevals.local"
-   ],
-   "first": "2020-05-02T07:50:54.297000+00:00",
-   "last": "2020-05-02T07:50:54.297000+00:00",
-   "process_images": {
-    "C:\\windows\\system32\\svchost.exe": 1
-   },
-   "image_names": [
-    "svchost.exe"
-   ],
-   "techniques": [
-    "T1490"
-   ],
-   "rule_families": {
-    "sigma:d223b46b-5621-4037-88fe-fda32eead684": 1
-   }
-  },
-  {
-   "group_id": "corr-group::1c0f381674c859dc6aff28cbd0d1494babffc47efd4878de844f6d6f3abcf5fd",
-   "anchor_observation_id": "sysmon:UTICA.dmevals.local:944437",
-   "evidence": 1,
-   "observations": 1,
-   "hosts": [
-    "UTICA.dmevals.local"
-   ],
-   "first": "2020-05-02T08:10:05.244000+00:00",
-   "last": "2020-05-02T08:10:05.244000+00:00",
-   "process_images": {
-    "C:\\Windows\\System32\\rundll32.exe": 1
-   },
-   "image_names": [
-    "rundll32.exe"
-   ],
-   "techniques": [
-    "T1048.003"
-   ],
-   "rule_families": {
-    "sigma:2dbd9d3d-9e27-42a8-b8df-f13825c6c3d5": 1
-   }
-  },
-  {
-   "group_id": "corr-group::26d5dec3c8511dc676042dab0eb7f988d8c47eec58912f23b2568419e14c2cee",
+   "group_id": "corr-group::73d2b6a30f9185c7186e598015cbe9ca8e5c58d517b85938c03cbf9cafb47619",
    "anchor_observation_id": "sysmon:UTICA.dmevals.local:1000880",
-   "evidence": 1,
+   "evidence": 2,
    "observations": 1,
    "hosts": [
     "UTICA.dmevals.local"
@@ -500,34 +501,12 @@
     "T1059.001"
    ],
    "rule_families": {
-    "sigma:58cb02d5-78ce-4692-b3e1-dce850aae41a": 1
+    "sigma:58cb02d5-78ce-4692-b3e1-dce850aae41a": 1,
+    "sigma:ac7102b4-9e1e-4802-9b4f-17c5524c015c": 1
    }
   },
   {
-   "group_id": "corr-group::5196528dc1933cdfaa1e13c0fa953025a70ae792f748d1477d499b96e1722925",
-   "anchor_observation_id": "sysmon:UTICA.dmevals.local:932845",
-   "evidence": 1,
-   "observations": 1,
-   "hosts": [
-    "UTICA.dmevals.local"
-   ],
-   "first": "2020-05-02T08:05:29.522000+00:00",
-   "last": "2020-05-02T08:05:29.522000+00:00",
-   "process_images": {
-    "C:\\Program Files\\Microsoft Office\\root\\Office16\\OUTLOOK.EXE": 1
-   },
-   "image_names": [
-    "outlook.exe"
-   ],
-   "techniques": [
-    "T1574.001"
-   ],
-   "rule_families": {
-    "sigma:e2e01011-5910-4267-9c3b-4149ed5479cf": 1
-   }
-  },
-  {
-   "group_id": "corr-group::720e9ebb27ef2950d704420d92ca98d074f8307824a6c666bc11dd70b8228bb0",
+   "group_id": "corr-group::092f325df9fcf27dceaa620b82435c4862030f10b63072db87d98afc4ed90ab6",
    "anchor_observation_id": "sysmon:UTICA.dmevals.local:884175",
    "evidence": 1,
    "observations": 1,
@@ -550,30 +529,30 @@
    }
   },
   {
-   "group_id": "corr-group::8e01a74e6d7945a1923a2ee88a1d23c7ab5097c4a3c9cb390e409b0b78801cda",
-   "anchor_observation_id": "sysmon:UTICA.dmevals.local:958833",
+   "group_id": "corr-group::1eeb9442ab775aa8b2f37dfb9cad9ae05e3a3e833672fafd5cd1f0cd72330102",
+   "anchor_observation_id": "sysmon:UTICA.dmevals.local:944437",
    "evidence": 1,
    "observations": 1,
    "hosts": [
     "UTICA.dmevals.local"
    ],
-   "first": "2020-05-02T08:12:44.634000+00:00",
-   "last": "2020-05-02T08:12:44.634000+00:00",
+   "first": "2020-05-02T08:10:05.244000+00:00",
+   "last": "2020-05-02T08:10:05.244000+00:00",
    "process_images": {
-    "C:\\Windows\\System32\\netsh.exe": 1
+    "C:\\Windows\\System32\\rundll32.exe": 1
    },
    "image_names": [
-    "netsh.exe"
+    "rundll32.exe"
    ],
    "techniques": [
-    "T1040"
+    "T1048.003"
    ],
    "rule_families": {
-    "sigma:d3c3861d-c504-4c77-ba55-224ba82d0118": 1
+    "sigma:2dbd9d3d-9e27-42a8-b8df-f13825c6c3d5": 1
    }
   },
   {
-   "group_id": "corr-group::bb86536a89a605cdf4a0ff42778f1748300160fe2c149a2050975bd459606674",
+   "group_id": "corr-group::33dea4ffd6e7e692840c287a16ae67d342c76fda918dfc0356ad651c70f84034",
    "anchor_observation_id": "windows_security:NEWYORK.dmevals.local:201065",
    "evidence": 1,
    "observations": 1,
@@ -596,7 +575,53 @@
    }
   },
   {
-   "group_id": "corr-group::c1b60ddcb906d2effedc57a543ad258fa84fe19a4d2bc5cd9d32297eddd4fdff",
+   "group_id": "corr-group::56cd7dd28136e63b410df25d992fcd017cbc7a13957e0ed205fafeb569f89d77",
+   "anchor_observation_id": "sysmon:UTICA.dmevals.local:958833",
+   "evidence": 1,
+   "observations": 1,
+   "hosts": [
+    "UTICA.dmevals.local"
+   ],
+   "first": "2020-05-02T08:12:44.634000+00:00",
+   "last": "2020-05-02T08:12:44.634000+00:00",
+   "process_images": {
+    "C:\\Windows\\System32\\netsh.exe": 1
+   },
+   "image_names": [
+    "netsh.exe"
+   ],
+   "techniques": [
+    "T1040"
+   ],
+   "rule_families": {
+    "sigma:d3c3861d-c504-4c77-ba55-224ba82d0118": 1
+   }
+  },
+  {
+   "group_id": "corr-group::eeebb404a8193b59b8fe6b00a6053be88a2f7cbd9e973af146a3a2e1946888d4",
+   "anchor_observation_id": "sysmon:SCRANTON.dmevals.local:294209",
+   "evidence": 1,
+   "observations": 1,
+   "hosts": [
+    "SCRANTON.dmevals.local"
+   ],
+   "first": "2020-05-02T07:50:54.297000+00:00",
+   "last": "2020-05-02T07:50:54.297000+00:00",
+   "process_images": {
+    "C:\\windows\\system32\\svchost.exe": 1
+   },
+   "image_names": [
+    "svchost.exe"
+   ],
+   "techniques": [
+    "T1490"
+   ],
+   "rule_families": {
+    "sigma:d223b46b-5621-4037-88fe-fda32eead684": 1
+   }
+  },
+  {
+   "group_id": "corr-group::f376207f94b61d2e7c2c5201dfa704802e0185777440678038053095e8e4b318",
    "anchor_observation_id": "sysmon:NEWYORK.dmevals.local:318662",
    "evidence": 1,
    "observations": 1,
@@ -616,6 +641,29 @@
    ],
    "rule_families": {
     "sigma:d223b46b-5621-4037-88fe-fda32eead684": 1
+   }
+  },
+  {
+   "group_id": "corr-group::fb8458b69276677f65ab814f518a6e02c021dfa4c712d9497d91cbfc8850d58a",
+   "anchor_observation_id": "sysmon:UTICA.dmevals.local:944543",
+   "evidence": 1,
+   "observations": 1,
+   "hosts": [
+    "UTICA.dmevals.local"
+   ],
+   "first": "2020-05-02T08:10:05.478000+00:00",
+   "last": "2020-05-02T08:10:05.478000+00:00",
+   "process_images": {
+    "C:\\Windows\\System32\\rundll32.exe": 1
+   },
+   "image_names": [
+    "rundll32.exe"
+   ],
+   "techniques": [
+    "T1048.003"
+   ],
+   "rule_families": {
+    "sigma:2dbd9d3d-9e27-42a8-b8df-f13825c6c3d5": 1
    }
   }
  ]

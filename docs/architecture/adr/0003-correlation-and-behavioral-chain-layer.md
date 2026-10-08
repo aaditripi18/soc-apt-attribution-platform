@@ -927,3 +927,30 @@ hard-negative runs keep their unit counts exactly (LSASS 01: 6 → 6, 3 of 92 lo
 units), while on the attack recordings 97 % of low-level Evidence joins attack units (APT29 day 1: 685 of 703;
 Empire: 222 of 227). APT29 day 1 goes from 65 to 60 units: low-level Evidence on bridging processes structurally
 connects chains that previously had no detected link — genuine instance / lineage facts, not a new rule.
+
+**Revision H2 (2026-10-06) — enrich Evidence never changes unit boundaries.** The first version let `LOW` Evidence
+*bridge* core units: on APT29 day 1 low-level detections on the PowerShell implant joined three previously separate
+chains into one unit with **21 core decision features** (27 with enrich techniques). The ADR-0005 exact
+combination search then ran for about two hours before correctly failing closed (`> 1,000,000` valid partitions),
+and two labelled units disappeared into the merge (7 → 5). Letting low-quality Evidence decide unit *boundaries*
+contradicts the tier's premise — enrich, never create. Revised rule: units are the components of **core** Evidence
+over links among core Evidence — exactly as without the tier; each connected cluster of `LOW` Evidence joins a unit
+only if it touches exactly **one** core unit, and is left out (merging nothing) if it touches several. Also: `LOW`
+Evidence adds no technique to a step's attribution features (sequence engine 1.1 — `support(h)` rests on core
+evidence), and the exact search's candidate-block bound is now enforced while a level grows (a 27-feature level ran
+for hours before the post-level check). Structural method 1.5 → 1.6.
+
+**Revision H2.3 (2026-10-08) — which links a unit carries.** Unit membership is unchanged from H2. Two computations
+exist once enrich Evidence is present — links over the core Evidence alone (enrich Observations as context), and
+links over all Evidence — and a unit's links are now taken as: **between two core members, only from the core
+computation**; **touching an enrich member, only from the full computation**; and no step-level fact (link class +
+Observation pair) stated twice — **except `SHARED_OBSERVATION`**, whose every pair on one Observation states the same
+fact and each of which is needed to collapse the enrich Evidence into that Observation's step. Found on the real
+APT29 recordings: the H2 assembly let the two computations describe one process entity twice (a chain gap the
+sequence engine rightly refused, ADR-0004 C3), and the first repair de-duplicated `SHARED_OBSERVATION` pairs,
+leaving an enrich Evidence as a **second step on the same Observation** — ordered by nothing, so the outcome
+depended on Python's per-process hash seed (day 1 failed under one seed and passed under others). Guards added: the
+sequence engine now refuses two steps on one Observation outright (deterministic failure instead of
+order-dependent output), and the real day-1 inputs replay to **byte-identical sequences under 8 hash seeds**.
+Regression test: `test_enrich_evidence_on_an_observation_with_two_core_evidence_is_one_step`. Structural method
+1.6 → 1.7.

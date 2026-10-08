@@ -260,8 +260,8 @@ def test_real_linux_report_conversion_and_os_scope() -> None:
     assert (
         sysmon["labelled_datasets_with_observations"],
         sysmon["labelled_datasets_with_documented_technique_detected"],
-    ) == (45, 1)
+    ) == (45, 5)  # 1 from Core++ alone; +4 with the enrich tier (ADR-0007 Amendment A)
     assert (
         auditd["labelled_datasets_with_observations"],
         auditd["labelled_datasets_with_documented_technique_detected"],
-    ) == (48, 4)
+    ) == (48, 5)

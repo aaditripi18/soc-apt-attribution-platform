@@ -7,13 +7,13 @@
   "windows_security": 1355
  },
  "suppressed_by_precedence": 0,
- "evidence": 25,
+ "evidence": 56,
  "units": [
   {
-   "group_id": "corr-group::adf4cb21f8e060ad75ce9250a5486fbd93aba387d8bc042323cab6f4f8afdbb8",
+   "group_id": "corr-group::c60df131baf54debc455c3ce57b426de700f82ce8f80a610baf8e1020fb97d9a",
    "anchor_observation_id": "sysmon:PRD01.pandalab.com:sha256:b2b7b973076067d6c18974ef3c95659fcd3dd58e744aac5aa16fb02033b8fa24",
-   "evidence": 14,
-   "observations": 7,
+   "evidence": 15,
+   "observations": 8,
    "hosts": [
     "PRD01.pandalab.com"
    ],
@@ -21,23 +21,27 @@
    "last": "2023-08-18T16:03:11.448000+00:00",
    "process_images": {
     "C:\\Windows\\system32\\cscript.exe": 6,
+    "C:\\Windows\\System32\\conhost.exe": 1,
     "C:\\Windows\\System32\\cscript.exe": 1
    },
    "image_names": [
+    "conhost.exe",
     "cscript.exe"
    ],
    "techniques": [
     "T1059.005",
     "T1112",
+    "T1202",
     "T1615"
    ],
    "rule_families": {
     "sigma:7f4c43f9-b1a5-4c7d-b24a-b41bf3a3ebf2": 12,
-    "sigma:575dce0c-8139-4e30-9295-1ee75969f7fe": 2
+    "sigma:575dce0c-8139-4e30-9295-1ee75969f7fe": 2,
+    "sigma:3037d961-21e9-4732-b27a-637bcc7bf539": 1
    }
   },
   {
-   "group_id": "corr-group::e8cb90f5a8ccc73f55208f821e575350f10b288e6da55d838b0f10abb780a953",
+   "group_id": "corr-group::677d24012e20cb384da2f3bf514b64ca7ddcba051b2038dc109b488503ac0793",
    "anchor_observation_id": "sysmon:PRD01.pandalab.com:sha256:cf57944b5180c3edaadaaea103b360c432135f09dd5a88f8bdd9b3be2b60d8e3",
    "evidence": 4,
    "observations": 2,
@@ -63,7 +67,32 @@
    }
   },
   {
-   "group_id": "corr-group::3129aabfc2c9f637dda9bf79b4ec95a4485c94704cadfe3afa431708133214ea",
+   "group_id": "corr-group::4b27b7b363c4e6759dcfec8d5dcb753110a01408734ab55cf3305fc639117d51",
+   "anchor_observation_id": "sysmon:PRD01.pandalab.com:sha256:2748969f2e83a9f3836322b6e6d6e73faac8309e191e0c9767fe790caf214229",
+   "evidence": 3,
+   "observations": 1,
+   "hosts": [
+    "PRD01.pandalab.com"
+   ],
+   "first": "2023-08-18T15:57:11.107000+00:00",
+   "last": "2023-08-18T15:57:11.107000+00:00",
+   "process_images": {
+    "C:\\Windows\\System32\\whoami.exe": 1
+   },
+   "image_names": [
+    "whoami.exe"
+   ],
+   "techniques": [
+    "T1033",
+    "T1087.001"
+   ],
+   "rule_families": {
+    "sigma:502b42de-4306-40b4-9596-6f590c81f073": 2,
+    "sigma:bd8b828d-0dca-48e1-8a63-8a58ecf2644f": 1
+   }
+  },
+  {
+   "group_id": "corr-group::0cbe8bc481cb7f49edfa01971d32f139ab9b68b4e4f0c88c929505c72d614dde",
    "anchor_observation_id": "sysmon:PRD01.pandalab.com:sha256:3bc42e9eda6bd8eb0818fa1ac85697924803587025701a25be82664ca1e27858",
    "evidence": 2,
    "observations": 2,
@@ -86,7 +115,7 @@
    }
   },
   {
-   "group_id": "corr-group::ea165cefce285d62157ab8129a21851f809da831e51ef474ac3387a7d67bbf78",
+   "group_id": "corr-group::512e00f70015c8b019b0e6a6c927db7374f8515d6299f9eaa8f61ff04556dd90",
    "anchor_observation_id": "sysmon:PRD01.pandalab.com:sha256:cc654e4b9dafebc8846aa18f7ef3a9172b4474b1ab263307d86811c9f7c8a472",
    "evidence": 2,
    "observations": 1,
@@ -110,53 +139,7 @@
    }
   },
   {
-   "group_id": "corr-group::0378a9ea43d03778b14b23d7611674c3475e3146fbf107c98cef77337485e851",
-   "anchor_observation_id": "sysmon:PRD01.pandalab.com:sha256:2748969f2e83a9f3836322b6e6d6e73faac8309e191e0c9767fe790caf214229",
-   "evidence": 1,
-   "observations": 1,
-   "hosts": [
-    "PRD01.pandalab.com"
-   ],
-   "first": "2023-08-18T15:57:11.107000+00:00",
-   "last": "2023-08-18T15:57:11.107000+00:00",
-   "process_images": {
-    "C:\\Windows\\System32\\whoami.exe": 1
-   },
-   "image_names": [
-    "whoami.exe"
-   ],
-   "techniques": [
-    "T1033"
-   ],
-   "rule_families": {
-    "sigma:bd8b828d-0dca-48e1-8a63-8a58ecf2644f": 1
-   }
-  },
-  {
-   "group_id": "corr-group::8199cfa697eefb2f52d44cebe00a6e59d3c0b8459f3bb93bdbad4846039df9af",
-   "anchor_observation_id": "sysmon:PRD01.pandalab.com:sha256:5c1b369d5d5ee067ab4b2895212cb9bfed9335dfb7fa875619a798731d1acec5",
-   "evidence": 1,
-   "observations": 1,
-   "hosts": [
-    "PRD01.pandalab.com"
-   ],
-   "first": "2023-08-18T16:03:12.135000+00:00",
-   "last": "2023-08-18T16:03:12.135000+00:00",
-   "process_images": {
-    "C:\\Windows\\System32\\gpresult.exe": 1
-   },
-   "image_names": [
-    "gpresult.exe"
-   ],
-   "techniques": [
-    "T1615"
-   ],
-   "rule_families": {
-    "sigma:e56d3073-83ff-4021-90fe-c658e0709e72": 1
-   }
-  },
-  {
-   "group_id": "corr-group::998ae5d348fc45afa47e8deaadd9c8616f3ce192e54c9ff6ddb00e59f5bd6492",
+   "group_id": "corr-group::4a2fcc3431bd403af8bc1e4690b0bf9f1c95a637753455f7628f1057fa7a0651",
    "anchor_observation_id": "sysmon:PRD01.pandalab.com:sha256:c4501af3a822305a20b9553d891aaad924de4328ff860c0c7724088f5a4ca814",
    "evidence": 1,
    "observations": 1,
@@ -176,6 +159,29 @@
    ],
    "rule_families": {
     "sigma:b69888d4-380c-45ce-9cf9-d9ce46e67821": 1
+   }
+  },
+  {
+   "group_id": "corr-group::9fa75e560e562661b8220e7eae34539f5a10893bb28007240b8fc557cbfe0924",
+   "anchor_observation_id": "sysmon:PRD01.pandalab.com:sha256:5c1b369d5d5ee067ab4b2895212cb9bfed9335dfb7fa875619a798731d1acec5",
+   "evidence": 1,
+   "observations": 1,
+   "hosts": [
+    "PRD01.pandalab.com"
+   ],
+   "first": "2023-08-18T16:03:12.135000+00:00",
+   "last": "2023-08-18T16:03:12.135000+00:00",
+   "process_images": {
+    "C:\\Windows\\System32\\gpresult.exe": 1
+   },
+   "image_names": [
+    "gpresult.exe"
+   ],
+   "techniques": [
+    "T1615"
+   ],
+   "rule_families": {
+    "sigma:e56d3073-83ff-4021-90fe-c658e0709e72": 1
    }
   }
  ]

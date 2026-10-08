@@ -30,28 +30,28 @@
   {
    "unit_id": "v2-apt29-day2-u00",
    "anchor_scenario_ids": [
-    "powershell:UTICA.dmevals.local:3541"
+    "sysmon:UTICA.dmevals.local:772804"
    ],
-   "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: certutil.exe, control.exe, csc.exe, net.exe, powershell.exe, sdclt.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
+   "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: certutil.exe, conhost.exe, control.exe, csc.exe, net.exe, powershell.exe, sdclt.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
   },
   {
    "unit_id": "v2-apt29-day2-u01",
    "anchor_scenario_ids": [
     "powershell:NEWYORK.dmevals.local:18403"
    ],
-   "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: none recorded); not identifiable as the emulated activity \u2014 excluded, not guessed."
+   "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: wmiprvse.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
   },
   {
    "unit_id": "v2-apt29-day2-u02",
    "anchor_scenario_ids": [
     "powershell:NEWYORK.dmevals.local:19104"
    ],
-   "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: none recorded); not identifiable as the emulated activity \u2014 excluded, not guessed."
+   "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: wmiprvse.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
   },
   {
    "unit_id": "v2-apt29-day2-u03",
    "anchor_scenario_ids": [
-    "sysmon:UTICA.dmevals.local:984177"
+    "windows_security:UTICA.dmevals.local:152181"
    ],
    "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: powershell.exe, wmiprvse.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
   },
@@ -79,9 +79,21 @@
   {
    "unit_id": "v2-apt29-day2-u07",
    "anchor_scenario_ids": [
-    "sysmon:UTICA.dmevals.local:1012651"
+    "sysmon:UTICA.dmevals.local:787306"
    ],
-   "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: msmpeng.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
+   "expected_output_shape": {
+    "outcome": "leading_hypothesis",
+    "authorship_provenance": "Authored from the dataset's documented procedure (mitre-attack/attack-arsenal@201db70f adversary_emulation/APT29/Emulation_Plan/Day 2/README.md), step: m.exe: Steps 14 (Elevation), 16 (Lateral Movement), 19 (Clean Up); NOT ATT&CK-derived and NOT derived from the engine's detections.",
+    "expected_likelihood_band": "AUTHORED-LEADING",
+    "expected_confidence_band": "AUTHORED-HIGH"
+   },
+   "documented_tools": [
+    "m.exe"
+   ],
+   "categories": [
+    "multiple_distinct_observation",
+    "repeated_detection"
+   ]
   },
   {
    "unit_id": "v2-apt29-day2-u08",
@@ -105,21 +117,9 @@
   {
    "unit_id": "v2-apt29-day2-u09",
    "anchor_scenario_ids": [
-    "sysmon:UTICA.dmevals.local:787306"
+    "sysmon:UTICA.dmevals.local:1012651"
    ],
-   "expected_output_shape": {
-    "outcome": "leading_hypothesis",
-    "authorship_provenance": "Authored from the dataset's documented procedure (mitre-attack/attack-arsenal@201db70f adversary_emulation/APT29/Emulation_Plan/Day 2/README.md), step: m.exe: Steps 14 (Elevation), 16 (Lateral Movement), 19 (Clean Up); NOT ATT&CK-derived and NOT derived from the engine's detections.",
-    "expected_likelihood_band": "AUTHORED-LEADING",
-    "expected_confidence_band": "AUTHORED-HIGH"
-   },
-   "documented_tools": [
-    "m.exe"
-   ],
-   "categories": [
-    "multiple_distinct_observation",
-    "repeated_detection"
-   ]
+   "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: msmpeng.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
   },
   {
    "unit_id": "v2-apt29-day2-u10",
@@ -133,14 +133,14 @@
    "anchor_scenario_ids": [
     "sysmon:SCRANTON.dmevals.local:343878"
    ],
-   "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: net.exe, net1.exe, wsmprovhost.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
+   "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: conhost.exe, net.exe, net1.exe, wsmprovhost.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
   },
   {
    "unit_id": "v2-apt29-day2-u12",
    "anchor_scenario_ids": [
-    "sysmon:SCRANTON.dmevals.local:333581"
+    "sysmon:UTICA.dmevals.local:931209"
    ],
-   "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: lsass.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
+   "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: outlook.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
   },
   {
    "unit_id": "v2-apt29-day2-u13",
@@ -152,65 +152,65 @@
   {
    "unit_id": "v2-apt29-day2-u14",
    "anchor_scenario_ids": [
-    "sysmon:UTICA.dmevals.local:944543"
+    "sysmon:SCRANTON.dmevals.local:333581"
    ],
-   "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: rundll32.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
+   "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: lsass.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
   },
   {
    "unit_id": "v2-apt29-day2-u15",
-   "anchor_scenario_ids": [
-    "sysmon:SCRANTON.dmevals.local:294209"
-   ],
-   "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: svchost.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
-  },
-  {
-   "unit_id": "v2-apt29-day2-u16",
-   "anchor_scenario_ids": [
-    "sysmon:UTICA.dmevals.local:944437"
-   ],
-   "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: rundll32.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
-  },
-  {
-   "unit_id": "v2-apt29-day2-u17",
    "anchor_scenario_ids": [
     "sysmon:UTICA.dmevals.local:1000880"
    ],
    "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: rundll32.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
   },
   {
-   "unit_id": "v2-apt29-day2-u18",
-   "anchor_scenario_ids": [
-    "sysmon:UTICA.dmevals.local:932845"
-   ],
-   "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: outlook.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
-  },
-  {
-   "unit_id": "v2-apt29-day2-u19",
+   "unit_id": "v2-apt29-day2-u16",
    "anchor_scenario_ids": [
     "sysmon:UTICA.dmevals.local:884175"
    ],
    "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: svchost.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
   },
   {
-   "unit_id": "v2-apt29-day2-u20",
+   "unit_id": "v2-apt29-day2-u17",
    "anchor_scenario_ids": [
-    "sysmon:UTICA.dmevals.local:958833"
+    "sysmon:UTICA.dmevals.local:944437"
    ],
-   "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: netsh.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
+   "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: rundll32.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
   },
   {
-   "unit_id": "v2-apt29-day2-u21",
+   "unit_id": "v2-apt29-day2-u18",
    "anchor_scenario_ids": [
     "windows_security:NEWYORK.dmevals.local:201065"
    ],
    "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: lsass.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
   },
   {
-   "unit_id": "v2-apt29-day2-u22",
+   "unit_id": "v2-apt29-day2-u19",
+   "anchor_scenario_ids": [
+    "sysmon:UTICA.dmevals.local:958833"
+   ],
+   "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: netsh.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
+  },
+  {
+   "unit_id": "v2-apt29-day2-u20",
+   "anchor_scenario_ids": [
+    "sysmon:SCRANTON.dmevals.local:294209"
+   ],
+   "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: svchost.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
+  },
+  {
+   "unit_id": "v2-apt29-day2-u21",
    "anchor_scenario_ids": [
     "sysmon:NEWYORK.dmevals.local:318662"
    ],
    "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: svchost.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
+  },
+  {
+   "unit_id": "v2-apt29-day2-u22",
+   "anchor_scenario_ids": [
+    "sysmon:UTICA.dmevals.local:944543"
+   ],
+   "exclusion_reason": "No process of this unit runs a tool the documented procedure names (images: rundll32.exe); not identifiable as the emulated activity \u2014 excluded, not guessed."
   }
  ]
 }

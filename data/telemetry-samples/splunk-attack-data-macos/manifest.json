@@ -1,0 +1,85 @@
+{
+  "source": "splunk/attack_data (macOS: osquery Endpoint Security process events)",
+  "license": "Apache-2.0",
+  "license_url": "https://github.com/splunk/attack_data/blob/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/LICENSE",
+  "source_repository": "splunk/attack_data",
+  "source_commit": "a28608b53aa3d8222052e8f3ada59e2d9a4adfff",
+  "retrieved_at_utc": "2026-10-08T12:12:03Z",
+  "method": "scripts/acquire_linux_telemetry.py (commit-pinned; LFS content verified against each pointer's SHA-256 and size)",
+  "approval": "owner standing instruction, 2026-10-08 (ADR-0014; recommended path)",
+  "cache": "data/cache/splunk-attack-data/ (git-ignored; rebuild with this script)",
+  "files": [
+    {
+      "source_path": "datasets/attack_techniques/T1016/atomic_red_team/macos_net_discovery/macos_list_firewall_rules.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1016/atomic_red_team/macos_net_discovery/macos_list_firewall_rules.log",
+      "size_bytes": 8415,
+      "sha256": "2b207c84b6b322daf28e27086831fcc0eb7090d1caa438f64c009fa5745de725",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1016/atomic_red_team/macos_net_discovery/macos_list_firewall_rules.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1016/atomic_red_team/macos_net_discovery/macos_net_discovery.yml",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1016/atomic_red_team/macos_net_discovery/macos_net_discovery.yml",
+      "size_bytes": 593,
+      "sha256": "1a26e8f7e8de539831d8098c34699a6d1d4498d86a524cec5986b0166a2cf955",
+      "lfs": false,
+      "download_url": "https://raw.githubusercontent.com/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1016/atomic_red_team/macos_net_discovery/macos_net_discovery.yml"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1016/atomic_red_team/macos_net_discovery/macos_network_discovery.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1016/atomic_red_team/macos_net_discovery/macos_network_discovery.log",
+      "size_bytes": 5022,
+      "sha256": "b5687df76db37a6faf7a8509e88d0cd1820c23e64fff4d92a580d74bf9c996b0",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1016/atomic_red_team/macos_net_discovery/macos_network_discovery.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1059.004/macos_lolbin/macos_lolbin_old.yml",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1059.004/macos_lolbin/macos_lolbin_old.yml",
+      "size_bytes": 508,
+      "sha256": "9cbfb6a769b7d1395bc8b20e1e906980590f991af0a4e632dc117071f155c885",
+      "lfs": false,
+      "download_url": "https://raw.githubusercontent.com/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1059.004/macos_lolbin/macos_lolbin_old.yml"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1059.004/macos_lolbin/osquery.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1059.004/macos_lolbin/osquery.log",
+      "size_bytes": 17533,
+      "sha256": "d6efc8b61126b78a677a64b16bac217770ee705e57a3fc0bd640b0b5e292b068",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1059.004/macos_lolbin/osquery.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1553.001/atomic_red_team/macos_gatekeeper_bypass_xattr/macos_gatekeeper_bypass_xattr.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1553.001/atomic_red_team/macos_gatekeeper_bypass_xattr/macos_gatekeeper_bypass_xattr.log",
+      "size_bytes": 3352,
+      "sha256": "eed3cd1fcfd35b468a8326f4580800a64f54309121252111cd319d92f4329be7",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1553.001/atomic_red_team/macos_gatekeeper_bypass_xattr/macos_gatekeeper_bypass_xattr.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1553.001/atomic_red_team/macos_gatekeeper_bypass_xattr/macos_gatekeeper_bypass_xattr.yml",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1553.001/atomic_red_team/macos_gatekeeper_bypass_xattr/macos_gatekeeper_bypass_xattr.yml",
+      "size_bytes": 499,
+      "sha256": "54e3c2ebf75bbdfbfe86c4d35f05d4ef3f567f5e3288a9230ca1835f02ca9bcc",
+      "lfs": false,
+      "download_url": "https://raw.githubusercontent.com/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1553.001/atomic_red_team/macos_gatekeeper_bypass_xattr/macos_gatekeeper_bypass_xattr.yml"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1553.001/macos_gatekeeper_bypass_LSFileQuarantineEnabled/macos_gatekeeper_bypass_LSFileQuarantineEnabled.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1553.001/macos_gatekeeper_bypass_LSFileQuarantineEnabled/macos_gatekeeper_bypass_LSFileQuarantineEnabled.log",
+      "size_bytes": 1951,
+      "sha256": "2e2e29b722ab46aed1c4fb5c3c6a570ad298b10ef269d62c1b0c5fcf7d00b828",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1553.001/macos_gatekeeper_bypass_LSFileQuarantineEnabled/macos_gatekeeper_bypass_LSFileQuarantineEnabled.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1553.001/macos_gatekeeper_bypass_LSFileQuarantineEnabled/macos_gatekeeper_bypass_LSFileQuarantineEnabled.yml",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1553.001/macos_gatekeeper_bypass_LSFileQuarantineEnabled/macos_gatekeeper_bypass_LSFileQuarantineEnabled.yml",
+      "size_bytes": 608,
+      "sha256": "5dacf9f5c182b446606c369b6af41f81f61f88d762462a056c6669e14cb8f1e3",
+      "lfs": false,
+      "download_url": "https://raw.githubusercontent.com/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1553.001/macos_gatekeeper_bypass_LSFileQuarantineEnabled/macos_gatekeeper_bypass_LSFileQuarantineEnabled.yml"
+    }
+  ]
+}

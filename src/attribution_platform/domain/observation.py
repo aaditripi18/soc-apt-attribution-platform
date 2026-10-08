@@ -37,17 +37,26 @@ from datetime import datetime
 from attribution_platform.domain.entities import (
     AccountChangeRef,
     AuditRef,
+    AwsCloudTrailRef,
+    AzureActivityRef,
+    CloudRef,
     CredentialReadRef,
     DllRef,
     DnsRef,
+    EntraRef,
     EventMetadata,
     FileRef,
     FileStreamRef,
+    GitHubAuditRef,
     HostRef,
     KerberosRef,
+    KubernetesAuditRef,
     LogonRef,
     NetworkInfo,
+    O365Ref,
     ObjectAccessRef,
+    ObserverRef,
+    OktaRef,
     PipeRef,
     PowerShellRef,
     PrivilegeRef,
@@ -58,9 +67,11 @@ from attribution_platform.domain.entities import (
     ScheduledTaskRef,
     ServiceRef,
     ShareRef,
+    UserAgentRef,
     UserRef,
     WfpFilterRef,
     WmiRef,
+    ZeekRef,
 )
 from attribution_platform.domain.enums import TimePrecision
 from attribution_platform.domain.errors import ensure_aware_datetime, ensure_nonempty_str
@@ -91,10 +102,14 @@ class Observation:
       / ``dns`` / ``file_stream`` / ``pipe`` / ``wmi`` / ``powershell`` /
       ``target_user`` / ``logon`` / ``object_access`` / ``share`` /
       ``service`` / ``kerberos`` / ``scheduled_task`` / ``privilege`` /
-      ``account_change`` / ``credential_read`` / ``wfp_filter`` / ``audit`` — entity
+      ``account_change`` / ``credential_read`` / ``wfp_filter`` / ``audit`` /
+      ``cloud`` / ``user_agent`` / ``entra`` /
+      ``o365`` / ``aws_cloudtrail`` / ``okta`` / ``github`` /
+      ``kubernetes_audit`` / ``azure_activity`` / ``observer`` / ``zeek`` — entity
       groups (added by ADR-0008 Wave 1 for image-load, registry,
       process-access, remote-thread, DNS, stream, pipe, WMI, PowerShell
-      logging and Windows Security log events; ``target_process`` /
+      logging and Windows Security log events; ADR-0010 / 0011 for Linux Audit
+      and cloud records; ``target_process`` /
       ``target_user`` are the process / account *acted upon*, ``process`` /
       ``user`` the actor).
 
@@ -134,6 +149,17 @@ class Observation:
     credential_read: CredentialReadRef | None = None
     wfp_filter: WfpFilterRef | None = None
     audit: AuditRef | None = None
+    cloud: CloudRef | None = None
+    user_agent: UserAgentRef | None = None
+    entra: EntraRef | None = None
+    o365: O365Ref | None = None
+    aws_cloudtrail: AwsCloudTrailRef | None = None
+    okta: OktaRef | None = None
+    github: GitHubAuditRef | None = None
+    kubernetes_audit: KubernetesAuditRef | None = None
+    azure_activity: AzureActivityRef | None = None
+    observer: ObserverRef | None = None
+    zeek: ZeekRef | None = None
     schema_version: str = field(default=OBSERVATION_SCHEMA_VERSION)
 
     def __post_init__(self) -> None:

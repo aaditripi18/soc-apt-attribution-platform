@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Acquire pinned, real telemetry from ``splunk/attack_data`` (ADR-0010 D6, ADR-0011).
 
-``--set linux`` (default) or ``--set cloud`` selects an owner-approved file set,
+``--set linux`` (default), ``--set cloud`` or ``--set macos`` selects an owner-approved file set,
 each with its own ``selection.txt`` and ``manifest.json``.
 
 Runs only when a human invokes it — never at application runtime. The owner
@@ -49,6 +49,11 @@ SETS = {
         "splunk/attack_data (cloud: AWS CloudTrail, Azure / Entra ID, Office 365, Okta, "
         "GitHub, GCP / Google Workspace, Kubernetes)",
         "owner, 2026-10-06 (ADR-0011)",
+    ),
+    "macos": (
+        REPO_ROOT / "data" / "telemetry-samples" / "splunk-attack-data-macos",
+        "splunk/attack_data (macOS: osquery Endpoint Security process events)",
+        "owner standing instruction, 2026-10-08 (ADR-0014; recommended path)",
     ),
 }
 _POINTER = re.compile(

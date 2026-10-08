@@ -503,13 +503,17 @@ def _find_combination_partition(
                     g_of(grown) is not None
                 ):
                     next_level.add(grown)
+                    # The bound is enforced while a level grows, not after it:
+                    # one level can be exponentially large (a unit with 27
+                    # features ran for hours before the post-level check).
+                    if len(co_used) + len(next_level) > _MAX_CANDIDATE_BLOCKS:
+                        raise AttributionError(
+                            f"_find_combination_partition: more than "
+                            f"{_MAX_CANDIDATE_BLOCKS} co-used candidate blocks for {n} "
+                            "features — exceeds the exact search's work bound; failing "
+                            "closed rather than approximating"
+                        )
         co_used |= next_level
-        if len(co_used) > _MAX_CANDIDATE_BLOCKS:
-            raise AttributionError(
-                f"_find_combination_partition: more than {_MAX_CANDIDATE_BLOCKS} co-used "
-                f"candidate blocks for {n} features — exceeds the exact search's work bound; "
-                "failing closed rather than approximating"
-            )
         level = next_level
 
     admissible_by_member: dict[str, list[frozenset[str]]] = {x: [] for x in ordered}

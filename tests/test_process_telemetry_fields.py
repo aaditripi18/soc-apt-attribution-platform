@@ -11,6 +11,7 @@ can only fire with the parent-executable field.
 from __future__ import annotations
 
 import copy
+import dataclasses
 from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
@@ -25,19 +26,28 @@ from attribution_platform.detection_content.sigma_field_map import FIELD_MAPS
 from attribution_platform.domain import (
     AccountChangeRef,
     AuditRef,
+    AwsCloudTrailRef,
+    AzureActivityRef,
+    CloudRef,
     CodeSignature,
     CredentialReadRef,
     DllRef,
     DnsRef,
+    EntraRef,
     EventMetadata,
     FileRef,
     FileStreamRef,
+    GitHubAuditRef,
     KerberosRef,
+    KubernetesAuditRef,
     LogonRef,
     NetworkEndpoint,
     NetworkInfo,
+    O365Ref,
     ObjectAccessRef,
     Observation,
+    ObserverRef,
+    OktaRef,
     PeInfo,
     PipeRef,
     PowerShellRef,
@@ -50,9 +60,11 @@ from attribution_platform.domain import (
     ServiceRef,
     ShareRef,
     SourceRef,
+    UserAgentRef,
     UserRef,
     WfpFilterRef,
     WmiRef,
+    ZeekRef,
 )
 from attribution_platform.replay.detection_fixtures import _process_ref_from_dict
 from attribution_platform.sources.sysmon import SysmonSourceAdapter
@@ -215,7 +227,35 @@ def test_persistence_round_trips_new_fields() -> None:
 # ===========================================================================
 
 
+def _all_text(cls: type[Any]) -> Any:
+    """An entity group with every (text) field set — for groups whose fields are
+    all optional strings (the cloud / network groups, ADR-0011 / 0012)."""
+    return cls(**{f.name: "a" for f in dataclasses.fields(cls)})
+
+
 def _full_observation() -> Observation:
+    return dataclasses.replace(
+        _full_endpoint_observation(),
+        **{
+            name: _all_text(cls)
+            for name, cls in (
+                ("cloud", CloudRef),
+                ("user_agent", UserAgentRef),
+                ("entra", EntraRef),
+                ("o365", O365Ref),
+                ("aws_cloudtrail", AwsCloudTrailRef),
+                ("okta", OktaRef),
+                ("github", GitHubAuditRef),
+                ("kubernetes_audit", KubernetesAuditRef),
+                ("azure_activity", AzureActivityRef),
+                ("observer", ObserverRef),
+                ("zeek", ZeekRef),
+            )
+        },
+    )
+
+
+def _full_endpoint_observation() -> Observation:
     return Observation(
         observation_id="o",
         timestamp=datetime(2026, 1, 1, tzinfo=UTC),

@@ -36,10 +36,17 @@ Gate status:
 - All adapters are pure functions over already-parsed JSON (no live
   collection, no host changes) and must pass ADR-0008's acceptance standard
   (exact mapping, fail-closed, real-sample golden tests, …).
-- **Not yet implemented:** further Security events (batch B: Kerberos,
-  directory service, WFP, services, tasks, account management), System and
-  Defender logs; Linux auditd/journald, network (Zeek/Suricata),
-  cloud/identity — Wave 2 per ADR-0008 D1.
+- **ADR-0008 batch B, ADR-0010 (implemented):** further Security events;
+  Sysmon for Linux (``sysmon_xml``) and Linux Audit (``auditd``).
+- **ADR-0011 (implemented):** cloud and SaaS audit logs — ``entra`` (Entra ID
+  diagnostic export), ``o365`` (Management Activity), ``cloudtrail`` (AWS,
+  native), ``azure_activity`` (Activity Log, REST form), ``okta``,
+  ``github_audit``, ``kubernetes_audit``; ``json_values`` holds their shared
+  exact value readers.
+- **ADR-0012 (implemented):** ``zeek`` — Zeek JSON and TSV logs from a
+  network sensor (``observer``, never a host).
+- **Not yet implemented:** System and Defender logs, journald, Suricata,
+  macOS, Google Workspace / GCP (ADR-0011 D1).
 """
 
 from __future__ import annotations

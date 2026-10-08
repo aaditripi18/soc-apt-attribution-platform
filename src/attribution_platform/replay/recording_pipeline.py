@@ -43,7 +43,24 @@ from attribution_platform.detection import DetectionEngine, derive_evidence_from
 from attribution_platform.domain import Evidence, HostRef, Observation
 from attribution_platform.replay.errors import ReplayError
 from attribution_platform.sources.auditd import AuditdSourceAdapter, is_audit_record
+from attribution_platform.sources.azure_activity import (
+    AzureActivitySourceAdapter,
+    is_azure_activity_record,
+)
+from attribution_platform.sources.cloudtrail import CloudTrailSourceAdapter, is_cloudtrail_record
+from attribution_platform.sources.entra import EntraIdSourceAdapter, is_entra_record
 from attribution_platform.sources.errors import SourceAdapterError
+from attribution_platform.sources.github_audit import (
+    GitHubAuditSourceAdapter,
+    is_github_audit_record,
+)
+from attribution_platform.sources.kubernetes_audit import (
+    KubernetesAuditSourceAdapter,
+    is_kubernetes_audit_record,
+)
+from attribution_platform.sources.o365 import O365SourceAdapter, is_o365_record
+from attribution_platform.sources.okta import OktaSourceAdapter, is_okta_record
+from attribution_platform.sources.osquery_es import OsqueryEsSourceAdapter, is_osquery_es_record
 from attribution_platform.sources.powershell import PowerShellSourceAdapter
 from attribution_platform.sources.precedence import apply_source_precedence
 from attribution_platform.sources.sysmon import SysmonSourceAdapter
@@ -57,12 +74,33 @@ XML_EVENT_CHANNEL = "<sysmon-xml>"
 #: Raw Linux Audit lines (ADR-0010 D4). Their adapter needs the logging host,
 #: which :func:`analyze_recording` takes from the recording's source declaration.
 AUDIT_CHANNEL = "<auditd>"
+#: Cloud records (ADR-0011) carry no event-log channel; they are recognised by
+#: their own schema: Entra ID diagnostic export, Office 365 Management Activity,
+#: native AWS CloudTrail, Azure Activity (REST form), Okta System Log,
+#: GitHub audit log, Kubernetes audit.
+ENTRA_CHANNEL = "<entra-id>"
+O365_CHANNEL = "<o365>"
+CLOUDTRAIL_CHANNEL = "<aws-cloudtrail>"
+AZURE_ACTIVITY_CHANNEL = "<azure-activity>"
+OKTA_CHANNEL = "<okta>"
+GITHUB_CHANNEL = "<github-audit>"
+KUBERNETES_AUDIT_CHANNEL = "<kubernetes-audit>"
+#: macOS Endpoint Security process events from osquery results (ADR-0014).
+OSQUERY_ES_CHANNEL = "<osquery-es>"
 _SYSMON = SysmonSourceAdapter()
 DEFAULT_CHANNEL_ADAPTERS: Mapping[str, Any] = {
     "microsoft-windows-sysmon/operational": _SYSMON,
     "linux-sysmon/operational": _SYSMON,
     XML_EVENT_CHANNEL: _SYSMON,
     AUDIT_CHANNEL: AuditdSourceAdapter(),
+    ENTRA_CHANNEL: EntraIdSourceAdapter(),
+    O365_CHANNEL: O365SourceAdapter(),
+    CLOUDTRAIL_CHANNEL: CloudTrailSourceAdapter(),
+    AZURE_ACTIVITY_CHANNEL: AzureActivitySourceAdapter(),
+    OKTA_CHANNEL: OktaSourceAdapter(),
+    GITHUB_CHANNEL: GitHubAuditSourceAdapter(),
+    KUBERNETES_AUDIT_CHANNEL: KubernetesAuditSourceAdapter(),
+    OSQUERY_ES_CHANNEL: OsqueryEsSourceAdapter(),
     "microsoft-windows-powershell/operational": PowerShellSourceAdapter(),
     "security": WindowsSecuritySourceAdapter(),
 }
@@ -191,6 +229,22 @@ def iter_recording_records(path: Path) -> Iterator[dict[str, Any] | str]:
 def _channel(record: Mapping[str, Any] | str) -> str:
     if isinstance(record, str):
         return AUDIT_CHANNEL if is_audit_record(record) else XML_EVENT_CHANNEL
+    if is_entra_record(record):
+        return ENTRA_CHANNEL
+    if is_o365_record(record):
+        return O365_CHANNEL
+    if is_cloudtrail_record(record):
+        return CLOUDTRAIL_CHANNEL
+    if is_azure_activity_record(record):
+        return AZURE_ACTIVITY_CHANNEL
+    if is_okta_record(record):
+        return OKTA_CHANNEL
+    if is_github_audit_record(record):
+        return GITHUB_CHANNEL
+    if is_kubernetes_audit_record(record):
+        return KUBERNETES_AUDIT_CHANNEL
+    if is_osquery_es_record(record):
+        return OSQUERY_ES_CHANNEL
     winlog = record.get("winlog")
     value = (
         winlog.get("channel")

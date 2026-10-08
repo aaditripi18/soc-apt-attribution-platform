@@ -108,14 +108,14 @@ from attribution_platform.correlation.sequence import (
     compute_step_id,
 )
 from attribution_platform.correlation.timing import MAX_GRANULARITY
-from attribution_platform.domain import Evidence, Observation, TimePrecision
+from attribution_platform.domain import Evidence, EvidenceQuality, Observation, TimePrecision
 
 #: Default ``CorrelationProvenance.method``/``method_version`` this engine
 #: stamps onto the ``BehavioralSequence`` it produces, mirroring G2.1's
 #: ``STRUCTURAL_CORRELATION_METHOD``/G2.2's ``CONTEXTUAL_CORRELATION_METHOD``
 #: convention exactly.
 SEQUENCE_ENGINE_METHOD = "behavioral-sequence-construction"
-SEQUENCE_ENGINE_METHOD_VERSION = "1.0"
+SEQUENCE_ENGINE_METHOD_VERSION = "1.1"  # 1.1: enrich Evidence adds no step technique (Amendment H)
 
 #: The wall-clock granularity each declared ``TimePrecision`` represents,
 #: used only to *truncate* two real timestamps to their common (coarser)
@@ -371,12 +371,16 @@ def _build_steps(
         (observation_id,) = observation_ids
 
         step_evidences = [evidence_by_id[eid] for eid in evidence_ids]
+        # ADR-0003 Amendment H: enrich-tier Evidence (quality LOW) stays on the
+        # step as context (``evidence_ids``) but contributes no technique to the
+        # step's attribution features — support(h) rests on core evidence.
         technique_stix_ids = tuple(
             sorted(
                 {
                     evidence.attack_ref.stix_id
                     for evidence in step_evidences
                     if evidence.attack_ref is not None
+                    and evidence.quality is not EvidenceQuality.LOW
                 }
             )
         )
@@ -395,6 +399,14 @@ def _build_steps(
             )
         )
 
+        if observation_id in observation_id_to_step_id:
+            # Every Evidence on one Observation is one step (ADR-0004 D4); two steps
+            # on one Observation would be ordered by nothing -- fail closed.
+            raise CorrelationError(
+                "construct_behavioral_sequence: Observation "
+                f"{observation_id!r} would form two steps -- its Evidence are not all "
+                "joined by SHARED_OBSERVATION links"
+            )
         step_id = compute_step_id(group.group_id, evidence_ids)
         step = BehavioralStep(
             step_id=step_id,

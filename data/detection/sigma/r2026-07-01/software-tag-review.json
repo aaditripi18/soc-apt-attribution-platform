@@ -251,6 +251,14 @@
    "software": "Windows Credential Editor",
    "decision": "reject",
    "reason": "The rule's branches match the service image names of several different tools (cachedump, dumpsvc, fgexec, gsecdump, mimidrv, pwdump, servpw); not every branch identifies Windows Credential Editor. (Security batch B, 2026-09-30.)"
+  },
+  {
+   "sigma_id": "259e5a6a-b8d2-4c38-86e2-26c5e651361d",
+   "title": "PsExec Service File Creation",
+   "tag": "attack.s0029",
+   "software": "PsExec",
+   "decision": "accept",
+   "reason": "Its single branch matches the creation of \\PSEXESVC.exe, the service binary Sysinternals PsExec writes by default; other remote-execution tools (Impacket, Metasploit, RemCom, CSExec, PAExec) use different names, and a renamed PsExec does not match (a miss, never a misattribution). Enrich tier (ADR-0007 Amendment A), 2026-10-03."
   }
  ]
 }

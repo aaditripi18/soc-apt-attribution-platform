@@ -361,7 +361,7 @@ all covered by Sigma). Coverage: 176 active Groups, 188 of 498 Group-used techni
   detected as T1003.001 without any Mimikatz mapping; both real LSASS dumps (comsvcs, Dumpert) are detected by
   ≥ 4 independent rules each.
 
-## Amendment A (2026-10-01) — Linux detection content: measured options (PROPOSED — owner decision)
+## Amendment A (2026-10-01) — Linux detection content: measured options (ACCEPTED 2026-10-08: option 3, enrich tier)
 
 **Why now.** Linux telemetry is complete and exact (ADR-0010), but detection is the bottleneck: against the
 datasets' own documented ATT&CK labels, Sysmon for Linux detects **1 of 45** labelled datasets and auditd **4 of
@@ -424,3 +424,17 @@ evidence lands where the attack already is (APT29 staging, Empire discovery). So
 never forms a unit on its own. This keeps one consistent content source, adds the measured recall, keeps
 hard-negative units intact, and needs a small, explicit contract (an Evidence content tier) rather than a level
 threshold. Option 2 as first stated is **not** recommended on this evidence.
+
+**Accepted and implemented (2026-10-08) — the enrich tier.** Owner decision: option 3 (enrich, never create).
+The 224 low / informational generic rules are vendored as a separately pinned, blob-verified archive
+(`sigma_enrich_low.zip`, `manifest-sigma_enrich_low.json`); the importer marks their rules
+`evidence_quality: low`, refuses a rule present in both archives, and keeps core-only output byte-identical.
+ADR-0003 Amendment H (with revisions H2 and H2.3) makes the tier's Evidence join units without ever forming,
+merging or splitting one, and adds no attribution feature (sequence engine 1.1). **Final measurement** on all 11
+real Windows recordings with the production pack: unit counts **equal the pre-tier counts** — APT29 day 1 65,
+day 2 23, APT3 CALDERA 57, Empire 65, LSASS runs 4–7 — and APT29 day 1 again has its **7** labelled units; the
+calibration corpus builds 15 cases; the readiness verdict is unchanged (not ready — owner lab recordings). Pack
+1,715 → 1,836 imported rules with the cloud and network content of ADR-0011 / 0012 (enrich tier alone: 297 → 310
+ATT&CK ids). Two engine faults found on the way and fixed with regression tests: an exponential partition search
+on a 27-feature merged unit (bound now checked while a level grows) and hash-seed-dependent sequence output
+(ADR-0003 H2.3).

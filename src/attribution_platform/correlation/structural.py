@@ -129,7 +129,10 @@ from attribution_platform.domain import Evidence, EvidenceQuality, Observation
 STRUCTURAL_CORRELATION_METHOD = "structural-correlation"
 #: 1.1: + PROCESS_INTERACTION; 1.2: resolved pid-only identities (Amendment B)
 #: and chain materialization of equivalence links (Amendment C).
-STRUCTURAL_CORRELATION_METHOD_VERSION = "1.5"  # 1.5: enrich-only Evidence (Amendment H)
+STRUCTURAL_CORRELATION_METHOD_VERSION = (
+    "1.7"  # 1.6: enrich Evidence never changes unit boundaries (H); 1.7: core-core links
+    # only from the core computation (H2 revision 3)
+)
 
 #: The (host-scope, entity-id) key process-entity dimensions are compared
 #: on. ``host_scope`` is itself ``(kind, value)`` where ``kind`` is
@@ -612,6 +615,106 @@ def _connected_components(
     return [frozenset(group) for group in members.values()]
 
 
+def _unit_components(
+    nodes: Sequence[_Node],
+    core_links: Sequence[CorrelationLink],
+    links: Sequence[CorrelationLink],
+) -> list[frozenset[str]]:
+    """ADR-0003 Amendment H2: units are the connected components of the core
+    Evidence (quality not ``LOW``) over ``core_links`` — the links computed from
+    core Evidence alone, exactly what they would be without the enrich tier.
+    Enrich-tier Evidence is then attached: each cluster of it (connected among
+    itself over ``links``) joins a unit only if it touches exactly one core unit;
+    a cluster touching none forms no unit, and one touching several is left out
+    rather than merging them — low-quality Evidence never changes a unit's
+    boundaries."""
+    is_low = {
+        node.evidence.evidence_id: node.evidence.quality is EvidenceQuality.LOW for node in nodes
+    }
+    core_nodes = [node for node in nodes if not is_low[node.evidence.evidence_id]]
+    core_components = _connected_components(
+        core_nodes, sorted(core_links, key=lambda link_: link_.link_id)
+    )
+    unit_of = {eid: i for i, members in enumerate(core_components) for eid in members}
+    low_nodes = [node for node in nodes if is_low[node.evidence.evidence_id]]
+    low_links = [l_ for l_ in links if is_low[l_.anchor_a] and is_low[l_.anchor_b]]
+    low_clusters = _connected_components(low_nodes, low_links)
+    members = [set(component) for component in core_components]
+    cluster_of = {eid: i for i, cluster in enumerate(low_clusters) for eid in cluster}
+    touched: dict[int, set[int]] = {}
+    for l_ in links:  # one pass: which core units each enrich cluster touches
+        for mine, other in ((l_.anchor_a, l_.anchor_b), (l_.anchor_b, l_.anchor_a)):
+            if mine in cluster_of and other in unit_of:
+                touched.setdefault(cluster_of[mine], set()).add(unit_of[other])
+    for index, cluster in enumerate(low_clusters):
+        units = touched.get(index, set())
+        if len(units) == 1:
+            members[next(iter(units))].update(cluster)
+    return [frozenset(m) for m in members]
+
+
+def _structural_links(
+    nodes: Sequence[_Node],
+    context: Sequence[Observation],
+    *,
+    method: str,
+    method_version: str,
+    method_content_hash: str | None,
+) -> dict[str, CorrelationLink]:
+    """Every structural link over ``nodes`` (``context`` read only as proofs and
+    witnesses)."""
+    links: dict[str, CorrelationLink] = {}
+    links.update(
+        _shared_observation_links(
+            nodes,
+            method=method,
+            method_version=method_version,
+            method_content_hash=method_content_hash,
+        )
+    )
+    resolution = resolve_process_identities((*(node.observation for node in nodes), *context))
+    index = _entity_index(nodes, resolution)
+    links.update(
+        _same_process_entity_links(
+            index,
+            method=method,
+            method_version=method_version,
+            method_content_hash=method_content_hash,
+        )
+    )
+    links.update(
+        _process_lineage_links(
+            nodes,
+            index,
+            method=method,
+            method_version=method_version,
+            method_content_hash=method_content_hash,
+        )
+    )
+
+    links.update(
+        _process_interaction_links(
+            nodes,
+            context,
+            index,
+            method=method,
+            method_version=method_version,
+            method_content_hash=method_content_hash,
+        )
+    )
+
+    links.update(
+        _same_audit_event_links(
+            nodes,
+            method=method,
+            method_version=method_version,
+            method_content_hash=method_content_hash,
+        )
+    )
+
+    return links
+
+
 def correlate_structurally(
     items: Sequence[tuple[Evidence, Observation]],
     *,
@@ -659,72 +762,79 @@ def correlate_structurally(
     if not nodes:
         return StructuralCorrelationResult(links=(), groups=())
 
-    all_links: dict[str, CorrelationLink] = {}
-    all_links.update(
-        _shared_observation_links(
-            nodes,
+    links_full = _structural_links(
+        nodes,
+        context,
+        method=method,
+        method_version=method_version,
+        method_content_hash=method_content_hash,
+    )
+    # ADR-0003 Amendment H2: unit boundaries come from the core Evidence alone, with
+    # enrich-tier Observations as plain context — exactly the links the pipeline
+    # would compute without the enrich tier (chains through enrich Evidence would
+    # otherwise route core links via it).
+    core_nodes = [n for n in nodes if n.evidence.quality is not EvidenceQuality.LOW]
+    if len(core_nodes) == len(nodes):
+        links_core = links_full
+    else:
+        core_observation_ids = {n.observation.observation_id for n in core_nodes}
+        enrich_context = {
+            n.observation.observation_id: n.observation
+            for n in nodes
+            if n.observation.observation_id not in core_observation_ids
+        }
+        links_core = _structural_links(
+            core_nodes,
+            (*context, *enrich_context.values()),
             method=method,
             method_version=method_version,
             method_content_hash=method_content_hash,
         )
-    )
-    resolution = resolve_process_identities((*(node.observation for node in nodes), *context))
-    index = _entity_index(nodes, resolution)
-    all_links.update(
-        _same_process_entity_links(
-            index,
-            method=method,
-            method_version=method_version,
-            method_content_hash=method_content_hash,
-        )
-    )
-    all_links.update(
-        _process_lineage_links(
-            nodes,
-            index,
-            method=method,
-            method_version=method_version,
-            method_content_hash=method_content_hash,
-        )
-    )
-
-    all_links.update(
-        _process_interaction_links(
-            nodes,
-            context,
-            index,
-            method=method,
-            method_version=method_version,
-            method_content_hash=method_content_hash,
-        )
-    )
-
-    all_links.update(
-        _same_audit_event_links(
-            nodes,
-            method=method,
-            method_version=method_version,
-            method_content_hash=method_content_hash,
-        )
-    )
+    all_links = {**links_full, **links_core}
 
     sorted_links = tuple(sorted(all_links.values(), key=lambda link_: link_.link_id))
 
     nodes_by_evidence_id = {node.evidence.evidence_id: node for node in nodes}
-    components = _connected_components(nodes, sorted_links)
+    components = _unit_components(nodes, tuple(links_core.values()), sorted_links)
     component_of = {eid: i for i, member_ids in enumerate(components) for eid in member_ids}
+    observation_of = {node.evidence.evidence_id: node.observation.observation_id for node in nodes}
+    low_ids = {n.evidence.evidence_id for n in nodes if n.evidence.quality is EvidenceQuality.LOW}
+
+    def fact(link: CorrelationLink) -> tuple[LinkClass, frozenset[str]]:
+        """A link's step-level fact: its class and the Observation pair it joins."""
+        return link.link_class, frozenset(
+            (observation_of[link.anchor_a], observation_of[link.anchor_b])
+        )
+
+    # A unit's links (Amendment H2, revision 3): between two core members, only the
+    # core computation's links — the full computation can resolve process entities
+    # differently once enrich Observations are nodes, and mixing the two would
+    # describe one entity twice; a link touching an enrich member comes from the
+    # full computation (the only one in which enrich Evidence is a node). No
+    # step-level fact (class + Observation pair) is stated twice: an enrich and a
+    # core Evidence on one Observation would otherwise ground one step edge twice.
     links_by_component: dict[int, list[CorrelationLink]] = {}
-    for link in sorted_links:  # both anchors are always in the same component
-        links_by_component.setdefault(component_of[link.anchor_a], []).append(link)
+    stated: set[tuple[LinkClass, frozenset[str]]] = set()
+    for link in sorted(links_core.values(), key=lambda link_: link_.link_id):
+        a, b = component_of.get(link.anchor_a), component_of.get(link.anchor_b)
+        if a is not None and a == b:  # a link belongs to a unit only when both anchors do
+            links_by_component.setdefault(a, []).append(link)
+            stated.add(fact(link))
+    for link in sorted(links_full.values(), key=lambda link_: link_.link_id):
+        if link.link_id in links_core or not ({link.anchor_a, link.anchor_b} & low_ids):
+            continue
+        a, b = component_of.get(link.anchor_a), component_of.get(link.anchor_b)
+        if a is None or a != b:
+            continue
+        if link.link_class is LinkClass.SHARED_OBSERVATION:
+            # Every pair on one Observation states the same fact; each is needed to
+            # collapse the enrich Evidence into that Observation's step.
+            links_by_component.setdefault(a, []).append(link)
+        elif fact(link) not in stated:
+            links_by_component.setdefault(a, []).append(link)
+            stated.add(fact(link))
     groups: list[CorrelationGroup] = []
     for position, member_ids in enumerate(components):
-        # ADR-0003 Amendment H: enrich-tier Evidence (quality LOW) joins a unit
-        # only through a structural link to other Evidence; a component made
-        # of it alone is not a unit.
-        if all(
-            nodes_by_evidence_id[eid].evidence.quality is EvidenceQuality.LOW for eid in member_ids
-        ):
-            continue
         component_links = tuple(links_by_component.get(position, ()))
         member_observation_ids = tuple(
             sorted({nodes_by_evidence_id[eid].observation.observation_id for eid in member_ids})

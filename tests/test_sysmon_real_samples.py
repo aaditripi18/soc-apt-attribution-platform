@@ -24,7 +24,13 @@ import pytest
 
 from attribution_platform.attack_knowledge.loader import AttackKnowledge, load_attack_knowledge
 from attribution_platform.detection import DetectionEngine, load_rule_pack
-from attribution_platform.domain import CodeSignature, Observation, PeInfo, to_canonical_json
+from attribution_platform.domain import (
+    CodeSignature,
+    EvidenceQuality,
+    Observation,
+    PeInfo,
+    to_canonical_json,
+)
 from attribution_platform.sources.errors import SourceAdapterError
 from attribution_platform.sources.sysmon import SysmonSourceAdapter
 
@@ -337,11 +343,13 @@ def test_production_sigma_pack_detects_the_documented_injection(
     detections = engine.evaluate(observations)
     techniques = {m.attack_ref.external_id for d in detections for m in d.technique_mappings}
     assert {"T1218.013", "T1055.001"} <= techniques
-    # every detection is on the mavinject process creation, nothing else fires
-    fired_on = {d.supporting_observation_ids for d in detections}
-    assert len(fired_on) == 1
+    # every core-tier detection is on the mavinject process creation; anything
+    # else is enrich-tier (ADR-0007 Amendment A) and LOW quality
+    core = [d for d in detections if d.evidence_quality is None]
+    assert len({d.supporting_observation_ids for d in core}) == 1
+    assert all(d.evidence_quality is EvidenceQuality.LOW for d in detections if d.evidence_quality)
     listener, _ = _convert_all(HTTPLISTENER)
-    assert engine.evaluate(listener) == ()
+    assert [d for d in engine.evaluate(listener) if d.evidence_quality is None] == []
 
 
 # ===========================================================================

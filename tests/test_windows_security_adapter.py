@@ -33,7 +33,12 @@ from attribution_platform.detection_content.sigma_field_map import (
     FIELD_MAPS,
     SUPPORTED_EVENT_CODES,
 )
-from attribution_platform.domain import Observation, TimePrecision, to_canonical_json
+from attribution_platform.domain import (
+    EvidenceQuality,
+    Observation,
+    TimePrecision,
+    to_canonical_json,
+)
 from attribution_platform.sources.errors import SourceAdapterError
 from attribution_platform.sources.precedence import apply_source_precedence, observation_kind
 from attribution_platform.sources.sysmon import SysmonSourceAdapter
@@ -410,11 +415,19 @@ def test_detections_on_the_real_security_events(engine: DetectionEngine) -> None
     rather than suppressed (ADR-0007: imported-rule noise is left to the
     diagnosticity / calibration machinery): Password Policy Enumerated (T1201)
     matches 13 SAM-domain handle requests on the DC — 11 by the DC's own
-    machine account (routine), 2 in the user session ``pgustavo``."""
+    machine account (routine), 2 in the user session ``pgustavo``. The enrich
+    tier (ADR-0007 Amendment A) adds one LOW-quality Local Accounts Discovery
+    detection in that same user session."""
     observations = _convert()
     assert len(observations) == 1219
     by_id = {o.observation_id: o for o in observations}
-    detections = engine.evaluate(observations)
+    everything = engine.evaluate(observations)
+    enrich = [d for d in everything if d.evidence_quality is EvidenceQuality.LOW]
+    assert [
+        (d.rule_ref.rule_id.rsplit(":", 1)[0], by_id[d.supporting_observation_ids[0]].user.name)  # type: ignore[union-attr]
+        for d in enrich
+    ] == [("sigma:502b42de-4306-40b4-9596-6f590c81f073", "pgustavo")]
+    detections = [d for d in everything if d.evidence_quality is None]
     assert {d.rule_ref.rule_id.rsplit(":", 1)[0] for d in detections} == {
         "sigma:12ba6a38-adb3-4d6b-91ba-a7fb248e3199"
     }

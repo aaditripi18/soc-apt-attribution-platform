@@ -1,0 +1,2907 @@
+{
+ "report_version": 1,
+ "source_manifest_sha256": "2ce2f153668819910602fa4d66004383b86d977975223f87a6a8eb0403db8de1",
+ "sigma_pack_sha256": "c9fb02b5adc0e7bcea613fccdc0d81f493331174d8db2fe03a7e9189a40cbb9a",
+ "entra_id": {
+  "observations": 579,
+  "os_types": [],
+  "refused_by_reason": {
+   "EntraIdSourceAdapter: category 'MicrosoftGraphActivityLogs' is not supported": 39,
+   "EntraIdSourceAdapter: category 'RiskyUsers' is not supported": 2
+  },
+  "fired_rules": [
+   {
+    "product": "azure",
+    "title": "Change to Authentication Method",
+    "detections": 3
+   },
+   {
+    "product": "azure",
+    "title": "Disabled MFA to Bypass Authentication Mechanisms",
+    "detections": 1
+   },
+   {
+    "product": "azure",
+    "title": "Malicious IP Address Sign-In Failure Rate",
+    "detections": 3
+   },
+   {
+    "product": "azure",
+    "title": "Multifactor Authentication Interrupted",
+    "detections": 5
+   }
+  ],
+  "labelled_datasets_with_observations": 40,
+  "labelled_datasets_with_documented_technique_detected": 6,
+  "datasets": [
+   {
+    "dataset": "attack_techniques/T1078.004/azure_ad_service_principal_authentication",
+    "logs": [
+     "azure_ad_service_principal_authentication.log"
+    ],
+    "observations": 43,
+    "documented_techniques": [
+     "T1078.004"
+    ],
+    "documented_techniques_current": [
+     "T1078.004"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1078.004/azuread",
+    "logs": [
+     "azure-audit.log"
+    ],
+    "observations": 2,
+    "documented_techniques": [
+     "T1078.004"
+    ],
+    "documented_techniques_current": [
+     "T1078.004"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1078.004/azuread_pws",
+    "logs": [
+     "azure-audit.log"
+    ],
+    "observations": 1,
+    "documented_techniques": [
+     "T1078.004"
+    ],
+    "documented_techniques_current": [
+     "T1078.004"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1078/azure_ad_multiple_appids_and_useragents_auth",
+    "logs": [
+     "azure_ad_multiple_appids_and_useragents_auth.log"
+    ],
+    "observations": 8,
+    "documented_techniques": [
+     "T1078"
+    ],
+    "documented_techniques_current": [
+     "T1078"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1087.004/azurehound",
+    "logs": [
+     "azurehound.log"
+    ],
+    "observations": 0,
+    "documented_techniques": [
+     "T1087.004"
+    ],
+    "documented_techniques_current": [
+     "T1087.004"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1098.001/azure_ad_federated_identity_credential",
+    "logs": [
+     "azure-audit.log"
+    ],
+    "observations": 2,
+    "documented_techniques": [
+     "T1098.001"
+    ],
+    "documented_techniques_current": [
+     "T1098.001"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1098.001/azure_ad_service_principal_credentials",
+    "logs": [
+     "azure-audit.log"
+    ],
+    "observations": 1,
+    "documented_techniques": [
+     "T1098.001"
+    ],
+    "documented_techniques_current": [
+     "T1098.001"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1098.003/azure_ad_admin_consent",
+    "logs": [
+     "azure_ad_admin_consent.log"
+    ],
+    "observations": 7,
+    "documented_techniques": [
+     "T1098.003"
+    ],
+    "documented_techniques_current": [
+     "T1098.003"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1098.003/azure_ad_assign_global_administrator",
+    "logs": [
+     "azure-audit.log"
+    ],
+    "observations": 16,
+    "documented_techniques": [
+     "T1098.003"
+    ],
+    "documented_techniques_current": [
+     "T1098.003"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1098.003/azure_ad_assign_privileged_role",
+    "logs": [
+     "azure-audit.log"
+    ],
+    "observations": 1,
+    "documented_techniques": [
+     "T1098.003"
+    ],
+    "documented_techniques_current": [
+     "T1098.003"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1098.003/azure_ad_bypass_admin_consent",
+    "logs": [
+     "azure_ad_bypass_admin_consent.log"
+    ],
+    "observations": 2,
+    "documented_techniques": [
+     "T1098.003"
+    ],
+    "documented_techniques_current": [
+     "T1098.003"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1098.003/azure_ad_pim_role_activated",
+    "logs": [
+     "azure-audit.log"
+    ],
+    "observations": 134,
+    "documented_techniques": [
+     "T1098.003"
+    ],
+    "documented_techniques_current": [
+     "T1098.003"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1098.003/azure_ad_privileged_graph_perm_assigned",
+    "logs": [
+     "azure_ad_privileged_graph_perm_assigned.log"
+    ],
+    "observations": 25,
+    "documented_techniques": [
+     "T1098.003"
+    ],
+    "documented_techniques_current": [
+     "T1098.003"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1098.003/azure_ad_privileged_role_serviceprincipal",
+    "logs": [
+     "azure-audit.log"
+    ],
+    "observations": 67,
+    "documented_techniques": [
+     "T1098.003"
+    ],
+    "documented_techniques_current": [
+     "T1098.003"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1098.003/azure_ad_spn_privesc",
+    "logs": [
+     "azure_ad_spn_privesc.log"
+    ],
+    "observations": 1,
+    "documented_techniques": [
+     "T1098.003"
+    ],
+    "documented_techniques_current": [
+     "T1098.003"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1098.005/azure_ad_register_new_mfa_method",
+    "logs": [
+     "azure_ad_register_new_mfa_method.log"
+    ],
+    "observations": 37,
+    "documented_techniques": [
+     "T1098.005"
+    ],
+    "documented_techniques_current": [
+     "T1098.005"
+    ],
+    "detected_techniques": [
+     "T1098",
+     "T1556"
+    ],
+    "documented_technique_detected": true
+   },
+   {
+    "dataset": "attack_techniques/T1098/azure_ad_add_serviceprincipal_owner",
+    "logs": [
+     "azure-audit.log"
+    ],
+    "observations": 22,
+    "documented_techniques": [
+     "T1098"
+    ],
+    "documented_techniques_current": [
+     "T1098"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1098/azure_ad_enable_and_reset",
+    "logs": [
+     "azure-audit.log"
+    ],
+    "observations": 6,
+    "documented_techniques": [
+     "T1098"
+    ],
+    "documented_techniques_current": [
+     "T1098"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1098/azure_ad_guest_user_type_changed_to_member",
+    "logs": [
+     "azure-audit.log"
+    ],
+    "observations": 2,
+    "documented_techniques": [
+     "T1098"
+    ],
+    "documented_techniques_current": [
+     "T1098"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1098/azure_ad_set_immutableid",
+    "logs": [
+     "azure-audit.log"
+    ],
+    "observations": 1,
+    "documented_techniques": [
+     "T1098"
+    ],
+    "documented_techniques_current": [
+     "T1098"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1110.001/azure_ad_high_number_of_failed_authentications_for_user",
+    "logs": [
+     "azuread.log"
+    ],
+    "observations": 30,
+    "documented_techniques": [
+     "T1110.001"
+    ],
+    "documented_techniques_current": [
+     "T1110.001"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1110.001/azure_ad_successful_authentication_from_different_ips",
+    "logs": [
+     "azuread.log"
+    ],
+    "observations": 11,
+    "documented_techniques": [
+     "T1110.001"
+    ],
+    "documented_techniques_current": [
+     "T1110.001"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1110.003/azure_ad_distributed_spray",
+    "logs": [
+     "azure_ad_distributed_spray.log"
+    ],
+    "observations": 31,
+    "documented_techniques": [
+     "T1110.003"
+    ],
+    "documented_techniques_current": [
+     "T1110.003"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1110.003/azuread_highrisk",
+    "logs": [
+     "azure-audit.log"
+    ],
+    "observations": 3,
+    "documented_techniques": [
+     "T1110.003"
+    ],
+    "documented_techniques_current": [
+     "T1110.003"
+    ],
+    "detected_techniques": [
+     "T1090"
+    ],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1110.003/password_spraying_azuread",
+    "logs": [
+     "azuread_signin.log"
+    ],
+    "observations": 29,
+    "documented_techniques": [
+     "T1110.003"
+    ],
+    "documented_techniques_current": [
+     "T1110.003"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1136.003/azure_ad_add_service_principal",
+    "logs": [
+     "azure-audit.log"
+    ],
+    "observations": 5,
+    "documented_techniques": [
+     "T1136.003"
+    ],
+    "documented_techniques_current": [
+     "T1136.003"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1136.003/azure_ad_external_guest_user_invited",
+    "logs": [
+     "azure-audit.log"
+    ],
+    "observations": 1,
+    "documented_techniques": [
+     "T1136.003"
+    ],
+    "documented_techniques_current": [
+     "T1136.003"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1136.003/azure_ad_multiple_service_principals_created",
+    "logs": [
+     "azure_ad_multiple_service_principals_created.log"
+    ],
+    "observations": 22,
+    "documented_techniques": [
+     "T1136.003"
+    ],
+    "documented_techniques_current": [
+     "T1136.003"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1185/azure_ad_concurrent_sessions_from_different_ips",
+    "logs": [
+     "azuread.log"
+    ],
+    "observations": 22,
+    "documented_techniques": [
+     "T1185"
+    ],
+    "documented_techniques_current": [
+     "T1185"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1484.002/new_federated_domain",
+    "logs": [
+     "azure-audit.log"
+    ],
+    "observations": 2,
+    "documented_techniques": [
+     "T1484.002"
+    ],
+    "documented_techniques_current": [
+     "T1484.002"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1528/azure_ad_user_consent_blocked",
+    "logs": [
+     "azure_ad_user_consent_blocked.log"
+    ],
+    "observations": 3,
+    "documented_techniques": [
+     "T1528"
+    ],
+    "documented_techniques_current": [
+     "T1528"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1528/azure_ad_user_consent_declined",
+    "logs": [
+     "azure_ad_user_consent_declined.log"
+    ],
+    "observations": 7,
+    "documented_techniques": [
+     "T1528"
+    ],
+    "documented_techniques_current": [
+     "T1528"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1528/azure_ad_user_consent_granted",
+    "logs": [
+     "azure_ad_user_consent_granted.log"
+    ],
+    "observations": 7,
+    "documented_techniques": [
+     "T1528"
+    ],
+    "documented_techniques_current": [
+     "T1528"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1528/device_code_authentication",
+    "logs": [
+     "azure-audit.log"
+    ],
+    "observations": 16,
+    "documented_techniques": [
+     "T1528"
+    ],
+    "documented_techniques_current": [
+     "T1528"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1556.006/azure_ad_new_mfa_method_registered_for_user",
+    "logs": [
+     "azuread.log"
+    ],
+    "observations": 2,
+    "documented_techniques": [
+     "T1556.006"
+    ],
+    "documented_techniques_current": [
+     "T1556.006"
+    ],
+    "detected_techniques": [
+     "T1098",
+     "T1556"
+    ],
+    "documented_technique_detected": true
+   },
+   {
+    "dataset": "attack_techniques/T1556.006/azure_ad_temporary_access_pass",
+    "logs": [
+     "azure-audit.log"
+    ],
+    "observations": 1,
+    "documented_techniques": [
+     "T1078.004",
+     "T1556.006"
+    ],
+    "documented_techniques_current": [
+     "T1078.004",
+     "T1556.006"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1556/azuread",
+    "logs": [
+     "azure-audit.log"
+    ],
+    "observations": 1,
+    "documented_techniques": [
+     "T1556"
+    ],
+    "documented_techniques_current": [
+     "T1556"
+    ],
+    "detected_techniques": [
+     "T1556"
+    ],
+    "documented_technique_detected": true
+   },
+   {
+    "dataset": "attack_techniques/T1562/azuread_disable_blockconsent_for_riskapps",
+    "logs": [
+     "azuread_disable_blockconsent_for_riskapps.log"
+    ],
+    "observations": 3,
+    "documented_techniques": [
+     "T1562"
+    ],
+    "documented_techniques_current": [
+     "T1685"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1621/azure_ad_multiple_denied_mfa_requests",
+    "logs": [
+     "azure_ad_multiple_denied_mfa_requests.log"
+    ],
+    "observations": 2,
+    "documented_techniques": [
+     "T1621"
+    ],
+    "documented_techniques_current": [
+     "T1621"
+    ],
+    "detected_techniques": [
+     "T1078.004",
+     "T1110",
+     "T1621"
+    ],
+    "documented_technique_detected": true
+   },
+   {
+    "dataset": "attack_techniques/T1621/azuread",
+    "logs": [
+     "azure-audit.log"
+    ],
+    "observations": 1,
+    "documented_techniques": [
+     "T1621"
+    ],
+    "documented_techniques_current": [
+     "T1621"
+    ],
+    "detected_techniques": [
+     "T1078.004",
+     "T1110",
+     "T1621"
+    ],
+    "documented_technique_detected": true
+   },
+   {
+    "dataset": "attack_techniques/T1621/multiple_failed_mfa_requests",
+    "logs": [
+     "azure-audit.log"
+    ],
+    "observations": 2,
+    "documented_techniques": [
+     "T1621"
+    ],
+    "documented_techniques_current": [
+     "T1621"
+    ],
+    "detected_techniques": [
+     "T1078.004",
+     "T1110",
+     "T1621"
+    ],
+    "documented_technique_detected": true
+   }
+  ]
+ },
+ "o365": {
+  "observations": 1413,
+  "os_types": [],
+  "refused_by_reason": {
+   "O365SourceAdapter: CreationTime='2023-10-10T17:08:65' is invalid": 2
+  },
+  "fired_rules": [
+   {
+    "product": "m365",
+    "title": "Disabling Multi Factor Authentication",
+    "detections": 1
+   },
+   {
+    "product": "m365",
+    "title": "New Federated Domain Added",
+    "detections": 2
+   },
+   {
+    "product": "m365",
+    "title": "Suspicious Email Delivered In Microsoft 365",
+    "detections": 2
+   }
+  ],
+  "labelled_datasets_with_observations": 50,
+  "labelled_datasets_with_documented_technique_detected": 2,
+  "datasets": [
+   {
+    "dataset": "attack_techniques/T1078.004/o365_security_and_compliance_alert_triggered",
+    "logs": [
+     "o365_security_and_compliance_alert_triggered.log"
+    ],
+    "observations": 7,
+    "documented_techniques": [
+     "T1078.004"
+    ],
+    "documented_techniques_current": [
+     "T1078.004"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1078/o365_multiple_appids_and_useragents_auth",
+    "logs": [
+     "o365_multiple_appids_and_useragents_auth.log"
+    ],
+    "observations": 8,
+    "documented_techniques": [
+     "T1078"
+    ],
+    "documented_techniques_current": [
+     "T1078"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1098.001/o365_service_principal_credentials",
+    "logs": [
+     "o365_service_principal_credentials.log"
+    ],
+    "observations": 3,
+    "documented_techniques": [
+     "T1098.001"
+    ],
+    "documented_techniques_current": [
+     "T1098.001"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1098.002/o365_full_access_as_app_permission_assigned",
+    "logs": [
+     "o365_full_access_as_app_permission_assigned.log"
+    ],
+    "observations": 2,
+    "documented_techniques": [
+     "T1098.002"
+    ],
+    "documented_techniques_current": [
+     "T1098.002"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1098.002/o365_mailbox_folder_read_granted",
+    "logs": [
+     "o365_mailbox_folder_read_granted.log"
+    ],
+    "observations": 11,
+    "documented_techniques": [
+     "T1098.002"
+    ],
+    "documented_techniques_current": [
+     "T1098.002"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1098.003/o365_admin_consent",
+    "logs": [
+     "o365_admin_consent.log"
+    ],
+    "observations": 4,
+    "documented_techniques": [
+     "T1098.003"
+    ],
+    "documented_techniques_current": [
+     "T1098.003"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1098.003/o365_bypass_admin_consent",
+    "logs": [
+     "o365_bypass_admin_consent.log"
+    ],
+    "observations": 3,
+    "documented_techniques": [
+     "T1098.003"
+    ],
+    "documented_techniques_current": [
+     "T1098.003"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1098.003/o365_grant_mail_read",
+    "logs": [
+     "o365_grant_mail_read.log"
+    ],
+    "observations": 6,
+    "documented_techniques": [
+     "T1098.003"
+    ],
+    "documented_techniques_current": [
+     "T1098.003"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1098.003/o365_high_priv_role_assigned",
+    "logs": [
+     "o365_high_priv_role_assigned.log"
+    ],
+    "observations": 4,
+    "documented_techniques": [
+     "T1098.003"
+    ],
+    "documented_techniques_current": [
+     "T1098.003"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1098.003/o365_privileged_graph_perm_assigned",
+    "logs": [
+     "o365_privileged_graph_perm_assigned.log"
+    ],
+    "observations": 6,
+    "documented_techniques": [
+     "T1098.003"
+    ],
+    "documented_techniques_current": [
+     "T1098.003"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1098.003/o365_spn_privesc",
+    "logs": [
+     "o365_spn_privesc.log"
+    ],
+    "observations": 1,
+    "documented_techniques": [
+     "T1098.003"
+    ],
+    "documented_techniques_current": [
+     "T1098.003"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1098.005/o365_register_new_mfa_method",
+    "logs": [
+     "o365_register_new_mfa_method.log"
+    ],
+    "observations": 4,
+    "documented_techniques": [
+     "T1098.005"
+    ],
+    "documented_techniques_current": [
+     "T1098.005"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1098/o365_add_app_registration_owner",
+    "logs": [
+     "o365_add_app_registration_owner.log"
+    ],
+    "observations": 1,
+    "documented_techniques": [
+     "T1098"
+    ],
+    "documented_techniques_current": [
+     "T1098"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1098/o365_azure_workload_events",
+    "logs": [
+     "o365_azure_workload_events.log"
+    ],
+    "observations": 11,
+    "documented_techniques": [
+     "T1098"
+    ],
+    "documented_techniques_current": [
+     "T1098"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1110.001/o365_high_number_authentications_for_user",
+    "logs": [
+     "o365_high_number_authentications_for_user.log"
+    ],
+    "observations": 20,
+    "documented_techniques": [
+     "T1110.001"
+    ],
+    "documented_techniques_current": [
+     "T1110.001"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1110.003/o365_distributed_spray",
+    "logs": [
+     "o365_distributed_spray.log"
+    ],
+    "observations": 31,
+    "documented_techniques": [
+     "T1110.003"
+    ],
+    "documented_techniques_current": [
+     "T1110.003"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1110.003/o365_multiple_users_from_ip",
+    "logs": [
+     "o365_multiple_users_from_ip.log"
+    ],
+    "observations": 28,
+    "documented_techniques": [
+     "T1110.003"
+    ],
+    "documented_techniques_current": [
+     "T1110.003"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1110/azure_mfasweep_events",
+    "logs": [
+     "azure_mfasweep_events.log"
+    ],
+    "observations": 8,
+    "documented_techniques": [
+     "T1110"
+    ],
+    "documented_techniques_current": [
+     "T1110"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1110/o365_brute_force_login",
+    "logs": [
+     "o365_brute_force_login.json"
+    ],
+    "observations": 788,
+    "documented_techniques": [
+     "T1110"
+    ],
+    "documented_techniques_current": [
+     "T1110"
+    ],
+    "detected_techniques": [
+     "T1556.006"
+    ],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1114.002/o365_compliance_content_search_exported",
+    "logs": [
+     "o365_compliance_content_search_exported.log"
+    ],
+    "observations": 19,
+    "documented_techniques": [
+     "T1114.002"
+    ],
+    "documented_techniques_current": [
+     "T1114.002"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1114.002/o365_compliance_content_search_started",
+    "logs": [
+     "o365_compliance_content_search_started.log"
+    ],
+    "observations": 7,
+    "documented_techniques": [
+     "T1114.002"
+    ],
+    "documented_techniques_current": [
+     "T1114.002"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1114.002/o365_inbox_shared_with_all_users",
+    "logs": [
+     "o365_inbox_shared_with_all_users.log"
+    ],
+    "observations": 5,
+    "documented_techniques": [
+     "T1114.002"
+    ],
+    "documented_techniques_current": [
+     "T1114.002"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1114.002/o365_multiple_mailboxes_accessed_via_api",
+    "logs": [
+     "o365_multiple_mailboxes_accessed_via_api.log"
+    ],
+    "observations": 6,
+    "documented_techniques": [
+     "T1114.002"
+    ],
+    "documented_techniques_current": [
+     "T1114.002"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1114.002/o365_oauth_app_ews_mailbox_access",
+    "logs": [
+     "o365_oauth_app_ews_mailbox_access.log"
+    ],
+    "observations": 10,
+    "documented_techniques": [
+     "T1114.002"
+    ],
+    "documented_techniques_current": [
+     "T1114.002"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1114.002/o365_oauth_app_graph_mailbox_access",
+    "logs": [
+     "o365_oauth_app_graph_mailbox_access.log"
+    ],
+    "observations": 5,
+    "documented_techniques": [
+     "T1114.002"
+    ],
+    "documented_techniques_current": [
+     "T1114.002"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1114.003/o365_email_forwarding_rule_created",
+    "logs": [
+     "o365_email_forwarding_rule_created.log"
+    ],
+    "observations": 6,
+    "documented_techniques": [
+     "T1114.003"
+    ],
+    "documented_techniques_current": [
+     "T1114.003"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1114.003/o365_mailbox_forwarding_enabled",
+    "logs": [
+     "o365_mailbox_forwarding_enabled.json"
+    ],
+    "observations": 38,
+    "documented_techniques": [
+     "T1114.003"
+    ],
+    "documented_techniques_current": [
+     "T1114.003"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1114/o365_export_pst_file",
+    "logs": [
+     "o365_export_pst_file.json"
+    ],
+    "observations": 788,
+    "documented_techniques": [
+     "T1114"
+    ],
+    "documented_techniques_current": [
+     "T1114"
+    ],
+    "detected_techniques": [
+     "T1556.006"
+    ],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1114/o365_new_forwarding_mailflow_rule_created",
+    "logs": [
+     "o365_new_forwarding_mailflow_rule_created.log"
+    ],
+    "observations": 4,
+    "documented_techniques": [
+     "T1114"
+    ],
+    "documented_techniques_current": [
+     "T1114"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1114/o365_suspect_email_actions",
+    "logs": [
+     "o365_exchange_suspect_events.log"
+    ],
+    "observations": 58,
+    "documented_techniques": [
+     "T1114"
+    ],
+    "documented_techniques_current": [
+     "T1114"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1136.003/o365_add_service_principal",
+    "logs": [
+     "o365_add_service_principal.json"
+    ],
+    "observations": 4,
+    "documented_techniques": [
+     "T1136.003"
+    ],
+    "documented_techniques_current": [
+     "T1136.003"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1136.003/o365_added_service_principal",
+    "logs": [
+     "o365_add_service_principal.log"
+    ],
+    "observations": 14,
+    "documented_techniques": [
+     "T1136.003"
+    ],
+    "documented_techniques_current": [
+     "T1136.003"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1136.003/o365_multiple_service_principals_created",
+    "logs": [
+     "o365_multiple_service_principals_created.log"
+    ],
+    "observations": 22,
+    "documented_techniques": [
+     "T1136.003"
+    ],
+    "documented_techniques_current": [
+     "T1136.003"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1136.003/o365_new_federated_domain",
+    "logs": [
+     "o365_new_federated_domain.json"
+    ],
+    "observations": 1,
+    "documented_techniques": [
+     "T1136.003"
+    ],
+    "documented_techniques_current": [
+     "T1136.003"
+    ],
+    "detected_techniques": [
+     "T1484.002"
+    ],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1136.003/o365_new_federated_domain_added",
+    "logs": [
+     "o365_add_federated_domain.log"
+    ],
+    "observations": 1,
+    "documented_techniques": [
+     "T1136.003"
+    ],
+    "documented_techniques_current": [
+     "T1136.003"
+    ],
+    "detected_techniques": [
+     "T1484.002"
+    ],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1136.003/o365_new_federation",
+    "logs": [
+     "o365_new_federation.json"
+    ],
+    "observations": 7,
+    "documented_techniques": [
+     "T1136.003"
+    ],
+    "documented_techniques_current": [
+     "T1136.003"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1185/o365_concurrent_sessions_from_different_ips",
+    "logs": [
+     "o365_concurrent_sessions_from_different_ips.log"
+    ],
+    "observations": 5,
+    "documented_techniques": [
+     "T1185"
+    ],
+    "documented_techniques_current": [
+     "T1185"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1213.002/o365_sus_sharepoint_search",
+    "logs": [
+     "o365_sus_sharepoint_search.log"
+    ],
+    "observations": 11,
+    "documented_techniques": [
+     "T1213.002"
+    ],
+    "documented_techniques_current": [
+     "T1213.002"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1528/o365_user_consent_blocked",
+    "logs": [
+     "o365_user_consent_blocked.log"
+    ],
+    "observations": 2,
+    "documented_techniques": [
+     "T1528"
+    ],
+    "documented_techniques_current": [
+     "T1528"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1528/o365_user_consent_file_permissions",
+    "logs": [
+     "o365_user_consent_file_permissions.log"
+    ],
+    "observations": 1,
+    "documented_techniques": [
+     "T1528"
+    ],
+    "documented_techniques_current": [
+     "T1528"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1528/o365_user_consent_mail_permissions",
+    "logs": [
+     "o365_user_consent_mail_permissions.log"
+    ],
+    "observations": 1,
+    "documented_techniques": [
+     "T1528"
+    ],
+    "documented_techniques_current": [
+     "T1528"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1556/o365_disable_mfa",
+    "logs": [
+     "o365_disable_mfa.json"
+    ],
+    "observations": 787,
+    "documented_techniques": [
+     "T1556"
+    ],
+    "documented_techniques_current": [
+     "T1556"
+    ],
+    "detected_techniques": [
+     "T1556.006"
+    ],
+    "documented_technique_detected": true
+   },
+   {
+    "dataset": "attack_techniques/T1556/o365_sso_logon_errors",
+    "logs": [
+     "o365_sso_logon_errors.json",
+     "o365_sso_logon_errors2.json"
+    ],
+    "observations": 11,
+    "documented_techniques": [
+     "T1556"
+    ],
+    "documented_techniques_current": [
+     "T1556"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1562.007/o365_bypass_mfa_via_trusted_ip",
+    "logs": [
+     "o365_bypass_mfa_via_trusted_ip.json"
+    ],
+    "observations": 7,
+    "documented_techniques": [
+     "T1562.007"
+    ],
+    "documented_techniques_current": [
+     "T1686.001"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1562.008/o365_advanced_audit_disabled",
+    "logs": [
+     "o365_advanced_audit_disabled.log"
+    ],
+    "observations": 12,
+    "documented_techniques": [
+     "T1562.008"
+    ],
+    "documented_techniques_current": [
+     "T1685.002"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1562/o365_disable_blockconsent_for_riskapps",
+    "logs": [
+     "o365_disable_blockconsent_for_riskapps.log"
+    ],
+    "observations": 3,
+    "documented_techniques": [
+     "T1562"
+    ],
+    "documented_techniques_current": [
+     "T1685"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1564.008/o365",
+    "logs": [
+     "o365_suspicious_mailbox_rule.log"
+    ],
+    "observations": 1,
+    "documented_techniques": [
+     "T1564.008"
+    ],
+    "documented_techniques_current": [
+     "T1564.008"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1566/o365_various_alerts",
+    "logs": [
+     "o365_various_alerts.log"
+    ],
+    "observations": 33,
+    "documented_techniques": [
+     "T1566"
+    ],
+    "documented_techniques_current": [
+     "T1566"
+    ],
+    "detected_techniques": [
+     "T1566.001",
+     "T1566.002"
+    ],
+    "documented_technique_detected": true
+   },
+   {
+    "dataset": "attack_techniques/T1567/o365_sus_file_activity",
+    "logs": [
+     "o365_sus_file_activity.log"
+    ],
+    "observations": 181,
+    "documented_techniques": [
+     "T1567"
+    ],
+    "documented_techniques_current": [
+     "T1567"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1621/o365_multiple_failed_mfa_requests",
+    "logs": [
+     "o365_multiple_failed_mfa_requests.log"
+    ],
+    "observations": 36,
+    "documented_techniques": [
+     "T1621"
+    ],
+    "documented_techniques_current": [
+     "T1621"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   }
+  ]
+ },
+ "aws_cloudtrail": {
+  "observations": 21690,
+  "os_types": [],
+  "refused_by_reason": {},
+  "fired_rules": [
+   {
+    "product": "aws",
+    "title": "AWS CloudTrail Important Change",
+    "detections": 5
+   },
+   {
+    "product": "aws",
+    "title": "AWS ConsoleLogin Failed Authentication",
+    "detections": 8
+   },
+   {
+    "product": "aws",
+    "title": "AWS IAM Backdoor Users Keys",
+    "detections": 54
+   },
+   {
+    "product": "aws",
+    "title": "AWS RDS Master Password Change",
+    "detections": 2
+   },
+   {
+    "product": "aws",
+    "title": "AWS Root Credentials",
+    "detections": 19
+   },
+   {
+    "product": "aws",
+    "title": "AWS Snapshot Backup Exfiltration",
+    "detections": 8
+   },
+   {
+    "product": "aws",
+    "title": "AWS Successful Console Login Without MFA",
+    "detections": 38
+   },
+   {
+    "product": "aws",
+    "title": "Ingress/Egress Security Group Modification",
+    "detections": 28
+   },
+   {
+    "product": "aws",
+    "title": "New Network Route Added",
+    "detections": 3
+   }
+  ],
+  "labelled_datasets_with_observations": 40,
+  "labelled_datasets_with_documented_technique_detected": 9,
+  "datasets": [
+   {
+    "dataset": "attack_techniques/T1021.008/aws_ec2_multiple_ssh_public_keys_uploaded",
+    "logs": [
+     "aws_ec2_multiple_ssh_public_keys_uploaded.json"
+    ],
+    "observations": 12,
+    "documented_techniques": [
+     "T1021.004",
+     "T1021.008"
+    ],
+    "documented_techniques_current": [
+     "T1021.004",
+     "T1021.008"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1078.004/aws_login_sfa",
+    "logs": [
+     "cloudtrail.json"
+    ],
+    "observations": 1,
+    "documented_techniques": [],
+    "documented_techniques_current": [],
+    "detected_techniques": [
+     "T1078.004"
+    ],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1078/aws_create_policy_version",
+    "logs": [
+     "aws_cloudtrail_events.json"
+    ],
+    "observations": 2,
+    "documented_techniques": [
+     "T1078"
+    ],
+    "documented_techniques_current": [
+     "T1078"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1078/aws_createaccesskey",
+    "logs": [
+     "aws_cloudtrail_events.json"
+    ],
+    "observations": 60,
+    "documented_techniques": [
+     "T1078"
+    ],
+    "documented_techniques_current": [
+     "T1078"
+    ],
+    "detected_techniques": [
+     "T1098"
+    ],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1078/aws_createloginprofile",
+    "logs": [
+     "aws_cloudtrail_events.json"
+    ],
+    "observations": 37,
+    "documented_techniques": [
+     "T1078"
+    ],
+    "documented_techniques_current": [
+     "T1078"
+    ],
+    "detected_techniques": [
+     "T1078.004"
+    ],
+    "documented_technique_detected": true
+   },
+   {
+    "dataset": "attack_techniques/T1078/aws_setdefaultpolicyversion",
+    "logs": [
+     "aws_cloudtrail_events.json"
+    ],
+    "observations": 4,
+    "documented_techniques": [
+     "T1078"
+    ],
+    "documented_techniques_current": [
+     "T1078"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1078/aws_updateloginprofile",
+    "logs": [
+     "aws_cloudtrail_events.json"
+    ],
+    "observations": 1,
+    "documented_techniques": [
+     "T1078"
+    ],
+    "documented_techniques_current": [
+     "T1078"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1087.004/aws_invoke_model_access_denied",
+    "logs": [
+     "cloudtrail.json"
+    ],
+    "observations": 1,
+    "documented_techniques": [],
+    "documented_techniques_current": [],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1098/aws_iam_delete_policy",
+    "logs": [
+     "aws_iam_delete_policy.json"
+    ],
+    "observations": 110,
+    "documented_techniques": [
+     "T1098"
+    ],
+    "documented_techniques_current": [
+     "T1098"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1098/aws_iam_failure_group_deletion",
+    "logs": [
+     "aws_iam_failure_group_deletion.json"
+    ],
+    "observations": 50,
+    "documented_techniques": [
+     "T1098"
+    ],
+    "documented_techniques_current": [
+     "T1098"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1098/aws_iam_successful_group_deletion",
+    "logs": [
+     "aws_iam_successful_group_deletion.json"
+    ],
+    "observations": 85,
+    "documented_techniques": [
+     "T1098"
+    ],
+    "documented_techniques_current": [
+     "T1098"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1110.001/aws_login_failure",
+    "logs": [
+     "aws_cloudtrail_events.json"
+    ],
+    "observations": 7,
+    "documented_techniques": [
+     "T1110.001"
+    ],
+    "documented_techniques_current": [
+     "T1110.001"
+    ],
+    "detected_techniques": [
+     "T1110"
+    ],
+    "documented_technique_detected": true
+   },
+   {
+    "dataset": "attack_techniques/T1110.002/aws_rds_password_reset",
+    "logs": [
+     "aws_cloudtrail_events.json"
+    ],
+    "observations": 2,
+    "documented_techniques": [
+     "T1110.002"
+    ],
+    "documented_techniques_current": [
+     "T1110.002"
+    ],
+    "detected_techniques": [
+     "T1020"
+    ],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1110.003/aws_mulitple_failed_console_login",
+    "logs": [
+     "aws_cloudtrail.json"
+    ],
+    "observations": 1,
+    "documented_techniques": [
+     "T1110.003"
+    ],
+    "documented_techniques_current": [
+     "T1110.003"
+    ],
+    "detected_techniques": [
+     "T1110"
+    ],
+    "documented_technique_detected": true
+   },
+   {
+    "dataset": "attack_techniques/T1110.003/aws_multiple_login_fail_per_user",
+    "logs": [
+     "cloudtrail.json"
+    ],
+    "observations": 28,
+    "documented_techniques": [],
+    "documented_techniques_current": [],
+    "detected_techniques": [
+     "T1110"
+    ],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1119/aws_exfil_datasync",
+    "logs": [
+     "cloudtrail.json"
+    ],
+    "observations": 4,
+    "documented_techniques": [],
+    "documented_techniques_current": [],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1185/aws_concurrent_sessions_from_different_ips",
+    "logs": [
+     "cloudtrail.json"
+    ],
+    "observations": 2,
+    "documented_techniques": [
+     "T1185"
+    ],
+    "documented_techniques_current": [
+     "T1185"
+    ],
+    "detected_techniques": [
+     "T1078.004"
+    ],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1201/aws_password_policy",
+    "logs": [
+     "cloudtrail.json"
+    ],
+    "observations": 7,
+    "documented_techniques": [],
+    "documented_techniques_current": [],
+    "detected_techniques": [
+     "T1078.004"
+    ],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1204.003/aws_ecr_container_upload",
+    "logs": [
+     "aws_ecr_container_upload.json"
+    ],
+    "observations": 2,
+    "documented_techniques": [
+     "T1204.003"
+    ],
+    "documented_techniques_current": [
+     "T1204.003"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1204.003/aws_ecr_image_scanning",
+    "logs": [
+     "aws_ecr_scanning_findings_events.json"
+    ],
+    "observations": 1,
+    "documented_techniques": [
+     "T1204.003"
+    ],
+    "documented_techniques_current": [
+     "T1204.003"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1204/aws_updatelambdafunctioncode",
+    "logs": [
+     "aws_cloudtrail_events.json"
+    ],
+    "observations": 2,
+    "documented_techniques": [
+     "T1204"
+    ],
+    "documented_techniques_current": [
+     "T1204"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1485/aws_delete_knowledge_base",
+    "logs": [
+     "cloudtrail.json"
+    ],
+    "observations": 1,
+    "documented_techniques": [],
+    "documented_techniques_current": [],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1485/decommissioned_buckets",
+    "logs": [
+     "cloudtrail.json"
+    ],
+    "observations": 4,
+    "documented_techniques": [
+     "T1485"
+    ],
+    "documented_techniques_current": [
+     "T1485"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1486/aws_kms_key",
+    "logs": [
+     "aws_cloudtrail_events.json"
+    ],
+    "observations": 674,
+    "documented_techniques": [
+     "T1486"
+    ],
+    "documented_techniques_current": [
+     "T1486"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1486/s3_file_encryption",
+    "logs": [
+     "aws_cloudtrail_events.json"
+    ],
+    "observations": 2,
+    "documented_techniques": [
+     "T1486"
+    ],
+    "documented_techniques_current": [
+     "T1486"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1490/aws_bucket_version",
+    "logs": [
+     "cloudtrail.json"
+    ],
+    "observations": 1,
+    "documented_techniques": [
+     "T1490"
+    ],
+    "documented_techniques_current": [
+     "T1490"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1526/aws_security_scanner",
+    "logs": [
+     "aws_security_scanner.json"
+    ],
+    "observations": 1071,
+    "documented_techniques": [
+     "T1526"
+    ],
+    "documented_techniques_current": [
+     "T1526"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1530/aws_cloudwatch_logs_high_volume_retrieval",
+    "logs": [
+     "aws_cloudwatch_logs_high_volume_retrieval.json"
+    ],
+    "observations": 650,
+    "documented_techniques": [
+     "T1530"
+    ],
+    "documented_techniques_current": [
+     "T1530"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1530/aws_exfil_high_no_getobject",
+    "logs": [
+     "cloudtrail.json"
+    ],
+    "observations": 100,
+    "documented_techniques": [],
+    "documented_techniques_current": [],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1530/aws_s3_public_bucket",
+    "logs": [
+     "aws_cloudtrail_events.json"
+    ],
+    "observations": 9,
+    "documented_techniques": [
+     "T1530"
+    ],
+    "documented_techniques_current": [
+     "T1530"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1537/aws_ami_shared_public",
+    "logs": [
+     "aws_cloudtrail_events.json"
+    ],
+    "observations": 2,
+    "documented_techniques": [
+     "T1537"
+    ],
+    "documented_techniques_current": [
+     "T1537"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1537/aws_snapshot_exfil",
+    "logs": [
+     "aws_cloudtrail_events.json"
+    ],
+    "observations": 9,
+    "documented_techniques": [
+     "T1537"
+    ],
+    "documented_techniques_current": [
+     "T1537"
+    ],
+    "detected_techniques": [
+     "T1537"
+    ],
+    "documented_technique_detected": true
+   },
+   {
+    "dataset": "attack_techniques/T1552/aws_getpassworddata",
+    "logs": [
+     "aws_cloudtrail_events.json"
+    ],
+    "observations": 60,
+    "documented_techniques": [
+     "T1552"
+    ],
+    "documented_techniques_current": [
+     "T1552"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1555.006/aws_anomalous_secrets_manager_batch_retrieval",
+    "logs": [
+     "aws_anomalous_secrets_manager_batch_retrieval.json"
+    ],
+    "observations": 1,
+    "documented_techniques": [
+     "T1555.006"
+    ],
+    "documented_techniques_current": [
+     "T1555.006"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1556.006/aws_new_mfa_method_registered_for_user",
+    "logs": [
+     "cloudtrail.json"
+    ],
+    "observations": 2,
+    "documented_techniques": [
+     "T1556.006"
+    ],
+    "documented_techniques_current": [
+     "T1556.006"
+    ],
+    "detected_techniques": [
+     "T1078.004"
+    ],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1562.007/aws_create_acl",
+    "logs": [
+     "aws_cloudtrail_events.json"
+    ],
+    "observations": 13274,
+    "documented_techniques": [
+     "T1562.007"
+    ],
+    "documented_techniques_current": [
+     "T1686.001"
+    ],
+    "detected_techniques": [
+     "T1190",
+     "T1686.001"
+    ],
+    "documented_technique_detected": true
+   },
+   {
+    "dataset": "attack_techniques/T1562.007/aws_delete_acl",
+    "logs": [
+     "aws_cloudtrail_events.json"
+    ],
+    "observations": 13274,
+    "documented_techniques": [
+     "T1562.007"
+    ],
+    "documented_techniques_current": [
+     "T1686.001"
+    ],
+    "detected_techniques": [
+     "T1190",
+     "T1686.001"
+    ],
+    "documented_technique_detected": true
+   },
+   {
+    "dataset": "attack_techniques/T1562.008/aws_bedrock_delete_guardrails",
+    "logs": [
+     "cloudtrail.json"
+    ],
+    "observations": 1,
+    "documented_techniques": [],
+    "documented_techniques_current": [],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1562.008/aws_bedrock_delete_model_invocation_logging",
+    "logs": [
+     "cloudtrail.json"
+    ],
+    "observations": 1,
+    "documented_techniques": [],
+    "documented_techniques_current": [],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1562.008/aws_delete_security_services",
+    "logs": [
+     "aws_cloudtrail_events.json"
+    ],
+    "observations": 8,
+    "documented_techniques": [
+     "T1562.008"
+    ],
+    "documented_techniques_current": [
+     "T1685.002"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1562.008/delete_cloudwatch_log_group",
+    "logs": [
+     "aws_cloudtrail_events.json"
+    ],
+    "observations": 4,
+    "documented_techniques": [
+     "T1562.008"
+    ],
+    "documented_techniques_current": [
+     "T1685.002"
+    ],
+    "detected_techniques": [
+     "T1685.002"
+    ],
+    "documented_technique_detected": true
+   },
+   {
+    "dataset": "attack_techniques/T1562.008/put_bucketlifecycle",
+    "logs": [
+     "aws_cloudtrail_events.json"
+    ],
+    "observations": 5,
+    "documented_techniques": [
+     "T1562.008"
+    ],
+    "documented_techniques_current": [
+     "T1685.002"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1562.008/stop_delete_cloudtrail",
+    "logs": [
+     "aws_cloudtrail_events.json"
+    ],
+    "observations": 3,
+    "documented_techniques": [
+     "T1562.008"
+    ],
+    "documented_techniques_current": [
+     "T1685.002"
+    ],
+    "detected_techniques": [
+     "T1685.002"
+    ],
+    "documented_technique_detected": true
+   },
+   {
+    "dataset": "attack_techniques/T1562.008/update_cloudtrail",
+    "logs": [
+     "aws_cloudtrail_events.json"
+    ],
+    "observations": 7,
+    "documented_techniques": [
+     "T1562.008"
+    ],
+    "documented_techniques_current": [
+     "T1685.002"
+    ],
+    "detected_techniques": [
+     "T1685.002"
+    ],
+    "documented_technique_detected": true
+   },
+   {
+    "dataset": "attack_techniques/T1578.005/aws_authorize_security_group",
+    "logs": [
+     "aws_authorize_security_group.json"
+    ],
+    "observations": 10,
+    "documented_techniques": [
+     "T1578.005"
+    ],
+    "documented_techniques_current": [
+     "T1578.005"
+    ],
+    "detected_techniques": [
+     "T1190"
+    ],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1580/aws_bedrock_list_foundation_model_failures",
+    "logs": [
+     "cloudtrail.json"
+    ],
+    "observations": 12,
+    "documented_techniques": [],
+    "documented_techniques_current": [],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1580/aws_iam_accessdenied_discovery_events",
+    "logs": [
+     "aws_iam_accessdenied_discovery_events.json"
+    ],
+    "observations": 1150,
+    "documented_techniques": [
+     "T1580"
+    ],
+    "documented_techniques_current": [
+     "T1580"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1580/aws_iam_assume_role_policy_brute_force",
+    "logs": [
+     "aws_iam_assume_role_policy_brute_force.json"
+    ],
+    "observations": 2,
+    "documented_techniques": [
+     "T1580"
+    ],
+    "documented_techniques_current": [
+     "T1580"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1580/aws_iam_excessive_list_command_usage",
+    "logs": [
+     "aws_iam_excessive_list_command_usage.json"
+    ],
+    "observations": 4196,
+    "documented_techniques": [
+     "T1580"
+    ],
+    "documented_techniques_current": [
+     "T1580"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1586.003/aws_console_login_multiple_ips",
+    "logs": [
+     "cloudtrail.json"
+    ],
+    "observations": 4,
+    "documented_techniques": [],
+    "documented_techniques_current": [],
+    "detected_techniques": [
+     "T1078.004",
+     "T1110"
+    ],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1621/aws_failed_mfa",
+    "logs": [
+     "cloudtrail.json"
+    ],
+    "observations": 3,
+    "documented_techniques": [],
+    "documented_techniques_current": [],
+    "detected_techniques": [
+     "T1078.004",
+     "T1110"
+    ],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1621/aws_mfa_disabled",
+    "logs": [
+     "cloudtrail.json"
+    ],
+    "observations": 2,
+    "documented_techniques": [
+     "T1621"
+    ],
+    "documented_techniques_current": [
+     "T1621"
+    ],
+    "detected_techniques": [
+     "T1078.004"
+    ],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "suspicious_behaviour/abnormally_high_cloud_instances_launched",
+    "logs": [
+     "cloudtrail_behavioural_detections.json"
+    ],
+    "observations": 7,
+    "documented_techniques": [],
+    "documented_techniques_current": [],
+    "detected_techniques": [
+     "T1078.004",
+     "T1190"
+    ],
+    "documented_technique_detected": false
+   }
+  ]
+ },
+ "azure_activity": {
+  "observations": 17,
+  "os_types": [],
+  "refused_by_reason": {},
+  "fired_rules": [],
+  "labelled_datasets_with_observations": 3,
+  "labelled_datasets_with_documented_technique_detected": 0,
+  "datasets": [
+   {
+    "dataset": "attack_techniques/T1078.004/azure_automation_runbook",
+    "logs": [
+     "azure-activity.log"
+    ],
+    "observations": 6,
+    "documented_techniques": [
+     "T1078.004"
+    ],
+    "documented_techniques_current": [
+     "T1078.004"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1078.004/azure_runbook_webhook",
+    "logs": [
+     "azure-activity.log"
+    ],
+    "observations": 4,
+    "documented_techniques": [
+     "T1078.004"
+    ],
+    "documented_techniques_current": [
+     "T1078.004"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1136.003/azure_automation_account",
+    "logs": [
+     "azure-activity.log"
+    ],
+    "observations": 7,
+    "documented_techniques": [
+     "T1136.003"
+    ],
+    "documented_techniques_current": [
+     "T1136.003"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   }
+  ]
+ },
+ "okta": {
+  "observations": 98,
+  "os_types": [],
+  "refused_by_reason": {},
+  "fired_rules": [
+   {
+    "product": "okta",
+    "title": "Okta Identity Provider Created",
+    "detections": 1
+   },
+   {
+    "product": "okta",
+    "title": "Okta MFA Reset or Deactivated",
+    "detections": 3
+   },
+   {
+    "product": "okta",
+    "title": "Okta Suspicious Activity Reported by End-user",
+    "detections": 1
+   },
+   {
+    "product": "okta",
+    "title": "Okta User Account Locked Out",
+    "detections": 2
+   }
+  ],
+  "labelled_datasets_with_observations": 16,
+  "labelled_datasets_with_documented_technique_detected": 1,
+  "datasets": [
+   {
+    "dataset": "attack_techniques/T1078.004/okta_single_factor_auth",
+    "logs": [
+     "okta_single_factor_auth.log"
+    ],
+    "observations": 5,
+    "documented_techniques": [
+     "T1078.004"
+    ],
+    "documented_techniques_current": [
+     "T1078.004"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1078.004/okta_threatinsight_threat_detected",
+    "logs": [
+     "okta_threatinsight_threat_detected.log"
+    ],
+    "observations": 5,
+    "documented_techniques": [
+     "T1078.004"
+    ],
+    "documented_techniques_current": [
+     "T1078.004"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1078/okta_suspicious_activity_reported_by_user",
+    "logs": [
+     "okta_suspicious_activity_reported_by_user.log"
+    ],
+    "observations": 1,
+    "documented_techniques": [
+     "T1078"
+    ],
+    "documented_techniques_current": [
+     "T1078"
+    ],
+    "detected_techniques": [
+     "T1586.003"
+    ],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1087.004/okta_unauth_access",
+    "logs": [
+     "okta_unauth_access.log"
+    ],
+    "observations": 1,
+    "documented_techniques": [
+     "T1087.004"
+    ],
+    "documented_techniques_current": [
+     "T1087.004"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1098.001/okta_new_api_token_created",
+    "logs": [
+     "okta_new_api_token_created.log"
+    ],
+    "observations": 1,
+    "documented_techniques": [
+     "T1098.001"
+    ],
+    "documented_techniques_current": [
+     "T1098.001"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1098.005/okta_new_device_enrolled",
+    "logs": [
+     "okta_new_device_enrolled.log"
+    ],
+    "observations": 2,
+    "documented_techniques": [
+     "T1098.005"
+    ],
+    "documented_techniques_current": [
+     "T1098.005"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1110.003/okta_multiple_users_from_ip",
+    "logs": [
+     "okta_multiple_users_from_ip.log"
+    ],
+    "observations": 6,
+    "documented_techniques": [
+     "T1110.003"
+    ],
+    "documented_techniques_current": [
+     "T1110.003"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1110/okta_multiple_accounts_lockout",
+    "logs": [
+     "okta_multiple_accounts_lockout.log"
+    ],
+    "observations": 1,
+    "documented_techniques": [
+     "T1110"
+    ],
+    "documented_techniques_current": [
+     "T1110"
+    ],
+    "detected_techniques": [
+     "T1531"
+    ],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1539/okta_web_session_multiple_ip",
+    "logs": [
+     "okta_web_session_multiple_ip.log"
+    ],
+    "observations": 2,
+    "documented_techniques": [
+     "T1539"
+    ],
+    "documented_techniques_current": [
+     "T1539"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1556.006/okta_mfa_method_disabled",
+    "logs": [
+     "okta_mfa_method_disabled.log"
+    ],
+    "observations": 3,
+    "documented_techniques": [
+     "T1556.006"
+    ],
+    "documented_techniques_current": [
+     "T1556.006"
+    ],
+    "detected_techniques": [
+     "T1556.006"
+    ],
+    "documented_technique_detected": true
+   },
+   {
+    "dataset": "attack_techniques/T1556/okta_idp",
+    "logs": [
+     "okta.log"
+    ],
+    "observations": 5,
+    "documented_techniques": [
+     "T1556"
+    ],
+    "documented_techniques_current": [
+     "T1556"
+    ],
+    "detected_techniques": [
+     "T1098.001"
+    ],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1586.003/okta_multiple_city",
+    "logs": [
+     "okta_multiple_city_im2.log"
+    ],
+    "observations": 1,
+    "documented_techniques": [
+     "T1586.003"
+    ],
+    "documented_techniques_current": [
+     "T1586.003"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1621/okta_mfa_login_failed",
+    "logs": [
+     "okta_mfa_login_failed.log"
+    ],
+    "observations": 1,
+    "documented_techniques": [
+     "T1621"
+    ],
+    "documented_techniques_current": [
+     "T1621"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1621/okta_mismatch",
+    "logs": [
+     "okta_mismatch.log"
+    ],
+    "observations": 11,
+    "documented_techniques": [
+     "T1621"
+    ],
+    "documented_techniques_current": [
+     "T1621"
+    ],
+    "detected_techniques": [
+     "T1531"
+    ],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1621/okta_multiple_failed_mfa_pushes",
+    "logs": [
+     "okta_multiple_failed_mfa_pushes.log"
+    ],
+    "observations": 20,
+    "documented_techniques": [
+     "T1621"
+    ],
+    "documented_techniques_current": [
+     "T1621"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1621/okta_multiple_failed_mfa_requests",
+    "logs": [
+     "okta_multiple_failed_mfa_requests.log"
+    ],
+    "observations": 33,
+    "documented_techniques": [
+     "T1621"
+    ],
+    "documented_techniques_current": [
+     "T1621"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   }
+  ]
+ },
+ "github_audit": {
+  "observations": 16,
+  "os_types": [],
+  "refused_by_reason": {},
+  "fired_rules": [
+   {
+    "product": "github",
+    "title": "Github Delete Action Invoked",
+    "detections": 1
+   },
+   {
+    "product": "github",
+    "title": "Github High Risk Configuration Disabled",
+    "detections": 1
+   },
+   {
+    "product": "github",
+    "title": "Outdated Dependency Or Vulnerability Alert Disabled",
+    "detections": 6
+   }
+  ],
+  "labelled_datasets_with_observations": 0,
+  "labelled_datasets_with_documented_technique_detected": 0,
+  "datasets": [
+   {
+    "dataset": "attack_techniques/T1485/github_archived_repository",
+    "logs": [
+     "github.json"
+    ],
+    "observations": 1,
+    "documented_techniques": [],
+    "documented_techniques_current": [],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1485/github_delete_repository",
+    "logs": [
+     "github.json"
+    ],
+    "observations": 1,
+    "documented_techniques": [],
+    "documented_techniques_current": [],
+    "detected_techniques": [
+     "T1213.003"
+    ],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1485/github_remove_organization",
+    "logs": [
+     "github.json"
+    ],
+    "observations": 1,
+    "documented_techniques": [],
+    "documented_techniques_current": [],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1562.001/disable_dependabot",
+    "logs": [
+     "github.json"
+    ],
+    "observations": 6,
+    "documented_techniques": [],
+    "documented_techniques_current": [],
+    "detected_techniques": [
+     "T1195.001"
+    ],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1562.001/github_created_self_hosted_runner",
+    "logs": [
+     "github.json"
+    ],
+    "observations": 1,
+    "documented_techniques": [],
+    "documented_techniques_current": [],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1562.001/github_delete_branch_ruleset",
+    "logs": [
+     "github.json"
+    ],
+    "observations": 1,
+    "documented_techniques": [],
+    "documented_techniques_current": [],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1562.001/github_disable_classic_branch_protection",
+    "logs": [
+     "github.json"
+    ],
+    "observations": 1,
+    "documented_techniques": [],
+    "documented_techniques_current": [],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1562.001/github_disable_ip_allow_list",
+    "logs": [
+     "github.json"
+    ],
+    "observations": 1,
+    "documented_techniques": [],
+    "documented_techniques_current": [],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1562.001/github_disable_two_factor_requirement",
+    "logs": [
+     "github.json"
+    ],
+    "observations": 1,
+    "documented_techniques": [],
+    "documented_techniques_current": [],
+    "detected_techniques": [
+     "T1556"
+    ],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1562.008/github_audit_log_stream_disabled",
+    "logs": [
+     "github.json"
+    ],
+    "observations": 1,
+    "documented_techniques": [],
+    "documented_techniques_current": [],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1562.008/github_audit_log_stream_modified",
+    "logs": [
+     "github.json"
+    ],
+    "observations": 1,
+    "documented_techniques": [],
+    "documented_techniques_current": [],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   }
+  ]
+ },
+ "kubernetes_audit": {
+  "observations": 12,
+  "os_types": [],
+  "refused_by_reason": {},
+  "fired_rules": [],
+  "labelled_datasets_with_observations": 6,
+  "labelled_datasets_with_documented_technique_detected": 0,
+  "datasets": [
+   {
+    "dataset": "attack_techniques/T1046/kubernetes_scanning",
+    "logs": [
+     "kubernetes_scanning.json"
+    ],
+    "observations": 7,
+    "documented_techniques": [
+     "T1046"
+    ],
+    "documented_techniques_current": [
+     "T1046"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1053.007/kubernetes_audit_cron_job_creation",
+    "logs": [
+     "kubernetes_audit_cron_job_creation.json"
+    ],
+    "observations": 1,
+    "documented_techniques": [
+     "T1053.007"
+    ],
+    "documented_techniques_current": [
+     "T1053.007"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1204/kubernetes_audit_daemonset_created",
+    "logs": [
+     "kubernetes_audit_daemonset_created.json"
+    ],
+    "observations": 1,
+    "documented_techniques": [
+     "T1204"
+    ],
+    "documented_techniques_current": [
+     "T1204"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1204/kubernetes_privileged_pod",
+    "logs": [
+     "kubernetes_privileged_pod.json"
+    ],
+    "observations": 1,
+    "documented_techniques": [
+     "T1204"
+    ],
+    "documented_techniques_current": [
+     "T1204"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1204/kubernetes_unauthorized_access",
+    "logs": [
+     "kubernetes_unauthorized_access.json"
+    ],
+    "observations": 1,
+    "documented_techniques": [
+     "T1204"
+    ],
+    "documented_techniques_current": [
+     "T1204"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   },
+   {
+    "dataset": "attack_techniques/T1526/kubernetes_audit_pull_image",
+    "logs": [
+     "kubernetes_audit_pull_image.json"
+    ],
+    "observations": 1,
+    "documented_techniques": [
+     "T1526"
+    ],
+    "documented_techniques_current": [
+     "T1526"
+    ],
+    "detected_techniques": [],
+    "documented_technique_detected": false
+   }
+  ]
+ }
+}

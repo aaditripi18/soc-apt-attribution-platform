@@ -405,6 +405,288 @@ class WfpFilterRef:
 
 
 @dataclass(frozen=True)
+class CloudRef:
+    """ECS ``cloud.*`` for a cloud service event (ADR-0011 D3; all optional).
+
+    ``provider`` is set only where the source states it (Elastic's own value for
+    that source); ``account_id`` is the tenant / organization / account the
+    event belongs to, as logged."""
+
+    provider: str | None = None
+    account_id: str | None = None
+    region: str | None = None
+    service_name: str | None = None
+
+
+@dataclass(frozen=True)
+class UserAgentRef:
+    """ECS ``user_agent.original``: the client's user-agent string, as logged."""
+
+    original: str | None = None
+
+
+@dataclass(frozen=True)
+class EntraRef:
+    """One Microsoft Entra ID record from an Azure Monitor diagnostic export
+    (ADR-0011 D3; all optional). Values are kept exactly as logged; JSON
+    booleans are recorded as ``"true"`` / ``"false"``.
+
+    ``log_category`` is the export's top-level ``category`` (``SignInLogs``,
+    ``AuditLogs``, ``UserRiskEvents``, …); ``audit_category`` is an audit
+    record's own ``properties.category`` (``RoleManagement``, …) — the Log
+    Analytics ``AuditLogs.Category`` column. ``operation_name`` is the top-level
+    ``operationName``; ``result_type`` / ``result_description`` the top-level
+    ``resultType`` / ``resultDescription``; every other field is the record's
+    ``properties`` value of the same name."""
+
+    log_category: str | None = None
+    operation_name: str | None = None
+    record_id: str | None = None
+    correlation_id: str | None = None
+    result_type: str | None = None
+    result_description: str | None = None
+    result: str | None = None
+    audit_category: str | None = None
+    activity_display_name: str | None = None
+    logged_by_service: str | None = None
+    operation_type: str | None = None
+    authentication_requirement: str | None = None
+    conditional_access_status: str | None = None
+    client_app_used: str | None = None
+    app_id: str | None = None
+    app_display_name: str | None = None
+    resource_display_name: str | None = None
+    home_tenant_id: str | None = None
+    resource_tenant_id: str | None = None
+    device_is_compliant: str | None = None
+    risk_state: str | None = None
+    risk_level: str | None = None
+    risk_detail: str | None = None
+    risk_event_type: str | None = None
+
+
+@dataclass(frozen=True)
+class O365Ref:
+    """One Office 365 Management Activity API (unified audit log) record
+    (ADR-0011 D3; all optional), with the common-schema fields and the
+    record-type fields Sigma's ``m365/audit`` rules read, as logged."""
+
+    record_id: str | None = None
+    record_type: str | None = None
+    workload: str | None = None
+    operation: str | None = None
+    result_status: str | None = None
+    user_type: str | None = None
+    object_id: str | None = None
+    application_id: str | None = None
+    directionality: str | None = None
+    delivery_action: str | None = None
+
+
+@dataclass(frozen=True)
+class AwsCloudTrailRef:
+    """One AWS CloudTrail record (ADR-0011 D3, batch B; all optional), as logged.
+
+    The top-level fields keep CloudTrail's own meaning (``source_ip_address`` is
+    ``sourceIPAddress``: an IP address *or* an AWS service name such as
+    ``eks.amazonaws.com`` / ``AWS Internal``). The remaining fields are the
+    nested values Sigma's ``aws/cloudtrail`` rules read, each named after its
+    CloudTrail path (``additionalEventData.MFAUsed`` → ``mfa_used``, …). JSON
+    booleans are recorded as ``"true"`` / ``"false"``."""
+
+    event_id: str | None = None
+    event_source: str | None = None
+    event_name: str | None = None
+    event_type: str | None = None
+    event_category: str | None = None
+    error_code: str | None = None
+    error_message: str | None = None
+    source_ip_address: str | None = None
+    read_only: str | None = None
+    request_id: str | None = None
+    shared_event_id: str | None = None
+    user_identity_type: str | None = None
+    user_identity_arn: str | None = None
+    user_identity_principal_id: str | None = None
+    user_identity_account_id: str | None = None
+    user_identity_access_key_id: str | None = None
+    user_identity_invoked_by: str | None = None
+    mfa_used: str | None = None
+    console_login: str | None = None
+    request_attribute: str | None = None
+    request_enable: str | None = None
+    response_publicly_accessible: str | None = None
+    response_pending_master_user_password: str | None = None
+
+
+@dataclass(frozen=True)
+class OktaRef:
+    """One Okta System Log event (ADR-0011 batch C; all optional), as logged.
+    ``debug_behaviors`` / ``debug_log_only_security_data`` are the strings Okta
+    writes in ``debugContext.debugData``; JSON booleans become ``"true"`` /
+    ``"false"``."""
+
+    uuid: str | None = None
+    event_type: str | None = None
+    legacy_event_type: str | None = None
+    display_message: str | None = None
+    severity: str | None = None
+    outcome_result: str | None = None
+    outcome_reason: str | None = None
+    actor_id: str | None = None
+    actor_type: str | None = None
+    actor_alternate_id: str | None = None
+    actor_display_name: str | None = None
+    transaction_id: str | None = None
+    external_session_id: str | None = None
+    security_is_proxy: str | None = None
+    debug_behaviors: str | None = None
+    debug_log_only_security_data: str | None = None
+
+
+@dataclass(frozen=True)
+class GitHubAuditRef:
+    """One GitHub audit-log event (enterprise / organization audit-log export or
+    stream; ADR-0011 batch C; all optional), as logged."""
+
+    document_id: str | None = None
+    action: str | None = None
+    operation_type: str | None = None
+    actor: str | None = None
+    actor_id: str | None = None
+    actor_is_bot: str | None = None
+    user: str | None = None
+    org: str | None = None
+    org_id: str | None = None
+    business: str | None = None
+    business_id: str | None = None
+    repo: str | None = None
+    visibility: str | None = None
+
+
+@dataclass(frozen=True)
+class KubernetesAuditRef:
+    """One Kubernetes API-server audit event (``audit.k8s.io/v1`` ``Event``;
+    ADR-0011 batch C; all optional), as logged. ``audit_id`` is shared by the
+    events of one request's stages; ``object_*`` are ``objectRef``'s fields."""
+
+    audit_id: str | None = None
+    stage: str | None = None
+    level: str | None = None
+    verb: str | None = None
+    request_uri: str | None = None
+    response_code: str | None = None
+    response_status: str | None = None
+    response_reason: str | None = None
+    object_resource: str | None = None
+    object_subresource: str | None = None
+    object_namespace: str | None = None
+    object_name: str | None = None
+    object_api_group: str | None = None
+    object_api_version: str | None = None
+    authorization_decision: str | None = None
+
+
+@dataclass(frozen=True)
+class AzureActivityRef:
+    """One Azure Activity Log event in the Azure Monitor REST API form (ADR-0011
+    batch C; all optional), as logged. ``operation_name``, ``category``,
+    ``resource_provider``, ``status`` and ``sub_status`` are the ``.value`` of
+    the API's localizable objects (the Log Analytics ``AzureActivity`` columns
+    ``OperationNameValue``, ``CategoryValue``, ``ResourceProviderValue``, …)."""
+
+    event_data_id: str | None = None
+    operation_id: str | None = None
+    correlation_id: str | None = None
+    operation_name: str | None = None
+    category: str | None = None
+    resource_provider: str | None = None
+    resource_id: str | None = None
+    resource_group: str | None = None
+    status: str | None = None
+    sub_status: str | None = None
+    level: str | None = None
+    caller: str | None = None
+    authorization_action: str | None = None
+    subscription_id: str | None = None
+    properties_message: str | None = None
+
+
+@dataclass(frozen=True)
+class ObserverRef:
+    """ECS ``observer.*``: the network sensor that recorded the event (ADR-0012
+    D5; all optional). A sensor sees traffic; it is not the host the traffic
+    came from, so its records carry no ``host``."""
+
+    product: str | None = None
+    hostname: str | None = None
+
+
+@dataclass(frozen=True)
+class ZeekRef:
+    """One Zeek log record (ADR-0012; all optional), in Zeek's own field names
+    and values as logged (``log`` is the Zeek log: ``conn``, ``dns``, …). ``uid``
+    identifies one connection across every log; ``fuid`` one file. Booleans are
+    ``"true"`` / ``"false"``; a Zeek *set* or *vector* is kept only where its
+    elements are listed (``answers``, ``conn_uids``) joined by ``","``, as Zeek's
+    own TSV writer joins them."""
+
+    log: str | None = None
+    uid: str | None = None
+    fuid: str | None = None
+    # conn
+    service: str | None = None
+    conn_state: str | None = None
+    history: str | None = None
+    duration: str | None = None
+    orig_bytes: str | None = None
+    resp_bytes: str | None = None
+    # dns
+    query: str | None = None
+    qtype_name: str | None = None
+    rcode_name: str | None = None
+    z: str | None = None
+    answers: str | None = None
+    # http
+    method: str | None = None
+    http_host: str | None = None
+    uri: str | None = None
+    status_code: str | None = None
+    # ssl
+    server_name: str | None = None
+    ssl_version: str | None = None
+    ssl_subject: str | None = None
+    ssl_issuer: str | None = None
+    ja3: str | None = None
+    ja3s: str | None = None
+    # kerberos
+    request_type: str | None = None
+    krb_client: str | None = None
+    krb_service: str | None = None
+    cipher: str | None = None
+    success: str | None = None
+    # smb_files / smb_mapping
+    smb_action: str | None = None
+    smb_path: str | None = None
+    smb_name: str | None = None
+    share_type: str | None = None
+    # dce_rpc
+    named_pipe: str | None = None
+    endpoint: str | None = None
+    operation: str | None = None
+    # files
+    filename: str | None = None
+    mime_type: str | None = None
+    file_source: str | None = None
+    md5: str | None = None
+    sha1: str | None = None
+    conn_uids: str | None = None
+    # notice
+    note: str | None = None
+    msg: str | None = None
+
+
+@dataclass(frozen=True)
 class ProcessRef:
     """A process and its immediate parent lineage (all optional).
 

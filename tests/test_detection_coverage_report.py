@@ -115,11 +115,12 @@ def test_no_rule_splits_observable_from_unobservable(knowledge: AttackKnowledge)
     for row in rows.values():
         expected = (
             "no_sigma_rule"
-            if row["windows_platform"] and row["has_data_component"]
-            else "not_endpoint_observable"
+            if row["supported_platforms"] and row["has_data_component"]
+            else "not_observable_on_supported_platforms"
         )
         assert row["status"] == expected
-    assert rows["T1583.001"]["status"] == "not_endpoint_observable"  # Acquire Infrastructure
+    # Acquire Infrastructure: PRE — no telemetry platform observes it
+    assert rows["T1583.001"]["status"] == "not_observable_on_supported_platforms"
 
 
 def test_policy_and_mapping_rejections_are_not_gaps(knowledge: AttackKnowledge) -> None:
@@ -128,7 +129,7 @@ def test_policy_and_mapping_rejections_are_not_gaps(knowledge: AttackKnowledge) 
         _row(["T1033"], "no_attack_mapping", {}),
     ]
     report = build_coverage_report(knowledge, [], _import_report(knowledge, rows))
-    assert _status(report, "T1033") in {"no_sigma_rule", "not_endpoint_observable"}
+    assert _status(report, "T1033") in {"no_sigma_rule", "not_observable_on_supported_platforms"}
 
 
 def test_kb_version_mismatch_fails_closed(knowledge: AttackKnowledge) -> None:
@@ -145,7 +146,7 @@ def test_gap_ranking_counts_only_telemetry_gap_techniques(knowledge: AttackKnowl
     report = build_coverage_report(knowledge, [], _import_report(knowledge, rows))
     ranking = {r["blocker"]: r for r in report["gap_ranking"]}
     assert ranking["logsource:windows/ps_script"]["techniques_upper_bound"] == 2
-    assert ranking["logsource:windows/ps_script"]["in_v1_scope"] is True
+    assert ranking["logsource:windows/ps_script"]["supported_product"] is True
     assert ranking["field:ParentImage"]["techniques_upper_bound"] == 1
 
 
@@ -198,7 +199,8 @@ def test_group_used_totals_match_union_of_profiles(report: dict[str, Any]) -> No
 def test_known_anchor_statuses(report: dict[str, Any]) -> None:
     assert _status(report, "T1033") == "covered"  # whoami (Sigma, T3 true positive)
     assert _status(report, "T1003.001") == "covered"  # LSASS Memory
-    assert _status(report, "T1583.001") == "not_endpoint_observable"  # Domains (pre-compromise)
+    # Domains (pre-compromise, PRE platform)
+    assert _status(report, "T1583.001") == "not_observable_on_supported_platforms"
 
 
 def test_committed_report_and_summary_regenerate_byte_identically(
@@ -218,3 +220,27 @@ def test_provenance_pins_every_input(report: dict[str, Any], real_packs: list[Ru
     assert prov["attack_kb_version"] == EXPECTED_ATTACK_KB_VERSION
     assert {p["content_hash"] for p in prov["rule_packs"]} == {p.content_hash for p in real_packs}
     assert prov["sigma_import"]["sigma_archive_sha256"]
+
+
+def test_supported_platforms_follow_the_field_map() -> None:
+    """Every product the field map scopes has an ATT&CK platform mapping, and the
+    supported platforms are exactly theirs — no fixed scope."""
+    from attribution_platform.detection_content.coverage_report import (
+        PRODUCT_PLATFORMS,
+        supported_platforms,
+    )
+    from attribution_platform.detection_content.sigma_field_map import PRODUCT_OS_SCOPES
+
+    assert set(PRODUCT_OS_SCOPES) <= set(PRODUCT_PLATFORMS)
+    platforms = supported_platforms()
+    assert {"Windows", "Linux", "IaaS", "Identity Provider", "SaaS"} <= set(platforms)
+    assert "PRE" not in platforms and "Network Devices" not in platforms
+
+
+def test_a_logsource_of_an_unsupported_product_is_not_a_supported_blocker(
+    knowledge: AttackKnowledge,
+) -> None:
+    rows = [_row(["T1033"], "telemetry_gap", {"logsource:bitbucket/audit": 1})]
+    report = build_coverage_report(knowledge, [], _import_report(knowledge, rows))
+    ranking = {r["blocker"]: r for r in report["gap_ranking"]}
+    assert ranking["logsource:bitbucket/audit"]["supported_product"] is False
