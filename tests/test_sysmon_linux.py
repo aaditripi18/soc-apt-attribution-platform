@@ -28,7 +28,7 @@ from attribution_platform.detection_content.sigma_field_map import (
 from attribution_platform.domain import Observation
 from attribution_platform.replay.recording_pipeline import (
     DEFAULT_CHANNEL_ADAPTERS,
-    _channel,
+    channel_of,
     iter_recording_records,
 )
 from attribution_platform.sources.errors import SourceAdapterError
@@ -131,8 +131,8 @@ def test_reader_reassembles_events_that_span_lines(tmp_path: Path) -> None:
     path.write_text(lines, encoding="utf-8", newline="\n")
     records = list(iter_recording_records(path))
     assert records == [LINUX["linux-sysmon-1-multiline"], LINUX["linux-sysmon-3"]]
-    assert {_channel(r) for r in records} == {"<sysmon-xml>"}
-    assert all(DEFAULT_CHANNEL_ADAPTERS[_channel(r)] is not None for r in records)
+    assert {channel_of(r) for r in records} == {"<sysmon-xml>"}
+    assert all(DEFAULT_CHANNEL_ADAPTERS[channel_of(r)] is not None for r in records)
 
 
 def test_unterminated_event_is_refused_not_cut(tmp_path: Path) -> None:

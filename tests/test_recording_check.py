@@ -120,3 +120,22 @@ def test_missing_sources_and_clock_gaps_are_warnings_not_fixes(tmp_path: Path) -
     assert "no PowerShell/Operational records" in text
     assert "more than 60 s from the collector clock" in text
     assert report.first_event == "2026-01-01T12:00:01+00:00"  # Sysmon's own time
+
+
+def test_non_windows_records_are_routed_like_the_pipeline(tmp_path: Path) -> None:
+    """A raw auditd line is read by the auditd adapter (not counted as broken
+    JSON); without ``node=`` it names no host, so the check warns that the
+    source declaration must state it — and, having no declared host here, the
+    adapter refuses it (fail closed, ADR-0010 D4)."""
+    golden = Path(__file__).resolve().parents[1] / "data" / "telemetry-samples"
+    rows = (golden / "splunk-attack-data" / "golden-records.jsonl").read_text("utf-8")
+    audit = next(json.loads(r)["record"] for r in rows.splitlines() if '"auditd-syscall"' in r)
+    path = tmp_path / "audit.log"
+    path.write_text(audit + "\n", encoding="utf-8")
+    report = check_recording(path)
+    assert report.unparseable_lines == 0
+    assert report.records_by_channel == {"<auditd>": 1}
+    assert any("name no host" in w for w in report.warnings)
+    assert report.problems == (
+        "no record converted to an Observation — unsupported shape or channels",
+    )

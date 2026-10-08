@@ -41,7 +41,7 @@ from attribution_platform.replay.recording_pipeline import (
     KUBERNETES_AUDIT_CHANNEL,
     O365_CHANNEL,
     OKTA_CHANNEL,
-    _channel,
+    channel_of,
 )
 from attribution_platform.sources.adapter import SourceAdapter
 from attribution_platform.sources.azure_activity import AzureActivitySourceAdapter
@@ -344,7 +344,7 @@ def test_impossible_creation_time_is_refused() -> None:
 
 @pytest.mark.parametrize("golden_id", sorted(set(RECORDS) - {"aws-ocsf"}))
 def test_records_route_to_their_adapter(golden_id: str) -> None:
-    channel = _channel(RECORDS[golden_id])
+    channel = channel_of(RECORDS[golden_id])
     assert channel == CHANNELS[golden_id.split("-")[0]]
     assert DEFAULT_CHANNEL_ADAPTERS[channel] is ADAPTERS_IN_PIPELINE[channel]
 
@@ -355,7 +355,7 @@ ADAPTERS_IN_PIPELINE = {c: DEFAULT_CHANNEL_ADAPTERS[c] for c in CHANNELS.values(
 def test_security_lake_ocsf_records_are_not_read() -> None:
     """Amazon Security Lake OCSF is a second schema for the same events (D1):
     no adapter reads it, and the CloudTrail adapter refuses it."""
-    assert _channel(RECORDS["aws-ocsf"]) not in DEFAULT_CHANNEL_ADAPTERS
+    assert channel_of(RECORDS["aws-ocsf"]) not in DEFAULT_CHANNEL_ADAPTERS
     with pytest.raises(SourceAdapterError, match="not a native CloudTrail record"):
         _convert("aws-ocsf")
 

@@ -90,52 +90,89 @@ def _unescape(value: str) -> str:
     return _HEX_ESCAPE.sub(lambda m: chr(int(m[1], 16)), value)
 
 
+class ZeekTsvReader:
+    """Stateful reader of Zeek TSV lines, one line at a time — so a recording
+    reader can interleave Zeek TSV logs with other lines (each log starts with
+    its own ``#separator`` header block, which resets the state; ``#close`` ends
+    it). :meth:`feed` returns the record a data line holds, or ``None`` for a
+    header line."""
+
+    def __init__(self) -> None:
+        self._reset()
+
+    def _reset(self) -> None:
+        self.separator, self.set_separator = "\t", ","
+        self.empty, self.unset = "(empty)", "-"
+        self.path: str | None = None
+        self.fields: list[str] | None = None
+        self.active = False
+
+    @property
+    def open(self) -> bool:
+        """Whether a TSV log is being read: from its ``#separator`` header up to
+        its ``#close`` (or the next log's ``#separator``)."""
+        return self.active
+
+    def feed(self, raw: str) -> dict[str, Any] | None:
+        line = raw.rstrip("\r\n")
+        if not line:
+            return None
+        if line.startswith("#"):
+            if line.startswith("#separator "):
+                self._reset()
+                self.active = True
+                self.separator = _unescape(line.split(" ", 1)[1])
+                return None
+            key, _, value = line[1:].partition(self.separator)
+            if key == "set_separator":
+                self.set_separator = _unescape(value)
+            elif key == "empty_field":
+                self.empty = value
+            elif key == "unset_field":
+                self.unset = value
+            elif key == "path":
+                self.path = value
+            elif key == "fields":
+                self.fields = value.split(self.separator)
+            elif key == "close":
+                self._reset()
+            return None
+        if self.path is None or self.fields is None:
+            raise SourceAdapterError(f"{_ADAPTER}: TSV data before its #path / #fields headers")
+        values = line.split(self.separator)
+        if len(values) != len(self.fields):
+            raise SourceAdapterError(
+                f"{_ADAPTER}: TSV line has {len(values)} columns, "
+                f"#fields declares {len(self.fields)}"
+            )
+        record: dict[str, Any] = {"@stream": self.path, "@proc": "zeek"}
+        for name, value in zip(self.fields, values, strict=True):
+            if value == self.unset:
+                continue
+            if value == self.empty:
+                record[name] = ""
+            elif self.set_separator in value and name in _LIST_FIELDS:
+                record[name] = [_unescape(v) for v in value.split(self.set_separator)]
+            else:
+                record[name] = _unescape(value)
+        return record
+
+
+def is_zeek_tsv_header(line: str) -> bool:
+    """Whether ``line`` opens a Zeek TSV log (its ``#separator`` header)."""
+    return line.startswith("#separator ")
+
+
 def iter_zeek_tsv(lines: Iterable[str]) -> Iterator[dict[str, Any]]:
     """Records of one Zeek TSV log, as ``{field: value}`` with ``@stream`` = the
     ``#path`` header and ``@proc`` = ``zeek``. Unset values are omitted; set /
     vector values become lists. A data line before the headers, or with the
     wrong number of columns, fails closed."""
-    separator, set_separator = "\t", ","
-    empty, unset = "(empty)", "-"
-    path: str | None = None
-    fields: list[str] | None = None
+    reader = ZeekTsvReader()
     for raw in lines:
-        line = raw.rstrip("\r\n")
-        if not line:
-            continue
-        if line.startswith("#"):
-            key, _, value = line[1:].partition(separator if fields is not None else "\t")
-            if line.startswith("#separator "):
-                separator = _unescape(line.split(" ", 1)[1])
-            elif key == "set_separator":
-                set_separator = _unescape(value)
-            elif key == "empty_field":
-                empty = value
-            elif key == "unset_field":
-                unset = value
-            elif key == "path":
-                path = value
-            elif key == "fields":
-                fields = value.split(separator)
-            continue
-        if path is None or fields is None:
-            raise SourceAdapterError(f"{_ADAPTER}: TSV data before its #path / #fields headers")
-        values = line.split(separator)
-        if len(values) != len(fields):
-            raise SourceAdapterError(
-                f"{_ADAPTER}: TSV line has {len(values)} columns, #fields declares {len(fields)}"
-            )
-        record: dict[str, Any] = {"@stream": path, "@proc": "zeek"}
-        for name, value in zip(fields, values, strict=True):
-            if value == unset:
-                continue
-            if value == empty:
-                record[name] = ""
-            elif set_separator in value and name in _LIST_FIELDS:
-                record[name] = [_unescape(v) for v in value.split(set_separator)]
-            else:
-                record[name] = _unescape(value)
-        yield record
+        record = reader.feed(raw)
+        if record is not None:
+            yield record
 
 
 #: Fields whose Zeek type is a set / vector in the logs read here.
@@ -310,6 +347,8 @@ __all__ = [
     "ZEEK_SOURCE_TYPE",
     "ZeekSourceAdapter",
     "is_zeek_record",
+    "ZeekTsvReader",
+    "is_zeek_tsv_header",
     "iter_zeek_lines",
     "iter_zeek_tsv",
 ]

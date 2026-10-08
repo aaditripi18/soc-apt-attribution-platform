@@ -25,7 +25,7 @@ import io
 import json
 import tarfile
 import zipfile
-from collections.abc import Iterator, Mapping
+from collections.abc import Callable, Iterator, Mapping
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any
@@ -66,6 +66,12 @@ from attribution_platform.sources.precedence import apply_source_precedence
 from attribution_platform.sources.sysmon import SysmonSourceAdapter
 from attribution_platform.sources.sysmon_xml import is_sysmon_event_xml
 from attribution_platform.sources.windows_security import WindowsSecuritySourceAdapter
+from attribution_platform.sources.zeek import (
+    ZeekSourceAdapter,
+    ZeekTsvReader,
+    is_zeek_record,
+    is_zeek_tsv_header,
+)
 
 #: Channel (case-folded) -> the adapter that reads it. XML event lines (Sysmon
 #: for Linux, ADR-0010 D1) are routed by :data:`XML_EVENT_CHANNEL`; the Sysmon
@@ -87,6 +93,8 @@ GITHUB_CHANNEL = "<github-audit>"
 KUBERNETES_AUDIT_CHANNEL = "<kubernetes-audit>"
 #: macOS Endpoint Security process events from osquery results (ADR-0014).
 OSQUERY_ES_CHANNEL = "<osquery-es>"
+#: Zeek log records from a network sensor, JSON or TSV (ADR-0012).
+ZEEK_CHANNEL = "<zeek>"
 _SYSMON = SysmonSourceAdapter()
 DEFAULT_CHANNEL_ADAPTERS: Mapping[str, Any] = {
     "microsoft-windows-sysmon/operational": _SYSMON,
@@ -101,6 +109,7 @@ DEFAULT_CHANNEL_ADAPTERS: Mapping[str, Any] = {
     GITHUB_CHANNEL: GitHubAuditSourceAdapter(),
     KUBERNETES_AUDIT_CHANNEL: KubernetesAuditSourceAdapter(),
     OSQUERY_ES_CHANNEL: OsqueryEsSourceAdapter(),
+    ZEEK_CHANNEL: ZeekSourceAdapter(),
     "microsoft-windows-powershell/operational": PowerShellSourceAdapter(),
     "security": WindowsSecuritySourceAdapter(),
 }
@@ -196,7 +205,9 @@ def iter_recording_lines(path: Path) -> Iterator[str]:
             yield line
 
 
-def iter_recording_records(path: Path) -> Iterator[dict[str, Any] | str]:
+def iter_recording_records(
+    path: Path, *, on_unparseable: Callable[[str], None] | None = None
+) -> Iterator[dict[str, Any] | str]:
     """Stream the records of a recording: JSON lines parsed, and Sysmon XML
     events passed through as text for the Sysmon adapter to parse (so a
     malformed one is that adapter's refusal, counted like any other).
@@ -205,9 +216,25 @@ def iter_recording_records(path: Path) -> Iterator[dict[str, Any] | str]:
     command line's own newlines verbatim (seen in the real AcidRain and
     Atomic Red Team captures). An event therefore runs from a line starting
     ``<Event`` to the line ending ``</Event>``, rejoined exactly as written —
-    blank lines and line breaks included — never cut at a line boundary."""
+    blank lines and line breaks included — never cut at a line boundary.
+
+    Zeek TSV logs (a ``#separator`` header block, then tab-separated lines) are
+    read with :class:`~attribution_platform.sources.zeek.ZeekTsvReader`, one
+    record per data line, until the next header block or ``#close``.
+
+    A line that is not a JSON object fails the read (fail closed) unless
+    ``on_unparseable`` is given — then it is reported to that callback and
+    skipped (the intake check counts such lines; ``recording_check.py``)."""
     pending: list[str] = []
+    zeek_tsv = ZeekTsvReader()
     for line in _iter_raw_lines(path):
+        if is_zeek_tsv_header(line) or (zeek_tsv.open and not line.lstrip().startswith("{")):
+            # Zeek TSV (ADR-0012): header blocks and tab-separated data lines.
+            if line.strip():
+                record = zeek_tsv.feed(line)
+                if record is not None:
+                    yield record
+            continue
         if pending:
             pending.append(line)
             if line.rstrip().endswith("</Event>"):
@@ -221,12 +248,25 @@ def iter_recording_records(path: Path) -> Iterator[dict[str, Any] | str]:
             else:
                 pending = [line]
         elif line.strip():
-            yield json.loads(line)
+            if on_unparseable is None:
+                yield json.loads(line)
+                continue
+            try:
+                parsed = json.loads(line)
+            except ValueError:
+                parsed = None
+            if isinstance(parsed, dict):
+                yield parsed
+            else:
+                on_unparseable(line)
     if pending:
         yield "".join(pending).strip()  # unterminated: the adapter refuses it
 
 
-def _channel(record: Mapping[str, Any] | str) -> str:
+def channel_of(record: Mapping[str, Any] | str) -> str:
+    """The channel :data:`DEFAULT_CHANNEL_ADAPTERS` routes ``record`` by: a
+    Windows event-log channel (case-folded), or one of the ``<...>`` source
+    channels for records recognised by their own schema."""
     if isinstance(record, str):
         return AUDIT_CHANNEL if is_audit_record(record) else XML_EVENT_CHANNEL
     if is_entra_record(record):
@@ -245,6 +285,8 @@ def _channel(record: Mapping[str, Any] | str) -> str:
         return KUBERNETES_AUDIT_CHANNEL
     if is_osquery_es_record(record):
         return OSQUERY_ES_CHANNEL
+    if is_zeek_record(record):
+        return ZEEK_CHANNEL
     winlog = record.get("winlog")
     value = (
         winlog.get("channel")
@@ -273,7 +315,7 @@ def analyze_recording(
     observations: dict[str, Observation] = {}
     refused: dict[str, int] = {}
     for record in iter_recording_records(source.path):
-        adapter = adapters.get(_channel(record))
+        adapter = adapters.get(channel_of(record))
         if adapter is None:
             continue
         try:
@@ -335,6 +377,7 @@ __all__ = [
     "RecordingAnalysis",
     "RecordingSource",
     "analyze_recording",
+    "channel_of",
     "iter_recording_lines",
     "iter_recording_records",
     "load_recording_sources",

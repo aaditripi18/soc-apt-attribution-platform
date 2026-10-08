@@ -30,7 +30,7 @@ from attribution_platform.extraction import RuleRef, derive_evidence
 from attribution_platform.replay.recording_pipeline import (
     AUDIT_CHANNEL,
     DEFAULT_CHANNEL_ADAPTERS,
-    _channel,
+    channel_of,
     iter_recording_records,
 )
 from attribution_platform.sources.auditd import AuditdSourceAdapter
@@ -176,7 +176,7 @@ def test_audit_lines_route_to_the_auditd_adapter(tmp_path: Path) -> None:
     path = tmp_path / "audit.log"
     path.write_text(RECORDS["auditd-execve"] + "\n", encoding="utf-8")
     (record,) = list(iter_recording_records(path))
-    assert _channel(record) == AUDIT_CHANNEL
+    assert channel_of(record) == AUDIT_CHANNEL
     assert isinstance(DEFAULT_CHANNEL_ADAPTERS[AUDIT_CHANNEL], AuditdSourceAdapter)
 
 

@@ -443,3 +443,25 @@ and PowerShell after real 4103/4104 samples are found. D1's list is otherwise un
   refusals are explicit and all unsupported event types: PowerShell 4105/4106 (script-block start/stop,
   no content), Security 5156/5158 (WFP, D3 vs Sysmon 3), 4690/4703/5447/4673, Sysmon 5/9/26/28 — Security
   batch B and later Sysmon types.
+
+## Record — final validation across all formats (2026-10-09)
+
+Every adapter passed its own acceptance tests, but an **end-to-end** run (intake check → investigation CLI →
+read model → HTTP API) on real records of each Wave 2 family found three integration gaps, now fixed:
+
+1. **The intake check was Windows-only.** It read hosts and channels from Windows event-log fields, required
+   Sysmon on every host and refused records without a host — so Linux, cloud / SaaS, Zeek and macOS recordings
+   were refused before investigation. It now routes every record exactly as the pipeline does
+   (`recording_pipeline.channel_of`, the same adapters); the Windows per-host requirements apply to Windows
+   event-log records only; host-less auditd lines produce a warning that the declaration must name the host.
+2. **Zeek was not routed by the recording pipeline,** and Zeek TSV logs could not be read from a recording.
+   Zeek records now route to the Zeek adapter, and the recording reader reads Zeek TSV header blocks
+   (`ZeekTsvReader`, shared with the Zeek report) interleaved with other lines.
+3. **Non-Windows hosts had no source declaration,** so the D3 precedence filter (correctly, fail closed)
+   refused their process starts. The intake declaration draft now covers every host, from the source types its
+   own records were read by.
+
+`tests/test_end_to_end_formats.py` pins the result on real records: cloud (9 records, 7 sources) → 10 Evidence in
+7 units served by the API with uncalibrated analyses; Zeek (JSON + TSV) and Linux (Sysmon for Linux) read with no
+detection, as their reports measured; macOS → 12 low-level Evidence and, by design, no unit. Full suite: 2,179
+tests.

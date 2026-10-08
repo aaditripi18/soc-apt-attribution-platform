@@ -32,7 +32,7 @@ from attribution_platform.domain import (
 from attribution_platform.replay.recording_pipeline import (
     DEFAULT_CHANNEL_ADAPTERS,
     OSQUERY_ES_CHANNEL,
-    _channel,
+    channel_of,
 )
 from attribution_platform.sources.errors import SourceAdapterError
 from attribution_platform.sources.osquery_es import OsqueryEsSourceAdapter
@@ -124,7 +124,7 @@ def test_query_name_does_not_matter_but_columns_do() -> None:
 
 @pytest.mark.parametrize("golden_id", sorted(RECORDS))
 def test_records_route_and_round_trip(golden_id: str) -> None:
-    assert _channel(RECORDS[golden_id]) == OSQUERY_ES_CHANNEL
+    assert channel_of(RECORDS[golden_id]) == OSQUERY_ES_CHANNEL
     assert isinstance(DEFAULT_CHANNEL_ADAPTERS[OSQUERY_ES_CHANNEL], OsqueryEsSourceAdapter)
     obs = _convert(RECORDS[golden_id])
     assert _observation_from_document(json.loads(json.dumps(to_serializable(obs)))) == obs
