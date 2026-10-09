@@ -42,7 +42,7 @@ functionality, never hard-code an attribution, explain every conclusion, measure
 flowchart LR
     R[Raw telemetry<br/>recordings / Elasticsearch] --> A[Source adapters<br/>exact, fail-closed]
     A --> O[Observations<br/>ECS-aligned]
-    O --> D[Detection engine<br/>pinned SigmaHQ pack]
+    O --> D[Detection engine<br/>pinned SigmaHQ + Elastic packs]
     D --> E[Evidence<br/>rule + matched values + ATT&CK mapping]
     E --> C[Structural correlation<br/>units]
     C --> S[Behavioral sequences]
@@ -72,12 +72,16 @@ Every dataset is pinned by commit or URL and verified by hash; manifests live be
 ## Coverage (measured, not claimed)
 
 From the generated [coverage report](data/detection/sigma/r2026-07-01/generated/coverage-summary.md),
-against ATT&CK Enterprise v19.2 and SigmaHQ `r2026-07-01`:
+against ATT&CK Enterprise v19.2, SigmaHQ `r2026-07-01` and Elastic `detection-rules` @ `195f15c0`:
 
 - **1,883** Sigma rules imported (plus 75 partial), mapped to **344** ATT&CK ids; every rejected rule is
   listed with its reason (telemetry gap, untranslatable construct, policy).
-- **276 of 498** techniques used by active Groups are covered; **163 of 176** active Groups have at least two
-  covered techniques (the minimum to attribute at all).
+- **251** Elastic prebuilt rules translated exactly (237 whole, 14 partial) for Sysmon telemetry, mapped
+  to 209 ATT&CK ids — **26 not covered by Sigma**
+  ([ADR-0015](docs/architecture/adr/0015-elastic-prebuilt-rules.md)). Every ECS field they read is
+  reproduced from Elastic's own ingest pipeline and checked against Elastic's own pipeline test fixtures.
+- **293 of 498** techniques used by active Groups are covered (276 with Sigma alone); **163 of 176**
+  active Groups have at least two covered techniques (the minimum to attribute at all).
 - Uncovered techniques are classified, not hidden: no Sigma rule exists, a telemetry gap blocks it, or ATT&CK
   lists no platform this system has telemetry for.
 
@@ -147,7 +151,8 @@ ATTRIBUTION_LIVE_ELASTICSEARCH=1 ELASTIC_PASSWORD=<from .env> ELASTICSEARCH_CA_C
 src/attribution_platform/
   sources/            telemetry adapters (Windows, Linux, macOS, cloud / SaaS, Zeek) — exact, fail-closed
   domain/             Observation, Evidence, provenance, ATT&CK references
-  detection/          rule engine; detection_content/: Sigma importer, field map, coverage, detectability
+  detection/          rule engine, derived ECS views; detection_content/: Sigma and Elastic importers,
+                      field maps, coverage, detectability
   correlation/        structural + contextual correlation, behavioral sequences
   attribution/        candidates, ACH matrix, comparative analysis, collection guidance
   intel/              advisory indicators (context only)
@@ -156,7 +161,7 @@ src/attribution_platform/
   dataplane/, api/    Elasticsearch persistence and the read-model HTTP API
   replay/             recording reader, routing, intake check
 data/                 pinned ATT&CK, Sigma, telemetry samples, intel — each with manifest + NOTICE
-docs/architecture/    architecture and 14 ADRs (decisions, measurements, rejected alternatives)
+docs/architecture/    architecture and 15 ADRs (decisions, measurements, rejected alternatives)
 scripts/              acquisition, import, reports, checks — run by a human, never at runtime
 tests/                unit, golden real-record, end-to-end and reproducibility tests
 ```
@@ -167,6 +172,8 @@ Start with [docs/architecture/README.md](docs/architecture/README.md) for the AD
 
 MITRE ATT&CK® data (Enterprise v19.2) is used under the [ATT&CK Terms of
 Use](https://attack.mitre.org/resources/terms-of-use/); ATT&CK is a registered trademark of The MITRE
-Corporation ([NOTICE](data/attack/enterprise/v19.2/NOTICE.md)). Detection content: SigmaHQ (DRL 1.1).
+Corporation ([NOTICE](data/attack/enterprise/v19.2/NOTICE.md)). Detection content: SigmaHQ (DRL 1.1);
+Elastic detection rules, KQL grammar and Sysmon pipeline fixtures (Elastic License 2.0,
+[NOTICE](data/detection/elastic/NOTICE.md)).
 Telemetry: OTRF Security-Datasets (MIT), Splunk `attack_data` (Apache-2.0). Indicators: CISA (public
 domain, TLP:CLEAR). Each data directory carries its own NOTICE.

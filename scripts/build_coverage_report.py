@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 """Generate the full-universe detection coverage report (ADR-0007 D9/D10).
 
-Loads the pinned ATT&CK KB, the production rule pack (Sigma, generated
-against that KB), and the Sigma import report, and writes (next to the generated Sigma pack):
+Loads the pinned ATT&CK KB, the production rule packs (Sigma, and the Elastic
+pack of ADR-0015 when generated) and their import reports, and writes (next to
+the generated Sigma pack):
 
   coverage-report.json   every active technique + every active Group
   coverage-summary.md    a short human-readable view
@@ -28,6 +29,7 @@ from attribution_platform.detection_content.coverage_report import (
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_TAG = "r2026-07-01"
+ELASTIC_COMMIT = "195f15c0bac8"
 
 
 def main() -> int:
@@ -45,8 +47,20 @@ def main() -> int:
     # techniques are all covered by Sigma), so it is not production content.
     knowledge = load_attack_knowledge()
     packs = [load_rule_pack(sigma_pack, knowledge=knowledge)]
+    # ADR-0015: the Elastic pack, when generated, is production content too.
+    elastic_generated = REPO_ROOT / "data" / "detection" / "elastic" / ELASTIC_COMMIT / "generated"
+    elastic_pack = next(elastic_generated.glob("*.rules.json"), None)
+    elastic_report = None
+    if elastic_pack is not None:
+        packs.append(load_rule_pack(elastic_pack, knowledge=knowledge))
+        elastic_report = json.loads(
+            next(elastic_generated.glob("*.import-report.json")).read_text(encoding="utf-8")
+        )
     report = build_coverage_report(
-        knowledge, packs, json.loads(sigma_report.read_text(encoding="utf-8"))
+        knowledge,
+        packs,
+        json.loads(sigma_report.read_text(encoding="utf-8")),
+        elastic_report,
     )
     (generated / "coverage-report.json").write_text(
         json.dumps(report, indent=1, ensure_ascii=False) + "\n", encoding="utf-8", newline="\n"

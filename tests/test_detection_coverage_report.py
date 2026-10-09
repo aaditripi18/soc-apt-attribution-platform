@@ -32,6 +32,9 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 GENERATED = REPO_ROOT / "data" / "detection" / "sigma" / "r2026-07-01" / "generated"
 SIGMA_PACK = GENERATED / "sigma-r2026-07-01-sigma_core++.rules.json"
 SIGMA_REPORT = GENERATED / "sigma-r2026-07-01-sigma_core++.import-report.json"
+ELASTIC_GENERATED = REPO_ROOT / "data" / "detection" / "elastic" / "195f15c0bac8" / "generated"
+ELASTIC_PACK = ELASTIC_GENERATED / "elastic-195f15c0bac8.rules.json"
+ELASTIC_REPORT = ELASTIC_GENERATED / "elastic-195f15c0bac8.import-report.json"
 COVERAGE_JSON = GENERATED / "coverage-report.json"
 COVERAGE_MD = GENERATED / "coverage-summary.md"
 
@@ -44,7 +47,10 @@ def knowledge() -> AttackKnowledge:
 @pytest.fixture(scope="module")
 def real_packs(knowledge: AttackKnowledge) -> list[RulePack]:
     """Production detection content, exactly as scripts/build_coverage_report.py loads it."""
-    return [load_rule_pack(SIGMA_PACK, knowledge=knowledge)]
+    return [
+        load_rule_pack(SIGMA_PACK, knowledge=knowledge),
+        load_rule_pack(ELASTIC_PACK, knowledge=knowledge),
+    ]
 
 
 @pytest.fixture(scope="module")
@@ -207,7 +213,10 @@ def test_committed_report_and_summary_regenerate_byte_identically(
     knowledge: AttackKnowledge, real_packs: list[RulePack]
 ) -> None:
     fresh = build_coverage_report(
-        knowledge, real_packs, json.loads(SIGMA_REPORT.read_text(encoding="utf-8"))
+        knowledge,
+        real_packs,
+        json.loads(SIGMA_REPORT.read_text(encoding="utf-8")),
+        json.loads(ELASTIC_REPORT.read_text(encoding="utf-8")),
     )
     assert json.dumps(fresh, indent=1, ensure_ascii=False) + "\n" == COVERAGE_JSON.read_text(
         encoding="utf-8"
@@ -220,6 +229,22 @@ def test_provenance_pins_every_input(report: dict[str, Any], real_packs: list[Ru
     assert prov["attack_kb_version"] == EXPECTED_ATTACK_KB_VERSION
     assert {p["content_hash"] for p in prov["rule_packs"]} == {p.content_hash for p in real_packs}
     assert prov["sigma_import"]["sigma_archive_sha256"]
+    assert prov["elastic_import"]["source_commit"].startswith("195f15c0bac8")
+
+
+def test_coverage_by_content_source(report: dict[str, Any]) -> None:
+    summary = report["summary"]
+    by_origin = summary["covered_techniques_by_origin"]
+    only = summary["covered_techniques_by_origin_only"]
+    covered = summary["techniques_by_status"]["covered"]
+    # Every covered technique is covered by Sigma, by Elastic, or by both.
+    assert (
+        by_origin["sigma"] + by_origin["elastic"] - covered
+        == covered - only["sigma"] - only["elastic"]
+    )
+    msbuild = next(t for t in report["techniques"] if t["attack_id"] == "T1127.001")
+    assert msbuild["status"] == "covered"
+    assert msbuild["rule_sources_by_origin"] == {"elastic": msbuild["rule_sources"]}
 
 
 def test_supported_platforms_follow_the_field_map() -> None:

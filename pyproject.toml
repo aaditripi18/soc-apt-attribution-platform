@@ -27,13 +27,16 @@ dev = [
     # Build-time Sigma parsing for the ADR-0007 importer (detection_content/).
     # Never imported by runtime detection; LGPL-2.1, used unmodified.
     "pySigma==1.5.1",
+    # Build-time parsing of Elastic prebuilt rules (ADR-0015): Elastic's own KQL
+    # grammar and our single-event EQL subset grammar. MIT.
+    "lark==1.3.1",
 ]
 
 [tool.setuptools.packages.find]
 where = ["src"]
 
 [tool.setuptools.package-data]
-attribution_platform = ["py.typed"]
+attribution_platform = ["py.typed", "detection_content/grammars/*.g"]
 
 # --- Ruff: formatter + linter (single boring tool instead of black+isort+flake8) ---
 [tool.ruff]

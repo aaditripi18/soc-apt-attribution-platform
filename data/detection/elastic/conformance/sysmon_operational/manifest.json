@@ -1,0 +1,33 @@
+{
+ "source": "elastic/integrations (Elastic's Windows integration, sysmon_operational data stream)",
+ "source_commit": "ff5328128a30c75046130ae58ddba450caa1f2dc",
+ "license": "Elastic License 2.0",
+ "license_url": "https://github.com/elastic/integrations/blob/ff5328128a30c75046130ae58ddba450caa1f2dc/LICENSE.txt",
+ "retrieved_at_utc": "2026-10-09T22:31:00Z",
+ "method": "GitHub contents API at the pinned commit; each file's git blob id re-computed locally and equal to the commit's",
+ "approval": "owner request 2026-10-09 ('add elastic prebuilt rules to increase coverage'); ADR-0015",
+ "purpose": "Conformance oracle for the elastic_sysmon.* derived views: Elastic's own pipeline test input and the ECS documents its pipeline must produce from it (tests/test_elastic_sysmon_conformance.py).",
+ "files": [
+  {
+   "path": "test-events.json",
+   "upstream_path": "packages/windows/data_stream/sysmon_operational/_dev/test/pipeline/test-events.json",
+   "blob_id": "0ef9ecef575bdead2adbf0379f6c6836809e9efb",
+   "size_bytes": 746050,
+   "sha256": "e9dfb46599d08c73a247eef708e9151bde5a533671aa47a45463f03aa2383575"
+  },
+  {
+   "path": "test-events.json-expected.json",
+   "upstream_path": "packages/windows/data_stream/sysmon_operational/_dev/test/pipeline/test-events.json-expected.json",
+   "blob_id": "cb562ab5b5abf2f0b6f4dcb914681b79f963c8a4",
+   "size_bytes": 1019271,
+   "sha256": "7b34c123bd5f3a369f08b29ac0a4d50b81b649fd2ec29083d8d7da80a6bf6c33"
+  },
+  {
+   "path": "sysmon_operational.yml",
+   "upstream_path": "packages/windows/_dev/shared/ingest_pipeline/sysmon_operational.yml",
+   "blob_id": "79387398b37ceb3026dd083784b6929fcef0c347",
+   "size_bytes": 50588,
+   "sha256": "8d9aa5dc109309b74c36c0640c1b3264ca8d49ef49a61339fd190f5059e9f34c"
+  }
+ ]
+}

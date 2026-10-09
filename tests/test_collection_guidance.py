@@ -29,6 +29,15 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 GENERATED = REPO_ROOT / "data" / "detection" / "sigma" / "r2026-07-01" / "generated"
 COVERAGE = GENERATED / "coverage-report.json"
 IMPORT_REPORT = GENERATED / "sigma-r2026-07-01-sigma_core++.import-report.json"
+ELASTIC_IMPORT_REPORT = (
+    REPO_ROOT
+    / "data"
+    / "detection"
+    / "elastic"
+    / "195f15c0bac8"
+    / "generated"
+    / "elastic-195f15c0bac8.import-report.json"
+)
 
 
 @pytest.fixture(scope="module")
@@ -143,9 +152,14 @@ def test_deterministic_and_bounded(
 
 def test_detectability_reads_the_pack_reports() -> None:
     coverage = json.loads(COVERAGE.read_text(encoding="utf-8"))
-    pack_hash = coverage["provenance"]["rule_packs"][0]["content_hash"]
-    detect = load_detectability(COVERAGE, IMPORT_REPORT, pack_content_hash=pack_hash)
+    pack_hashes = [p["content_hash"] for p in coverage["provenance"]["rule_packs"]]
+    detect = load_detectability(
+        COVERAGE, (IMPORT_REPORT, ELASTIC_IMPORT_REPORT), pack_content_hash=pack_hashes
+    )
     assert detect["T1003.001"].detectable
+    # Covered only by Elastic content (ADR-0015): its Sysmon event profiles' logsources.
+    assert detect["T1127.001"].detectable  # MSBuild
+    assert detect["T1127.001"].logsources
     assert "windows/process_access" in detect["T1003.001"].logsources
     assert detect["T1059.002"].logsources == ("macos/process_creation",)  # AppleScript
     pre = detect["T1583.001"]  # Acquire Infrastructure: Domains (PRE)
@@ -155,3 +169,10 @@ def test_detectability_reads_the_pack_reports() -> None:
 def test_detectability_refuses_a_report_built_for_another_pack() -> None:
     with pytest.raises(DetectabilityError, match="regenerate"):
         load_detectability(COVERAGE, IMPORT_REPORT, pack_content_hash="0" * 64)
+
+
+def test_detectability_refuses_a_partial_pack_set() -> None:
+    coverage = json.loads(COVERAGE.read_text(encoding="utf-8"))
+    sigma_only = coverage["provenance"]["rule_packs"][0]["content_hash"]
+    with pytest.raises(DetectabilityError, match="regenerate"):
+        load_detectability(COVERAGE, IMPORT_REPORT, pack_content_hash=sigma_only)

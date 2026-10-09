@@ -34,7 +34,11 @@ from attribution_platform.api.__main__ import elasticsearch_client_from_env
 from attribution_platform.api.server import create_server
 from attribution_platform.attack_knowledge.loader import load_attack_knowledge
 from attribution_platform.dataplane import ElasticClient, FakeElasticClient
-from attribution_platform.detection import DetectionEngine, load_rule_pack
+from attribution_platform.detection import (
+    DetectionEngine,
+    load_rule_pack,
+    pack_set_content_hash,
+)
 from attribution_platform.detection_content.detectability import load_detectability
 from attribution_platform.intel.indicators import load_indicator_set
 from attribution_platform.investigation.dossier import render_dossier
@@ -62,8 +66,20 @@ SIGMA_PACK = (
 )
 
 
+#: ADR-0015: Elastic prebuilt rules, translated exactly, beside the Sigma pack.
+ELASTIC_PACK = (
+    REPO_ROOT
+    / "data"
+    / "detection"
+    / "elastic"
+    / "195f15c0bac8"
+    / "generated"
+    / "elastic-195f15c0bac8.rules.json"
+)
+
 COVERAGE_REPORT = SIGMA_PACK.with_name("coverage-report.json")
 IMPORT_REPORT = SIGMA_PACK.with_name("sigma-r2026-07-01-sigma_core++.import-report.json")
+ELASTIC_IMPORT_REPORT = ELASTIC_PACK.with_name("elastic-195f15c0bac8.import-report.json")
 
 
 ADVISORIES = REPO_ROOT / "data" / "intel" / "advisories"
@@ -103,15 +119,17 @@ def investigate(argument: str, *, client: ElasticClient, recordings: Path = RECO
     """Resolve, run and persist one investigation."""
     source = resolve_source(argument, recordings=recordings)
     knowledge = load_attack_knowledge()
-    pack = load_rule_pack(SIGMA_PACK, knowledge=knowledge)
+    packs = [load_rule_pack(path, knowledge=knowledge) for path in (SIGMA_PACK, ELASTIC_PACK)]
     record = run_investigation(
         source,
         client=client,
-        engine=DetectionEngine(rules=pack.rules),
+        engine=DetectionEngine(rules=tuple(r for pack in packs for r in pack.rules)),
         knowledge=knowledge,
-        detection_pack_content_hash=pack.content_hash,
+        detection_pack_content_hash=pack_set_content_hash(packs),
         detectability=load_detectability(
-            COVERAGE_REPORT, IMPORT_REPORT, pack_content_hash=pack.content_hash
+            COVERAGE_REPORT,
+            (IMPORT_REPORT, ELASTIC_IMPORT_REPORT),
+            pack_content_hash=[pack.content_hash for pack in packs],
         ),
         indicators=load_indicator_set(ADVISORIES, ADVISORY_ATTRIBUTIONS),
     )

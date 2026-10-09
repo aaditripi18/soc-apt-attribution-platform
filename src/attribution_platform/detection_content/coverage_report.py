@@ -44,7 +44,9 @@ from attribution_platform.attack_knowledge.traversal import (
 from attribution_platform.detection.rules import RulePack
 from attribution_platform.detection_content.sigma_field_map import PRODUCT_OS_SCOPES
 
-COVERAGE_REPORT_VERSION = "coverage-report/2"
+#: v3 (ADR-0015): several content sources -- per-technique rule sources by origin
+#: (``sigma`` / ``elastic``) and the Elastic import provenance when supplied.
+COVERAGE_REPORT_VERSION = "coverage-report/3"
 
 #: Sigma product -> the ATT&CK platforms (``x_mitre_platforms``) its telemetry
 #: observes. Products without an ATT&CK platform of their own (a network sensor
@@ -117,18 +119,33 @@ def _supported_product(unit: str) -> bool:
     return product in PRODUCT_OS_SCOPES
 
 
+def _by_origin(rule_sources: set[str]) -> dict[str, int]:
+    """``sigma:<id>`` / ``elastic:<id>`` rule sources counted by origin."""
+    counts: dict[str, int] = {}
+    for source in rule_sources:
+        origin = source.split(":", 1)[0]
+        counts[origin] = counts.get(origin, 0) + 1
+    return dict(sorted(counts.items()))
+
+
 def build_coverage_report(
     knowledge: AttackKnowledge,
     packs: Sequence[RulePack],
     sigma_import_report: Mapping[str, Any],
+    elastic_import_report: Mapping[str, Any] | None = None,
 ) -> dict[str, Any]:
-    """Build the coverage report (a JSON-ready dict)."""
-    if sigma_import_report["provenance"]["attack_kb_version"] != knowledge.attack_kb_version:
-        raise ValueError(
-            "sigma import report was produced against "
-            f"{sigma_import_report['provenance']['attack_kb_version']!r}, "
-            f"not the loaded {knowledge.attack_kb_version!r}"
-        )
+    """Build the coverage report (a JSON-ready dict). ``covered`` counts every
+    supplied pack; the reasons an uncovered technique is uncovered come from the
+    Sigma import report (Elastic content only ever adds coverage, ADR-0015)."""
+    for name, report in (("sigma", sigma_import_report), ("elastic", elastic_import_report)):
+        if report is not None and report["provenance"]["attack_kb_version"] != (
+            knowledge.attack_kb_version
+        ):
+            raise ValueError(
+                f"{name} import report was produced against "
+                f"{report['provenance']['attack_kb_version']!r}, "
+                f"not the loaded {knowledge.attack_kb_version!r}"
+            )
 
     techniques = sorted(
         (o for o in (*knowledge.techniques(), *knowledge.sub_techniques()) if is_active(o)),
@@ -188,6 +205,7 @@ def build_coverage_report(
                 "name": str(obj.get("name", "")),
                 "status": status.value,
                 "rule_sources": len(covered_by.get(stix_id, ())),
+                "rule_sources_by_origin": _by_origin(covered_by.get(stix_id, set())),
                 # Blockers of *rejected* Sigma rules for this technique (also shown
                 # for covered techniques: fixing them would add further rules).
                 "rejected_rules_blocked_by": sorted(
@@ -259,11 +277,22 @@ def build_coverage_report(
         if stix_id in group_used:
             group_used_totals[status.value] += 1
     covered_counts = [g["covered"] for g in group_rows]
+    origin_totals: dict[str, int] = {}
+    origin_only: dict[str, int] = {}
+    for sources in covered_by.values():
+        origins = set(_by_origin(sources))
+        for origin in origins:
+            origin_totals[origin] = origin_totals.get(origin, 0) + 1
+        if len(origins) == 1:
+            (only,) = origins
+            origin_only[only] = origin_only.get(only, 0) + 1
     summary = {
         "active_techniques": len(techniques),
         "group_used_techniques": len(group_used),
         "active_groups": len(group_rows),
         "techniques_by_status": status_totals,
+        "covered_techniques_by_origin": dict(sorted(origin_totals.items())),
+        "covered_techniques_by_origin_only": dict(sorted(origin_only.items())),
         "group_used_techniques_by_status": group_used_totals,
         "groups_with_empty_technique_profile": sum(
             1 for g in group_rows if g["profile_techniques"] == 0
@@ -285,6 +314,11 @@ def build_coverage_report(
                 for p in sorted(packs, key=lambda p: p.pack_id)
             ],
             "sigma_import": dict(sigma_import_report["provenance"]),
+            **(
+                {"elastic_import": dict(elastic_import_report["provenance"])}
+                if elastic_import_report is not None
+                else {}
+            ),
             "supported_platforms": list(platforms_with_telemetry),
         },
         "notes": [
@@ -314,7 +348,15 @@ def render_coverage_summary(report: Mapping[str, Any], *, top_gaps: int = 15) ->
         "",
         f"ATT&CK `{report['provenance']['attack_kb_version']}`; Sigma "
         f"`{report['provenance']['sigma_import']['sigma_release']}`; "
-        "Platforms with telemetry: " + ", ".join(report["provenance"]["supported_platforms"]) + ".",
+        + (
+            f"Elastic detection-rules "
+            f"`{report['provenance']['elastic_import']['source_commit'][:12]}`; "
+            if "elastic_import" in report["provenance"]
+            else ""
+        )
+        + "Platforms with telemetry: "
+        + ", ".join(report["provenance"]["supported_platforms"])
+        + ".",
         "Counts only — not detection-efficacy or attribution-accuracy claims.",
         "",
         "## Techniques",
@@ -329,6 +371,13 @@ def render_coverage_summary(report: Mapping[str, Any], *, top_gaps: int = 15) ->
         )
     lines += [
         f"| **total** | **{s['active_techniques']}** | **{s['group_used_techniques']}** |",
+        "",
+        "Covered techniques by content source: "
+        + ", ".join(
+            f"{origin} {n} ({s['covered_techniques_by_origin_only'].get(origin, 0)} only by it)"
+            for origin, n in s["covered_techniques_by_origin"].items()
+        )
+        + ".",
         "",
         "## Groups",
         "",

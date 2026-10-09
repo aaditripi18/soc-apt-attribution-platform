@@ -15,6 +15,7 @@ would describe other content).
 from __future__ import annotations
 
 import json
+from collections.abc import Sequence
 from pathlib import Path
 from types import MappingProxyType
 from typing import Any
@@ -27,22 +28,33 @@ class DetectabilityError(ValueError):
 
 
 def load_detectability(
-    coverage_report: Path, import_report: Path, *, pack_content_hash: str
+    coverage_report: Path,
+    import_reports: Path | Sequence[Path],
+    *,
+    pack_content_hash: str | Sequence[str],
 ) -> MappingProxyType[str, Detectability]:
-    """Technique id (``T1059.002``) -> :class:`Detectability`."""
+    """Technique id (``T1059.002``) -> :class:`Detectability`.
+
+    ``import_reports`` / ``pack_content_hash`` may name several packs (Sigma and
+    Elastic, ADR-0015); the coverage report must have been built from exactly
+    the loaded packs. A Sigma report row names one ``logsource``, an Elastic row
+    the ``logsources`` of its event profiles."""
     coverage: dict[str, Any] = json.loads(coverage_report.read_text(encoding="utf-8"))
     hashes = {p["content_hash"] for p in coverage["provenance"]["rule_packs"]}
-    if pack_content_hash not in hashes:
+    loaded = {pack_content_hash} if isinstance(pack_content_hash, str) else set(pack_content_hash)
+    if loaded != hashes:
         raise DetectabilityError(
             f"{coverage_report.name} was built from rule pack(s) {sorted(hashes)}, not the loaded "
-            f"pack {pack_content_hash}: regenerate it (scripts/build_coverage_report.py)"
+            f"pack(s) {sorted(loaded)}: regenerate it (scripts/build_coverage_report.py)"
         )
-    rows = json.loads(import_report.read_text(encoding="utf-8"))["rules"]
+    reports = [import_reports] if isinstance(import_reports, Path) else list(import_reports)
     logsources: dict[str, set[str]] = {}
-    for row in rows:
-        if row["status"] in ("imported", "partial"):
-            for attack_id in row["attack_ids"]:
-                logsources.setdefault(attack_id, set()).add(row["logsource"])
+    for report in reports:
+        for row in json.loads(report.read_text(encoding="utf-8"))["rules"]:
+            if row["status"] in ("imported", "partial"):
+                names = row["logsources"] if "logsources" in row else [row["logsource"]]
+                for attack_id in row["attack_ids"]:
+                    logsources.setdefault(attack_id, set()).update(names)
     return MappingProxyType(
         {
             t["attack_id"]: Detectability(

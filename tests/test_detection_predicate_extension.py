@@ -242,7 +242,7 @@ def test_has_element_on_scalar_field_fails_closed() -> None:
 
 @pytest.mark.parametrize("operator", ["equals", "contains", "startswith", "endswith"])
 def test_scalar_operators_still_reject_array_fields(operator: str) -> None:
-    with pytest.raises(DetectionError, match="only operator 'has_element'"):
+    with pytest.raises(DetectionError, match="only the array operators"):
         FieldCondition("event.category", operator, "process").evaluate(_proc_obs(executable="a"))
 
 
@@ -260,9 +260,14 @@ def test_negate_does_not_bypass_array_rejection() -> None:
 
 @pytest.mark.parametrize("operator", ["startswith", "endswith", "has_element"])
 def test_new_operators_require_nonempty_string_value(operator: str) -> None:
-    for bad in (None, "", "   ", ("a",)):
+    # ADR-0015: startswith / endswith also take a tuple (any of), but never an
+    # empty one or one with a blank entry; has_element stays single-valued.
+    bad_values: tuple[object, ...] = (None, "", "   ", (), ("a", ""), ("   ",))
+    if operator == "has_element":
+        bad_values += (("a",),)
+    for bad in bad_values:
         with pytest.raises(DetectionError):
-            FieldCondition("process.executable", operator, bad)
+            FieldCondition("process.executable", operator, bad)  # type: ignore[arg-type]
 
 
 @pytest.mark.parametrize("flag", ["case_insensitive", "negate"])

@@ -72,8 +72,10 @@ ECS-aligned entity groups — the same fields any source populates).
 from __future__ import annotations
 
 import dataclasses
+import functools
 import hashlib
 import json
+import re
 from collections.abc import Sequence
 from dataclasses import dataclass, field
 from pathlib import Path
@@ -92,6 +94,7 @@ from attribution_platform.detection.contracts import (
     MatchedField,
     TechniqueMapping,
 )
+from attribution_platform.detection.derived_fields import resolve_derived
 from attribution_platform.detection.errors import DetectionError
 from attribution_platform.domain import (
     AttackRef,
@@ -122,6 +125,61 @@ _ALLOWED_TOP_LEVEL_FIELDS = frozenset(
 
 _OPERATORS_REQUIRING_VALUE = frozenset({"equals", "contains", "in"})
 
+#: Operators that apply to each element of an array-typed field (true iff any
+#: element matches). ``has_element`` is element equality (ADR-0007 D4); the
+#: ``element_*`` forms (ADR-0015) are the scalar operators applied per element --
+#: Elasticsearch's own semantics for a term / wildcard query on an array field.
+_ARRAY_OPERATORS = frozenset(
+    {
+        "has_element",
+        "element_in",
+        "element_contains",
+        "element_startswith",
+        "element_endswith",
+        "element_wildcard",
+    }
+)
+#: Operators whose value may be a tuple meaning *any of* (ADR-0015).
+_ANY_OF_OPERATORS = frozenset(
+    {
+        "contains",
+        "startswith",
+        "endswith",
+        "wildcard",
+        "element_contains",
+        "element_startswith",
+        "element_endswith",
+        "element_wildcard",
+    }
+)
+
+
+@functools.lru_cache(maxsize=4096)
+def _wildcard_regex(pattern: str, case_insensitive: bool) -> re.Pattern[str]:
+    """Compile a ``wildcard`` pattern: ``*`` is any run of characters, ``?`` exactly
+    one, and a backslash makes the next character literal (so ``\\*`` is a
+    literal asterisk and ``\\\\`` a literal backslash). Nothing else is special.
+    A trailing lone backslash is rejected. ``case_insensitive`` casefolds the
+    literal characters, matching the casefolded text (the engine's one notion of
+    case-insensitivity)."""
+
+    def fold(text: str) -> str:
+        return text.casefold() if case_insensitive else text
+
+    parts: list[str] = []
+    i = 0
+    while i < len(pattern):
+        char = pattern[i]
+        if char == "\\":
+            if i + 1 == len(pattern):
+                raise DetectionError(f"wildcard pattern {pattern!r} ends with a lone backslash")
+            parts.append(re.escape(fold(pattern[i + 1])))
+            i += 2
+            continue
+        parts.append(".*" if char == "*" else "." if char == "?" else re.escape(fold(char)))
+        i += 1
+    return re.compile("".join(parts), re.DOTALL)
+
 
 def _resolve_field(observation: Observation, field_path: str) -> Any:
     """Resolve a dotted field_path against an Observation's entity groups.
@@ -129,7 +187,16 @@ def _resolve_field(observation: Observation, field_path: str) -> Any:
     Returns ``None`` if any hop along the path is absent (a legitimately
     unpopulated optional entity group/field) — only an unrecognized
     *top-level* segment is a hard error (see module docstring).
+
+    ``elastic_sysmon.<ECS field>`` paths are derived views (ADR-0015,
+    :mod:`attribution_platform.detection.derived_fields`); an unknown one is a
+    hard error too.
     """
+    derived, value = resolve_derived(observation, field_path)
+    if derived:
+        if not isinstance(value, str | tuple) and value is not None:
+            raise DetectionError(f"unknown derived field_path {field_path!r}")
+        return value
     segments = field_path.split(".")
     top = segments[0]
     if top not in _ALLOWED_TOP_LEVEL_FIELDS:
@@ -191,15 +258,18 @@ class FieldCondition:
                 raise DetectionError(
                     "FieldCondition.case_insensitive is meaningless for operator 'exists'"
                 )
-        elif self.operator == "in":
+        elif self.operator in ("in", "element_in") or (
+            self.operator in _ANY_OF_OPERATORS and isinstance(self.value, tuple)
+        ):
             if not isinstance(self.value, tuple) or not self.value:
                 raise DetectionError(
-                    "FieldCondition.value must be a non-empty tuple[str, ...] for operator 'in'"
+                    f"FieldCondition.value must be a non-empty tuple[str, ...] for operator "
+                    f"{self.operator!r}"
                 )
             for v in self.value:
                 if not isinstance(v, str) or not v.strip():
                     raise DetectionError("FieldCondition.value entries must be non-empty strings")
-        else:  # equals / contains / startswith / endswith / has_element
+        else:  # equals / has_element, or a single value for an any-of operator
             if not isinstance(self.value, str) or not self.value.strip():
                 raise DetectionError(
                     f"FieldCondition.value must be a non-empty string for operator "
@@ -209,50 +279,60 @@ class FieldCondition:
     def _fold(self, text: str) -> str:
         return text.casefold() if self.case_insensitive else text
 
+    def _values(self) -> tuple[str, ...]:
+        return self.value if isinstance(self.value, tuple) else (cast(str, self.value),)
+
+    def _scalar_match(self, operator: str, observed_raw: Any) -> bool:
+        """``operator`` (a scalar operator) against one scalar value."""
+        if operator == "wildcard":
+            text = self._fold(str(observed_raw))
+            return any(
+                _wildcard_regex(p, self.case_insensitive).fullmatch(text) is not None
+                for p in self._values()
+            )
+        observed = self._fold(str(observed_raw))
+        expected = [self._fold(v) for v in self._values()]
+        if operator in ("equals", "in"):
+            return observed in expected
+        if operator == "contains":
+            return any(e in observed for e in expected)
+        if operator == "startswith":
+            return any(observed.startswith(e) for e in expected)
+        if operator == "endswith":
+            return any(observed.endswith(e) for e in expected)
+        raise DetectionError(f"unreachable: unhandled operator {operator!r}")  # pragma: no cover
+
     def _positive_match(self, resolved: Any) -> bool:
         """The un-negated predicate. ``resolved`` is ``None`` (absent), a
         tuple (array field -- ``has_element`` only), or a scalar."""
         if self.operator == "exists":
-            return resolved is not None
+            return resolved is not None and resolved != ()
         if resolved is None:
             return False  # every remaining operator requires a value to compare
-        if self.operator == "has_element":
-            wanted = self._fold(cast(str, self.value))
-            return any(self._fold(str(element)) == wanted for element in resolved)
-        observed = self._fold(str(resolved))
-        if self.operator == "in":
-            # __post_init__ guarantees tuple[str, ...] for this operator
-            return observed in {self._fold(v) for v in cast("tuple[str, ...]", self.value)}
-        expected = self._fold(cast(str, self.value))
-        if self.operator == "equals":
-            return observed == expected
-        if self.operator == "contains":
-            return expected in observed
-        if self.operator == "startswith":
-            return observed.startswith(expected)
-        if self.operator == "endswith":
-            return observed.endswith(expected)
-        raise DetectionError(
-            f"unreachable: unhandled operator {self.operator!r}"
-        )  # pragma: no cover
+        if self.operator in _ARRAY_OPERATORS:
+            scalar = "equals" if self.operator == "has_element" else self.operator[8:]
+            return any(self._scalar_match(scalar, element) for element in resolved)
+        return self._scalar_match(self.operator, resolved)
 
     def _resolve_checked(self, observation: Observation) -> Any:
         """Resolve the field and apply the array/scalar fail-closed checks."""
         resolved = _resolve_field(observation, self.field_path)
-        if self.operator == "has_element":
+        if self.operator in _ARRAY_OPERATORS:
             if resolved is not None and not isinstance(resolved, tuple):
                 raise DetectionError(
                     f"FieldCondition.field_path {self.field_path!r} resolves to a scalar "
-                    f"({resolved!r}); operator 'has_element' requires an array-typed field"
+                    f"({resolved!r}); operator {self.operator!r} requires an array-typed field"
                 )
-        elif isinstance(resolved, tuple):
+        elif isinstance(resolved, tuple) and self.operator != "exists":
+            # 'exists' is defined on an array: it has at least one element.
             # Array-typed ECS fields have no defined semantics for scalar
             # operators -- stringifying the tuple would make 'contains' match
             # on Python's repr punctuation rather than element membership.
             # Fail closed; 'has_element' is the element-membership operator.
             raise DetectionError(
                 f"FieldCondition.field_path {self.field_path!r} resolves to an array-typed "
-                f"field ({resolved!r}); only operator 'has_element' supports array fields"
+                f"field ({resolved!r}); only the array operators (has_element, element_*) "
+                f"support array fields"
             )
         return resolved
 
@@ -277,8 +357,8 @@ class FieldCondition:
             observed = str(resolved)
         if self.operator == "exists":
             expected: str | None = None
-        elif self.operator == "in":
-            expected = ",".join(cast("tuple[str, ...]", self.value))
+        elif isinstance(self.value, tuple):
+            expected = ",".join(self.value)
         else:
             expected = cast(str, self.value)
         return MatchedField(
@@ -448,6 +528,20 @@ class RulePack:
     pack_id: str
     content_hash: str
     rules: tuple[DetectionRule, ...]
+
+
+def pack_set_content_hash(packs: Sequence[RulePack]) -> str:
+    """One identity for the detection content of a run. A single pack is
+    identified by its own content hash (unchanged); several (Sigma + Elastic,
+    ADR-0015) by the SHA-256 of their sorted ``pack_id`` / ``content_hash`` pairs.
+    Every detection still carries its own pack's hash
+    (``DetectionResult.rule_pack_content_hash``)."""
+    if not packs:
+        raise DetectionError("pack_set_content_hash needs at least one rule pack")
+    if len(packs) == 1:
+        return packs[0].content_hash
+    identity = json.dumps(sorted([p.pack_id, p.content_hash] for p in packs), separators=(",", ":"))
+    return hashlib.sha256(identity.encode("utf-8")).hexdigest()
 
 
 #: The array field whose ``has_element`` scope condition the engine indexes on.
@@ -649,12 +743,9 @@ def _condition_from_dict(d: Any, *, where: str) -> FieldCondition:
     operator = _require_str(d, "operator", where=where)
     raw_value = d.get("value")
     value: str | tuple[str, ...] | None
-    if operator == "in":
-        if not isinstance(raw_value, list):
-            raise DetectionError(f"{where}: 'value' must be a list for operator 'in'")
-        value = tuple(raw_value)
-    else:
-        value = raw_value
+    if operator in ("in", "element_in") and not isinstance(raw_value, list):
+        raise DetectionError(f"{where}: 'value' must be a list for operator {operator!r}")
+    value = tuple(raw_value) if isinstance(raw_value, list) else raw_value
     # ADR-0007 D4 flags: optional JSON booleans; absent means the original
     # (case-sensitive, non-negated) semantics, so existing packs are unchanged.
     flags: dict[str, bool] = {}

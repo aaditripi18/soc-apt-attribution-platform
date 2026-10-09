@@ -60,6 +60,7 @@ from attribution_platform.detection.rules import (
     FieldCondition,
     RulePack,
     load_rule_pack,
+    pack_set_content_hash,
 )
 
 __all__ = [
@@ -74,6 +75,7 @@ __all__ = [
     "DetectionRule",
     "RulePack",
     "load_rule_pack",
+    "pack_set_content_hash",
     "DetectionEngine",
     "derive_evidence_from_detection",
 ]

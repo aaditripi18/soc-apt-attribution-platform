@@ -22,3 +22,8 @@ data/emulation-plans/** binary
 
 # --- Government-advisory indicator bundles (ADR-0013 D2): SHA-256-pinned, byte-for-byte. ---
 data/intel/** binary
+
+# --- Elastic detection content (ADR-0015): pinned conformance fixtures, the pinned
+# pipeline and Elastic's vendored KQL grammar, all SHA-256-checked by tests. ---
+data/detection/**/*.yml binary
+src/attribution_platform/detection_content/grammars/*.g binary

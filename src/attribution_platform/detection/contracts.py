@@ -66,8 +66,23 @@ DETECTION_RESULT_SCHEMA_VERSION = "detection-result/1"
 #: The closed set of predicate operators a MatchedField may record — kept in
 #: sync with, but not imported from, rules.py (contracts must not depend on
 #: the rule-evaluation module; rules.py imports this constant instead).
-#: ``startswith``/``endswith``/``has_element`` added by ADR-0007 D4.
-MATCH_OPERATORS = ("equals", "contains", "in", "exists", "startswith", "endswith", "has_element")
+#: ``startswith``/``endswith``/``has_element`` added by ADR-0007 D4; ``wildcard`` and
+#: the ``element_*`` array operators by ADR-0015 (Elastic rule translation).
+MATCH_OPERATORS = (
+    "equals",
+    "contains",
+    "in",
+    "exists",
+    "startswith",
+    "endswith",
+    "has_element",
+    "wildcard",
+    "element_in",
+    "element_contains",
+    "element_startswith",
+    "element_endswith",
+    "element_wildcard",
+)
 
 
 def _require_nonempty_str(value: object, field_name: str) -> str:
