@@ -1736,3 +1736,38 @@ exactly the valid partitions the exhaustive enumeration kept. The 8-feature limi
 feature sets drawn from real Group profiles (2–8 features) and 60 adversarial synthetic `g` functions — identical
 partitions in every case; all 56 existing hand-verified partition and tie-break tests pass unchanged; the work
 bound fails closed as tested.
+
+### Amendment E (2026-10-09) — Evidence-collection guidance before calibration
+
+**Status:** ACCEPTED (owner instruction 2026-10-09: "finish all other tasks", recommended path).
+
+**Problem.** CLAUDE.md requires the engine to say *what additional evidence would improve confidence*. §D14
+defines `NextEvidence` as the counterfactual change in the **top-two separation** — a ranking quantity, which
+ADR-0009 withholds until a `calibration_version` exists. So, today, an analyst gets candidates and contributions but
+no guidance on what to look for next.
+
+**Decision.** A ranking-free precursor of §D14, computed per unit from facts only
+(`attribution/collection_guidance.py`, method 1.0), stored on the unit's attribution analysis
+(`attribution-analysis/2`, field `collection_guidance`):
+
+- For the unit's candidate set *C* (`n` Groups / Campaigns, §D2) and every technique *t* some candidate is recorded
+  in ATT&CK as using and the unit has **not** observed: `candidates_using` (*k* of *n*, exact ATT&CK `uses`),
+  `split = min(k, n − k)` — how many candidates either answer sets apart (observed → consistent with the *k*;
+  adequately absent → contradicts the *k*, §D11) — a **count, not a score**;
+- `data_components`: ATT&CK's own data components for *t* (MITRE's detection model);
+- platform detectability, from the loaded pack's **own** generated reports (`detection_content/detectability.py`):
+  covered with which Sigma logsources, or the coverage status and telemetry blockers; the coverage report must
+  name the loaded pack's content hash, else it fails closed (a stale report describes other content).
+- Order: `split` descending, then detectable-on-this-platform first, then ATT&CK id; ten questions kept, the
+  number considered recorded. Questions are ordered, **candidates never are** — no likelihood, confidence or rank
+  is introduced. Techniques used by every candidate (or none) separate nothing and are not listed.
+
+**Relation to §D14.** Once a `calibration_version` exists, §D14's counterfactual re-run of `support(h)` replaces the
+`split` order for the top-two hypotheses; the facts above remain its explanation. Investigation method 1.1 → 1.2.
+
+**Measured (APT29 evaluation day 1, 65 units):** 57 units receive questions (8 have candidate sets with nothing to
+split). The largest unit (11 observed techniques, 169 candidates) is asked first about *Windows Command Shell*
+(T1059.003, used by 77 of 169), then *Malicious File*, *Ingress Tool Transfer*, *Match Legitimate Resource Name or
+Location* — each detectable by this platform. **Stated limitation:** a balanced split favours moderately common
+techniques, because without a prior those separate the most candidates; it is a statement about the candidate
+set, not about the actor's likely next action. §D14's calibrated counterfactual will reweight it.

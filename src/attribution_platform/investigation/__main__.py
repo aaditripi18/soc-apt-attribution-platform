@@ -32,6 +32,7 @@ from attribution_platform.api.server import create_server
 from attribution_platform.attack_knowledge.loader import load_attack_knowledge
 from attribution_platform.dataplane import ElasticClient, FakeElasticClient
 from attribution_platform.detection import DetectionEngine, load_rule_pack
+from attribution_platform.detection_content.detectability import load_detectability
 from attribution_platform.investigation.records import (
     InvestigationRecord,
     load_attribution_analysis,
@@ -54,6 +55,10 @@ SIGMA_PACK = (
     / "generated"
     / "sigma-r2026-07-01-sigma_core++.rules.json"
 )
+
+
+COVERAGE_REPORT = SIGMA_PACK.with_name("coverage-report.json")
+IMPORT_REPORT = SIGMA_PACK.with_name("sigma-r2026-07-01-sigma_core++.import-report.json")
 
 
 class CliError(Exception):
@@ -96,6 +101,9 @@ def investigate(argument: str, *, client: ElasticClient, recordings: Path = RECO
         engine=DetectionEngine(rules=pack.rules),
         knowledge=knowledge,
         detection_pack_content_hash=pack.content_hash,
+        detectability=load_detectability(
+            COVERAGE_REPORT, IMPORT_REPORT, pack_content_hash=pack.content_hash
+        ),
     )
     return Session(record=record, client=client)
 

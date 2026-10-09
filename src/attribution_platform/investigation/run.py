@@ -21,6 +21,11 @@ from collections.abc import Mapping
 from attribution_platform.attack_knowledge.loader import AttackKnowledge
 from attribution_platform.attribution.ach_matrix import build_ach_matrix
 from attribution_platform.attribution.candidate_generation import generate_candidates
+from attribution_platform.attribution.collection_guidance import (
+    CollectionGuidance,
+    Detectability,
+    compute_collection_guidance,
+)
 from attribution_platform.attribution.comparative_analysis import (
     compute_comparative_evidence,
     compute_unattributed_decision_support,
@@ -47,6 +52,8 @@ from attribution_platform.domain import Evidence, Observation
 from attribution_platform.investigation.records import (
     AttributionAnalysisRecord,
     CandidateView,
+    CollectionGuidanceView,
+    CollectionQuestionView,
     ContributionView,
     HypothesisView,
     InvestigationRecord,
@@ -61,7 +68,9 @@ from attribution_platform.replay import (
 )
 from attribution_platform.replay.recording_pipeline import RecordingSource, analyze_recording
 
-INVESTIGATION_METHOD_VERSION = "1.1"  # 1.1: unit summaries (ADR-0009 Amendment A)
+#: 1.1: unit summaries (ADR-0009 Amendment A); 1.2: evidence-collection guidance
+#: per unit (ADR-0005 Amendment E).
+INVESTIGATION_METHOD_VERSION = "1.2"
 #: ADR-0005 §D16 structural lower bound; the fitted floor needs a calibration_version.
 STRUCTURAL_MIN_PROFILE_FLOOR = 1
 
@@ -103,14 +112,40 @@ def _candidate_view(candidate: Candidate, knowledge: AttackKnowledge) -> Candida
     )
 
 
+def _guidance_view(guidance: CollectionGuidance) -> CollectionGuidanceView:
+    return CollectionGuidanceView(
+        method_version=guidance.method_version,
+        candidates_total=guidance.candidates_total,
+        questions_considered=guidance.questions_considered,
+        questions=tuple(
+            CollectionQuestionView(
+                technique_id=q.technique_id,
+                technique_stix_id=q.technique_stix_id,
+                technique_name=q.technique_name,
+                candidates_using=q.candidates_using,
+                candidates_total=q.candidates_total,
+                split=q.split,
+                data_components=q.data_components,
+                platform_detection_status=q.detectability.status if q.detectability else None,
+                platform_logsources=q.detectability.logsources if q.detectability else (),
+                platform_blocked_by=q.detectability.blocked_by if q.detectability else (),
+                rationale=q.rationale,
+            )
+            for q in guidance.questions
+        ),
+    )
+
+
 def analyze_unit(
     group: CorrelationGroup,
     sequence: BehavioralSequence,
     *,
     investigation_id: str,
     knowledge: AttackKnowledge,
+    detectability: Mapping[str, Detectability] | None = None,
 ) -> AttributionAnalysisRecord:
-    """The uncalibrated attribution analysis of one unit (ADR-0009 D3)."""
+    """The uncalibrated attribution analysis of one unit (ADR-0009 D3), with
+    its evidence-collection guidance (ADR-0005 Amendment E)."""
     candidates = generate_candidates(group, sequence, knowledge)
     matrix = build_ach_matrix(group, sequence, candidates, knowledge)
     comparative = compute_comparative_evidence(
@@ -137,15 +172,22 @@ def analyze_unit(
         )
         for summary in comparative.hypothesis_summaries  # already in id order
     )
+    observed = tuple(sorted({a.technique_stix_id for a in matrix.assessments}))
+    guidance = compute_collection_guidance(
+        knowledge,
+        candidates=(
+            (c.candidate_id, c.actor_ref or c.campaign_ref or "") for c in candidates.candidates
+        ),
+        observed_technique_stix_ids=observed,
+        detectability=detectability,
+    )
     return AttributionAnalysisRecord(
         group_id=group.group_id,
         sequence_id=sequence.sequence_id,
         investigation_id=investigation_id,
         attack_kb_version=knowledge.attack_kb_version,
         min_profile_floor=STRUCTURAL_MIN_PROFILE_FLOOR,
-        observed_feature_technique_ids=tuple(
-            sorted({a.technique_stix_id for a in matrix.assessments})
-        ),
+        observed_feature_technique_ids=observed,
         unattributed_decision_support=baseline.decision_support,
         candidates=tuple(
             sorted(
@@ -154,6 +196,7 @@ def analyze_unit(
             )
         ),
         hypotheses=hypotheses,
+        collection_guidance=_guidance_view(guidance),
     )
 
 
@@ -198,6 +241,7 @@ def run_investigation(
     engine: DetectionEngine,
     knowledge: AttackKnowledge,
     detection_pack_content_hash: str,
+    detectability: Mapping[str, Detectability] | None = None,
 ) -> InvestigationRecord:
     """Run ``source`` end to end and persist every read-model object."""
     versions = {
@@ -247,7 +291,11 @@ def run_investigation(
         if isinstance(source, RecordingSource):
             persist_behavioral_sequence(client, sequence)
         analysis_record = analyze_unit(
-            group, sequence, investigation_id=investigation_id, knowledge=knowledge
+            group,
+            sequence,
+            investigation_id=investigation_id,
+            knowledge=knowledge,
+            detectability=detectability,
         )
         persist_attribution_analysis(client, analysis_record)
         persist_unit_summary(client, summarize_unit(group, sequence, analysis_record, members))

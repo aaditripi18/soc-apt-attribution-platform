@@ -177,6 +177,14 @@ def test_api_serves_a_cloud_unit_with_its_uncalibrated_analysis(
             load_attribution_analysis(investigated["client"], unit_id) or {}
         )
         assert not _keys(unit["attribution_analysis"]) & FORBIDDEN_KEYS  # uncalibrated
+        # ADR-0005 Amendment E: collection guidance is served with every analysis
+        guidance = unit["attribution_analysis"]["collection_guidance"]
+        assert guidance["candidates_total"] == len(unit["attribution_analysis"]["candidates"])
+        for question in guidance["questions"]:
+            assert question["split"] == min(
+                len(question["candidates_using"]),
+                guidance["candidates_total"] - len(question["candidates_using"]),
+            )
 
 
 FORBIDDEN_KEYS = {"likelihood", "confidence", "wep", "verdict", "rank", "probability"}

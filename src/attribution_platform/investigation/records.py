@@ -30,7 +30,8 @@ ATTRIBUTION_ANALYSES_INDEX = "attribution-platform-attribution-analyses-v1"
 UNIT_SUMMARIES_INDEX = "attribution-platform-unit-summaries-v1"
 INVESTIGATION_SCHEMA_VERSION = "investigation/1"
 UNIT_SUMMARY_SCHEMA_VERSION = "unit-summary/1"
-ATTRIBUTION_ANALYSIS_SCHEMA_VERSION = "attribution-analysis/1"
+#: /2 adds ``collection_guidance`` (ADR-0005 Amendment E).
+ATTRIBUTION_ANALYSIS_SCHEMA_VERSION = "attribution-analysis/2"
 
 # Field mappings in the same form as dataplane/mappings.py: the "properties"
 # body itself (ensure_index wraps it); a "properties"-wrapped form would be
@@ -107,6 +108,31 @@ class HypothesisView:
 
 
 @dataclass(frozen=True)
+class CollectionQuestionView:
+    """One evidence-collection question (ADR-0005 Amendment E): facts only."""
+
+    technique_id: str
+    technique_stix_id: str
+    technique_name: str
+    candidates_using: tuple[str, ...]
+    candidates_total: int
+    split: int
+    data_components: tuple[str, ...]
+    platform_detection_status: str | None
+    platform_logsources: tuple[str, ...]
+    platform_blocked_by: tuple[str, ...]
+    rationale: str
+
+
+@dataclass(frozen=True)
+class CollectionGuidanceView:
+    method_version: str
+    candidates_total: int
+    questions_considered: int
+    questions: tuple[CollectionQuestionView, ...]
+
+
+@dataclass(frozen=True)
 class AttributionAnalysisRecord:
     group_id: str
     sequence_id: str
@@ -117,6 +143,7 @@ class AttributionAnalysisRecord:
     unattributed_decision_support: float
     candidates: tuple[CandidateView, ...]
     hypotheses: tuple[HypothesisView, ...]
+    collection_guidance: CollectionGuidanceView | None = None
     calibration_status: CalibrationStatus = CalibrationStatus.UNCALIBRATED
     calibration_version: None = None
     calibration_note: str = UNCALIBRATED_NOTE
