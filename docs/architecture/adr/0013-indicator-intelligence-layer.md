@@ -1,7 +1,8 @@
 # ADR-0013 — Indicator (IOC) intelligence layer
 
-- **Status:** PROPOSED (2026-10-08) — research complete; **owner decision required** on D3 before any
-  implementation. The recommended path (D1–D2) is stated so the decision is a yes / no, not an open question.
+- **Status:** ACCEPTED for D1–D2 (2026-10-09, owner instruction "finish all other tasks", recommended path:
+  contextual only). D3 (scoring) is **not** adopted — matches stay contextual until validation data with real
+  public infrastructure exists.
 - **Builds on:** ADR-0002 / 0005 (attribution methodology: evidence-driven, ACH over ATT&CK features),
   ADR-0003 (contextual vs structural links), ADR-0012 (network telemetry — the infrastructure facts an IOC
   would match).
@@ -64,3 +65,30 @@ infrastructure (none exists in the corpus).
 - **Rolling commercial / community feeds** — not reproducible, licence-restricted, expiring.
 - **Scoring indicators as ATT&CK-technique-like features now** — label-driven, unvalidated, and an IP's
   diagnosticity is not knowable from the feed alone.
+
+## Record — implementation (2026-10-09)
+
+- *Source:* CISA MAR-10448362.c1 STIX 2.1 bundle (published with joint advisory AA24-038A), TLP:CLEAR, marked
+  for public release; 53,239 bytes, pinned by URL **and** SHA-256 (`scripts/acquire_advisory_indicators.py`,
+  vendored under `data/intel/advisories/`). cisa.gov's CDN refuses Python's HTTP client (403 regardless of
+  headers), so the script's `--from-file` mode vendors a copy fetched with an ordinary client — accepted only if
+  its SHA-256 equals the pin; bot detection is never worked around. The manifest records how the bytes arrived.
+- *Attribution:* the bundle carries no structured actor relationship; its report names the actor in prose. The
+  reviewed `data/intel/advisory-attributions.json` maps the report to ATT&CK **Volt Typhoon (G1017)** with the
+  naming sentence quoted verbatim, and **loading fails closed if the quote is not in the pinned bundle**. The
+  review also records the claim's scope (files from one compromised environment — not files unique to the actor).
+- *Patterns:* only one observation expression of `=` comparisons joined by `OR` on file hashes, IPv4 / IPv6,
+  domain names and URLs; `AND`, other operators, qualifiers, multiple expressions and other paths are refused and
+  counted. The bundle's 3 indicators (MD5 / SHA-1 / SHA-256 / SHA-512 each) load with 0 unsupported.
+- *Observation side:* Sysmon process creation now records the image hashes (`process.hashes`), parsed exactly
+  from Sysmon's documented `ALGO=HEX,…` form (`-`, Sysmon's "no value" written by Sysmon for Linux, is absent;
+  IMPHASH is not a file digest and is not kept; malformed values fail closed). Matched values: process and file
+  hashes, Zeek file hashes, network IPs, DNS / Zeek query names, TLS server names, HTTP hosts.
+- *Output:* `indicator_matches` on each unit's attribution analysis (`attribution-analysis/3`; investigation
+  1.3): the value, the observation, the indicator, the advisory, the named actor with its ATT&CK id and quote,
+  and whether the observation falls inside the indicator's validity window (a stale match is flagged, not
+  dropped).
+- *Proof of D1:* `tests/test_indicators.py` runs the same real record (an advisory hash and a detected image as
+  two labelled changes) with and without the indicator set: the match appears, and **every attribution quantity
+  in the analysis is identical**. The corpus contains only lab-built tooling and private infrastructure, so no
+  match is expected there (ADR context).

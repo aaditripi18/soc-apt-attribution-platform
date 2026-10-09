@@ -48,13 +48,15 @@ Thumbs.db
 #     from it under data/detection/ are tracked for the same reason
 #     (ADR-0007 D7 — detection content is a versioned, hash-pinned input), and the
 #     commit-pinned real telemetry samples under data/telemetry-samples/ used by
-#     adapter golden tests (ADR-0008 D2.3). ---
+#     adapter golden tests (ADR-0008 D2.3), and the hash-pinned government-advisory
+#     indicator bundles under data/intel/ (ADR-0013 D2). ---
 /data/*
 !/data/attack/
 !/data/calibration/
 !/data/detection/
 !/data/telemetry-samples/
 !/data/emulation-plans/
+!/data/intel/
 
 # Interrupted-download temp file from scripts/acquire_attack_bundle.py's
 # atomic-write step — must never be committed even if a download fails.

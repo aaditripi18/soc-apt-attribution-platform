@@ -2,7 +2,7 @@
 results through the read-model API (ADR-0009).
 
     python -m attribution_platform.investigation <recording> [--serve] [--port N]
-        [--elasticsearch] [--json out.json]
+        [--elasticsearch] [--json out.json] [--dossier out.md]
 
 ``<recording>`` is either a recording id pinned in
 ``data/calibration/corpus/v2/recordings.json`` (e.g. ``otrf-apt3-empire``) or a
@@ -10,6 +10,9 @@ path to a recording archive (``.zip`` / ``.tar.gz`` of JSON lines, e.g. your own
 lab export — ``docs/operations/lab-recording-guide.md``). A path that is not
 pinned must first pass the intake check (``replay/recording_check.py``); its
 SHA-256 and source declaration come from that check, never from guesses.
+
+``--dossier`` writes the attribution dossier (``investigation/dossier.py``):
+every unit explained in plain language from the persisted read model.
 
 Results are kept in memory by default (a throwaway session); ``--elasticsearch``
 persists them to the cluster configured by the same environment variables as
@@ -33,6 +36,8 @@ from attribution_platform.attack_knowledge.loader import load_attack_knowledge
 from attribution_platform.dataplane import ElasticClient, FakeElasticClient
 from attribution_platform.detection import DetectionEngine, load_rule_pack
 from attribution_platform.detection_content.detectability import load_detectability
+from attribution_platform.intel.indicators import load_indicator_set
+from attribution_platform.investigation.dossier import render_dossier
 from attribution_platform.investigation.records import (
     InvestigationRecord,
     load_attribution_analysis,
@@ -59,6 +64,10 @@ SIGMA_PACK = (
 
 COVERAGE_REPORT = SIGMA_PACK.with_name("coverage-report.json")
 IMPORT_REPORT = SIGMA_PACK.with_name("sigma-r2026-07-01-sigma_core++.import-report.json")
+
+
+ADVISORIES = REPO_ROOT / "data" / "intel" / "advisories"
+ADVISORY_ATTRIBUTIONS = REPO_ROOT / "data" / "intel" / "advisory-attributions.json"
 
 
 class CliError(Exception):
@@ -104,6 +113,7 @@ def investigate(argument: str, *, client: ElasticClient, recordings: Path = RECO
         detectability=load_detectability(
             COVERAGE_REPORT, IMPORT_REPORT, pack_content_hash=pack.content_hash
         ),
+        indicators=load_indicator_set(ADVISORIES, ADVISORY_ATTRIBUTIONS),
     )
     return Session(record=record, client=client)
 
@@ -168,6 +178,13 @@ def main(argv: Sequence[str] | None = None, env: dict[str, str] | None = None) -
     if "--json" in args:
         out = Path(args[args.index("--json") + 1])
         out.write_text(json.dumps(report, indent=1) + "\n", encoding="utf-8", newline="\n")
+
+    if "--dossier" in args:
+        out = Path(args[args.index("--dossier") + 1])
+        investigation_id = str(report["investigation_id"])
+        text = render_dossier(session.client, load_attack_knowledge(), investigation_id)
+        out.write_text(text, encoding="utf-8", newline="\n")
+        print(f"dossier       {out}")
 
     if "--serve" in args:
         port = int(args[args.index("--port") + 1]) if "--port" in args else 8000

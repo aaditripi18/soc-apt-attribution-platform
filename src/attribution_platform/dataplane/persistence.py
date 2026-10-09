@@ -390,6 +390,7 @@ def _process_ref_from_dict(d: Mapping[str, Any] | None) -> ProcessRef | None:
         working_directory=d.get("working_directory"),
         integrity_level=d.get("integrity_level"),
         pe=_pe_info_from_dict(d.get("pe")),
+        hashes=_hash_set_from_dict(d.get("hashes")),
     )
 
 

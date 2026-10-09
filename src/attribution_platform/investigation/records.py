@@ -30,8 +30,9 @@ ATTRIBUTION_ANALYSES_INDEX = "attribution-platform-attribution-analyses-v1"
 UNIT_SUMMARIES_INDEX = "attribution-platform-unit-summaries-v1"
 INVESTIGATION_SCHEMA_VERSION = "investigation/1"
 UNIT_SUMMARY_SCHEMA_VERSION = "unit-summary/1"
-#: /2 adds ``collection_guidance`` (ADR-0005 Amendment E).
-ATTRIBUTION_ANALYSIS_SCHEMA_VERSION = "attribution-analysis/2"
+#: /2 adds ``collection_guidance`` (ADR-0005 Amendment E); /3 adds
+#: ``indicator_matches`` (ADR-0013, contextual only).
+ATTRIBUTION_ANALYSIS_SCHEMA_VERSION = "attribution-analysis/3"
 
 # Field mappings in the same form as dataplane/mappings.py: the "properties"
 # body itself (ensure_index wraps it); a "properties"-wrapped form would be
@@ -133,6 +134,26 @@ class CollectionGuidanceView:
 
 
 @dataclass(frozen=True)
+class IndicatorMatchView:
+    """An observed value equal to a government advisory's indicator (ADR-0013).
+    **Context only**: a third-party claim shown beside the unit, never part of
+    any attribution quantity above."""
+
+    indicator_id: str
+    indicator_name: str
+    kind: str
+    value: str
+    observation_id: str
+    observed_at: str
+    within_validity: bool | None
+    bundle_file: str
+    report_name: str | None
+    named_actor: str | None
+    named_actor_attack_id: str | None
+    attribution_quote: str | None
+
+
+@dataclass(frozen=True)
 class AttributionAnalysisRecord:
     group_id: str
     sequence_id: str
@@ -144,6 +165,7 @@ class AttributionAnalysisRecord:
     candidates: tuple[CandidateView, ...]
     hypotheses: tuple[HypothesisView, ...]
     collection_guidance: CollectionGuidanceView | None = None
+    indicator_matches: tuple[IndicatorMatchView, ...] = ()
     calibration_status: CalibrationStatus = CalibrationStatus.UNCALIBRATED
     calibration_version: None = None
     calibration_note: str = UNCALIBRATED_NOTE

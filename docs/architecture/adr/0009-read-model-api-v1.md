@@ -144,3 +144,17 @@ a second; the live test refreshes explicitly before searching.
 **Result.** Against Elasticsearch 8.15.3: 9 of 9 live tests pass — including the real APT3 Empire recording,
 whose investigation, units, analyses and Evidence are served byte-identically from the cluster and from the
 in-memory run. Offline: 1,823 tests pass (the 9 live tests skip unless opted in).
+
+## Amendment C (2026-10-09) — The attribution dossier
+
+**Status:** ACCEPTED (owner instruction 2026-10-09, "finish all other tasks").
+
+**Decision.** `investigation/dossier.py` renders one investigation as Markdown (`--dossier out.md` on the
+investigation CLI), answering CLAUDE.md's attribution questions per unit — what was observed, what evidence was
+extracted, which techniques are supported and why, which actors are consistent, what uncertainty remains, what
+additional evidence would help, and indicator context — **only from the persisted read model** (the objects the
+API serves), so it can never say more than the system computed. Rules: candidates alphabetical with factual
+counts, no likelihood / confidence / ranking (D3 of this ADR still holds); each technique is tied to its Evidence
+and each Evidence quotes its own `claim` (rule, matched values, mapping basis); low-level Evidence is labelled as
+context; indicator matches carry the publisher's sentence and validity. Deterministic (tested: the same read model
+renders the same bytes). It is a report, not a user interface — the frontend remains the owner's later decision.

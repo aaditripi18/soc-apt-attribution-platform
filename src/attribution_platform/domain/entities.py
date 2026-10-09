@@ -715,6 +715,9 @@ class ProcessRef:
     working_directory: str | None = None
     integrity_level: str | None = None
     pe: PeInfo | None = None
+    #: The image's hashes, as the source computed them (Sysmon process creation);
+    #: lower-case hex. Added for indicator matching (ADR-0013).
+    hashes: HashSet | None = None
 
 
 @dataclass(frozen=True)

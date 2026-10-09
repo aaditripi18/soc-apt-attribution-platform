@@ -1,0 +1,17 @@
+{
+  "source": "Government advisory STIX 2.1 indicator bundles (ADR-0013)",
+  "retrieved_at_utc": "2026-10-09T08:44:53Z",
+  "method": "scripts/acquire_advisory_indicators.py (URL + SHA-256 pinned)",
+  "approval": "owner instruction 2026-10-09 ('finish all other tasks'; ADR-0013 D1-D2)",
+  "bundles": [
+    {
+      "file": "MAR-10448362.c1.v1.CLEAR_stix2.json",
+      "download_url": "https://www.cisa.gov/sites/default/files/2024-02/MAR-10448362.c1.v1.CLEAR_stix2.json",
+      "sha256": "bcccd68d135277f7e94a8832e863b973311bb534d443027ab592f7945ed36266",
+      "size_bytes": 53239,
+      "advisory": "CISA MAR-10448362.c1 (with joint advisory AA24-038A, PRC state-sponsored actors)",
+      "reuse": "TLP:CLEAR (disclosure not limited); a work of the U.S. Government",
+      "obtained_via": "--from-file (fetched with another client; SHA-256 verified)"
+    }
+  ]
+}

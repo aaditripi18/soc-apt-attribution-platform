@@ -14,6 +14,7 @@ records.
 
 from __future__ import annotations
 
+import dataclasses
 import hashlib
 import json
 from collections.abc import Mapping
@@ -49,6 +50,11 @@ from attribution_platform.dataplane import (
 )
 from attribution_platform.detection import DetectionEngine
 from attribution_platform.domain import Evidence, Observation
+from attribution_platform.intel.indicators import (
+    IndicatorMatch,
+    IndicatorSet,
+    match_observations,
+)
 from attribution_platform.investigation.records import (
     AttributionAnalysisRecord,
     CandidateView,
@@ -56,6 +62,7 @@ from attribution_platform.investigation.records import (
     CollectionQuestionView,
     ContributionView,
     HypothesisView,
+    IndicatorMatchView,
     InvestigationRecord,
     UnitSummaryRecord,
     persist_attribution_analysis,
@@ -69,8 +76,8 @@ from attribution_platform.replay import (
 from attribution_platform.replay.recording_pipeline import RecordingSource, analyze_recording
 
 #: 1.1: unit summaries (ADR-0009 Amendment A); 1.2: evidence-collection guidance
-#: per unit (ADR-0005 Amendment E).
-INVESTIGATION_METHOD_VERSION = "1.2"
+#: per unit (ADR-0005 Amendment E); 1.3: advisory indicator matches (ADR-0013).
+INVESTIGATION_METHOD_VERSION = "1.3"
 #: ADR-0005 §D16 structural lower bound; the fitted floor needs a calibration_version.
 STRUCTURAL_MIN_PROFILE_FLOOR = 1
 
@@ -109,6 +116,23 @@ def _candidate_view(candidate: Candidate, knowledge: AttackKnowledge) -> Candida
         name=str(stix_object.get("name")) if stix_object is not None else stix_id,
         attack_external_id=_external_id(stix_object),
         generation_basis=candidate.generation_basis,
+    )
+
+
+def _match_view(match: IndicatorMatch) -> IndicatorMatchView:
+    return IndicatorMatchView(
+        indicator_id=match.indicator_id,
+        indicator_name=match.indicator_name,
+        kind=match.kind,
+        value=match.value,
+        observation_id=match.observation_id,
+        observed_at=match.observed_at,
+        within_validity=match.within_validity,
+        bundle_file=match.bundle_file,
+        report_name=match.report_name,
+        named_actor=match.actor_name,
+        named_actor_attack_id=match.attack_group_id,
+        attribution_quote=match.attribution_quote,
     )
 
 
@@ -242,6 +266,7 @@ def run_investigation(
     knowledge: AttackKnowledge,
     detection_pack_content_hash: str,
     detectability: Mapping[str, Detectability] | None = None,
+    indicators: IndicatorSet | None = None,
 ) -> InvestigationRecord:
     """Run ``source`` end to end and persist every read-model object."""
     versions = {
@@ -297,6 +322,19 @@ def run_investigation(
             knowledge=knowledge,
             detectability=detectability,
         )
+        if indicators is not None:
+            unit_observations = {
+                members[e][1].observation_id: members[e][1]
+                for e in group.member_evidence_ids
+                if e in members
+            }
+            analysis_record = dataclasses.replace(
+                analysis_record,
+                indicator_matches=tuple(
+                    _match_view(m)
+                    for m in match_observations(indicators, unit_observations.values())
+                ),
+            )
         persist_attribution_analysis(client, analysis_record)
         persist_unit_summary(client, summarize_unit(group, sequence, analysis_record, members))
 

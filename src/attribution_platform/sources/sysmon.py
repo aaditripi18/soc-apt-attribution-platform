@@ -83,6 +83,7 @@ from attribution_platform.domain import (
     EventMetadata,
     FileRef,
     FileStreamRef,
+    HashSet,
     HostRef,
     NetworkEndpoint,
     NetworkInfo,
@@ -444,6 +445,44 @@ def _pe_info(record: Mapping[str, Any], ecs_owner: str) -> PeInfo | None:
     return None if pe == PeInfo() else pe
 
 
+#: Sysmon's ``HashAlgorithms`` names -> HashSet field and hex length. IMPHASH is a
+#: Sysmon-computed import hash, kept out of HashSet (not a file digest).
+_HASH_FIELDS = {"MD5": ("md5", 32), "SHA1": ("sha1", 40), "SHA256": ("sha256", 64)}
+
+
+def _process_hashes(record: Mapping[str, Any]) -> HashSet | None:
+    """The image hashes of a Process Create event: Sysmon's ``Hashes`` value
+    (``ALGO=HEX[,ALGO=HEX…]``, its documented form) parsed exactly, else the ECS
+    ``process.hash.*`` fields. ``-`` is Sysmon's own "no value" (hashing off, as
+    Sysmon for Linux writes it) and means absent. Malformed values fail closed;
+    nothing is guessed."""
+    raw = _event_data_or_ecs(record, "Hashes")
+    values: dict[str, str] = {}
+    if raw is None:
+        for key in ("md5", "sha1", "sha256"):
+            ecs_value = _get(record, "process", "hash", key)
+            if ecs_value:
+                values[key] = str(ecs_value).lower()
+        return HashSet(**values) if values else None
+    if str(raw).strip() == "-":
+        return None
+    for part in str(raw).split(","):
+        name, sep, value = part.strip().partition("=")
+        if not sep or not value:
+            raise SourceAdapterError(f"SysmonSourceAdapter: malformed Hashes entry {part!r}")
+        if name.upper() == "IMPHASH":
+            continue
+        if name.upper() not in _HASH_FIELDS:
+            raise SourceAdapterError(f"SysmonSourceAdapter: unknown hash algorithm {name!r}")
+        field_name, length = _HASH_FIELDS[name.upper()]
+        if len(value) != length or any(c not in "0123456789abcdefABCDEF" for c in value):
+            raise SourceAdapterError(
+                f"SysmonSourceAdapter: {name} value is not {length} hex digits"
+            )
+        values[field_name] = value.lower()
+    return HashSet(**values) if values else None
+
+
 def _process_ref(record: Mapping[str, Any], *, creation: bool) -> ProcessRef | None:
     """The acting process. ``creation`` (Process Create only) adds the fields
     that event alone carries — parent lineage details, working directory,
@@ -486,6 +525,7 @@ def _process_ref(record: Mapping[str, Any], *, creation: bool) -> ProcessRef | N
         # No ECS field exists for Sysmon's IntegrityLevel; only the raw value.
         integrity_level=_event_data_or_ecs(record, "IntegrityLevel"),
         pe=_pe_info(record, "process"),
+        hashes=_process_hashes(record),
     )
 
 

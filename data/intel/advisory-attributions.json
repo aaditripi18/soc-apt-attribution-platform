@@ -1,0 +1,18 @@
+{
+  "review_version": "advisory-attribution-review/1",
+  "reviewed_on": "2026-10-09",
+  "policy": "An advisory's indicators are attributed only to an actor the publisher names in the bundle itself; the naming sentence is quoted verbatim and must be present in the pinned bundle (checked at load). Matches are contextual annotations only — never ATT&CK features, never scored (ADR-0013 D1).",
+  "attributions": [
+    {
+      "bundle_file": "MAR-10448362.c1.v1.CLEAR_stix2.json",
+      "report_id": "report--25563b64-7e0b-4a6c-b8a3-ccddc41ae422",
+      "report_name": "MAR-10448362.c1.v2",
+      "actor_name": "Volt Typhoon",
+      "attack_group_id": "G1017",
+      "attack_group_stix_id": "intrusion-set--174279b4-399f-4ddb-966e-5efedd1dd5f2",
+      "publisher": "CISA",
+      "quote": "CISA received three files for analysis obtained from a critical infrastructure compromised by the People’s Republic of China (PRC) state-sponsored cyber group known as Volt Typhoon.",
+      "scope": "files recovered from one compromised critical-infrastructure environment; the publisher states the environment was compromised by the actor, not that the files are unique to it"
+    }
+  ]
+}
