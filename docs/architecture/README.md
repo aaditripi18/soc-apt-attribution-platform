@@ -41,7 +41,7 @@ the later ADRs below record each subsystem as it was designed, measured and buil
 | [adr/0010-linux-telemetry.md](adr/0010-linux-telemetry.md) | Linux telemetry: Sysmon for Linux, Linux Audit (auditd), OS product scopes | **ACCEPTED** (2026-10-01), implemented |
 | [adr/0011-cloud-telemetry.md](adr/0011-cloud-telemetry.md) | Cloud and SaaS telemetry: Entra ID, Office 365, AWS CloudTrail, Azure Activity, Okta, GitHub, Kubernetes audit | **ACCEPTED** (2026-10-06), implemented (batches A–C) |
 | [adr/0012-network-telemetry.md](adr/0012-network-telemetry.md) | Network telemetry: Zeek (JSON and TSV), the sensor product scope; network ↔ host link measured and not adopted | **ACCEPTED** (2026-10-06), implemented |
-| [adr/0013-indicator-intelligence-layer.md](adr/0013-indicator-intelligence-layer.md) | Indicator (IOC) intelligence layer — contextual-only recommended | **PROPOSED** — owner decision required |
+| [adr/0013-indicator-intelligence-layer.md](adr/0013-indicator-intelligence-layer.md) | Indicator (IOC) intelligence layer: pinned government advisories, contextual only | **ACCEPTED** D1–D2 (2026-10-09), implemented; scoring (D3) not adopted |
 | [adr/0014-macos-telemetry.md](adr/0014-macos-telemetry.md) | macOS telemetry: Endpoint Security process events via osquery; enrich tier extended to macOS | **ACCEPTED** (2026-10-08), implemented |
 
 ## The one-paragraph summary
@@ -57,5 +57,4 @@ scoring, no opaque/LLM step on the correctness path, and every conclusion traces
 - **Calibration** (ADR-0006): the corpus-v2 readiness gate is not met — it needs at least four calibration actors
   and hard negatives recorded in the owner's isolated lab (see `docs/operations/lab-recording-guide.md`). Until
   then attribution output is explicitly *uncalibrated* (no likelihood / confidence / rank fields, ADR-0009).
-- **ADR-0013** (indicator layer) awaits the owner's decision.
 - **Frontend** comes last, on the owner's direction.

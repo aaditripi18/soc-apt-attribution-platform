@@ -663,3 +663,14 @@ selection (a reproducibility-frozen implementation input, no longer a methodolog
 execution; and all of G3.6 — likelihood, confidence, WEP, abstention, scoring, candidate generation, ACH,
 comparative analysis, CoverageProfile, `evidence_type` implementation, telemetry, and frontend. This clarification
 does not itself implement any of them.
+
+## Record (2026-10-09) — Reproducibility is a tested property
+
+Calibration is only meaningful if replaying the same telemetry through the same versions yields the same objects.
+Version stamps alone did not guarantee that: ADR-0003 revision H2.3 found a real **hash-seed dependence** (Python
+randomises string hashing per process) that made APT29 day 1 fail under one seed and pass under others.
+`scripts/check_reproducibility.py` now investigates a recording in fresh interpreters under different
+`PYTHONHASHSEED` values and requires the canonical digest of **every persisted document** (Observations, Evidence,
+links, units, sequences, analyses, guidance, indicator matches) to agree; `tests/test_reproducibility.py` runs it
+on a mixed real-record recording in every test run. Measured on the real APT3 Empire recording: **2,056 documents,
+byte-identical under seeds 0, 1 and 2**. No persisted document carries wall-clock time.

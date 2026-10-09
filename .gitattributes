@@ -19,3 +19,6 @@ data/telemetry-samples/**/*.jsonl binary
 
 # --- CTID emulation plans (doc 15 DC-3): SHA-256-pinned text, byte-for-byte. ---
 data/emulation-plans/** binary
+
+# --- Government-advisory indicator bundles (ADR-0013 D2): SHA-256-pinned, byte-for-byte. ---
+data/intel/** binary
