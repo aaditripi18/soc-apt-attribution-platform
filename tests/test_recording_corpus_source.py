@@ -73,15 +73,17 @@ def _process_create(
 
 
 def _recording(tmp_path: Path) -> RecordingSource:
-    ps = "C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe"
-    whoami = "C:\Windows\System32\whoami.exe"
+    ps = "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe"
+    whoami = "C:\\Windows\\System32\\whoami.exe"
     records = [
         # one process tree: encoded PowerShell -> two whoami discovery children
         _process_create(1, 1, "{P}", "{ROOT}", ps, "powershell.exe -nop -w hidden -enc SQBFAFgA"),
         _process_create(2, 2, "{A}", "{P}", whoami, "whoami /all -all"),
         _process_create(3, 3, "{B}", "{P}", whoami, "whoami /all -all"),
         # an unrelated benign event: no detection, context only
-        _process_create(4, 4, "{N}", "{ROOT2}", "C:\Windows\System32\notepad.exe", "notepad.exe"),
+        _process_create(
+            4, 4, "{N}", "{ROOT2}", "C:\\Windows\\System32\\notepad.exe", "notepad.exe"
+        ),
     ]
     path = tmp_path / "rec.zip"
     with zipfile.ZipFile(path, "w") as archive:
