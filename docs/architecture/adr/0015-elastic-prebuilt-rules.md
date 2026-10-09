@@ -115,6 +115,23 @@ account, SYSTEM in every supported fixture event, not the acting user, so such b
 Elastic either), `regex` (166), comparisons of an expression or of two fields (`length(…) > 0`,
 `startsWith(process.parent.name, process.name)`: 216). The pack regenerates byte-identically.
 
+**On real recordings** (the pinned OTRF corpus, both packs on the same Observations; "Elastic adds" =
+ATT&CK ids Elastic detects in that recording and Sigma does not):
+
+| Recording | Observations | Sigma ids | Elastic ids | Elastic detections | Elastic adds |
+|---|---|---|---|---|---|
+| APT29 eval day 1 | 175,143 | 42 | 13 | 6 | 7 (T1105, T1112, T1560, T1027.010, …) |
+| APT29 eval day 2 | 494,098 | 39 | 24 | 13 | 13 (T1136.002, T1552.004, T1546, T1087.002, …) |
+| APT3 CALDERA | 63,824 | 27 | 17 | 125 | 12 (T1018, T1036.005, T1140, …) |
+| APT3 Empire | 87,929 | 14 | 33 | 68 | 26 (T1566.001, T1569.002, T1218.005, T1564.001, T1074.001, …) |
+| 7 LSASS-dump tool runs | 33–55 k each | 7–16 | 2–12 | 3–8 | T1003 everywhere; T1003.001 (Metasploit payload's LSASS access, missed by Sigma there), T1003.003 + T1055.012 (comsvcs) |
+
+Inspected detections are the documented activity (Empire's encoded launcher, a VBS run through a
+service shell, `net use \\host\ADMIN$` sweeps, the payload's LSASS access with `GrantedAccess 0x1410`);
+some fire on benign process behaviour exactly as Elastic's rule logic does (e.g. a `svchost.exe` LSASS
+access outside the rule's exclusion list) — translation is faithful, not tuned. Low-severity and
+building-block detections are enrich-tier Evidence.
+
 ## Consequences
 
 - More techniques become detectable where Elastic content is single-event and exact; the rest stays an explicit,
