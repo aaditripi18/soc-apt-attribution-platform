@@ -80,7 +80,7 @@ def test_candidates_are_alphabetical_and_nothing_is_ranked(
 def test_indicator_context_quotes_the_publisher(tmp_path: Path) -> None:
     record: dict[str, Any] = _with_hash(_sysmon_1(), ADVISORY_SHA256)
     _event_data(record).update(
-        Image="C:\Windows\System32\whoami.exe",
+        Image="C:\\Windows\\System32\\whoami.exe",
         CommandLine="whoami /all",
         OriginalFileName="whoami.exe",
     )
