@@ -1,0 +1,1727 @@
+{
+ "source": "elastic/integrations (Elastic integration ingest pipeline and pipeline test fixtures)",
+ "source_commit": "ff5328128a30c75046130ae58ddba450caa1f2dc",
+ "license": "Elastic License 2.0",
+ "license_url": "https://github.com/elastic/integrations/blob/ff5328128a30c75046130ae58ddba450caa1f2dc/LICENSE.txt",
+ "retrieved_at_utc": "2026-10-10T14:35:12Z",
+ "method": "scripts/acquire_elastic_conformance.py (commit-pinned; each file verified against its git blob id)",
+ "approval": "owner instruction 2026-10-10 (extend Elastic rules to further log sources)",
+ "purpose": "Conformance oracle for the derived ECS views of this data stream (ADR-0015).",
+ "files": [
+  {
+   "path": "fixtures/test-add-permission-json.log",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-add-permission-json.log",
+   "blob_id": "7799574a423304e262f0739eb69ba6c14aff3e56",
+   "size_bytes": 1385,
+   "sha256": "8f462742bfb5bc5a229a953e3b41642ac199e6ddd93935fa9137cc5f9214c34f"
+  },
+  {
+   "path": "fixtures/test-add-permission-json.log-expected.json",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-add-permission-json.log-expected.json",
+   "blob_id": "26ce88f14e8262d2f3ad67cb17b917bd3a7d582f",
+   "size_bytes": 7123,
+   "sha256": "3b08fd683c015758423a4542f1e28c0ade02723958d2a23e40178607060ceba9"
+  },
+  {
+   "path": "fixtures/test-add-user-to-group-json.log",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-add-user-to-group-json.log",
+   "blob_id": "4c067668bedb3da086514e01756d983ecbaa4895",
+   "size_bytes": 570,
+   "sha256": "e78e7275b6c906310d36dd89f1c6b38a9eafc03b09920bb6c82d21ee2f18f271"
+  },
+  {
+   "path": "fixtures/test-add-user-to-group-json.log-expected.json",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-add-user-to-group-json.log-expected.json",
+   "blob_id": "fe8393e5766275512c31f9801c40ebae0a915e3f",
+   "size_bytes": 3947,
+   "sha256": "ce97ca63a69223ac544de950692adfbc1a74d46ddd3ebc679737bdb1a35db341"
+  },
+  {
+   "path": "fixtures/test-assume-role-email-session-json.log",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-assume-role-email-session-json.log",
+   "blob_id": "279105fc7829f51ae6c7cbf10941a0f97d40b0ec",
+   "size_bytes": 1561,
+   "sha256": "bf875e0c054b1237c021c953ac34b6867114e1394b1510289ed20903783659a2"
+  },
+  {
+   "path": "fixtures/test-assume-role-email-session-json.log-expected.json",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-assume-role-email-session-json.log-expected.json",
+   "blob_id": "2baaa48b7417d1936542bc46a9ae6b861ffd41ab",
+   "size_bytes": 8613,
+   "sha256": "b48ea0a5789ed6ddbdac944701dc1a3249bda48860d7fdbfe9eecad762b85c1c"
+  },
+  {
+   "path": "fixtures/test-assume-role-json.log",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-assume-role-json.log",
+   "blob_id": "dc75acef7d56f737cb5fefc40526c671bb1871f0",
+   "size_bytes": 5048,
+   "sha256": "8af087018745d3452d6c4c086e85a03b8964fe351288017e45123d48e679adec"
+  },
+  {
+   "path": "fixtures/test-assume-role-json.log-expected.json",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-assume-role-json.log-expected.json",
+   "blob_id": "5ab85d006877198bc0824537524d9162db282a9a",
+   "size_bytes": 23937,
+   "sha256": "f57be5286e17478679ea6becf89b4d9cda1a63e7a3f71d3d4723e821a2710c11"
+  },
+  {
+   "path": "fixtures/test-attach-group-policy-json.log",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-attach-group-policy-json.log",
+   "blob_id": "ed176bdc12d40b1c2448efb5dff6897b6fc8d22c",
+   "size_bytes": 1103,
+   "sha256": "f87002115ebf26efccd1e6d46ece40ff83505162283b77359dd5a31c73e1fd44"
+  },
+  {
+   "path": "fixtures/test-attach-group-policy-json.log-expected.json",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-attach-group-policy-json.log-expected.json",
+   "blob_id": "75d83093058179e218cefaa3d2317541dcc59d66",
+   "size_bytes": 6841,
+   "sha256": "105aa7d5e71c93a5b2902233093e0d38b504bfc24972ca64ed577eeec0d0f1d1"
+  },
+  {
+   "path": "fixtures/test-attach-role-policy-json.log",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-attach-role-policy-json.log",
+   "blob_id": "e2059aa1d602320c20343d8ec70530ddfc569638",
+   "size_bytes": 1098,
+   "sha256": "7109a5f9a192113d48e4879e7e364a2f293fe2fce9449ec55965c79f79116df9"
+  },
+  {
+   "path": "fixtures/test-attach-role-policy-json.log-expected.json",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-attach-role-policy-json.log-expected.json",
+   "blob_id": "2afa4b1b982a4ba57d00ec1c9ff14d1c08a31d50",
+   "size_bytes": 6137,
+   "sha256": "86ced56c77b24e30035f8ef0ead068588bc3dda577dd2deb2adfda1eceb8d855"
+  },
+  {
+   "path": "fixtures/test-attach-user-policy-json.log",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-attach-user-policy-json.log",
+   "blob_id": "38ba9bd26d2b33234047c8de0911aa81a496f994",
+   "size_bytes": 1400,
+   "sha256": "ef86314fdfef2af58c378ad59f83da8f33c33bf219d3c2360adc11c04e14236e"
+  },
+  {
+   "path": "fixtures/test-attach-user-policy-json.log-expected.json",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-attach-user-policy-json.log-expected.json",
+   "blob_id": "bd3098c94570e2304235a4d3a785b681c615d61e",
+   "size_bytes": 7924,
+   "sha256": "4dbd35a688bf067bde1bdd659893058689ee6bcd09f99324f9089c2c05d68e57"
+  },
+  {
+   "path": "fixtures/test-attach-user-role-json.log",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-attach-user-role-json.log",
+   "blob_id": "8647efc62ac03c2ceb5dde990be8f584c83ecb2c",
+   "size_bytes": 1104,
+   "sha256": "6ae52e301ea5ca0aeeecf6efcce1972964d32dfbfa6d965d693626388c8fe7ef"
+  },
+  {
+   "path": "fixtures/test-attach-user-role-json.log-expected.json",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-attach-user-role-json.log-expected.json",
+   "blob_id": "4e4fe1c27a9502105f363164cb6f3173e62cb767",
+   "size_bytes": 6646,
+   "sha256": "4d7883e79574bd0ada5474f98095f561f16e813bd1370ad41bd6ffbc8d7eb372"
+  },
+  {
+   "path": "fixtures/test-authorize-security-group-egress-json.log",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-authorize-security-group-egress-json.log",
+   "blob_id": "f5fc802a912d62c2a7ffba06a726f38efc550181",
+   "size_bytes": 1949,
+   "sha256": "21985e72c77882f7e74ca6600180337aa2263a5677ab3976a050398674a2b819"
+  },
+  {
+   "path": "fixtures/test-authorize-security-group-egress-json.log-expected.json",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-authorize-security-group-egress-json.log-expected.json",
+   "blob_id": "d8d007351060ff1dae073d677d54897c8939bb59",
+   "size_bytes": 10393,
+   "sha256": "bb8981b8105aba9848f6b4dd02cb92ff8c30db5be06c899e2a8880d33dac35f0"
+  },
+  {
+   "path": "fixtures/test-authorize-security-group-ingress-json.log",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-authorize-security-group-ingress-json.log",
+   "blob_id": "a2bd9f4957a722f7beca4e8cb8037177c4fcaee0",
+   "size_bytes": 1655,
+   "sha256": "2454973392f7f950b7f9127750eefad9989e51917bb73ca29c055d9c995bd15d"
+  },
+  {
+   "path": "fixtures/test-authorize-security-group-ingress-json.log-expected.json",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-authorize-security-group-ingress-json.log-expected.json",
+   "blob_id": "148477fd66201d6ab29872ae52138e71be30a896",
+   "size_bytes": 9253,
+   "sha256": "6b4cc532ac99de8f63de8c2019cf4dcb06838b8e349358e93660e68ab4071197"
+  },
+  {
+   "path": "fixtures/test-batch-get-secret-value-json.log",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-batch-get-secret-value-json.log",
+   "blob_id": "c7b834995552370ac217abff02d46051f1ec5c61",
+   "size_bytes": 1242,
+   "sha256": "d987a94e4dd8eae34a5f3e07e8ba3216086c8766e3a2a4fe13ae53d27a137a0a"
+  },
+  {
+   "path": "fixtures/test-batch-get-secret-value-json.log-expected.json",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-batch-get-secret-value-json.log-expected.json",
+   "blob_id": "d58fd2714485d5908571310e0aad8152e0dc45c2",
+   "size_bytes": 7023,
+   "sha256": "24658d89de4bd71fba5f250a95e07b580eb4de921ca21229a59119c8861eef88"
+  },
+  {
+   "path": "fixtures/test-change-password-json.log",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-change-password-json.log",
+   "blob_id": "b3c1f2a10d31a9f882bd5efb697e83689f03da8a",
+   "size_bytes": 1355,
+   "sha256": "f4f06cf0047fcc7a789b312a8f37a62b990547f7a1c8f894a94c8ebfcf3ae65a"
+  },
+  {
+   "path": "fixtures/test-change-password-json.log-expected.json",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-change-password-json.log-expected.json",
+   "blob_id": "869903fb9982224385122223c027805a5b13c3d5",
+   "size_bytes": 7429,
+   "sha256": "87d776015c5775925d10ffed693e50ac5a1f672ad202bd10c8d8cc2df54a7720"
+  },
+  {
+   "path": "fixtures/test-cloudtrail-digest-json-keyword.log",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-cloudtrail-digest-json-keyword.log",
+   "blob_id": "d5a68415c116cbdea53973796175ae112938414b",
+   "size_bytes": 2466,
+   "sha256": "c9ebd8ad4ac1cbfbc425f0b32c5ea6d3b80d01d49dbfebaf7b870480aadf8002"
+  },
+  {
+   "path": "fixtures/test-cloudtrail-digest-json-keyword.log-config.yml",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-cloudtrail-digest-json-keyword.log-config.yml",
+   "blob_id": "ea62b82d20cd6af5d128976ea940d3e910632a43",
+   "size_bytes": 521,
+   "sha256": "dca4b747c4fc1e725cd83c81a4df841322269cbeb56e2cad62e07978160baa70"
+  },
+  {
+   "path": "fixtures/test-cloudtrail-digest-json-keyword.log-expected.json",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-cloudtrail-digest-json-keyword.log-expected.json",
+   "blob_id": "55d94ab2943d89563fc2be3000e89cf282574c11",
+   "size_bytes": 7450,
+   "sha256": "f752e4f50150f293ff79d3230e12b4e2a92aeb215b2c9210c919479de191bc39"
+  },
+  {
+   "path": "fixtures/test-cloudtrail-digest-json.log",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-cloudtrail-digest-json.log",
+   "blob_id": "d5a68415c116cbdea53973796175ae112938414b",
+   "size_bytes": 2466,
+   "sha256": "c9ebd8ad4ac1cbfbc425f0b32c5ea6d3b80d01d49dbfebaf7b870480aadf8002"
+  },
+  {
+   "path": "fixtures/test-cloudtrail-digest-json.log-expected.json",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-cloudtrail-digest-json.log-expected.json",
+   "blob_id": "55d94ab2943d89563fc2be3000e89cf282574c11",
+   "size_bytes": 7450,
+   "sha256": "f752e4f50150f293ff79d3230e12b4e2a92aeb215b2c9210c919479de191bc39"
+  },
+  {
+   "path": "fixtures/test-common-config.yml",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-common-config.yml",
+   "blob_id": "1b43234b2fe45edc71a5bc957d703327419b8686",
+   "size_bytes": 591,
+   "sha256": "51970af80f824dcc807f4ca010b34fe36f4929d05fd419cf825a2753f95601bb"
+  },
+  {
+   "path": "fixtures/test-console-login-json.log",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-console-login-json.log",
+   "blob_id": "315e72e609e312297901b0914622c756ea3b8f83",
+   "size_bytes": 2407,
+   "sha256": "0ae2e57fd459ed92163801637eb77f8f7101646f9bf066423a0257f35ee18a4c"
+  },
+  {
+   "path": "fixtures/test-console-login-json.log-expected.json",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-console-login-json.log-expected.json",
+   "blob_id": "030d8006525f9dc5aaecb7d90844a6f0ed189c95",
+   "size_bytes": 16993,
+   "sha256": "fb360d97e49f425445e6dc4a40f2727b15a4c3de2999b25f6b5d151c38a1b10f"
+  },
+  {
+   "path": "fixtures/test-converse-json.log",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-converse-json.log",
+   "blob_id": "44077837913fde520c673a2434522dc1759927f6",
+   "size_bytes": 1341,
+   "sha256": "3460085aec3bbd34f9551ce0bb8d103157a5df657b739a5b49ccdf3eb7071794"
+  },
+  {
+   "path": "fixtures/test-converse-json.log-expected.json",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-converse-json.log-expected.json",
+   "blob_id": "d79f985e1dcafb786adf1aa45ba2bbd486884ffb",
+   "size_bytes": 7265,
+   "sha256": "cd189dc0179c94e74bb022323d2d1a72ed3c831d3501f8ca9c446d65f8da31af"
+  },
+  {
+   "path": "fixtures/test-copy-object-json-minimal.log",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-copy-object-json-minimal.log",
+   "blob_id": "d656cb52ca68b151abf6d6c3df68b8ed4d680e2c",
+   "size_bytes": 1903,
+   "sha256": "4222cdbbf7c08046877f391a7288e92c082e56c60f228cb6ffdec4602c7608f8"
+  },
+  {
+   "path": "fixtures/test-copy-object-json-minimal.log-config.yml",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-copy-object-json-minimal.log-config.yml",
+   "blob_id": "b30d398a0a7eb60cfa5b2b6d96d50ced87423783",
+   "size_bytes": 521,
+   "sha256": "cb96128ac88ea626d361c6d2fe378c87c2eebd1c006bfbbca9733d1b3bba2b5d"
+  },
+  {
+   "path": "fixtures/test-copy-object-json-minimal.log-expected.json",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-copy-object-json-minimal.log-expected.json",
+   "blob_id": "edb72eb0b4d0e5ea3b36f1fe2d981e5ac163cfd6",
+   "size_bytes": 9487,
+   "sha256": "65d08e67778ba5a15bdcf26c82f2bcf017f2da00ab2987a7e33af1b69c830dfd"
+  },
+  {
+   "path": "fixtures/test-copy-object-json.log",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-copy-object-json.log",
+   "blob_id": "d656cb52ca68b151abf6d6c3df68b8ed4d680e2c",
+   "size_bytes": 1903,
+   "sha256": "4222cdbbf7c08046877f391a7288e92c082e56c60f228cb6ffdec4602c7608f8"
+  },
+  {
+   "path": "fixtures/test-copy-object-json.log-expected.json",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-copy-object-json.log-expected.json",
+   "blob_id": "4f1d7e38e42bfc8bf8e77b7a358fb697e2be4c8c",
+   "size_bytes": 10495,
+   "sha256": "8653610101fcdf42422a5c4f2024d7a817b535561a6e99dbd2a0e933f4517954"
+  },
+  {
+   "path": "fixtures/test-create-access-key-json.log",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-create-access-key-json.log",
+   "blob_id": "d18fcffb93364343ddd28df1c4c6ec81c4993c3e",
+   "size_bytes": 855,
+   "sha256": "134017871e333a4f8fd2b7532f325ab30b56c86520836970cbbf456fa6990c7e"
+  },
+  {
+   "path": "fixtures/test-create-access-key-json.log-expected.json",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-create-access-key-json.log-expected.json",
+   "blob_id": "362725a3632a76ef3ba626a8eecb878434c624fc",
+   "size_bytes": 5410,
+   "sha256": "05aa71b6703918836c86c0ca62637c6bae6838817ac6b285d9afb5bc6dcf1cc1"
+  },
+  {
+   "path": "fixtures/test-create-control-channel-json.log",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-create-control-channel-json.log",
+   "blob_id": "c19b863a2f05e7f9603174fdd6d733daa315ed1e",
+   "size_bytes": 1651,
+   "sha256": "351c323bcce37864e75d4bcf375087833568b03d788dac018f945c7c0c89f134"
+  },
+  {
+   "path": "fixtures/test-create-control-channel-json.log-expected.json",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-create-control-channel-json.log-expected.json",
+   "blob_id": "726cbb6f7af3542e43e9efebbedfbd7dc1c2f8ea",
+   "size_bytes": 8436,
+   "sha256": "d69ae442493d4a43a8af958dcffdf3a351316080ac7889a708febc0de306b412"
+  },
+  {
+   "path": "fixtures/test-create-db-instance-json.log",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-create-db-instance-json.log",
+   "blob_id": "916492df3f086b7a1634d4888d02db8b4ecd25ca",
+   "size_bytes": 3740,
+   "sha256": "0ff70ef696107f017bbd25d8262de256a623844ffdba267b8d0973e679eea176"
+  },
+  {
+   "path": "fixtures/test-create-db-instance-json.log-expected.json",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-create-db-instance-json.log-expected.json",
+   "blob_id": "4a91e5eb11578fe08758b3a3dcafe11f4e84214f",
+   "size_bytes": 17467,
+   "sha256": "36189cb1107fef5dceb2ba8251a98824c4fc3e4fc4af4719596a8f2c019c863b"
+  },
+  {
+   "path": "fixtures/test-create-detector-json.log",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-create-detector-json.log",
+   "blob_id": "c626c9ebfd51f9f0afa773c4bc0861aebde4aae9",
+   "size_bytes": 1026,
+   "sha256": "f2236fe96498cf51af8afbe5d7425bf7e51d8b710130f3a146d75874ea3c3fcd"
+  },
+  {
+   "path": "fixtures/test-create-detector-json.log-expected.json",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-create-detector-json.log-expected.json",
+   "blob_id": "9fa4b13268c005de4a019af461575d814804c893",
+   "size_bytes": 6537,
+   "sha256": "f8165153afdb20b7e682a105f4e6e57597ff5800c23f4d9176873612e956304c"
+  },
+  {
+   "path": "fixtures/test-create-document-json.log",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-create-document-json.log",
+   "blob_id": "3cc55a36f576d628e056d83cdfbdb009dcedf578",
+   "size_bytes": 1716,
+   "sha256": "edf409b491fbe70cd4c1468cb038be20129d9eac935a144edf2e535780cef0a1"
+  },
+  {
+   "path": "fixtures/test-create-document-json.log-expected.json",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-create-document-json.log-expected.json",
+   "blob_id": "9194335aaa256bc471780029072ed9a62eeeaedb",
+   "size_bytes": 9468,
+   "sha256": "7f9927040752a7702bb21a4497413c754928d07d2831f383f5a76c83c4dedfac"
+  },
+  {
+   "path": "fixtures/test-create-group-json.log",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-create-group-json.log",
+   "blob_id": "e7804d403873c7edcf77baa84a350b19a14df475",
+   "size_bytes": 3243,
+   "sha256": "c1bf2b3e98a2bfdf9d4d6d02881cd5bd499116ba37f6e4c2e35b37a0dce386ec"
+  },
+  {
+   "path": "fixtures/test-create-group-json.log-expected.json",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-create-group-json.log-expected.json",
+   "blob_id": "76409aa003e00fa66669216bb3b5aa552d66ce41",
+   "size_bytes": 18123,
+   "sha256": "f9acfb84c7b3c37b1204e028c545c4d6ea2db32db40f6f225719ec0e19d19929"
+  },
+  {
+   "path": "fixtures/test-create-key-pair-json.log",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-create-key-pair-json.log",
+   "blob_id": "81f2d0107168cf63b47f53331f5e99b480be172c",
+   "size_bytes": 773,
+   "sha256": "60cde68fd532c93dbc231dfb46c1e487a22004979252a7e32863a50ca8f6fb3c"
+  },
+  {
+   "path": "fixtures/test-create-key-pair-json.log-expected.json",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-create-key-pair-json.log-expected.json",
+   "blob_id": "3c76ba88b5f9ffa7dc3d4675a06ce29dce8f82b5",
+   "size_bytes": 5205,
+   "sha256": "b5890ca5ab78ec9a66ee043689737ae785e6cb2204389e4e3ca3b02e54dbf949"
+  },
+  {
+   "path": "fixtures/test-create-lambda-json.log",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-create-lambda-json.log",
+   "blob_id": "8e9ffb824f5723cb230eaded2330535b4d6085b1",
+   "size_bytes": 2204,
+   "sha256": "0c44ad6ace37b8ab27b834f9e564d60947ac5225d419f690be06477e54c7438b"
+  },
+  {
+   "path": "fixtures/test-create-lambda-json.log-expected.json",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-create-lambda-json.log-expected.json",
+   "blob_id": "81ae0105570036c7f04efb938fe35c222c9ea5a2",
+   "size_bytes": 11088,
+   "sha256": "bf1182bc0f0153a41654338b095a50da54762e8778d4434f20cd6eb24dc4331f"
+  },
+  {
+   "path": "fixtures/test-create-policy-json.log",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-create-policy-json.log",
+   "blob_id": "698aa75a141d5e9716e1b253144f93ceaf9db726",
+   "size_bytes": 1582,
+   "sha256": "354891b789317eed3976291084cc91b30eed40be12f053c0269eed3aa0213abc"
+  },
+  {
+   "path": "fixtures/test-create-policy-json.log-expected.json",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-create-policy-json.log-expected.json",
+   "blob_id": "a02d81745bfc6a7d84345141be5ed37f5233ef81",
+   "size_bytes": 9018,
+   "sha256": "6d35dd57452dcee9c36961d4aa9280870ff3e53a01b390225e7aad3a05495fb4"
+  },
+  {
+   "path": "fixtures/test-create-stack-json.log",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-create-stack-json.log",
+   "blob_id": "f9202d9f5671d1fdab11e6de756e49c25045b874",
+   "size_bytes": 1262,
+   "sha256": "51e347cd0d08c59ea2e81e8c05fc8bcfde8c1b21b361eec4b3e8a4aba4ab33d1"
+  },
+  {
+   "path": "fixtures/test-create-stack-json.log-expected.json",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-create-stack-json.log-expected.json",
+   "blob_id": "64f53aea5e14e4e44b39da129f917487bbbd3b3f",
+   "size_bytes": 7772,
+   "sha256": "f150b6162ddef02629698102b52b4c49e3622c6530539e7cea76dcd58c7bcf3c"
+  },
+  {
+   "path": "fixtures/test-create-stack-set-json.log",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-create-stack-set-json.log",
+   "blob_id": "9fa8c3368cfa8af82cb560c94f0b16905f46b0b0",
+   "size_bytes": 1225,
+   "sha256": "c973e9a2f322b715493f113082254f091075688aa862cb527174d25584b67ee1"
+  },
+  {
+   "path": "fixtures/test-create-stack-set-json.log-expected.json",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-create-stack-set-json.log-expected.json",
+   "blob_id": "8408c16b87e1d2effc9d48a5625c0c275f13482d",
+   "size_bytes": 7214,
+   "sha256": "aecb42ecc45e936edcae00106fa3dc316cb51e2b2d1f1bedadef7f7fb762046d"
+  },
+  {
+   "path": "fixtures/test-create-topic-json.log",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-create-topic-json.log",
+   "blob_id": "2c5e177831fba8b6f9f39341667d218ffb7abe10",
+   "size_bytes": 1112,
+   "sha256": "ebd459c7561d3b28b859676aadcf1ffb985c8bd075727bddad9be9d93914f4af"
+  },
+  {
+   "path": "fixtures/test-create-topic-json.log-expected.json",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-create-topic-json.log-expected.json",
+   "blob_id": "4e7821eddb92f7429ade633d4d2a1ff8cb2c60a4",
+   "size_bytes": 6387,
+   "sha256": "05717422cb9989ba8a9ec2a981ac4142d7c2fa638c39530be31421635fac56f2"
+  },
+  {
+   "path": "fixtures/test-create-traffic-mirror-filter-response-json.log",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-create-traffic-mirror-filter-response-json.log",
+   "blob_id": "a3eb07aea38da2e3ca1bf48ca575ceb35b381e2f",
+   "size_bytes": 1571,
+   "sha256": "f9a62725bff6df8079c24b3105ad52a62e33fee6f5ed60d6cecaec7919474742"
+  },
+  {
+   "path": "fixtures/test-create-traffic-mirror-filter-response-json.log-expected.json",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-create-traffic-mirror-filter-response-json.log-expected.json",
+   "blob_id": "2a34dcc2acc056dba1ed46867774d251a2f2519b",
+   "size_bytes": 8332,
+   "sha256": "e0520085690a7b8f91388c16b4adefc3bf12afd581561fa68e4f23067016094f"
+  },
+  {
+   "path": "fixtures/test-create-traffic-mirror-filter-rule-json.log",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-create-traffic-mirror-filter-rule-json.log",
+   "blob_id": "153a23aecb11d9caae7afcca0551256b198d6186",
+   "size_bytes": 1859,
+   "sha256": "e4e15bc063e333a9e6ee7105bb8d6f08b0794efc733bc382a8dd8419de270cd5"
+  },
+  {
+   "path": "fixtures/test-create-traffic-mirror-filter-rule-json.log-expected.json",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-create-traffic-mirror-filter-rule-json.log-expected.json",
+   "blob_id": "4100f6be5ec9b3a86cf43c5bb03760520c252cfc",
+   "size_bytes": 9864,
+   "sha256": "bc94ec6a1f5a01d117c3f9f7ed60553103cc963cf875187899224df22f785575"
+  },
+  {
+   "path": "fixtures/test-create-traffic-mirror-session-request-json.log",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-create-traffic-mirror-session-request-json.log",
+   "blob_id": "29aa05d8012d2c64a70f44d23a1cb3f618a4c142",
+   "size_bytes": 1886,
+   "sha256": "3a7ae96f232461e56014edb7cab0a340435bff5020d8aca38d718582e0ed9f17"
+  },
+  {
+   "path": "fixtures/test-create-traffic-mirror-session-request-json.log-expected.json",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-create-traffic-mirror-session-request-json.log-expected.json",
+   "blob_id": "6afb390163ed90f243aa00c01ccf163352a10a6e",
+   "size_bytes": 9859,
+   "sha256": "69f8b4fbf1a543449a12b2c55a1d631bb36c4bcae39a06d6e170f9b6643e52c6"
+  },
+  {
+   "path": "fixtures/test-create-traffic-mirror-target-json.log",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-create-traffic-mirror-target-json.log",
+   "blob_id": "e13db5ec324ebf23f7e62009abeed885b5450ce9",
+   "size_bytes": 1840,
+   "sha256": "de0e7d601112150b892510bee510e0e20bfcd91d13600b6e8a1b420e35c01916"
+  },
+  {
+   "path": "fixtures/test-create-traffic-mirror-target-json.log-expected.json",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-create-traffic-mirror-target-json.log-expected.json",
+   "blob_id": "7557c8a2b714ec2bc4e5004ae521c07c6a31ae59",
+   "size_bytes": 9427,
+   "sha256": "292b55c585d0a707d72c5b8a839c5f14beab2fc8d8d71241013225a1ab96ea60"
+  },
+  {
+   "path": "fixtures/test-create-trail-json.log",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-create-trail-json.log",
+   "blob_id": "ebc0c708b042bcd4f03db6f6614d49cc82398c63",
+   "size_bytes": 1230,
+   "sha256": "cf9d08166bd078505832d86f5712975a534283d9c18353a670a6d781a0cb0831"
+  },
+  {
+   "path": "fixtures/test-create-trail-json.log-expected.json",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-create-trail-json.log-expected.json",
+   "blob_id": "c872c1a6dd5dea1d878c515d7c8182f8d03e2693",
+   "size_bytes": 6083,
+   "sha256": "763038e5d46e4663445b0ede34e3cfd53ac605ee80d4735aa65f5fea0e7ad0ea"
+  },
+  {
+   "path": "fixtures/test-create-trust-anchor-json.log",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-create-trust-anchor-json.log",
+   "blob_id": "b474991aed5e8d33b9acc8b2e33890c5c8968635",
+   "size_bytes": 2018,
+   "sha256": "a5e160fd5e4797bf80ca1338cca83beee2e7ffabcf3203bcac1778c6f9af0040"
+  },
+  {
+   "path": "fixtures/test-create-trust-anchor-json.log-expected.json",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-create-trust-anchor-json.log-expected.json",
+   "blob_id": "a20e48673f99e5b413dbf657220b97df8f7c7043",
+   "size_bytes": 11065,
+   "sha256": "5b70f2a9f46909941468cdf528ab61e2d3d5fc1eb4e382bcea2f2db0731dad05"
+  },
+  {
+   "path": "fixtures/test-create-user-json.log",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-create-user-json.log",
+   "blob_id": "37e60f3f86cb3602d77910dc9ceb6b9e1726acd1",
+   "size_bytes": 614,
+   "sha256": "eb95038e2169bd2640fdd6a8f1cc37cca6a9d9084ebe0d56bdee9b56844dd1fa"
+  },
+  {
+   "path": "fixtures/test-create-user-json.log-expected.json",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-create-user-json.log-expected.json",
+   "blob_id": "face6bdce90ddbf08d723fc1375603113991f702",
+   "size_bytes": 4923,
+   "sha256": "5763e2d1b6f6ae6c324deb05fbb34e90e04c77fc7d4f2a0e77e083ef4b3fab4e"
+  },
+  {
+   "path": "fixtures/test-create-virtual-mfa-device-json.log",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-create-virtual-mfa-device-json.log",
+   "blob_id": "5d33cd1ae3d789925dfc9ef1805e2d7c82840491",
+   "size_bytes": 811,
+   "sha256": "9846d62a0e38f14ac649b34dac69f22711b4e5b93b3534d7f3a95baab706ed0f"
+  },
+  {
+   "path": "fixtures/test-create-virtual-mfa-device-json.log-expected.json",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-create-virtual-mfa-device-json.log-expected.json",
+   "blob_id": "6fa3000d8078d832f761000336dcee58b1c91226",
+   "size_bytes": 4612,
+   "sha256": "5d8322d0f7be6c56405df32887e5478e5e8e2f905a4b2ed3fda851cd3ccccead"
+  },
+  {
+   "path": "fixtures/test-deactivate-mfa-device-json.log",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-deactivate-mfa-device-json.log",
+   "blob_id": "bc8b0627f2ffe64e7c48a89c31dbf25d3b305aa0",
+   "size_bytes": 799,
+   "sha256": "5f62347f40cc16de6c58d3b7aeb6941f0184aa26bf1fac2111d3b9b8dc53ae2a"
+  },
+  {
+   "path": "fixtures/test-deactivate-mfa-device-json.log-expected.json",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-deactivate-mfa-device-json.log-expected.json",
+   "blob_id": "35010b338e2c16f28c1311d6441f127e912b3fce",
+   "size_bytes": 4836,
+   "sha256": "33ca25d034ea302225a8e397779fa86dc71277e8b8cda5eaa454cfb19fbc98c1"
+  },
+  {
+   "path": "fixtures/test-delete-access-key-json.log",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-delete-access-key-json.log",
+   "blob_id": "63799766f5c610e1c54b64297f02232fd7d20846",
+   "size_bytes": 766,
+   "sha256": "b1f09ad6bd711ee34ec20c6682202a5de9e128c82fb3de5005bd6bb92bd6995f"
+  },
+  {
+   "path": "fixtures/test-delete-access-key-json.log-expected.json",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-delete-access-key-json.log-expected.json",
+   "blob_id": "4d0c0ed22dbb5da1166b9a64553c4f37686a5daa",
+   "size_bytes": 4399,
+   "sha256": "df3f56588ae918706cd69701b40c92b2799dd72349c0de592ea261144cf0dcea"
+  },
+  {
+   "path": "fixtures/test-delete-alarms-json.log",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-delete-alarms-json.log",
+   "blob_id": "3b5c00feb6d6e08342f74575f8b033232ef3ec8d",
+   "size_bytes": 1065,
+   "sha256": "7c62373a744bee0c2c482b931ade6d8ecdde6ca500cad17422235dda4a790d24"
+  },
+  {
+   "path": "fixtures/test-delete-alarms-json.log-expected.json",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-delete-alarms-json.log-expected.json",
+   "blob_id": "0eb6fad2afd86ac8511ce5aa7516b46e8521c8cf",
+   "size_bytes": 6473,
+   "sha256": "842ccf93dc5dbbfc9a6361b0d0234ed2b299acd31f1f1ab9b31ce1c274cb82e6"
+  },
+  {
+   "path": "fixtures/test-delete-bucket-json.log",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-delete-bucket-json.log",
+   "blob_id": "ab5c34153a63d63a976144ca9796d8c97f8e963b",
+   "size_bytes": 1006,
+   "sha256": "947f6189b5c1787d0ebd3a46183c323b94fc862905ca5aacfe85f3b3cee92053"
+  },
+  {
+   "path": "fixtures/test-delete-bucket-json.log-expected.json",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-delete-bucket-json.log-expected.json",
+   "blob_id": "6f3d5248892778b0c9562d571caa3590ec9334e1",
+   "size_bytes": 6006,
+   "sha256": "33683fdbc6ae71405e26f3afb1550f9ff48aca45ce71f922ef0712ca9312d7ad"
+  },
+  {
+   "path": "fixtures/test-delete-db-cluster-json.log",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-delete-db-cluster-json.log",
+   "blob_id": "501e6eddebe91d295b8595524ed7983521d5cc71",
+   "size_bytes": 2689,
+   "sha256": "061640e035a557defd0b51e9af9ba34a003315d5e5673fd324deaa29ee7de5a4"
+  },
+  {
+   "path": "fixtures/test-delete-db-cluster-json.log-expected.json",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-delete-db-cluster-json.log-expected.json",
+   "blob_id": "ac8ff489525c930a68c482e2c3a9e20e148720ef",
+   "size_bytes": 12930,
+   "sha256": "c0df7b398e1d9ad0fd4c334fa61ee3ecad87f083e1ff6f3dc500586b64b157f7"
+  },
+  {
+   "path": "fixtures/test-delete-db-instance-json.log",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-delete-db-instance-json.log",
+   "blob_id": "b99a83c69679edbecebede0742fca0d760fbcb13",
+   "size_bytes": 3822,
+   "sha256": "d68e7a7fdd3c3553e8ae32051182de8db03dd06410093623b85b5d545bef94ef"
+  },
+  {
+   "path": "fixtures/test-delete-db-instance-json.log-expected.json",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-delete-db-instance-json.log-expected.json",
+   "blob_id": "a55da6008a5821ceb0b34d9a20e9963f43a9133c",
+   "size_bytes": 18820,
+   "sha256": "83beeacba76bc5641bfd3f8ff6e2b0c51a2ddc74979f4737490c2a3525cf3c82"
+  },
+  {
+   "path": "fixtures/test-delete-detector-json.log",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-delete-detector-json.log",
+   "blob_id": "e5f6ba6550ef7008a6be43d3bc6f10217e3b8286",
+   "size_bytes": 949,
+   "sha256": "e4b11de4047b6b472b83190682c3f9c0c7e4653312f845d10644dceb36a27fd1"
+  },
+  {
+   "path": "fixtures/test-delete-detector-json.log-expected.json",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-delete-detector-json.log-expected.json",
+   "blob_id": "1a84857e9812c653c27cf0e37a4a802a381be9ac",
+   "size_bytes": 6120,
+   "sha256": "81cdabba3ec370168d025a7a7db8db16a1c83e1fb2c70f68c7eb83be1900fa5f"
+  },
+  {
+   "path": "fixtures/test-delete-file-system-json.log",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-delete-file-system-json.log",
+   "blob_id": "47adfcf2bb6ab3d43ecd421be981538ce1353872",
+   "size_bytes": 1120,
+   "sha256": "eaa83a2122ccf20e661a3e897bacd6ee0276656e498cddc6843d896dd5f40e66"
+  },
+  {
+   "path": "fixtures/test-delete-file-system-json.log-expected.json",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-delete-file-system-json.log-expected.json",
+   "blob_id": "a215e63d6ae364f53586d98142b9bbc23e816b1f",
+   "size_bytes": 6607,
+   "sha256": "2211c57f0ee31ef1243eca69125ba13268a7eb247ccae7a395519eac6d751f82"
+  },
+  {
+   "path": "fixtures/test-delete-flow-log-json.log",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-delete-flow-log-json.log",
+   "blob_id": "d55d79a0ec8dc4d109524efe8a27b3ce55e88aa8",
+   "size_bytes": 1249,
+   "sha256": "ed6d1a33338dbcaf3e37e8ca42ab9a81ca088e4fb9c51def18fe78e8e015b345"
+  },
+  {
+   "path": "fixtures/test-delete-flow-log-json.log-expected.json",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-delete-flow-log-json.log-expected.json",
+   "blob_id": "f4c634c9a2303ae529b4c1f5ebe05d3cb55e163b",
+   "size_bytes": 7405,
+   "sha256": "aaf87362e2fa9b16f13f9cf5ba110d8922d71de28e4a00dd7d9880bbc22dcf67"
+  },
+  {
+   "path": "fixtures/test-delete-global-cluster-json.log",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-delete-global-cluster-json.log",
+   "blob_id": "ea04b7ed4abe3440d22ff97cfdd3cdf47d58cff7",
+   "size_bytes": 1528,
+   "sha256": "dd63e9fe553ed5d5457820cc2ca60eb4a0a283ee201da4ce1b99ced735c39107"
+  },
+  {
+   "path": "fixtures/test-delete-global-cluster-json.log-expected.json",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-delete-global-cluster-json.log-expected.json",
+   "blob_id": "3be3918500bdc9cc0a7db189d82ffa3a3a081b8c",
+   "size_bytes": 8356,
+   "sha256": "ac64c0d9c8e57031e8fa56c90e45072ab684ecd7e4d8e1114bb79423aa0b4cdf"
+  },
+  {
+   "path": "fixtures/test-delete-group-json.log",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-delete-group-json.log",
+   "blob_id": "97e75c9ab077056a64913b48c0b64984e24d4769",
+   "size_bytes": 1517,
+   "sha256": "f7a143a59a08b51cff6a573545a9147ef74e934e0cd3db144ac76c4c3355971c"
+  },
+  {
+   "path": "fixtures/test-delete-group-json.log-expected.json",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-delete-group-json.log-expected.json",
+   "blob_id": "e65129a7c5a4c13f324c363f7e25c5adae0f1621",
+   "size_bytes": 8492,
+   "sha256": "ea65056695d4a920fe258f9387baf98930b72b469302809bc5b62cf081e7119b"
+  },
+  {
+   "path": "fixtures/test-delete-log-group-json.log",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-delete-log-group-json.log",
+   "blob_id": "0a2ca3a781b0ab765d1299e7522be2e64c7a88fe",
+   "size_bytes": 1094,
+   "sha256": "f4f11e1d6a330d565c4cf0db0342653703849c1bb65fe5254fbad22d72e38763"
+  },
+  {
+   "path": "fixtures/test-delete-log-group-json.log-expected.json",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-delete-log-group-json.log-expected.json",
+   "blob_id": "077193d028cfdab657d6508977fca446540864b5",
+   "size_bytes": 6562,
+   "sha256": "4e300b97fbf049dd8cf85b10866f46d948b3b5538054e06940cb6ad22b6646cd"
+  },
+  {
+   "path": "fixtures/test-delete-log-stream-json.log",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-delete-log-stream-json.log",
+   "blob_id": "bfba79e49ea062e121d82e8bf34396acada6323e",
+   "size_bytes": 1141,
+   "sha256": "c0d56f4b1bf1e761106a9c2374e34ed6ba29b0f401ce3b03fe54ffcc3568bf34"
+  },
+  {
+   "path": "fixtures/test-delete-log-stream-json.log-expected.json",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-delete-log-stream-json.log-expected.json",
+   "blob_id": "28e59486c764b4a276a65156396c96cc2fe684cf",
+   "size_bytes": 6735,
+   "sha256": "939826e8f3b968654ffbc990a54c0615a75499d309f7a9aa4c2bf8c85dd04d49"
+  },
+  {
+   "path": "fixtures/test-delete-mount-target-json.log",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-delete-mount-target-json.log",
+   "blob_id": "780dd298feb3dd20a2c61f26a802dd0adf1d11d8",
+   "size_bytes": 1125,
+   "sha256": "5ee23f562fa0bff9e6749369401bc06d88eacd8ff69af5c6e7b4e2831e52a83a"
+  },
+  {
+   "path": "fixtures/test-delete-mount-target-json.log-expected.json",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-delete-mount-target-json.log-expected.json",
+   "blob_id": "d84a49991c0859231ef0ec12d9773d09212cd8ec",
+   "size_bytes": 6626,
+   "sha256": "6c3adb21cac79751237f9c051caa6d06fa27013e2e3595b2ddf0b0caeb9031c2"
+  },
+  {
+   "path": "fixtures/test-delete-network-acl-entry-json.log",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-delete-network-acl-entry-json.log",
+   "blob_id": "6692185bbf628fa10f6bb3de5ada2dfd027146ae",
+   "size_bytes": 1173,
+   "sha256": "8226e3cd5fe8c2ab7c405039291b2b170d5a62f9ce348d86b1f7d5309d3088ae"
+  },
+  {
+   "path": "fixtures/test-delete-network-acl-entry-json.log-expected.json",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-delete-network-acl-entry-json.log-expected.json",
+   "blob_id": "e2d922d01c937fe2c8ddc08dc5e7868dec5685e9",
+   "size_bytes": 7309,
+   "sha256": "2f83ebbb26e6902ea807d47a6d64abe91dc542a8efd77c84d2635428f843f8c4"
+  },
+  {
+   "path": "fixtures/test-delete-network-acl-json.log",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-delete-network-acl-json.log",
+   "blob_id": "5752f1d91f0e75d50ec98ab451ad3e5a1458f0ad",
+   "size_bytes": 1130,
+   "sha256": "cd40957c25e87b400d585f71f451b3c95eec5272288aa03df74755a1deb0794f"
+  },
+  {
+   "path": "fixtures/test-delete-network-acl-json.log-expected.json",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-delete-network-acl-json.log-expected.json",
+   "blob_id": "4a37ad07fd578fe0ba267afa3524c3217e38dc0f",
+   "size_bytes": 6906,
+   "sha256": "0c057290544e98ff3ea880ab980e4b66435b94bb410a727afd858a8af251b533"
+  },
+  {
+   "path": "fixtures/test-delete-resolver-query-log-config-json.log",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-delete-resolver-query-log-config-json.log",
+   "blob_id": "a3601dd4b7ec9db34fe862443dfaae990bee761c",
+   "size_bytes": 1654,
+   "sha256": "41e85ae198c7f1abb40c07232e9ddb356d5fe6026b2e4807df365a23c21ff447"
+  },
+  {
+   "path": "fixtures/test-delete-resolver-query-log-config-json.log-expected.json",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-delete-resolver-query-log-config-json.log-expected.json",
+   "blob_id": "174b080ed2bd6a22f335df6cae9e3f2ff15f03d5",
+   "size_bytes": 9016,
+   "sha256": "ba3b6f1863cb24c5121fa738cbf912402e87967db673c73f9050c58930227c1f"
+  },
+  {
+   "path": "fixtures/test-delete-rule-group-json.log",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-delete-rule-group-json.log",
+   "blob_id": "578aa5404423953fb7389d867848f1d4200912a3",
+   "size_bytes": 1195,
+   "sha256": "0e8f02c4d8993ab72b68d2a42dd1b446e9cb8c2bf4d6b06a41df19d6b2797878"
+  },
+  {
+   "path": "fixtures/test-delete-rule-group-json.log-expected.json",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-delete-rule-group-json.log-expected.json",
+   "blob_id": "c5854482548a35adfd06816f60e62d195156a273",
+   "size_bytes": 6985,
+   "sha256": "b321938a6f26c710968eb8d9bc303dd945c7882bb76e66ffa701ee1db4704a43"
+  },
+  {
+   "path": "fixtures/test-delete-rule-json.log",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-delete-rule-json.log",
+   "blob_id": "ccaca02c8d747a84e88890381bdf966c885e3a8d",
+   "size_bytes": 1093,
+   "sha256": "ee91579d48d68a49102eaecb333d93ba1a10b23b63e966c30969c6f94ff04c24"
+  },
+  {
+   "path": "fixtures/test-delete-rule-json.log-expected.json",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-delete-rule-json.log-expected.json",
+   "blob_id": "38248c0e66c862b96648244bc5f340bc568a6dde",
+   "size_bytes": 6575,
+   "sha256": "c97c2a3dd7d0175d2742f41f69813d5d2130d898e42b913d8c2dc11cfce21e11"
+  },
+  {
+   "path": "fixtures/test-delete-ssh-public-key-json.log",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-delete-ssh-public-key-json.log",
+   "blob_id": "47451dfe3714906026ca8b27cefd379eee0c43c1",
+   "size_bytes": 777,
+   "sha256": "6ecb6254cc23a7d5052a451a806f5576fda62eeacdd346a02c9904de332e1011"
+  },
+  {
+   "path": "fixtures/test-delete-ssh-public-key-json.log-expected.json",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-delete-ssh-public-key-json.log-expected.json",
+   "blob_id": "73ed0e93ab1396d8c54c5ec25b736a7419343e87",
+   "size_bytes": 4429,
+   "sha256": "0fe9330641e6f517f53c59db03e73ec72f10abaeb0aa7a614cb4d40cafc61865"
+  },
+  {
+   "path": "fixtures/test-delete-trail-json.log",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-delete-trail-json.log",
+   "blob_id": "f747ff2c14a84a5085b6159db2c09b50ed402ff4",
+   "size_bytes": 719,
+   "sha256": "3183ef0999742c5447a0ce9717f153269ebe9814c07f5a90427ef7bada5179e2"
+  },
+  {
+   "path": "fixtures/test-delete-trail-json.log-expected.json",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-delete-trail-json.log-expected.json",
+   "blob_id": "48e746dceb0c9cdd4ebb49dfe4ce952b3c0d6bf6",
+   "size_bytes": 4669,
+   "sha256": "fc52e5829c4f851a100e118720b582a872d07562faa8fec76795404fee2cf868"
+  },
+  {
+   "path": "fixtures/test-delete-user-json.log",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-delete-user-json.log",
+   "blob_id": "ce00f5a118552079cd5b4ac35f13cf80f473f915",
+   "size_bytes": 745,
+   "sha256": "303281e8388f2db0f6632f6217234602dec3c99d6ede2cb3bbfcf7272cce700a"
+  },
+  {
+   "path": "fixtures/test-delete-user-json.log-expected.json",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-delete-user-json.log-expected.json",
+   "blob_id": "95e455df20009e4622fd2f90eb5a76a948bfc3b7",
+   "size_bytes": 4307,
+   "sha256": "36ec76313668aae67e7f11c8b2877c5c3d42fad539d38d1150e3632086167a87"
+  },
+  {
+   "path": "fixtures/test-delete-virtual-mfa-device-json.log",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-delete-virtual-mfa-device-json.log",
+   "blob_id": "ad22f516894c45f74576fe47830936cd4a12aa4c",
+   "size_bytes": 784,
+   "sha256": "23e8accf2e129e79a5c4f1f89fc0f9859862c195a0324a225b2f97ae502ac690"
+  },
+  {
+   "path": "fixtures/test-delete-virtual-mfa-device-json.log-expected.json",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-delete-virtual-mfa-device-json.log-expected.json",
+   "blob_id": "ca735bf639bda9844e283151360aa0e3b06a4629",
+   "size_bytes": 4764,
+   "sha256": "14bba4dd4a0e6b4629fea9c22bdb0b2a5f220720c2015c1a9803772bd58d1273"
+  },
+  {
+   "path": "fixtures/test-delete-web-acl-json.log",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-delete-web-acl-json.log",
+   "blob_id": "1a3b64ac6b768ad73210f42682cae117ca72548c",
+   "size_bytes": 1235,
+   "sha256": "e13f37b35a7656cb3061e63b13fc5124e6bb64587ef2e9fd7a100c9fd58bf9ba"
+  },
+  {
+   "path": "fixtures/test-delete-web-acl-json.log-expected.json",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-delete-web-acl-json.log-expected.json",
+   "blob_id": "6e2037f1340f83f3c7915e4a6613c30a398a934b",
+   "size_bytes": 7337,
+   "sha256": "36988dc4e7b7f81827dd02767839610669b6cb389f1c79c2e3af4d642b48621c"
+  },
+  {
+   "path": "fixtures/test-disable-key-json.log",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-disable-key-json.log",
+   "blob_id": "07ef9d1ab5db1e5d1d65e34f52ec75c56c0c57a2",
+   "size_bytes": 1286,
+   "sha256": "b7b6e86e5df6db32eb41e1d62246a326674dd8f74cd219f4da7e47218f1a75ff"
+  },
+  {
+   "path": "fixtures/test-disable-key-json.log-expected.json",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-disable-key-json.log-expected.json",
+   "blob_id": "8db852423da9a6e7a5a3aaacde1c7fe9d6bf52f4",
+   "size_bytes": 7707,
+   "sha256": "6c7c9a1776d7aff65f505a3e46893e1ed9b83b92e7cfdd3f1bc856c31194f020"
+  },
+  {
+   "path": "fixtures/test-enable-mfa-device-json.log",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-enable-mfa-device-json.log",
+   "blob_id": "67cdd3ad6e681591b1480640ec3a601dfc27b5ce",
+   "size_bytes": 759,
+   "sha256": "ca1429284564bf195d1d94d8969c0524f8fe744a94b7397ed617ec6cca71a1d2"
+  },
+  {
+   "path": "fixtures/test-enable-mfa-device-json.log-expected.json",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-enable-mfa-device-json.log-expected.json",
+   "blob_id": "38b4d1e02340e0c9d49693611985b2813d28c332",
+   "size_bytes": 4438,
+   "sha256": "782d6c8a8eaadb056b16d90d5eea916148c8b88c6c65a56c3b05b302715601c5"
+  },
+  {
+   "path": "fixtures/test-get-bucket-policy-json.log",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-get-bucket-policy-json.log",
+   "blob_id": "4b7e67aec592a07f0f597fd92f65176656ede0c5",
+   "size_bytes": 1595,
+   "sha256": "7c984d7140109c7f24ed5d413dbda7d87a02c406dbdeed9b0aa4fa829cd11121"
+  },
+  {
+   "path": "fixtures/test-get-bucket-policy-json.log-expected.json",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-get-bucket-policy-json.log-expected.json",
+   "blob_id": "2d9be8acebe04110f1ffb6b60443d1b897c9f22b",
+   "size_bytes": 8351,
+   "sha256": "3da4a021cfadf6dee1163cabc4ae69de11a2faaa9d591897ff55a23c7593ca0e"
+  },
+  {
+   "path": "fixtures/test-get-caller-identity-json.log",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-get-caller-identity-json.log",
+   "blob_id": "bb46a5a544f2ee86a42db466bbaac8ca52a07add",
+   "size_bytes": 925,
+   "sha256": "823c17c2f9bbcef4181344b8d6e95ffd5bf83652edf36aafd00175e35cbec1c1"
+  },
+  {
+   "path": "fixtures/test-get-caller-identity-json.log-expected.json",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-get-caller-identity-json.log-expected.json",
+   "blob_id": "c826bbc67979d107f82252132e5fe2dbba77e03f",
+   "size_bytes": 5934,
+   "sha256": "c7800521953687443433d554e91b2c2c20047adc83bd20d56ef89fae8f44491c"
+  },
+  {
+   "path": "fixtures/test-get-parameter-json.log",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-get-parameter-json.log",
+   "blob_id": "1dc7bc797df917c5831444324ed9fcc6ff6d7a17",
+   "size_bytes": 1235,
+   "sha256": "0f400a2a207c0ef19ff53787714ae99d7e20fec2c1c287937c7309c3a05d57ca"
+  },
+  {
+   "path": "fixtures/test-get-parameter-json.log-expected.json",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-get-parameter-json.log-expected.json",
+   "blob_id": "bbed39bd17b527d18737a6d3e67a9a17f42fa0ea",
+   "size_bytes": 7286,
+   "sha256": "ce9566d99320bddbad7e64dfbeaa12c23e53665aacb2d9d57817f3d31c7edbda"
+  },
+  {
+   "path": "fixtures/test-get-parameters-json.log",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-get-parameters-json.log",
+   "blob_id": "d11dd0bc33601fab736d8712f8ecd83f597cb259",
+   "size_bytes": 1240,
+   "sha256": "8627aeb2e946a0fe4ea62dc4552f8fbe0c297374de63e14cd69c657c006cb372"
+  },
+  {
+   "path": "fixtures/test-get-parameters-json.log-expected.json",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-get-parameters-json.log-expected.json",
+   "blob_id": "2d54c91977331fa7d85e5c2634ba0bfb063b418f",
+   "size_bytes": 7361,
+   "sha256": "5a2ded1b718fe706111cf6a92467b4d296a268fd5fbf3a3469205a688c516586"
+  },
+  {
+   "path": "fixtures/test-get-password-data-json.log",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-get-password-data-json.log",
+   "blob_id": "7b5594bfc3d1b6b3a19e185bc69976e560647c49",
+   "size_bytes": 1060,
+   "sha256": "2787a8ef3fcaf6666f4836c94223266b3e88f3b47035780a3b1fdf6c88625323"
+  },
+  {
+   "path": "fixtures/test-get-password-data-json.log-expected.json",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-get-password-data-json.log-expected.json",
+   "blob_id": "441f43a26ed965a22df591ae1983820ed8fc5c6e",
+   "size_bytes": 6592,
+   "sha256": "c79b74a7ff6951a23fb238fb0ddb094a48ef8d9052b8284249556bb48c9eaf96"
+  },
+  {
+   "path": "fixtures/test-get-policy-json.log",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-get-policy-json.log",
+   "blob_id": "0573a397212abce4de36e21405863346cc58a3e3",
+   "size_bytes": 1375,
+   "sha256": "7820e926ae0b411df0d7ff9c0f8f4f91c543b8db84d50e798da1629e9a50fde4"
+  },
+  {
+   "path": "fixtures/test-get-policy-json.log-expected.json",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-get-policy-json.log-expected.json",
+   "blob_id": "7690fa4ce7e193fce40113b70827774fcdafefc1",
+   "size_bytes": 8173,
+   "sha256": "6ecb954ae0a32c9b0f250bfd19b457685a6c074013566ff20fa25050e8d3d669"
+  },
+  {
+   "path": "fixtures/test-get-secret-value-json.log",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-get-secret-value-json.log",
+   "blob_id": "0026d1af1ca42620ce00357cc89d344b00a96b86",
+   "size_bytes": 1139,
+   "sha256": "d3f4a58c8b5db7bc9936b74141cf1fd58170806e442a4abba5c0b6a5eb29432f"
+  },
+  {
+   "path": "fixtures/test-get-secret-value-json.log-expected.json",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-get-secret-value-json.log-expected.json",
+   "blob_id": "aeb51473e91843553902343583af72f1ff3f3c62",
+   "size_bytes": 6874,
+   "sha256": "013894ff662701ae674c93302f26aea39e498030bef69ff7acce2d88a70b7854"
+  },
+  {
+   "path": "fixtures/test-insight-json.log",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-insight-json.log",
+   "blob_id": "c5c536fe7a67306c5cd849e2e85af74464d19130",
+   "size_bytes": 872,
+   "sha256": "a37ce86aa30dc782e57e8f42c422d1e0e3ab81c06882135b29da3712b36cc73b"
+  },
+  {
+   "path": "fixtures/test-insight-json.log-expected.json",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-insight-json.log-expected.json",
+   "blob_id": "cd2ca52b08c1928bc65cc325e1ed1867d437c25d",
+   "size_bytes": 4629,
+   "sha256": "9ab85009f913bba0fadc732ef5f7273db6fbbfec7c736f9c92127f000828cbe8"
+  },
+  {
+   "path": "fixtures/test-list-attached-role-policies-json.log",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-list-attached-role-policies-json.log",
+   "blob_id": "ad188754cf41de3920b2c93d9cea18cba285aca8",
+   "size_bytes": 1036,
+   "sha256": "31806afc24ef4ce37adc2d63aca0c559021fa4e11344849a0fe27a625ea47be4"
+  },
+  {
+   "path": "fixtures/test-list-attached-role-policies-json.log-expected.json",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-list-attached-role-policies-json.log-expected.json",
+   "blob_id": "8e66a0d052cd4981934ed4aa248c308fda83733e",
+   "size_bytes": 6324,
+   "sha256": "a23f5f4a6c2b6d0f550c8533ef88a4fd4c0366ac8cfc4b862da0b3f2bff4a63c"
+  },
+  {
+   "path": "fixtures/test-modify-db-cluster-json.log",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-modify-db-cluster-json.log",
+   "blob_id": "88703bf92d66948ab716d11f05f27e2c16a5f629",
+   "size_bytes": 2785,
+   "sha256": "ebd4958f155a844b1a0a76f1fb22a96f35cd02397c66768548fb27ec4eb58138"
+  },
+  {
+   "path": "fixtures/test-modify-db-cluster-json.log-expected.json",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-modify-db-cluster-json.log-expected.json",
+   "blob_id": "1fc6a150b2d771e0d18fea15c466d2b087790c33",
+   "size_bytes": 13311,
+   "sha256": "bf4acd55ae3a9efc0d602429ef20594d581c92cba72e0196f06901d75c1da246"
+  },
+  {
+   "path": "fixtures/test-modify-db-cluster-snapshot-attribute-json.log",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-modify-db-cluster-snapshot-attribute-json.log",
+   "blob_id": "216fe0135dd362d26d8db1763c66d4c651ae41b9",
+   "size_bytes": 1375,
+   "sha256": "0bf0eda498d8f0409fbe3709a8a02129183b768b609e75273406cfb9081c6d20"
+  },
+  {
+   "path": "fixtures/test-modify-db-cluster-snapshot-attribute-json.log-expected.json",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-modify-db-cluster-snapshot-attribute-json.log-expected.json",
+   "blob_id": "fdc0e5221409127579c12c4a42d24c59799a1361",
+   "size_bytes": 7998,
+   "sha256": "f94ec9989be2c4f126bcf9d884c18392a2722d77702500458ee0c7514643fbd0"
+  },
+  {
+   "path": "fixtures/test-modify-db-instance-json.log",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-modify-db-instance-json.log",
+   "blob_id": "ee166ebbe41323665d932c879d75e63b679d6928",
+   "size_bytes": 3928,
+   "sha256": "9f802d2173ac9b216490a5e4db07b0ed32a9898baf673194834a4bf6e68e5148"
+  },
+  {
+   "path": "fixtures/test-modify-db-instance-json.log-expected.json",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-modify-db-instance-json.log-expected.json",
+   "blob_id": "87c2ddbfd5979de8ac886cfae256d683d2cbee94",
+   "size_bytes": 19347,
+   "sha256": "5d4138a19caa09431d1817e79d8278d55aaf60b1901538d81c37a02a6f20653e"
+  },
+  {
+   "path": "fixtures/test-modify-db-snapshot-attributte-json.log",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-modify-db-snapshot-attributte-json.log",
+   "blob_id": "4118eb9cf910c4f28781389bf9621721199217bc",
+   "size_bytes": 1312,
+   "sha256": "bd2da0af6baf59814bcb21cb8a165b707655dd7a01af7a933940198e1868580a"
+  },
+  {
+   "path": "fixtures/test-modify-db-snapshot-attributte-json.log-expected.json",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-modify-db-snapshot-attributte-json.log-expected.json",
+   "blob_id": "7632c83ef2cee51fc5c5dcebeb2531dbdb3ba903",
+   "size_bytes": 7643,
+   "sha256": "b4a69a65785f9927fe62a2e576d9eeccf4fd209b17269c0d1637a068f3b719bb"
+  },
+  {
+   "path": "fixtures/test-modify-image-attribute-json.log",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-modify-image-attribute-json.log",
+   "blob_id": "24fa4dff6f5402edc46f26c7302ceb8976f17824",
+   "size_bytes": 1226,
+   "sha256": "96b5b7f5e58819b7d8ad6a6d625c7e9caf68441d602775f13cfdbe12124e1fa5"
+  },
+  {
+   "path": "fixtures/test-modify-image-attribute-json.log-expected.json",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-modify-image-attribute-json.log-expected.json",
+   "blob_id": "0f8547074fb39342b0b5f5ede2bc69f9750a12e7",
+   "size_bytes": 7480,
+   "sha256": "baf4cd25dfa59457944b10d5d17a9961ee1ab4973168241154ee80574cb4916c"
+  },
+  {
+   "path": "fixtures/test-modify-snapshot-attribute-json.log",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-modify-snapshot-attribute-json.log",
+   "blob_id": "4cfa782768b3620c1959d23b96bd669f998891e2",
+   "size_bytes": 1250,
+   "sha256": "ac88166706e7e7bb4d4cb8754ee9557d96eae4fd7cc8342aa69d3acbd651ca10"
+  },
+  {
+   "path": "fixtures/test-modify-snapshot-attribute-json.log-expected.json",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-modify-snapshot-attribute-json.log-expected.json",
+   "blob_id": "3762af5bb819b4d98a9527de6b2d22ecf4bfe8a9",
+   "size_bytes": 7549,
+   "sha256": "d12d7e3559b800419dec385a1c9c92a49fb6680e713308163c5d3ddc049275e9"
+  },
+  {
+   "path": "fixtures/test-open-control-channel-json.log",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-open-control-channel-json.log",
+   "blob_id": "b1c0bdbd6c187e9e303f4ef5d1de6a86a4bcc6d4",
+   "size_bytes": 1487,
+   "sha256": "aec93389a1d8e831fe30a1051a7ac22d1a8fd4ea5f9b16855257ecc6bc184331"
+  },
+  {
+   "path": "fixtures/test-open-control-channel-json.log-expected.json",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-open-control-channel-json.log-expected.json",
+   "blob_id": "708cc7fd88c5378358022e9710226d5d61d81086",
+   "size_bytes": 8635,
+   "sha256": "b7e1d08fea345976d632595c47f26af5fd8a0c3faa6e755643fe0a63b45605f9"
+  },
+  {
+   "path": "fixtures/test-publish-json.log",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-publish-json.log",
+   "blob_id": "3fdf3b75429f872864badb888550cf7f943324dd",
+   "size_bytes": 1626,
+   "sha256": "ece71cf164f205939e2f87a544269601f325546ec91e86b321fc7ec5ed52f3f6"
+  },
+  {
+   "path": "fixtures/test-publish-json.log-expected.json",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-publish-json.log-expected.json",
+   "blob_id": "e76b3a54386e17a2e1648251db2ed5bfa71e492f",
+   "size_bytes": 8966,
+   "sha256": "0db19beb991595f6c531560f1834cd58c6fda4578a93fa02e37d0e32ecf3d7a7"
+  },
+  {
+   "path": "fixtures/test-put-bucket-logging-json.log",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-put-bucket-logging-json.log",
+   "blob_id": "01629547d71251532f64487798a6a4c6a8b5b727",
+   "size_bytes": 1740,
+   "sha256": "f136ad413caffd99bf3a7d3d7875b2beea1e0b206132d6fb4f07afab92c1b4f6"
+  },
+  {
+   "path": "fixtures/test-put-bucket-logging-json.log-expected.json",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-put-bucket-logging-json.log-expected.json",
+   "blob_id": "b7ef1bd7dcc7af3383e3ea8288a4284ee3565c00",
+   "size_bytes": 9259,
+   "sha256": "919411de042ca9b6778541d7c89a3126aed5468754c629919dacb6c434dde83d"
+  },
+  {
+   "path": "fixtures/test-put-bucket-replication-json.log",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-put-bucket-replication-json.log",
+   "blob_id": "31fecfabb637cc2789e6b6df8c9f5ad8f118e271",
+   "size_bytes": 1921,
+   "sha256": "54aa647096ec32725bd86c76d34cee2f9263a40cd2d64d50e5d3655229b80ad3"
+  },
+  {
+   "path": "fixtures/test-put-bucket-replication-json.log-expected.json",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-put-bucket-replication-json.log-expected.json",
+   "blob_id": "952c375380764e18d446d74d20db5ec88322b5ca",
+   "size_bytes": 10287,
+   "sha256": "935529f1a6387bdda50fdd0ab668ffa370c8041ee7c24ca1bddde7b29b21a2fc"
+  },
+  {
+   "path": "fixtures/test-put-bucket-versioning-json.log",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-put-bucket-versioning-json.log",
+   "blob_id": "d1484b4d4e35088702fd33618656f2da0faecd13",
+   "size_bytes": 1677,
+   "sha256": "8266dc2432a4c568aeedf07034e8e039f8735b18c17acb146fc9903ba81aa6cc"
+  },
+  {
+   "path": "fixtures/test-put-bucket-versioning-json.log-expected.json",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-put-bucket-versioning-json.log-expected.json",
+   "blob_id": "5c35fc36fef062424ed915d33dcba2334035c89e",
+   "size_bytes": 8948,
+   "sha256": "aa0020246dc2ce2548f51ae1d611ddc182c462123f67de8ce4cc33bd8b062268"
+  },
+  {
+   "path": "fixtures/test-put-object-json.log",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-put-object-json.log",
+   "blob_id": "16d931926e9d82749f92f62fc9d2d60873517f60",
+   "size_bytes": 1637,
+   "sha256": "1a39c977c5de8bcbd76e4c0f7600b157124c8ce27696cf219ed3545f460bf464"
+  },
+  {
+   "path": "fixtures/test-put-object-json.log-expected.json",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-put-object-json.log-expected.json",
+   "blob_id": "d3bbc605926e18a7aeed04c5b11ea6a3f2a2ac20",
+   "size_bytes": 9105,
+   "sha256": "35ee7e6700c41836f87c489b5ec043093c829a0fe3d05dd79a60238858ef7859"
+  },
+  {
+   "path": "fixtures/test-remove-user-from-group-json.log",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-remove-user-from-group-json.log",
+   "blob_id": "93c180dfe9b0cb468e88769b5b931b053f14f538",
+   "size_bytes": 764,
+   "sha256": "5b12c2bee42887a2d8928591b9d3b18a03c2ef35d263124a4b55ac3d91d5dc7a"
+  },
+  {
+   "path": "fixtures/test-remove-user-from-group-json.log-expected.json",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-remove-user-from-group-json.log-expected.json",
+   "blob_id": "1522e1a037715f1e609ed955e7a1e2f8c9783443",
+   "size_bytes": 4460,
+   "sha256": "81b1be4e4e10780a3438fd92b7ec709e22557f90a8e1ad2070ad7d835764bcd7"
+  },
+  {
+   "path": "fixtures/test-restore-db-instnace-from-s3-json.log",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-restore-db-instnace-from-s3-json.log",
+   "blob_id": "34f951ee339db568962404b29ce6e05fbd236a40",
+   "size_bytes": 3984,
+   "sha256": "251bf6c1bfde71a584ef0b2cf9f90d39016248499ff8cc2659717487bfc08ca2"
+  },
+  {
+   "path": "fixtures/test-restore-db-instnace-from-s3-json.log-expected.json",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-restore-db-instnace-from-s3-json.log-expected.json",
+   "blob_id": "64c1e789a443c3e0934653fe319d7c580fda63ea",
+   "size_bytes": 19638,
+   "sha256": "b8c902c8d66da75c1848c9097bad5a22a2242316bade4f05bec1d0f917a314bf"
+  },
+  {
+   "path": "fixtures/test-restore-db-instnace-from-snapshot-json.log",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-restore-db-instnace-from-snapshot-json.log",
+   "blob_id": "92d58b0f9cf0de5dfebc6898cf04672224a176d9",
+   "size_bytes": 3696,
+   "sha256": "4b8bb0f3ce420b42a2986fec118f24d94357d0877aa474bd7e1b46528550b54d"
+  },
+  {
+   "path": "fixtures/test-restore-db-instnace-from-snapshot-json.log-expected.json",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-restore-db-instnace-from-snapshot-json.log-expected.json",
+   "blob_id": "dfad9b134df58c51ea91572cb017a54b77e03e4b",
+   "size_bytes": 18331,
+   "sha256": "256e9778d3d13522bbb053987041b27d9c1f150aa4f84b7d20321c3e306f27ed"
+  },
+  {
+   "path": "fixtures/test-run-instances-json.log",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-run-instances-json.log",
+   "blob_id": "4dd1bfa46f671367bda21c52989db415e1d4b0e2",
+   "size_bytes": 4034,
+   "sha256": "b45e062aefeba6271fcb513365d1a40af903ec85a1ba60f5bbcc0d8727bf561b"
+  },
+  {
+   "path": "fixtures/test-run-instances-json.log-expected.json",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-run-instances-json.log-expected.json",
+   "blob_id": "afdf3379a58681cfe05c1fe1b76910f18e14fb05",
+   "size_bytes": 24063,
+   "sha256": "969e69c8fa1f2ab48cf552ed2e2a8ff6c8528aba704de8089b5dcde9c126a58e"
+  },
+  {
+   "path": "fixtures/test-schedule-key-deletion-json.log",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-schedule-key-deletion-json.log",
+   "blob_id": "6fe7bd12b97e07f96bf83efddf922aff46c6f835",
+   "size_bytes": 1460,
+   "sha256": "7a044e311303c4661264ee85fb3de9db07eaa2103e4d12d88a144cc1ed1fa677"
+  },
+  {
+   "path": "fixtures/test-schedule-key-deletion-json.log-expected.json",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-schedule-key-deletion-json.log-expected.json",
+   "blob_id": "05dcbd30a079710a793b42965bbbfeb901c4097b",
+   "size_bytes": 8190,
+   "sha256": "771be5b579d5e445f43804c35c539d7ce10300f6750927d0e5c7485fe6b434e4"
+  },
+  {
+   "path": "fixtures/test-send-command-all-json.log",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-send-command-all-json.log",
+   "blob_id": "313ec6652132f89f1c58201075ae8cdb626829a8",
+   "size_bytes": 2457,
+   "sha256": "07dca8a41c0341cdff88b06075c3d9ec8b4a3cbe851ce01a94b9fd00fcaae0df"
+  },
+  {
+   "path": "fixtures/test-send-command-all-json.log-expected.json",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-send-command-all-json.log-expected.json",
+   "blob_id": "e3d7f7da0a328a722e87c5fc1b2e6105660484b4",
+   "size_bytes": 11483,
+   "sha256": "c5c4d23348c5b1e96dc40d7171e2d5de8b2feff58004a02062c93c875d8381e0"
+  },
+  {
+   "path": "fixtures/test-send-command-targets-json.log",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-send-command-targets-json.log",
+   "blob_id": "ca5f9f8b3a9d0d656417f8bbbb6087fd7b409133",
+   "size_bytes": 2182,
+   "sha256": "1a892847c684cbb0d24261af9071a3ca945e43e9460ba27267278f32387919a5"
+  },
+  {
+   "path": "fixtures/test-send-command-targets-json.log-expected.json",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-send-command-targets-json.log-expected.json",
+   "blob_id": "0e015e2ea4b3a7538594584ca5ebe78b09862dc2",
+   "size_bytes": 11204,
+   "sha256": "0045245604870ba8dc659841d535b5694e386fd363585de086e03969f67c7a12"
+  },
+  {
+   "path": "fixtures/test-send-serial-console-ssh-public-key-json.log",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-send-serial-console-ssh-public-key-json.log",
+   "blob_id": "7af6af9c6414001d09273b2e5bc116a18c42421a",
+   "size_bytes": 1375,
+   "sha256": "36be0d2d3ec2812b1189021827a3b4b920569142d4c73e809a0242a8a67e8147"
+  },
+  {
+   "path": "fixtures/test-send-serial-console-ssh-public-key-json.log-expected.json",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-send-serial-console-ssh-public-key-json.log-expected.json",
+   "blob_id": "7b2296bed354b9a8462d19cc685011b50b089597",
+   "size_bytes": 7751,
+   "sha256": "7060763763149e72f78ecdc8ed667eedac17a340ad3cbace86e9d4e33ba5d190"
+  },
+  {
+   "path": "fixtures/test-send-ssh-public-key-json.log",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-send-ssh-public-key-json.log",
+   "blob_id": "54207ec460ef972ccd4207982e7108e6189394f1",
+   "size_bytes": 1372,
+   "sha256": "65929f4c5c242a5e5b33fed79bfc477002691dade28a89bc65a0f0b8436f12ed"
+  },
+  {
+   "path": "fixtures/test-send-ssh-public-key-json.log-expected.json",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-send-ssh-public-key-json.log-expected.json",
+   "blob_id": "441826ce81988e93390f2690ee7398b3ce1e1585",
+   "size_bytes": 7770,
+   "sha256": "33d5968a45a2357f359aea1b3f5e8079fd006ab09b54b0289f694da2f89c577f"
+  },
+  {
+   "path": "fixtures/test-start-logging-json.log",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-start-logging-json.log",
+   "blob_id": "e03d924e97bf8ea27e9b6658544203b5f2ad90b3",
+   "size_bytes": 808,
+   "sha256": "6974af2755adef4095bdd95972ff8ce872d0c29d321227447afedb6cc256dd0e"
+  },
+  {
+   "path": "fixtures/test-start-logging-json.log-expected.json",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-start-logging-json.log-expected.json",
+   "blob_id": "6a5aef7d976d55448f6b51189c4d31c583558a98",
+   "size_bytes": 4215,
+   "sha256": "0cbd210f0e350625539554f6612e63626a4de7c5dc00a9cf20153470ee455a90"
+  },
+  {
+   "path": "fixtures/test-start-session-json.log",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-start-session-json.log",
+   "blob_id": "0622e0a12603625def21ab9fa706efeb11c4d230",
+   "size_bytes": 1055,
+   "sha256": "9d6bdff3faefd9e41dc4e157a6afc07dc6f2f27510bd68e6ba8ed39dfbc1bc18"
+  },
+  {
+   "path": "fixtures/test-start-session-json.log-expected.json",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-start-session-json.log-expected.json",
+   "blob_id": "3fa4c2a321fd6f05d1f9f48bae23afbc5333f491",
+   "size_bytes": 6658,
+   "sha256": "8ee3e8d2d6ccea01f122c2458ceec73022d3df5e1c77a2c901fef1d82811d053"
+  },
+  {
+   "path": "fixtures/test-stop-configuration-recorder.log",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-stop-configuration-recorder.log",
+   "blob_id": "8344e21c7c27abb53cf38374a874325a999298c4",
+   "size_bytes": 1048,
+   "sha256": "1de6ea19f4b53e5b029ce865268107d44bbdead186cd36843bfca7732aed2207"
+  },
+  {
+   "path": "fixtures/test-stop-configuration-recorder.log-expected.json",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-stop-configuration-recorder.log-expected.json",
+   "blob_id": "1e52fe4ceb3b3c8c931412cd3d2be3c76fb26c8c",
+   "size_bytes": 6474,
+   "sha256": "258bd06c5ba5e8ecf433b791d0524cf94b18d1d58c965cb1233a85502d20c02b"
+  },
+  {
+   "path": "fixtures/test-stop-db-cluster-json.log",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-stop-db-cluster-json.log",
+   "blob_id": "5eb050688f37fa8551e96c767686627883205f14",
+   "size_bytes": 2613,
+   "sha256": "88d80f87e9e256f406e50de4dffb5fec49d091c20ad8ab5f2d5bade1b557ceb9"
+  },
+  {
+   "path": "fixtures/test-stop-db-cluster-json.log-expected.json",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-stop-db-cluster-json.log-expected.json",
+   "blob_id": "12ffbd4f542b2a913364f49c6ca8cf63ebbb280b",
+   "size_bytes": 12644,
+   "sha256": "d193e8cf8b88c2a1becd9efd85abe32b6c42e85f8943d9f51f62726a09c70af1"
+  },
+  {
+   "path": "fixtures/test-stop-db-instance-json.log",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-stop-db-instance-json.log",
+   "blob_id": "56dcba1d6a4f82f1c6d6fcfabdb5a4f4709ffca3",
+   "size_bytes": 3840,
+   "sha256": "bc70cf2a22e894cb60e82f015b0df6ccbc4b4d26dfd0ae6584b866ff1984fa82"
+  },
+  {
+   "path": "fixtures/test-stop-db-instance-json.log-expected.json",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-stop-db-instance-json.log-expected.json",
+   "blob_id": "f4a8a255bf00720ea5a4c778314c967c538284fd",
+   "size_bytes": 18994,
+   "sha256": "48729e55c8724e5852d9c22bc01a7a72a66c1a0691fd74530b3943e08b4ce187"
+  },
+  {
+   "path": "fixtures/test-stop-logging-json.log",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-stop-logging-json.log",
+   "blob_id": "b2c96b814b9d22fbf75d120f048ff6bd75f30474",
+   "size_bytes": 856,
+   "sha256": "8d1defc9c043237f78357c27e8e7be013c57a68e4d5ead1fc1040b9fa5869148"
+  },
+  {
+   "path": "fixtures/test-stop-logging-json.log-expected.json",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-stop-logging-json.log-expected.json",
+   "blob_id": "96207b4929151b3f469f9cdedfa380adb6a9d183",
+   "size_bytes": 4918,
+   "sha256": "7e0d71a148968b7f59f768e8158aa5d1496620a6b7c493d74036314903e7898a"
+  },
+  {
+   "path": "fixtures/test-subscribe-json.log",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-subscribe-json.log",
+   "blob_id": "a4c415ed41d37ad17add9984eb4983ad70b6dca6",
+   "size_bytes": 1189,
+   "sha256": "2ea736079cb8371930922a093b0eac37dd8750014c6d0e43e88fe5aa572fd7ea"
+  },
+  {
+   "path": "fixtures/test-subscribe-json.log-expected.json",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-subscribe-json.log-expected.json",
+   "blob_id": "6bc0f7c4a3754086dfb5735ea85979db5b3cf594",
+   "size_bytes": 7380,
+   "sha256": "ba335a8b777acf2907cc4e184f0c7a584706201f44d2b93e09b3ab5087e0def8"
+  },
+  {
+   "path": "fixtures/test-terminate-instances-json.log",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-terminate-instances-json.log",
+   "blob_id": "0d33d93141216b16aee6b6290c7c4f2cebca1e16",
+   "size_bytes": 1300,
+   "sha256": "fe163e91ca14204f6b818089df96090eee739af598f8162217fd33b0a22b282b"
+  },
+  {
+   "path": "fixtures/test-terminate-instances-json.log-expected.json",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-terminate-instances-json.log-expected.json",
+   "blob_id": "195d8386867a72a7567b0ba9ce0094c369069209",
+   "size_bytes": 6859,
+   "sha256": "36b4fa0657e201a5b876e2531a3a5ac2ff138fb9fb9d1b881e88d640cda7f729"
+  },
+  {
+   "path": "fixtures/test-terminate-session-json.log",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-terminate-session-json.log",
+   "blob_id": "b4a5f97645db7c9934386610c9816e3f2954d469",
+   "size_bytes": 1080,
+   "sha256": "663dffbf95f514c78542b5bef97f3e6e79aab6a3551b44a64c859cdfc22459a8"
+  },
+  {
+   "path": "fixtures/test-terminate-session-json.log-expected.json",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-terminate-session-json.log-expected.json",
+   "blob_id": "c189bfd9d1488b20eeae6f6859c730055aab3c88",
+   "size_bytes": 6934,
+   "sha256": "22b7eacf80caf271c8a01d3a476ba08f0ae65d7a2c780875ff32b9b772ce5cc8"
+  },
+  {
+   "path": "fixtures/test-tls-details-json.log",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-tls-details-json.log",
+   "blob_id": "62805f4e24af6b784626a308505b12f3351d9e03",
+   "size_bytes": 3929,
+   "sha256": "628193fbd50fa0846ccfd47ee6d65c4bb5fed85888a6b7dc229f5f64450923ad"
+  },
+  {
+   "path": "fixtures/test-tls-details-json.log-expected.json",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-tls-details-json.log-expected.json",
+   "blob_id": "b78e0dac90bb68c4214c8d5a0504bfe4ae4da2aa",
+   "size_bytes": 19358,
+   "sha256": "12c0f433344c5deed36b84f6adb38474221f4d7e604928e7f66ff90b73e3ae56"
+  },
+  {
+   "path": "fixtures/test-update-access-key-json.log",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-update-access-key-json.log",
+   "blob_id": "ed2b823cfcf271371de27494ae7f1d7b6e85db00",
+   "size_bytes": 794,
+   "sha256": "6242b5dafe753020786a1896a585abdbd0aeec5b05de5af3be567718fb766366"
+  },
+  {
+   "path": "fixtures/test-update-access-key-json.log-expected.json",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-update-access-key-json.log-expected.json",
+   "blob_id": "580aa12bb99b49a2e7da6c874f9b36c436f9fe29",
+   "size_bytes": 4514,
+   "sha256": "2ec4afb377899451704320bff1b68bb300ea268b246e702bbea4da92e69e0d52"
+  },
+  {
+   "path": "fixtures/test-update-accout-password-policy-json.log",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-update-accout-password-policy-json.log",
+   "blob_id": "24094717e84d6cbeb07d77e1e66db8b797caf2d6",
+   "size_bytes": 908,
+   "sha256": "275d6a756770e3c42d023057008b94b6c91712d754d79ed21ddd044f717bbc90"
+  },
+  {
+   "path": "fixtures/test-update-accout-password-policy-json.log-expected.json",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-update-accout-password-policy-json.log-expected.json",
+   "blob_id": "5a5f5b617bdeae741d77141f4ebe866bf0f672f3",
+   "size_bytes": 4803,
+   "sha256": "e4ab878b625bcf961580b38ac15126c14be4185af34a5b2616d96986bff09c6d"
+  },
+  {
+   "path": "fixtures/test-update-assume-role-policy-json.log",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-update-assume-role-policy-json.log",
+   "blob_id": "71caca3667067cdc8e10695519c1161c5d94c8ce",
+   "size_bytes": 1245,
+   "sha256": "7e5f2ce6e8adf1a603797b370502b9b89ca52af46da16890fff14de4b769bee1"
+  },
+  {
+   "path": "fixtures/test-update-assume-role-policy-json.log-expected.json",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-update-assume-role-policy-json.log-expected.json",
+   "blob_id": "9dbed620db9abb6fab59a457206f127b235edcc9",
+   "size_bytes": 7056,
+   "sha256": "a3e214823cda04fe975f351842173ba26c0118a7c9e46ae0ca996cd7fe89d110"
+  },
+  {
+   "path": "fixtures/test-update-group-json.log",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-update-group-json.log",
+   "blob_id": "e94cafbe4bde9a5f4410562c3bfe49d5a031c529",
+   "size_bytes": 2861,
+   "sha256": "423761d6f3aef6009646e4746f6f14a9f79bbeba88755a4ab889d08c6fb8d570"
+  },
+  {
+   "path": "fixtures/test-update-group-json.log-expected.json",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-update-group-json.log-expected.json",
+   "blob_id": "a463258e85853d42b717435837b5e8af19cf561e",
+   "size_bytes": 16285,
+   "sha256": "940e3c4ea67c3346f767e5dd32f89bd46b22d19fbc520ea9a29a5681077a3099"
+  },
+  {
+   "path": "fixtures/test-update-lambda-json.log",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-update-lambda-json.log",
+   "blob_id": "34fd172a437f1ac2175eecafee672f274bf62a5a",
+   "size_bytes": 192,
+   "sha256": "c02e496803084a1cd4126ad2670bdf9c6d2b0c626e83b1ec71c7cfda19a0d8c5"
+  },
+  {
+   "path": "fixtures/test-update-lambda-json.log-expected.json",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-update-lambda-json.log-expected.json",
+   "blob_id": "762470fcfd26339043cd7b370cf1c6b11c4b7b84",
+   "size_bytes": 1972,
+   "sha256": "2e8f5763ef32da11d3c7423c20f68f4f5df9f64836452bc1f8382892d059a723"
+  },
+  {
+   "path": "fixtures/test-update-login-profile-json.log",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-update-login-profile-json.log",
+   "blob_id": "5dc6e47cb5ecff5ae186eef31f5d0942dfd9a582",
+   "size_bytes": 743,
+   "sha256": "ccee2cb765decf87e942d3ede4b63800d0dc63bb1b1a82e2c621c35343b0f4fa"
+  },
+  {
+   "path": "fixtures/test-update-login-profile-json.log-expected.json",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-update-login-profile-json.log-expected.json",
+   "blob_id": "846e4c2279a67e098f26e8ccd616d17a6d86f1c7",
+   "size_bytes": 4296,
+   "sha256": "9249faee1238f22fc77836ec68740c7421d8b2ae6033aa0821c10eca1eb6533c"
+  },
+  {
+   "path": "fixtures/test-update-ssh-public-key-json.log",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-update-ssh-public-key-json.log",
+   "blob_id": "6a31d001b620f402ede89fd3071e2ee1f599852a",
+   "size_bytes": 1600,
+   "sha256": "78197e00862dd3d11bbcbccaa3a380d5b80675046dbaae5e8746afaceb6ed07b"
+  },
+  {
+   "path": "fixtures/test-update-ssh-public-key-json.log-expected.json",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-update-ssh-public-key-json.log-expected.json",
+   "blob_id": "d28e5dca3bc2f572ee75ee3156d6f068076b0a8c",
+   "size_bytes": 9031,
+   "sha256": "dba718cc88309f961d4a05df6817e62ac89f1539b7db32073d4da7f819faead6"
+  },
+  {
+   "path": "fixtures/test-update-trail-json.log",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-update-trail-json.log",
+   "blob_id": "9b440298c648ce1d439bb2af5077733f0c1f838d",
+   "size_bytes": 2036,
+   "sha256": "b768cc32a077baff4cfab942e042b2f943c3b43af7256080e1c9b7c5e9eff5c6"
+  },
+  {
+   "path": "fixtures/test-update-trail-json.log-expected.json",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-update-trail-json.log-expected.json",
+   "blob_id": "0c7548cf366056d39f9c947852e3916e24c7d789",
+   "size_bytes": 10867,
+   "sha256": "c8edb3a27da743541f0da28966de305246f4921bb615c2a9810e0f3f398e958e"
+  },
+  {
+   "path": "fixtures/test-update-user-json.log",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-update-user-json.log",
+   "blob_id": "62721399a4055ac94629f9575ba189cbd28b9335",
+   "size_bytes": 678,
+   "sha256": "8920125d94d05b8200449746bb47c491ab4fc875bde89767b1bef14fb7ff898f"
+  },
+  {
+   "path": "fixtures/test-update-user-json.log-expected.json",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-update-user-json.log-expected.json",
+   "blob_id": "28010cd58f3ed165c622c60215cf7d997f8c9541",
+   "size_bytes": 4818,
+   "sha256": "fa62a0725c54af1b09d8e2fbf26cdda97d618fcbedc56fdd1cfb4ed40f4e4a2c"
+  },
+  {
+   "path": "fixtures/test-upload-ssh-public-key-json-flattened.log",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-upload-ssh-public-key-json-flattened.log",
+   "blob_id": "0db4791855bd926929d08beda4776527281d1a15",
+   "size_bytes": 1079,
+   "sha256": "44838bd5ccbcbc8a2f25ef03604326be064deeddb1e37490f61312c35d667adc"
+  },
+  {
+   "path": "fixtures/test-upload-ssh-public-key-json-flattened.log-config.yml",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-upload-ssh-public-key-json-flattened.log-config.yml",
+   "blob_id": "4cba74f95928cb7490a9a7aaa5711fe06a755008",
+   "size_bytes": 523,
+   "sha256": "f6d2fea45ea549223f6a28c5183e39e00f3535c3322319b17f66c07ecf2300a1"
+  },
+  {
+   "path": "fixtures/test-upload-ssh-public-key-json-flattened.log-expected.json",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-upload-ssh-public-key-json-flattened.log-expected.json",
+   "blob_id": "654989a6a359cced93b4d028076e3fb72a81701a",
+   "size_bytes": 5150,
+   "sha256": "96e68466d8857203aacba2a7f104446ddf3e3e1f3efa9011a577e3042fd4d42b"
+  },
+  {
+   "path": "fixtures/test-upload-ssh-public-key-json-keyword.log",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-upload-ssh-public-key-json-keyword.log",
+   "blob_id": "0db4791855bd926929d08beda4776527281d1a15",
+   "size_bytes": 1079,
+   "sha256": "44838bd5ccbcbc8a2f25ef03604326be064deeddb1e37490f61312c35d667adc"
+  },
+  {
+   "path": "fixtures/test-upload-ssh-public-key-json-keyword.log-config.yml",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-upload-ssh-public-key-json-keyword.log-config.yml",
+   "blob_id": "ea62b82d20cd6af5d128976ea940d3e910632a43",
+   "size_bytes": 521,
+   "sha256": "dca4b747c4fc1e725cd83c81a4df841322269cbeb56e2cad62e07978160baa70"
+  },
+  {
+   "path": "fixtures/test-upload-ssh-public-key-json-keyword.log-expected.json",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-upload-ssh-public-key-json-keyword.log-expected.json",
+   "blob_id": "8aa92e7a87e90342e4ae745f63762d00ad19f328",
+   "size_bytes": 4688,
+   "sha256": "e1b124f386bf226c7fb866c1c37c953ff679d93a6481d1ada8ba118104e1cdda"
+  },
+  {
+   "path": "fixtures/test-upload-ssh-public-key-json-none.log",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-upload-ssh-public-key-json-none.log",
+   "blob_id": "0db4791855bd926929d08beda4776527281d1a15",
+   "size_bytes": 1079,
+   "sha256": "44838bd5ccbcbc8a2f25ef03604326be064deeddb1e37490f61312c35d667adc"
+  },
+  {
+   "path": "fixtures/test-upload-ssh-public-key-json-none.log-config.yml",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-upload-ssh-public-key-json-none.log-config.yml",
+   "blob_id": "d832521389d830fc74db93a14099ddf6f9b46c46",
+   "size_bytes": 518,
+   "sha256": "25f2a6d84c89598dc1717eee2c05b74c1f37ca85e165e4f56a0ee235fa681015"
+  },
+  {
+   "path": "fixtures/test-upload-ssh-public-key-json-none.log-expected.json",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-upload-ssh-public-key-json-none.log-expected.json",
+   "blob_id": "59eed5946f0bb3e57ec7cffa7a6abb3ac7c383ab",
+   "size_bytes": 4267,
+   "sha256": "e1a75622896c62bb660449f2cf1ef7e01a7f7b1080484ca3dab17efa63fdb489"
+  },
+  {
+   "path": "fixtures/test-upload-ssh-public-key-json.log",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-upload-ssh-public-key-json.log",
+   "blob_id": "0db4791855bd926929d08beda4776527281d1a15",
+   "size_bytes": 1079,
+   "sha256": "44838bd5ccbcbc8a2f25ef03604326be064deeddb1e37490f61312c35d667adc"
+  },
+  {
+   "path": "fixtures/test-upload-ssh-public-key-json.log-expected.json",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-upload-ssh-public-key-json.log-expected.json",
+   "blob_id": "793b0638b793332742df897bb7f61b3fd327a252",
+   "size_bytes": 5571,
+   "sha256": "8b77ab5d6ac386b2a7259c8af33468cbb7fa389b3d7f29754d74863ab0ca3d74"
+  },
+  {
+   "path": "fixtures/test-us-gov-arn.log",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-us-gov-arn.log",
+   "blob_id": "a3951835fd9c0d6ba65c01683e5bb85c9350599c",
+   "size_bytes": 1664,
+   "sha256": "9c835ac7cc49e37b522953cbb240cb0a1da659b3bfeda68328d39d77889b0457"
+  },
+  {
+   "path": "fixtures/test-us-gov-arn.log-expected.json",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-us-gov-arn.log-expected.json",
+   "blob_id": "98d874fddf8c0a37a4dccfcda8b461489d9d287d",
+   "size_bytes": 8018,
+   "sha256": "23f7bf08455cd458a6b9a9abc5e58fad378900bf7c201a645971f8b5efb6391f"
+  },
+  {
+   "path": "fixtures/test-user-authentication.log",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-user-authentication.log",
+   "blob_id": "5242c0df33e4f650198de496cabb2edb8173ee2c",
+   "size_bytes": 967,
+   "sha256": "64f40c8e0bd05da3d21656b3afe0ec2ea4b69814d11aa67d4fad9f7258d48420"
+  },
+  {
+   "path": "fixtures/test-user-authentication.log-expected.json",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/_dev/test/pipeline/test-user-authentication.log-expected.json",
+   "blob_id": "06bbe78ae4900ff6a31dbabd12c8228fca40e9bd",
+   "size_bytes": 4847,
+   "sha256": "dc4cb29e2c353ecc2a76b636be3c019ba3ec3c6a1dcf0856e171340b13aecf3b"
+  },
+  {
+   "path": "pipeline/default.yml",
+   "upstream_path": "packages/aws/data_stream/cloudtrail/elasticsearch/ingest_pipeline/default.yml",
+   "blob_id": "127f1d032c2dba4ea78e7e5a13be505a57e71a3a",
+   "size_bytes": 97217,
+   "sha256": "d415748970239578d854b1137d48e3096f3af4fde45c1ab6211818fc2fd9db2a"
+  }
+ ]
+}

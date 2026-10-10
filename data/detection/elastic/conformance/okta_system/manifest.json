@@ -1,0 +1,117 @@
+{
+ "source": "elastic/integrations (Elastic integration ingest pipeline and pipeline test fixtures)",
+ "source_commit": "ff5328128a30c75046130ae58ddba450caa1f2dc",
+ "license": "Elastic License 2.0",
+ "license_url": "https://github.com/elastic/integrations/blob/ff5328128a30c75046130ae58ddba450caa1f2dc/LICENSE.txt",
+ "retrieved_at_utc": "2026-10-10T14:35:49Z",
+ "method": "scripts/acquire_elastic_conformance.py (commit-pinned; each file verified against its git blob id)",
+ "approval": "owner instruction 2026-10-10 (extend Elastic rules to further log sources)",
+ "purpose": "Conformance oracle for the derived ECS views of this data stream (ADR-0015).",
+ "files": [
+  {
+   "path": "fixtures/test-okta-system-events.json",
+   "upstream_path": "packages/okta/data_stream/system/_dev/test/pipeline/test-okta-system-events.json",
+   "blob_id": "2c6f4d2fa487460df237264eea2c96ca5d8e00c8",
+   "size_bytes": 1988,
+   "sha256": "9523c234a0cab5e56749b986a293e2efe3a3054b491a3e4e0349e9d6fd2d7c4a"
+  },
+  {
+   "path": "fixtures/test-okta-system-events.json-expected.json",
+   "upstream_path": "packages/okta/data_stream/system/_dev/test/pipeline/test-okta-system-events.json-expected.json",
+   "blob_id": "a367290b5a2fa8e448f66150a07cee54b07863b9",
+   "size_bytes": 7884,
+   "sha256": "6c3dbb47607adb191d50c9afc5e9ff01437b7e52f2c279f5af434b3798eb22aa"
+  },
+  {
+   "path": "fixtures/test-okta-system-events.log",
+   "upstream_path": "packages/okta/data_stream/system/_dev/test/pipeline/test-okta-system-events.log",
+   "blob_id": "6fae9dbcaf64e3ff4622b7d1feb1c2aeea58554b",
+   "size_bytes": 48276,
+   "sha256": "161032b42fd1a4f2e0dbff134a073cd23cda042ba24b8f42adfeed525e91f9c7"
+  },
+  {
+   "path": "fixtures/test-okta-system-events.log-config.yml",
+   "upstream_path": "packages/okta/data_stream/system/_dev/test/pipeline/test-okta-system-events.log-config.yml",
+   "blob_id": "e873d78fcb2ce3a2a45e00ac3f26b68eb4852162",
+   "size_bytes": 414,
+   "sha256": "8315a9f8c80c9cbdab48d834f239ae58c1d5ebb7b5c029228146bfb8f0556696"
+  },
+  {
+   "path": "fixtures/test-okta-system-events.log-expected.json",
+   "upstream_path": "packages/okta/data_stream/system/_dev/test/pipeline/test-okta-system-events.log-expected.json",
+   "blob_id": "8832875774a5188105341d6d94475a27361821f3",
+   "size_bytes": 218888,
+   "sha256": "1cae5de8018726655be75eaa02e66d45bf103bfdadabe27822c5b02801e31b98"
+  },
+  {
+   "path": "fixtures/test-okta-system-no-flattened-events.log",
+   "upstream_path": "packages/okta/data_stream/system/_dev/test/pipeline/test-okta-system-no-flattened-events.log",
+   "blob_id": "b622f56123a5f7b818821f468ddd07a11da651d7",
+   "size_bytes": 50783,
+   "sha256": "20748554f66ac3aed31d010cccacf222959d4ede8b1ca1bbe45cf0d5305b8a78"
+  },
+  {
+   "path": "fixtures/test-okta-system-no-flattened-events.log-config.yml",
+   "upstream_path": "packages/okta/data_stream/system/_dev/test/pipeline/test-okta-system-no-flattened-events.log-config.yml",
+   "blob_id": "54200cd70350ee81bc03e542180dc421f8392a7c",
+   "size_bytes": 532,
+   "sha256": "82da07fbed8963472de1c5a7f50ee85fa6e8d7c58fdfe7dfcd41511a15e7b1a5"
+  },
+  {
+   "path": "fixtures/test-okta-system-no-flattened-events.log-expected.json",
+   "upstream_path": "packages/okta/data_stream/system/_dev/test/pipeline/test-okta-system-no-flattened-events.log-expected.json",
+   "blob_id": "879c5e5f877c7c558f2fad157afe374f542537a1",
+   "size_bytes": 219422,
+   "sha256": "1c429f46cd2bdd3f2ac6ba607eb300e74c43d0d3061a51067efcc5c80d44f2aa"
+  },
+  {
+   "path": "fixtures/test-okta-system-yes-flattened-events.log",
+   "upstream_path": "packages/okta/data_stream/system/_dev/test/pipeline/test-okta-system-yes-flattened-events.log",
+   "blob_id": "c125c95f55a3fd463d39be8d8abfd9177de99426",
+   "size_bytes": 48498,
+   "sha256": "ed2928c75215a6aef346222c21c345328cf6374998e6f80c8b6a6fc7eb5b5871"
+  },
+  {
+   "path": "fixtures/test-okta-system-yes-flattened-events.log-config.yml",
+   "upstream_path": "packages/okta/data_stream/system/_dev/test/pipeline/test-okta-system-yes-flattened-events.log-config.yml",
+   "blob_id": "8b3e7c07d57b5aec3dd75cf9150970f18f9e19e7",
+   "size_bytes": 533,
+   "sha256": "543b22630671d2ce090b8f909bc182a89dd7034e45199bcd9e5c0e4a933b886c"
+  },
+  {
+   "path": "fixtures/test-okta-system-yes-flattened-events.log-expected.json",
+   "upstream_path": "packages/okta/data_stream/system/_dev/test/pipeline/test-okta-system-yes-flattened-events.log-expected.json",
+   "blob_id": "8bd5a9cc6851c77114ff438fee7b729acf56ba03",
+   "size_bytes": 219416,
+   "sha256": "2a7746e06dfbae447066952c11459b0b8c9b456372eb628e35ad485543fc551a"
+  },
+  {
+   "path": "pipeline/default.yml",
+   "upstream_path": "packages/okta/data_stream/system/elasticsearch/ingest_pipeline/default.yml",
+   "blob_id": "b7ce1ee157c30262249552bd7e092734bc34c982",
+   "size_bytes": 27187,
+   "sha256": "a8c5a33b54b2ce612bdf7cd536205bf47b2a30f23f614aaa09d09066259ac268"
+  },
+  {
+   "path": "pipeline/ecs_category_type.yml",
+   "upstream_path": "packages/okta/data_stream/system/elasticsearch/ingest_pipeline/ecs_category_type.yml",
+   "blob_id": "92e3b6f901d707eef45108a208c1f448eacde57e",
+   "size_bytes": 192600,
+   "sha256": "02f7cf1324e6607c5fde4e9d46b602581069121f64fd25c369f1cbd55c0e3506"
+  },
+  {
+   "path": "pipeline/no_use_flattened_debug.yml",
+   "upstream_path": "packages/okta/data_stream/system/elasticsearch/ingest_pipeline/no_use_flattened_debug.yml",
+   "blob_id": "070c76f0fe282fbc88dca34da96c1dbf53fb773e",
+   "size_bytes": 10003,
+   "sha256": "3916b537d1bdd0df4f103ef54efe841e745aa3fbb9e8cfa941dd029e406a4186"
+  },
+  {
+   "path": "pipeline/use_flattened_debug.yml",
+   "upstream_path": "packages/okta/data_stream/system/elasticsearch/ingest_pipeline/use_flattened_debug.yml",
+   "blob_id": "5d75b24f12660598ca63b3f919ee21c00ebf1dd5",
+   "size_bytes": 9264,
+   "sha256": "0628749379798cfa9de4301477caaf213c62683cd40fb26ec25f7be8acef3038"
+  }
+ ]
+}

@@ -517,6 +517,10 @@ class AwsCloudTrailRef:
     request_enable: str | None = None
     response_publicly_accessible: str | None = None
     response_pending_master_user_password: str | None = None
+    #: ``requestParameters`` as logged: the JSON object re-serialised compactly
+    #: with its key order kept (ADR-0015 -- Elastic rules read the whole object,
+    #: as a string and by sub-field).
+    request_parameters: str | None = None
 
 
 @dataclass(frozen=True)

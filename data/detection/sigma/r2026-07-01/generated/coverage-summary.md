@@ -9,22 +9,22 @@ Counts only — not detection-efficacy or attribution-accuracy claims.
 
 | Status | All active techniques | Used by ≥ 1 active Group |
 |---|---|---|
-| `covered` | 362 | 293 |
-| `telemetry_gap` | 35 | 20 |
+| `covered` | 395 | 314 |
+| `telemetry_gap` | 30 | 17 |
 | `translation_gap` | 5 | 4 |
-| `not_observable_on_supported_platforms` | 92 | 68 |
-| `no_sigma_rule` | 203 | 113 |
+| `not_observable_on_supported_platforms` | 87 | 63 |
+| `no_sigma_rule` | 180 | 100 |
 | **total** | **697** | **498** |
 
-Covered techniques by content source: elastic 209 (26 only by it), sigma 336 (153 only by it).
+Covered techniques by content source: elastic 271 (59 only by it), sigma 336 (124 only by it).
 
 ## Groups
 
 - Active Groups: 176
-- With 0 covered techniques: 6 (of which 4 have no active techniques in ATT&CK at all, so no detection work can cover them)
+- With 0 covered techniques: 5 (of which 4 have no active techniques in ATT&CK at all, so no detection work can cover them)
 - With ≥ 2 covered (necessary, not sufficient, to attribute): 163
-- With ≥ 5 covered: 145
-- With ≥ 10 covered: 114
+- With ≥ 5 covered: 147
+- With ≥ 10 covered: 116
 
 ## Top 15 telemetry blockers (upper bounds)
 
@@ -32,16 +32,16 @@ Covered techniques by content source: elastic 209 (26 only by it), sigma 336 (15
 |---|---|---|---|---|
 | `logsource:/proxy` | no | 5 | 4 | 17 |
 | `logsource:cisco/aaa` | no | 5 | 3 | 7 |
-| `field:DestinationHostname` | yes | 3 | 2 | 29 |
 | `field:ClassName` | yes | 2 | 2 | 9 |
+| `field:DestinationHostname` | yes | 2 | 2 | 29 |
 | `field:DeviceDescription` | yes | 2 | 2 | 9 |
-| `logsource:opencanary/application` | no | 2 | 2 | 28 |
-| `field:Initiated` | yes | 2 | 1 | 27 |
 | `logsource:bitbucket/audit` | no | 2 | 1 | 4 |
 | `logsource:windows/system` | yes | 2 | 1 | 1 |
 | `event_code:6423` | no | 1 | 1 | 1 |
+| `field:Initiated` | yes | 1 | 1 | 27 |
 | `field:activityType` | yes | 1 | 1 | 1 |
 | `field:additionalDetails.additionalInfo` | yes | 1 | 1 | 1 |
 | `field:category` | yes | 1 | 1 | 1 |
 | `logsource:/dns` | no | 1 | 1 | 15 |
 | `logsource:/webserver` | no | 1 | 1 | 8 |
+| `logsource:fortigate/event` | no | 1 | 1 | 1 |

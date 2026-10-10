@@ -52,9 +52,9 @@ nothing is claimed from the upper bound.
 
 **First data stream: Windows Sysmon.** A rule applies to this platform's Sysmon telemetry iff one of
 its index patterns matches `logs-windows.sysmon_operational-default`, the data stream Elastic's Windows
-integration writes Sysmon events to (`detection_content/elastic_field_map.py`). Other streams (Windows
-Security, PowerShell, cloud, Linux) are not yet modelled; their rules are reported as
-`index:no_supported_data_stream`.
+integration writes Sysmon events to (`detection_content/elastic_field_map.py`). Rules for a stream that
+is not modelled are reported as `index:no_supported_data_stream` (Windows Security and the cloud audit
+streams were added next — Amendment A below).
 
 **What a rule condition reads — verified, not assumed.** Elastic rules read ECS fields that Elastic's
 *ingest pipeline* computes. For each, `detection/derived_fields.py` reproduces the pinned pipeline
@@ -131,6 +131,70 @@ service shell, `net use \\host\ADMIN$` sweeps, the payload's LSASS access with `
 some fire on benign process behaviour exactly as Elastic's rule logic does (e.g. a `svchost.exe` LSASS
 access outside the rule's exclusion list) — translation is faithful, not tuned. Low-severity and
 building-block detections are enrich-tier Evidence.
+
+## Amendment A — further data streams (2026-10-10, owner: "go ahead with the recommended step")
+
+The same method, per data stream (`STREAMS` in `detection_content/elastic_field_map.py`): the rule's
+index patterns must match the stream's concrete name; constants are decided at import; every other field
+is a derived view reproduced from the pinned pipeline and checked against **that integration's own
+pipeline test fixtures** (vendored, blob-id pinned, by `scripts/acquire_elastic_conformance.py`;
+`tests/test_elastic_stream_conformance.py`). No divergence is tolerated in any stream.
+
+| Stream (Elastic data stream) | Fixture events compared | Views (examples of what had to be reproduced) |
+|---|---|---|
+| Windows Security (`system.security`) | 43 | 4688 `process.args` — split on whitespace outside quotes, **quotes kept** (unlike Sysmon's); `process.name`; raw `winlog.event_data.*` after the pipeline's `""` / `-` removal; `PrivilegeList` split; `event.category` / `type` / `action` per event code from the pipeline's table |
+| AWS CloudTrail (`aws.cloudtrail`) | 120 | `event.outcome` (error code / message, `ConsoleLogin`); `event.category` / `type` from the pipeline's table; `aws.cloudtrail.request_parameters` = Java `Map.toString()` in **`java.util.HashMap` iteration order** after the pipeline's empty-value removal (114 strings equal); `…flattened.request_parameters.*` (324 leaves equal) |
+| Microsoft 365 audit (`o365.audit`) | 371 | `event.code` from the `RecordType` table; renamed operations (Entra, Teams); `event.outcome` from `ResultStatus` |
+| Entra audit / sign-in (`azure.auditlogs`, `azure.signinlogs`) | 11 / 66 | operation, outcome, application fields |
+| Okta (`okta.system`) | 26 | `event.action`, outcome mapping (`ALLOW` / `DENY` / unknown), actor fields |
+| GitHub audit (`github.audit`) | 10 | `github.category` grok, `event.category` / `event.type` by action words |
+| Kubernetes audit (`kubernetes.audit_logs`) | 3 | verb, `objectRef.*`, authorization decision → outcome |
+
+Mechanisms this needed:
+
+- **`UNDETERMINED`** (`detection/derived_views.py`): where the pipeline's value depends on something the
+  adapter does not keep (M365 DLP outcomes from `PolicyDetails`; an acting process a Security builder does
+  not read), the view answers neither a value nor "absent", and the engine makes **every** condition on it
+  a non-match — negated or not. A rule can then only fail to fire, never fire on a guess.
+- **Always-present array members** (`EventProfile.always_contains`): every M365 record has
+  `event.category` "web"; a condition asking for it is decided, any other category is a named gap.
+- **Per-field `ignore_above`** (CloudTrail's `request_parameters`: 8191) and **flattened families**
+  (`ViewSet.dynamic`).
+- **Lookup tables are extracted, not retyped**: `scripts/extract_elastic_pipeline_tables.py` reads them
+  from the vendored pipeline YAML; a test regenerates and compares.
+- The CloudTrail adapter now keeps `requestParameters` whole (compact JSON, logged key order).
+
+Not offered, and why: **Azure activity logs** — the adapter reads the REST API record shape, Elastic's
+pipeline the diagnostic-export shape, so no fixture can be run (rules stay `index:no_supported_data_stream`);
+**Linux audit** (`auditd_manager`) — Elastic's normalisation of audit records is a different model from
+this adapter's one-Observation-per-record; **PowerShell script blocks** — Elastic's rules search
+`powershell.file.script_block_text`, an analysed `text` field (token matching, not string matching), which
+has no exact equivalent here; fields the adapters do not keep (IP / ASN enrichment, most
+`o365.audit.*` and `kubernetes.audit.requestObject.*` bodies, Security `AccessMask` descriptions) are gaps.
+Fixture coverage is thin for Kubernetes (3 events) and GitHub (10): those views are exact where tested and
+simple pass-throughs otherwise.
+
+### Measured after Amendment A
+
+| | Sigma only | + Sysmon | + all streams |
+|---|---|---|---|
+| Elastic rules imported / partial | — | 237 / 14 | **414 / 26** (of 2,215) |
+| Generated engine rules | — | 1,632 | 2,378 |
+| ATT&CK ids with an Elastic rule | — | 209 | 271 |
+| Covered techniques (of 697 active) | 336 | 362 | **395** (59 only by Elastic) |
+| Covered techniques used by Groups (of 498) | 276 | 293 | **314** |
+| Groups with ≥ 5 / ≥ 10 covered | 145 / 111 | 145 / 114 | 147 / 116 |
+| Groups with zero covered | 6 | 6 | 5 |
+
+Rules per stream (a rule can serve several): Sysmon 251, Security 133, CloudTrail 110, M365 22, Okta 22,
+GitHub 12, Kubernetes 11, Entra audit 8, Entra sign-in 1. 112 Groups gain covered techniques (APT28 +13,
+APT29 +10, Scattered Spider +8, Kimsuky +8).
+
+**On the pinned cloud samples** (Splunk `attack_data`; datasets with at least one detection, Sigma →
+Sigma or Elastic): AWS CloudTrail 21 → 29 of 53; M365 6 → 9 of 50; Entra 6 → 10 of 38; Okta 5 → 7 of 16;
+GitHub 3 → 4 of 11; Kubernetes 0 → 0 of 6. Technique ids Elastic detects there and Sigma does not: 22
+(AWS), 20 (M365), 10 (Entra), 8 (Okta), 2 (GitHub). The M365 building-block rule "Security Compliance
+Admin Signal" fires 1,747 times — enrich-tier Evidence, as its Elastic classification says.
 
 ## Consequences
 

@@ -129,3 +129,24 @@ def test_tuple_values_are_validated(bad: tuple[str, ...]) -> None:
     for operator in ("wildcard", "element_in", "element_contains"):
         with pytest.raises(DetectionError):
             FieldCondition("process.executable", operator, bad)
+
+
+def test_undetermined_values_never_match_negated_or_not() -> None:
+    """A derived value the adapter cannot determine (ADR-0015): no condition on it
+    matches, so a rule can only fail to fire, never fire on a guess."""
+    from attribution_platform.domain import O365Ref
+
+    dlp = Observation(
+        observation_id="o365:1",
+        timestamp=datetime(2026, 1, 1, tzinfo=UTC),
+        raw_reference=SourceRef(source_type="o365", source_event_id="1"),
+        event=EventMetadata(kind="event", dataset="o365.audit"),
+        o365=O365Ref(record_type="13", operation="DlpRuleMatch", workload="Exchange"),
+    )
+    outcome = "elastic_o365.event.outcome"
+    assert not _matches(FieldCondition(outcome, "equals", "success"), dlp)
+    assert not _matches(FieldCondition(outcome, "equals", "success", negate=True), dlp)
+    assert not _matches(FieldCondition(outcome, "exists"), dlp)
+    assert not _matches(FieldCondition(outcome, "exists", negate=True), dlp)
+    # A determined view on the same record still answers.
+    assert _matches(FieldCondition("elastic_o365.event.provider", "equals", "Exchange"), dlp)

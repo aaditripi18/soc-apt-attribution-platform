@@ -76,11 +76,14 @@ against ATT&CK Enterprise v19.2, SigmaHQ `r2026-07-01` and Elastic `detection-ru
 
 - **1,883** Sigma rules imported (plus 75 partial), mapped to **344** ATT&CK ids; every rejected rule is
   listed with its reason (telemetry gap, untranslatable construct, policy).
-- **251** Elastic prebuilt rules translated exactly (237 whole, 14 partial) for Sysmon telemetry, mapped
-  to 209 ATT&CK ids — **26 not covered by Sigma**
+- **440** Elastic prebuilt rules translated exactly (414 whole, 26 partial) for Sysmon, Windows
+  Security, AWS CloudTrail, Microsoft 365, Entra ID, Okta, GitHub and Kubernetes telemetry, mapped to
+  271 ATT&CK ids — **59 not covered by Sigma**
   ([ADR-0015](docs/architecture/adr/0015-elastic-prebuilt-rules.md)). Every ECS field they read is
-  reproduced from Elastic's own ingest pipeline and checked against Elastic's own pipeline test fixtures.
-- **293 of 498** techniques used by active Groups are covered (276 with Sigma alone); **163 of 176**
+  reproduced from Elastic's own ingest pipeline for that source and checked against Elastic's own
+  pipeline test fixtures — down to the Java `HashMap` key order of CloudTrail's request parameters.
+- **395 of 697** active techniques are covered, and **314 of 498** of those used by active Groups (336
+  and 276 with Sigma alone); **163 of 176**
   active Groups have at least two covered techniques (the minimum to attribute at all).
 - Uncovered techniques are classified, not hidden: no Sigma rule exists, a telemetry gap blocks it, or ATT&CK
   lists no platform this system has telemetry for.
@@ -173,7 +176,7 @@ Start with [docs/architecture/README.md](docs/architecture/README.md) for the AD
 MITRE ATT&CK® data (Enterprise v19.2) is used under the [ATT&CK Terms of
 Use](https://attack.mitre.org/resources/terms-of-use/); ATT&CK is a registered trademark of The MITRE
 Corporation ([NOTICE](data/attack/enterprise/v19.2/NOTICE.md)). Detection content: SigmaHQ (DRL 1.1);
-Elastic detection rules, KQL grammar and Sysmon pipeline fixtures (Elastic License 2.0,
+Elastic detection rules, KQL grammar, ingest pipelines and their test fixtures (Elastic License 2.0,
 [NOTICE](data/detection/elastic/NOTICE.md)).
 Telemetry: OTRF Security-Datasets (MIT), Splunk `attack_data` (Apache-2.0). Indicators: CISA (public
 domain, TLP:CLEAR). Each data directory carries its own NOTICE.

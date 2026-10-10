@@ -1,0 +1,2224 @@
+{
+ "source": "elastic/integrations (Elastic integration ingest pipeline and pipeline test fixtures)",
+ "source_commit": "ff5328128a30c75046130ae58ddba450caa1f2dc",
+ "license": "Elastic License 2.0",
+ "license_url": "https://github.com/elastic/integrations/blob/ff5328128a30c75046130ae58ddba450caa1f2dc/LICENSE.txt",
+ "retrieved_at_utc": "2026-10-10T14:36:43Z",
+ "method": "scripts/acquire_elastic_conformance.py (commit-pinned; each file verified against its git blob id)",
+ "approval": "owner instruction 2026-10-10 (extend Elastic rules to further log sources)",
+ "purpose": "Conformance oracle for the derived ECS views of this data stream (ADR-0015).",
+ "files": [
+  {
+   "path": "fixtures/test-1100.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-1100.json",
+   "blob_id": "874f22895f57fd187f30b85c4cf872c3006ece80",
+   "size_bytes": 1759,
+   "sha256": "52886468fcdcff6df76a05bb7d5b7609ab9931bed0253fa5ad480b5761aef0d1"
+  },
+  {
+   "path": "fixtures/test-1100.json-expected.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-1100.json-expected.json",
+   "blob_id": "1ade49aba2b7d629936b0a1cc2bac7dc8f34acb1",
+   "size_bytes": 1973,
+   "sha256": "a997aa22ffd52118d06da605f75d2405d1a03082d2f20faa282c2d584d4ef78e"
+  },
+  {
+   "path": "fixtures/test-1102.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-1102.json",
+   "blob_id": "32c19922164a1c803d0afaba841f0579fc487169",
+   "size_bytes": 2100,
+   "sha256": "a8275b62a5b6e87ac34075b11cc75f90a3cb7f2d884eff885a0714d992e8f321"
+  },
+  {
+   "path": "fixtures/test-1102.json-expected.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-1102.json-expected.json",
+   "blob_id": "a241c097b004f7daeacdce1b0944117e5956840d",
+   "size_bytes": 2720,
+   "sha256": "17604495f6f50cf4667932d6dd947039c67c428a49807a96160078a9baf10fa9"
+  },
+  {
+   "path": "fixtures/test-1104.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-1104.json",
+   "blob_id": "db23db5c84674ab9abb6bee846ad2062f9cd4663",
+   "size_bytes": 1747,
+   "sha256": "208b99261ec58c80b253446df3a8a1a2bd505d81283214b7da9a58930f91992a"
+  },
+  {
+   "path": "fixtures/test-1104.json-expected.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-1104.json-expected.json",
+   "blob_id": "bb7f698c58f6a309deed3ad5b0c6d75d45a61643",
+   "size_bytes": 1947,
+   "sha256": "040f58198453317c4a2340aac7394250b8997ae4072923308983b8c30492c218"
+  },
+  {
+   "path": "fixtures/test-1105.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-1105.json",
+   "blob_id": "e66a080f5e290e9a86810f6d9171770282a63f53",
+   "size_bytes": 2017,
+   "sha256": "fec07b23b95aa3225cd0bc221acbf745c8e6727f4499aea43ad8d7e02f6e5f6b"
+  },
+  {
+   "path": "fixtures/test-1105.json-expected.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-1105.json-expected.json",
+   "blob_id": "ac2c3c41235860e553cb0d4afdbdd6a16df4349f",
+   "size_bytes": 2223,
+   "sha256": "774536a9715e5110e1890b13c8a41fe6d3b141ec8f704c4e9d26b8e4cf87254c"
+  },
+  {
+   "path": "fixtures/test-4627.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-4627.json",
+   "blob_id": "77bd19115804a7883c3fbd22e6f449157f015fc3",
+   "size_bytes": 4053,
+   "sha256": "875643776a0f2a8db94c8d1405b7f38a60b29639e9475a2466128921f34b23a6"
+  },
+  {
+   "path": "fixtures/test-4627.json-expected.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-4627.json-expected.json",
+   "blob_id": "d3d9c2c58d48dc660874e0651565deb12696633e",
+   "size_bytes": 5198,
+   "sha256": "6ae05ea85ed9ca0a4086e7d4edc1ff29766d24287b28c54594204bb3fb8b8b63"
+  },
+  {
+   "path": "fixtures/test-4658.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-4658.json",
+   "blob_id": "90d38dc30f675fbd8e0c434e7f87dcf1353f8d2e",
+   "size_bytes": 1895,
+   "sha256": "8cf08c23f551e6e9c575aea413a1d2e9a3a0004e618a5dd9b716cf9a68e6b7d3"
+  },
+  {
+   "path": "fixtures/test-4658.json-expected.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-4658.json-expected.json",
+   "blob_id": "c3d4db45e92017acc3fbf36ba81f10deed28e0ec",
+   "size_bytes": 2935,
+   "sha256": "9700d96afe983802b7c7dafababcdd0c310ddc4786e1a012abb28f853455561e"
+  },
+  {
+   "path": "fixtures/test-4659.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-4659.json",
+   "blob_id": "dc1ddcfb9b9a5010fba82f397bd9bf71370952c1",
+   "size_bytes": 2469,
+   "sha256": "70be7b03ec97623facf08cc6c1753331e43ec752a4bf4fc1d1f3da7fd41e6dd3"
+  },
+  {
+   "path": "fixtures/test-4659.json-expected.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-4659.json-expected.json",
+   "blob_id": "9e669ed8c02706cbd6c42986e45da3f62a11daab",
+   "size_bytes": 4051,
+   "sha256": "23025c0898c6d3c95ac28015d94d237da224d5c28faffa768421d5314966771e"
+  },
+  {
+   "path": "fixtures/test-4660.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-4660.json",
+   "blob_id": "55dd03b945d5ab3505132f6ac89e09a14b19dda2",
+   "size_bytes": 2513,
+   "sha256": "cd2a97c86debb9f2b012730c30d4dc3fc0b0701334fac69ba83b08909d23f36d"
+  },
+  {
+   "path": "fixtures/test-4660.json-expected.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-4660.json-expected.json",
+   "blob_id": "73857820cbfccee2745879bee862230cb3443255",
+   "size_bytes": 3079,
+   "sha256": "8e71dc8adb55aa22eb1b8cd6e5deb05d794e83fb7a92a8c88e0b237cd8abbaaa"
+  },
+  {
+   "path": "fixtures/test-4662.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-4662.json",
+   "blob_id": "3c8d6db144a13987e25faf9ef373f92fea7e6976",
+   "size_bytes": 1602,
+   "sha256": "86bb8f8b1d1f7a3363ade4e3d2ca51bcd5f3292b4233f6289137c169d87b9d80"
+  },
+  {
+   "path": "fixtures/test-4662.json-expected.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-4662.json-expected.json",
+   "blob_id": "63548fe5dde73e59327384627c8cbf9402ae46ed",
+   "size_bytes": 2527,
+   "sha256": "d8447a27bb1005ffb4ca9f86e19bf05bd46d6f05cf87bba0f4bdc7484980a241"
+  },
+  {
+   "path": "fixtures/test-4663.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-4663.json",
+   "blob_id": "6eba23512386c94953e7225965ca4c03966de29c",
+   "size_bytes": 4479,
+   "sha256": "5f8c79079c15e9f8c7e4fdcf8605794f7561bc7901614bccf4f93643eca795b1"
+  },
+  {
+   "path": "fixtures/test-4663.json-expected.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-4663.json-expected.json",
+   "blob_id": "892af95b9fc566c065ecb5176fdb6e938558542b",
+   "size_bytes": 5148,
+   "sha256": "de3130da2032986aec746d181bc69991794454ad6b46f7e015a35baf0a1cb3ed"
+  },
+  {
+   "path": "fixtures/test-4664.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-4664.json",
+   "blob_id": "3185515cc8ddb699e1ab055932b2bbfce4bba32b",
+   "size_bytes": 3142,
+   "sha256": "9229f91cf239e1b8e364b6a2cd364b868812a308c8d80342ede00e62db2bc0c0"
+  },
+  {
+   "path": "fixtures/test-4664.json-expected.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-4664.json-expected.json",
+   "blob_id": "a1bfcfbcdde5680439e7b7791737789faeb6712b",
+   "size_bytes": 3827,
+   "sha256": "09572173972fd918089b4408a73b75618d79d5045156857ffc29094ea2c583e0"
+  },
+  {
+   "path": "fixtures/test-4670-windowssrv2016.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-4670-windowssrv2016.json",
+   "blob_id": "5e3a49302e619c2f18511b1905c72b56fddc93af",
+   "size_bytes": 2517,
+   "sha256": "8a53d9a3779e1275b19e1e785bc1aeb55355bfca4f79220c242ebe8d227bca9c"
+  },
+  {
+   "path": "fixtures/test-4670-windowssrv2016.json-expected.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-4670-windowssrv2016.json-expected.json",
+   "blob_id": "03cebea8bee3a82185635c5350474e641eaa7d23",
+   "size_bytes": 3629,
+   "sha256": "cd3e566e7f8ee50b53e874d3dd9cad303d97943bf30221d8c541907f459c39c4"
+  },
+  {
+   "path": "fixtures/test-4674.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-4674.json",
+   "blob_id": "dc8434259ce7c9711db9e9eccebf991ae38a36f6",
+   "size_bytes": 6894,
+   "sha256": "98a282adc6382e2fac43f71dc18ad281f070a93e85bc2a6347137c7401874e20"
+  },
+  {
+   "path": "fixtures/test-4674.json-expected.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-4674.json-expected.json",
+   "blob_id": "187c8b55809c0cee579176670df7d71c8db322ff",
+   "size_bytes": 8192,
+   "sha256": "ab8d307b076383f3bf8cf3c3506d966b571362429bb1869d3347c7c2f1513935"
+  },
+  {
+   "path": "fixtures/test-4675.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-4675.json",
+   "blob_id": "0c1c9893467c509cd14c4acb7526738d3bf10915",
+   "size_bytes": 3475,
+   "sha256": "f38e8bcf73c71a63713d75be58517ef20a273118c1d9800b3a7fdbf49a91f34e"
+  },
+  {
+   "path": "fixtures/test-4675.json-expected.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-4675.json-expected.json",
+   "blob_id": "59a46c76214e0d7813a356484c062c3885a89d47",
+   "size_bytes": 4410,
+   "sha256": "0da24cb3fc644adf667d991826b9237bf51e0be21c24e8579406e685e3be94d6"
+  },
+  {
+   "path": "fixtures/test-4690.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-4690.json",
+   "blob_id": "a2251e12139833ec650307f9e61a0267e29d10f5",
+   "size_bytes": 2424,
+   "sha256": "4bd2dcb6f82ffdcd69dd010043176bed679f06e0eda170b531c8a992ff5a7292"
+  },
+  {
+   "path": "fixtures/test-4690.json-expected.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-4690.json-expected.json",
+   "blob_id": "faaaa7090212d6d76507c704a6cb221623556150",
+   "size_bytes": 2976,
+   "sha256": "b2a76d7baf2b815660eb63b3495cc44f3ace5160ed033925fe4a8ee63bf9854c"
+  },
+  {
+   "path": "fixtures/test-4691.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-4691.json",
+   "blob_id": "c1f5d8ca9911d266357962d3a60c3774bcc983ff",
+   "size_bytes": 2626,
+   "sha256": "8994f80ea669c21f47eeed752c2a2c44f0a6479856a25915cc287cb7da1ec0a9"
+  },
+  {
+   "path": "fixtures/test-4691.json-expected.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-4691.json-expected.json",
+   "blob_id": "83c4120a6aa4b441d6bd65e6cb5d4b6852830389",
+   "size_bytes": 3523,
+   "sha256": "1e64a61ce78ed1c47e23f65efd1f8ad8b5ef37bc7f3a746f76c06ba2cdf6595d"
+  },
+  {
+   "path": "fixtures/test-4692.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-4692.json",
+   "blob_id": "f53b7695d9f9277e9d45d8a58fbf7d57a8a2df14",
+   "size_bytes": 2521,
+   "sha256": "52c54b56975ac8d79c5d9d7f4f1bbb1aa6f2a5d0bd6dad2a810948dbf53a59fc"
+  },
+  {
+   "path": "fixtures/test-4692.json-expected.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-4692.json-expected.json",
+   "blob_id": "5a9ffd1ad3d1b1d83cd2a3d229697397b5760f7b",
+   "size_bytes": 3150,
+   "sha256": "7b9619c6c1892055f7cf496f9897631d75dd0446cf7ecde11cebbc52c5473efb"
+  },
+  {
+   "path": "fixtures/test-4695.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-4695.json",
+   "blob_id": "68ee2ea5bf5b2edfc08e084ad858bd833d0be63c",
+   "size_bytes": 3051,
+   "sha256": "686282280ca84beaa889020966450ec6c5164fb5422929215300eaf07a0c98e0"
+  },
+  {
+   "path": "fixtures/test-4695.json-expected.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-4695.json-expected.json",
+   "blob_id": "f6d2f5e795ce9aeec8f0fda628a820efcd18749e",
+   "size_bytes": 3636,
+   "sha256": "178866a3cac7d7af26fceac6526667daee67d92df8a6d1889a8f7a7d4d885201"
+  },
+  {
+   "path": "fixtures/test-4698-scheduled-task-created.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-4698-scheduled-task-created.json",
+   "blob_id": "0900bbafa191c6f05d79c8e4bb8600b893fde03b",
+   "size_bytes": 5256,
+   "sha256": "3d2053859b277d8ecd147b9763192e4815de2fa516fbbd99b5df795a5c5ef8c2"
+  },
+  {
+   "path": "fixtures/test-4698-scheduled-task-created.json-expected.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-4698-scheduled-task-created.json-expected.json",
+   "blob_id": "0452eb2ca60f4cb60f60b8b9e6e34d1a44f6ae46",
+   "size_bytes": 5775,
+   "sha256": "f76fdae8a23c48b9adc3df431cf1479fb4641d429ec9c6771d76c5f3d3a2770f"
+  },
+  {
+   "path": "fixtures/test-4698-scheduled-task-malformed-xml.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-4698-scheduled-task-malformed-xml.json",
+   "blob_id": "a8b1c7f8380730fc5b81ce8daaff2e2629550180",
+   "size_bytes": 2353,
+   "sha256": "6f41fc3d11407b11c5e3d001e1222a89a13b1e28f8bf611f49f54bb4f573ad89"
+  },
+  {
+   "path": "fixtures/test-4698-scheduled-task-malformed-xml.json-expected.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-4698-scheduled-task-malformed-xml.json-expected.json",
+   "blob_id": "2636fed35bb6dd8ad75a7a5ad3bb35c608467666",
+   "size_bytes": 3592,
+   "sha256": "9c644bb9d35164645f5b51c06fa970c7a7f105135074197d9fdd10940be244c5"
+  },
+  {
+   "path": "fixtures/test-4698-scheduled-task-trigger-boolean-lexical.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-4698-scheduled-task-trigger-boolean-lexical.json",
+   "blob_id": "4ab43cae2512f50ab104e381c8417cfe1c70358c",
+   "size_bytes": 4882,
+   "sha256": "1367d53fdd2f8a70c3ff582b996f28165859246c64583515e61e0dda1748787b"
+  },
+  {
+   "path": "fixtures/test-4698-scheduled-task-trigger-boolean-lexical.json-expected.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-4698-scheduled-task-trigger-boolean-lexical.json-expected.json",
+   "blob_id": "efa8378c715bbb82546a5d19470de65dd1e9446e",
+   "size_bytes": 6080,
+   "sha256": "85deb7a7cbb89c24adbd93ce73eaaa9ac03db10089826e1c90a11085edd03fb3"
+  },
+  {
+   "path": "fixtures/test-4699-scheduled-task-deleted-no-xml.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-4699-scheduled-task-deleted-no-xml.json",
+   "blob_id": "8fa858f781ba96ceaf235c84b677761d1b0d8d6d",
+   "size_bytes": 2304,
+   "sha256": "c799de8b79bc8721ec40a7c3a311d186c4355852707f84b732e1c87a453b3e64"
+  },
+  {
+   "path": "fixtures/test-4699-scheduled-task-deleted-no-xml.json-expected.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-4699-scheduled-task-deleted-no-xml.json-expected.json",
+   "blob_id": "10d2d4bcb90d3671d9efcfdbe9b6ae8babad498e",
+   "size_bytes": 3574,
+   "sha256": "57f799e8fe6235dd93cdaf7a4f784888fbdda6cf888e30d0d07e1db4f9beb431"
+  },
+  {
+   "path": "fixtures/test-4699-scheduled-task-deleted-with-xml.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-4699-scheduled-task-deleted-with-xml.json",
+   "blob_id": "c262f49cad12dc8e6b47e4570a89e8976622aa0b",
+   "size_bytes": 2982,
+   "sha256": "ade43d7c5bf7dd131cd4f4be0a4c40855df272406aad4a91c51d38ce444ebfb5"
+  },
+  {
+   "path": "fixtures/test-4699-scheduled-task-deleted-with-xml.json-expected.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-4699-scheduled-task-deleted-with-xml.json-expected.json",
+   "blob_id": "ec1f1d201266d83f6f9700bf8da6c5b0691cd469",
+   "size_bytes": 3903,
+   "sha256": "6d06ba01b70d3034456d0c19135793ab594427d0a06bbe600be4d69f8ce727c4"
+  },
+  {
+   "path": "fixtures/test-4700-scheduled-task-enabled.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-4700-scheduled-task-enabled.json",
+   "blob_id": "7d7ee0cb605960123714be9f114950268544c6c3",
+   "size_bytes": 4781,
+   "sha256": "2f093277b9006acc419c25f3359f5c2516eec1150caa1b8a2930ce2f0582e7e7"
+  },
+  {
+   "path": "fixtures/test-4700-scheduled-task-enabled.json-expected.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-4700-scheduled-task-enabled.json-expected.json",
+   "blob_id": "67de48d10d7f8f1685e131e9d4cd38587f7259a6",
+   "size_bytes": 5829,
+   "sha256": "1037501dc08a05fe135249a5c294fecec6cf8d9d0a5e9e52939a9438e52f914a"
+  },
+  {
+   "path": "fixtures/test-4700-scheduled-task-trigger-defaults.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-4700-scheduled-task-trigger-defaults.json",
+   "blob_id": "13107badea57f9d72be2f0cd92fb37a4f3b3ef64",
+   "size_bytes": 4681,
+   "sha256": "f030d06c5c650707b8c8395cb771a62d182f19b017d1139d9fdbdcfd6dfa64ec"
+  },
+  {
+   "path": "fixtures/test-4700-scheduled-task-trigger-defaults.json-expected.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-4700-scheduled-task-trigger-defaults.json-expected.json",
+   "blob_id": "6ebafbbf149f85e977782fefbc0bea27d2bd45df",
+   "size_bytes": 5784,
+   "sha256": "6d4f71284b5b000734cc8a422c9e97963fc3d9614a0f94e6eed514379515e236"
+  },
+  {
+   "path": "fixtures/test-4701-scheduled-task-disabled.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-4701-scheduled-task-disabled.json",
+   "blob_id": "a9dcfc39b4a21aa779e4e39f3b2d49f61b52da25",
+   "size_bytes": 6260,
+   "sha256": "f08e199a59e65627bd1bd4c7f9bbc4aae4971ede3f1a33b47b90f1f021e64231"
+  },
+  {
+   "path": "fixtures/test-4701-scheduled-task-disabled.json-expected.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-4701-scheduled-task-disabled.json-expected.json",
+   "blob_id": "db1cc9345b778ab41dad12da213d8d8b7bcb8e8b",
+   "size_bytes": 6451,
+   "sha256": "09a760265b43a6696174f455997f113eccfa2eb3ecd6c6bcd3b3e5a6e2eda13c"
+  },
+  {
+   "path": "fixtures/test-4702-scheduled-task-updated.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-4702-scheduled-task-updated.json",
+   "blob_id": "0795d061dabb784cac7fc8f24b79118b1b0bffbd",
+   "size_bytes": 4925,
+   "sha256": "1ac1f3da8e3cb4448d01a0207f95ff591e1e3a1a5b52b751a2a5350f72b44537"
+  },
+  {
+   "path": "fixtures/test-4702-scheduled-task-updated.json-expected.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-4702-scheduled-task-updated.json-expected.json",
+   "blob_id": "cb960b8e265d6983d195668cb9226432f535b25f",
+   "size_bytes": 5993,
+   "sha256": "a4b2d844ead7013304afa1ebe5bc77dcdad3e089031b351234f49b80ee23e344"
+  },
+  {
+   "path": "fixtures/test-4704.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-4704.json",
+   "blob_id": "3898d5deedfb4b064133a59e0b8adde44c07285c",
+   "size_bytes": 2344,
+   "sha256": "d31c0a9dbd2efcfa14b4d15b3f1dd7ce16745c6ab1d913917e18b776c5350056"
+  },
+  {
+   "path": "fixtures/test-4704.json-expected.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-4704.json-expected.json",
+   "blob_id": "56cd69de58370deffd37b1a34efef1c8cb2f408e",
+   "size_bytes": 3044,
+   "sha256": "b0147457dbb43f8b0dae86e4703a4617cb7bac22e6582bac043c97bccfc3d45f"
+  },
+  {
+   "path": "fixtures/test-4705.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-4705.json",
+   "blob_id": "3f14c95a83449f48523eba9139f207a02645be4e",
+   "size_bytes": 2485,
+   "sha256": "c56ae192015ed8ab3f9d284fa1b4dcebdddd386f05a84cdf9924be7a2c67083f"
+  },
+  {
+   "path": "fixtures/test-4705.json-expected.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-4705.json-expected.json",
+   "blob_id": "74bc1704bc592079821586d601c4806fbbea8af8",
+   "size_bytes": 3224,
+   "sha256": "fbee436b968cf594dc1633f5468df585817daa413e00249f3d20be59d6ff5f01"
+  },
+  {
+   "path": "fixtures/test-4706-windowssrv2016.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-4706-windowssrv2016.json",
+   "blob_id": "71b628ddedea189c0cfe9aae23b7a10eeda3f67b",
+   "size_bytes": 2419,
+   "sha256": "674466f4c5d88a73d78eb1cf2cc7bf0e642c6f86621867ddd0eb9d5d8f43d745"
+  },
+  {
+   "path": "fixtures/test-4706-windowssrv2016.json-expected.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-4706-windowssrv2016.json-expected.json",
+   "blob_id": "3c493e029b3e5d5cc3ac97a8612aedc0cd1222d6",
+   "size_bytes": 3204,
+   "sha256": "ade6c776bdf7c330a581ad89089e26423c3beca4acffe8183d4093a403875933"
+  },
+  {
+   "path": "fixtures/test-4707-windowssrv2016.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-4707-windowssrv2016.json",
+   "blob_id": "ada3ae0d3c7de77576388c585f43925b4811f20c",
+   "size_bytes": 2175,
+   "sha256": "71ce3d33f63d31077af14a0adbd9145d2ff06a9932fdbed0ff8c086787e2b9ef"
+  },
+  {
+   "path": "fixtures/test-4707-windowssrv2016.json-expected.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-4707-windowssrv2016.json-expected.json",
+   "blob_id": "29e7dc4d864172dc036a16c326ed3b7032b721b7",
+   "size_bytes": 2780,
+   "sha256": "b19d4d7b4df0218bec9811d32f06cfef1813f56a308b80e4e093d17898bc1cc7"
+  },
+  {
+   "path": "fixtures/test-4713-windowssrv2016.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-4713-windowssrv2016.json",
+   "blob_id": "b2cea0250c0ab4d2d6f5d93e39d893b2bd9adec9",
+   "size_bytes": 2279,
+   "sha256": "e0e828f9c7f0079d9d6a0ef4bbba33d5709bb735eae074019e1d281180fc52eb"
+  },
+  {
+   "path": "fixtures/test-4713-windowssrv2016.json-expected.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-4713-windowssrv2016.json-expected.json",
+   "blob_id": "7438b543c625d4a831d3f81ce086c268de39fd08",
+   "size_bytes": 2852,
+   "sha256": "3eed5ebeebf8ca51d487dacaccfdb95fad6b02d55d7125c5dc1bf3f41e26dfce"
+  },
+  {
+   "path": "fixtures/test-4716-windowssrv2016.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-4716-windowssrv2016.json",
+   "blob_id": "9959d273833f368c85c9139ac217955a6402b136",
+   "size_bytes": 2401,
+   "sha256": "5f5b3b1572c76b6273f2c348e2fc3126e7ed47ee121a923d07ce8f26989917be"
+  },
+  {
+   "path": "fixtures/test-4716-windowssrv2016.json-expected.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-4716-windowssrv2016.json-expected.json",
+   "blob_id": "f2a3f188fb7b5b85e043e9717312f774da2f1df6",
+   "size_bytes": 3113,
+   "sha256": "0d06fd3226aff0058abbc16ad51e6e7e7b273bc5a56cc83558b327c42d33f47b"
+  },
+  {
+   "path": "fixtures/test-4717-windowssrv2016.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-4717-windowssrv2016.json",
+   "blob_id": "50d6b908d489dfe4898e2341271a5c93c3656afe",
+   "size_bytes": 2200,
+   "sha256": "f8125cd54a35b148e211f999c21110960bad17c03439df8af1366cba2abef1d7"
+  },
+  {
+   "path": "fixtures/test-4717-windowssrv2016.json-expected.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-4717-windowssrv2016.json-expected.json",
+   "blob_id": "3030b10c5c89e86d983b109960731d02a704fa31",
+   "size_bytes": 2841,
+   "sha256": "69593d5a1ab122e456ae2e54f51152a1c19bda2d868cdcbddc5fb6f4bd009da4"
+  },
+  {
+   "path": "fixtures/test-4718-windowssrv2016.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-4718-windowssrv2016.json",
+   "blob_id": "240edb06f918016fde0ba3c89f93663c1b812bff",
+   "size_bytes": 2205,
+   "sha256": "a50eb11c830a0797e9aec33622569cd51633f1e6b34414d1c47a1334e75129aa"
+  },
+  {
+   "path": "fixtures/test-4718-windowssrv2016.json-expected.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-4718-windowssrv2016.json-expected.json",
+   "blob_id": "12f33b6b83fc883f40a89f3df659590d412ce7df",
+   "size_bytes": 2848,
+   "sha256": "a83165c342b17fb0342e9924e0bac1fb03138fa9b348b50956f58707ae60fe20"
+  },
+  {
+   "path": "fixtures/test-4719-windowssrv2016.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-4719-windowssrv2016.json",
+   "blob_id": "11b58fcaf70e261b14c8e8145780227e261cb89f",
+   "size_bytes": 2377,
+   "sha256": "3b443eab2327288e359bb5dd0c8f2617feee0c838a8f6e6721a4618591eeb25f"
+  },
+  {
+   "path": "fixtures/test-4719-windowssrv2016.json-expected.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-4719-windowssrv2016.json-expected.json",
+   "blob_id": "27490a0519725230ec87435e2e219f5b40fa8224",
+   "size_bytes": 3270,
+   "sha256": "105a3f56ef36cdeb059595a2b02f5e58c70761a051bb2de7dcc2a6b27f7672dd"
+  },
+  {
+   "path": "fixtures/test-4719.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-4719.json",
+   "blob_id": "4731be62d1510f26882e85240f2d5c8714ca18ec",
+   "size_bytes": 2339,
+   "sha256": "71aa5e76df23f40365844b6105e20c9e929ea3ad0ee2cc35342f8cb10abf92c5"
+  },
+  {
+   "path": "fixtures/test-4719.json-expected.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-4719.json-expected.json",
+   "blob_id": "edd08ffda8e010bbc11ec144e6b846b53c28c3c7",
+   "size_bytes": 3234,
+   "sha256": "7300af892fc94a5f00d6dfb117c0a00c137166579b3efe72d40ba467c956b384"
+  },
+  {
+   "path": "fixtures/test-4738.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-4738.json",
+   "blob_id": "e23bd7817803a2454e6f6a55be406130a0d65d39",
+   "size_bytes": 3497,
+   "sha256": "e4565089b7704c73b9860ddaf7370af6b576d56d68ddbd543f47d386ebbae048"
+  },
+  {
+   "path": "fixtures/test-4738.json-expected.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-4738.json-expected.json",
+   "blob_id": "23dc5dcd9d3175852a47fbdf82573678a6e222e6",
+   "size_bytes": 3559,
+   "sha256": "d14e5346dc8b1f6d0db2b797f588b34c3af6f6c11eb5e2e0e7c3fd3e1c3f1e20"
+  },
+  {
+   "path": "fixtures/test-4739-windowssrv2016.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-4739-windowssrv2016.json",
+   "blob_id": "c4235d797d6afcc8b06b8a0c8da9dbe63443950f",
+   "size_bytes": 2499,
+   "sha256": "2ab520b9092f804438498890a57f1058079cc66ccfd4d7818cdc16e63d410769"
+  },
+  {
+   "path": "fixtures/test-4739-windowssrv2016.json-expected.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-4739-windowssrv2016.json-expected.json",
+   "blob_id": "b7414dd9f862963b0102db169a32a01b8f5e8c7c",
+   "size_bytes": 2793,
+   "sha256": "e744b9aa447f4d216cdd6d066d23c0a36ebfac9b7fa23c23f8faf8d73d4a30e3"
+  },
+  {
+   "path": "fixtures/test-4742.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-4742.json",
+   "blob_id": "524720e3171aaadfe244fe4f4c57aa28cc6fb808",
+   "size_bytes": 3670,
+   "sha256": "52597c4b4d4b4761ff9aa5f9929ef5036a64fa30ef6388da821878721beaffd5"
+  },
+  {
+   "path": "fixtures/test-4742.json-expected.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-4742.json-expected.json",
+   "blob_id": "d9f9c256d0a05cccc05d9a88956b6280fdf09758",
+   "size_bytes": 3589,
+   "sha256": "0ea024b3d4bae565b00ed34730e465637c806dd516f2decc543e52062e7a0c75"
+  },
+  {
+   "path": "fixtures/test-4743.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-4743.json",
+   "blob_id": "d9faf0bd64cc26c33bd1e3e44c729b7aee101ede",
+   "size_bytes": 2275,
+   "sha256": "740488aee1bdfc72853358c83bf6da03f089869d084841d87d9e5b117d71712e"
+  },
+  {
+   "path": "fixtures/test-4743.json-expected.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-4743.json-expected.json",
+   "blob_id": "954071d3d86ba68c90f833a4e18095719e00ad86",
+   "size_bytes": 3060,
+   "sha256": "d54fe496c43c60a6496d2874dc21ba65786b689c599cdd8daa1755d45251d7d7"
+  },
+  {
+   "path": "fixtures/test-4744.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-4744.json",
+   "blob_id": "52299683085f6c3228e54d0f7b81e983a5b65625",
+   "size_bytes": 2366,
+   "sha256": "12d278b4915bea61df88abab19be8fd7f4a16361ce4d37727227582f21f4e46e"
+  },
+  {
+   "path": "fixtures/test-4744.json-expected.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-4744.json-expected.json",
+   "blob_id": "3c114d5bcc16666c2c5e1c5adbdb156a9315cbdb",
+   "size_bytes": 3088,
+   "sha256": "07c6aecf14d926246d1558413a41a859b5f5dee355de036125afb81cf9281261"
+  },
+  {
+   "path": "fixtures/test-4745.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-4745.json",
+   "blob_id": "a1a5172773dcbe8962a1d5b2140ef02ffb8cd3a9",
+   "size_bytes": 2369,
+   "sha256": "63118f6263183c6a91c19f71d211c4a5004ebeb90bd515263735b967f34ecf22"
+  },
+  {
+   "path": "fixtures/test-4745.json-expected.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-4745.json-expected.json",
+   "blob_id": "c1cf35eb7e3fa44e26849f182444b792d977d473",
+   "size_bytes": 3092,
+   "sha256": "d3c51e71d6632559fd98e986421b8db47e9350ce4024bb272d0c1676202e0ed4"
+  },
+  {
+   "path": "fixtures/test-4746.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-4746.json",
+   "blob_id": "155999dc6303726765e56182d0105e0284aa8451",
+   "size_bytes": 2432,
+   "sha256": "dd75c74e4e3dd981d1c33b0e669231d5023a62a19b05e43ccd6ba78d5867545f"
+  },
+  {
+   "path": "fixtures/test-4746.json-expected.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-4746.json-expected.json",
+   "blob_id": "029fc43d889fe170494f657645c67c2cbf86a547",
+   "size_bytes": 3582,
+   "sha256": "fdc918eb270b31c86a0a3feea899b51d170eac7c24ff3476f855e3bdc63b0c24"
+  },
+  {
+   "path": "fixtures/test-4747.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-4747.json",
+   "blob_id": "7fb4ed4cef5dc47ade0b43a5f25b944153db2ba9",
+   "size_bytes": 2431,
+   "sha256": "5545e138009911e5349efb7815c813f049b2f4b2497ed858b918cfdde1d0c978"
+  },
+  {
+   "path": "fixtures/test-4747.json-expected.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-4747.json-expected.json",
+   "blob_id": "c060aff59dddd1d167a14ee4d78f62e1abf0511c",
+   "size_bytes": 3585,
+   "sha256": "d2b271bcf100899839f65d84f85a821898557dda75b700deda5195e90f0125c9"
+  },
+  {
+   "path": "fixtures/test-4748.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-4748.json",
+   "blob_id": "097ca310e0cfb614b6d5c76955299f8b31ef8509",
+   "size_bytes": 2274,
+   "sha256": "ceee92b7ace80cd7d84e0141fec4f70876c09464fe63f073420b20eb3b7a4d93"
+  },
+  {
+   "path": "fixtures/test-4748.json-expected.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-4748.json-expected.json",
+   "blob_id": "0e74526055d13f467461698701028959e28291cf",
+   "size_bytes": 3038,
+   "sha256": "a577e5e604afad7f0799c59c50f809f05a52770040ac32c9dfea84876d8b7cc0"
+  },
+  {
+   "path": "fixtures/test-4749.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-4749.json",
+   "blob_id": "bb2024815f37e4db23e4b6ac3c25b157f492d920",
+   "size_bytes": 2361,
+   "sha256": "3bae7f0fbd20d0179fc556d7fe46beabb969d1f27b558e4a0fbed35be8519a5d"
+  },
+  {
+   "path": "fixtures/test-4749.json-expected.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-4749.json-expected.json",
+   "blob_id": "a50742469e8510a3fecf0e6041b01fa8e74f2f5e",
+   "size_bytes": 3080,
+   "sha256": "2afb82f8e6aba1480549eb2df3044994af06d77cc114c80b8a99384e1ba2eb0d"
+  },
+  {
+   "path": "fixtures/test-4750.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-4750.json",
+   "blob_id": "db997bfc617c33aeea627943b2ff529223d85fa2",
+   "size_bytes": 2362,
+   "sha256": "fa20dd28403f8aa91e9df7753d573329f9831a3f23a702c82660bb98cc8b82e2"
+  },
+  {
+   "path": "fixtures/test-4750.json-expected.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-4750.json-expected.json",
+   "blob_id": "ade2bb81e22608af3c553c50d4d37f537a0b2451",
+   "size_bytes": 3082,
+   "sha256": "4f82a65e52035497f774099ec13c8001e60afd207caf46e526553232996e4de6"
+  },
+  {
+   "path": "fixtures/test-4751.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-4751.json",
+   "blob_id": "995f5ebaafe585f72773b822d422c386f0350d30",
+   "size_bytes": 2429,
+   "sha256": "de09789aa77243ed8e4717de8453ff35b8cbf8e09b217ec9c199bd837ab9c52f"
+  },
+  {
+   "path": "fixtures/test-4751.json-expected.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-4751.json-expected.json",
+   "blob_id": "04c94733121689e385018e4ffa65d3785cc031d9",
+   "size_bytes": 3573,
+   "sha256": "d53099f6249b8e8b5a49224b7fb0a82f70323c4a9e4a990e9afd07db4b527cfd"
+  },
+  {
+   "path": "fixtures/test-4752.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-4752.json",
+   "blob_id": "bed53cfb8539f657b008fc689ecf650fe871a0bb",
+   "size_bytes": 2429,
+   "sha256": "3594170b627ad75afc17012965ecd30fdf8c8d703285d8aa26d0ce8e16d49b86"
+  },
+  {
+   "path": "fixtures/test-4752.json-expected.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-4752.json-expected.json",
+   "blob_id": "9cb9219a7003dafceb9bea870de3b34ef5bfae8c",
+   "size_bytes": 3577,
+   "sha256": "606a9f8c7729c4b3b5c25534616e852b7a08f1abcfccff15702be2aced6ab207"
+  },
+  {
+   "path": "fixtures/test-4753.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-4753.json",
+   "blob_id": "4d2d181c1a590ae8b42255668cd67f4585f50210",
+   "size_bytes": 2271,
+   "sha256": "dedf486a1976dcb672a1debece80bdec33d166aeddece4047329642ce143f75d"
+  },
+  {
+   "path": "fixtures/test-4753.json-expected.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-4753.json-expected.json",
+   "blob_id": "4be4ec6b4e9a89cb1cc28666cccfc36ec470fc8f",
+   "size_bytes": 3032,
+   "sha256": "99df69831d5c117bc78a13f3969c8608193ea3d8abdea207a8ec328315683f27"
+  },
+  {
+   "path": "fixtures/test-4759.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-4759.json",
+   "blob_id": "218699029202c5b1c786320ffac4132293b634c0",
+   "size_bytes": 2355,
+   "sha256": "a668973867ca72e291795a941ae04a2a3947d59dd7a15a9cc105aecfa330d429"
+  },
+  {
+   "path": "fixtures/test-4759.json-expected.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-4759.json-expected.json",
+   "blob_id": "d19ef9910804f203832fc1e6102757b0a440a72b",
+   "size_bytes": 3071,
+   "sha256": "7aec20324e2582c38173478f65acdaa974aea7440af37df5647a4ad0a7b92995"
+  },
+  {
+   "path": "fixtures/test-4760.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-4760.json",
+   "blob_id": "bc7196376c2d6f573dae212c0ef70ff0853f261a",
+   "size_bytes": 2356,
+   "sha256": "e092b19209d198fdc17e17556f656305da0c59aba11890a627d2f5a8d88bee30"
+  },
+  {
+   "path": "fixtures/test-4760.json-expected.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-4760.json-expected.json",
+   "blob_id": "5b4c548dc6e541af842d4bcc25880d3e1d8520ce",
+   "size_bytes": 3073,
+   "sha256": "b272ad504d44a04fdc47bf466e5c1b4c812977a072ab9f0c2c276a65c4935484"
+  },
+  {
+   "path": "fixtures/test-4761.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-4761.json",
+   "blob_id": "ed62f8fa1270302736b134b20621d8553bf1e239",
+   "size_bytes": 2426,
+   "sha256": "8634660120ae1840fdffcf7fc8c094dc5dc4bfe6156ae6dcd9bc59f8666677fc"
+  },
+  {
+   "path": "fixtures/test-4761.json-expected.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-4761.json-expected.json",
+   "blob_id": "76e2e19c5d05be7b6cfc0d1f14536fe00bc839e8",
+   "size_bytes": 3564,
+   "sha256": "9153fdfb5fe932f722d002a9ef2ff1eaf17244b3696d6587e33fdf20845c91e8"
+  },
+  {
+   "path": "fixtures/test-4762.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-4762.json",
+   "blob_id": "a5c8712d4eeca7f57d4cf9c16c6e5db1e1fdc9b0",
+   "size_bytes": 2426,
+   "sha256": "16a6119b4a70ef0eb4f09bb20ece0e72f53e8345e4c006ec195fc2d9f1f7a1b8"
+  },
+  {
+   "path": "fixtures/test-4762.json-expected.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-4762.json-expected.json",
+   "blob_id": "cec5897bf870b95646509622eb1e09bd966aae3d",
+   "size_bytes": 3568,
+   "sha256": "81e5c385ea37f8705ca47aebbe03c13b904844f1862a1a4f0f6b7b5c847be03e"
+  },
+  {
+   "path": "fixtures/test-4763.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-4763.json",
+   "blob_id": "891b7dd63c7ecd0114595b6e2c353ba4caad7423",
+   "size_bytes": 2268,
+   "sha256": "86fc5208e53b875ffaf07059f537d471b213be540613e183e50a05cbb14d593f"
+  },
+  {
+   "path": "fixtures/test-4763.json-expected.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-4763.json-expected.json",
+   "blob_id": "6919f37b5988d9f04cbbc10116f02b8ebd00c299",
+   "size_bytes": 3026,
+   "sha256": "d9c3817471970aba761d99520fc6b6412358843c4b95a1b10689af0297cbefaf"
+  },
+  {
+   "path": "fixtures/test-4793.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-4793.json",
+   "blob_id": "d4864bbf65ecba39fd064603b8509bf49b72e1d0",
+   "size_bytes": 2025,
+   "sha256": "5e7959523604e300a64a065c91866835b36eaf12e0718109413daea88ff2576b"
+  },
+  {
+   "path": "fixtures/test-4793.json-expected.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-4793.json-expected.json",
+   "blob_id": "77fc91b01743acf988ebc3e1236f5742c2b2e6ee",
+   "size_bytes": 3070,
+   "sha256": "160fcffa130d4faad15677850bf6ec2ceb9253259fb21c2fe5d4d0b538f20ea2"
+  },
+  {
+   "path": "fixtures/test-4797.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-4797.json",
+   "blob_id": "479b72e551a5fc7c473c45d5084e54582f80d93f",
+   "size_bytes": 8066,
+   "sha256": "b129195e7ec5b43db7397e37fd74c614c0f6d926a02eb615c8b994df993bb778"
+  },
+  {
+   "path": "fixtures/test-4797.json-expected.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-4797.json-expected.json",
+   "blob_id": "b0d68719cfccff908733da7edfe4beb2aeba5b5c",
+   "size_bytes": 12598,
+   "sha256": "49ab15d0219d86dac74cd0b4265773cac79c2ef2e6480f84e29bb40514884202"
+  },
+  {
+   "path": "fixtures/test-4800.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-4800.json",
+   "blob_id": "cba60107b8270239279dd67c8f1d9ef6e86805ae",
+   "size_bytes": 1757,
+   "sha256": "e374dabdffd756c4eff54c0791142f96a35e36d95b6b135d989e239a01c8e59b"
+  },
+  {
+   "path": "fixtures/test-4800.json-expected.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-4800.json-expected.json",
+   "blob_id": "ac8d0a405dfc64659625d5d429db1cfc16d98324",
+   "size_bytes": 3064,
+   "sha256": "e27094d44289f921929cf5b38495760eaf60c20e5cc80f21e3c0301974ce7808"
+  },
+  {
+   "path": "fixtures/test-4801.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-4801.json",
+   "blob_id": "acff0d885a13d545f3aac29371e49f18c847cffb",
+   "size_bytes": 2661,
+   "sha256": "a443a12cf531bb9b0e03788d0170d61a6f3ed7b1a2ed59039d526dc5f9137e1b"
+  },
+  {
+   "path": "fixtures/test-4801.json-expected.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-4801.json-expected.json",
+   "blob_id": "0471d4e859493fa226b7ab6ea2f579b28566930f",
+   "size_bytes": 3536,
+   "sha256": "53988c037ed290156a48f4daa66eb061277ff005b7d95d7761eb95a0cf4f3105"
+  },
+  {
+   "path": "fixtures/test-4802.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-4802.json",
+   "blob_id": "a49ae4d666afcec0917e7a137d9a41453390c641",
+   "size_bytes": 2182,
+   "sha256": "24e02a3d4700fa09b3c5e09e1b7be91af83aae1a055dc9b3aea4a35799a88a2b"
+  },
+  {
+   "path": "fixtures/test-4802.json-expected.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-4802.json-expected.json",
+   "blob_id": "4532ae521cc52ede6c5e33b40ec2501a3b762d5b",
+   "size_bytes": 3093,
+   "sha256": "b8fcc9de776382d906864d35cfe23eeb5dc046eb3867409db2ee0ceea18a9db9"
+  },
+  {
+   "path": "fixtures/test-4803.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-4803.json",
+   "blob_id": "9eb44c5621c775a143332588098ce2c0f01295a9",
+   "size_bytes": 2184,
+   "sha256": "a6a174852634bf853470e10a1ff80a74cd379567e8413491a069e6e38af9d37e"
+  },
+  {
+   "path": "fixtures/test-4803.json-expected.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-4803.json-expected.json",
+   "blob_id": "afe403f37db98127c3f028b5ee3fbc867159c8b6",
+   "size_bytes": 3097,
+   "sha256": "46bb280606174eda3b5612d1c2f911f4a4842597e25ac85f36d3d4e6dc1cb7c6"
+  },
+  {
+   "path": "fixtures/test-4817-windowssrv2016.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-4817-windowssrv2016.json",
+   "blob_id": "b3950a765bffd62856b13d5e7690cab3e0bc77ed",
+   "size_bytes": 2450,
+   "sha256": "b33575b4ae2675c5b4020e5172d38b3e2d1bd0e5bfa77cec3f0e3b9927dd0ae9"
+  },
+  {
+   "path": "fixtures/test-4817-windowssrv2016.json-expected.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-4817-windowssrv2016.json-expected.json",
+   "blob_id": "b9eb60142f8707fb806e15988e152608809707cc",
+   "size_bytes": 3710,
+   "sha256": "830eef3e724c2db5f836bfa67a8a49e76ff862993debe7ae5666f2481944fe80"
+  },
+  {
+   "path": "fixtures/test-4868.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-4868.json",
+   "blob_id": "b77d0e9fe3b6bf8ad7cda6b0784cddea228e514f",
+   "size_bytes": 2019,
+   "sha256": "1452c7e4dfdb28ddc044832bb69b005c8d0835817200621489874f956780caf4"
+  },
+  {
+   "path": "fixtures/test-4868.json-expected.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-4868.json-expected.json",
+   "blob_id": "3b8dc3cf57be9d4bdbf4003e7a2cd7e983517076",
+   "size_bytes": 3126,
+   "sha256": "c01b3baa7cd8fa4a401c916645337fadd4361558e7154f362dba69cee10ed833"
+  },
+  {
+   "path": "fixtures/test-4869.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-4869.json",
+   "blob_id": "780cfdec07d79248390143fa396d930ee21a35ed",
+   "size_bytes": 2020,
+   "sha256": "a34254a483d44cdc5431bc6f9fc2817b1f444cfe12bcb3d24f805ee66b3a2434"
+  },
+  {
+   "path": "fixtures/test-4869.json-expected.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-4869.json-expected.json",
+   "blob_id": "56167fe35ae54ccc174d875befc7693c72675692",
+   "size_bytes": 3132,
+   "sha256": "7ea1cc00297d44e70b2b7bab22f3c1a92ec295b470faebe7ee15403f3cc5516b"
+  },
+  {
+   "path": "fixtures/test-4876.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-4876.json",
+   "blob_id": "4622ba8645c7c8ea24cd1e96f61d5c8ef12424e0",
+   "size_bytes": 1992,
+   "sha256": "0c13750e3e53b3b64d4a3844067516bf26c45ff1094d41ee93b38d6e67c4d8f8"
+  },
+  {
+   "path": "fixtures/test-4876.json-expected.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-4876.json-expected.json",
+   "blob_id": "58aca0ca4a226e2dff220594419e8e75cddbf1c1",
+   "size_bytes": 3133,
+   "sha256": "9c37c295b4675578ded84effc72eae4b59280c4f9f4b993044850b920c1f0083"
+  },
+  {
+   "path": "fixtures/test-4902-windowssrv2016.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-4902-windowssrv2016.json",
+   "blob_id": "e73bf02ddc69ef409851258580fdf11b4e560dcc",
+   "size_bytes": 1919,
+   "sha256": "bfc327b80c7e73d131021f479fe3a4ba7c8ffbd6ea923499d82c0f3645ebf69f"
+  },
+  {
+   "path": "fixtures/test-4902-windowssrv2016.json-expected.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-4902-windowssrv2016.json-expected.json",
+   "blob_id": "4e9fd2a8a870bf7843fdc6f013be474c3c1d0861",
+   "size_bytes": 2201,
+   "sha256": "d66f96f803908859440d8dea8a0e9e2c7b8aa2e6bff28dbdb350dc4a3b4f1ac1"
+  },
+  {
+   "path": "fixtures/test-4904-windowssrv2016.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-4904-windowssrv2016.json",
+   "blob_id": "b41340b1718913e6ae378c7c3a445c86bf7f366e",
+   "size_bytes": 2344,
+   "sha256": "590a9f0201776c5d6249799eaa402814433380cab4063cca90bc62bee734996b"
+  },
+  {
+   "path": "fixtures/test-4904-windowssrv2016.json-expected.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-4904-windowssrv2016.json-expected.json",
+   "blob_id": "c8b8037b945bd47ae37e66f85654de13558532b1",
+   "size_bytes": 3038,
+   "sha256": "67172081267a034d37c184e4e2315891fcdc12254371ff91f884d5f18c8cf983"
+  },
+  {
+   "path": "fixtures/test-4905-windowssrv2016.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-4905-windowssrv2016.json",
+   "blob_id": "f9e3a5d8d7461f20a43d32cd53e8ecab9e0b8cb7",
+   "size_bytes": 2302,
+   "sha256": "2413216f56a2afd175e77044efb5a5c70b7c82d325ed5c2adc7021bde2529071"
+  },
+  {
+   "path": "fixtures/test-4905-windowssrv2016.json-expected.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-4905-windowssrv2016.json-expected.json",
+   "blob_id": "7188853d9271cf940a58421b806b3bb05195656c",
+   "size_bytes": 2924,
+   "sha256": "9114ae180f6d3a9edcb75583236dc71877b69f32558bfa38ce079d8fc765c0b5"
+  },
+  {
+   "path": "fixtures/test-4906-windowssrv2016.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-4906-windowssrv2016.json",
+   "blob_id": "e07c7b600aff3d9b766508df802f2f0c682767b9",
+   "size_bytes": 1887,
+   "sha256": "9f5cbddf29069cd97e62cd8e15acfa1b39df61e52b352b644e1807e88f666eef"
+  },
+  {
+   "path": "fixtures/test-4906-windowssrv2016.json-expected.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-4906-windowssrv2016.json-expected.json",
+   "blob_id": "70c828f5cd7592b9103a97fb5bb8ece2a2a76053",
+   "size_bytes": 2164,
+   "sha256": "21e148d8a55957cd2238bab7e251a69676cad28bdcd6a92688a602d8eb50c2c1"
+  },
+  {
+   "path": "fixtures/test-4907-windowssrv2016.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-4907-windowssrv2016.json",
+   "blob_id": "fba2f04229c5e9f3665920bb19cd6075e93a582e",
+   "size_bytes": 2575,
+   "sha256": "2459ebff396ad4bf564a81fbfe0a331423301fb0163246c19d642326c746cda1"
+  },
+  {
+   "path": "fixtures/test-4907-windowssrv2016.json-expected.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-4907-windowssrv2016.json-expected.json",
+   "blob_id": "8e3c473d835add2508805ee61c1788d835faca18",
+   "size_bytes": 3602,
+   "sha256": "3afe61e77764012c80aaeb486155fb8dc23074b9f5a1847718a4bb29f5690f51"
+  },
+  {
+   "path": "fixtures/test-4931.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-4931.json",
+   "blob_id": "debd76a3db530bab485c2ab7bebe3ef163a31a43",
+   "size_bytes": 2251,
+   "sha256": "8fb4f5899ce81cb8a98cd5b7dbbf7a7f778aad8aed88c6c7ebadc0cf237e4166"
+  },
+  {
+   "path": "fixtures/test-4931.json-expected.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-4931.json-expected.json",
+   "blob_id": "9757da4f667e1e7bc9471128ac24f46024f7bc35",
+   "size_bytes": 2615,
+   "sha256": "fce66d449f9f5f0b9e5c4a5ec66353623d19391f4130d029a3384809f9f2a807"
+  },
+  {
+   "path": "fixtures/test-4932.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-4932.json",
+   "blob_id": "82fe234fd528c3b4926bed5b6d2da1f0776a29f6",
+   "size_bytes": 2296,
+   "sha256": "eee055971129324b254209bbfae5899380a40a0905ce457c392afd05861e069c"
+  },
+  {
+   "path": "fixtures/test-4932.json-expected.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-4932.json-expected.json",
+   "blob_id": "3499bccc317f5711ae36ba4878c505797af494eb",
+   "size_bytes": 2703,
+   "sha256": "386635fe6f616f6333d057caf3fde047f678e9232548f2d8b6045ba4205f1085"
+  },
+  {
+   "path": "fixtures/test-4933.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-4933.json",
+   "blob_id": "11ab01e84c842e6ec4fa0e4876b4165e58d6cdf0",
+   "size_bytes": 2132,
+   "sha256": "f6e24d59f7c5442b098c4fe124f6f520b74b4d7072983e3d422ed8ebfdcb18c5"
+  },
+  {
+   "path": "fixtures/test-4933.json-expected.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-4933.json-expected.json",
+   "blob_id": "efa4e95bf1fd19546e17d1d605d38c9d0a7938c8",
+   "size_bytes": 2765,
+   "sha256": "e526dd8ad08815fc2c05784eb96ca984d1600cb842b297a3adae71a7447ad2d1"
+  },
+  {
+   "path": "fixtures/test-4945.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-4945.json",
+   "blob_id": "84ab6c5d99e0cce56004ae78920f1f998010aa22",
+   "size_bytes": 2249,
+   "sha256": "e46ba2ffe7b0f4ce343653f22c91346d0d2f0d0287eeae45676c1ba78f3504dd"
+  },
+  {
+   "path": "fixtures/test-4945.json-expected.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-4945.json-expected.json",
+   "blob_id": "48a5e4ddc2d0399fa614cde17c9f8ced7f57908c",
+   "size_bytes": 2823,
+   "sha256": "a813d7b18c1f005830b7dd5f7ee34be3b0a88895b82ca6dee6195b61d3733e88"
+  },
+  {
+   "path": "fixtures/test-4946.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-4946.json",
+   "blob_id": "d37e0561817372838c3bb12141a4cd80cd85bac1",
+   "size_bytes": 1826,
+   "sha256": "0f4dae6f8d6eaebf5af44af7de031c15e95ac1d5afc263d939b49a367f5fe366"
+  },
+  {
+   "path": "fixtures/test-4946.json-expected.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-4946.json-expected.json",
+   "blob_id": "65fa177eaebdd5ebe093dd630880332aa0d848ac",
+   "size_bytes": 2547,
+   "sha256": "c910d14b5526da13bdce140286486af2d60171a286cd641a8c51398147797887"
+  },
+  {
+   "path": "fixtures/test-4948.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-4948.json",
+   "blob_id": "671d343415dfcceaf16e47f93bb594390a38de98",
+   "size_bytes": 2305,
+   "sha256": "8404d37d0217be243d4ca15b3aa3e8f83688957905dad5e4f8c5e85ae7ff9887"
+  },
+  {
+   "path": "fixtures/test-4948.json-expected.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-4948.json-expected.json",
+   "blob_id": "faf6283b7c6ce60f278882d400768160d4152195",
+   "size_bytes": 2899,
+   "sha256": "390d176e1160fa375f453055cbe6b5971b60abc037a4790c56613d54381d28b7"
+  },
+  {
+   "path": "fixtures/test-4953.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-4953.json",
+   "blob_id": "a15b291e277564bfb6255539aede4cd3525261ee",
+   "size_bytes": 2105,
+   "sha256": "1a814a15ca55642960934b428257a9a797e6140ad0e5818103c347bcb0a43371"
+  },
+  {
+   "path": "fixtures/test-4953.json-expected.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-4953.json-expected.json",
+   "blob_id": "539fe7868b6db07d3782776fe2014b93358a2eb7",
+   "size_bytes": 2437,
+   "sha256": "237a0cc5b7e5814f1edf29162ca896b700f3f073f20dee3fb1059358fcb2a2cc"
+  },
+  {
+   "path": "fixtures/test-4957.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-4957.json",
+   "blob_id": "2559113e4f7ffd5645b0ca0bdd7f4e31b90003b9",
+   "size_bytes": 1958,
+   "sha256": "937b30abb0f6fa8ade2a5a9b5302420774e1b37d65a4e007df5062a4eceb4e10"
+  },
+  {
+   "path": "fixtures/test-4957.json-expected.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-4957.json-expected.json",
+   "blob_id": "bd96872812d98ae971bb43ca920c4a8fad3416ef",
+   "size_bytes": 2607,
+   "sha256": "5507313f7487295421cac9f1f0bcfd0ec576175ec3dbe28b999aca8cb7a7d6e0"
+  },
+  {
+   "path": "fixtures/test-4962.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-4962.json",
+   "blob_id": "0f0069cce85d3117be8f91fde49b6b5d071d7945",
+   "size_bytes": 1910,
+   "sha256": "bae8fe24bd85faec19d1068f84bfce1eac5fa2617f84c91a4803c7093e80130f"
+  },
+  {
+   "path": "fixtures/test-4962.json-expected.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-4962.json-expected.json",
+   "blob_id": "b75cce3c5b0acbb667e2698c4350b4a79c801537",
+   "size_bytes": 2705,
+   "sha256": "20a1ac464a4ac744e06e9009b661e2234871894e07167824ca5d21cbc5097a2d"
+  },
+  {
+   "path": "fixtures/test-4963.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-4963.json",
+   "blob_id": "f45ade478149f214871b0ae34afac0d9403651a9",
+   "size_bytes": 1946,
+   "sha256": "33bf8468fd145658e3ed06d8c0fce9c39af89f2440f0efa5dabc58504c8da30f"
+  },
+  {
+   "path": "fixtures/test-4963.json-expected.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-4963.json-expected.json",
+   "blob_id": "9f209b980eff6636288ed74655ce8fc26f817a2e",
+   "size_bytes": 2645,
+   "sha256": "cce745d3d723272ddea61c9c22a118e6449b3c88a21cdffbbda5340ec23550a5"
+  },
+  {
+   "path": "fixtures/test-4965.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-4965.json",
+   "blob_id": "61ca00cfb2e43dbcbb42989e0828dfcc8dc64912",
+   "size_bytes": 2242,
+   "sha256": "6240d30db5530d3dd55f7c85179d0ace59305797de230511a8381ceecfe6dde5"
+  },
+  {
+   "path": "fixtures/test-4965.json-expected.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-4965.json-expected.json",
+   "blob_id": "a96d91cdca61457f704f6e1878add5e5df4aac1e",
+   "size_bytes": 3044,
+   "sha256": "67e3ccec8b962fc8a8419c815cfa5089bd643997eb2e16499ba046c44698e8e0"
+  },
+  {
+   "path": "fixtures/test-4985.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-4985.json",
+   "blob_id": "5d3e0b6437eb984850c67b8c5c3b46c38ade9e03",
+   "size_bytes": 2664,
+   "sha256": "6c627a4c2e329ee06e673d2a69078b58d1d23f2f16b62b4d3993ea72ad4a3e85"
+  },
+  {
+   "path": "fixtures/test-4985.json-expected.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-4985.json-expected.json",
+   "blob_id": "bf4cb3c89f2e16d513eadba7a8468cd78fb5e495",
+   "size_bytes": 3412,
+   "sha256": "3529f98aadf1c061cee14a994d99050a4e4218b590009cb37cccf4eb53d0ed48"
+  },
+  {
+   "path": "fixtures/test-5038.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-5038.json",
+   "blob_id": "82bbfe54fc38945891b9a7c500baead28ac19ae3",
+   "size_bytes": 2928,
+   "sha256": "dbbfbccbe7c709ad57902892b96e944803deecb5e4d77fe462a19b1b2b4f1170"
+  },
+  {
+   "path": "fixtures/test-5038.json-expected.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-5038.json-expected.json",
+   "blob_id": "db6b7082f8328857798bca497649873a5e1e05e7",
+   "size_bytes": 3705,
+   "sha256": "6196ea92a154daaafea7f482a1538fbe657cff7102f711a49c91c4dff24c2134"
+  },
+  {
+   "path": "fixtures/test-5058.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-5058.json",
+   "blob_id": "8cd26775e97e6c8c1f2e11aa4a5e5b15d0990184",
+   "size_bytes": 3280,
+   "sha256": "11f04eab9ec1dd3b9e5e6a40e77655205b43eb4b9a971738fefdc9c2108110ff"
+  },
+  {
+   "path": "fixtures/test-5058.json-expected.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-5058.json-expected.json",
+   "blob_id": "59f38c8385af8a8f417aa3b9c718705f9a71ecf7",
+   "size_bytes": 3997,
+   "sha256": "c852d28312b38203aa2ec48b8328ee80c3a12a79469f86070e99b9d8fad06502"
+  },
+  {
+   "path": "fixtures/test-5059.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-5059.json",
+   "blob_id": "f4d5ceefdafb1444befd42228f1131ea249824e5",
+   "size_bytes": 3026,
+   "sha256": "f82cf4fc4ea2444077926cad6d8b344f4601f896027ed8fbeae0ffca4d99d624"
+  },
+  {
+   "path": "fixtures/test-5059.json-expected.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-5059.json-expected.json",
+   "blob_id": "dd492b65598d2b60515c6a35b79ab2762b482048",
+   "size_bytes": 3712,
+   "sha256": "cc95ed2b34dd728b01071c3f8eec599464ad81d782cfd854a25834f2ac84c417"
+  },
+  {
+   "path": "fixtures/test-5061.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-5061.json",
+   "blob_id": "e23e188377ba3a8ee227fffd047348b58aa43563",
+   "size_bytes": 2321,
+   "sha256": "320b23af6ccb42dfebfc70b33ddfea6db5c63cc63abd4dae6496694b52bde310"
+  },
+  {
+   "path": "fixtures/test-5061.json-expected.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-5061.json-expected.json",
+   "blob_id": "d6701276b1b81656c1d1fbc3970594d8641704ae",
+   "size_bytes": 3393,
+   "sha256": "ad2baf5261f2cb892c90fcc180fedc58056ae672ad7ba64ef0957c0b233c628c"
+  },
+  {
+   "path": "fixtures/test-5136-objectdn-escaped-comma.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-5136-objectdn-escaped-comma.json",
+   "blob_id": "04440512630baf924f492059c71ad237bd92fb9c",
+   "size_bytes": 1825,
+   "sha256": "4ec4b920c76b52d95594ec7819b2b6dbae2661c862cc64380b8c41893311321d"
+  },
+  {
+   "path": "fixtures/test-5136-objectdn-escaped-comma.json-expected.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-5136-objectdn-escaped-comma.json-expected.json",
+   "blob_id": "2273f6c85397d6d860c05a4fe6c104d515fd28dd",
+   "size_bytes": 2771,
+   "sha256": "aaab974b97d0b7e7f1bf5d1461744eb9c6033b16666275bc4b341e25b6819201"
+  },
+  {
+   "path": "fixtures/test-5136.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-5136.json",
+   "blob_id": "82a697acc29c576b4ca55de84ff86f2622d7904e",
+   "size_bytes": 1399,
+   "sha256": "c116085948e5ac3e5c865a40b858453ab0acb1f10b3e5c9098cc53971e1618a8"
+  },
+  {
+   "path": "fixtures/test-5136.json-expected.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-5136.json-expected.json",
+   "blob_id": "6c01789e0f99e9bc96dfdab1adb4d2e43d3c30dc",
+   "size_bytes": 2181,
+   "sha256": "83e1dce670d4ee665b8ac6bd5202681bf48057f164b4e971e7a098e7388856f3"
+  },
+  {
+   "path": "fixtures/test-5142.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-5142.json",
+   "blob_id": "ea06705ff4c17b7b9a51a318095af33e7201d574",
+   "size_bytes": 2626,
+   "sha256": "c09c4c3897356e036fe9a90389b076fb30860ed6c40dd920f9182de3bb0855df"
+  },
+  {
+   "path": "fixtures/test-5142.json-expected.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-5142.json-expected.json",
+   "blob_id": "94bc8d290633f1e04525d2ae83a46bbd2f12b3f3",
+   "size_bytes": 3491,
+   "sha256": "0bed1264b3657d2099f4a5519111a22980a3f0f1620b8bc44945a41dd131ff9a"
+  },
+  {
+   "path": "fixtures/test-5152.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-5152.json",
+   "blob_id": "ef577fb9a1c0b0be712e015f7a20b60b2d62f2a7",
+   "size_bytes": 1773,
+   "sha256": "f456d5967892e1d53e8fd07be780503fa46d7fae837f4d973b7050053652c510"
+  },
+  {
+   "path": "fixtures/test-5152.json-expected.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-5152.json-expected.json",
+   "blob_id": "9db37fa760c783c9b094ff2c4965036da219a982",
+   "size_bytes": 2633,
+   "sha256": "942d733f1d49f9ddc76b4571847e2b74a8425d4d471c2d101ead3a4e0bfe31dd"
+  },
+  {
+   "path": "fixtures/test-5156.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-5156.json",
+   "blob_id": "099c3f9d539d35846fec6b1098f5fd878f648597",
+   "size_bytes": 1960,
+   "sha256": "eee7d643c6abc618c8132af68a303366585fbc0a9e4f7deca01e015dc915f22d"
+  },
+  {
+   "path": "fixtures/test-5156.json-expected.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-5156.json-expected.json",
+   "blob_id": "62936ba432ac9463a9b37d1a0ff9347351e12024",
+   "size_bytes": 3006,
+   "sha256": "66478db6700d6b5f58075b1f17b039454c6a457981d3fb14e964b75ea5e342c4"
+  },
+  {
+   "path": "fixtures/test-5157.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-5157.json",
+   "blob_id": "b74d9c25ab11c3a255a847755979e783d591e83a",
+   "size_bytes": 2122,
+   "sha256": "0a5a151c138693e75f87df6d14cf8996fdae10131254bd5bf6e1519aad813ce6"
+  },
+  {
+   "path": "fixtures/test-5157.json-expected.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-5157.json-expected.json",
+   "blob_id": "e65ab4e2ee6f33c6123f0fc44c7eabc9106e50b3",
+   "size_bytes": 3170,
+   "sha256": "c1fb906bfa30a18a9fa788ab81f7177edc18e9c800663eb779df003240f9dfc2"
+  },
+  {
+   "path": "fixtures/test-5158.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-5158.json",
+   "blob_id": "d27d18ce37a5647d2847d79fc2c6c0b55eb7fa25",
+   "size_bytes": 1683,
+   "sha256": "c25fb6f4131e4bc1f4c70280a38bbf68d26b23d897e4265e9ca95a96d9c06c68"
+  },
+  {
+   "path": "fixtures/test-5158.json-expected.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-5158.json-expected.json",
+   "blob_id": "9bb3b83ce8b7286983b97ab62b2f75c6e641ef7a",
+   "size_bytes": 2402,
+   "sha256": "3c15437463a17fcd6844d5ca8f9ae2b73bd54dd5b613fbb33f09976fbcdf4576"
+  },
+  {
+   "path": "fixtures/test-5379.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-5379.json",
+   "blob_id": "71d2b88640d8a981a176f2d8af507896be4963a6",
+   "size_bytes": 9368,
+   "sha256": "90e919d9a2941515a9271a81d919efe2c59d4e7fe8cc762bf57ff2449770dfcb"
+  },
+  {
+   "path": "fixtures/test-5379.json-expected.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-5379.json-expected.json",
+   "blob_id": "de7684017751959d7324460df7b4a6d1c5e6c8cb",
+   "size_bytes": 13101,
+   "sha256": "42bbf8a004ca751fcbca017e444f0a2c76bf6a2890ce5ce8b0cd89199ec4cc06"
+  },
+  {
+   "path": "fixtures/test-5380.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-5380.json",
+   "blob_id": "e9658bba1ae5ab16023fb178bfa2d9868417cb5c",
+   "size_bytes": 8988,
+   "sha256": "a547b1e38a1def3e024d21ba5652dc035be26963c13342e84390a6f4495293cb"
+  },
+  {
+   "path": "fixtures/test-5380.json-expected.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-5380.json-expected.json",
+   "blob_id": "2b2c7726ea97f88b1b1e063c821065786594cc85",
+   "size_bytes": 12621,
+   "sha256": "5808213b34f8270bee3f92cfa1189dd2ef60da43158d56033e4a6452d44913ae"
+  },
+  {
+   "path": "fixtures/test-5381.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-5381.json",
+   "blob_id": "e6bf5b18f3730ec727a073c3c9aaeecb59d70dba",
+   "size_bytes": 7813,
+   "sha256": "c55e7ae3bf2e028328cd5c1eba78cdde3ca4bfbad12499f78b359245be553a0a"
+  },
+  {
+   "path": "fixtures/test-5381.json-expected.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-5381.json-expected.json",
+   "blob_id": "cf0bac3f5cac3212cd1107ab94a62a86807789d4",
+   "size_bytes": 11326,
+   "sha256": "bb88eb81e06b11feed09f7004a7d1cf138cbed3fa2efa40a778940ae92fba0c6"
+  },
+  {
+   "path": "fixtures/test-5382.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-5382.json",
+   "blob_id": "a7999a1ed7d624b0f52b5fd518f7877d7cf7242f",
+   "size_bytes": 9439,
+   "sha256": "f188f997337c3dad79819673775ad007724f2f64d8fa170bd867e1b5220081fe"
+  },
+  {
+   "path": "fixtures/test-5382.json-expected.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-5382.json-expected.json",
+   "blob_id": "438fca4ae754fc35b79282ac9748e8769f7c21fa",
+   "size_bytes": 13076,
+   "sha256": "d017db4c011611b399a1485efe9c0776e8dc3ebab8708c566092ab804f9e52ef"
+  },
+  {
+   "path": "fixtures/test-5441.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-5441.json",
+   "blob_id": "96f1a4ac26857a1b25557b299d4cdf4532230649",
+   "size_bytes": 3870,
+   "sha256": "7a889eda7aaa112510f2d68a9b34d138d5846043812a859d27210a0fe03080bf"
+  },
+  {
+   "path": "fixtures/test-5441.json-expected.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-5441.json-expected.json",
+   "blob_id": "4b2c0666cfb7e463220d889979d33398947b0967",
+   "size_bytes": 4485,
+   "sha256": "2f645cf69a3b4c3e4719e7af9d5c8f4285e9be7fd5e30d7f45cd17a878d2d4cb"
+  },
+  {
+   "path": "fixtures/test-5446.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-5446.json",
+   "blob_id": "5b8d059d5003bbfd429b7ffc32999221d232b864",
+   "size_bytes": 3389,
+   "sha256": "a3c25ced0eb4af091c0b23e0af7b47a1d2e1f08f6b259c64b064b297a71e3d93"
+  },
+  {
+   "path": "fixtures/test-5446.json-expected.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-5446.json-expected.json",
+   "blob_id": "74664fb6282f35a78c6fccc3390dca8bbf5a0ef2",
+   "size_bytes": 4103,
+   "sha256": "2917ba8be16144bc4175a9fec2ff32e6589d9ab1a6e938b7ab627907b5929c0f"
+  },
+  {
+   "path": "fixtures/test-5447.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-5447.json",
+   "blob_id": "2b80b7df75d2a38607470ded7df8c59ec68e8a20",
+   "size_bytes": 4914,
+   "sha256": "2bf5aa195a021cc59b82257751d5f9a378bcd7287bbd0379e997afc9419c9d28"
+  },
+  {
+   "path": "fixtures/test-5447.json-expected.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-5447.json-expected.json",
+   "blob_id": "3dc3c145e47ffaeca2e4fbb4e6d25ff16057e0b0",
+   "size_bytes": 5663,
+   "sha256": "ab2ebc252bff308c17caceec87bc7932215c6ae6e1741a33c8ad7bcf4617f6ac"
+  },
+  {
+   "path": "fixtures/test-5449.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-5449.json",
+   "blob_id": "95a92252299b5b86f98d0dba468dc58dd065bad2",
+   "size_bytes": 2925,
+   "sha256": "dd0cca9d3528af8e3a981a1b0f1b6ec6392189444f54aa3e8d8a757841f332ea"
+  },
+  {
+   "path": "fixtures/test-5449.json-expected.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-5449.json-expected.json",
+   "blob_id": "b307c9c630714fe6266dd8da450a68bcb0cda28e",
+   "size_bytes": 3774,
+   "sha256": "bf0b64c244b4277fb649fafe96d42b6bc42634cbeb6f664f9c633fdfbc0a65d0"
+  },
+  {
+   "path": "fixtures/test-6144.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-6144.json",
+   "blob_id": "728990f171f7bb90fe9f4593a8b03fea44b34678",
+   "size_bytes": 2450,
+   "sha256": "6c01c89f67f07ba199617064222a17446d7aa1de9e9138693b2c5ce4e19b7261"
+  },
+  {
+   "path": "fixtures/test-6144.json-expected.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-6144.json-expected.json",
+   "blob_id": "b86e2a70eed7408672878aa1e7cf8e647367c92c",
+   "size_bytes": 2965,
+   "sha256": "617ce6b6bd530bf2bb75e87a3bff2436fdf306cb0531f3a014ad50bab462ee32"
+  },
+  {
+   "path": "fixtures/test-6145.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-6145.json",
+   "blob_id": "78d23bb459613de9c0455e4d3ebb585f41107f47",
+   "size_bytes": 2469,
+   "sha256": "c5b78ef84c700c53c85566b43f327aaddf3286233f3fe82fd006a5293149ee4c"
+  },
+  {
+   "path": "fixtures/test-6145.json-expected.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-6145.json-expected.json",
+   "blob_id": "4d310fb6710caed9cb2cca10c01a8dd1aa82958e",
+   "size_bytes": 3012,
+   "sha256": "a9200a930a64512a02873c1fa231b87771bd3e7bb41bcd1de62f6278d9743759"
+  },
+  {
+   "path": "fixtures/test-6416.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-6416.json",
+   "blob_id": "ec3e62af971b04976f177d4e222cc5b32b5b8b40",
+   "size_bytes": 2782,
+   "sha256": "0ab3dc79f68cbeed2b47cfddba4afba9ee9fdd7a428524bd350c40c71d90ed1b"
+  },
+  {
+   "path": "fixtures/test-6416.json-expected.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-6416.json-expected.json",
+   "blob_id": "13410145852b5e84b0c24a375b70ac249c961d02",
+   "size_bytes": 3637,
+   "sha256": "d7e73929d64cccdf65808c146da021e64a6a32c49384c2cc27e2cd06936d5370"
+  },
+  {
+   "path": "fixtures/test-6419.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-6419.json",
+   "blob_id": "84dc96caa8b4efdeb1f62130351b452ea5e0a755",
+   "size_bytes": 3613,
+   "sha256": "2f2644693b6f1866c6d63a432a1cb15f5dce63ee37c824a6773e0b6c568691ff"
+  },
+  {
+   "path": "fixtures/test-6419.json-expected.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-6419.json-expected.json",
+   "blob_id": "154adfa666f70a343f0146129d7f5b73bb59e3aa",
+   "size_bytes": 4485,
+   "sha256": "0634fe702f7fcc74260de176a3a25623fcd403d4a94985f8f05067bc8309fe63"
+  },
+  {
+   "path": "fixtures/test-6420.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-6420.json",
+   "blob_id": "2e4f90b8d1c2bea36e7e8d8826f23e239ed08e1b",
+   "size_bytes": 3507,
+   "sha256": "1f6867270fd3d59b511dfc53cd45e0c20b4cfd9ea3776c4070139beaa042a253"
+  },
+  {
+   "path": "fixtures/test-6420.json-expected.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-6420.json-expected.json",
+   "blob_id": "5315c01bc60d836fcd9f989026ac120348703ce9",
+   "size_bytes": 4337,
+   "sha256": "3e9085d49d79e5ba3bccf669f7e33374ff115d3fd68a77757827005ae2d70346"
+  },
+  {
+   "path": "fixtures/test-6421.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-6421.json",
+   "blob_id": "543276ae08da2d8e7e48632e9d45a27b7c2c3bf7",
+   "size_bytes": 3612,
+   "sha256": "53565ee6dd65dbf75d1422456ddf341b05115863a26e9f0f267882767e4bfd3e"
+  },
+  {
+   "path": "fixtures/test-6421.json-expected.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-6421.json-expected.json",
+   "blob_id": "510af76bda190537c088c923b734cebbde7a7a01",
+   "size_bytes": 4483,
+   "sha256": "570f41950def1473b2defd57b3bcdbc6d21906a62d42fcc11dfc4e22fc953116"
+  },
+  {
+   "path": "fixtures/test-6422.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-6422.json",
+   "blob_id": "dc7369cc6ad0915771459444e5f2a00c9cc5d765",
+   "size_bytes": 3505,
+   "sha256": "c01fd76c951742006f27f4e3347136d9e84d8e4b323149a54a34dfd1ae5e1a6e"
+  },
+  {
+   "path": "fixtures/test-6422.json-expected.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-6422.json-expected.json",
+   "blob_id": "989151cad6d393f9a4c0b6c1ed9fb537fa99b2d9",
+   "size_bytes": 4334,
+   "sha256": "39c01fbc71d95c6b28b8d1414538007cfc0de0e4aab34aa41c683d6649ca3489"
+  },
+  {
+   "path": "fixtures/test-common-config.yml",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-common-config.yml",
+   "blob_id": "e071d397ddfce77c5350bb614602f2b825aa3ade",
+   "size_bytes": 41,
+   "sha256": "b10ce53ca1a12c6b7b1417e1f0fb1aeeadd49667482fca911d8ce66ea1404479"
+  },
+  {
+   "path": "fixtures/test-log-5136.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-log-5136.json",
+   "blob_id": "f6306cfbd5bceec2de7cac085ceec2956677053c",
+   "size_bytes": 2159,
+   "sha256": "bee499348ac2cf22860ccb186ae931dd6f8059ff58f66f3ed333b51bdf770c44"
+  },
+  {
+   "path": "fixtures/test-log-5136.json-expected.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-log-5136.json-expected.json",
+   "blob_id": "6f9e99a6c7e357cb122ddc41ed5b26a5915ea247",
+   "size_bytes": 3153,
+   "sha256": "1801aac68d322d4d432d578412bcbdffd62ad4d8944db1e4ec2f108089f07bd4"
+  },
+  {
+   "path": "fixtures/test-security-4738-malformed.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-security-4738-malformed.json",
+   "blob_id": "cf6bf9af5d6cf9be431a836a641122091e1b957b",
+   "size_bytes": 2180,
+   "sha256": "a56cbc6f0458a0f6f2fea068136ef9fb7b80bbf449d354a375366f7ebff2bfe9"
+  },
+  {
+   "path": "fixtures/test-security-4738-malformed.json-expected.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-security-4738-malformed.json-expected.json",
+   "blob_id": "3d2b535b666de2b08731f082eaabee91d994ab96",
+   "size_bytes": 3142,
+   "sha256": "d57d62d7afb9072af13b57b5b8816784d0cd453a972050544742241a227d920a"
+  },
+  {
+   "path": "fixtures/test-security-4738.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-security-4738.json",
+   "blob_id": "e23bd7817803a2454e6f6a55be406130a0d65d39",
+   "size_bytes": 3497,
+   "sha256": "e4565089b7704c73b9860ddaf7370af6b576d56d68ddbd543f47d386ebbae048"
+  },
+  {
+   "path": "fixtures/test-security-4738.json-expected.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-security-4738.json-expected.json",
+   "blob_id": "23dc5dcd9d3175852a47fbdf82573678a6e222e6",
+   "size_bytes": 3559,
+   "sha256": "d14e5346dc8b1f6d0db2b797f588b34c3af6f6c11eb5e2e0e7c3fd3e1c3f1e20"
+  },
+  {
+   "path": "fixtures/test-security-5140-5145.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-security-5140-5145.json",
+   "blob_id": "6752b73fd416dfcd42647023c4b859d6243d46a9",
+   "size_bytes": 4171,
+   "sha256": "21660a7bf883149536dbdf80e1f7ca3cdcc5f054a71c816ef58a4beb84fff06b"
+  },
+  {
+   "path": "fixtures/test-security-5140-5145.json-expected.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-security-5140-5145.json-expected.json",
+   "blob_id": "e723a83834737429604b1e91f3fb495e95718783",
+   "size_bytes": 6955,
+   "sha256": "c118997fef7c9a35a33a86fdb62444cdc76c12a7bef128f9c666a8c999ddb150"
+  },
+  {
+   "path": "fixtures/test-security-6272-nps-subject.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-security-6272-nps-subject.json",
+   "blob_id": "cf5b17a2d21ae29e93ac1ccb3737be44f18c2bbd",
+   "size_bytes": 1121,
+   "sha256": "67d0c551bb117204adf7802b3243f196d03df8925101649e5036a6f0fbd42d9a"
+  },
+  {
+   "path": "fixtures/test-security-6272-nps-subject.json-expected.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-security-6272-nps-subject.json-expected.json",
+   "blob_id": "4f2b011f60fde5070f0b865a18bbff1be8702cee",
+   "size_bytes": 1549,
+   "sha256": "f9dbd83746171acf8932e53d36a7f218ddc7dde51e5d26e93bdc683f41fc4da0"
+  },
+  {
+   "path": "fixtures/test-security-windows2012-4673.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-security-windows2012-4673.json",
+   "blob_id": "75b58229739996f546b5b0c88e0fd0b2c4da3185",
+   "size_bytes": 2355,
+   "sha256": "d2937597f2364ef3a34dd3bc44b48fe66a1507dbbcb1637e2c7787ec8a1cf560"
+  },
+  {
+   "path": "fixtures/test-security-windows2012-4673.json-expected.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-security-windows2012-4673.json-expected.json",
+   "blob_id": "b99c7c4369cfea0f116e177dd4b18586d2dda20b",
+   "size_bytes": 3016,
+   "sha256": "39df866397d884db1464b6f2602632650d9d6fa1702794f42342e4a75a40938f"
+  },
+  {
+   "path": "fixtures/test-security-windows2012-4697.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-security-windows2012-4697.json",
+   "blob_id": "2cc659dcb26e0382212ae3659af0167e126df688",
+   "size_bytes": 2672,
+   "sha256": "8cb54057765069d4f39e40edce53e77166f5862730bdc27e4770992d76b00795"
+  },
+  {
+   "path": "fixtures/test-security-windows2012-4697.json-expected.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-security-windows2012-4697.json-expected.json",
+   "blob_id": "f8bed44ed2356155866f1a7ce9ad3e25287cf4f9",
+   "size_bytes": 3451,
+   "sha256": "b15b48080e6797b2f5ed1de5b263abd177239312b88ff572c844b603643ac9df"
+  },
+  {
+   "path": "fixtures/test-security-windows2012-4768.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-security-windows2012-4768.json",
+   "blob_id": "24d8e5deaf62b52220d16d33ae33ebc1d101517c",
+   "size_bytes": 2396,
+   "sha256": "89369166345bf5c41ab996e3944c4b4a4600ac24360a3116e91af4e900516b25"
+  },
+  {
+   "path": "fixtures/test-security-windows2012-4768.json-expected.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-security-windows2012-4768.json-expected.json",
+   "blob_id": "b641ad08251108c87e67484919b54beec01c803e",
+   "size_bytes": 3459,
+   "sha256": "a8931f627d81b7be67f7c183f09316ce039aad10e018812beb2ffa248d1aaa81"
+  },
+  {
+   "path": "fixtures/test-security-windows2012-4769.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-security-windows2012-4769.json",
+   "blob_id": "f80653aafbe9af3adfeaff9a361f372e07035268",
+   "size_bytes": 2416,
+   "sha256": "c4e9d0e7c52886f7e4e563a4707f2b2bccd48b91d432732df45b66b69f5e83f2"
+  },
+  {
+   "path": "fixtures/test-security-windows2012-4769.json-expected.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-security-windows2012-4769.json-expected.json",
+   "blob_id": "bbf1e0caf84f8d2ccdf44ee705d77a5278e78728",
+   "size_bytes": 3321,
+   "sha256": "fe9aeabba1d782c249b2f2349770de705ba21fea800547b2134c62ec0782ce11"
+  },
+  {
+   "path": "fixtures/test-security-windows2012-4770.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-security-windows2012-4770.json",
+   "blob_id": "2b4c2a2c3d0fef9f4b45cf05ea37146e2c3c1883",
+   "size_bytes": 2252,
+   "sha256": "45a8cd2b82dc923b9598fe68833bcdf248c83804d193bcb7595dd786866653de"
+  },
+  {
+   "path": "fixtures/test-security-windows2012-4770.json-expected.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-security-windows2012-4770.json-expected.json",
+   "blob_id": "427452bca85747a288759b4c43fcd12267d86a7f",
+   "size_bytes": 3109,
+   "sha256": "435dd4c843f713b485a6b9946fbe32b54ec367cd347c7cc0c3a17a97f4f37b9c"
+  },
+  {
+   "path": "fixtures/test-security-windows2012-4771.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-security-windows2012-4771.json",
+   "blob_id": "4c57b533f482f5d08143b79cbc85ae09e245d21f",
+   "size_bytes": 2241,
+   "sha256": "02551d26547a58d8a6c3eabeaeb49b6da70e884a3cfa41701ffc0d63eb24d0d3"
+  },
+  {
+   "path": "fixtures/test-security-windows2012-4771.json-expected.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-security-windows2012-4771.json-expected.json",
+   "blob_id": "2e1dd01712ee4e15f1df23d21759395d32aaf757",
+   "size_bytes": 3186,
+   "sha256": "9a2e0f8551c485fef7f84a1c9434d9379f4349ef7197749bd8c4ade84d23e2e9"
+  },
+  {
+   "path": "fixtures/test-security-windows2012-4776.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-security-windows2012-4776.json",
+   "blob_id": "55d04a03884cb9b46ef075b18a5454540777865d",
+   "size_bytes": 2043,
+   "sha256": "7b980b5942e22de93a57267b3663207cd817595d9fbb3ef2ac92c7023540a2de"
+  },
+  {
+   "path": "fixtures/test-security-windows2012-4776.json-expected.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-security-windows2012-4776.json-expected.json",
+   "blob_id": "ddce5ba2696b736b745523e0e0ec703ba14ed613",
+   "size_bytes": 2593,
+   "sha256": "26a4e76b7fc2f89a85dbea2d218ef52feee2e72ec019faa07b4e93e10acfc3e6"
+  },
+  {
+   "path": "fixtures/test-security-windows2012-4778.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-security-windows2012-4778.json",
+   "blob_id": "c03ef805d0883d892199b68e508a7341e19c1ccc",
+   "size_bytes": 2119,
+   "sha256": "26475b13c1e558cb75643eadf85e266bf243ccac047ccb95026c9f4baadfd3a1"
+  },
+  {
+   "path": "fixtures/test-security-windows2012-4778.json-expected.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-security-windows2012-4778.json-expected.json",
+   "blob_id": "b9d5e0fa2525bfa98fa4ad0c45ecb317d7c79c90",
+   "size_bytes": 3415,
+   "sha256": "37bc195c81bb3ed9285fb94a2a8a858964880f951c2eff2fbc922d268563c092"
+  },
+  {
+   "path": "fixtures/test-security-windows2012-4779.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-security-windows2012-4779.json",
+   "blob_id": "5e64ecb808af7988c2b1d43eead966c9288ef622",
+   "size_bytes": 4200,
+   "sha256": "c51a9f174c8573a2239da9ddcac8bc95f3e15fd069c8a62fe9c322d2dc11ffb1"
+  },
+  {
+   "path": "fixtures/test-security-windows2012-4779.json-expected.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-security-windows2012-4779.json-expected.json",
+   "blob_id": "6f2fc0c7ed12f6e1688e1a1b54b599b0c51fa02a",
+   "size_bytes": 5561,
+   "sha256": "9e301db40895c2dfefaca8e049d80b9998595b86ad033226732b2a15bd7b729b"
+  },
+  {
+   "path": "fixtures/test-security-windows2012r2-logon.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-security-windows2012r2-logon.json",
+   "blob_id": "1dae9ccfc3feac99e47e048724af0de88a6909ea",
+   "size_bytes": 51222,
+   "sha256": "605be1eef9e4b074dc64eecbb38aa23f25d17e0b0ba357e24c9470335e0ac0c1"
+  },
+  {
+   "path": "fixtures/test-security-windows2012r2-logon.json-expected.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-security-windows2012r2-logon.json-expected.json",
+   "blob_id": "a618d3b898f06f37fbff8431b0c73c0d48bdd42d",
+   "size_bytes": 59556,
+   "sha256": "407e23f6b6c290d79f41537a921df323fd147788d3a506fc531f529fab19e68d"
+  },
+  {
+   "path": "fixtures/test-security-windows2016-4722-account-enabled.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-security-windows2016-4722-account-enabled.json",
+   "blob_id": "bb7f664ec87125fd7608ff54291a13e78f7d85dd",
+   "size_bytes": 4682,
+   "sha256": "760f8c8c8cad036f28f447d6c8eeb468d117b3cf6bdee951d0fba752fd310804"
+  },
+  {
+   "path": "fixtures/test-security-windows2016-4722-account-enabled.json-expected.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-security-windows2016-4722-account-enabled.json-expected.json",
+   "blob_id": "88b3471ddf5eae4dcd5676f2e6eee829c298bead",
+   "size_bytes": 6437,
+   "sha256": "ab82d6897a010121f1dfdb3cb1e0b29b5e48764905e140dc6304eee766bfed65"
+  },
+  {
+   "path": "fixtures/test-security-windows2016-4723-password-change.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-security-windows2016-4723-password-change.json",
+   "blob_id": "3fb6a55d875c45b086dbfe1c0d08ea2489162dee",
+   "size_bytes": 4768,
+   "sha256": "b69ac16c1815bff8888cdc433a16684cb35908ae1c17ef250a57579ac6f221a1"
+  },
+  {
+   "path": "fixtures/test-security-windows2016-4723-password-change.json-expected.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-security-windows2016-4723-password-change.json-expected.json",
+   "blob_id": "aacdf05811bcabe065f6144f1f4ae344855d6d16",
+   "size_bytes": 6363,
+   "sha256": "6c449d49838a0efb9f020300e4cfeee2a9c750b14b90b0a80b9a4748ca17acda"
+  },
+  {
+   "path": "fixtures/test-security-windows2016-4724-password-reset.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-security-windows2016-4724-password-reset.json",
+   "blob_id": "40b5ddd05f0202712a6835cadc0e1a2aadc988a1",
+   "size_bytes": 4683,
+   "sha256": "821c5599e0159b0b873a27f36f524af7ecfdc6e721741db4db1015b5185fc77a"
+  },
+  {
+   "path": "fixtures/test-security-windows2016-4724-password-reset.json-expected.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-security-windows2016-4724-password-reset.json-expected.json",
+   "blob_id": "12a879901b805658cbe7be9a8191fd201a236f5c",
+   "size_bytes": 6432,
+   "sha256": "9c200f4461fa78619f7b1beb6d863227272119fa8309575fd9d658c597d35f97"
+  },
+  {
+   "path": "fixtures/test-security-windows2016-4725-account-disabled.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-security-windows2016-4725-account-disabled.json",
+   "blob_id": "c139186c78cd5e30a9c86291476969efb7bb3b6c",
+   "size_bytes": 4684,
+   "sha256": "5b02bdee8a47df795cdd734c41c161d9283b3eb8a5e0b34042857707fe199213"
+  },
+  {
+   "path": "fixtures/test-security-windows2016-4725-account-disabled.json-expected.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-security-windows2016-4725-account-disabled.json-expected.json",
+   "blob_id": "922fffa1c0ec54fef7b96ff222a43ed3ddf7ddd1",
+   "size_bytes": 6445,
+   "sha256": "44fb9124a66cb957a8530a7326f0cfb2d14f810118b10426999f5e9b9aea47f6"
+  },
+  {
+   "path": "fixtures/test-security-windows2016-4726-account-deleted.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-security-windows2016-4726-account-deleted.json",
+   "blob_id": "58bd492bf508451d46a4d6b1022a6062a801e486",
+   "size_bytes": 4765,
+   "sha256": "85253c30e2a0b0785f83cd83409fc1ddc8e37556274f53ccb94dc024dce90f91"
+  },
+  {
+   "path": "fixtures/test-security-windows2016-4726-account-deleted.json-expected.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-security-windows2016-4726-account-deleted.json-expected.json",
+   "blob_id": "6cf094afdeafab189d5df4a04a8d42d062194316",
+   "size_bytes": 6436,
+   "sha256": "236339b65992583f1bb069104463bd9c6ec1d253480123dd3dd2e26d00d527fe"
+  },
+  {
+   "path": "fixtures/test-security-windows2016-4727.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-security-windows2016-4727.json",
+   "blob_id": "290dd41ef7cef242f70600f336ce115d519acd6f",
+   "size_bytes": 2380,
+   "sha256": "c903f45c3145d2cb97f4ef1b9bd683e7af2a8f784f5ea28474a7583da95966db"
+  },
+  {
+   "path": "fixtures/test-security-windows2016-4727.json-expected.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-security-windows2016-4727.json-expected.json",
+   "blob_id": "90ee02d21e5af201ab65fd5059294bda19555fb4",
+   "size_bytes": 3079,
+   "sha256": "94e6ade631c2d426a2d5afe48d4554de7ff8a5b780dd0bb413eff79855ef1c0d"
+  },
+  {
+   "path": "fixtures/test-security-windows2016-4728.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-security-windows2016-4728.json",
+   "blob_id": "f229c729735e7a7f48e5ce53f201f9ce0dad5054",
+   "size_bytes": 2478,
+   "sha256": "1e09eb3ce55e7cbe1c687295ef58a4f4ec8b3ea465805690a8f468a984c38439"
+  },
+  {
+   "path": "fixtures/test-security-windows2016-4728.json-expected.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-security-windows2016-4728.json-expected.json",
+   "blob_id": "17aa87cbc7ebd445acbceaa942e23dc4fbcaa316",
+   "size_bytes": 3596,
+   "sha256": "9bfcb040d05bba49bce1c36b62fea17cd0b833ff83e8bb71794c137346d45f03"
+  },
+  {
+   "path": "fixtures/test-security-windows2016-4729.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-security-windows2016-4729.json",
+   "blob_id": "b099bec10856827c7e31d9edda8791fd6f7a603b",
+   "size_bytes": 2480,
+   "sha256": "d3733f51f3927f70bb595cc1f99af948ebe478e49d25305d8d7db76ed71dca97"
+  },
+  {
+   "path": "fixtures/test-security-windows2016-4729.json-expected.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-security-windows2016-4729.json-expected.json",
+   "blob_id": "0a16a592164caac216a61e5927b897e74f6c092c",
+   "size_bytes": 3606,
+   "sha256": "8f22eaa265512e2a5a3f0ecf4483d7ee7fb7585b6200ea07ddec4ffd81560406"
+  },
+  {
+   "path": "fixtures/test-security-windows2016-4730.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-security-windows2016-4730.json",
+   "blob_id": "96d4678930d473f2533eb67c8f21307cad06d9ea",
+   "size_bytes": 2317,
+   "sha256": "b241a7ae94b30610cb504c7188e99ad21df1013c9a10bcbda2efee7494b6c3de"
+  },
+  {
+   "path": "fixtures/test-security-windows2016-4730.json-expected.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-security-windows2016-4730.json-expected.json",
+   "blob_id": "85f61688a600a93e909ae02b09138d98086ae6c6",
+   "size_bytes": 3086,
+   "sha256": "7e895efee18c330d3f20d6ff679495fee9227274e389114a4ac5c6f6ce2de242"
+  },
+  {
+   "path": "fixtures/test-security-windows2016-4731.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-security-windows2016-4731.json",
+   "blob_id": "27001f880724fb7e757fc5aea495d6b840483406",
+   "size_bytes": 2407,
+   "sha256": "340c5c503d27dba15e818bf75d9c7a225ba2f1ed022bfa941c7ed67c4a5a02c8"
+  },
+  {
+   "path": "fixtures/test-security-windows2016-4731.json-expected.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-security-windows2016-4731.json-expected.json",
+   "blob_id": "5bae61ab9e3b900282234eee03c0d013d0a78f1c",
+   "size_bytes": 3133,
+   "sha256": "3d2c9eb46c003cc742569c09f6e7c1d5346404a27a44db8f26284e9b04e4ca9e"
+  },
+  {
+   "path": "fixtures/test-security-windows2016-4732.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-security-windows2016-4732.json",
+   "blob_id": "fc88e96d18cd61ea75cd1453f7f9995f0817c33a",
+   "size_bytes": 2478,
+   "sha256": "9ef44474b1b0256713a3abb97bb99bb381945e81debf9e32a7bec13ff710fefb"
+  },
+  {
+   "path": "fixtures/test-security-windows2016-4732.json-expected.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-security-windows2016-4732.json-expected.json",
+   "blob_id": "9c853cd5f5ccfd1c80dab58b7f6f4f370d88c70f",
+   "size_bytes": 3596,
+   "sha256": "4572fbd35fbb341266a00147850c0acbd71d0a1b7b352524131342671d1307dd"
+  },
+  {
+   "path": "fixtures/test-security-windows2016-4733.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-security-windows2016-4733.json",
+   "blob_id": "56153d7f52d94b4a6afae888e2c81a1395ff4878",
+   "size_bytes": 2478,
+   "sha256": "3ff4dd9d44b37ac17b9f9a094e2bd27110efedbde1ff68f7f9201171e00e1b4e"
+  },
+  {
+   "path": "fixtures/test-security-windows2016-4733.json-expected.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-security-windows2016-4733.json-expected.json",
+   "blob_id": "e24c7ef55ac12dac2ebee369dc66f8a124c6ee38",
+   "size_bytes": 3600,
+   "sha256": "cd7bf8ce472f9679916ac534ab41cafbfdc7169a37f6c90e1133d7c456b3578a"
+  },
+  {
+   "path": "fixtures/test-security-windows2016-4734.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-security-windows2016-4734.json",
+   "blob_id": "e5c993a12883d57f4169ef444f4fb57213ecfb44",
+   "size_bytes": 2317,
+   "sha256": "5f099d49e9cb82f40090dddbe16698217ced2b3983b0ccd18dc65705f293c925"
+  },
+  {
+   "path": "fixtures/test-security-windows2016-4734.json-expected.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-security-windows2016-4734.json-expected.json",
+   "blob_id": "f60b6f7cdc33b7ce9a3e1028a7718bd9d58a12df",
+   "size_bytes": 3086,
+   "sha256": "81576f3d412efd572fe0d9fe9b652eae251bf5f6e3064f61797ec3510f38bc0b"
+  },
+  {
+   "path": "fixtures/test-security-windows2016-4735.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-security-windows2016-4735.json",
+   "blob_id": "9acf41ce49377c8bf8a8c1ff30632a60d2b8f82b",
+   "size_bytes": 2411,
+   "sha256": "00c40aaacdeda58c53a88a5569a834b765ffae2041cca183cbbf7ee966c0288b"
+  },
+  {
+   "path": "fixtures/test-security-windows2016-4735.json-expected.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-security-windows2016-4735.json-expected.json",
+   "blob_id": "91c8e46c385868383b67700f0462afb5736dc393",
+   "size_bytes": 3140,
+   "sha256": "1ecc0b0c0608fe98b0c1aab1a0140937f3a7ec36395cc699cd677ed3a019a61c"
+  },
+  {
+   "path": "fixtures/test-security-windows2016-4737.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-security-windows2016-4737.json",
+   "blob_id": "ab0a42cce645c96108639f11a7242747a06c30e4",
+   "size_bytes": 2399,
+   "sha256": "227233e85d5ca2949ae5a6d091915fade5e54b47cbbf4a14c81232eef02fe07f"
+  },
+  {
+   "path": "fixtures/test-security-windows2016-4737.json-expected.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-security-windows2016-4737.json-expected.json",
+   "blob_id": "8d64962560e71e07c323ae680083e8c01594fdad",
+   "size_bytes": 3085,
+   "sha256": "a20e144fb588278731df4b44ca5bb56df52e7831f60aa84fc5bb7c33736080cc"
+  },
+  {
+   "path": "fixtures/test-security-windows2016-4738-account-changed.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-security-windows2016-4738-account-changed.json",
+   "blob_id": "8b12f4c9bc4b7caec1c4acdf96a0b160fa0f5945",
+   "size_bytes": 3277,
+   "sha256": "f47e6befa8a5e9503aa04ae90d2704ef57d4ece5a7c8ab648a42c6b5fcb99ac8"
+  },
+  {
+   "path": "fixtures/test-security-windows2016-4738-account-changed.json-expected.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-security-windows2016-4738-account-changed.json-expected.json",
+   "blob_id": "c7c493ef1829b5d21ce2642e8ef650340b4aa0f1",
+   "size_bytes": 4061,
+   "sha256": "868270395f1a6af74255b8e77ca9becca3699c672abfdc6be63914a3908b343b"
+  },
+  {
+   "path": "fixtures/test-security-windows2016-4740-account-locked-out.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-security-windows2016-4740-account-locked-out.json",
+   "blob_id": "464d7367e409b447324b0e37acf79fc5b295ec4d",
+   "size_bytes": 2316,
+   "sha256": "6610a3d3571aeff0b78915694cbfbddb3d8c12bb1e2d101082b2efaf1dd1aa67"
+  },
+  {
+   "path": "fixtures/test-security-windows2016-4740-account-locked-out.json-expected.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-security-windows2016-4740-account-locked-out.json-expected.json",
+   "blob_id": "2623b01f12348711f4a1e91c911751497536838d",
+   "size_bytes": 3162,
+   "sha256": "2d3d4bf961ac6855420d03d57eb8bc441ba4406ab7d99e6969e07fe0b5e58e5d"
+  },
+  {
+   "path": "fixtures/test-security-windows2016-4754.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-security-windows2016-4754.json",
+   "blob_id": "242cf88517fdb15542410565818a856ee8512856",
+   "size_bytes": 2407,
+   "sha256": "6ac6ccf88e953840b619c8e4b0b4d8fa456b7449ed4f1ce583ed0bc21480a846"
+  },
+  {
+   "path": "fixtures/test-security-windows2016-4754.json-expected.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-security-windows2016-4754.json-expected.json",
+   "blob_id": "5069c45ce7d66e184b87c73c7bd4d4793952edb0",
+   "size_bytes": 3133,
+   "sha256": "d6eb79365697abf5d22c04a2cff7a14e3cc603e185ca11e86d53ff6efff2fc39"
+  },
+  {
+   "path": "fixtures/test-security-windows2016-4755.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-security-windows2016-4755.json",
+   "blob_id": "1f6fe5a1ff15cfb14d48e111ced6dbc70d0b2339",
+   "size_bytes": 2399,
+   "sha256": "43fcb7a53322505d5d078c5b7b84038f3a46bb73b4e8446eced02d7a9a67177b"
+  },
+  {
+   "path": "fixtures/test-security-windows2016-4755.json-expected.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-security-windows2016-4755.json-expected.json",
+   "blob_id": "227e3ce2655d4975f7a29e0619f6ec517bcba6e3",
+   "size_bytes": 3085,
+   "sha256": "7908bff2191785d49d2e830f7b13fda07efd350df96eca6dcca058f672bd40c7"
+  },
+  {
+   "path": "fixtures/test-security-windows2016-4756.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-security-windows2016-4756.json",
+   "blob_id": "df6ad1b6a7db8111130eb984c6fde035f381a4c9",
+   "size_bytes": 2480,
+   "sha256": "6f57ea3dd0e024b16ef14b27b85c6be144e83779c73b826ec74db16def01beaf"
+  },
+  {
+   "path": "fixtures/test-security-windows2016-4756.json-expected.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-security-windows2016-4756.json-expected.json",
+   "blob_id": "ad171debfa00724c9982e129274626c3a569423b",
+   "size_bytes": 3602,
+   "sha256": "7fee38431b872541b14c3cece77d552f18015d9f667a30c6fd06591efb81fd34"
+  },
+  {
+   "path": "fixtures/test-security-windows2016-4757.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-security-windows2016-4757.json",
+   "blob_id": "7984036f3662c32a6a9fd482b757efe1eeb060ce",
+   "size_bytes": 2480,
+   "sha256": "473a85c498c869cd5232f081f1eb867e276c628a891653e976da4cdd830a2ef1"
+  },
+  {
+   "path": "fixtures/test-security-windows2016-4757.json-expected.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-security-windows2016-4757.json-expected.json",
+   "blob_id": "d52e222706672a2dbc6124aa83e2a39a48c8b7bc",
+   "size_bytes": 3606,
+   "sha256": "908a9e51c70a542d1556c182ee12dd2bea502bbee9b38e8387d844a24fa67afd"
+  },
+  {
+   "path": "fixtures/test-security-windows2016-4758.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-security-windows2016-4758.json",
+   "blob_id": "b2f8b0809605e53f055977acd1c97345d2ef17cf",
+   "size_bytes": 2317,
+   "sha256": "58f73f19d80edc7de462d7347cb2a9a3adc398349b87c945a01dcc304db1e14c"
+  },
+  {
+   "path": "fixtures/test-security-windows2016-4758.json-expected.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-security-windows2016-4758.json-expected.json",
+   "blob_id": "7a46e2cebcb3ea84a9cbd468a55758d2aabed24e",
+   "size_bytes": 3086,
+   "sha256": "41650650825d29c315b34d5512dc3756113e309925219d9a9b5014a1959454ec"
+  },
+  {
+   "path": "fixtures/test-security-windows2016-4764.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-security-windows2016-4764.json",
+   "blob_id": "cc968e389f650f89969ec3f9b900d9c113fdf6dc",
+   "size_bytes": 2434,
+   "sha256": "a9e9ea05b590cf51230a57d5ff95c6fe87f7c07e712d65d8e7350a0563be1ad4"
+  },
+  {
+   "path": "fixtures/test-security-windows2016-4764.json-expected.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-security-windows2016-4764.json-expected.json",
+   "blob_id": "9ba105712ed5b141ae6d04d0e68a6baa20093c40",
+   "size_bytes": 3206,
+   "sha256": "4640c14e9188495b629bc473a1fbc2e9370b3d4b3c76c6cc92dd6fb71f2bf0f4"
+  },
+  {
+   "path": "fixtures/test-security-windows2016-4767-account-unlocked.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-security-windows2016-4767-account-unlocked.json",
+   "blob_id": "7396bdcdd837b743e02a8e8c018d84c53771a84d",
+   "size_bytes": 2355,
+   "sha256": "5c1d4c9221c2043f7229c75c4ce86346b556ec52cc52c2e5df1ba25b4357b610"
+  },
+  {
+   "path": "fixtures/test-security-windows2016-4767-account-unlocked.json-expected.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-security-windows2016-4767-account-unlocked.json-expected.json",
+   "blob_id": "23533ee58ec438eb47a64c189a81befaa97ae92b",
+   "size_bytes": 3237,
+   "sha256": "00e463455297e69e2474b353d1864df529f9b0f0c713bf95492f20d72942ce6b"
+  },
+  {
+   "path": "fixtures/test-security-windows2016-4781-account-renamed.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-security-windows2016-4781-account-renamed.json",
+   "blob_id": "10af170bf90bea008343ce984cf73245c3509d43",
+   "size_bytes": 4888,
+   "sha256": "2a857ccecaf0d1f568630448b88bb37ad3917ae6aeb6faef82fb54023930de09"
+  },
+  {
+   "path": "fixtures/test-security-windows2016-4781-account-renamed.json-expected.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-security-windows2016-4781-account-renamed.json-expected.json",
+   "blob_id": "373f23cb0d46cb3c1015b1ca8966c5974f7204f5",
+   "size_bytes": 6569,
+   "sha256": "57afb50edcfbf8d5a618f1c1d3aea35450d19312d1b9a8857f7e12d4e57a64a6"
+  },
+  {
+   "path": "fixtures/test-security-windows2016-4798.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-security-windows2016-4798.json",
+   "blob_id": "20bdbb24c2ff67b372da0af77b25f38154575e0d",
+   "size_bytes": 2425,
+   "sha256": "a9233619d36fdccbc80c47219c53f75bc8f4c54814a308549fb9a7fa13cda827"
+  },
+  {
+   "path": "fixtures/test-security-windows2016-4798.json-expected.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-security-windows2016-4798.json-expected.json",
+   "blob_id": "f69456fe1057d7cd8b2e6accbb75affdc0a4ca43",
+   "size_bytes": 3273,
+   "sha256": "9a9cf0b369a1b5276ef9d995596ddef4904cb4c6ca1b50200e9324dfcf9ada89"
+  },
+  {
+   "path": "fixtures/test-security-windows2016-4799.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-security-windows2016-4799.json",
+   "blob_id": "da6e8c590c6f2f90bc07bac412eb730b9d445888",
+   "size_bytes": 2385,
+   "sha256": "67a11a82fd9b1155829d9511025ffad93657955a3b09481ec23e47c12eb0e033"
+  },
+  {
+   "path": "fixtures/test-security-windows2016-4799.json-expected.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-security-windows2016-4799.json-expected.json",
+   "blob_id": "f7946dfb388634f0d7d9a53074dcbea66034ef6e",
+   "size_bytes": 3133,
+   "sha256": "e49415ef991c4f0d0c9d5315b5adf7da10cc65ea4851d6107e74c976fbd2583a"
+  },
+  {
+   "path": "fixtures/test-security-windows2016-4908.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-security-windows2016-4908.json",
+   "blob_id": "cbe590774c5782ef96d2ac2c734bdd88673fff09",
+   "size_bytes": 1485,
+   "sha256": "ee4133b956d61fbb7635b58d5623f4a85656eebf1d82dd1bc6a4a1837d787e4b"
+  },
+  {
+   "path": "fixtures/test-security-windows2016-4908.json-expected.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-security-windows2016-4908.json-expected.json",
+   "blob_id": "2a76f9191438d8180560993e868dbcc21b063906",
+   "size_bytes": 2317,
+   "sha256": "ff8151bb66ea973cee84eb1f8b0eab157c271b4735a0ad4b9bd91cffe6f8b43f"
+  },
+  {
+   "path": "fixtures/test-security-windows2016-logoff.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-security-windows2016-logoff.json",
+   "blob_id": "433a6d735e6807cf1db8e9e3dbabdefbfc166ffe",
+   "size_bytes": 4186,
+   "sha256": "5a2fa5a85a30facefa64616e963aaa827929d951d6ba3597918ec735bc944b39"
+  },
+  {
+   "path": "fixtures/test-security-windows2016-logoff.json-expected.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-security-windows2016-logoff.json-expected.json",
+   "blob_id": "6fa72025ae36eb9cd37b6ea68362b507761769e3",
+   "size_bytes": 5459,
+   "sha256": "9f911930b1f6380b537eec92b2cd5ee808bb11c24b84ccec363f79180a62f1dc"
+  },
+  {
+   "path": "fixtures/test-security-windows2019-4688-process-created.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-security-windows2019-4688-process-created.json",
+   "blob_id": "dd0cc14cfb85fa52fc2bcda57818f3b9bc0bb0f0",
+   "size_bytes": 5210,
+   "sha256": "420e0adbcf142017f67a381aabb04799df68f38006ad532f398c411810bdc477"
+  },
+  {
+   "path": "fixtures/test-security-windows2019-4688-process-created.json-expected.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-security-windows2019-4688-process-created.json-expected.json",
+   "blob_id": "ed1b841813f180d1ba852823d8e573c8963a52ff",
+   "size_bytes": 7216,
+   "sha256": "a4aae4a2f641f8d28f664e401ce7173f624c25fa52b2a2bc256b196d1cb7a98e"
+  },
+  {
+   "path": "fixtures/test-security-windows2019-4689-process-exited.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-security-windows2019-4689-process-exited.json",
+   "blob_id": "a1e6f6799238725c49ee302809113459e9b89ae2",
+   "size_bytes": 6580,
+   "sha256": "3294b15fd4fb3c260e57a7a89cc3b8309dc347f1f35721e63e18f670d33b0f46"
+  },
+  {
+   "path": "fixtures/test-security-windows2019-4689-process-exited.json-expected.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-security-windows2019-4689-process-exited.json-expected.json",
+   "blob_id": "c7e8abbec9a9b36004c5e2ce590b9600efe2b9c2",
+   "size_bytes": 8497,
+   "sha256": "857e91267155fa53122d63834698936b09f85b04cdd4f7bdcd2db8e133b5ecaf"
+  },
+  {
+   "path": "fixtures/test-unknown.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-unknown.json",
+   "blob_id": "5f9005013ee9b6c8db0e5eae1424d49d0ef3867e",
+   "size_bytes": 906,
+   "sha256": "dda6bac4d2daa16b540198b9ac973829d2a3e432e61cce5fcc344093f747042b"
+  },
+  {
+   "path": "fixtures/test-unknown.json-expected.json",
+   "upstream_path": "packages/system/data_stream/security/_dev/test/pipeline/test-unknown.json-expected.json",
+   "blob_id": "d322689be4f2b985ed731336ec9766047d771eed",
+   "size_bytes": 1062,
+   "sha256": "41736e3d3c12897fc76ea3a664dcf5d7d50ce58c10fe3729c4d078a113fcb03d"
+  },
+  {
+   "path": "pipeline/default.yml",
+   "upstream_path": "packages/system/data_stream/security/elasticsearch/ingest_pipeline/default.yml",
+   "blob_id": "ffd27f8ad59e85371fe4d3bfd4d668a67a5a17e4",
+   "size_bytes": 5996,
+   "sha256": "1893a4a6a0e38a5bd953a8696522cf8f4abce11c34a8a917bd2f616559f49cfa"
+  },
+  {
+   "path": "pipeline/scheduled_task.yml",
+   "upstream_path": "packages/system/data_stream/security/elasticsearch/ingest_pipeline/scheduled_task.yml",
+   "blob_id": "912e3f9c78d524d54491ac7c81e50a5c28ab620f",
+   "size_bytes": 14301,
+   "sha256": "0414c65b7e58b84efda95d133d2f2e4a76bf3e7a92a23681bf6891543c0b9375"
+  },
+  {
+   "path": "pipeline/standard.yml",
+   "upstream_path": "packages/system/data_stream/security/elasticsearch/ingest_pipeline/standard.yml",
+   "blob_id": "be05d5ed8c47575e67446db6790cab32093a5922",
+   "size_bytes": 198936,
+   "sha256": "fbbb4692c95536626747ccf25be1cc40c295cef9c7f96f1a53ba0fd43f8b68ad"
+  }
+ ]
+}

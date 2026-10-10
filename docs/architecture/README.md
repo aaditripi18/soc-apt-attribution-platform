@@ -43,7 +43,7 @@ the later ADRs below record each subsystem as it was designed, measured and buil
 | [adr/0012-network-telemetry.md](adr/0012-network-telemetry.md) | Network telemetry: Zeek (JSON and TSV), the sensor product scope; network ↔ host link measured and not adopted | **ACCEPTED** (2026-10-06), implemented |
 | [adr/0013-indicator-intelligence-layer.md](adr/0013-indicator-intelligence-layer.md) | Indicator (IOC) intelligence layer: pinned government advisories, contextual only | **ACCEPTED** D1–D2 (2026-10-09), implemented; scoring (D3) not adopted |
 | [adr/0014-macos-telemetry.md](adr/0014-macos-telemetry.md) | macOS telemetry: Endpoint Security process events via osquery; enrich tier extended to macOS | **ACCEPTED** (2026-10-08), implemented |
-| [adr/0015-elastic-prebuilt-rules.md](adr/0015-elastic-prebuilt-rules.md) | Elastic prebuilt detection rules as a second content source: exact EQL/KQL translation, pipeline-faithful derived ECS views verified against Elastic's fixtures; Sysmon first | **ACCEPTED** (2026-10-09), implemented (Sysmon) |
+| [adr/0015-elastic-prebuilt-rules.md](adr/0015-elastic-prebuilt-rules.md) | Elastic prebuilt detection rules as a second content source: exact EQL/KQL translation, pipeline-faithful derived ECS views verified against Elastic's fixtures; Sysmon, Windows Security, CloudTrail, M365, Entra, Okta, GitHub, Kubernetes (Amendment A) | **ACCEPTED** (2026-10-09), implemented |
 
 ## The one-paragraph summary
 

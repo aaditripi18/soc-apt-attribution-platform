@@ -1,0 +1,201 @@
+{
+ "source": "elastic/integrations (Elastic integration ingest pipeline and pipeline test fixtures)",
+ "source_commit": "ff5328128a30c75046130ae58ddba450caa1f2dc",
+ "license": "Elastic License 2.0",
+ "license_url": "https://github.com/elastic/integrations/blob/ff5328128a30c75046130ae58ddba450caa1f2dc/LICENSE.txt",
+ "retrieved_at_utc": "2026-10-10T14:35:45Z",
+ "method": "scripts/acquire_elastic_conformance.py (commit-pinned; each file verified against its git blob id)",
+ "approval": "owner instruction 2026-10-10 (extend Elastic rules to further log sources)",
+ "purpose": "Conformance oracle for the derived ECS views of this data stream (ADR-0015).",
+ "files": [
+  {
+   "path": "fixtures/test-alternative-time-and-duration-as-string.log",
+   "upstream_path": "packages/azure/data_stream/signinlogs/_dev/test/pipeline/test-alternative-time-and-duration-as-string.log",
+   "blob_id": "1646205f982748344d42c8496a2ded17a5ccda76",
+   "size_bytes": 3030,
+   "sha256": "570e7ee54145cdd28b82796681d3c42c5cbe14c6be7878c6efa6b732593e91a3"
+  },
+  {
+   "path": "fixtures/test-alternative-time-and-duration-as-string.log-expected.json",
+   "upstream_path": "packages/azure/data_stream/signinlogs/_dev/test/pipeline/test-alternative-time-and-duration-as-string.log-expected.json",
+   "blob_id": "0857261f2c7b081f2b5408b8575476bcea1e5c6f",
+   "size_bytes": 9361,
+   "sha256": "c3410a17c3e2c6560730515b5b67902fa35ed375622007aa55d8cb010753baa1"
+  },
+  {
+   "path": "fixtures/test-common-config.yml",
+   "upstream_path": "packages/azure/data_stream/signinlogs/_dev/test/pipeline/test-common-config.yml",
+   "blob_id": "4da226416540fb12d8c5a4c4b74ecce1f60b3e66",
+   "size_bytes": 46,
+   "sha256": "08ff6f4fc622fbd65822153c9a2e72550eacd5a354f69519f734c6ff4bc0cadf"
+  },
+  {
+   "path": "fixtures/test-invalid-time.log",
+   "upstream_path": "packages/azure/data_stream/signinlogs/_dev/test/pipeline/test-invalid-time.log",
+   "blob_id": "6e39c186b0578fbceeeca433f9d9bb94c5f98f9d",
+   "size_bytes": 247,
+   "sha256": "cf37e698316d90aa0f2882a0d27d5b76db5e89f88c34341d66615ff58cc43767"
+  },
+  {
+   "path": "fixtures/test-invalid-time.log-expected.json",
+   "upstream_path": "packages/azure/data_stream/signinlogs/_dev/test/pipeline/test-invalid-time.log-expected.json",
+   "blob_id": "22e181f1c4592d191bb57e49b183878abfcb26f3",
+   "size_bytes": 1320,
+   "sha256": "5b0beea9592fc050e3a3e52fb635158a262c56e5dd00d99e4819143e1c388781"
+  },
+  {
+   "path": "fixtures/test-managed-identity-sample.log",
+   "upstream_path": "packages/azure/data_stream/signinlogs/_dev/test/pipeline/test-managed-identity-sample.log",
+   "blob_id": "51c78b4c63033de279be177774e0eb92a3f186a9",
+   "size_bytes": 49034,
+   "sha256": "ec2d20db5309a9db7759fedb8f9df2301d276d6a01758f1b9408345f005847e9"
+  },
+  {
+   "path": "fixtures/test-managed-identity-sample.log-expected.json",
+   "upstream_path": "packages/azure/data_stream/signinlogs/_dev/test/pipeline/test-managed-identity-sample.log-expected.json",
+   "blob_id": "0fb119cbd9c538f15b71afa6a84c1be54c0480b5",
+   "size_bytes": 172565,
+   "sha256": "82c5ac2ea88ea72e5fa282b8ea255ff1a7564f25462310e4ae846efba541a6e5"
+  },
+  {
+   "path": "fixtures/test-managed-identity.log",
+   "upstream_path": "packages/azure/data_stream/signinlogs/_dev/test/pipeline/test-managed-identity.log",
+   "blob_id": "1ac63d7031974f4a3bf443fc39c57a3122754b83",
+   "size_bytes": 1160,
+   "sha256": "6337bbab9b14ee9a3e9a790fc77b9ef9c58d8e5bff7f55d427e98874be52cb8e"
+  },
+  {
+   "path": "fixtures/test-managed-identity.log-expected.json",
+   "upstream_path": "packages/azure/data_stream/signinlogs/_dev/test/pipeline/test-managed-identity.log-expected.json",
+   "blob_id": "b6ef6ed68fc51cc4c2dd64e52f84fde8520f5e95",
+   "size_bytes": 4500,
+   "sha256": "b19170aff32bc74c633f99f32940de7a8acb2d69b00f219673c52a917706c695"
+  },
+  {
+   "path": "fixtures/test-non-interactive-user-sample.log",
+   "upstream_path": "packages/azure/data_stream/signinlogs/_dev/test/pipeline/test-non-interactive-user-sample.log",
+   "blob_id": "113c59a5837d4d971754490955f90319160881e5",
+   "size_bytes": 38884,
+   "sha256": "1b791ab7f62bd8157c6043022354d4ff133c62b319404d4cdc902c7424e0da80"
+  },
+  {
+   "path": "fixtures/test-non-interactive-user-sample.log-expected.json",
+   "upstream_path": "packages/azure/data_stream/signinlogs/_dev/test/pipeline/test-non-interactive-user-sample.log-expected.json",
+   "blob_id": "502c68ed5d9febdcd31d85c3de83b3c90b0ddbf6",
+   "size_bytes": 131226,
+   "sha256": "1aba233822dae31afdd4e7bc00378cc89b7fb151c0c9e678c86f77fa60d96417"
+  },
+  {
+   "path": "fixtures/test-non-interactive-user-signin.log",
+   "upstream_path": "packages/azure/data_stream/signinlogs/_dev/test/pipeline/test-non-interactive-user-signin.log",
+   "blob_id": "33ccc66173060c971e2eddd67c7adccbb1054d17",
+   "size_bytes": 6180,
+   "sha256": "a7ab21caf90fb21da458c5625cce999891016cf27e00aeff1ce845dc06cbc211"
+  },
+  {
+   "path": "fixtures/test-non-interactive-user-signin.log-expected.json",
+   "upstream_path": "packages/azure/data_stream/signinlogs/_dev/test/pipeline/test-non-interactive-user-signin.log-expected.json",
+   "blob_id": "17544a6ff3414faa2e7d06ca4a03d4c07e0e6cdd",
+   "size_bytes": 21565,
+   "sha256": "d6e89af0aea636aac3d1d952ae213f883f65868bc81035c01b6cc5600f376609"
+  },
+  {
+   "path": "fixtures/test-non-interactive-user.log",
+   "upstream_path": "packages/azure/data_stream/signinlogs/_dev/test/pipeline/test-non-interactive-user.log",
+   "blob_id": "de22f9d88e83cd4f120c47f6a6e4e60e6a0d4454",
+   "size_bytes": 4638,
+   "sha256": "a5967f09181b6b618b024cfca1606f0f18b4c236939f0e1cdde2653596017ac9"
+  },
+  {
+   "path": "fixtures/test-non-interactive-user.log-expected.json",
+   "upstream_path": "packages/azure/data_stream/signinlogs/_dev/test/pipeline/test-non-interactive-user.log-expected.json",
+   "blob_id": "b41754ea9f586ef44f9dd312a2e97a3a2c1d04e0",
+   "size_bytes": 16918,
+   "sha256": "5f91a13e0358b3f440d26db282cf230a0e93236a974b1350a7ba4bc35d1a44af"
+  },
+  {
+   "path": "fixtures/test-service-principal-signinlogs-sample.log",
+   "upstream_path": "packages/azure/data_stream/signinlogs/_dev/test/pipeline/test-service-principal-signinlogs-sample.log",
+   "blob_id": "4bcb312ac5bf6d7df01a55ce14b513d6447a3ef9",
+   "size_bytes": 12362,
+   "sha256": "402de42bc982e66c514e31d485719d7215aa749f185d5ec07e1f8fa1d81046ec"
+  },
+  {
+   "path": "fixtures/test-service-principal-signinlogs-sample.log-expected.json",
+   "upstream_path": "packages/azure/data_stream/signinlogs/_dev/test/pipeline/test-service-principal-signinlogs-sample.log-expected.json",
+   "blob_id": "886217473fdc2669f6f285192293ee5ecab35403",
+   "size_bytes": 44575,
+   "sha256": "a314c6bf50311705ace132d3764be1c1dbd08c62666f1b62d24dc97bc046b0cd"
+  },
+  {
+   "path": "fixtures/test-service-principal.log",
+   "upstream_path": "packages/azure/data_stream/signinlogs/_dev/test/pipeline/test-service-principal.log",
+   "blob_id": "a0265a4206712ff7761ff19ae9201d52b215385b",
+   "size_bytes": 1408,
+   "sha256": "93e07b744e2f294d228d1db05a9161564627730e721a514f17bdda6ccf99c0fc"
+  },
+  {
+   "path": "fixtures/test-service-principal.log-expected.json",
+   "upstream_path": "packages/azure/data_stream/signinlogs/_dev/test/pipeline/test-service-principal.log-expected.json",
+   "blob_id": "3ba02fdb23b831111a047fb6c95782c6b83710f6",
+   "size_bytes": 5914,
+   "sha256": "f3360e803e0b997a948e51a683b720ee44d4f918731c4d170cfd6c56ec6305df"
+  },
+  {
+   "path": "fixtures/test-signinlogs-raw.log",
+   "upstream_path": "packages/azure/data_stream/signinlogs/_dev/test/pipeline/test-signinlogs-raw.log",
+   "blob_id": "06ce24169f0e7bcdb0c4d739010cf59c1730a8ad",
+   "size_bytes": 8718,
+   "sha256": "49836583565fe6111f276245e714a1f5f4ef790f7c1bef734a953da77e1f26e3"
+  },
+  {
+   "path": "fixtures/test-signinlogs-raw.log-expected.json",
+   "upstream_path": "packages/azure/data_stream/signinlogs/_dev/test/pipeline/test-signinlogs-raw.log-expected.json",
+   "blob_id": "66a5d94ee28932cc76b9dcda89598f6bcaa105aa",
+   "size_bytes": 34361,
+   "sha256": "bd589e380d0bcd23c35c7b25027e73911e3b9bfa1983d3d653c133739f48e4f1"
+  },
+  {
+   "path": "fixtures/test-signinlogs-sample.log",
+   "upstream_path": "packages/azure/data_stream/signinlogs/_dev/test/pipeline/test-signinlogs-sample.log",
+   "blob_id": "cdc128575976e45a577bec3458edaceefd863c9b",
+   "size_bytes": 5974,
+   "sha256": "ea06eb6c68af82700705c3607e0cc24f77fa555ccf843972bd8ddb35a42c0722"
+  },
+  {
+   "path": "fixtures/test-signinlogs-sample.log-expected.json",
+   "upstream_path": "packages/azure/data_stream/signinlogs/_dev/test/pipeline/test-signinlogs-sample.log-expected.json",
+   "blob_id": "a43a941197a7664d58e7d9f2c268d75b45acaac4",
+   "size_bytes": 20569,
+   "sha256": "1f5cc30d880ff40a36a4f572006a49f1472aba7109b5a5d28c73f6581049d989"
+  },
+  {
+   "path": "fixtures/test-time-formats-corner-cases.log",
+   "upstream_path": "packages/azure/data_stream/signinlogs/_dev/test/pipeline/test-time-formats-corner-cases.log",
+   "blob_id": "e256502b2a6e0f23a96cd4f1de02973a6c651dbc",
+   "size_bytes": 689,
+   "sha256": "bc84d3512b0bc5255a2579ae3216d0c28f0ce8006af7af4a9d362345313d71e3"
+  },
+  {
+   "path": "fixtures/test-time-formats-corner-cases.log-expected.json",
+   "upstream_path": "packages/azure/data_stream/signinlogs/_dev/test/pipeline/test-time-formats-corner-cases.log-expected.json",
+   "blob_id": "013dc2352477bcae9cd1cbd650bdb86093ef19b4",
+   "size_bytes": 8824,
+   "sha256": "16346246a08afebb75ce1633a54d39726533b7cd03c1f85a1d06e338391acc66"
+  },
+  {
+   "path": "pipeline/azure-shared-pipeline.yml",
+   "upstream_path": "packages/azure/data_stream/signinlogs/elasticsearch/ingest_pipeline/azure-shared-pipeline.yml",
+   "blob_id": "b0f2dc78ad62749c3fe0e482a6af08fce06f5ea2",
+   "size_bytes": 5400,
+   "sha256": "6c87cc8f34f8297e1461814f4388b83c1cc4df7bcdb38ddb6c89969fd393ec7f"
+  },
+  {
+   "path": "pipeline/default.yml",
+   "upstream_path": "packages/azure/data_stream/signinlogs/elasticsearch/ingest_pipeline/default.yml",
+   "blob_id": "a8b809a01870ad22f0106cb3740ef8cacd8ce59b",
+   "size_bytes": 19300,
+   "sha256": "7987aa8d96b97f3ca8066eb4fa3b18ad3c71cea96aeb4da9965ea7f8553eb3e4"
+  }
+ ]
+}

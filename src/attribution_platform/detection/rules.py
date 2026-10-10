@@ -94,7 +94,11 @@ from attribution_platform.detection.contracts import (
     MatchedField,
     TechniqueMapping,
 )
-from attribution_platform.detection.derived_fields import resolve_derived
+from attribution_platform.detection.derived_registry import (
+    UnknownDerivedField,
+    resolve_derived,
+)
+from attribution_platform.detection.derived_views import UNDETERMINED
 from attribution_platform.detection.errors import DetectionError
 from attribution_platform.domain import (
     AttackRef,
@@ -188,14 +192,15 @@ def _resolve_field(observation: Observation, field_path: str) -> Any:
     unpopulated optional entity group/field) — only an unrecognized
     *top-level* segment is a hard error (see module docstring).
 
-    ``elastic_sysmon.<ECS field>`` paths are derived views (ADR-0015,
-    :mod:`attribution_platform.detection.derived_fields`); an unknown one is a
-    hard error too.
+    ``<view set>.<ECS field>`` paths (``elastic_sysmon.process.args``, ...) are
+    derived views (ADR-0015, :mod:`attribution_platform.detection.derived_registry`);
+    an unknown one is a hard error too.
     """
-    derived, value = resolve_derived(observation, field_path)
+    try:
+        derived, value = resolve_derived(observation, field_path)
+    except UnknownDerivedField:
+        raise DetectionError(f"unknown derived field_path {field_path!r}") from None
     if derived:
-        if not isinstance(value, str | tuple) and value is not None:
-            raise DetectionError(f"unknown derived field_path {field_path!r}")
         return value
     segments = field_path.split(".")
     top = segments[0]
@@ -317,6 +322,8 @@ class FieldCondition:
     def _resolve_checked(self, observation: Observation) -> Any:
         """Resolve the field and apply the array/scalar fail-closed checks."""
         resolved = _resolve_field(observation, self.field_path)
+        if resolved is UNDETERMINED:
+            return resolved
         if self.operator in _ARRAY_OPERATORS:
             if resolved is not None and not isinstance(resolved, tuple):
                 raise DetectionError(
@@ -340,13 +347,17 @@ class FieldCondition:
         """Whether this condition matches -- the same decision (and the same
         fail-closed errors) as :meth:`evaluate`, without building the
         explanation. Used by :meth:`DetectionRule.evaluate` so explanations are
-        only built for rules that actually fire."""
-        return self._positive_match(self._resolve_checked(observation)) != self.negate
+        only built for rules that actually fire. A derived value that is
+        ``UNDETERMINED`` (ADR-0015) never matches, negated or not."""
+        resolved = self._resolve_checked(observation)
+        if resolved is UNDETERMINED:
+            return False
+        return self._positive_match(resolved) != self.negate
 
     def evaluate(self, observation: Observation) -> MatchedField | None:
         """Return the ``MatchedField`` if this condition matches, else ``None``."""
         resolved = self._resolve_checked(observation)
-        if self._positive_match(resolved) == self.negate:
+        if resolved is UNDETERMINED or self._positive_match(resolved) == self.negate:
             return None
 
         if resolved is None:

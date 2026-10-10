@@ -29,6 +29,11 @@ from collections.abc import Callable, Mapping
 from types import MappingProxyType
 from typing import Any
 
+from attribution_platform.detection.derived_views import (
+    KEYWORD_IGNORE_ABOVE,
+    ViewSet,
+    build_view_set,
+)
 from attribution_platform.domain import Observation
 
 #: The pipeline's first processor removes these event-data values.
@@ -338,72 +343,31 @@ _PIPELINE_FIELDS: Mapping[str, Callable[[Observation], Any]] = MappingProxyType(
 #: ECS fields whose derived value is an array (``element_*`` operators only).
 SYSMON_ARRAY_FIELDS = frozenset({"process.args", "process.parent.args", "registry.data.strings"})
 
-#: ECS 8.17 (``ecs_flat.yml``) field types of the derived fields. ``keyword``
-#: fields carry ``ignore_above: 1024``: a longer value is not indexed, so no
-#: query (term, wildcard or exists) can match it -- the view drops it likewise.
-#: ``wildcard`` fields have no such limit; ``long`` fields compare as integers.
-ECS_FIELD_TYPES: Mapping[str, str] = MappingProxyType(
-    {
-        name: (
-            "wildcard"
-            if name
-            in ("process.command_line", "process.parent.command_line", "registry.data.strings")
-            else "long"
-            if name in ("source.port", "destination.port")
-            else "keyword"
-        )
-        for name in _PIPELINE_FIELDS
-    }
+#: ECS 8.17 (``ecs_flat.yml``) types of the fields that are not ``keyword``:
+#: ``wildcard`` fields have no ``ignore_above``; ``long`` fields compare as integers.
+_NON_KEYWORD = {
+    "process.command_line": "wildcard",
+    "process.parent.command_line": "wildcard",
+    "registry.data.strings": "wildcard",
+    "source.port": "long",
+    "destination.port": "long",
+}
+
+SYSMON_VIEWS: ViewSet = build_view_set(
+    "elastic_sysmon", _PIPELINE_FIELDS, non_keyword=_NON_KEYWORD, arrays=SYSMON_ARRAY_FIELDS
 )
-KEYWORD_IGNORE_ABOVE = 1024
-
-
-def _indexed(ecs_field: str, value: Any) -> Any:
-    """``value`` as the index holds it for querying (``ignore_above`` applied)."""
-    if value is None or ECS_FIELD_TYPES[ecs_field] != "keyword":
-        return value
-    if isinstance(value, tuple):
-        kept = tuple(v for v in value if len(v) <= KEYWORD_IGNORE_ABOVE)
-        return kept or None
-    return value if len(value) <= KEYWORD_IGNORE_ABOVE else None
-
-
-def _view(ecs_field: str) -> Callable[[Observation], Any]:
-    derive = _PIPELINE_FIELDS[ecs_field]
-    return lambda obs: _indexed(ecs_field, derive(obs))
-
 
 #: ``elastic_sysmon.<ECS field>`` -> its queryable value for a Sysmon Observation.
-SYSMON_DERIVED_FIELDS: Mapping[str, Callable[[Observation], Any]] = MappingProxyType(
-    {name: _view(name) for name in _PIPELINE_FIELDS}
-)
-
-DERIVED_NAMESPACE = "elastic_sysmon"
-
-
-def resolve_derived(observation: Observation, field_path: str) -> tuple[bool, Any]:
-    """``(True, value)`` for an ``elastic_sysmon.<field>`` path, else ``(False, None)``."""
-    namespace, _, ecs_field = field_path.partition(".")
-    if namespace != DERIVED_NAMESPACE:
-        return False, None
-    derive = SYSMON_DERIVED_FIELDS.get(ecs_field)
-    if derive is None:
-        return True, _UNKNOWN
-    return True, derive(observation)
-
-
-class _Unknown:
-    pass
-
-
-_UNKNOWN = _Unknown()
+SYSMON_DERIVED_FIELDS: Mapping[str, Callable[[Observation], Any]] = SYSMON_VIEWS.views
+ECS_FIELD_TYPES: Mapping[str, str] = SYSMON_VIEWS.types
+DERIVED_NAMESPACE = SYSMON_VIEWS.namespace
 
 __all__ = [
     "DERIVED_NAMESPACE",
     "SYSMON_DERIVED_FIELDS",
     "SYSMON_ARRAY_FIELDS",
+    "SYSMON_VIEWS",
     "ECS_FIELD_TYPES",
     "KEYWORD_IGNORE_ABOVE",
-    "resolve_derived",
     "windows_argv",
 ]

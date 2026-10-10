@@ -1,0 +1,54 @@
+{
+ "source": "elastic/integrations (Elastic integration ingest pipeline and pipeline test fixtures)",
+ "source_commit": "ff5328128a30c75046130ae58ddba450caa1f2dc",
+ "license": "Elastic License 2.0",
+ "license_url": "https://github.com/elastic/integrations/blob/ff5328128a30c75046130ae58ddba450caa1f2dc/LICENSE.txt",
+ "retrieved_at_utc": "2026-10-10T14:35:58Z",
+ "method": "scripts/acquire_elastic_conformance.py (commit-pinned; each file verified against its git blob id)",
+ "approval": "owner instruction 2026-10-10 (extend Elastic rules to further log sources)",
+ "purpose": "Conformance oracle for the derived ECS views of this data stream (ADR-0015).",
+ "files": [
+  {
+   "path": "fixtures/test-audit.log",
+   "upstream_path": "packages/kubernetes/data_stream/audit_logs/_dev/test/pipeline/test-audit.log",
+   "blob_id": "6fef32c638dd3844fa597f798c01518b27bdb3e3",
+   "size_bytes": 5357,
+   "sha256": "9e0a95ba12016a3634e4fbdb7f3331736232ae1104db6b0afe3f935014df5138"
+  },
+  {
+   "path": "fixtures/test-audit.log-config.yml",
+   "upstream_path": "packages/kubernetes/data_stream/audit_logs/_dev/test/pipeline/test-audit.log-config.yml",
+   "blob_id": "88618462be69f76f7986567bbd2f46335c8a9eea",
+   "size_bytes": 47,
+   "sha256": "8919f8a76c8ff1ba9d03a73e1c11ec31052ab2173366df03ad26d9e52b2888da"
+  },
+  {
+   "path": "fixtures/test-audit.log-expected.json",
+   "upstream_path": "packages/kubernetes/data_stream/audit_logs/_dev/test/pipeline/test-audit.log-expected.json",
+   "blob_id": "16bfd99997880b2b2865369e7aa7b250628bcab8",
+   "size_bytes": 22643,
+   "sha256": "2612e8501cad0faa77c52860c8ee9a4612fc7a77c8003abf615a6342c6192836"
+  },
+  {
+   "path": "fixtures/test-kube-audit.log",
+   "upstream_path": "packages/kubernetes/data_stream/audit_logs/_dev/test/pipeline/test-kube-audit.log",
+   "blob_id": "f81303fc916a3be59a4581afe88b7485ad1d4df8",
+   "size_bytes": 1499,
+   "sha256": "bf400acfc18bf47b943ce904077ad82f3f75920f37ea483a88d13998df29ce98"
+  },
+  {
+   "path": "fixtures/test-kube-audit.log-expected.json",
+   "upstream_path": "packages/kubernetes/data_stream/audit_logs/_dev/test/pipeline/test-kube-audit.log-expected.json",
+   "blob_id": "5121d104d03ea90ff1792399b496c933a0c44516",
+   "size_bytes": 5492,
+   "sha256": "4538d3e581d9dec82e1e653e3bb93cbc123c005de9a3b53131b80ed5fb150a62"
+  },
+  {
+   "path": "pipeline/default.yml",
+   "upstream_path": "packages/kubernetes/data_stream/audit_logs/elasticsearch/ingest_pipeline/default.yml",
+   "blob_id": "2e6f41916722c810fd4ec1bcc29e1cadf3996646",
+   "size_bytes": 10282,
+   "sha256": "687d0707c894f397b93ea073959450c4182bc1661179608ec0fd3b25188ffb67"
+  }
+ ]
+}

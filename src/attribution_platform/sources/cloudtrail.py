@@ -20,11 +20,14 @@ records an error code only for a failed request), or a sign-in's own result
 success is not claimed from silence; ``user.id`` = ``userIdentity.principalId``,
 ``user.name`` = ``userIdentity.userName`` (only where CloudTrail states one);
 ``network.source.ip`` = ``sourceIPAddress`` only when it is an IP address (it is
-often an AWS service name); ``user_agent.original`` = ``userAgent``.
+often an AWS service name); ``user_agent.original`` = ``userAgent``. The
+``requestParameters`` object is kept whole, as compact JSON text in logged key
+order (ADR-0015).
 """
 
 from __future__ import annotations
 
+import json
 from collections.abc import Mapping
 from typing import Any
 
@@ -64,6 +67,14 @@ def _text(value: Any) -> str | None:
 
 def _at(record: Mapping[str, Any], *path: str) -> str | None:
     return at_path(record, path, _ADAPTER)
+
+
+def _object_text(value: Any) -> str | None:
+    """A JSON object exactly as logged: compact JSON text, key order kept. A
+    record without the object (or with JSON ``null``) has none."""
+    if not isinstance(value, Mapping):
+        return None
+    return json.dumps(value, separators=(",", ":"), ensure_ascii=False)
 
 
 class CloudTrailSourceAdapter:
@@ -115,6 +126,7 @@ class CloudTrailSourceAdapter:
             response_pending_master_user_password=_at(
                 raw_record, "responseElements", "pendingModifiedValues", "masterUserPassword"
             ),
+            request_parameters=_object_text(raw_record.get("requestParameters")),
         )
         ip = ip_or_none(source_ip)
         observation_id = f"cloudtrail:{account}:{event_id}"

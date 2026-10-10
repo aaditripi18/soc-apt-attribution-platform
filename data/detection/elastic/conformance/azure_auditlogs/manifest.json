@@ -1,0 +1,117 @@
+{
+ "source": "elastic/integrations (Elastic integration ingest pipeline and pipeline test fixtures)",
+ "source_commit": "ff5328128a30c75046130ae58ddba450caa1f2dc",
+ "license": "Elastic License 2.0",
+ "license_url": "https://github.com/elastic/integrations/blob/ff5328128a30c75046130ae58ddba450caa1f2dc/LICENSE.txt",
+ "retrieved_at_utc": "2026-10-10T14:35:39Z",
+ "method": "scripts/acquire_elastic_conformance.py (commit-pinned; each file verified against its git blob id)",
+ "approval": "owner instruction 2026-10-10 (extend Elastic rules to further log sources)",
+ "purpose": "Conformance oracle for the derived ECS views of this data stream (ADR-0015).",
+ "files": [
+  {
+   "path": "fixtures/test-audit-logs-duration-as-string.log",
+   "upstream_path": "packages/azure/data_stream/auditlogs/_dev/test/pipeline/test-audit-logs-duration-as-string.log",
+   "blob_id": "efadabd1a9a9f0664c7ef9451888d8f29550492d",
+   "size_bytes": 1563,
+   "sha256": "61e92bc938bc1d79c91d253a1d3063eaf3b1022dbacb1c89cf6cfeccf70b0cff"
+  },
+  {
+   "path": "fixtures/test-audit-logs-duration-as-string.log-expected.json",
+   "upstream_path": "packages/azure/data_stream/auditlogs/_dev/test/pipeline/test-audit-logs-duration-as-string.log-expected.json",
+   "blob_id": "6f59fa68f70eacb1dfb8ff15e2abd9cf38737485",
+   "size_bytes": 5776,
+   "sha256": "524442a2619d6eb72f68de1f8ef5b36106069fa115cdcea3af66f0f238656d66"
+  },
+  {
+   "path": "fixtures/test-audit-logs-edgecases.log",
+   "upstream_path": "packages/azure/data_stream/auditlogs/_dev/test/pipeline/test-audit-logs-edgecases.log",
+   "blob_id": "c0413290a4515f2a2277417e8e8e29a9a36186f1",
+   "size_bytes": 3179,
+   "sha256": "9dc64a0351b81df83e7e1d5ed717d68949da5e68b187ea3375a033b8d3630f0f"
+  },
+  {
+   "path": "fixtures/test-audit-logs-edgecases.log-expected.json",
+   "upstream_path": "packages/azure/data_stream/auditlogs/_dev/test/pipeline/test-audit-logs-edgecases.log-expected.json",
+   "blob_id": "e6d1952309d177ac7c789922a4b9c689b426a36a",
+   "size_bytes": 11487,
+   "sha256": "da721e237994d147993075c9714d16f3db67f2fd69099de0be0210d696b342ea"
+  },
+  {
+   "path": "fixtures/test-audit-logs-sample.log",
+   "upstream_path": "packages/azure/data_stream/auditlogs/_dev/test/pipeline/test-audit-logs-sample.log",
+   "blob_id": "c8ef89bdff35e2d904449a82fa7236f824c07ef6",
+   "size_bytes": 5708,
+   "sha256": "7defa21a8888f6c68e43649d9d39656ae3d35e4dbf5076edcfc0835a2c17cdff"
+  },
+  {
+   "path": "fixtures/test-audit-logs-sample.log-expected.json",
+   "upstream_path": "packages/azure/data_stream/auditlogs/_dev/test/pipeline/test-audit-logs-sample.log-expected.json",
+   "blob_id": "a1dedb3ba68f2db8c98cdbd60a3531c204376f9a",
+   "size_bytes": 19895,
+   "sha256": "b2ec1ea7611f919304f2dace4508879448936df36fe24bb33e8d943bd90aea76"
+  },
+  {
+   "path": "fixtures/test-auditlogs-raw.log",
+   "upstream_path": "packages/azure/data_stream/auditlogs/_dev/test/pipeline/test-auditlogs-raw.log",
+   "blob_id": "b493af6325c229ffeeecaa9247891de68c5a942e",
+   "size_bytes": 3269,
+   "sha256": "58454ab23c3fb962e8aeb1a17aaaf79ae39d29daaeef4ba032948076d8deb676"
+  },
+  {
+   "path": "fixtures/test-auditlogs-raw.log-expected.json",
+   "upstream_path": "packages/azure/data_stream/auditlogs/_dev/test/pipeline/test-auditlogs-raw.log-expected.json",
+   "blob_id": "27d426f21db77165b52cca57ae23cc2f2a166f9e",
+   "size_bytes": 13587,
+   "sha256": "739a53994f956c8f1d38291e90d6cfb6e5a98c367e16100933a64a98ca6a6ad0"
+  },
+  {
+   "path": "fixtures/test-auditlogs-result-description.log",
+   "upstream_path": "packages/azure/data_stream/auditlogs/_dev/test/pipeline/test-auditlogs-result-description.log",
+   "blob_id": "a00e9b171dc470132352df86d9a604db2e3eb55d",
+   "size_bytes": 3005,
+   "sha256": "649cc9be0f509fefec2f41388fcdccb9c392b426184858ae1ab5464677d12e39"
+  },
+  {
+   "path": "fixtures/test-auditlogs-result-description.log-expected.json",
+   "upstream_path": "packages/azure/data_stream/auditlogs/_dev/test/pipeline/test-auditlogs-result-description.log-expected.json",
+   "blob_id": "5c9c08ee0655bdd4520d98a8984333b22a37dd38",
+   "size_bytes": 10440,
+   "sha256": "71f9454f49041a3d70b5fc874022684b244f59fef4346628b7fecd1351939e52"
+  },
+  {
+   "path": "fixtures/test-common-config.yml",
+   "upstream_path": "packages/azure/data_stream/auditlogs/_dev/test/pipeline/test-common-config.yml",
+   "blob_id": "4da226416540fb12d8c5a4c4b74ecce1f60b3e66",
+   "size_bytes": 46,
+   "sha256": "08ff6f4fc622fbd65822153c9a2e72550eacd5a354f69519f734c6ff4bc0cadf"
+  },
+  {
+   "path": "fixtures/test-time-formats-corner-cases.log",
+   "upstream_path": "packages/azure/data_stream/auditlogs/_dev/test/pipeline/test-time-formats-corner-cases.log",
+   "blob_id": "b10ceadae944e5c6c322ff3b21d4deebef2fcaa2",
+   "size_bytes": 678,
+   "sha256": "ba52f80fddd4a7a7a415593bc297b8caed5d3cb6d697219cac437d6a2ab4b959"
+  },
+  {
+   "path": "fixtures/test-time-formats-corner-cases.log-expected.json",
+   "upstream_path": "packages/azure/data_stream/auditlogs/_dev/test/pipeline/test-time-formats-corner-cases.log-expected.json",
+   "blob_id": "7e61a48b54fd12f740b635edfbf4ac934f24e2d6",
+   "size_bytes": 7394,
+   "sha256": "9813e57571e87b0449f6bc391323d915397f8c32d245e88c51dd879f3894d018"
+  },
+  {
+   "path": "pipeline/azure-shared-pipeline.yml",
+   "upstream_path": "packages/azure/data_stream/auditlogs/elasticsearch/ingest_pipeline/azure-shared-pipeline.yml",
+   "blob_id": "b0f2dc78ad62749c3fe0e482a6af08fce06f5ea2",
+   "size_bytes": 5400,
+   "sha256": "6c87cc8f34f8297e1461814f4388b83c1cc4df7bcdb38ddb6c89969fd393ec7f"
+  },
+  {
+   "path": "pipeline/default.yml",
+   "upstream_path": "packages/azure/data_stream/auditlogs/elasticsearch/ingest_pipeline/default.yml",
+   "blob_id": "5bc6e695f4d9e240f24f33b56cda1e4e6a710f4e",
+   "size_bytes": 18334,
+   "sha256": "b3a6b07e1bb6fadf9f79563242bda183831a36e5e5014a65a3fc0cbd6b3ac346"
+  }
+ ]
+}

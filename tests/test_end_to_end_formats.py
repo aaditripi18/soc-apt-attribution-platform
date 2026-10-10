@@ -123,9 +123,10 @@ def test_each_family_is_read_by_its_own_adapters(investigated: dict[str, Any]) -
 def test_cloud_investigation_forms_units_from_real_records(investigated: dict[str, Any]) -> None:
     """No structural link joins cloud records (ADR-0011 D6): each detected record is
     its own unit; several rules matching one record share its Observation, so
-    they share its unit (10 Evidence on 7 records)."""
+    they share its unit (17 Evidence on 7 records: 10 from Sigma rules, 7 from
+    Elastic rules on the same records -- ADR-0015 Amendment A)."""
     _, record = investigated["cloud"]
-    assert (record.evidence, len(record.units)) == (10, 7)
+    assert (record.evidence, len(record.units)) == (17, 7)
 
 
 def test_families_without_core_detections_form_no_units(investigated: dict[str, Any]) -> None:

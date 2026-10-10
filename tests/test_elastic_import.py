@@ -187,8 +187,8 @@ def test_constant_fields_are_decided_per_event(tmp_path: Path, knowledge: Attack
     pack, report, _ = _import(tmp_path, knowledge, rules)
     assert report["a"]["profiles"] == ["sysmon:1"]
     assert report["b"]["rejection"] == "telemetry_gap"
-    assert report["b"]["gap_reasons"] == {"event:no_sysmon_event_satisfies_scope": 1}
-    assert report["c"]["gap_reasons"] == {"event:no_sysmon_event_satisfies_scope": 1}
+    assert report["b"]["gap_reasons"] == {"event:no_supported_event_satisfies_scope": 1}
+    assert report["c"]["gap_reasons"] == {"event:no_supported_event_satisfies_scope": 1}
     assert report["d"]["status"] == "imported"
     d_rule = next(r for r in pack["rules"] if r["rule_family"] == "elastic:d")
     assert all("code_signature" not in c["field_path"] for c in d_rule["conditions"])
@@ -339,11 +339,12 @@ def test_tracked_pack_loads_and_matches_its_manifest(knowledge: AttackKnowledge)
         for condition in rule.conditions:
             assert condition.field_path.startswith(
                 (
-                    "elastic_sysmon.",
+                    "elastic_",
                     "event.category",
                     "event.type",
                     "event.action",
                     "event.dataset",
+                    "event.code",
                     "host.os_type",
                 )
             ), condition.field_path
@@ -359,3 +360,156 @@ def test_tracked_pack_regenerates_byte_for_byte(tmp_path: Path, knowledge: Attac
         text = json.dumps(data, indent=1, sort_keys=False, ensure_ascii=False) + "\n"
         tracked = (GENERATED / f"elastic-195f15c0bac8.{name}.json").read_text(encoding="utf-8")
         assert text == tracked, name
+
+
+# --- further data streams (cloud audit logs, Windows Security) -----------------------
+
+
+def _cloudtrail(**fields: Any) -> Observation:
+    from attribution_platform.sources.cloudtrail import CloudTrailSourceAdapter
+
+    record = {
+        "eventVersion": "1.08",
+        "eventTime": "2026-01-01T00:00:00Z",
+        "eventSource": "iam.amazonaws.com",
+        "eventName": "CreateUser",
+        "eventID": "e-1",
+        "recipientAccountId": "111122223333",
+        "awsRegion": "us-east-1",
+        "sourceIPAddress": "203.0.113.5",
+        "userAgent": "aws-cli/2.0",
+        "userIdentity": {"type": "IAMUser", "arn": "arn:aws:iam::111122223333:user/a"},
+        **fields,
+    }
+    (observation,) = CloudTrailSourceAdapter().to_observations(record)
+    return observation
+
+
+def test_cloudtrail_rules_read_pipeline_faithful_fields(
+    tmp_path: Path, knowledge: AttackKnowledge
+) -> None:
+    index = '["filebeat-*", "logs-aws.cloudtrail-*"]'
+    rules = {
+        "ct1": _toml(
+            "ct1",
+            "event.dataset:aws.cloudtrail and event.provider:iam.amazonaws.com and "
+            "event.action:CreateUser and event.outcome:success",
+            rule_type="query",
+            language="kuery",
+            index=index,
+            technique="T1136",
+            subtechnique="T1136.003",
+        ),
+        "ct2": _toml(
+            "ct2",
+            'any where data_stream.dataset == "aws.cloudtrail" and event.action == "PutUserPolicy" '
+            'and aws.cloudtrail.request_parameters like "*policyName=Admin*" and '
+            'aws.cloudtrail.flattened.request_parameters.userName == "bob"',
+            index=index,
+            technique="T1098",
+        ),
+        "ct3": _toml(
+            "ct3",
+            'iam where event.dataset == "aws.cloudtrail" and event.action == "CreateUser"',
+            index=index,
+            technique="T1136",
+        ),
+    }
+    pack, report, engine = _import(tmp_path, knowledge, rules)
+    assert all(report[r]["status"] == "imported" for r in rules), report
+    assert report["ct1"]["profiles"] == ["cloudtrail"]
+    first = next(r for r in pack["rules"] if r["rule_family"] == "elastic:ct1")
+    assert first["conditions"][0] == {
+        "field_path": "event.dataset",
+        "operator": "equals",
+        "value": "aws.cloudtrail",
+    }
+    created = _cloudtrail(requestParameters={"userName": "bob"})
+    assert _fired(engine, created) == {"ct1", "ct3"}  # CreateUser is category iam
+    # A record with an error code is a failure in the CloudTrail pipeline.
+    assert _fired(engine, _cloudtrail(errorCode="AccessDenied")) == {"ct3"}
+    policy = _cloudtrail(
+        eventName="PutUserPolicy",
+        requestParameters={"userName": "bob", "policyName": "Admin", "policyDocument": "{}"},
+    )
+    assert _fired(engine, policy) == {"ct2"}
+    other_user = _cloudtrail(
+        eventName="PutUserPolicy", requestParameters={"userName": "eve", "policyName": "Admin"}
+    )
+    assert _fired(engine, other_user) == set()
+    assert _fired(engine, _sysmon(1, Image=WHOAMI)) == set()
+
+
+def test_always_present_array_members_decide_only_themselves(
+    tmp_path: Path, knowledge: AttackKnowledge
+) -> None:
+    index = '["logs-o365.audit-*"]'
+    rules = {
+        # Every O365 record is event.category "web" in the O365 pipeline: decided.
+        "web": _toml(
+            "web",
+            "event.dataset:o365.audit and event.category:web and event.action:New-InboxRule",
+            rule_type="query",
+            language="kuery",
+            index=index,
+            technique="T1564",
+        ),
+        # Any other category depends on the audit schema: a named gap, not a guess.
+        "auth": _toml(
+            "auth",
+            "event.dataset:o365.audit and event.category:authentication",
+            rule_type="query",
+            language="kuery",
+            index=index,
+            technique="T1078",
+        ),
+    }
+    _, report, _ = _import(tmp_path, knowledge, rules)
+    assert report["web"]["status"] == "imported"
+    assert report["auth"]["gap_reasons"] == {"translation_gap:undetermined:event.category": 1}
+
+
+def test_security_4688_rules_use_the_security_pipeline_semantics(
+    tmp_path: Path, knowledge: AttackKnowledge
+) -> None:
+    index = '["logs-system.security*", "logs-windows.sysmon_operational-*"]'
+    query = (
+        'process where host.os.type == "windows" and event.type == "start" and '
+        '(process.name : "net.exe" or process.pe.original_file_name == "net.exe") and '
+        'process.args : "user"'
+    )
+    pack, report, engine = _import(tmp_path, knowledge, {"n": _toml("n", query, index=index)})
+    assert report["n"]["status"] == "imported"
+    assert "security:4688" in report["n"]["profiles"] and "sysmon:1" in report["n"]["profiles"]
+    security_rules = [r for r in pack["rules"] if ":security:4688:" in r["rule_id"]]
+    # The PE branch is decided false for 4688 (the Security pipeline sets no PE data).
+    assert len(security_rules) == 1
+    assert all("pe." not in c["field_path"] for c in security_rules[0]["conditions"])
+    net = "C:" + BS + "Windows" + BS + "System32" + BS + "net.exe"
+
+    def security(command_line: str) -> Observation:
+        (observation,) = WindowsSecuritySourceAdapter().to_observations(
+            {
+                "@timestamp": "2026-01-01T00:00:00Z",
+                "winlog": {
+                    "channel": "Security",
+                    "event_id": 4688,
+                    "record_id": 9,
+                    "computer_name": "host",
+                    "provider_name": "Microsoft-Windows-Security-Auditing",
+                    "event_data": {
+                        "NewProcessName": net,
+                        "NewProcessId": "0x10",
+                        "ProcessId": "0x4",
+                        "CommandLine": command_line,
+                    },
+                },
+            }
+        )
+        return observation
+
+    assert _fired(engine, security("net user /add x")) == {"n"}
+    # The Security pipeline keeps the quotes in process.args: no element is "user".
+    assert _fired(engine, security('net "user" /add x')) == set()
+    # The Sysmon pipeline strips them, so the same command line matches there.
+    assert _fired(engine, _sysmon(1, Image=net, CommandLine='net "user" /add x')) == {"n"}

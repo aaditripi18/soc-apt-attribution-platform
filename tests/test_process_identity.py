@@ -279,6 +279,8 @@ def test_real_caldera_wmi_provider_serving_the_user_is_not_bound() -> None:
     source = load_recording_sources(RECORDINGS, REPO_ROOT)["otrf-apt3-caldera"]
     observations: dict[str, Observation] = {}
     for record in iter_recording_records(source.path):
+        if isinstance(record, str):
+            continue  # Sysmon-for-Linux XML text: not in this Windows recording
         channel = str(
             (record.get("winlog") or {}).get("channel") or record.get("Channel") or ""
         ).casefold()

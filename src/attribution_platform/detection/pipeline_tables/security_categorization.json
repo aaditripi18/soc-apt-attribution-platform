@@ -1,0 +1,1640 @@
+{
+ "1100": {
+  "action": "logging-service-shutdown",
+  "category": [
+   "process"
+  ],
+  "type": [
+   "end"
+  ]
+ },
+ "1102": {
+  "action": "audit-log-cleared",
+  "category": [
+   "iam"
+  ],
+  "type": [
+   "admin",
+   "change"
+  ]
+ },
+ "1104": {
+  "action": "logging-full",
+  "category": [
+   "iam"
+  ],
+  "type": [
+   "admin"
+  ]
+ },
+ "1105": {
+  "action": "auditlog-archieved",
+  "category": [
+   "iam"
+  ],
+  "type": [
+   "admin"
+  ]
+ },
+ "1108": {
+  "action": "logging-processing-error",
+  "category": [
+   "iam"
+  ],
+  "type": [
+   "admin"
+  ]
+ },
+ "4610": {
+  "action": "authentication-package-loaded",
+  "category": [
+   "configuration"
+  ],
+  "type": [
+   "access"
+  ]
+ },
+ "4611": {
+  "action": "trusted-logon-process-registered",
+  "category": [
+   "configuration"
+  ],
+  "type": [
+   "change"
+  ]
+ },
+ "4614": {
+  "action": "notification-package-loaded",
+  "category": [
+   "configuration"
+  ],
+  "type": [
+   "access"
+  ]
+ },
+ "4616": {
+  "action": "system-time-changed",
+  "category": [
+   "configuration"
+  ],
+  "type": [
+   "change"
+  ]
+ },
+ "4622": {
+  "action": "security-package-loaded",
+  "category": [
+   "configuration"
+  ],
+  "type": [
+   "access"
+  ]
+ },
+ "4624": {
+  "action": "logged-in",
+  "category": [
+   "authentication"
+  ],
+  "type": [
+   "start"
+  ]
+ },
+ "4625": {
+  "action": "logon-failed",
+  "category": [
+   "authentication"
+  ],
+  "type": [
+   "start"
+  ]
+ },
+ "4627": {
+  "action": "group-membership-info",
+  "category": [
+   "iam"
+  ],
+  "type": [
+   "info"
+  ]
+ },
+ "4634": {
+  "action": "logged-out",
+  "category": [
+   "authentication"
+  ],
+  "type": [
+   "end"
+  ]
+ },
+ "4647": {
+  "action": "logged-out",
+  "category": [
+   "authentication"
+  ],
+  "type": [
+   "end"
+  ]
+ },
+ "4648": {
+  "action": "logged-in-explicit",
+  "category": [
+   "authentication"
+  ],
+  "type": [
+   "start"
+  ]
+ },
+ "4657": {
+  "action": "registry-value-modified",
+  "category": [
+   "registry",
+   "configuration"
+  ],
+  "type": [
+   "change"
+  ]
+ },
+ "4658": {
+  "action": "handle-closed-object",
+  "category": [
+   "iam",
+   "configuration"
+  ],
+  "type": [
+   "change"
+  ]
+ },
+ "4659": {
+  "action": "object-was-requested-with-intent-to-delete",
+  "category": [
+   "iam",
+   "configuration"
+  ],
+  "type": [
+   "change"
+  ]
+ },
+ "4660": {
+  "action": "object-deleted",
+  "category": [
+   "file",
+   "registry"
+  ],
+  "type": [
+   "deletion"
+  ]
+ },
+ "4662": {
+  "action": "object-operation-performed",
+  "category": [
+   "iam",
+   "configuration"
+  ],
+  "type": [
+   "admin",
+   "change"
+  ]
+ },
+ "4663": {
+  "action": "attempt-made-to-access-object",
+  "category": [
+   "authentication"
+  ],
+  "type": [
+   "info"
+  ]
+ },
+ "4664": {
+  "action": "create-hard-link",
+  "category": [
+   "file"
+  ],
+  "type": [
+   "creation"
+  ]
+ },
+ "4670": {
+  "action": "permissions-changed",
+  "category": [
+   "iam",
+   "configuration"
+  ],
+  "type": [
+   "admin",
+   "change"
+  ]
+ },
+ "4672": {
+  "action": "logged-in-special",
+  "category": [
+   "iam"
+  ],
+  "type": [
+   "admin"
+  ]
+ },
+ "4673": {
+  "action": "privileged-service-called",
+  "category": [
+   "iam"
+  ],
+  "type": [
+   "admin"
+  ]
+ },
+ "4674": {
+  "action": "privileged-operation",
+  "category": [
+   "iam"
+  ],
+  "type": [
+   "admin"
+  ]
+ },
+ "4675": {
+  "action": "sids-filtered",
+  "category": [
+   "authentication"
+  ],
+  "type": [
+   "info"
+  ]
+ },
+ "4688": {
+  "action": "created-process",
+  "category": [
+   "process"
+  ],
+  "type": [
+   "start"
+  ]
+ },
+ "4689": {
+  "action": "exited-process",
+  "category": [
+   "process"
+  ],
+  "type": [
+   "end"
+  ]
+ },
+ "4690": {
+  "action": "duplicate-handle-attempt",
+  "category": [
+   "process"
+  ],
+  "type": [
+   "access"
+  ]
+ },
+ "4691": {
+  "action": "indirect-object-access-requested",
+  "category": [
+   "process"
+  ],
+  "type": [
+   "access"
+  ]
+ },
+ "4692": {
+  "action": "dpapi-master-key-backup-attempted",
+  "category": [
+   "configuration"
+  ],
+  "type": [
+   "access"
+  ]
+ },
+ "4695": {
+  "action": "auditable-data-unprotection-attempted",
+  "category": [
+   "configuration"
+  ],
+  "type": [
+   "access"
+  ]
+ },
+ "4697": {
+  "action": "service-installed",
+  "category": [
+   "iam",
+   "configuration"
+  ],
+  "type": [
+   "admin",
+   "change"
+  ]
+ },
+ "4698": {
+  "action": "scheduled-task-created",
+  "category": [
+   "iam",
+   "configuration"
+  ],
+  "type": [
+   "creation",
+   "admin"
+  ]
+ },
+ "4699": {
+  "action": "scheduled-task-deleted",
+  "category": [
+   "iam",
+   "configuration"
+  ],
+  "type": [
+   "deletion",
+   "admin"
+  ]
+ },
+ "4700": {
+  "action": "scheduled-task-enabled",
+  "category": [
+   "iam",
+   "configuration"
+  ],
+  "type": [
+   "change",
+   "admin"
+  ]
+ },
+ "4701": {
+  "action": "scheduled-task-disabled",
+  "category": [
+   "iam",
+   "configuration"
+  ],
+  "type": [
+   "change",
+   "admin"
+  ]
+ },
+ "4702": {
+  "action": "scheduled-task-updated",
+  "category": [
+   "iam",
+   "configuration"
+  ],
+  "type": [
+   "change",
+   "admin"
+  ]
+ },
+ "4704": {
+  "action": "user-right-assigned",
+  "category": [
+   "iam"
+  ],
+  "type": [
+   "change",
+   "user"
+  ]
+ },
+ "4705": {
+  "action": "user-right-removed",
+  "category": [
+   "iam"
+  ],
+  "type": [
+   "change",
+   "user"
+  ]
+ },
+ "4706": {
+  "action": "domain-trust-added",
+  "category": [
+   "configuration"
+  ],
+  "type": [
+   "creation"
+  ]
+ },
+ "4707": {
+  "action": "domain-trust-removed",
+  "category": [
+   "configuration"
+  ],
+  "type": [
+   "deletion"
+  ]
+ },
+ "4713": {
+  "action": "kerberos-policy-changed",
+  "category": [
+   "configuration"
+  ],
+  "type": [
+   "change"
+  ]
+ },
+ "4714": {
+  "action": "encrypted-data-recovery-policy-changed",
+  "category": [
+   "configuration"
+  ],
+  "type": [
+   "change"
+  ]
+ },
+ "4715": {
+  "action": "object-audit-policy-changed",
+  "category": [
+   "configuration"
+  ],
+  "type": [
+   "change"
+  ]
+ },
+ "4716": {
+  "action": "trusted-domain-information-changed",
+  "category": [
+   "configuration"
+  ],
+  "type": [
+   "change"
+  ]
+ },
+ "4717": {
+  "action": "system-security-access-granted",
+  "category": [
+   "iam",
+   "configuration"
+  ],
+  "type": [
+   "admin",
+   "change"
+  ]
+ },
+ "4718": {
+  "action": "system-security-access-removed",
+  "category": [
+   "iam",
+   "configuration"
+  ],
+  "type": [
+   "admin",
+   "deletion"
+  ]
+ },
+ "4719": {
+  "action": "changed-audit-config",
+  "category": [
+   "iam",
+   "configuration"
+  ],
+  "type": [
+   "admin",
+   "change"
+  ]
+ },
+ "4720": {
+  "action": "added-user-account",
+  "category": [
+   "iam"
+  ],
+  "type": [
+   "user",
+   "creation"
+  ]
+ },
+ "4722": {
+  "action": "enabled-user-account",
+  "category": [
+   "iam"
+  ],
+  "type": [
+   "user",
+   "change"
+  ]
+ },
+ "4723": {
+  "action": "changed-password",
+  "category": [
+   "iam"
+  ],
+  "type": [
+   "user",
+   "change"
+  ]
+ },
+ "4724": {
+  "action": "reset-password",
+  "category": [
+   "iam"
+  ],
+  "type": [
+   "user",
+   "change"
+  ]
+ },
+ "4725": {
+  "action": "disabled-user-account",
+  "category": [
+   "iam"
+  ],
+  "type": [
+   "user",
+   "deletion"
+  ]
+ },
+ "4726": {
+  "action": "deleted-user-account",
+  "category": [
+   "iam"
+  ],
+  "type": [
+   "user",
+   "deletion"
+  ]
+ },
+ "4727": {
+  "action": "added-group-account",
+  "category": [
+   "iam"
+  ],
+  "type": [
+   "group",
+   "creation"
+  ]
+ },
+ "4728": {
+  "action": "added-member-to-group",
+  "category": [
+   "iam"
+  ],
+  "type": [
+   "group",
+   "change"
+  ]
+ },
+ "4729": {
+  "action": "removed-member-from-group",
+  "category": [
+   "iam"
+  ],
+  "type": [
+   "group",
+   "change"
+  ]
+ },
+ "4730": {
+  "action": "deleted-group-account",
+  "category": [
+   "iam"
+  ],
+  "type": [
+   "group",
+   "deletion"
+  ]
+ },
+ "4731": {
+  "action": "added-group-account",
+  "category": [
+   "iam"
+  ],
+  "type": [
+   "group",
+   "creation"
+  ]
+ },
+ "4732": {
+  "action": "added-member-to-group",
+  "category": [
+   "iam"
+  ],
+  "type": [
+   "group",
+   "change"
+  ]
+ },
+ "4733": {
+  "action": "removed-member-from-group",
+  "category": [
+   "iam"
+  ],
+  "type": [
+   "group",
+   "change"
+  ]
+ },
+ "4734": {
+  "action": "deleted-group-account",
+  "category": [
+   "iam"
+  ],
+  "type": [
+   "group",
+   "deletion"
+  ]
+ },
+ "4735": {
+  "action": "modified-group-account",
+  "category": [
+   "iam"
+  ],
+  "type": [
+   "group",
+   "change"
+  ]
+ },
+ "4737": {
+  "action": "modified-group-account",
+  "category": [
+   "iam"
+  ],
+  "type": [
+   "group",
+   "change"
+  ]
+ },
+ "4738": {
+  "action": "modified-user-account",
+  "category": [
+   "iam"
+  ],
+  "type": [
+   "user",
+   "change"
+  ]
+ },
+ "4739": {
+  "action": "domain-policy-changed",
+  "category": [
+   "configuration"
+  ],
+  "type": [
+   "change"
+  ]
+ },
+ "4740": {
+  "action": "locked-out-user-account",
+  "category": [
+   "iam"
+  ],
+  "type": [
+   "user",
+   "change"
+  ]
+ },
+ "4741": {
+  "action": "added-computer-account",
+  "category": [
+   "iam"
+  ],
+  "type": [
+   "creation",
+   "admin"
+  ]
+ },
+ "4742": {
+  "action": "changed-computer-account",
+  "category": [
+   "iam"
+  ],
+  "type": [
+   "change",
+   "admin"
+  ]
+ },
+ "4743": {
+  "action": "deleted-computer-account",
+  "category": [
+   "iam"
+  ],
+  "type": [
+   "deletion",
+   "admin"
+  ]
+ },
+ "4744": {
+  "action": "added-distribution-group-account",
+  "category": [
+   "iam"
+  ],
+  "type": [
+   "group",
+   "creation"
+  ]
+ },
+ "4745": {
+  "action": "changed-distribution-group-account",
+  "category": [
+   "iam"
+  ],
+  "type": [
+   "group",
+   "change"
+  ]
+ },
+ "4746": {
+  "action": "added-member-to-distribution-group",
+  "category": [
+   "iam"
+  ],
+  "type": [
+   "group",
+   "change"
+  ]
+ },
+ "4747": {
+  "action": "removed-member-from-distribution-group",
+  "category": [
+   "iam"
+  ],
+  "type": [
+   "group",
+   "change"
+  ]
+ },
+ "4748": {
+  "action": "deleted-distribution-group-account",
+  "category": [
+   "iam"
+  ],
+  "type": [
+   "group",
+   "deletion"
+  ]
+ },
+ "4749": {
+  "action": "added-distribution-group-account",
+  "category": [
+   "iam"
+  ],
+  "type": [
+   "group",
+   "creation"
+  ]
+ },
+ "4750": {
+  "action": "changed-distribution-group-account",
+  "category": [
+   "iam"
+  ],
+  "type": [
+   "group",
+   "change"
+  ]
+ },
+ "4751": {
+  "action": "added-member-to-distribution-group",
+  "category": [
+   "iam"
+  ],
+  "type": [
+   "group",
+   "change"
+  ]
+ },
+ "4752": {
+  "action": "removed-member-from-distribution-group",
+  "category": [
+   "iam"
+  ],
+  "type": [
+   "group",
+   "change"
+  ]
+ },
+ "4753": {
+  "action": "deleted-distribution-group-account",
+  "category": [
+   "iam"
+  ],
+  "type": [
+   "group",
+   "deletion"
+  ]
+ },
+ "4754": {
+  "action": "added-group-account",
+  "category": [
+   "iam"
+  ],
+  "type": [
+   "group",
+   "creation"
+  ]
+ },
+ "4755": {
+  "action": "modified-group-account",
+  "category": [
+   "iam"
+  ],
+  "type": [
+   "group",
+   "change"
+  ]
+ },
+ "4756": {
+  "action": "added-member-to-group",
+  "category": [
+   "iam"
+  ],
+  "type": [
+   "group",
+   "change"
+  ]
+ },
+ "4757": {
+  "action": "removed-member-from-group",
+  "category": [
+   "iam"
+  ],
+  "type": [
+   "group",
+   "change"
+  ]
+ },
+ "4758": {
+  "action": "deleted-group-account",
+  "category": [
+   "iam"
+  ],
+  "type": [
+   "group",
+   "deletion"
+  ]
+ },
+ "4759": {
+  "action": "added-distribution-group-account",
+  "category": [
+   "iam"
+  ],
+  "type": [
+   "group",
+   "creation"
+  ]
+ },
+ "4760": {
+  "action": "changed-distribution-group-account",
+  "category": [
+   "iam"
+  ],
+  "type": [
+   "group",
+   "change"
+  ]
+ },
+ "4761": {
+  "action": "added-member-to-distribution-group",
+  "category": [
+   "iam"
+  ],
+  "type": [
+   "group",
+   "change"
+  ]
+ },
+ "4762": {
+  "action": "removed-member-from-distribution-group",
+  "category": [
+   "iam"
+  ],
+  "type": [
+   "group",
+   "change"
+  ]
+ },
+ "4763": {
+  "action": "deleted-distribution-group-account",
+  "category": [
+   "iam"
+  ],
+  "type": [
+   "group",
+   "deletion"
+  ]
+ },
+ "4764": {
+  "action": "type-changed-group-account",
+  "category": [
+   "iam"
+  ],
+  "type": [
+   "group",
+   "change"
+  ]
+ },
+ "4767": {
+  "action": "unlocked-user-account",
+  "category": [
+   "iam"
+  ],
+  "type": [
+   "user",
+   "change"
+  ]
+ },
+ "4768": {
+  "action": "kerberos-authentication-ticket-requested",
+  "category": [
+   "authentication"
+  ],
+  "type": [
+   "start"
+  ]
+ },
+ "4769": {
+  "action": "kerberos-service-ticket-requested",
+  "category": [
+   "authentication"
+  ],
+  "type": [
+   "start"
+  ]
+ },
+ "4770": {
+  "action": "kerberos-service-ticket-renewed",
+  "category": [
+   "authentication"
+  ],
+  "type": [
+   "start"
+  ]
+ },
+ "4771": {
+  "action": "kerberos-preauth-failed",
+  "category": [
+   "authentication"
+  ],
+  "type": [
+   "start"
+  ]
+ },
+ "4776": {
+  "action": "credential-validated",
+  "category": [
+   "authentication"
+  ],
+  "type": [
+   "start"
+  ]
+ },
+ "4778": {
+  "action": "session-reconnected",
+  "category": [
+   "authentication",
+   "session"
+  ],
+  "type": [
+   "start"
+  ]
+ },
+ "4779": {
+  "action": "session-disconnected",
+  "category": [
+   "authentication",
+   "session"
+  ],
+  "type": [
+   "end"
+  ]
+ },
+ "4781": {
+  "action": "renamed-user-account",
+  "category": [
+   "iam"
+  ],
+  "type": [
+   "user",
+   "change"
+  ]
+ },
+ "4793": {
+  "action": "password-policy-checking-api-called",
+  "category": [
+   "api"
+  ],
+  "type": [
+   "info"
+  ]
+ },
+ "4797": {
+  "action": "query-existence-of-blank-password",
+  "category": [
+   "iam"
+  ],
+  "type": [
+   "user",
+   "info"
+  ]
+ },
+ "4798": {
+  "action": "group-membership-enumerated",
+  "category": [
+   "iam"
+  ],
+  "type": [
+   "user",
+   "info"
+  ]
+ },
+ "4799": {
+  "action": "user-member-enumerated",
+  "category": [
+   "iam"
+  ],
+  "type": [
+   "group",
+   "info"
+  ]
+ },
+ "4800": {
+  "action": "workstation-locked",
+  "category": [
+   "authentication"
+  ],
+  "type": [
+   "info"
+  ]
+ },
+ "4801": {
+  "action": "workstation-unlocked",
+  "category": [
+   "authentication"
+  ],
+  "type": [
+   "info"
+  ]
+ },
+ "4802": {
+  "action": "screen-saver-invoked",
+  "category": [
+   "process",
+   "session"
+  ],
+  "type": [
+   "info"
+  ]
+ },
+ "4803": {
+  "action": "screen-saver-dismissed",
+  "category": [
+   "process",
+   "session"
+  ],
+  "type": [
+   "info"
+  ]
+ },
+ "4817": {
+  "action": "object-audit-changed",
+  "category": [
+   "iam",
+   "configuration"
+  ],
+  "type": [
+   "admin",
+   "change"
+  ]
+ },
+ "4868": {
+  "action": "certificate-manager-denied-pending-certificate-request",
+  "category": [
+   "configuration"
+  ],
+  "type": [
+   "change"
+  ]
+ },
+ "4869": {
+  "action": "certificate-services-received-resubmitted-certificate-request",
+  "category": [
+   "configuration"
+  ],
+  "type": [
+   "info"
+  ]
+ },
+ "4876": {
+  "action": "certificate-services-backup-started",
+  "category": [
+   "session"
+  ],
+  "type": [
+   "start"
+  ]
+ },
+ "4902": {
+  "action": "user-audit-policy-created",
+  "category": [
+   "iam",
+   "configuration"
+  ],
+  "type": [
+   "admin",
+   "creation"
+  ]
+ },
+ "4904": {
+  "action": "security-event-source-added",
+  "category": [
+   "iam",
+   "configuration"
+  ],
+  "type": [
+   "admin",
+   "change"
+  ]
+ },
+ "4905": {
+  "action": "security-event-source-removed",
+  "category": [
+   "iam",
+   "configuration"
+  ],
+  "type": [
+   "admin",
+   "deletion"
+  ]
+ },
+ "4906": {
+  "action": "crash-on-audit-changed",
+  "category": [
+   "iam",
+   "configuration"
+  ],
+  "type": [
+   "admin",
+   "change"
+  ]
+ },
+ "4907": {
+  "action": "audit-setting-changed",
+  "category": [
+   "iam",
+   "configuration"
+  ],
+  "type": [
+   "admin",
+   "change"
+  ]
+ },
+ "4908": {
+  "action": "special-group-table-changed",
+  "category": [
+   "iam",
+   "configuration"
+  ],
+  "type": [
+   "admin",
+   "change"
+  ]
+ },
+ "4912": {
+  "action": "per-user-audit-policy-changed",
+  "category": [
+   "iam",
+   "configuration"
+  ],
+  "type": [
+   "admin",
+   "change"
+  ]
+ },
+ "4931": {
+  "action": "active-directory-replica-destination-naming-context-modified",
+  "category": [
+   "configuration"
+  ],
+  "type": [
+   "change"
+  ]
+ },
+ "4932": {
+  "action": "synchronization-of-replica-of-active-directory-naming-context-begun",
+  "category": [
+   "iam"
+  ],
+  "type": [
+   "info"
+  ]
+ },
+ "4933": {
+  "action": "synchronization-of-replica-of-active-directory-naming-context-ended",
+  "category": [
+   "iam"
+  ],
+  "type": [
+   "info"
+  ]
+ },
+ "4945": {
+  "action": "rule-listed-when-windows-firewall-started",
+  "category": [
+   "configuration"
+  ],
+  "type": [
+   "info"
+  ]
+ },
+ "4946": {
+  "action": "added-rule-to-windows-firewall-exception-list",
+  "category": [
+   "configuration"
+  ],
+  "type": [
+   "creation"
+  ]
+ },
+ "4948": {
+  "action": "deleted-rule-from-windows-firewall-exception-list",
+  "category": [
+   "configuration"
+  ],
+  "type": [
+   "deletion"
+  ]
+ },
+ "4950": {
+  "action": "windows-firewall-setting-changed",
+  "category": [
+   "configuration"
+  ],
+  "type": [
+   "change"
+  ]
+ },
+ "4953": {
+  "action": "ignored-rule-by-windows-firewall-because-it-could-not-parse-rule",
+  "category": [
+   "configuration"
+  ],
+  "type": [
+   "info"
+  ]
+ },
+ "4954": {
+  "action": "windows-firewall-group-policy-changed",
+  "category": [
+   "configuration"
+  ],
+  "type": [
+   "change"
+  ]
+ },
+ "4957": {
+  "action": "windows-firewall-did-not-apply-following-rule",
+  "category": [
+   "configuration"
+  ],
+  "type": [
+   "info"
+  ]
+ },
+ "4962": {
+  "action": "ipsec-dropped-inbound-packet-that-failed-replay-check",
+  "category": [
+   "network"
+  ],
+  "type": [
+   "end"
+  ]
+ },
+ "4963": {
+  "action": "ipsec-dropped-inbound-clear-text-packet-that-should-have-been-secured",
+  "category": [
+   "network"
+  ],
+  "type": [
+   "end"
+  ]
+ },
+ "4964": {
+  "action": "logged-in-special",
+  "category": [
+   "iam"
+  ],
+  "type": [
+   "admin",
+   "group"
+  ]
+ },
+ "4965": {
+  "action": "ipsec-received-packet-from-remote-computer-wth-incorrect-spi",
+  "category": [
+   "network"
+  ],
+  "type": [
+   "end"
+  ]
+ },
+ "4985": {
+  "action": "state-of-transaction-has-changed",
+  "category": [
+   "configuration"
+  ],
+  "type": [
+   "change"
+  ]
+ },
+ "5024": {
+  "action": "windows-firewall-service-started",
+  "category": [
+   "process"
+  ],
+  "type": [
+   "start"
+  ]
+ },
+ "5025": {
+  "action": "windows-firewall-service-stopped",
+  "category": [
+   "process"
+  ],
+  "type": [
+   "end"
+  ]
+ },
+ "5033": {
+  "action": "windows-firewall-driver-started",
+  "category": [
+   "driver"
+  ],
+  "type": [
+   "start"
+  ]
+ },
+ "5034": {
+  "action": "windows-firewall-driver-stopped",
+  "category": [
+   "driver"
+  ],
+  "type": [
+   "end"
+  ]
+ },
+ "5037": {
+  "action": "windows-firewall-driver-error",
+  "category": [
+   "driver"
+  ],
+  "type": [
+   "end"
+  ]
+ },
+ "5038": {
+  "action": "code-integrity-determined-that-image-hash-of-file-is-not-valid",
+  "category": [
+   "file"
+  ],
+  "type": [
+   "access"
+  ]
+ },
+ "5058": {
+  "action": "key-file-operation",
+  "category": [
+   "file"
+  ],
+  "type": [
+   "change"
+  ]
+ },
+ "5059": {
+  "action": "key-migration-operation",
+  "category": [
+   "file"
+  ],
+  "type": [
+   "change"
+  ]
+ },
+ "5061": {
+  "action": "cryptographic-operation",
+  "category": [
+   "file"
+  ],
+  "type": [
+   "access"
+  ]
+ },
+ "5136": {
+  "action": "directory-service-object-modified",
+  "category": [
+   "iam",
+   "configuration"
+  ],
+  "type": [
+   "admin",
+   "change"
+  ]
+ },
+ "5140": {
+  "action": "network-share-object-accessed",
+  "category": [
+   "network",
+   "file"
+  ],
+  "type": [
+   "info",
+   "access"
+  ]
+ },
+ "5142": {
+  "action": "network-share-object-added",
+  "category": [
+   "network",
+   "file"
+  ],
+  "type": [
+   "info",
+   "creation"
+  ]
+ },
+ "5145": {
+  "action": "network-share-object-access-checked",
+  "category": [
+   "network",
+   "file"
+  ],
+  "type": [
+   "info",
+   "access"
+  ]
+ },
+ "5152": {
+  "action": "windows-firewall-packet-drop",
+  "category": [
+   "network"
+  ],
+  "type": [
+   "connection",
+   "info",
+   "denied"
+  ]
+ },
+ "5156": {
+  "action": "windows-firewall-connection",
+  "category": [
+   "network"
+  ],
+  "type": [
+   "connection",
+   "info",
+   "allowed"
+  ]
+ },
+ "5157": {
+  "action": "windows-firewall-packet-block",
+  "category": [
+   "network"
+  ],
+  "type": [
+   "connection",
+   "info",
+   "denied"
+  ]
+ },
+ "5158": {
+  "action": "windows-firewall-bind-local-port",
+  "category": [
+   "network"
+  ],
+  "type": [
+   "info"
+  ]
+ },
+ "5379": {
+  "action": "credential-manager-credentials-were-read",
+  "category": [
+   "iam"
+  ],
+  "type": [
+   "user",
+   "info"
+  ]
+ },
+ "5380": {
+  "action": "vault-credential-find",
+  "category": [
+   "iam"
+  ],
+  "type": [
+   "user",
+   "info"
+  ]
+ },
+ "5381": {
+  "action": "vault-credentials-were-read",
+  "category": [
+   "iam"
+  ],
+  "type": [
+   "user",
+   "info"
+  ]
+ },
+ "5382": {
+  "action": "vault-credentials-were-read",
+  "category": [
+   "iam"
+  ],
+  "type": [
+   "user",
+   "info"
+  ]
+ },
+ "5441": {
+  "action": "following-filter-present-when-windows-filtering-platform-base-filtering-engine-started",
+  "category": [
+   "configuration"
+  ],
+  "type": [
+   "info"
+  ]
+ },
+ "5446": {
+  "action": "windows-filtering-platform-callout-changed",
+  "category": [
+   "configuration"
+  ],
+  "type": [
+   "change"
+  ]
+ },
+ "5447": {
+  "action": "windows-filtering-platform-filter-changed",
+  "category": [
+   "configuration"
+  ],
+  "type": [
+   "change"
+  ]
+ },
+ "5449": {
+  "action": "windows-filtering-platform-provider-context-changed",
+  "category": [
+   "configuration"
+  ],
+  "type": [
+   "change"
+  ]
+ },
+ "6144": {
+  "action": "security-policy-in-group-policy-objects-applied-successfully",
+  "category": [
+   "configuration"
+  ],
+  "type": [
+   "info"
+  ]
+ },
+ "6145": {
+  "action": "one-or-more-errors-occured-while-processing-security-policy-in-group-policy-objects",
+  "category": [
+   "configuration"
+  ],
+  "type": [
+   "change"
+  ]
+ },
+ "6416": {
+  "action": "new-external-device-recognized-by-system",
+  "category": [
+   "process"
+  ],
+  "type": [
+   "info"
+  ]
+ },
+ "6419": {
+  "action": "request-was-made-to-disable-device",
+  "category": [
+   "configuration"
+  ],
+  "type": [
+   "change"
+  ]
+ },
+ "6420": {
+  "action": "device-was-disabled",
+  "category": [
+   "process"
+  ],
+  "type": [
+   "change",
+   "end"
+  ]
+ },
+ "6421": {
+  "action": "request-was-made-to-enable-device",
+  "category": [
+   "configuration"
+  ],
+  "type": [
+   "change"
+  ]
+ },
+ "6422": {
+  "action": "device-was-enabled",
+  "category": [
+   "process"
+  ],
+  "type": [
+   "change",
+   "end"
+  ]
+ }
+}

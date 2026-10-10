@@ -205,8 +205,10 @@ def test_group_used_totals_match_union_of_profiles(report: dict[str, Any]) -> No
 def test_known_anchor_statuses(report: dict[str, Any]) -> None:
     assert _status(report, "T1033") == "covered"  # whoami (Sigma, T3 true positive)
     assert _status(report, "T1003.001") == "covered"  # LSASS Memory
-    # Domains (pre-compromise, PRE platform)
-    assert _status(report, "T1583.001") == "not_observable_on_supported_platforms"
+    # Virtual Private Server (pre-compromise, PRE platform). "Domains" (T1583.001)
+    # was the anchor until an Elastic CloudTrail rule covered it (ADR-0015 A).
+    assert _status(report, "T1583.001") == "covered"
+    assert _status(report, "T1583.003") == "not_observable_on_supported_platforms"
 
 
 def test_committed_report_and_summary_regenerate_byte_identically(

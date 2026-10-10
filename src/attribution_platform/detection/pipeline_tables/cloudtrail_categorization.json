@@ -1,0 +1,778 @@
+{
+ "AddUserToGroup": {
+  "category": [
+   "iam"
+  ],
+  "type": [
+   "group",
+   "change"
+  ]
+ },
+ "AssumeRole": {
+  "category": [
+   "authentication"
+  ],
+  "type": [
+   "info"
+  ]
+ },
+ "AttachGroupPolicy": {
+  "category": [
+   "iam"
+  ],
+  "type": [
+   "group",
+   "change"
+  ]
+ },
+ "AttachRolePolicy": {
+  "category": [
+   "iam"
+  ],
+  "type": [
+   "change"
+  ]
+ },
+ "AttachUserPolicy": {
+  "category": [
+   "iam"
+  ],
+  "type": [
+   "user",
+   "change"
+  ]
+ },
+ "AuthorizeSecurityGroupIngress": {
+  "category": [
+   "network"
+  ],
+  "type": [
+   "access"
+  ]
+ },
+ "ChangePassword": {
+  "category": [
+   "iam"
+  ],
+  "type": [
+   "user",
+   "change"
+  ]
+ },
+ "ConsoleLogin": {
+  "category": [
+   "authentication"
+  ],
+  "type": [
+   "info"
+  ]
+ },
+ "Converse": {
+  "category": [
+   "api"
+  ],
+  "type": [
+   "info"
+  ]
+ },
+ "CreateAccessKey": {
+  "category": [
+   "iam"
+  ],
+  "type": [
+   "user",
+   "change"
+  ]
+ },
+ "CreateBucket": {
+  "category": [
+   "file"
+  ],
+  "type": [
+   "creation"
+  ]
+ },
+ "CreateControlChannel": {
+  "category": [
+   "session"
+  ],
+  "type": [
+   "start"
+  ]
+ },
+ "CreateDataChannel": {
+  "category": [
+   "session"
+  ],
+  "type": [
+   "start"
+  ]
+ },
+ "CreateDocument": {
+  "category": [
+   "file"
+  ],
+  "type": [
+   "creation"
+  ]
+ },
+ "CreateGroup": {
+  "category": [
+   "iam"
+  ],
+  "type": [
+   "group",
+   "creation"
+  ]
+ },
+ "CreateKeyPair": {
+  "category": [
+   "iam"
+  ],
+  "type": [
+   "admin",
+   "creation"
+  ]
+ },
+ "CreatePolicy": {
+  "category": [
+   "iam"
+  ],
+  "type": [
+   "creation"
+  ]
+ },
+ "CreateTopic": {
+  "category": [
+   "configuration"
+  ],
+  "type": [
+   "creation"
+  ]
+ },
+ "CreateUser": {
+  "category": [
+   "iam"
+  ],
+  "type": [
+   "user",
+   "creation"
+  ]
+ },
+ "CreateVirtualMFADevice": {
+  "category": [
+   "iam"
+  ],
+  "type": [
+   "user",
+   "change"
+  ]
+ },
+ "DeactivateMFADevice": {
+  "category": [
+   "iam"
+  ],
+  "type": [
+   "user",
+   "change"
+  ]
+ },
+ "DeleteAccessKey": {
+  "category": [
+   "iam"
+  ],
+  "type": [
+   "user",
+   "change"
+  ]
+ },
+ "DeleteBucket": {
+  "category": [
+   "file"
+  ],
+  "type": [
+   "deletion"
+  ]
+ },
+ "DeleteGroup": {
+  "category": [
+   "iam"
+  ],
+  "type": [
+   "group",
+   "deletion"
+  ]
+ },
+ "DeleteGroupPolicy": {
+  "category": [
+   "iam"
+  ],
+  "type": [
+   "group",
+   "change"
+  ]
+ },
+ "DeleteObject": {
+  "category": [
+   "file"
+  ],
+  "type": [
+   "deletion"
+  ]
+ },
+ "DeleteSSHPublicKey": {
+  "category": [
+   "iam"
+  ],
+  "type": [
+   "user",
+   "change"
+  ]
+ },
+ "DeleteTrail": {
+  "category": [
+   "configuration"
+  ],
+  "type": [
+   "deletion"
+  ]
+ },
+ "DeleteUser": {
+  "category": [
+   "iam"
+  ],
+  "type": [
+   "user",
+   "deletion"
+  ]
+ },
+ "DeleteUserPermissionsBoundary": {
+  "category": [
+   "iam"
+  ],
+  "type": [
+   "user",
+   "change"
+  ]
+ },
+ "DeleteUserPolicy": {
+  "category": [
+   "iam"
+  ],
+  "type": [
+   "user",
+   "change"
+  ]
+ },
+ "DeleteVirtualMFADevice": {
+  "category": [
+   "iam"
+  ],
+  "type": [
+   "user",
+   "change"
+  ]
+ },
+ "DescribeDBInstances": {
+  "category": [
+   "database"
+  ],
+  "type": [
+   "info"
+  ]
+ },
+ "DescribeInstances": {
+  "category": [
+   "host"
+  ],
+  "type": [
+   "info"
+  ]
+ },
+ "DescribeLoadBalancers": {
+  "category": [
+   "network"
+  ],
+  "type": [
+   "info"
+  ]
+ },
+ "DescribeNetworkAcls": {
+  "category": [
+   "network"
+  ],
+  "type": [
+   "info"
+  ]
+ },
+ "DescribeNetworkInterfaces": {
+  "category": [
+   "network"
+  ],
+  "type": [
+   "info"
+  ]
+ },
+ "DescribeRegions": {
+  "category": [
+   "api"
+  ],
+  "type": [
+   "info"
+  ]
+ },
+ "DescribeSecurityGroups": {
+  "category": [
+   "network"
+  ],
+  "type": [
+   "info"
+  ]
+ },
+ "DescribeTrails": {
+  "category": [
+   "configuration"
+  ],
+  "type": [
+   "info"
+  ]
+ },
+ "DescribeVolumes": {
+  "category": [
+   "host"
+  ],
+  "type": [
+   "info"
+  ]
+ },
+ "DescribeVpcs": {
+  "category": [
+   "network"
+  ],
+  "type": [
+   "info"
+  ]
+ },
+ "DetachGroupPolicy": {
+  "category": [
+   "iam"
+  ],
+  "type": [
+   "group",
+   "change"
+  ]
+ },
+ "DetachUserPolicy": {
+  "category": [
+   "iam"
+  ],
+  "type": [
+   "user",
+   "change"
+  ]
+ },
+ "EnableMFADevice": {
+  "category": [
+   "iam"
+  ],
+  "type": [
+   "user",
+   "change"
+  ]
+ },
+ "GetCallerIdentity": {
+  "category": [
+   "authentication"
+  ],
+  "type": [
+   "info"
+  ]
+ },
+ "GetGroup": {
+  "category": [
+   "iam"
+  ],
+  "type": [
+   "group",
+   "info"
+  ]
+ },
+ "GetGroupPolicy": {
+  "category": [
+   "iam"
+  ],
+  "type": [
+   "group",
+   "info"
+  ]
+ },
+ "GetObject": {
+  "category": [
+   "file"
+  ],
+  "type": [
+   "info"
+  ]
+ },
+ "GetPolicy": {
+  "category": [
+   "iam"
+  ],
+  "type": [
+   "info"
+  ]
+ },
+ "GetUser": {
+  "category": [
+   "iam"
+  ],
+  "type": [
+   "user",
+   "info"
+  ]
+ },
+ "GetUserPolicy": {
+  "category": [
+   "iam"
+  ],
+  "type": [
+   "user",
+   "info"
+  ]
+ },
+ "HeadObject": {
+  "category": [
+   "file"
+  ],
+  "type": [
+   "info"
+  ]
+ },
+ "ListAttachedGroupPolicies": {
+  "category": [
+   "iam"
+  ],
+  "type": [
+   "group",
+   "info"
+  ]
+ },
+ "ListAttachedRolePolicies": {
+  "category": [
+   "iam"
+  ],
+  "type": [
+   "info"
+  ]
+ },
+ "ListAttachedUserPolicies": {
+  "category": [
+   "iam"
+  ],
+  "type": [
+   "user",
+   "info"
+  ]
+ },
+ "ListBuckets": {
+  "category": [
+   "file"
+  ],
+  "type": [
+   "info"
+  ]
+ },
+ "ListFunctions": {
+  "category": [
+   "package"
+  ],
+  "type": [
+   "info"
+  ]
+ },
+ "ListGroupPolicies": {
+  "category": [
+   "iam"
+  ],
+  "type": [
+   "group",
+   "info"
+  ]
+ },
+ "ListGroups": {
+  "category": [
+   "iam"
+  ],
+  "type": [
+   "group",
+   "info"
+  ]
+ },
+ "ListGroupsForUser": {
+  "category": [
+   "iam"
+  ],
+  "type": [
+   "user",
+   "info"
+  ]
+ },
+ "ListInstanceAssociations": {
+  "category": [
+   "host"
+  ],
+  "type": [
+   "info"
+  ]
+ },
+ "ListObjects": {
+  "category": [
+   "file"
+  ],
+  "type": [
+   "info"
+  ]
+ },
+ "ListRoles": {
+  "category": [
+   "iam"
+  ],
+  "type": [
+   "info"
+  ]
+ },
+ "ListTables": {
+  "category": [
+   "database"
+  ],
+  "type": [
+   "info"
+  ]
+ },
+ "ListUserPolicies": {
+  "category": [
+   "iam"
+  ],
+  "type": [
+   "user",
+   "info"
+  ]
+ },
+ "ListUserTags": {
+  "category": [
+   "iam"
+  ],
+  "type": [
+   "user",
+   "info"
+  ]
+ },
+ "ListUsers": {
+  "category": [
+   "iam"
+  ],
+  "type": [
+   "user",
+   "info"
+  ]
+ },
+ "OpenControlChannel": {
+  "category": [
+   "session"
+  ],
+  "type": [
+   "start"
+  ]
+ },
+ "OpenDataChannel": {
+  "category": [
+   "session"
+  ],
+  "type": [
+   "start"
+  ]
+ },
+ "Publish": {
+  "category": [
+   "api"
+  ],
+  "type": [
+   "info"
+  ]
+ },
+ "PutGroupPolicy": {
+  "category": [
+   "iam"
+  ],
+  "type": [
+   "group",
+   "change"
+  ]
+ },
+ "PutObject": {
+  "category": [
+   "file"
+  ],
+  "type": [
+   "change"
+  ]
+ },
+ "PutUserPermissionsBoundary": {
+  "category": [
+   "iam"
+  ],
+  "type": [
+   "user",
+   "change"
+  ]
+ },
+ "PutUserPolicy": {
+  "category": [
+   "iam"
+  ],
+  "type": [
+   "user",
+   "change"
+  ]
+ },
+ "RemoveUserFromGroup": {
+  "category": [
+   "iam"
+  ],
+  "type": [
+   "group",
+   "change"
+  ]
+ },
+ "SendCommand": {
+  "category": [
+   "process"
+  ],
+  "type": [
+   "start"
+  ]
+ },
+ "SetDefaultPolicyVersion": {
+  "category": [
+   "iam"
+  ],
+  "type": [
+   "admin",
+   "change"
+  ]
+ },
+ "SetSecurityTokenServicePreferences": {
+  "category": [
+   "iam"
+  ],
+  "type": [
+   "admin",
+   "change"
+  ]
+ },
+ "StartSession": {
+  "category": [
+   "session"
+  ],
+  "type": [
+   "start"
+  ]
+ },
+ "Subscribe": {
+  "category": [
+   "configuration"
+  ],
+  "type": [
+   "change"
+  ]
+ },
+ "TagUser": {
+  "category": [
+   "iam"
+  ],
+  "type": [
+   "user",
+   "change"
+  ]
+ },
+ "TerminateSession": {
+  "category": [
+   "session"
+  ],
+  "type": [
+   "end"
+  ]
+ },
+ "UntagUser": {
+  "category": [
+   "iam"
+  ],
+  "type": [
+   "user",
+   "change"
+  ]
+ },
+ "UpdateAccessKey": {
+  "category": [
+   "iam"
+  ],
+  "type": [
+   "user",
+   "change"
+  ]
+ },
+ "UpdateAccountPasswordPolicy": {
+  "category": [
+   "iam"
+  ],
+  "type": [
+   "admin",
+   "change"
+  ]
+ },
+ "UpdateGroup": {
+  "category": [
+   "iam"
+  ],
+  "type": [
+   "group",
+   "change"
+  ]
+ },
+ "UpdateLoginProfile": {
+  "category": [
+   "iam"
+  ],
+  "type": [
+   "user",
+   "change"
+  ]
+ },
+ "UpdateRole": {
+  "category": [
+   "iam"
+  ],
+  "type": [
+   "admin",
+   "change"
+  ]
+ },
+ "UpdateSSHPublicKey": {
+  "category": [
+   "iam"
+  ],
+  "type": [
+   "user",
+   "change"
+  ]
+ },
+ "UpdateUser": {
+  "category": [
+   "iam"
+  ],
+  "type": [
+   "user",
+   "change"
+  ]
+ }
+}

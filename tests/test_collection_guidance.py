@@ -162,7 +162,10 @@ def test_detectability_reads_the_pack_reports() -> None:
     assert detect["T1127.001"].logsources
     assert "windows/process_access" in detect["T1003.001"].logsources
     assert detect["T1059.002"].logsources == ("macos/process_creation",)  # AppleScript
-    pre = detect["T1583.001"]  # Acquire Infrastructure: Domains (PRE)
+    # Acquire Infrastructure: Domains (PRE) is observable in a cloud trail: an
+    # Elastic CloudTrail rule covers it (ADR-0015 Amendment A).
+    assert detect["T1583.001"].logsources == ("aws/cloudtrail",)
+    pre = detect["T1583.003"]  # Acquire Infrastructure: Virtual Private Server (PRE)
     assert not pre.detectable and pre.logsources == ()
 
 

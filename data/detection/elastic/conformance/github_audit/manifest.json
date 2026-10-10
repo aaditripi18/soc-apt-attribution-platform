@@ -1,0 +1,68 @@
+{
+ "source": "elastic/integrations (Elastic integration ingest pipeline and pipeline test fixtures)",
+ "source_commit": "ff5328128a30c75046130ae58ddba450caa1f2dc",
+ "license": "Elastic License 2.0",
+ "license_url": "https://github.com/elastic/integrations/blob/ff5328128a30c75046130ae58ddba450caa1f2dc/LICENSE.txt",
+ "retrieved_at_utc": "2026-10-10T14:35:56Z",
+ "method": "scripts/acquire_elastic_conformance.py (commit-pinned; each file verified against its git blob id)",
+ "approval": "owner instruction 2026-10-10 (extend Elastic rules to further log sources)",
+ "purpose": "Conformance oracle for the derived ECS views of this data stream (ADR-0015).",
+ "files": [
+  {
+   "path": "fixtures/test-common-config.yml",
+   "upstream_path": "packages/github/data_stream/audit/_dev/test/pipeline/test-common-config.yml",
+   "blob_id": "73b2a8f1c812364ce83a498d3b37fd915fa61bd2",
+   "size_bytes": 398,
+   "sha256": "d35c1e82dc8515ed708add40654bc6dc76f60f2235768798d43a51e6da5ab358"
+  },
+  {
+   "path": "fixtures/test-enterprise-audit-eventhub.log",
+   "upstream_path": "packages/github/data_stream/audit/_dev/test/pipeline/test-enterprise-audit-eventhub.log",
+   "blob_id": "324fd4a7938173b04239b809e9bd8ca6c16e6084",
+   "size_bytes": 1898,
+   "sha256": "d1e706982c82e3ff51564b012dd65db26740e366a967b1f3eb4b73713d3b71f1"
+  },
+  {
+   "path": "fixtures/test-enterprise-audit-eventhub.log-expected.json",
+   "upstream_path": "packages/github/data_stream/audit/_dev/test/pipeline/test-enterprise-audit-eventhub.log-expected.json",
+   "blob_id": "8652e2c93e60887bd0e2b964eab3f04d4048881f",
+   "size_bytes": 8798,
+   "sha256": "57c8f043d7ed1e6327db79f39ca44290795fd88625fda1234f48a68c0e760899"
+  },
+  {
+   "path": "fixtures/test-enterprise-audit-json.log",
+   "upstream_path": "packages/github/data_stream/audit/_dev/test/pipeline/test-enterprise-audit-json.log",
+   "blob_id": "debbc2aff6cdbd36e61cc115e99ae0b86bd5003f",
+   "size_bytes": 7151,
+   "sha256": "b5c7dbb8429d8a5a2e9216064def7829f05336d44c700dcd4c0cf45a70dd2842"
+  },
+  {
+   "path": "fixtures/test-enterprise-audit-json.log-expected.json",
+   "upstream_path": "packages/github/data_stream/audit/_dev/test/pipeline/test-enterprise-audit-json.log-expected.json",
+   "blob_id": "4e68729ec53c3684564a49578ad53a13a88dec01",
+   "size_bytes": 39703,
+   "sha256": "7efed1e5b8a6d7b4bfb9853fc4cabad0e10ea48968b7a94c7343982fa326d717"
+  },
+  {
+   "path": "fixtures/test-organisation-audit-json.log",
+   "upstream_path": "packages/github/data_stream/audit/_dev/test/pipeline/test-organisation-audit-json.log",
+   "blob_id": "7d043f74273529ad8c5616ad90148ba6fdbeedc6",
+   "size_bytes": 39133,
+   "sha256": "2308b9ea6351daa2044fc8a4d394aedc7257df411b088a4f4c0cae38e124d94c"
+  },
+  {
+   "path": "fixtures/test-organisation-audit-json.log-expected.json",
+   "upstream_path": "packages/github/data_stream/audit/_dev/test/pipeline/test-organisation-audit-json.log-expected.json",
+   "blob_id": "4766bf62fc6997bd15ab17f74bb7635e19fba3a8",
+   "size_bytes": 277301,
+   "sha256": "a2db9a63895eb9aea5477bbfc978672513f5b5e718cf22e980e6215d7b9cc101"
+  },
+  {
+   "path": "pipeline/default.yml",
+   "upstream_path": "packages/github/data_stream/audit/elasticsearch/ingest_pipeline/default.yml",
+   "blob_id": "d85f508bfd61f9b1e78867e7afd742e09334710b",
+   "size_bytes": 19053,
+   "sha256": "bd842ce813e4cb249b87aa10d441cc17261e1ae5b99ec8a20bf28d5299af8313"
+  }
+ ]
+}

@@ -1,0 +1,404 @@
+{
+ "source": "elastic/integrations (Elastic integration ingest pipeline and pipeline test fixtures)",
+ "source_commit": "ff5328128a30c75046130ae58ddba450caa1f2dc",
+ "license": "Elastic License 2.0",
+ "license_url": "https://github.com/elastic/integrations/blob/ff5328128a30c75046130ae58ddba450caa1f2dc/LICENSE.txt",
+ "retrieved_at_utc": "2026-10-10T14:35:28Z",
+ "method": "scripts/acquire_elastic_conformance.py (commit-pinned; each file verified against its git blob id)",
+ "approval": "owner instruction 2026-10-10 (extend Elastic rules to further log sources)",
+ "purpose": "Conformance oracle for the derived ECS views of this data stream (ADR-0015).",
+ "files": [
+  {
+   "path": "fixtures/test-ai-interaction-events.json",
+   "upstream_path": "packages/o365/data_stream/audit/_dev/test/pipeline/test-ai-interaction-events.json",
+   "blob_id": "253481444dcd988576939c25456add084b9f7550",
+   "size_bytes": 2104,
+   "sha256": "8ee4d91e42b82acd6ec83185b96cb1e71ae602bf572a4214bb749ec07c4186da"
+  },
+  {
+   "path": "fixtures/test-ai-interaction-events.json-expected.json",
+   "upstream_path": "packages/o365/data_stream/audit/_dev/test/pipeline/test-ai-interaction-events.json-expected.json",
+   "blob_id": "000f55731229e5d2540df7d36b9d3039dfbc0d8a",
+   "size_bytes": 4971,
+   "sha256": "430094e94bc8e200c85213aabe3fcb503bce949ca8e9bab3e2aed4b92002b796"
+  },
+  {
+   "path": "fixtures/test-azuread-events.json",
+   "upstream_path": "packages/o365/data_stream/audit/_dev/test/pipeline/test-azuread-events.json",
+   "blob_id": "ed52f4050e5e48fdd608196980b4ab0cf734e4a3",
+   "size_bytes": 1600413,
+   "sha256": "c918b18d8429ef55b849e3de3e9fbc67d24ce7911467bf2e494ddca381125d8f"
+  },
+  {
+   "path": "fixtures/test-azuread-events.json-expected.json",
+   "upstream_path": "packages/o365/data_stream/audit/_dev/test/pipeline/test-azuread-events.json-expected.json",
+   "blob_id": "25c519179f1320c789a000392ba3f896f2c8aedc",
+   "size_bytes": 1536340,
+   "sha256": "12e324e35b0d32bafea88748d60b4782a489ecdb90464115a615f6e94e9a2d8b"
+  },
+  {
+   "path": "fixtures/test-azuread-sts-logon-events.json",
+   "upstream_path": "packages/o365/data_stream/audit/_dev/test/pipeline/test-azuread-sts-logon-events.json",
+   "blob_id": "bc6d0af16bc9938758d1f5fd8fb568147d431420",
+   "size_bytes": 297152,
+   "sha256": "df5c8f8c125241c41cdbc40ac890f38c8a31fb473028046d2490cc81ffb0c73f"
+  },
+  {
+   "path": "fixtures/test-azuread-sts-logon-events.json-expected.json",
+   "upstream_path": "packages/o365/data_stream/audit/_dev/test/pipeline/test-azuread-sts-logon-events.json-expected.json",
+   "blob_id": "103b300ded3bedf0a1d59be823803206d9535a75",
+   "size_bytes": 439109,
+   "sha256": "fd4dbe72cd55740d71b85d70ce10550d8ec408b918556a470765242a8967af9d"
+  },
+  {
+   "path": "fixtures/test-bad-ips.json",
+   "upstream_path": "packages/o365/data_stream/audit/_dev/test/pipeline/test-bad-ips.json",
+   "blob_id": "5be1c8aa2dd0b5ad6d561370f4905c6892ff3584",
+   "size_bytes": 3064,
+   "sha256": "3ed73f2eedbaed1c0898cfc9308b3a14425856502305944867098d4dfca2cc85"
+  },
+  {
+   "path": "fixtures/test-bad-ips.json-expected.json",
+   "upstream_path": "packages/o365/data_stream/audit/_dev/test/pipeline/test-bad-ips.json-expected.json",
+   "blob_id": "530ef124bb67de957d1861723f6cb63fa5a94fe7",
+   "size_bytes": 10384,
+   "sha256": "9fe7e5b12668d1fc6a63b1498b532477cc75a2e46be5a6ac62c17f55265c3feb"
+  },
+  {
+   "path": "fixtures/test-common-config.yml",
+   "upstream_path": "packages/o365/data_stream/audit/_dev/test/pipeline/test-common-config.yml",
+   "blob_id": "09ab29776d45f0a4c9c6b182778acd98237ba643",
+   "size_bytes": 1589,
+   "sha256": "559dede0541333edfdc36fc6f186413b0c658368e2a22d76d783612ca0df06f0"
+  },
+  {
+   "path": "fixtures/test-data-duplicated-querytime-events.json",
+   "upstream_path": "packages/o365/data_stream/audit/_dev/test/pipeline/test-data-duplicated-querytime-events.json",
+   "blob_id": "7cc0cd7a5f98e09f79511b4c7193bb67fe53b49d",
+   "size_bytes": 7061,
+   "sha256": "481a4756c8d094ceaf25c6efafb8ca56f32b9db4f53034fd2546bd2c072bf343"
+  },
+  {
+   "path": "fixtures/test-data-duplicated-querytime-events.json-expected.json",
+   "upstream_path": "packages/o365/data_stream/audit/_dev/test/pipeline/test-data-duplicated-querytime-events.json-expected.json",
+   "blob_id": "52de5eff7b0264549920fae87548a5081a9a2157",
+   "size_bytes": 11189,
+   "sha256": "f9796ecabdeba71e1492becf220a6ffcf8ef64997432b09575c9ba76e1e518db"
+  },
+  {
+   "path": "fixtures/test-data-insights-api-events.json",
+   "upstream_path": "packages/o365/data_stream/audit/_dev/test/pipeline/test-data-insights-api-events.json",
+   "blob_id": "2ce9872369f37579b65d09c65941a45b8303d103",
+   "size_bytes": 9861,
+   "sha256": "b74f1f0252364f1adad03ee332b0b75337a9beff55523611e0f1391649d42214"
+  },
+  {
+   "path": "fixtures/test-data-insights-api-events.json-expected.json",
+   "upstream_path": "packages/o365/data_stream/audit/_dev/test/pipeline/test-data-insights-api-events.json-expected.json",
+   "blob_id": "5f1e1d67dd86bcf9c985016b7a7de9f536448129",
+   "size_bytes": 19458,
+   "sha256": "a209da93aab234fafc49b9a7360b7380df518952364918db4f24cdc34f1cdeb4"
+  },
+  {
+   "path": "fixtures/test-dlp-exchange-events.json",
+   "upstream_path": "packages/o365/data_stream/audit/_dev/test/pipeline/test-dlp-exchange-events.json",
+   "blob_id": "4690bbe01424fb73e65994b520b7de5847ab511e",
+   "size_bytes": 54430,
+   "sha256": "6bb3149a8844ee02e27f2ac89bcfb9ee613bbc26e4f80c7d4af939ed983b332b"
+  },
+  {
+   "path": "fixtures/test-dlp-exchange-events.json-expected.json",
+   "upstream_path": "packages/o365/data_stream/audit/_dev/test/pipeline/test-dlp-exchange-events.json-expected.json",
+   "blob_id": "cddad40057e4d49845ad8f304a3e84863eb0443b",
+   "size_bytes": 70256,
+   "sha256": "56126f006e5fb4240fd90c70548d08edb435e9f78585c63f5926f8931fefc692"
+  },
+  {
+   "path": "fixtures/test-dlp-sharepoint-events.json",
+   "upstream_path": "packages/o365/data_stream/audit/_dev/test/pipeline/test-dlp-sharepoint-events.json",
+   "blob_id": "bd2d163cf0d673bfbdfeafb40f5fd70256ef8f8d",
+   "size_bytes": 35818,
+   "sha256": "38cce192c468da049fdc94b276d7d079d138524cd2102139ab7ed685610bda97"
+  },
+  {
+   "path": "fixtures/test-dlp-sharepoint-events.json-expected.json",
+   "upstream_path": "packages/o365/data_stream/audit/_dev/test/pipeline/test-dlp-sharepoint-events.json-expected.json",
+   "blob_id": "e50db396777420471b0eaa8019d4bb93faffcdc1",
+   "size_bytes": 46243,
+   "sha256": "4402fb6a5b6d1d8f950f3c4d92426b3fa6fc8ad45ef41d65116b04a25a0b0d3e"
+  },
+  {
+   "path": "fixtures/test-exchange-access-event.json",
+   "upstream_path": "packages/o365/data_stream/audit/_dev/test/pipeline/test-exchange-access-event.json",
+   "blob_id": "d327dd7bea417413bf491983346df47689910793",
+   "size_bytes": 20987,
+   "sha256": "aaa809f4695fabdd0b602d89eace2bd607e84c96250e6cd0cb5712c3277c9f98"
+  },
+  {
+   "path": "fixtures/test-exchange-access-event.json-expected.json",
+   "upstream_path": "packages/o365/data_stream/audit/_dev/test/pipeline/test-exchange-access-event.json-expected.json",
+   "blob_id": "a4e7e00d8939c844ca1c0eb1ffe89530afa73fa6",
+   "size_bytes": 62620,
+   "sha256": "8dc77ae273561fcd008c6d8e2b4f921c357e291eed3695a42e6850ec9ab0cd19"
+  },
+  {
+   "path": "fixtures/test-exchange-admin-events.json",
+   "upstream_path": "packages/o365/data_stream/audit/_dev/test/pipeline/test-exchange-admin-events.json",
+   "blob_id": "70b54d66b8c0552bcff157c1ef3d0aa5d1bbbc5c",
+   "size_bytes": 445176,
+   "sha256": "91da5546e1325aadc81e4ea8f2d9ec6b2742c1a4a8b82cc6d1d7f0c5ee1ac330"
+  },
+  {
+   "path": "fixtures/test-exchange-admin-events.json-expected.json",
+   "upstream_path": "packages/o365/data_stream/audit/_dev/test/pipeline/test-exchange-admin-events.json-expected.json",
+   "blob_id": "6bb20bfa978af97e32ec261fffaff238d01acee6",
+   "size_bytes": 480883,
+   "sha256": "1649c85d9a5b620c427743e70a41f20e76e1ccbee62aa4fb7b3feedaa2541432"
+  },
+  {
+   "path": "fixtures/test-exchange-item-edge-cases.json",
+   "upstream_path": "packages/o365/data_stream/audit/_dev/test/pipeline/test-exchange-item-edge-cases.json",
+   "blob_id": "131cd30f5dd775f39fa4087566501ef4d2a9c34e",
+   "size_bytes": 5863,
+   "sha256": "c7d236e71aff97842eed1595858b146043e0352073e3e786cea4e2998c1bbd27"
+  },
+  {
+   "path": "fixtures/test-exchange-item-edge-cases.json-expected.json",
+   "upstream_path": "packages/o365/data_stream/audit/_dev/test/pipeline/test-exchange-item-edge-cases.json-expected.json",
+   "blob_id": "343652f10a86fb0c7939999538e95e5f666e1d73",
+   "size_bytes": 12098,
+   "sha256": "031f12c26d5ba40ce2bfc618977acc841a480b0d904de966fd87df6de8ee1090"
+  },
+  {
+   "path": "fixtures/test-exchange-item-events.json",
+   "upstream_path": "packages/o365/data_stream/audit/_dev/test/pipeline/test-exchange-item-events.json",
+   "blob_id": "01d72c3ce57dc26b3fa5ad1f1e8988782ca586f9",
+   "size_bytes": 32821,
+   "sha256": "fcbcc8da8d58004eb7c251a126404f2b13a5ccc5f0d922e9c37e037ce8235876"
+  },
+  {
+   "path": "fixtures/test-exchange-item-events.json-expected.json",
+   "upstream_path": "packages/o365/data_stream/audit/_dev/test/pipeline/test-exchange-item-events.json-expected.json",
+   "blob_id": "c8b2881812601b7ce776712bb9886e4b684088d1",
+   "size_bytes": 55108,
+   "sha256": "04ca29b90c4a8b182209117e8f06ba290311a6eae92299d6c33392254a810773"
+  },
+  {
+   "path": "fixtures/test-ip-formats-events.json",
+   "upstream_path": "packages/o365/data_stream/audit/_dev/test/pipeline/test-ip-formats-events.json",
+   "blob_id": "a06db96b345431d74e6ccfa10116792932aa43c7",
+   "size_bytes": 7367,
+   "sha256": "4f3216b3beb7054b6b4178b195009d76cce24afd88b78e6f86b7aa02bfe36599"
+  },
+  {
+   "path": "fixtures/test-ip-formats-events.json-expected.json",
+   "upstream_path": "packages/o365/data_stream/audit/_dev/test/pipeline/test-ip-formats-events.json-expected.json",
+   "blob_id": "fe93f2d32782e5af2f045677e8046576479d7d4d",
+   "size_bytes": 19811,
+   "sha256": "65a425a274ca128c0a8cada6a19ee1fabbd0a576064146f3927b24a28ac5f437"
+  },
+  {
+   "path": "fixtures/test-modified-properites.json",
+   "upstream_path": "packages/o365/data_stream/audit/_dev/test/pipeline/test-modified-properites.json",
+   "blob_id": "b9c428454a1767ed5bc96e3b02054c7d0f74d22d",
+   "size_bytes": 2251,
+   "sha256": "2c4bd43bb5b63de8adab37b83ea95e3e839dc853faa5ae645a509f3d1e7a5bc5"
+  },
+  {
+   "path": "fixtures/test-modified-properites.json-expected.json",
+   "upstream_path": "packages/o365/data_stream/audit/_dev/test/pipeline/test-modified-properites.json-expected.json",
+   "blob_id": "6e6cb564a7e13fda40e837f22717b12ece6fae31",
+   "size_bytes": 6055,
+   "sha256": "55385871b981416aaf26c8447311faf5ef0a02e4b632fab1ff874d14617c4478"
+  },
+  {
+   "path": "fixtures/test-ms-teams-events.json",
+   "upstream_path": "packages/o365/data_stream/audit/_dev/test/pipeline/test-ms-teams-events.json",
+   "blob_id": "f5039051335f4d8af00a504a03a4fcd4d7076ed1",
+   "size_bytes": 7749,
+   "sha256": "92cd2bb1537e22f8af46684296cb148bf21b6794f058e6690edb8c9358928588"
+  },
+  {
+   "path": "fixtures/test-ms-teams-events.json-expected.json",
+   "upstream_path": "packages/o365/data_stream/audit/_dev/test/pipeline/test-ms-teams-events.json-expected.json",
+   "blob_id": "3455f978b40d584aaba520fff3a7b0991263601c",
+   "size_bytes": 14771,
+   "sha256": "0d02497bfadeb3fbfbe4c3d7702afe68c03c242b0d4cd4f35849db1d6d5a52f0"
+  },
+  {
+   "path": "fixtures/test-numbery-json-events.json",
+   "upstream_path": "packages/o365/data_stream/audit/_dev/test/pipeline/test-numbery-json-events.json",
+   "blob_id": "10ce8425f1d3091944ca3226bc333743c712f3e7",
+   "size_bytes": 12740,
+   "sha256": "bf9e455f5f74d0dbcb0e1158ab03aeee21d9db992ab2089bab6530499e06df72"
+  },
+  {
+   "path": "fixtures/test-numbery-json-events.json-expected.json",
+   "upstream_path": "packages/o365/data_stream/audit/_dev/test/pipeline/test-numbery-json-events.json-expected.json",
+   "blob_id": "7ba25f72b81618bcbf2f0d8a25a11ece4da7ee31",
+   "size_bytes": 24339,
+   "sha256": "2067f5c6b2ca7a8d81201c02a52924cd174526a3fa88b45d41d37443879468d6"
+  },
+  {
+   "path": "fixtures/test-parameter-string.json",
+   "upstream_path": "packages/o365/data_stream/audit/_dev/test/pipeline/test-parameter-string.json",
+   "blob_id": "fdebd9aef9f5048b8f533005dd387b7f33a4de26",
+   "size_bytes": 6144,
+   "sha256": "4e37e4576478cd2e8e14f4e7544ba959af6d73c24ea47e3b7f0fc8e9fac4b3f2"
+  },
+  {
+   "path": "fixtures/test-parameter-string.json-expected.json",
+   "upstream_path": "packages/o365/data_stream/audit/_dev/test/pipeline/test-parameter-string.json-expected.json",
+   "blob_id": "1ca1ff2d53ce8a4dfd066f90993ea0440ae49195",
+   "size_bytes": 9599,
+   "sha256": "a1495b1d68532baaf9c0b73ec9a10cc9ecf354a9d775c2fe4c1ee3bf86539b2a"
+  },
+  {
+   "path": "fixtures/test-platform-attribute-events.json",
+   "upstream_path": "packages/o365/data_stream/audit/_dev/test/pipeline/test-platform-attribute-events.json",
+   "blob_id": "3c5e7440cb8db7c4eb7620459f9b89cac0633bdf",
+   "size_bytes": 395,
+   "sha256": "40b435833acc77ed92ce4ceef3fc05c45a98127332f31dab3a9985dd1668123f"
+  },
+  {
+   "path": "fixtures/test-platform-attribute-events.json-expected.json",
+   "upstream_path": "packages/o365/data_stream/audit/_dev/test/pipeline/test-platform-attribute-events.json-expected.json",
+   "blob_id": "a9dc8403897794d087bdd7d54296db26e1091814",
+   "size_bytes": 1651,
+   "sha256": "6ab4f561dab1e42be5f6f3aa955f349db5cdaf9bb6c45ee82bd251d97eac59ad"
+  },
+  {
+   "path": "fixtures/test-sec-comp-alerts-events.json",
+   "upstream_path": "packages/o365/data_stream/audit/_dev/test/pipeline/test-sec-comp-alerts-events.json",
+   "blob_id": "5d7a30f75e45a4a57f01939630119b542c587b3b",
+   "size_bytes": 13893,
+   "sha256": "f63269689583391e7c9662dece7c7576b71b171a549678b6dd217feeb421d9cc"
+  },
+  {
+   "path": "fixtures/test-sec-comp-alerts-events.json-expected.json",
+   "upstream_path": "packages/o365/data_stream/audit/_dev/test/pipeline/test-sec-comp-alerts-events.json-expected.json",
+   "blob_id": "621b9bd46f94ad97dd1654a57d8ac84c831497fa",
+   "size_bytes": 23511,
+   "sha256": "bb488163078d5d588410cc246f0086058c287c7d2ccb416a27e566dfc8a90c8f"
+  },
+  {
+   "path": "fixtures/test-sharepoint-events.json",
+   "upstream_path": "packages/o365/data_stream/audit/_dev/test/pipeline/test-sharepoint-events.json",
+   "blob_id": "613cc20556b59c70d18f067cd377f94a850b9da6",
+   "size_bytes": 13833,
+   "sha256": "24556dac0a1972521888b09a85a6ecaa66d7cfebe3c85107342ad03d3e17ee71"
+  },
+  {
+   "path": "fixtures/test-sharepoint-events.json-expected.json",
+   "upstream_path": "packages/o365/data_stream/audit/_dev/test/pipeline/test-sharepoint-events.json-expected.json",
+   "blob_id": "9ef9c4c23fa61b48a1abd4516fb8939fff81401b",
+   "size_bytes": 28279,
+   "sha256": "6be1cbd25fcf689c0e24a2f1608f6a4e4bec529e0d15852012d5a956bf8ed8f1"
+  },
+  {
+   "path": "fixtures/test-sharepointfileop-events.json",
+   "upstream_path": "packages/o365/data_stream/audit/_dev/test/pipeline/test-sharepointfileop-events.json",
+   "blob_id": "3628fcf284427ccd3d9beaff9af0df12419ce4e7",
+   "size_bytes": 33624,
+   "sha256": "bab4267a93102f5fdc730a6682c9a54c0291a36c3c68ed2840f4df2a6b6625ff"
+  },
+  {
+   "path": "fixtures/test-sharepointfileop-events.json-expected.json",
+   "upstream_path": "packages/o365/data_stream/audit/_dev/test/pipeline/test-sharepointfileop-events.json-expected.json",
+   "blob_id": "46c569c68a2f6fc7ea3f7ea49f36e9fa03efd890",
+   "size_bytes": 63286,
+   "sha256": "c3d3ce39eed97805361d658c8b373086fc83879be5fca662487be70bf135ba60"
+  },
+  {
+   "path": "fixtures/test-sp-sharing-op-events.json",
+   "upstream_path": "packages/o365/data_stream/audit/_dev/test/pipeline/test-sp-sharing-op-events.json",
+   "blob_id": "a3e704eed9c1e5b4d0f8654da35a694fa2bc8454",
+   "size_bytes": 27036,
+   "sha256": "d12537eeaa8a2a7a2a092f6da133c6bad906649725ba768bb8f03c444ab170ce"
+  },
+  {
+   "path": "fixtures/test-sp-sharing-op-events.json-expected.json",
+   "upstream_path": "packages/o365/data_stream/audit/_dev/test/pipeline/test-sp-sharing-op-events.json-expected.json",
+   "blob_id": "73faf353e1bb5cc0546a65d5750a2d1acab500c8",
+   "size_bytes": 46048,
+   "sha256": "0667a0d8c4bf17db2a589fb2bba148513087b50d2c0f80ad556245f22e1414d5"
+  },
+  {
+   "path": "fixtures/test-stringly-json-events.json",
+   "upstream_path": "packages/o365/data_stream/audit/_dev/test/pipeline/test-stringly-json-events.json",
+   "blob_id": "f99973acc29d413d996d4cb97e68466f66042ca0",
+   "size_bytes": 5034,
+   "sha256": "a9390ca1ed465ce22c182fb281f65164ec60e90f27b0d8683ccfd1b1f39b74a2"
+  },
+  {
+   "path": "fixtures/test-stringly-json-events.json-expected.json",
+   "upstream_path": "packages/o365/data_stream/audit/_dev/test/pipeline/test-stringly-json-events.json-expected.json",
+   "blob_id": "bbc151e454743285d35b2396442250550f112778",
+   "size_bytes": 9734,
+   "sha256": "ba6fe640a010a5a27e26fe5f07c36c256983acea6080536b30aef7111db72264"
+  },
+  {
+   "path": "fixtures/test-wl-airinvestigation.json",
+   "upstream_path": "packages/o365/data_stream/audit/_dev/test/pipeline/test-wl-airinvestigation.json",
+   "blob_id": "a24aec1e0e7a668a2d0311ead7f1666ecccb58a7",
+   "size_bytes": 94676,
+   "sha256": "4695cfde9c8f2f4937c79860e81003b069b22dbce837ef3e52536366c1a6d192"
+  },
+  {
+   "path": "fixtures/test-wl-airinvestigation.json-expected.json",
+   "upstream_path": "packages/o365/data_stream/audit/_dev/test/pipeline/test-wl-airinvestigation.json-expected.json",
+   "blob_id": "3a7df38e2f8f03c853e25e32f136d9671c0f76ba",
+   "size_bytes": 139227,
+   "sha256": "d87acfcd1479b8aa3b6d626689092806a5386b9e8560e81ae03075b79b13bfe3"
+  },
+  {
+   "path": "fixtures/test-wl-securitycompliancecenter.json",
+   "upstream_path": "packages/o365/data_stream/audit/_dev/test/pipeline/test-wl-securitycompliancecenter.json",
+   "blob_id": "89b18f4f9bd2cb9b0269f33374491eeb624bb376",
+   "size_bytes": 24251,
+   "sha256": "3ae352d7dd5750bce87cf3d24fe9f4fc07886d0ad2de8026cefbe808068893c9"
+  },
+  {
+   "path": "fixtures/test-wl-securitycompliancecenter.json-expected.json",
+   "upstream_path": "packages/o365/data_stream/audit/_dev/test/pipeline/test-wl-securitycompliancecenter.json-expected.json",
+   "blob_id": "ea32836d6d881cf2c3cae83fc3417bcf58a5c947",
+   "size_bytes": 38386,
+   "sha256": "33df4186eaf5e4e48a8951a32dd80da47dc7a854c9ae98bf733c1f392dfc1ba4"
+  },
+  {
+   "path": "fixtures/test-wl-threatintelligence.json",
+   "upstream_path": "packages/o365/data_stream/audit/_dev/test/pipeline/test-wl-threatintelligence.json",
+   "blob_id": "61b69d3253e5912be439b3c59d40925624377767",
+   "size_bytes": 21406,
+   "sha256": "736b1a481471de66ce562cb0110cc6f60c8a7726aa25b863dd2f3b70c2db7ba4"
+  },
+  {
+   "path": "fixtures/test-wl-threatintelligence.json-expected.json",
+   "upstream_path": "packages/o365/data_stream/audit/_dev/test/pipeline/test-wl-threatintelligence.json-expected.json",
+   "blob_id": "b6fdb40b9200438e050c54b116f0814491433628",
+   "size_bytes": 29931,
+   "sha256": "31c2fd4ff75fb2fd062de1033986fcfeac5082a7bd466dcd72436b2a7606bf3c"
+  },
+  {
+   "path": "fixtures/test-yammer-events.json",
+   "upstream_path": "packages/o365/data_stream/audit/_dev/test/pipeline/test-yammer-events.json",
+   "blob_id": "e7b777750fdeae86c43bc5103f566e7af11b0b1f",
+   "size_bytes": 4887,
+   "sha256": "77e00ad8b915b0d6f6c629ea1591c8927315317ab8b93f5bb0e2ed58eeb6c948"
+  },
+  {
+   "path": "fixtures/test-yammer-events.json-expected.json",
+   "upstream_path": "packages/o365/data_stream/audit/_dev/test/pipeline/test-yammer-events.json-expected.json",
+   "blob_id": "4985c1c8824bd60fa9e9d76d930d3cce5515ffb9",
+   "size_bytes": 10075,
+   "sha256": "f2d74a162d2125250112916fb091f2069dfddd7a655ef8fb38843b8afe7c9086"
+  },
+  {
+   "path": "pipeline/default.yml",
+   "upstream_path": "packages/o365/data_stream/audit/elasticsearch/ingest_pipeline/default.yml",
+   "blob_id": "9f2d467b2e2257403a2ba3c26eea5d4f074b240f",
+   "size_bytes": 84873,
+   "sha256": "1211e33c543cba8788fae0563f53ebaa403ed273cd3968ae0827d7883191721d"
+  }
+ ]
+}

@@ -39,18 +39,15 @@ from pathlib import Path
 from typing import Any
 
 from attribution_platform.attack_knowledge.loader import AttackKnowledge
+from attribution_platform.detection.derived_views import ViewSet
 from attribution_platform.detection.rules import _wildcard_regex
 from attribution_platform.detection_content.elastic_field_map import (
-    CONSTANT_FIELDS,
     ECS_VERSION,
     ELASTIC_FIELD_MAP_VERSION,
     INTEGRATIONS_COMMIT,
-    SYSMON_DATA_STREAM,
-    SYSMON_FIELDS,
-    SYSMON_PROFILES,
+    STREAMS,
+    DataStream,
     EventProfile,
-    applies_to_sysmon,
-    known_absent,
 )
 from attribution_platform.detection_content.elastic_query import (
     And,
@@ -76,7 +73,7 @@ from attribution_platform.detection_content.sigma_import import (
 )
 
 IMPORTER_METHOD = "elastic-importer"
-IMPORTER_VERSION = "1.0"
+IMPORTER_VERSION = "1.1"  # 1.1: several data streams
 
 CORE_SEVERITIES = frozenset({"medium", "high", "critical"})
 ENRICH_SEVERITIES = frozenset({"low"})
@@ -137,7 +134,12 @@ class ElasticRuleOutcome:
             # The Sigma-style logsource of every event profile a branch came from
             # (read by the detectability loader beside the Sigma report's).
             "logsources": sorted(
-                {p.logsource for p in SYSMON_PROFILES if p.profile_id in self.profiles}
+                {
+                    p.logsource
+                    for stream in STREAMS
+                    for p in stream.profiles
+                    if p.profile_id in self.profiles
+                }
             )
             if self.conjuncts_imported
             else [],
@@ -189,24 +191,31 @@ def _constant_holds(pred: Pred, values: tuple[str, ...] | None) -> bool:
     return False
 
 
-def _specialise(node: Node, profile: EventProfile) -> Node | bool:
+def _specialise(node: Node, profile: EventProfile, stream: DataStream) -> Node | bool:
     """Decide every condition on a constant field; ``True`` / ``False`` when the
     whole node is decided."""
     if isinstance(node, Pred):
-        if node.field in CONSTANT_FIELDS:
-            return _constant_holds(node, profile.constants.get(node.field))
-        if known_absent(node.field):
-            return False  # never in a Sysmon document: no positive predicate holds
+        if node.field in profile.constants:
+            return _constant_holds(node, profile.constants[node.field])
+        if node.field in profile.always_contains:
+            # Only "has one of the always-present elements" is decidable here.
+            if node.operator in ("equals", "in") and _constant_holds(
+                node, profile.always_contains[node.field]
+            ):
+                return True
+            return Unsupported(f"undetermined:{node.field}")
+        if stream.absent(node.field):
+            return False  # never in this stream's documents: no positive predicate holds
         return node
     if isinstance(node, Unsupported):
         return node
     if isinstance(node, Not):
-        inner = _specialise(node.arg, profile)
+        inner = _specialise(node.arg, profile, stream)
         return (not inner) if isinstance(inner, bool) else Not(inner)
     is_and = isinstance(node, And)
     kept: list[Node] = []
     for arg in node.args:
-        value = _specialise(arg, profile)
+        value = _specialise(arg, profile, stream)
         if isinstance(value, bool):
             if value != is_and:  # False in an AND, True in an OR: decided
                 return value
@@ -224,14 +233,22 @@ def _specialise(node: Node, profile: EventProfile) -> Node | bool:
 # ===========================================================================
 
 
-def _literal(pred: Pred, negate: bool) -> Item:
-    target = SYSMON_FIELDS.get(pred.field)
-    if target is None:
+def _literal(pred: Pred, negate: bool, views: ViewSet) -> Item:
+    ecs_type = views.type_of(pred.field)
+    if ecs_type is None:
         return Gap(GapKind.TELEMETRY, f"field:{pred.field}")
-    if pred.boolean:
-        return Gap(GapKind.TRANSLATION, f"boolean_value:{pred.field}")  # no boolean views
     operator, value, case_insensitive = pred.operator, pred.value, pred.case_insensitive
-    if target.ecs_type == "long":
+    if ecs_type == "boolean":
+        # A boolean field holds only true / false (the view renders them so).
+        values = value if isinstance(value, tuple) else (value,)
+        if operator not in ("equals", "in", "exists") or not all(
+            v in ("true", "false") for v in values if v is not None
+        ):
+            return Gap(GapKind.TRANSLATION, f"value_semantics:{pred.field}:{operator}")
+        case_insensitive = False
+    elif pred.boolean:
+        return Gap(GapKind.TRANSLATION, f"boolean_value:{pred.field}")
+    if ecs_type == "long":
         values = value if isinstance(value, tuple) else (value,)
         if operator not in ("equals", "in", "exists") or not all(
             isinstance(v, str) and v.lstrip("-").isdigit() for v in values if v is not None
@@ -244,7 +261,7 @@ def _literal(pred: Pred, negate: bool) -> Item:
                 else str(int(str(value)))
             )
         case_insensitive = False
-    if target.array:
+    if views.is_array(pred.field):
         operator = _ARRAY_OPERATORS[operator]
     if isinstance(value, tuple) and operator in ("equals", "has_element"):
         return Gap(GapKind.TRANSLATION, "internal:multi_value_equality")  # pragma: no cover
@@ -255,7 +272,7 @@ def _literal(pred: Pred, negate: bool) -> Item:
     if isinstance(value, tuple) and any(not v.strip() for v in value):
         return Gap(GapKind.TRANSLATION, "blank_value")
     return Literal(
-        target.field_path,
+        views.path(pred.field),
         operator,
         value,  # type: ignore[arg-type]  # tuple values are JSON lists
         case_insensitive,
@@ -263,12 +280,12 @@ def _literal(pred: Pred, negate: bool) -> Item:
     )
 
 
-def _dnf(node: Node, negated: bool, bound: int) -> list[Conjunct]:
+def _dnf(node: Node, negated: bool, bound: int, views: ViewSet) -> list[Conjunct]:
     if isinstance(node, Not):
-        return _dnf(node.arg, not negated, bound)
+        return _dnf(node.arg, not negated, bound, views)
     if isinstance(node, And | Or):
         conjunctive = isinstance(node, And) != negated
-        children = [_dnf(child, negated, bound) for child in node.args]
+        children = [_dnf(child, negated, bound, views) for child in node.args]
         if not conjunctive:
             result = [c for child in children for c in child]
             if len(result) > bound:
@@ -282,7 +299,7 @@ def _dnf(node: Node, negated: bool, bound: int) -> list[Conjunct]:
         return acc
     if isinstance(node, Unsupported):
         return [(Gap(GapKind.TRANSLATION, node.detail),)]
-    return [(_literal(node, negated),)]
+    return [(_literal(node, negated, views),)]
 
 
 def _dedupe(conjunct: Conjunct) -> Conjunct:
@@ -377,7 +394,9 @@ def _import_rule(
     if not single_event:
         kind = "eql_sequence" if rule_type == "eql" else f"{rule_type}/{language or '-'}"
         return reject(RejectionReason.TRANSLATION_GAP, f"rule_type:{kind}")
-    if not applies_to_sysmon(tuple(str(i) for i in rule.get("index", []) or [])):
+    index_patterns = tuple(str(i) for i in rule.get("index", []) or [])
+    streams = [stream for stream in STREAMS if stream.applies_to(index_patterns)]
+    if not streams:
         return reject(RejectionReason.TELEMETRY_GAP, "index:no_supported_data_stream")
     try:
         query = _scope_query(_parse(rule))
@@ -408,12 +427,14 @@ def _import_rule(
     rules: list[dict[str, Any]] = []
     profiles: list[str] = []
     total = 0
-    for profile in SYSMON_PROFILES:
-        specialised = _specialise(query, profile)
+    for stream, profile in ((s, p) for s in streams for p in s.profiles):
+        specialised = _specialise(query, profile, stream)
         if specialised is False:
             continue
         try:
-            conjuncts = [()] if specialised is True else _dnf(specialised, False, bound)
+            conjuncts = (
+                [()] if specialised is True else _dnf(specialised, False, bound, stream.views)
+            )
         except _DNFBoundExceeded:
             key = f"dnf_bound_exceeded:{profile.profile_id}:>{bound}"
             outcome.reasons[key] = outcome.reasons.get(key, 0) + 1
@@ -449,9 +470,9 @@ def _import_rule(
     outcome.conjuncts_imported = len(rules)
     if not rules:
         if total == 0:
-            # Every branch is decided false for every supported Sysmon event: the
-            # rule targets events or field values Sysmon documents never have.
-            return reject(RejectionReason.TELEMETRY_GAP, "event:no_sysmon_event_satisfies_scope")
+            # Every branch is decided false for every supported event kind: the rule
+            # targets events or field values these streams' documents never have.
+            return reject(RejectionReason.TELEMETRY_GAP, "event:no_supported_event_satisfies_scope")
         outcome.rejection = (
             RejectionReason.TELEMETRY_GAP
             if all(k.startswith(GapKind.TELEMETRY.value) for k in outcome.reasons)
@@ -530,7 +551,7 @@ def import_elastic_rules(
         "field_map_version": ELASTIC_FIELD_MAP_VERSION,
         "integrations_commit": INTEGRATIONS_COMMIT,
         "ecs_version": ECS_VERSION,
-        "data_streams": [SYSMON_DATA_STREAM],
+        "data_streams": [stream.data_stream for stream in STREAMS],
         "attack_kb_version": knowledge.attack_kb_version,
         "dnf_bound": dnf_bound,
         "license": "Elastic License 2.0 — see data/detection/elastic/NOTICE.md",

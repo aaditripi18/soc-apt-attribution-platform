@@ -941,6 +941,12 @@ def test_valid_single_and_multiple_mapping_behavior_still_works(
 # ===========================================================================
 
 
+def _is_sources(module: str) -> bool:
+    """The platform's ``sources`` package or a module in it (and nothing that
+    merely contains the word, such as ``importlib.resources``)."""
+    return "sources" in module.split(".")
+
+
 def test_detection_package_never_imports_from_sources() -> None:
     """Static AST check: no module in detection/ imports attribution_platform.sources
     (Sysmon, or any future source, must never become a detection-layer
@@ -952,11 +958,11 @@ def test_detection_package_never_imports_from_sources() -> None:
     for path in detection_files:
         tree = ast.parse(path.read_text(encoding="utf-8"), filename=str(path))
         for node in ast.walk(tree):
-            if isinstance(node, ast.ImportFrom) and node.module and "sources" in node.module:
+            if isinstance(node, ast.ImportFrom) and node.module and _is_sources(node.module):
                 offending.append(f"{path.name}: from {node.module} import ...")
             if isinstance(node, ast.Import):
                 for alias in node.names:
-                    if "sources" in alias.name:
+                    if _is_sources(alias.name):
                         offending.append(f"{path.name}: import {alias.name}")
 
     assert not offending, f"detection/ must not import from sources/: {offending}"
