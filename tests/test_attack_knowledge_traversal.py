@@ -587,3 +587,33 @@ def test_traversal_module_never_references_scoring_or_calibration_vocabulary() -
                 f"traversal.py binds identifier {identifier!r} referencing "
                 f"out-of-scope vocabulary {forbidden!r}"
             )
+
+
+# ===========================================================================
+# Relationship indexes are remembered per knowledge base (ADR-0009 Amendment D)
+# ===========================================================================
+
+
+def test_relationship_index_is_built_once_per_knowledge_base_and_read_only() -> None:
+    import dataclasses
+    import gc
+
+    from attribution_platform.attack_knowledge import traversal
+    from attribution_platform.attack_knowledge.loader import load_attack_knowledge
+
+    knowledge = load_attack_knowledge()
+    first = traversal._uses_index_by_target(knowledge)
+    assert traversal._uses_index_by_target(knowledge) is first  # remembered
+    assert dict(first) == traversal._build_uses_index_by_target(knowledge)  # and unchanged
+    with pytest.raises(TypeError):
+        first["x"] = frozenset()  # type: ignore[index]
+
+    # An equal but distinct knowledge base gets its own index, never another's.
+    twin = dataclasses.replace(knowledge)
+    other = traversal._uses_index_by_target(twin)
+    assert other is not first and dict(other) == dict(first)
+    key = (id(twin), "uses_by_target")
+    assert key in traversal._INDEXES
+    del twin, other
+    gc.collect()
+    assert key not in traversal._INDEXES  # dropped with its knowledge base

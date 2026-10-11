@@ -20,10 +20,15 @@ Rules the text obeys:
 - Indicator matches are context (ADR-0013), shown with the publisher's own
   attribution sentence and the indicator's validity.
 - Deterministic: the same read model renders the same bytes.
+- Observed values are data, not markup: command lines, paths and rule claims are
+  written as code spans or with Markdown's special characters escaped, so a
+  ``~~``, ``*`` or ``|`` inside telemetry can never restyle, hide or re-tabulate
+  the text a reader sees (dossier/2).
 """
 
 from __future__ import annotations
 
+import re
 from collections.abc import Mapping, Sequence
 from typing import Any
 
@@ -45,9 +50,29 @@ from attribution_platform.investigation.records import (
     load_investigation,
 )
 
-DOSSIER_VERSION = "dossier/1"
+DOSSIER_VERSION = "dossier/2"
 _MAX_CANDIDATES_LISTED = 25
 _MAX_QUESTIONS = 5
+
+
+_MARKDOWN_SPECIAL = re.compile(r"([\\`*_~\[\]<>|#])")
+_BACKTICK_RUN = re.compile(r"`+")
+
+
+def _text(value: str) -> str:
+    """``value`` as literal Markdown text (special characters escaped)."""
+    return _MARKDOWN_SPECIAL.sub(r"\\\1", " ".join(value.split()))
+
+
+def _code(value: str, *, in_table: bool = False) -> str:
+    """``value`` as a Markdown code span: fenced by more backticks than it
+    contains, on one line, with ``|`` escaped where a table would split on it."""
+    flat = " ".join(value.split())
+    if in_table:
+        flat = flat.replace("|", "\\|")
+    fence = "`" * (max((len(run) for run in _BACKTICK_RUN.findall(flat)), default=0) + 1)
+    pad = " " if flat.startswith("`") or flat.endswith("`") or not flat else ""
+    return f"{fence}{pad}{flat}{pad}{fence}"
 
 
 def _external(knowledge: AttackKnowledge, stix_id: str) -> tuple[str, str]:
@@ -64,20 +89,25 @@ def _describe(observation: Observation) -> str:
     """One factual line about what an Observation recorded."""
     parts: list[str] = []
     if observation.host is not None and (observation.host.name or observation.host.id):
-        parts.append(f"host `{observation.host.name or observation.host.id}`")
+        parts.append(
+            f"host {_code(observation.host.name or observation.host.id or '', in_table=True)}"
+        )
     if observation.user is not None and (observation.user.name or observation.user.id):
-        parts.append(f"user `{observation.user.name or observation.user.id}`")
+        parts.append(
+            f"user {_code(observation.user.name or observation.user.id or '', in_table=True)}"
+        )
     process = observation.process
     if process is not None and process.executable:
-        parts.append(f"process `{process.executable}`")
+        parts.append(f"process {_code(process.executable, in_table=True)}")
         if process.command_line:
             command = process.command_line
-            parts.append(f"command `{command[:160]}{'…' if len(command) > 160 else ''}`")
+            shown = command[:160] + ("…" if len(command) > 160 else "")
+            parts.append(f"command {_code(shown, in_table=True)}")
     if observation.event is not None and observation.event.action and process is None:
-        parts.append(f"action `{observation.event.action}`")
+        parts.append(f"action {_code(observation.event.action, in_table=True)}")
     if observation.event is not None and observation.event.dataset:
-        parts.append(f"source `{observation.event.dataset}`")
-    return "; ".join(parts) or observation.observation_id
+        parts.append(f"source {_code(observation.event.dataset, in_table=True)}")
+    return "; ".join(parts) or _code(observation.observation_id, in_table=True)
 
 
 def _evidence_rows(
@@ -95,6 +125,13 @@ def _evidence_rows(
         seen = _describe(observation) if observation else "—"
         rows.append(f"| {when} | {technique} | {tier} | {seen} |")
     return rows
+
+
+def _baseline_line(analysis: Mapping[str, Any]) -> str:
+    baseline = analysis.get("unattributed_decision_support")
+    if baseline is None:
+        return f"- {analysis.get('comparison_note') or 'The comparison was not computed.'}"
+    return f"- Unattributed baseline (support if no Group is involved): {float(baseline):.3f}."
 
 
 def _section_unit(
@@ -124,7 +161,7 @@ def _section_unit(
         "",
         f"- {len(observations)} observation(s) from {times[0].isoformat() if times else '—'} to "
         f"{times[-1].isoformat() if times else '—'}"
-        + (f" on {', '.join(f'`{h}`' for h in hosts)}" if hosts else "")
+        + (f" on {', '.join(_code(h) for h in hosts)}" if hosts else "")
         + ".",
         f"- {len(sequence.steps) if sequence else 0} behavioural step(s), joined by "
         f"{len(group.structural_link_ids)} structural link(s) (same process, lineage, injection, "
@@ -156,7 +193,7 @@ def _section_unit(
             "more it separates candidates).",
         ]
         for item in supporting[:3]:
-            lines.append(f"  - {item.claim}")
+            lines.append(f"  - {_text(item.claim)}")
         if len(supporting) > 3:
             lines.append(f"  - … and {len(supporting) - 3} more with the same technique.")
     lines += ["", "### 4. Actors consistent with the evidence", ""]
@@ -198,8 +235,7 @@ def _section_unit(
         "(ADR-0003 Amendment H)."
         if low
         else "- All Evidence here is core detection content.",
-        f"- Unattributed baseline (support if no Group is involved): "
-        f"{float(analysis['unattributed_decision_support']):.3f}.",
+        _baseline_line(analysis),
         "",
         "### 6. What additional evidence would help",
         "",
@@ -222,15 +258,16 @@ def _section_unit(
     for match in matches:
         validity = {True: "inside", False: "outside", None: "no stated"}[match["within_validity"]]
         lines.append(
-            f"- `{match['value']}` ({match['kind']}) on `{match['observation_id']}` equals "
+            f"- {_code(str(match['value']))} ({match['kind']}) on "
+            f"{_code(str(match['observation_id']))} equals "
             "indicator "
-            f"*{match['indicator_name']}* in {match['report_name']} "
+            f"*{_text(str(match['indicator_name']))}* in {_text(str(match['report_name']))} "
             f"({validity} its validity window)."
         )
         if match.get("named_actor"):
             lines.append(
-                f"  - The publisher names **{match['named_actor']}** "
-                f"({match['named_actor_attack_id']}): “{match['attribution_quote']}”"
+                f"  - The publisher names **{_text(str(match['named_actor']))}** "
+                f"({match['named_actor_attack_id']}): “{_text(str(match['attribution_quote']))}”"
             )
     lines.append("")
     return lines
@@ -256,7 +293,10 @@ def render_dossier(client: ElasticClient, knowledge: AttackKnowledge, investigat
         f"`{investigation['detection_pack_content_hash']}`",
         "- Methods: "
         + ", ".join(f"{k} {v}" for k, v in sorted(dict(investigation["method_versions"]).items())),
-        f"- {investigation['evidence']} Evidence item(s) in {len(investigation['units'])} unit(s).",
+        f"- {investigation['evidence']} Evidence item(s): {investigation['evidence_in_units']} in "
+        f"{len(investigation['units'])} unit(s); {investigation['evidence_outside_units']} "
+        "low-level item(s) in no unit (no structural link to core Evidence — ADR-0003 "
+        "Amendment H).",
         "",
     ]
     for number, group_id in enumerate(investigation["units"], start=1):

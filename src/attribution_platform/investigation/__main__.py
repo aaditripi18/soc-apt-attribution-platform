@@ -1,10 +1,11 @@
-"""Investigate one recording from the command line, optionally serving the
-results through the read-model API (ADR-0009).
+"""Investigate recordings from the command line, optionally serving the
+results through the read-model API (ADR-0009) and the analyst frontend
+(ADR-0016).
 
-    python -m attribution_platform.investigation <recording> [--serve] [--port N]
-        [--elasticsearch] [--json out.json] [--dossier out.md]
+    python -m attribution_platform.investigation <recording> [<recording> ...]
+        [--serve] [--port N] [--elasticsearch] [--json out.json] [--dossier out.md]
 
-``<recording>`` is either a recording id pinned in
+Each ``<recording>`` is either a recording id pinned in
 ``data/calibration/corpus/v2/recordings.json`` (e.g. ``otrf-apt3-empire``) or a
 path to a recording archive (``.zip`` / ``.tar.gz`` of JSON lines, e.g. your own
 lab export — ``docs/operations/lab-recording-guide.md``). A path that is not
@@ -17,8 +18,10 @@ every unit explained in plain language from the persisted read model.
 Results are kept in memory by default (a throwaway session); ``--elasticsearch``
 persists them to the cluster configured by the same environment variables as
 ``python -m attribution_platform.api``. ``--serve`` then starts the read-model API
-on 127.0.0.1 (``--port``, default 8000). Nothing here ranks candidates or
-emits a confidence: analyses are uncalibrated until a calibration_version exists.
+on 127.0.0.1 (``--port``, default 8000); when the frontend has been built
+(``npm run build`` in ``frontend/``) the same address serves it. ``--dossier``
+needs exactly one recording. Nothing here ranks candidates or emits a
+confidence: analyses are uncalibrated until a calibration_version exists.
 """
 
 from __future__ import annotations
@@ -26,13 +29,15 @@ from __future__ import annotations
 import json
 import os
 import sys
-from collections.abc import Sequence
+from collections.abc import Mapping, Sequence
 from dataclasses import dataclass
 from pathlib import Path
 
 from attribution_platform.api.__main__ import elasticsearch_client_from_env
+from attribution_platform.api.context import load_api_context
 from attribution_platform.api.server import create_server
-from attribution_platform.attack_knowledge.loader import load_attack_knowledge
+from attribution_platform.attack_knowledge.loader import AttackKnowledge, load_attack_knowledge
+from attribution_platform.attribution.collection_guidance import Detectability
 from attribution_platform.dataplane import ElasticClient, FakeElasticClient
 from attribution_platform.detection import (
     DetectionEngine,
@@ -40,7 +45,15 @@ from attribution_platform.detection import (
     pack_set_content_hash,
 )
 from attribution_platform.detection_content.detectability import load_detectability
-from attribution_platform.intel.indicators import load_indicator_set
+from attribution_platform.detection_content.pinned import (
+    COVERAGE_REPORT,
+    ELASTIC_IMPORT_REPORT,
+    ELASTIC_PACK,
+    FRONTEND_DIST,
+    SIGMA_PACK,
+)
+from attribution_platform.detection_content.pinned import SIGMA_IMPORT_REPORT as IMPORT_REPORT
+from attribution_platform.intel.indicators import IndicatorSet, load_indicator_set
 from attribution_platform.investigation.dossier import render_dossier
 from attribution_platform.investigation.records import (
     InvestigationRecord,
@@ -55,33 +68,6 @@ from attribution_platform.replay.recording_pipeline import (
 
 REPO_ROOT = Path(__file__).resolve().parents[3]
 RECORDINGS = REPO_ROOT / "data" / "calibration" / "corpus" / "v2" / "recordings.json"
-SIGMA_PACK = (
-    REPO_ROOT
-    / "data"
-    / "detection"
-    / "sigma"
-    / "r2026-07-01"
-    / "generated"
-    / "sigma-r2026-07-01-sigma_core++.rules.json"
-)
-
-
-#: ADR-0015: Elastic prebuilt rules, translated exactly, beside the Sigma pack.
-ELASTIC_PACK = (
-    REPO_ROOT
-    / "data"
-    / "detection"
-    / "elastic"
-    / "195f15c0bac8"
-    / "generated"
-    / "elastic-195f15c0bac8.rules.json"
-)
-
-COVERAGE_REPORT = SIGMA_PACK.with_name("coverage-report.json")
-IMPORT_REPORT = SIGMA_PACK.with_name("sigma-r2026-07-01-sigma_core++.import-report.json")
-ELASTIC_IMPORT_REPORT = ELASTIC_PACK.with_name("elastic-195f15c0bac8.import-report.json")
-
-
 ADVISORIES = REPO_ROOT / "data" / "intel" / "advisories"
 ADVISORY_ATTRIBUTIONS = REPO_ROOT / "data" / "intel" / "advisory-attributions.json"
 
@@ -115,16 +101,24 @@ def resolve_source(argument: str, *, recordings: Path = RECORDINGS) -> Recording
     )
 
 
-def investigate(argument: str, *, client: ElasticClient, recordings: Path = RECORDINGS) -> Session:
-    """Resolve, run and persist one investigation."""
-    source = resolve_source(argument, recordings=recordings)
+@dataclass(frozen=True)
+class Workbench:
+    """Everything pinned an investigation runs against, loaded once so several
+    recordings in one session share it."""
+
+    knowledge: AttackKnowledge
+    engine: DetectionEngine
+    detection_pack_content_hash: str
+    detectability: Mapping[str, Detectability]
+    indicators: IndicatorSet
+
+
+def load_workbench() -> Workbench:
     knowledge = load_attack_knowledge()
     packs = [load_rule_pack(path, knowledge=knowledge) for path in (SIGMA_PACK, ELASTIC_PACK)]
-    record = run_investigation(
-        source,
-        client=client,
-        engine=DetectionEngine(rules=tuple(r for pack in packs for r in pack.rules)),
+    return Workbench(
         knowledge=knowledge,
+        engine=DetectionEngine(rules=tuple(r for pack in packs for r in pack.rules)),
         detection_pack_content_hash=pack_set_content_hash(packs),
         detectability=load_detectability(
             COVERAGE_REPORT,
@@ -132,6 +126,27 @@ def investigate(argument: str, *, client: ElasticClient, recordings: Path = RECO
             pack_content_hash=[pack.content_hash for pack in packs],
         ),
         indicators=load_indicator_set(ADVISORIES, ADVISORY_ATTRIBUTIONS),
+    )
+
+
+def investigate(
+    argument: str,
+    *,
+    client: ElasticClient,
+    recordings: Path = RECORDINGS,
+    workbench: Workbench | None = None,
+) -> Session:
+    """Resolve, run and persist one investigation."""
+    source = resolve_source(argument, recordings=recordings)
+    bench = workbench if workbench is not None else load_workbench()
+    record = run_investigation(
+        source,
+        client=client,
+        engine=bench.engine,
+        knowledge=bench.knowledge,
+        detection_pack_content_hash=bench.detection_pack_content_hash,
+        detectability=bench.detectability,
+        indicators=bench.indicators,
     )
     return Session(record=record, client=client)
 
@@ -178,37 +193,62 @@ def main(argv: Sequence[str] | None = None, env: dict[str, str] | None = None) -
     else:
         client = FakeElasticClient()
 
+    arguments = []
+    for argument in args:
+        if argument.startswith("--"):
+            break
+        arguments.append(argument)
+    if "--dossier" in args and len(arguments) != 1:
+        print("--dossier needs exactly one recording.", file=sys.stderr)
+        return 2
+
+    reports: list[dict[str, object]] = []
     try:
-        session = investigate(args[0], client=client)
+        workbench = load_workbench()
+        for argument in arguments:
+            session = investigate(argument, client=client, workbench=workbench)
+            report = summary(session)
+            reports.append(report)
+            print(f"investigation {report['investigation_id']}")
+            print(f"source        {report['source_id']}  sha256 {report['source_sha256']}")
+            print(f"evidence      {report['evidence']}  ATT&CK {report['attack_kb_version']}")
+            for unit in report["units"]:  # type: ignore[attr-defined]
+                print(
+                    f"  unit {unit['group_id'][:48]}…  techniques "
+                    f"{unit['observed_techniques']:>3}  candidates {unit['candidates']:>4}  "
+                    f"{unit['calibration_status']}"
+                )
     except CliError as exc:
         print(f"refused: {exc}", file=sys.stderr)
         return 1
 
-    report = summary(session)
-    print(f"investigation {report['investigation_id']}")
-    print(f"source        {report['source_id']}  sha256 {report['source_sha256']}")
-    print(f"evidence      {report['evidence']}  ATT&CK {report['attack_kb_version']}")
-    for unit in report["units"]:  # type: ignore[attr-defined]
-        print(
-            f"  unit {unit['group_id'][:48]}…  techniques {unit['observed_techniques']:>3}  "
-            f"candidates {unit['candidates']:>4}  {unit['calibration_status']}"
-        )
     if "--json" in args:
         out = Path(args[args.index("--json") + 1])
-        out.write_text(json.dumps(report, indent=1) + "\n", encoding="utf-8", newline="\n")
+        payload: object = reports[0] if len(reports) == 1 else {"investigations": reports}
+        out.write_text(json.dumps(payload, indent=1) + "\n", encoding="utf-8", newline="\n")
 
     if "--dossier" in args:
         out = Path(args[args.index("--dossier") + 1])
-        investigation_id = str(report["investigation_id"])
-        text = render_dossier(session.client, load_attack_knowledge(), investigation_id)
+        investigation_id = str(reports[0]["investigation_id"])
+        text = render_dossier(client, workbench.knowledge, investigation_id)
         out.write_text(text, encoding="utf-8", newline="\n")
         print(f"dossier       {out}")
 
     if "--serve" in args:
         port = int(args[args.index("--port") + 1]) if "--port" in args else 8000
-        server = create_server(session.client, host="127.0.0.1", port=port)
-        print(f"Serving the read-model API on http://127.0.0.1:{port}  (Ctrl+C to stop)")
-        print(f"  http://127.0.0.1:{port}/investigations/{report['investigation_id']}")
+        context = load_api_context(
+            workbench.knowledge,
+            coverage_report=COVERAGE_REPORT,
+            sigma_import_report=IMPORT_REPORT,
+            elastic_import_report=ELASTIC_IMPORT_REPORT,
+            static_dir=FRONTEND_DIST,
+        )
+        server = create_server(client, host="127.0.0.1", port=port, context=context)
+        print(f"Serving the read-model API on http://127.0.0.1:{port}/api  (Ctrl+C to stop)")
+        if context.static_dir is not None:
+            print(f"Analyst frontend: http://127.0.0.1:{port}/")
+        else:
+            print("Frontend not built (run `npm run build` in frontend/, or `npm run dev`).")
         try:
             server.serve_forever()
         except KeyboardInterrupt:

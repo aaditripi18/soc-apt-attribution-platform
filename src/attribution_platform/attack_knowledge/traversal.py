@@ -68,6 +68,8 @@ exists to protect.
 
 from __future__ import annotations
 
+import weakref
+from collections.abc import Callable, Mapping
 from types import MappingProxyType
 
 from attribution_platform.attack_knowledge.loader import AttackKnowledge, FrozenStixObject
@@ -287,14 +289,46 @@ def resolve_alias(
 # ===========================================================================
 
 
-def _uses_index_by_source(knowledge: AttackKnowledge) -> dict[str, frozenset[str]]:
-    """``source_ref -> {target_ref, ...}`` over every ``uses`` relationship.
+_Index = Mapping[str, frozenset[str]]
+#: ``(id(knowledge), index name) -> (weak reference to that knowledge, index)``.
+_INDEXES: dict[tuple[int, str], tuple[weakref.ref[AttackKnowledge], _Index]] = {}
 
-    Built fresh from the loaded (already frozen, already verified)
-    relationship objects on every call — a pure function of ``knowledge``,
-    never cached/mutated global state, so repeated calls against the same
-    pinned artifact are always logically equivalent.
+
+def _index(
+    knowledge: AttackKnowledge, name: str, build: Callable[[AttackKnowledge], _Index]
+) -> _Index:
+    """``build(knowledge)``, computed once per loaded knowledge base.
+
+    An :class:`AttackKnowledge` is deeply frozen, so an index over its
+    relationships is a pure function of that one object: remembering it changes
+    no result, only the cost (each build walks every relationship — ~10 ms on
+    the pinned bundle — and the exact combination search asks for ``g`` tens of
+    thousands of times; ADR-0009 Amendment D). The entry is keyed by object
+    identity, checked against a weak reference so a recycled ``id`` can never
+    return another knowledge base's index, and dropped when the object is
+    collected. The index itself is read-only.
     """
+    key = (id(knowledge), name)
+    hit = _INDEXES.get(key)
+    if hit is not None and hit[0]() is knowledge:
+        return hit[1]
+    built = MappingProxyType(dict(build(knowledge)))
+
+    def forget(_reference: weakref.ref[AttackKnowledge]) -> None:
+        _INDEXES.pop(key, None)
+
+    _INDEXES[key] = (weakref.ref(knowledge, forget), built)
+    return built
+
+
+def _uses_index_by_source(knowledge: AttackKnowledge) -> _Index:
+    """``source_ref -> {target_ref, ...}`` over every ``uses`` relationship of
+    the loaded (already frozen, already verified) knowledge base — a pure
+    function of ``knowledge`` (see :func:`_index`)."""
+    return _index(knowledge, "uses_by_source", _build_uses_index_by_source)
+
+
+def _build_uses_index_by_source(knowledge: AttackKnowledge) -> dict[str, frozenset[str]]:
     index: dict[str, set[str]] = {}
     for rel in knowledge.relationships():
         if rel.get("relationship_type") != _RELATIONSHIP_USES:
@@ -306,9 +340,13 @@ def _uses_index_by_source(knowledge: AttackKnowledge) -> dict[str, frozenset[str
     return {key: frozenset(value) for key, value in index.items()}
 
 
-def _uses_index_by_target(knowledge: AttackKnowledge) -> dict[str, frozenset[str]]:
+def _uses_index_by_target(knowledge: AttackKnowledge) -> _Index:
     """``target_ref -> {source_ref, ...}`` over every ``uses`` relationship —
     the reverse of :func:`_uses_index_by_source`."""
+    return _index(knowledge, "uses_by_target", _build_uses_index_by_target)
+
+
+def _build_uses_index_by_target(knowledge: AttackKnowledge) -> dict[str, frozenset[str]]:
     index: dict[str, set[str]] = {}
     for rel in knowledge.relationships():
         if rel.get("relationship_type") != _RELATIONSHIP_USES:

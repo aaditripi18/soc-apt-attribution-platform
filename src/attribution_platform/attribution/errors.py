@@ -21,3 +21,10 @@ class AttributionError(ValueError):
     ``AttributionResult`` whose ``leading_hypothesis_id`` is not even a
     member of its own ``candidate_hypothesis_ids``).
     """
+
+
+class SearchBoundExceededError(AttributionError):
+    """The exact combination-partition search (ADR-0005 §D3) would exceed its
+    work bound. The search never approximates, so it stops; a caller that can
+    represent "not computed" (one unit of an investigation) catches exactly
+    this type — every other :class:`AttributionError` is still a defect."""

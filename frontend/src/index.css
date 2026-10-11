@@ -1,0 +1,232 @@
+@import "@fontsource-variable/geist/wght.css";
+@import "@fontsource-variable/jetbrains-mono/wght.css";
+@import "tailwindcss";
+
+/* Design tokens from the Stitch design system ("analyst console", dark only). */
+@theme {
+  --font-sans: "Geist Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono Variable", ui-monospace, "Cascadia Mono", Consolas, monospace;
+
+  --color-background: #0f131c;
+  --color-surface-lowest: #0a0e16;
+  --color-surface-low: #181c24;
+  --color-surface: #1c2028;
+  --color-surface-high: #262a33;
+  --color-surface-highest: #31353e;
+  --color-on-surface: #dfe2ee;
+  --color-on-surface-variant: #bacac5;
+  --color-outline: #859490;
+  --color-outline-variant: #3c4a46;
+
+  --color-primary: #57f1db;
+  --color-primary-container: #2dd4bf;
+  --color-primary-fixed: #62fae3;
+  --color-on-primary: #003731;
+  --color-secondary: #4fdbc8;
+  --color-secondary-container: #04b4a2;
+  --color-tertiary: #d7d6ff;
+  --color-tertiary-container: #b6b8ff;
+  --color-tertiary-dim: #c0c1ff;
+  --color-error: #ffb4ab;
+  --color-error-container: #93000a;
+  --color-warning: #fbbf24;
+  --color-warning-container: #4a3506;
+
+  --text-headline-xl: 24px;
+  --text-headline-xl--line-height: 32px;
+  --text-headline-xl--font-weight: 600;
+  --text-headline-xl--letter-spacing: -0.02em;
+  --text-headline-lg: 20px;
+  --text-headline-lg--line-height: 28px;
+  --text-headline-lg--font-weight: 600;
+  --text-headline-lg--letter-spacing: -0.01em;
+  --text-headline-md: 16px;
+  --text-headline-md--line-height: 24px;
+  --text-headline-md--font-weight: 600;
+  --text-headline-sm: 14px;
+  --text-headline-sm--line-height: 20px;
+  --text-headline-sm--font-weight: 600;
+  --text-body-lg: 15px;
+  --text-body-lg--line-height: 24px;
+  --text-body-md: 13px;
+  --text-body-md--line-height: 20px;
+  --text-body-sm: 12px;
+  --text-body-sm--line-height: 18px;
+  --text-label-md: 12px;
+  --text-label-md--line-height: 16px;
+  --text-label-md--font-weight: 500;
+  --text-label-sm: 10px;
+  --text-label-sm--line-height: 14px;
+  --text-label-sm--font-weight: 600;
+  --text-label-sm--letter-spacing: 0.06em;
+  --text-code-md: 12px;
+  --text-code-md--line-height: 18px;
+  --text-code-sm: 11px;
+  --text-code-sm--line-height: 16px;
+
+  --radius-xs: 2px;
+  --radius-sm: 2px;
+  --radius-md: 4px;
+  --radius-lg: 6px;
+
+  --animate-shimmer: shimmer 1.6s linear infinite;
+  @keyframes shimmer {
+    from {
+      background-position: 200% 0;
+    }
+    to {
+      background-position: -200% 0;
+    }
+  }
+}
+
+@layer base {
+  html {
+    color-scheme: dark;
+  }
+  body {
+    @apply bg-background text-on-surface font-sans text-body-md antialiased;
+    font-feature-settings: "ss01", "cv11";
+  }
+  ::selection {
+    background: color-mix(in srgb, var(--color-primary) 30%, transparent);
+  }
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-surface-highest) transparent;
+  }
+  *::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  *::-webkit-scrollbar-thumb {
+    background: var(--color-surface-highest);
+    border: 2px solid var(--color-background);
+    border-radius: 6px;
+  }
+  *::-webkit-scrollbar-thumb:hover {
+    background: var(--color-outline-variant);
+  }
+  :focus-visible {
+    outline: 1px solid var(--color-primary);
+    outline-offset: 1px;
+  }
+  button,
+  [role="button"],
+  a {
+    cursor: pointer;
+  }
+  code,
+  kbd,
+  pre {
+    font-family: var(--font-mono);
+  }
+}
+
+@utility label {
+  @apply font-mono text-label-sm uppercase text-on-surface-variant;
+}
+
+@layer components {
+  .skeleton {
+    @apply animate-shimmer rounded-sm;
+    background: linear-gradient(
+      90deg,
+      var(--color-surface) 25%,
+      var(--color-surface-high) 37%,
+      var(--color-surface) 63%
+    );
+    background-size: 400% 100%;
+  }
+}
+
+/* The dossier: rendered Markdown in the console's type scale. */
+.dossier {
+  @apply text-body-lg text-on-surface;
+  overflow-wrap: anywhere;
+}
+.dossier h1 {
+  @apply mb-3 text-headline-xl text-on-surface;
+}
+.dossier h2 {
+  @apply mt-10 mb-3 scroll-mt-20 border-b border-outline-variant pb-2 text-headline-lg text-primary;
+}
+.dossier h3 {
+  @apply mt-6 mb-2 scroll-mt-20 text-headline-md text-on-surface;
+}
+.dossier p {
+  @apply my-3 text-on-surface-variant;
+}
+.dossier ul {
+  @apply my-3 list-disc space-y-1.5 pl-5 text-on-surface-variant;
+}
+.dossier ul ul {
+  @apply my-1.5;
+}
+.dossier li::marker {
+  color: var(--color-outline);
+}
+.dossier strong {
+  @apply font-semibold text-on-surface;
+}
+.dossier em {
+  @apply text-on-surface-variant;
+}
+.dossier code {
+  @apply rounded-sm bg-surface-high px-1 py-0.5 text-code-sm text-tertiary break-all;
+}
+.dossier table {
+  @apply my-4 w-full border-collapse text-body-sm;
+}
+.dossier th {
+  @apply label border-b border-outline-variant bg-surface-low px-3 py-2 text-left;
+}
+.dossier td {
+  @apply border-b border-outline-variant/50 px-3 py-2 align-top text-on-surface-variant;
+}
+.dossier .table-wrap {
+  @apply overflow-x-auto;
+}
+
+@media print {
+  .no-print {
+    display: none !important;
+  }
+  body {
+    background: #fff !important;
+    color: #111 !important;
+  }
+  .print-root {
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+  .dossier,
+  .dossier p,
+  .dossier ul,
+  .dossier td,
+  .dossier em {
+    color: #111 !important;
+  }
+  .dossier h1,
+  .dossier h2,
+  .dossier h3,
+  .dossier strong {
+    color: #000 !important;
+  }
+  .dossier h2 {
+    border-color: #999 !important;
+    break-after: avoid;
+  }
+  .dossier code {
+    background: #eee !important;
+    color: #222 !important;
+  }
+  .dossier th {
+    background: #eee !important;
+    color: #222 !important;
+  }
+  .dossier td,
+  .dossier th {
+    border-color: #bbb !important;
+  }
+}

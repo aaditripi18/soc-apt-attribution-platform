@@ -31,6 +31,7 @@ import re
 from collections.abc import Mapping
 from typing import Any
 
+from attribution_platform.api.context import ApiContext, rule_key
 from attribution_platform.api.errors import BackendError, InvalidIdentifierError, NotFoundError
 from attribution_platform.dataplane import (
     ElasticClient,
@@ -41,6 +42,7 @@ from attribution_platform.dataplane import (
     load_observation,
 )
 from attribution_platform.domain import Evidence, Observation, to_serializable
+from attribution_platform.investigation.dossier import DOSSIER_VERSION, render_dossier
 from attribution_platform.investigation.records import (
     list_investigations,
     load_attribution_analysis,
@@ -109,6 +111,7 @@ def list_investigation_summaries(client: ElasticClient) -> list[dict[str, Any]]:
             "source_kind": r.get("source_kind"),
             "attack_kb_version": r.get("attack_kb_version"),
             "evidence": r.get("evidence"),
+            "evidence_in_units": r.get("evidence_in_units"),
             "units": len(r.get("units") or ()),
         }
         for r in records
@@ -238,4 +241,76 @@ def search_units(client: ElasticClient, params: Mapping[str, str]) -> dict[str, 
         "limit": limit,
         "truncated": len(hits) >= limit,
         "units": units,
+    }
+
+
+# ---------------------------------------------------------------------------
+# ADR-0016: what the analyst frontend reads beside the stored records
+# ---------------------------------------------------------------------------
+
+
+def _reference(value: Any, what: str) -> Any:
+    if value is None:
+        raise NotFoundError(f"{what} is not available: the server was started without it")
+    return value
+
+
+def get_attack_techniques(context: ApiContext) -> Mapping[str, Any]:
+    """Active ATT&CK techniques with tactics and Group prevalence."""
+    return _reference(context.techniques, "the ATT&CK technique catalogue")  # type: ignore[no-any-return]
+
+
+def get_coverage(context: ApiContext) -> Mapping[str, Any]:
+    """The committed detection coverage report and content-source summaries."""
+    return _reference(context.coverage, "the detection coverage report")  # type: ignore[no-any-return]
+
+
+def get_unit_evidence(client: ElasticClient, context: ApiContext, group_id: str) -> dict[str, Any]:
+    """Every Evidence of one unit, the Observations they are grounded in and the
+    detection rules that produced them — each exactly as stored. Evidence is in
+    (start time, id) order; a rule the pinned import reports do not list is
+    simply absent from ``rules`` (never guessed)."""
+    group_id = _validate_identifier(group_id, field="group_id")
+    try:
+        group = load_correlation_group(client, group_id)
+        if group is None:
+            raise NotFoundError(f"no attribution unit found with group_id={group_id!r}")
+        evidence = [e for e in (load_evidence(client, i) for i in group.member_evidence_ids) if e]
+        observations = [
+            o for o in (load_observation(client, i) for i in group.member_observation_ids) if o
+        ]
+    except ElasticIntegrationError as exc:
+        raise BackendError(f"could not load the evidence of unit {group_id!r}: {exc}") from exc
+    evidence.sort(
+        key=lambda e: (e.time_span.start.isoformat() if e.time_span else "", e.evidence_id)
+    )
+    rules = {}
+    for item in evidence:
+        key = rule_key(item.provenance.method)
+        if key in context.rules:
+            rules[key] = dict(context.rules[key])
+    return {
+        "group_id": group_id,
+        "evidence": [to_serializable(e) for e in evidence],
+        "observations": {o.observation_id: to_serializable(o) for o in observations},
+        "rules": rules,
+    }
+
+
+def get_dossier(
+    client: ElasticClient, context: ApiContext, investigation_id: str
+) -> dict[str, Any]:
+    """The attribution dossier of one investigation as Markdown, rendered from
+    the persisted read model (``investigation/dossier.py``)."""
+    investigation_id = _validate_identifier(investigation_id, field="investigation_id")
+    knowledge = _reference(context.knowledge, "the ATT&CK knowledge base")
+    get_investigation(client, investigation_id)  # 404 if absent
+    try:
+        markdown = render_dossier(client, knowledge, investigation_id)
+    except ElasticIntegrationError as exc:
+        raise BackendError(f"could not render the dossier of {investigation_id!r}: {exc}") from exc
+    return {
+        "investigation_id": investigation_id,
+        "dossier_version": DOSSIER_VERSION,
+        "markdown": markdown,
     }

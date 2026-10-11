@@ -115,9 +115,30 @@ python scripts/check_recording.py path/to/recording.zip
 python scripts/check_reproducibility.py path/to/recording.zip
 ```
 
-`--serve` starts the read-model API on `127.0.0.1:8000` (`/investigations`, `/units/{id}`, `/units?technique=`);
-`--elasticsearch` persists to and serves from Elasticsearch instead of memory (see below). Recording
-archives come from `scripts/acquire_corpus_telemetry.py` (git-ignored cache, tracked manifests).
+`--serve` starts the read-model API on `127.0.0.1:8000` (`/api/investigations`, `/api/units/{id}`,
+`/api/units?technique=`) and, once the frontend is built, the analyst console at the same address. Several
+recordings can be given in one session. `--elasticsearch` persists to and serves from Elasticsearch instead of
+memory (see below). Recording archives come from `scripts/acquire_corpus_telemetry.py` (git-ignored cache, tracked
+manifests).
+
+### The analyst console
+
+A reader over the read-model API ([ADR-0016](docs/architecture/adr/0016-analyst-frontend.md)): investigations, a
+host timeline, and per unit the attack sequence, evidence with the rule and the raw observation behind each item,
+techniques with their Group prevalence, an alphabetical candidate × technique matrix, what evidence would separate
+the candidates, advisory indicator context, provenance — plus detection coverage and the written dossier. It
+computes nothing and shows no likelihood, confidence or ranking: none exists until there is a calibration version.
+
+Requires **Node.js 20+**.
+
+```bash
+cd frontend && npm ci && npm run build && cd ..        # once; output in frontend/dist (git-ignored)
+python -m attribution_platform.investigation otrf-lsass-01-logonpasswords otrf-apt29-day1 --serve
+# open http://127.0.0.1:8000/
+```
+
+For frontend work, run the API as above and `npm run dev` in `frontend/` (http://localhost:5173, `/api` proxied
+to port 8000; set `VITE_API_TARGET` for another address). `npm run typecheck`, `npm test`, `npm run build`.
 
 ### Checks
 

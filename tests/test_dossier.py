@@ -93,3 +93,27 @@ def test_indicator_context_quotes_the_publisher(tmp_path: Path) -> None:
 def test_unknown_investigation_is_refused() -> None:
     with pytest.raises(KeyError):
         render_dossier(FakeElasticClient(), load_attack_knowledge(), "investigation::none")
+
+
+# ===========================================================================
+# Observed values are data, not markup (dossier/2)
+# ===========================================================================
+
+
+def test_observed_values_cannot_restyle_the_dossier() -> None:
+    """A command line or a rule claim may contain ``~~``, ``*``, ``|`` or
+    backticks. Rendered as Markdown they must still read as the same text."""
+    from attribution_platform.investigation.dossier import _code, _text
+
+    claim = r"process.executable not in 'C:\Program Files\*\x.exe,~~y~~' [a] | <b> _c_ #d `e`"
+    escaped = _text(claim)
+    for special in "*~[]|<>_#`":
+        assert all(escaped[i - 1] == "\\" for i, ch in enumerate(escaped) if ch == special), special
+    # un-escaping gives the claim back exactly
+    assert re.sub(r"\\([\\`*_~\[\]<>|#])", r"\1", escaped) == claim
+
+    assert _code("plain") == "`plain`"
+    assert _code("a `b` c") == "``a `b` c``"
+    assert _code("`edge`") == "`` `edge` ``"
+    assert _code("x | y", in_table=True) == "`x \\| y`"
+    assert _code("two\nlines") == "`two lines`"

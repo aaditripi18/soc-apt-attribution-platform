@@ -194,6 +194,7 @@ could use to mutate the inputs.
 from __future__ import annotations
 
 import hashlib
+import weakref
 from collections.abc import Callable
 from dataclasses import dataclass
 from enum import Enum
@@ -209,7 +210,10 @@ from attribution_platform.attack_knowledge.traversal import (
 from attribution_platform.attribution.ach_matrix import ACHMatrix
 from attribution_platform.attribution.candidate_generation import CandidateGenerationResult
 from attribution_platform.attribution.contracts import UNATTRIBUTED_CANDIDATE_ID, EvidenceRole
-from attribution_platform.attribution.errors import AttributionError
+from attribution_platform.attribution.errors import (
+    AttributionError,
+    SearchBoundExceededError,
+)
 
 #: Method identity for this engine, mirroring every prior gate's own
 #: constant-pair convention.
@@ -507,7 +511,7 @@ def _find_combination_partition(
                     # one level can be exponentially large (a unit with 27
                     # features ran for hours before the post-level check).
                     if len(co_used) + len(next_level) > _MAX_CANDIDATE_BLOCKS:
-                        raise AttributionError(
+                        raise SearchBoundExceededError(
                             f"_find_combination_partition: more than "
                             f"{_MAX_CANDIDATE_BLOCKS} co-used candidate blocks for {n} "
                             "features — exceeds the exact search's work bound; failing "
@@ -531,7 +535,7 @@ def _find_combination_partition(
         if not remaining:
             valid_partitions.append(chosen)
             if len(valid_partitions) > _MAX_VALID_PARTITIONS:
-                raise AttributionError(
+                raise SearchBoundExceededError(
                     f"_find_combination_partition: more than {_MAX_VALID_PARTITIONS} valid "
                     f"partitions for {n} features — exceeds the exact search's work bound; "
                     "failing closed rather than approximating"
@@ -586,6 +590,28 @@ def _find_combination_partition(
     # the same order for
     # identical logical input regardless of how `features` was supplied.
     return tuple(sorted(best, key=lambda b: tuple(sorted(b))))
+
+
+#: Partitions already found, per ``g`` closure. The partition is a pure function
+#: of the feature set and ``g`` (which is candidate-independent and fixed for one
+#: knowledge base), and many hypotheses of a unit share a supporting-feature set,
+#: so the exact search runs once per distinct set instead of once per hypothesis.
+_PARTITIONS: weakref.WeakKeyDictionary[
+    Callable[[frozenset[str]], float | None],
+    dict[tuple[str, ...], tuple[frozenset[str], ...]],
+] = weakref.WeakKeyDictionary()
+
+
+def _combination_partition(
+    features: tuple[str, ...], g_of: Callable[[frozenset[str]], float | None]
+) -> tuple[frozenset[str], ...]:
+    """:func:`_find_combination_partition`, remembered per ``(g_of, feature set)``.
+    A search that stops at its work bound raises and is not remembered."""
+    found = _PARTITIONS.setdefault(g_of, {})
+    key = tuple(sorted(features))
+    if key not in found:
+        found[key] = _find_combination_partition(key, g_of)
+    return found[key]
 
 
 def _make_hypothesis_summary(
@@ -666,7 +692,7 @@ def _summarize_hypothesis(
 
     distinct_features = tuple(sorted(assessment_ids_by_feature))
     combination_blocks = (
-        _find_combination_partition(distinct_features, g_of) if len(distinct_features) >= 2 else ()
+        _combination_partition(distinct_features, g_of) if len(distinct_features) >= 2 else ()
     )
 
     contributions: list[EvidenceContribution] = []
@@ -849,7 +875,7 @@ def compute_unattributed_decision_support(
 
     g_of = _make_g_of(knowledge)
     combination_blocks = (
-        _find_combination_partition(observed_features, g_of) if len(observed_features) >= 2 else ()
+        _combination_partition(observed_features, g_of) if len(observed_features) >= 2 else ()
     )
     covered: set[str] = set()
     for block in combination_blocks:

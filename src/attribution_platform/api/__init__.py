@@ -24,9 +24,14 @@ Gate status:
   engine investigation run persists (``attribution_platform.investigation``);
   attribution analyses are explicitly uncalibrated (no likelihood, confidence
   or ranking field exists).
-- **Not yet implemented:** search/filter endpoints; authentication (the server
-  binds to localhost); calibrated decisions (need a ``calibration_version``);
-  any frontend files.
+- **ADR-0009 Amendment A (implemented):** unit search and filtering.
+- **ADR-0016 (implemented):** ``context`` — pinned reference data (ATT&CK
+  technique catalogue, coverage report, rule index) shaped once at start-up;
+  ``GET /units/<id>/evidence``, ``GET /investigations/<id>/dossier``,
+  ``GET /coverage``, ``GET /attack/techniques``; every route also under
+  ``/api``; the built analyst frontend (``frontend/dist``) served as files.
+- **Not yet implemented:** authentication (the server binds to localhost and is
+  read-only); calibrated decisions (need a ``calibration_version``).
 """
 
 from __future__ import annotations

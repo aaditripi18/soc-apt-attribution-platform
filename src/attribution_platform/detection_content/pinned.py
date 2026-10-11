@@ -1,0 +1,37 @@
+"""Where the pinned, generated detection content lives in the repository.
+
+One place for the paths every entry point shares (the investigation CLI, the
+read-model API and the report builders), so the engine that runs an
+investigation and the API that explains it always read the same files.
+"""
+
+from __future__ import annotations
+
+from pathlib import Path
+
+REPO_ROOT = Path(__file__).resolve().parents[3]
+
+_SIGMA_GENERATED = REPO_ROOT / "data" / "detection" / "sigma" / "r2026-07-01" / "generated"
+_ELASTIC_GENERATED = REPO_ROOT / "data" / "detection" / "elastic" / "195f15c0bac8" / "generated"
+
+#: ADR-0007: the Sigma rule pack and its import report.
+SIGMA_PACK = _SIGMA_GENERATED / "sigma-r2026-07-01-sigma_core++.rules.json"
+SIGMA_IMPORT_REPORT = _SIGMA_GENERATED / "sigma-r2026-07-01-sigma_core++.import-report.json"
+#: ADR-0015: Elastic prebuilt rules, translated exactly, beside the Sigma pack.
+ELASTIC_PACK = _ELASTIC_GENERATED / "elastic-195f15c0bac8.rules.json"
+ELASTIC_IMPORT_REPORT = _ELASTIC_GENERATED / "elastic-195f15c0bac8.import-report.json"
+#: ADR-0007 D9/D10: the full-universe coverage report over both packs.
+COVERAGE_REPORT = _SIGMA_GENERATED / "coverage-report.json"
+
+#: ADR-0016: the built analyst frontend (``npm run build`` in ``frontend/``).
+FRONTEND_DIST = REPO_ROOT / "frontend" / "dist"
+
+__all__ = [
+    "COVERAGE_REPORT",
+    "ELASTIC_IMPORT_REPORT",
+    "ELASTIC_PACK",
+    "FRONTEND_DIST",
+    "REPO_ROOT",
+    "SIGMA_IMPORT_REPORT",
+    "SIGMA_PACK",
+]

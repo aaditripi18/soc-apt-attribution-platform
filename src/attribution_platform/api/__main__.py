@@ -26,8 +26,16 @@ from __future__ import annotations
 import os
 import sys
 
+from attribution_platform.api.context import load_api_context
 from attribution_platform.api.server import create_server
+from attribution_platform.attack_knowledge.loader import load_attack_knowledge
 from attribution_platform.dataplane import ElasticsearchHttpClient
+from attribution_platform.detection_content.pinned import (
+    COVERAGE_REPORT,
+    ELASTIC_IMPORT_REPORT,
+    FRONTEND_DIST,
+    SIGMA_IMPORT_REPORT,
+)
 
 
 def elasticsearch_client_from_env(env: dict[str, str]) -> ElasticsearchHttpClient | None:
@@ -55,8 +63,17 @@ def main(env: dict[str, str] | None = None) -> int:
     host = env.get("API_HOST", "127.0.0.1")
     port = int(env.get("API_PORT", "8000"))
 
-    server = create_server(client, host=host, port=port)
-    print(f"Serving the read-model API on http://{host}:{port} (Ctrl+C to stop)")
+    context = load_api_context(
+        load_attack_knowledge(),
+        coverage_report=COVERAGE_REPORT,
+        sigma_import_report=SIGMA_IMPORT_REPORT,
+        elastic_import_report=ELASTIC_IMPORT_REPORT,
+        static_dir=FRONTEND_DIST,
+    )
+    server = create_server(client, host=host, port=port, context=context)
+    print(f"Serving the read-model API on http://{host}:{port}/api (Ctrl+C to stop)")
+    if context.static_dir is not None:
+        print(f"Analyst frontend: http://{host}:{port}/")
     try:
         server.serve_forever()
     except KeyboardInterrupt:

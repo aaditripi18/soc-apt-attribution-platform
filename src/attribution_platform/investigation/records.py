@@ -28,11 +28,14 @@ from attribution_platform.dataplane import ElasticClient, ElasticIntegrationErro
 INVESTIGATIONS_INDEX = "attribution-platform-investigations-v1"
 ATTRIBUTION_ANALYSES_INDEX = "attribution-platform-attribution-analyses-v1"
 UNIT_SUMMARIES_INDEX = "attribution-platform-unit-summaries-v1"
-INVESTIGATION_SCHEMA_VERSION = "investigation/1"
+#: /2 adds ``evidence_in_units`` / ``evidence_outside_units`` (ADR-0009 Amendment D).
+INVESTIGATION_SCHEMA_VERSION = "investigation/2"
 UNIT_SUMMARY_SCHEMA_VERSION = "unit-summary/1"
 #: /2 adds ``collection_guidance`` (ADR-0005 Amendment E); /3 adds
-#: ``indicator_matches`` (ADR-0013, contextual only).
-ATTRIBUTION_ANALYSIS_SCHEMA_VERSION = "attribution-analysis/3"
+#: ``indicator_matches`` (ADR-0013, contextual only); /4 adds
+#: ``comparison_status`` / ``comparison_note`` and lets the baseline be absent
+#: (ADR-0009 Amendment D: a unit beyond the exact search's work bound).
+ATTRIBUTION_ANALYSIS_SCHEMA_VERSION = "attribution-analysis/4"
 
 # Field mappings in the same form as dataplane/mappings.py: the "properties"
 # body itself (ensure_index wraps it); a "properties"-wrapped form would be
@@ -69,6 +72,16 @@ class CalibrationStatus(Enum):
     does."""
 
     UNCALIBRATED = "uncalibrated"
+
+
+class ComparisonStatus(Enum):
+    """Whether ADR-0005's per-candidate comparison was computed for the unit.
+    ``NOT_COMPUTED`` means the exact search stopped at its work bound: the
+    candidates and what would separate them are still recorded, the
+    per-candidate quantities and the baseline are absent — never estimated."""
+
+    COMPUTED = "computed"
+    NOT_COMPUTED = "not_computed"
 
 
 UNCALIBRATED_NOTE = (
@@ -161,11 +174,13 @@ class AttributionAnalysisRecord:
     attack_kb_version: str
     min_profile_floor: int
     observed_feature_technique_ids: tuple[str, ...]
-    unattributed_decision_support: float
+    unattributed_decision_support: float | None
     candidates: tuple[CandidateView, ...]
     hypotheses: tuple[HypothesisView, ...]
     collection_guidance: CollectionGuidanceView | None = None
     indicator_matches: tuple[IndicatorMatchView, ...] = ()
+    comparison_status: ComparisonStatus = ComparisonStatus.COMPUTED
+    comparison_note: str | None = None
     calibration_status: CalibrationStatus = CalibrationStatus.UNCALIBRATED
     calibration_version: None = None
     calibration_note: str = UNCALIBRATED_NOTE
@@ -184,6 +199,11 @@ class InvestigationRecord:
     observations_persisted: int
     evidence: int
     units: tuple[str, ...]
+    #: Evidence that is a member of some unit, and Evidence that is not. The
+    #: second is always low-level (enrich-tier) Evidence with no structural link
+    #: to core Evidence: it never forms or joins a unit (ADR-0003 Amendment H).
+    evidence_in_units: int = 0
+    evidence_outside_units: int = 0
     schema_version: str = field(default=INVESTIGATION_SCHEMA_VERSION)
 
 
@@ -312,6 +332,7 @@ __all__ = [
     "AttributionAnalysisRecord",
     "CalibrationStatus",
     "CandidateView",
+    "ComparisonStatus",
     "ContributionView",
     "HypothesisView",
     "InvestigationRecord",

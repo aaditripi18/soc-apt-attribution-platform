@@ -158,3 +158,59 @@ counts, no likelihood / confidence / ranking (D3 of this ADR still holds); each 
 and each Evidence quotes its own `claim` (rule, matched values, mapping basis); low-level Evidence is labelled as
 context; indicator matches carry the publisher's sentence and validity. Deterministic (tested: the same read model
 renders the same bytes). It is a report, not a user interface — the frontend remains the owner's later decision.
+
+## Amendment D (2026-10-11) — What the frontend's audit found: honest counts, and one unit must not abort a run
+
+**Status:** ACCEPTED (owner instruction 2026-10-11: "the site should … answer each and every thing correctly").
+Found while building and auditing the analyst frontend (ADR-0016); both are backend facts the read model stated
+wrongly or not at all.
+
+**D1 — A unit beyond the exact search's work bound is recorded, not fatal.** ADR-0005 §D3's combination-partition
+search is exact and stops at a work bound rather than approximating. After ADR-0015 widened detection content, one
+unit of the pinned `otrf-apt3-empire` recording reached 13 decision features and exceeded the bound; the exception
+aborted the whole investigation, so the recording could no longer be investigated at all. Now:
+
+- the bound raises its own type, `SearchBoundExceededError` (every other `AttributionError` is still a defect);
+- `analyze_unit` catches exactly that type and stores the unit with `comparison_status = "not_computed"`, the
+  reason in `comparison_note`, **no** hypotheses and **no** baseline (`unattributed_decision_support = null`) —
+  nothing is estimated in their place;
+- candidates, the candidate × technique facts and collection guidance do not depend on the search and are stored
+  as usual; the dossier and the frontend say in words that the comparison was not computed.
+
+`attribution-analysis/4`. Raising the bound or changing the search is an ADR-0005 decision and is not made here.
+
+**D2 — The investigation record says how much Evidence is in units.** Units are the connected components of
+*core* Evidence; low-level (enrich-tier) Evidence joins a unit only through a structural link to it (ADR-0003
+Amendment H). Low-level Evidence with no such link is in no unit — by design — but the record carried only the
+total, and the dossier said "N Evidence item(s) in M unit(s)", which was false whenever such Evidence existed
+(`otrf-lsass-01-logonpasswords`: 141 Evidence, 48 in units). The record now carries `evidence_in_units` and
+`evidence_outside_units` (`investigation/2`), the dossier states both, and the run fails closed if any *core*
+Evidence is in no unit.
+
+**D3 — Dossier values are data, not markup (`dossier/2`).** Rule claims and command lines were written into the
+Markdown raw; a `~~`, `*` or `|` inside telemetry restyled or re-tabulated the rendered text. Observed values are
+now code spans (fenced past any backticks they contain, `|` escaped in tables) or have Markdown's special
+characters escaped. The raw text is unchanged in meaning; un-escaping gives the claim back exactly (tested).
+
+**D4 — `scripts/audit_served_read_model.py`.** Audits a running API by independent recomputation, GET only:
+every Evidence's rule is loaded from the pinned pack and re-evaluated on the served Observation; g is recomputed
+from the ATT&CK knowledge base; the candidate set and every candidate × technique cell are rebuilt from ATT&CK
+`uses` relationships; collection-guidance users and splits, unit summaries, search filters, sequence integrity
+and coverage counts are recomputed; no decision-field key may appear.
+
+`INVESTIGATION_METHOD_VERSION` 1.4 (investigation ids change; nothing else about a run does).
+
+**D5 — Two exact speed-ups (no result changes).** Measured while auditing: every ATT&CK traversal call rebuilt its
+relationship index from all 21,262 relationships (~10 ms per call), and the exact combination search asks for `g`
+tens of thousands of times and was re-run for every hypothesis of a unit even when hypotheses share a
+supporting-feature set.
+
+- `attack_knowledge/traversal.py`: the `uses` indexes are built once per loaded `AttackKnowledge` (deeply frozen,
+  so the index is a pure function of that object), keyed by identity, guarded by a weak reference, dropped with
+  the object, and read-only. `groups_using_technique`: 10.7 ms → under 0.001 ms.
+- `attribution/comparative_analysis.py`: the partition found for a feature set is remembered per `g` closure
+  (`g` is candidate-independent); a search that stops at its bound is not remembered.
+
+Both are covered by the existing equivalence tests (the exhaustive-search comparison, the full suite) and a test
+that the remembered index equals a fresh build, is per knowledge base and is released with it. The dossier of
+`otrf-apt29-day1` (65 units) rendered in 17 s before; see the implementation record in ADR-0016 for the time after.

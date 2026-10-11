@@ -28,15 +28,18 @@ from attribution_platform.attribution.collection_guidance import (
     compute_collection_guidance,
 )
 from attribution_platform.attribution.comparative_analysis import (
+    HypothesisSupportSummary,
     compute_comparative_evidence,
     compute_unattributed_decision_support,
 )
 from attribution_platform.attribution.contracts import Candidate
+from attribution_platform.attribution.errors import SearchBoundExceededError
 from attribution_platform.correlation import (
     BehavioralSequence,
     CorrelationGroup,
 )
 from attribution_platform.correlation.contextual import CONTEXTUAL_CORRELATION_METHOD_VERSION
+from attribution_platform.correlation.errors import CorrelationError
 from attribution_platform.correlation.process_identity import PROCESS_IDENTITY_METHOD_VERSION
 from attribution_platform.correlation.sequence_engine import SEQUENCE_ENGINE_METHOD_VERSION
 from attribution_platform.correlation.structural import STRUCTURAL_CORRELATION_METHOD_VERSION
@@ -49,7 +52,7 @@ from attribution_platform.dataplane import (
     persist_observation,
 )
 from attribution_platform.detection import DetectionEngine
-from attribution_platform.domain import Evidence, Observation
+from attribution_platform.domain import Evidence, EvidenceQuality, Observation
 from attribution_platform.intel.indicators import (
     IndicatorMatch,
     IndicatorSet,
@@ -60,6 +63,7 @@ from attribution_platform.investigation.records import (
     CandidateView,
     CollectionGuidanceView,
     CollectionQuestionView,
+    ComparisonStatus,
     ContributionView,
     HypothesisView,
     IndicatorMatchView,
@@ -76,8 +80,11 @@ from attribution_platform.replay import (
 from attribution_platform.replay.recording_pipeline import RecordingSource, analyze_recording
 
 #: 1.1: unit summaries (ADR-0009 Amendment A); 1.2: evidence-collection guidance
-#: per unit (ADR-0005 Amendment E); 1.3: advisory indicator matches (ADR-0013).
-INVESTIGATION_METHOD_VERSION = "1.3"
+#: per unit (ADR-0005 Amendment E); 1.3: advisory indicator matches (ADR-0013);
+#: 1.4: a unit beyond the exact comparison search's work bound is recorded as
+#: "comparison not computed" instead of aborting the run, and the record says how
+#: much Evidence is in units and how much is not (ADR-0009 Amendment D).
+INVESTIGATION_METHOD_VERSION = "1.4"
 #: ADR-0005 §D16 structural lower bound; the fitted floor needs a calibration_version.
 STRUCTURAL_MIN_PROFILE_FLOOR = 1
 
@@ -172,10 +179,23 @@ def analyze_unit(
     its evidence-collection guidance (ADR-0005 Amendment E)."""
     candidates = generate_candidates(group, sequence, knowledge)
     matrix = build_ach_matrix(group, sequence, candidates, knowledge)
-    comparative = compute_comparative_evidence(
-        matrix, knowledge, candidates, min_profile_floor=STRUCTURAL_MIN_PROFILE_FLOOR
-    )
-    baseline = compute_unattributed_decision_support(matrix, knowledge)
+    comparison_note: str | None = None
+    summaries: tuple[HypothesisSupportSummary, ...] = ()
+    baseline_support: float | None = None
+    try:
+        comparative = compute_comparative_evidence(
+            matrix, knowledge, candidates, min_profile_floor=STRUCTURAL_MIN_PROFILE_FLOOR
+        )
+        baseline_support = compute_unattributed_decision_support(matrix, knowledge).decision_support
+        summaries = comparative.hypothesis_summaries  # already in id order
+    except SearchBoundExceededError as exc:
+        # Fail closed for this unit only: nothing is approximated, and the
+        # candidates and collection guidance below do not depend on the search.
+        detail = str(exc).split(": ", 1)[-1]  # without the raising function's name
+        comparison_note = (
+            f"The per-candidate comparison was not computed for this unit: {detail}. "
+            "Candidates and what would separate them are unaffected."
+        )
     hypotheses = tuple(
         HypothesisView(
             hypothesis_id=summary.hypothesis_id,
@@ -194,7 +214,7 @@ def analyze_unit(
                 for c in summary.contributions
             ),
         )
-        for summary in comparative.hypothesis_summaries  # already in id order
+        for summary in summaries
     )
     observed = tuple(sorted({a.technique_stix_id for a in matrix.assessments}))
     guidance = compute_collection_guidance(
@@ -212,7 +232,7 @@ def analyze_unit(
         attack_kb_version=knowledge.attack_kb_version,
         min_profile_floor=STRUCTURAL_MIN_PROFILE_FLOOR,
         observed_feature_technique_ids=observed,
-        unattributed_decision_support=baseline.decision_support,
+        unattributed_decision_support=baseline_support,
         candidates=tuple(
             sorted(
                 (_candidate_view(c, knowledge) for c in candidates.candidates),
@@ -221,6 +241,10 @@ def analyze_unit(
         ),
         hypotheses=hypotheses,
         collection_guidance=_guidance_view(guidance),
+        comparison_status=(
+            ComparisonStatus.COMPUTED if comparison_note is None else ComparisonStatus.NOT_COMPUTED
+        ),
+        comparison_note=comparison_note,
     )
 
 
@@ -309,6 +333,18 @@ def run_investigation(
             for e in r.evidences
         }
 
+    in_units = {evidence_id for group in groups for evidence_id in group.member_evidence_ids}
+    stray_core = sorted(
+        evidence_id
+        for evidence_id, (evidence, _) in members.items()
+        if evidence_id not in in_units and evidence.quality is not EvidenceQuality.LOW
+    )
+    if stray_core:
+        # ADR-0003 Amendment H: every core Evidence belongs to exactly one unit.
+        raise CorrelationError(
+            f"{len(stray_core)} core Evidence item(s) belong to no unit, e.g. {stray_core[0]!r}"
+        )
+
     sequence_by_group = {s.group_id: s for s in sequences}
     for group in groups:
         persist_correlation_group(client, group)
@@ -349,6 +385,8 @@ def run_investigation(
         observations_persisted=len(observations),
         evidence=evidence_count,
         units=tuple(sorted(g.group_id for g in groups)),
+        evidence_in_units=len(in_units),
+        evidence_outside_units=evidence_count - len(in_units),
     )
     persist_investigation(client, record)
     return record
