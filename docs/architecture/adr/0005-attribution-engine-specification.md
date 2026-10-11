@@ -1771,3 +1771,52 @@ split). The largest unit (11 observed techniques, 169 candidates) is asked first
 Location* — each detectable by this platform. **Stated limitation:** a balanced split favours moderately common
 techniques, because without a prior those separate the most candidates; it is a statement about the candidate
 set, not about the actor's likely next action. §D14's calibrated counterfactual will reweight it.
+
+## Implementation record — pruned exact search, and what ordering candidates would get right (2026-10-11)
+
+**The search (no change to §D3's result).** After ADR-0015 widened detection content, units of the pinned
+`otrf-apt3-empire` recording reached 12–21 decision features and the enumerate-every-valid-partition search hit
+its bound (more than 1,000,000 valid partitions for 12 features). The search now selects the same partition
+without holding them all:
+
+- a branch ends at the first pair of already-chosen blocks whose union is admissible — every partition below it
+  would fail the maximality filter (step 3) anyway;
+- a branch ends when the running sum of g over its combination blocks exceeds the best maximal partition found —
+  g is positive, so it cannot win the tie-break (an equal sum is kept; the canonical key decides);
+- a feature that could merge with a chosen block cannot stay atomic, so the rarest block containing it is a floor
+  on what the branch still costs;
+- only blocks whose lowest feature is the lowest uncovered feature are tried, rarest first; feature sets are bit
+  masks.
+
+The order tried never changes which partition wins, and g is summed in the same order as before, so results are
+bit-identical: `tests/test_combination_partition_equivalence.py` (real Group profiles and adversarial synthetic g
+against the exhaustive reference) passes unchanged. `_MAX_SEARCH_STEPS` (5,000,000 nodes) replaces the partition
+count as the fail-closed bound. Measured on the Empire sets: every per-candidate search (up to 13 features, 8,178
+co-used blocks) finishes in under 0.4 s; the one 21-feature baseline search (25,323 co-used blocks) still stops at
+the bound (and did not finish in 35 minutes with the bound raised 24-fold). Re-run: 66 of 67 Empire units fully
+computed, one with every per-candidate quantity and no baseline; the investigation takes 641 s instead of 1,107 s. The run therefore keeps the two searches apart (`comparison_status`: `computed`,
+`baseline_not_computed`, `not_computed` — ADR-0009 Amendment D).
+
+**Would ordering the candidates name the right actor? Measured: no.** `scripts/measure_actor_ranking.py`, on the
+two served recordings whose emulated actor is known (OTRF: APT29 day 1 → G0016, APT3 Empire → G0022):
+
+| | APT29 day 1 | APT3 Empire |
+|---|---|---|
+| Units in which the emulated actor is a candidate at all | 15 of 65 | 6 of 67 |
+| …its rank by stored `support_value` (median, of median candidates) | 102 of 103 | 107.5 of 164 |
+| …first, or in the top 10 | never | never |
+| All units pooled: observed techniques in the actor's ATT&CK profile | 10 of 42 (profile: 66) | 8 of 25 (profile: 44) |
+| Rank by overlap count / rarity-weighted overlap / F1 | 34 / 37 / 54 of 152 | 24 / 26 / 33 of 148 |
+| Rank by overlap ÷ profile size (the current normalisation) | 121 of 152 | 60 of 148 |
+| Sub-techniques folded into parents: best rank under any ordering | 27 of 162 | 14 of 157 |
+| Who would have been named first | Kimsuky, BlackOasis, Ke3chang, BRONZE BUTLER | FIN7, APT32, Aquatic Panda, Chimera |
+
+Under every ordering tried, at unit and at investigation level, a "most likely actor" would have been wrong on
+both cases, usually by dozens of places. Two recordings prove nothing general, but they are the only known
+answers available and they agree with what ATT&CK's own guidance says: technique use is shared, and a Group's
+published profile is what was reported, not what it does. Breadth normalisation makes it worse — it rewards
+Groups with three-technique profiles. This is why ADR-0009 D3 withholds any ordering, and it means calibration
+(ADR-0006) is not the missing piece by itself: a calibrated decision layer over technique overlap alone would
+be right to abstain on both cases. Naming an actor needs evidence that discriminates — software and tooling tied
+to a Group, infrastructure and indicators (ADR-0013 is contextual today), or procedures finer than a technique id —
+and known-answer cases from several actors to check it against.

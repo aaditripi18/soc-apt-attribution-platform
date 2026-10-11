@@ -94,7 +94,11 @@ export function ProvenanceTab({ data, unitId }: { data: UnitData; unitId: string
           <Row label="Calibration version">{analysis.calibration_version ?? "none exists"}</Row>
           <Row label="ATT&CK knowledge base">{analysis.attack_kb_version}</Row>
           <Row label="Comparison">
-            {analysis.comparison_status === "not_computed" ? <Badge tone="warning">not computed</Badge> : "computed"}
+            {analysis.comparison_status === "computed" ? (
+              "computed"
+            ) : (
+              <Badge tone="warning">{analysis.comparison_status.replace(/_/g, " ")}</Badge>
+            )}
           </Row>
           <Row label="Profile floor">{analysis.min_profile_floor}</Row>
           <Row label="Guidance method">{analysis.collection_guidance?.method_version ?? "—"}</Row>

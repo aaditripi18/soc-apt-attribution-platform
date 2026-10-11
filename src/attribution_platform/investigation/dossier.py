@@ -130,7 +130,7 @@ def _evidence_rows(
 def _baseline_line(analysis: Mapping[str, Any]) -> str:
     baseline = analysis.get("unattributed_decision_support")
     if baseline is None:
-        return f"- {analysis.get('comparison_note') or 'The comparison was not computed.'}"
+        return f"- {analysis.get('comparison_note') or 'The baseline was not computed.'}"
     return f"- Unattributed baseline (support if no Group is involved): {float(baseline):.3f}."
 
 

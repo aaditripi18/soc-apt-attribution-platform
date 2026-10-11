@@ -386,7 +386,7 @@ def test_unit_beyond_the_search_bound_is_recorded_not_fatal(
     multi = [a for a in computed if len(a["observed_feature_technique_ids"]) >= 2]
     assert multi, "the fixture needs a unit with two decision features"
 
-    monkeypatch.setattr(comparative_analysis, "_MAX_VALID_PARTITIONS", 0)
+    monkeypatch.setattr(comparative_analysis, "_MAX_SEARCH_STEPS", 0)
     client, bounded = run()
     assert bounded.units == record.units  # the investigation still completes
     by_group = {a["group_id"]: a for a in computed}
@@ -430,3 +430,40 @@ def test_investigation_says_how_much_evidence_is_in_units(
         f"{record['evidence']} Evidence item(s): {in_units} in {len(units)} unit(s)"
         in (dossier["markdown"])
     )
+
+
+def test_baseline_beyond_the_bound_keeps_the_per_candidate_comparison(
+    knowledge: AttackKnowledge,
+    served: tuple[str, FakeElasticClient, str, tuple[str, ...]],
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """The baseline is one search over every observed feature at once — the larger
+    problem. When only it stops, the per-candidate quantities are kept."""
+    from attribution_platform.attribution.errors import SearchBoundExceededError
+    from attribution_platform.dataplane import load_behavioral_sequence, load_correlation_group
+    from attribution_platform.investigation import load_attribution_analysis, run
+
+    _, client, investigation_id, units = served
+
+    def stop(*_args: object, **_kwargs: object) -> None:
+        raise SearchBoundExceededError("search: more than 0 search steps — exceeds the work bound")
+
+    monkeypatch.setattr(run, "compute_unattributed_decision_support", stop)
+    for group_id in units:
+        stored = dict(load_attribution_analysis(client, group_id) or {})
+        group = load_correlation_group(client, group_id)
+        sequence = load_behavioral_sequence(client, stored["sequence_id"])
+        assert group is not None and sequence is not None
+        record = run.analyze_unit(
+            group, sequence, investigation_id=investigation_id, knowledge=knowledge
+        )
+        assert record.comparison_status.value == "baseline_not_computed"
+        assert record.unattributed_decision_support is None
+        assert "baseline was not computed" in (record.comparison_note or "")
+        # the per-candidate comparison is exactly what a complete run stored
+        assert [h.hypothesis_id for h in record.hypotheses] == [
+            h["hypothesis_id"] for h in stored["hypotheses"]
+        ]
+        assert [h.support_value for h in record.hypotheses] == [
+            h["support_value"] for h in stored["hypotheses"]
+        ]

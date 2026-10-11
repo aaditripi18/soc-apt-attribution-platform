@@ -132,14 +132,13 @@ export function OverviewTab({ data, unitId }: { data: UnitData; unitId: string }
           <div className="space-y-4 p-4">
             <Badge tone="warning">{analysis.calibration_status}</Badge>
             <p className="text-body-md text-on-surface-variant">{analysis.calibration_note}</p>
-            {analysis.comparison_status === "not_computed" ? (
+            {analysis.comparison_status !== "computed" ? (
               <div className="rounded-sm border border-warning/30 bg-warning/5 p-3">
-                <div className="label text-warning">Comparison not computed</div>
+                <div className="label text-warning">
+                  {analysis.comparison_status === "not_computed" ? "Comparison not computed" : "Baseline not computed"}
+                </div>
                 <p className="mt-1 text-body-sm text-on-surface-variant">{analysis.comparison_note}</p>
-                <p className="mt-1 text-body-sm text-on-surface-variant">
-                  Candidates, their recorded techniques and what would separate them are still shown; no per-candidate
-                  quantity was estimated in their place.
-                </p>
+                <p className="mt-1 text-body-sm text-on-surface-variant">Nothing was estimated in its place.</p>
               </div>
             ) : (
               <div className="rounded-sm border border-outline-variant/70 bg-surface-lowest p-3">

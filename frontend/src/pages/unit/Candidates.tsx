@@ -183,11 +183,15 @@ export function CandidatesTab({ data }: { data: UnitData }) {
           score. Being listed here is not an accusation, and absence of a dot is not evidence of absence.
         </p>
       </div>
-      {analysis.comparison_status === "not_computed" && (
+      {analysis.comparison_status !== "computed" && (
         <div className="rounded-md border border-warning/30 bg-warning/5 px-4 py-3 text-body-md text-on-surface-variant">
-          <span className="font-semibold text-on-surface">Per-candidate quantities are absent for this unit.</span>{" "}
-          {analysis.comparison_note} The matrix below is unaffected: it only states which candidates ATT&amp;CK records using
-          which observed technique.
+          <span className="font-semibold text-on-surface">
+            {analysis.comparison_status === "not_computed"
+              ? "Per-candidate quantities are absent for this unit."
+              : "The unattributed baseline is absent for this unit."}
+          </span>{" "}
+          {analysis.comparison_note} The matrix below only states which candidates ATT&amp;CK records using which observed
+          technique, and does not depend on it.
         </div>
       )}
       <Card padded={false}>

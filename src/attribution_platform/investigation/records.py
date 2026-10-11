@@ -75,12 +75,19 @@ class CalibrationStatus(Enum):
 
 
 class ComparisonStatus(Enum):
-    """Whether ADR-0005's per-candidate comparison was computed for the unit.
-    ``NOT_COMPUTED`` means the exact search stopped at its work bound: the
-    candidates and what would separate them are still recorded, the
-    per-candidate quantities and the baseline are absent — never estimated."""
+    """Whether ADR-0005's comparison was computed for the unit. The exact search
+    stops at a work bound instead of approximating, so a quantity can be absent
+    — never estimated. The candidates and what would separate them are recorded
+    in every case.
+
+    - ``BASELINE_NOT_COMPUTED``: the per-candidate quantities exist; only the
+      candidate-independent Unattributed baseline (one search over every
+      observed feature at once) is absent.
+    - ``NOT_COMPUTED``: the per-candidate quantities and the baseline are absent.
+    """
 
     COMPUTED = "computed"
+    BASELINE_NOT_COMPUTED = "baseline_not_computed"
     NOT_COMPUTED = "not_computed"
 
 

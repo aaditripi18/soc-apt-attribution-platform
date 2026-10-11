@@ -84,7 +84,8 @@ from attribution_platform.replay.recording_pipeline import RecordingSource, anal
 #: 1.4: a unit beyond the exact comparison search's work bound is recorded as
 #: "comparison not computed" instead of aborting the run, and the record says how
 #: much Evidence is in units and how much is not (ADR-0009 Amendment D).
-INVESTIGATION_METHOD_VERSION = "1.4"
+#: 1.5: the baseline search is kept apart from the per-candidate one.
+INVESTIGATION_METHOD_VERSION = "1.5"
 #: ADR-0005 §D16 structural lower bound; the fitted floor needs a calibration_version.
 STRUCTURAL_MIN_PROFILE_FLOOR = 1
 
@@ -167,6 +168,11 @@ def _guidance_view(guidance: CollectionGuidance) -> CollectionGuidanceView:
     )
 
 
+def _bound_detail(exc: SearchBoundExceededError) -> str:
+    """The bound's own message without the raising function's name."""
+    return str(exc).split(": ", 1)[-1]
+
+
 def analyze_unit(
     group: CorrelationGroup,
     sequence: BehavioralSequence,
@@ -179,23 +185,35 @@ def analyze_unit(
     its evidence-collection guidance (ADR-0005 Amendment E)."""
     candidates = generate_candidates(group, sequence, knowledge)
     matrix = build_ach_matrix(group, sequence, candidates, knowledge)
-    comparison_note: str | None = None
     summaries: tuple[HypothesisSupportSummary, ...] = ()
     baseline_support: float | None = None
+    status = ComparisonStatus.COMPUTED
+    comparison_note: str | None = None
+    # Two exact searches, each kept when it completes: one per candidate (over
+    # the observed features its profile includes) and one for the baseline (over
+    # every observed feature at once — the larger problem). Neither is ever
+    # approximated; the candidates and collection guidance below need neither.
     try:
-        comparative = compute_comparative_evidence(
+        summaries = compute_comparative_evidence(
             matrix, knowledge, candidates, min_profile_floor=STRUCTURAL_MIN_PROFILE_FLOOR
-        )
-        baseline_support = compute_unattributed_decision_support(matrix, knowledge).decision_support
-        summaries = comparative.hypothesis_summaries  # already in id order
+        ).hypothesis_summaries  # already in id order
     except SearchBoundExceededError as exc:
-        # Fail closed for this unit only: nothing is approximated, and the
-        # candidates and collection guidance below do not depend on the search.
-        detail = str(exc).split(": ", 1)[-1]  # without the raising function's name
+        status = ComparisonStatus.NOT_COMPUTED
         comparison_note = (
-            f"The per-candidate comparison was not computed for this unit: {detail}. "
-            "Candidates and what would separate them are unaffected."
+            "The per-candidate comparison was not computed for this unit: "
+            f"{_bound_detail(exc)}. Candidates and what would separate them are unaffected."
         )
+    if status is ComparisonStatus.COMPUTED:
+        try:
+            baseline_support = compute_unattributed_decision_support(
+                matrix, knowledge
+            ).decision_support
+        except SearchBoundExceededError as exc:
+            status = ComparisonStatus.BASELINE_NOT_COMPUTED
+            comparison_note = (
+                "The unattributed baseline was not computed for this unit: "
+                f"{_bound_detail(exc)}. The per-candidate quantities are unaffected."
+            )
     hypotheses = tuple(
         HypothesisView(
             hypothesis_id=summary.hypothesis_id,
@@ -241,9 +259,7 @@ def analyze_unit(
         ),
         hypotheses=hypotheses,
         collection_guidance=_guidance_view(guidance),
-        comparison_status=(
-            ComparisonStatus.COMPUTED if comparison_note is None else ComparisonStatus.NOT_COMPUTED
-        ),
+        comparison_status=status,
         comparison_note=comparison_note,
     )
 

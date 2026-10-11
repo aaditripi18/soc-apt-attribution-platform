@@ -202,8 +202,12 @@ export interface AttributionAnalysis {
   hypotheses: Hypothesis[];
   collection_guidance: CollectionGuidance | null;
   indicator_matches: IndicatorMatch[];
-  /** "not_computed": the exact search stopped at its work bound (never approximated). */
-  comparison_status: "computed" | "not_computed";
+  /**
+   * The exact search stops at a work bound instead of approximating.
+   * "baseline_not_computed": per-candidate quantities exist, the Unattributed baseline does not.
+   * "not_computed": neither exists.
+   */
+  comparison_status: "computed" | "baseline_not_computed" | "not_computed";
   comparison_note: string | null;
   calibration_status: string;
   calibration_version: string | null;

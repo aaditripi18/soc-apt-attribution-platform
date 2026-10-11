@@ -177,7 +177,11 @@ aborted the whole investigation, so the recording could no longer be investigate
 - candidates, the candidate × technique facts and collection guidance do not depend on the search and are stored
   as usual; the dossier and the frontend say in words that the comparison was not computed.
 
-`attribution-analysis/4`. Raising the bound or changing the search is an ADR-0005 decision and is not made here.
+`attribution-analysis/4`. **Follow-up the same day:** the search itself was then made to prune exactly (ADR-0005
+implementation record, 2026-10-11), and the two searches of a unit are kept apart: `comparison_status` is
+`computed`, `baseline_not_computed` (per-candidate quantities present, the candidate-independent baseline absent)
+or `not_computed`. On Empire: 66 of 67 units fully computed, one `baseline_not_computed`, none `not_computed`
+(`INVESTIGATION_METHOD_VERSION` 1.5).
 
 **D2 — The investigation record says how much Evidence is in units.** Units are the connected components of
 *core* Evidence; low-level (enrich-tier) Evidence joins a unit only through a structural link to it (ADR-0003

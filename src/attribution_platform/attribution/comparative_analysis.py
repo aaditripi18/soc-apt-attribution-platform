@@ -160,7 +160,7 @@ below):**
   valid partitions an exhaustive set-partition enumeration would keep, without
   Bell-number growth (ADR-0005 implementation record, 2026-09-25; equivalence
   tested against the exhaustive form). Fail-closed work bounds
-  (:data:`_MAX_CANDIDATE_BLOCKS`, :data:`_MAX_VALID_PARTITIONS`) replace the
+  (:data:`_MAX_CANDIDATE_BLOCKS`, :data:`_MAX_SEARCH_STEPS`) replace the
   former 8-feature limit; (2) validity is therefore guaranteed by
   construction; (3) a **local-
   maximality filter**: a valid partition is discarded if any two of its
@@ -240,7 +240,8 @@ DEFAULT_MIN_PROFILE_FLOOR = 1
 #: They bound the *work*, never redefine admissibility; exceeding either
 #: raises rather than approximating.
 _MAX_CANDIDATE_BLOCKS = 1 << 16
-_MAX_VALID_PARTITIONS = 1_000_000
+#: Nodes the partition search may visit before it stops (ADR-0005 record, 2026-10-11).
+_MAX_SEARCH_STEPS = 5_000_000
 
 
 def _require_nonempty_str(value: object, field_name: str) -> str:
@@ -520,76 +521,141 @@ def _find_combination_partition(
         co_used |= next_level
         level = next_level
 
-    admissible_by_member: dict[str, list[frozenset[str]]] = {x: [] for x in ordered}
+    # (1b)-(4) One depth-first search over the valid partitions: the lowest
+    # uncovered feature is either atomic or in an admissible block of
+    # still-uncovered features — so that block's lowest feature is that feature,
+    # and only the blocks filed under it need trying. Two exact cuts keep the
+    # search from visiting every valid partition:
+    #
+    # - *maximality*: a partition is discarded if any two of its blocks could be
+    #   merged into an admissible block (step 3). Two blocks already chosen stay
+    #   in every partition below the current node, so the first such pair ends
+    #   the whole branch — every partition under it would be discarded anyway.
+    # - *the tie-break itself*: g is positive, so the running sum of g over the
+    #   chosen combination blocks only grows; a branch whose sum already exceeds
+    #   the best maximal partition found cannot win (an equal sum is kept: the
+    #   canonical key decides). Rarer blocks are tried first so that a good
+    #   partition is found early; the order tried never changes which wins.
+    #
+    # The partition returned is therefore exactly the one the plain "enumerate
+    # every valid partition, filter, then take the minimum" form selects
+    # (tests/test_combination_partition_equivalence.py). Feature sets are bit
+    # masks over ``ordered`` here; nothing else about them changes.
+    bit = {feature: 1 << position for position, feature in enumerate(ordered)}
+    everything = (1 << n) - 1
+
+    def mask_of(block: frozenset[str]) -> int:
+        mask = 0
+        for member in block:
+            mask |= bit[member]
+        return mask
+
+    def block_of(mask: int) -> frozenset[str]:
+        return frozenset(ordered[i] for i in range(n) if mask >> i & 1)
+
+    #: per lowest feature: (g, mask) of each admissible block, rarest first
+    by_lowest: list[list[tuple[float, int]]] = [[] for _ in range(n)]
+    mergeable: dict[int, bool] = {}
     for block in sorted(co_used, key=lambda b: tuple(sorted(b))):
-        if is_admissible(block):
-            for member in block:
-                admissible_by_member[member].append(block)
+        if not is_admissible(block):
+            continue
+        value = g_of(block)
+        if value is None:
+            raise AttributionError(
+                "_find_combination_partition: internal inconsistency — an admissible "
+                "block's g(C) resolved to None during scoring"
+            )
+        mask = mask_of(block)
+        mergeable[mask] = True
+        by_lowest[(mask & -mask).bit_length() - 1].append((value, mask))
+    for blocks_here in by_lowest:
+        blocks_here.sort()
+    #: per feature: the g of the rarest admissible block containing it (None: none)
+    cheapest: list[float | None] = [None] * n
+    for blocks_here in by_lowest:
+        for value, mask in blocks_here:
+            for i in range(n):
+                if mask >> i & 1 and (cheapest[i] is None or value < cheapest[i]):  # type: ignore[operator]
+                    cheapest[i] = value
 
-    # (1b) Every valid partition exactly once: the lowest uncovered feature is
-    # either atomic or in an admissible block of still-uncovered features.
-    valid_partitions: list[tuple[frozenset[str], ...]] = []
+    def can_merge(union: int) -> bool:
+        known = mergeable.get(union)
+        if known is None:
+            known = mergeable[union] = is_admissible(block_of(union))
+        return known
 
-    def extend(covered: frozenset[str], chosen: tuple[frozenset[str], ...]) -> None:
-        remaining = [x for x in ordered if x not in covered]
-        if not remaining:
-            valid_partitions.append(chosen)
-            if len(valid_partitions) > _MAX_VALID_PARTITIONS:
-                raise SearchBoundExceededError(
-                    f"_find_combination_partition: more than {_MAX_VALID_PARTITIONS} valid "
-                    f"partitions for {n} features — exceeds the exact search's work bound; "
-                    "failing closed rather than approximating"
-                )
+    def canonical_key(multi_blocks: tuple[int, ...]) -> tuple[tuple[str, ...], ...]:
+        return tuple(sorted(tuple(sorted(block_of(b))) for b in multi_blocks))
+
+    best: tuple[int, ...] | None = None
+    best_sum = 0.0
+    best_key: tuple[tuple[str, ...], ...] = ()
+    steps = 0
+
+    def extend(
+        covered: int, blocks: tuple[int, ...], chosen: tuple[int, ...], total: float
+    ) -> None:
+        """``blocks``: every block chosen so far, atomic ones too; ``chosen``: the
+        combination blocks among them, in the order chosen (lowest feature first),
+        which is the order their g is summed in."""
+        nonlocal best, best_sum, best_key, steps
+        steps += 1
+        if steps > _MAX_SEARCH_STEPS:
+            raise SearchBoundExceededError(
+                f"_find_combination_partition: more than {_MAX_SEARCH_STEPS} search steps "
+                f"for {n} features — exceeds the exact search's work bound; failing closed "
+                "rather than approximating"
+            )
+        if covered == everything:
+            if best is None or total < best_sum:
+                best, best_sum, best_key = chosen, total, canonical_key(chosen)
+            elif total == best_sum:
+                key = canonical_key(chosen)
+                if key < best_key:
+                    best, best_key = chosen, key
             return
-        first = remaining[0]
-        extend(covered | {first}, chosen)  # atomic
-        for block in admissible_by_member[first]:
-            if not block & covered:
-                extend(covered | block, (*chosen, block))
+        uncovered = everything & ~covered
+        if best is not None:
+            # A feature that could be merged with a block already chosen cannot stay
+            # atomic (the partition would not be maximal), so it still has to enter a
+            # combination block, and the rarest block containing it is the least that
+            # can cost. If even that cannot beat the best partition, nothing below can.
+            floor = 0.0
+            rest = uncovered
+            while rest:
+                single = rest & -rest
+                rest ^= single
+                if any(can_merge(single | other) for other in blocks):
+                    least = cheapest[single.bit_length() - 1]
+                    if least is None:
+                        return  # can neither stay atomic nor join a block
+                    if least > floor:
+                        floor = least
+            if total + floor > best_sum:
+                return
+        first = uncovered & -uncovered
+        for value, mask in by_lowest[first.bit_length() - 1]:
+            added = total + value
+            if best is not None and added > best_sum:
+                break  # rarest first: every later block here costs at least as much
+            if mask & covered:
+                continue
+            if any(can_merge(mask | other) for other in blocks):
+                continue  # not maximal, whatever follows
+            extend(covered | mask, (*blocks, mask), (*chosen, mask), added)
+        if not any(can_merge(first | other) for other in blocks):  # atomic
+            extend(covered | first, (*blocks, first), chosen, total)
 
-    extend(frozenset(), ())
-
-    feature_set = frozenset(features)
-
-    def has_improving_merge(multi_blocks: tuple[frozenset[str], ...]) -> bool:
-        covered: frozenset[str] = (
-            frozenset[str]().union(*multi_blocks) if multi_blocks else frozenset()
-        )
-        atomics = feature_set - covered
-        blocks = list(multi_blocks) + [frozenset({x}) for x in atomics]
-        for i in range(len(blocks)):
-            for j in range(i + 1, len(blocks)):
-                if is_admissible(blocks[i] | blocks[j]):
-                    return True
-        return False
-
-    maximal_partitions = [p for p in valid_partitions if not has_improving_merge(p)]
-    if not maximal_partitions:
+    extend(0, (), (), 0.0)
+    if best is None:
         return ()
-
-    def sum_g(multi_blocks: tuple[frozenset[str], ...]) -> float:
-        total = 0.0
-        for block in multi_blocks:
-            value = g_of(block)
-            if value is None:
-                raise AttributionError(
-                    "_find_combination_partition: internal inconsistency — an admissible "
-                    "block's g(C) resolved to None during scoring"
-                )
-            total += value
-        return total
-
-    def canonical_key(multi_blocks: tuple[frozenset[str], ...]) -> tuple[tuple[str, ...], ...]:
-        return tuple(sorted(tuple(sorted(b)) for b in multi_blocks))
-
-    best = min(maximal_partitions, key=lambda p: (sum_g(p), canonical_key(p)))
     # Canonicalize the returned block ORDER itself (sorted by each block's own
     # canonical sorted-tuple form) -- the chosen partition's *content* is
     # already deterministic via the tie-break above, but the tuple order it
-    # was discovered in may depend on enumeration order; every caller must see
-    # the same order for
-    # identical logical input regardless of how `features` was supplied.
-    return tuple(sorted(best, key=lambda b: tuple(sorted(b))))
+    # was discovered in depends on enumeration order; every caller must see
+    # the same order for identical logical input regardless of how `features`
+    # was supplied.
+    return tuple(sorted((block_of(b) for b in best), key=lambda b: tuple(sorted(b))))
 
 
 #: Partitions already found, per ``g`` closure. The partition is a pure function

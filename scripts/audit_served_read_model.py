@@ -270,19 +270,27 @@ def main(argv: list[str]) -> int:
                             < 1e-12,
                             features[0],
                         )
-            if analysis["comparison_status"] == "computed":
+            status = analysis["comparison_status"]
+            if status == "not_computed":
+                audit.check(
+                    "comparison.not_computed_has_no_quantities",
+                    analysis["hypotheses"] == []
+                    and analysis["unattributed_decision_support"] is None
+                    and bool(analysis["comparison_note"]),
+                    group_id,
+                )
+            else:
                 audit.check(
                     "hypotheses.one_per_candidate_plus_unattributed",
                     set(hypotheses)
                     == {c["candidate_id"] for c in served.values()} | {UNATTRIBUTED},
                     group_id,
                 )
-            else:
                 audit.check(
-                    "comparison.not_computed_has_no_quantities",
-                    analysis["hypotheses"] == []
-                    and analysis["unattributed_decision_support"] is None
-                    and bool(analysis["comparison_note"]),
+                    "comparison.baseline_present_iff_computed",
+                    (analysis["unattributed_decision_support"] is not None)
+                    == (status == "computed")
+                    and (status == "computed") == (analysis["comparison_note"] is None),
                     group_id,
                 )
 
