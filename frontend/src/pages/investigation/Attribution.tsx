@@ -257,6 +257,14 @@ export function AttributionTab({ investigationId }: { investigationId: string })
                 </tbody>
               </table>
             </div>
+            {match.candidates_without_technique_overlap > 0 && (
+              <p className="border-t border-outline-variant/70 px-4 py-2.5 text-body-sm text-on-surface-variant">
+                {integer(match.candidates_without_technique_overlap)} more{" "}
+                {match.candidates_without_technique_overlap === 1 ? "group is" : "groups are"} linked only through
+                software seen here that they are recorded using (a public tool, for example). They share no observed
+                technique and are not scored.
+              </p>
+            )}
             {match.matches.length > TOP && (
               <div className="border-t border-outline-variant/70 px-4 py-2.5">
                 <Button variant="ghost" onClick={() => setAll((value) => !value)}>

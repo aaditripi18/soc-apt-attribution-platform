@@ -53,8 +53,9 @@ from attribution_platform.attack_knowledge.traversal import (
 from attribution_platform.dataplane import ElasticClient
 from attribution_platform.investigation.records import _load, _persist, _to_json
 
-#: 1.1: actor-specific Evidence (ADR-0018).
-ASSESSMENT_METHOD_VERSION = "1.1"
+#: 1.1: actor-specific Evidence (ADR-0018). 1.2: candidates linked only through
+#: observed software are counted apart from those with an observed technique.
+ASSESSMENT_METHOD_VERSION = "1.2"
 ASSESSMENT_SCHEMA_VERSION = "investigation-assessment/2"
 ASSESSMENTS_INDEX = "attribution-platform-investigation-assessments-v1"
 ASSESSMENTS_MAPPING: Mapping[str, Any] = {"investigation_id": {"type": "keyword"}}
@@ -283,11 +284,23 @@ def assess_investigation(
         at_half = sum(1 for c in candidates if len(c.matched_technique_ids) >= half)
         everything = sum(1 for c in candidates if len(c.matched_technique_ids) == total)
         shared = sum(1 for t in techniques if t.groups_using + t.campaigns_using > 1)
-        actors = _plural(len(candidates), "ATT&CK Group or Campaign", "ATT&CK Groups and Campaigns")
+        overlapping = [c for c in candidates if c.matched_technique_ids]
+        overlapping_groups = sum(1 for c in overlapping if c.kind == "group")
+        actors = _plural(
+            len(overlapping), "ATT&CK Group or Campaign", "ATT&CK Groups and Campaigns"
+        )
         reasons.append(
-            f"{actors} ({groups} Groups, {len(candidates) - groups} Campaigns) have at least one "
+            f"{actors} ({overlapping_groups} Groups, {len(overlapping) - overlapping_groups} "
+            f"Campaigns) {'has' if len(overlapping) == 1 else 'have'} at least one "
             f"of the {_plural(total, 'observed technique')} in their recorded profile."
         )
+        software_only = len(candidates) - len(overlapping)
+        if software_only:
+            reasons.append(
+                f"{software_only} more {'is' if software_only == 1 else 'are'} linked only "
+                "through software observed here that ATT&CK records them using, not through a "
+                "technique."
+            )
         all_of_them = (
             "none has" if everything == 0 else "1 has" if everything == 1 else f"{everything} have"
         )

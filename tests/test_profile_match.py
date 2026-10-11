@@ -186,3 +186,40 @@ def test_nothing_observed_gives_an_empty_match(knowledge: AttackKnowledge) -> No
         [],
     )
     assert empty["total_weight"] == 0
+
+
+def test_a_candidate_linked_only_through_software_has_no_overlap_to_report(
+    knowledge: AttackKnowledge,
+) -> None:
+    """ATT&CK software evidence (a public tool, say) brings in every Group recorded
+    using it. Such a candidate shares no observed technique: it is counted, not
+    listed with a zero, and the assessment says what links it."""
+    stix = [_technique(knowledge, t) for t in OBSERVED]
+    analysis = _analysis(knowledge, "u1", stix)
+    # a real Group whose profile holds none of the observed techniques
+    outsider = next(
+        g
+        for g in active_groups(knowledge)
+        if not set(techniques_used_by(knowledge, str(g["id"]))) & set(stix)
+    )
+    extra = {
+        "stix_id": str(outsider["id"]),
+        "name": str(outsider["name"]),
+        "kind": "group",
+        "attack_external_id": "G9999",
+        "candidate_id": "candidate::software-only",
+        "generation_basis": ["tool--x"],
+    }
+    analysis["candidates"] = [*analysis["candidates"], extra]
+    assessment = assessment_to_json(assess_investigation(knowledge, "investigation::s", [analysis]))
+    listed = {c["candidate_id"]: c for c in assessment["candidates"]}
+    assert listed["G9999"]["matched_technique_ids"] == []
+    assert any("linked only through software observed here" in r for r in assessment["reasons"])
+    with_technique = len(assessment["candidates"]) - 1
+    assert assessment["reasons"][0].startswith(f"{with_technique} ATT&CK Groups and Campaigns")
+
+    match = profile_match_to_json(match_profiles(knowledge, assessment))
+    assert "G9999" not in {m["candidate_id"] for m in match["matches"]}
+    assert match["candidates_without_technique_overlap"] == 1
+    assert len(match["matches"]) == with_technique
+    assert all(m["matched"] >= 1 and m["overlap"] > 0 for m in match["matches"])

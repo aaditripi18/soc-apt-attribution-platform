@@ -37,6 +37,8 @@ from attribution_platform.attack_knowledge.loader import load_attack_knowledge
 from attribution_platform.attack_knowledge.traversal import (
     active_campaigns,
     active_groups,
+    campaigns_using_software,
+    groups_using_software,
     groups_using_technique,
     techniques_used_by,
 )
@@ -248,7 +250,26 @@ def main(argv: list[str]) -> int:
             audit.check("summary.hosts", unit_summary["host_names"] == hosts, group_id)
 
             # --- Candidates: rebuilt from ATT&CK relationships -------------------
-            expected = {stix_id for stix_id, profile in profiles.items() if profile & observed}
+            # A candidate is an actor whose profile holds an observed technique, or
+            # one ATT&CK records using software this unit's core Evidence identifies.
+            software = {
+                e["attack_ref"]["stix_id"]
+                for e in evidence
+                if e["attack_ref"]
+                and e["attack_ref"]["object_type"] in ("malware", "tool")
+                and e["quality"] != "low"
+            }
+            software_users = {
+                user
+                for item in software
+                for user in (
+                    *groups_using_software(knowledge, item),
+                    *campaigns_using_software(knowledge, item),
+                )
+            }
+            expected = {stix_id for stix_id, profile in profiles.items() if profile & observed} | (
+                software_users & set(profiles)
+            )
             served = {c["stix_id"]: c for c in analysis["candidates"]}
             audit.check(
                 "candidates.set_equals_attack_profiles",
@@ -578,7 +599,10 @@ def main(argv: list[str]) -> int:
         )
         audit.check(
             "profile_match.candidates_are_the_assessments",
-            {m["stix_id"] for m in match["matches"]} == pooled_candidates,
+            {m["stix_id"] for m in match["matches"]}
+            == {c for c in pooled_candidates if profiles[c] & pooled}
+            and match["candidates_without_technique_overlap"]
+            == sum(1 for c in pooled_candidates if not profiles[c] & pooled),
             summary["source_id"],
         )
         total_weight = sum(weight.values())

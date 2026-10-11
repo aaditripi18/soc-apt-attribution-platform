@@ -61,7 +61,7 @@ from attribution_platform.attack_knowledge.traversal import (
 from attribution_platform.dataplane import ElasticClient
 from attribution_platform.investigation.records import _load, _persist, _to_json
 
-PROFILE_MATCH_METHOD_VERSION = "1.0"
+PROFILE_MATCH_METHOD_VERSION = "1.1"
 PROFILE_MATCH_SCHEMA_VERSION = "profile-match/1"
 PROFILE_MATCH_INDEX = "attribution-platform-profile-matches-v1"
 PROFILE_MATCH_MAPPING: Mapping[str, Any] = {"investigation_id": {"type": "keyword"}}
@@ -136,6 +136,9 @@ class ProfileMatchRecord:
     mitigations: tuple[Mitigation, ...]
     #: observed techniques for which ATT&CK records no mitigation
     techniques_without_mitigation: tuple[str, ...]
+    #: candidates of the assessment whose profile holds no observed technique
+    #: (linked through observed software only); they are not in ``matches``
+    candidates_without_technique_overlap: int = 0
     method_version: str = PROFILE_MATCH_METHOD_VERSION
     schema_version: str = field(default=PROFILE_MATCH_SCHEMA_VERSION)
 
@@ -251,8 +254,13 @@ def match_profiles(knowledge: AttackKnowledge, assessment: Mapping[str, Any]) ->
             named[str(lead["actor_attack_id"])] = "actor_specific"
 
     rows = []
+    without_overlap = 0
     for candidate in assessment["candidates"]:
         matched = tuple(sorted(t for t in candidate["matched_technique_ids"] if t in observed_ids))
+        if not matched:
+            # a candidate linked only through observed software: no behaviour to compare
+            without_overlap += 1
+            continue
         profile_size = len(techniques_used_by(knowledge, str(candidate["stix_id"])))
         cluster_id = "cluster-" + hashlib.sha256("|".join(matched).encode()).hexdigest()[:12]
         rows.append(
@@ -297,6 +305,7 @@ def match_profiles(knowledge: AttackKnowledge, assessment: Mapping[str, Any]) ->
         clusters=clusters,
         mitigations=mitigations,
         techniques_without_mitigation=without,
+        candidates_without_technique_overlap=without_overlap,
     )
 
 

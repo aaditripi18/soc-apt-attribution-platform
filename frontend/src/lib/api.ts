@@ -678,6 +678,8 @@ export interface ProfileMatchRecord {
     technique_ids: string[];
   }[];
   techniques_without_mitigation: string[];
+  /** Candidates linked only through observed software; not in `matches`. */
+  candidates_without_technique_overlap: number;
   method_version: string;
   schema_version: string;
 }
