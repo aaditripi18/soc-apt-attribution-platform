@@ -62,7 +62,7 @@ export function useRoute(): Route {
 
 export const links = {
   investigations: () => href([]),
-  investigation: (id: string) => href(["investigations", id]),
+  investigation: (id: string, tab?: string) => href(tab ? ["investigations", id, tab] : ["investigations", id]),
   unit: (id: string, tab?: string) => href(tab ? ["units", id, tab] : ["units", id]),
   units: (filters: Record<string, string | undefined> = {}) => href(["units"], filters),
   coverage: () => href(["coverage"]),

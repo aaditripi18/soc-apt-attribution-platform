@@ -41,9 +41,15 @@ from attribution_platform.dataplane import (
     load_evidence,
     load_observation,
 )
-from attribution_platform.domain import Evidence, Observation, to_serializable
+from attribution_platform.domain import (
+    Evidence,
+    EvidenceQuality,
+    Observation,
+    to_serializable,
+)
 from attribution_platform.investigation.assessment import load_assessment
 from attribution_platform.investigation.dossier import DOSSIER_VERSION, render_dossier
+from attribution_platform.investigation.emulation import load_emulation_comparison
 from attribution_platform.investigation.records import (
     list_investigations,
     load_attribution_analysis,
@@ -109,6 +115,86 @@ def get_assessment(client: ElasticClient, investigation_id: str) -> Mapping[str,
     if record is None:
         raise NotFoundError(f"no assessment found for investigation_id={investigation_id!r}")
     return record
+
+
+def get_emulation_comparison(client: ElasticClient, investigation_id: str) -> Mapping[str, Any]:
+    """The stored ran-versus-detected comparison (ADR-0019), or 404 when the
+    investigation was run without an emulation report."""
+    investigation_id = _validate_identifier(investigation_id, field="investigation_id")
+    try:
+        record = load_emulation_comparison(client, investigation_id)
+    except ElasticIntegrationError as exc:
+        raise BackendError(
+            f"could not load the emulation comparison of {investigation_id!r}: {exc}"
+        ) from exc
+    if record is None:
+        raise NotFoundError(
+            f"no emulation report was given for investigation_id={investigation_id!r}"
+        )
+    return record
+
+
+def _label(observation: Observation | None) -> str | None:
+    """A short name for what an Observation recorded (never its command line)."""
+    if observation is None:
+        return None
+    process = observation.process
+    if process is not None and (process.name or process.executable):
+        return process.name or str(process.executable).replace("\\", "/").rsplit("/", 1)[-1]
+    if observation.event is not None and observation.event.action:
+        return observation.event.action
+    return observation.raw_reference.source_type if observation.raw_reference else None
+
+
+def get_investigation_activity(client: ElasticClient, investigation_id: str) -> dict[str, Any]:
+    """Every Evidence item of an investigation's units as one time-ordered list
+    (ADR-0019): when, on which host, in which unit, mapped to what, and whether
+    it is a decision feature of its unit. A join of stored records — the ATT&CK
+    matrix view and the investigation timeline are drawn from it."""
+    record = get_investigation(client, investigation_id)
+    events: list[dict[str, Any]] = []
+    try:
+        for group_id in record["units"]:
+            group = load_correlation_group(client, str(group_id))
+            analysis = load_attribution_analysis(client, str(group_id))
+            if group is None or analysis is None:
+                continue
+            features = set(analysis["observed_feature_technique_ids"])
+            for evidence_id in group.member_evidence_ids:
+                evidence = load_evidence(client, evidence_id)
+                if evidence is None:
+                    continue
+                observation = load_observation(
+                    client, evidence.provenance.source_observation_ids[0]
+                )
+                ref = evidence.attack_ref
+                when = evidence.time_span.start if evidence.time_span else None
+                if when is None and observation is not None:
+                    when = observation.timestamp
+                host = observation.host if observation is not None else None
+                events.append(
+                    {
+                        "time": when.isoformat() if when is not None else None,
+                        "group_id": str(group_id),
+                        "evidence_id": evidence.evidence_id,
+                        "host": (host.name or host.id) if host is not None else None,
+                        "label": _label(observation),
+                        "attack_id": ref.external_id if ref is not None else None,
+                        "attack_stix_id": ref.stix_id if ref is not None else None,
+                        "attack_object_type": ref.object_type if ref is not None else None,
+                        "context": evidence.quality is EvidenceQuality.LOW,
+                        "decision_feature": ref is not None and ref.stix_id in features,
+                    }
+                )
+    except ElasticIntegrationError as exc:
+        raise BackendError(f"could not load the activity of {investigation_id!r}: {exc}") from exc
+    events.sort(key=lambda e: (e["time"] is None, e["time"] or "", e["evidence_id"]))
+    return {
+        "investigation_id": investigation_id,
+        "evidence_in_units": len(events),
+        "evidence_outside_units": record.get("evidence_outside_units"),
+        "events": events,
+    }
 
 
 def list_investigation_summaries(client: ElasticClient) -> list[dict[str, Any]]:

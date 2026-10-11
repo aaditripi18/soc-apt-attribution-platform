@@ -63,6 +63,11 @@ from attribution_platform.investigation.assessment import (
     assess_investigation,
     persist_assessment,
 )
+from attribution_platform.investigation.emulation import (
+    EmulationRun,
+    compare_emulation,
+    persist_emulation_comparison,
+)
 from attribution_platform.investigation.records import (
     ActorEvidenceView,
     AttributionAnalysisRecord,
@@ -340,6 +345,7 @@ def run_investigation(
     detection_pack_content_hash: str,
     detectability: Mapping[str, Detectability] | None = None,
     indicators: IndicatorSet | None = None,
+    emulation: EmulationRun | None = None,
 ) -> InvestigationRecord:
     """Run ``source`` end to end and persist every read-model object."""
     versions = {
@@ -452,6 +458,12 @@ def run_investigation(
         evidence_outside_units=evidence_count - len(in_units),
     )
     persist_investigation(client, record)
+    if emulation is not None:
+        # ADR-0019: what the emulation tool reports having run, beside what was found.
+        unit_of = {e: group.group_id for group in groups for e in group.member_evidence_ids}
+        persist_emulation_comparison(
+            client, compare_emulation(emulation, investigation_id, members, unit_of)
+        )
     # ADR-0017: the verdict about the whole investigation, from the same JSON the
     # read model holds for its units.
     stored_analyses.sort(key=lambda analysis: str(analysis["group_id"]))

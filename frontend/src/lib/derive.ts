@@ -6,6 +6,7 @@
  * arithmetic this file does on attribution data is `n of m`.
  */
 import type {
+  ActivityEvent,
   AttackRef,
   AttributionAnalysis,
   BehavioralSequence,
@@ -380,4 +381,183 @@ export function coverageByTactic(rows: CoverageTechnique[], index: TechniqueInde
     }
   }
   return [...tally.values()].filter((entry) => entry.total > 0);
+}
+
+// ---------------------------------------------------------------------------
+// Investigation views: the ATT&CK matrix and the activity timeline (ADR-0019)
+// ---------------------------------------------------------------------------
+
+/** The role of observed Evidence in the comparison, strongest first. */
+export type ActivityRole = "actor" | "feature" | "unmatched" | "context";
+
+const ROLE_STRENGTH: ActivityRole[] = ["actor", "feature", "unmatched", "context"];
+
+const isTechniqueEvent = (event: ActivityEvent): boolean =>
+  event.attack_object_type === "attack-pattern" && event.attack_id !== null;
+
+/** Actor-specific, decision feature, core Evidence no candidate uses, or context; null when unmapped. */
+export function activityRole(event: ActivityEvent): ActivityRole | null {
+  if (event.attack_object_type === "intrusion-set") return "actor";
+  if (!isTechniqueEvent(event)) return null;
+  if (event.decision_feature) return "feature";
+  return event.context ? "context" : "unmatched";
+}
+
+function strongest(roles: Iterable<ActivityRole>): ActivityRole {
+  const present = new Set(roles);
+  return ROLE_STRENGTH.find((role) => present.has(role)) ?? "context";
+}
+
+export interface MatrixTechnique {
+  attackId: string;
+  name: string;
+  /** The strongest role this technique has in any unit. */
+  role: ActivityRole;
+  units: number;
+  evidence: number;
+}
+
+export interface MatrixColumn {
+  tactic: string;
+  name: string;
+  techniques: MatrixTechnique[];
+}
+
+/**
+ * The observed techniques of an investigation arranged by ATT&CK tactic, in matrix
+ * order. A technique listed under several tactics appears under each. Every tactic
+ * is returned, including those with nothing observed: an empty column is
+ * information too.
+ */
+export function matrixFromActivity(events: ActivityEvent[], index: TechniqueIndex): MatrixColumn[] {
+  const byTechnique = new Map<string, ActivityEvent[]>();
+  for (const event of events) {
+    if (!isTechniqueEvent(event)) continue;
+    const id = event.attack_id as string;
+    const list = byTechnique.get(id);
+    if (list) list.push(event);
+    else byTechnique.set(id, [event]);
+  }
+  const columns = new Map<string, MatrixTechnique[]>(index.tacticOrder.map((t) => [t, []]));
+  const other: MatrixTechnique[] = [];
+  for (const [attackId, list] of byTechnique) {
+    const known = index.byAttackId.get(attackId);
+    const cell: MatrixTechnique = {
+      attackId,
+      name: known?.name ?? "",
+      role: strongest(list.map((e) => activityRole(e) ?? "context")),
+      units: new Set(list.map((e) => e.group_id)).size,
+      evidence: list.length,
+    };
+    const tactics = (known?.tactics ?? []).filter((t) => columns.has(t));
+    if (tactics.length === 0) other.push(cell);
+    for (const tactic of tactics) columns.get(tactic)?.push(cell);
+  }
+  const sorted = (cells: MatrixTechnique[]) => [...cells].sort((a, b) => a.attackId.localeCompare(b.attackId));
+  const result = index.tacticOrder.map((tactic) => ({
+    tactic,
+    name: index.tacticName.get(tactic) ?? tactic,
+    techniques: sorted(columns.get(tactic) ?? []),
+  }));
+  if (other.length > 0) {
+    result.push({ tactic: "", name: "No tactic in this ATT&CK version", techniques: sorted(other) });
+  }
+  return result;
+}
+
+export interface ActivityBin {
+  index: number;
+  role: ActivityRole;
+  events: ActivityEvent[];
+}
+
+export interface ActivityLane {
+  key: string;
+  name: string;
+  evidence: number;
+  /** Non-empty bins only, in time order. */
+  bins: ActivityBin[];
+}
+
+export interface ActivityTimeline {
+  start: number;
+  end: number;
+  binCount: number;
+  lanes: ActivityLane[];
+  /** Evidence with a time and a technique or Group reference: what is drawn. */
+  drawn: number;
+  /** Evidence not drawn: no time, or no technique with a tactic. */
+  undrawn: number;
+}
+
+export const ACTOR_LANE = "actor-specific";
+
+/**
+ * Evidence over time, one lane per ATT&CK tactic in matrix order (only tactics
+ * with something in them), plus a lane for actor-specific Evidence. Each lane is
+ * cut into `binCount` equal intervals; a bin carries its Evidence and the
+ * strongest role among it. An item whose technique belongs to several tactics is
+ * in each of those lanes.
+ */
+export function timelineFromActivity(
+  events: ActivityEvent[],
+  index: TechniqueIndex,
+  binCount = 96,
+): ActivityTimeline | null {
+  const placed: { time: number; lanes: string[]; event: ActivityEvent }[] = [];
+  let undrawn = 0;
+  for (const event of events) {
+    const time = parseTime(event.time)?.getTime();
+    const role = activityRole(event);
+    const lanes =
+      role === "actor"
+        ? [ACTOR_LANE]
+        : role === null
+          ? []
+          : (index.byAttackId.get(event.attack_id as string)?.tactics ?? []);
+    if (time === undefined || lanes.length === 0) undrawn += 1;
+    else placed.push({ time, lanes, event });
+  }
+  if (placed.length === 0) return null;
+  const start = Math.min(...placed.map((p) => p.time));
+  const end = Math.max(...placed.map((p) => p.time));
+  const span = Math.max(end - start, 1);
+  const lanes = new Map<string, Map<number, ActivityEvent[]>>();
+  for (const { time, lanes: keys, event } of placed) {
+    const bin = Math.min(binCount - 1, Math.floor(((time - start) / span) * binCount));
+    for (const key of keys) {
+      const lane = lanes.get(key) ?? new Map<number, ActivityEvent[]>();
+      lanes.set(key, lane);
+      const list = lane.get(bin);
+      if (list) list.push(event);
+      else lane.set(bin, [event]);
+    }
+  }
+  const order = [ACTOR_LANE, ...index.tacticOrder];
+  const name = (key: string) =>
+    key === ACTOR_LANE ? "Actor-specific evidence" : (index.tacticName.get(key) ?? key);
+  return {
+    start,
+    end,
+    binCount,
+    drawn: placed.length,
+    undrawn,
+    lanes: [...lanes.entries()]
+      .sort(([a], [b]) => {
+        const [x, y] = [order.indexOf(a), order.indexOf(b)];
+        return (x < 0 ? order.length : x) - (y < 0 ? order.length : y) || a.localeCompare(b);
+      })
+      .map(([key, bins]) => ({
+        key,
+        name: name(key),
+        evidence: [...bins.values()].reduce((sum, list) => sum + list.length, 0),
+        bins: [...bins.entries()]
+          .sort(([a], [b]) => a - b)
+          .map(([bin, list]) => ({
+            index: bin,
+            role: strongest(list.map((e) => activityRole(e) ?? "context")),
+            events: list,
+          })),
+      })),
+  };
 }

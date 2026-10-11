@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import type {
+  ActivityEvent,
   AttributionAnalysis,
   BehavioralSequence,
   Candidate,
@@ -10,13 +11,16 @@ import type {
   UnitSummary,
 } from "./api";
 import {
+  activityRole,
   buildTimeline,
   candidateRows,
   coverageByTactic,
   indexTechniques,
   layoutSequence,
+  matrixFromActivity,
   observationFacets,
   ruleKey,
+  timelineFromActivity,
   unitTechniques,
 } from "./derive";
 import { attackUrl, durationMs, shortId, utcDateTime } from "./format";
@@ -246,5 +250,74 @@ describe("identifiers and formatting", () => {
     expect(attackUrl("T1003.001")).toBe("https://attack.mitre.org/techniques/T1003/001/");
     expect(attackUrl("G0016")).toBe("https://attack.mitre.org/groups/G0016/");
     expect(attackUrl("nonsense")).toBeNull();
+  });
+});
+
+describe("investigation views (ADR-0019)", () => {
+  const event = (over: Partial<ActivityEvent>): ActivityEvent => ({
+    time: "2026-01-01T00:00:00+00:00",
+    group_id: "u1",
+    evidence_id: "e",
+    host: "h",
+    label: "x.exe",
+    attack_id: "T1033",
+    attack_stix_id: "ap--a",
+    attack_object_type: "attack-pattern",
+    context: false,
+    decision_feature: false,
+    ...over,
+  });
+  const events = [
+    event({ evidence_id: "e1", decision_feature: true }),
+    event({ evidence_id: "e2", group_id: "u2", context: true, time: "2026-01-01T00:10:00+00:00" }),
+    event({ evidence_id: "e3", attack_id: "T1087", attack_stix_id: "ap--c" }),
+    event({ evidence_id: "e4", attack_id: "T1059.001", attack_stix_id: "ap--b", context: true, time: "2026-01-01T00:05:00+00:00" }),
+    event({ evidence_id: "e5", attack_id: "G0016", attack_stix_id: "is--a", attack_object_type: "intrusion-set" }),
+    event({ evidence_id: "e6", attack_id: null, attack_stix_id: null, attack_object_type: null }),
+    event({ evidence_id: "e7", attack_id: "T9999", attack_stix_id: "ap--z" }),
+  ];
+
+  it("gives each Evidence item its role, and none to unmapped Evidence", () => {
+    expect(events.map(activityRole)).toEqual(["feature", "context", "unmatched", "context", "actor", null, "unmatched"]);
+  });
+
+  it("arranges observed techniques by tactic in matrix order, with the strongest role", () => {
+    const matrix = matrixFromActivity(events, index);
+    expect(matrix.map((c) => c.tactic)).toEqual(["execution", "discovery", ""]);
+    expect(matrix[0]?.techniques).toEqual([
+      { attackId: "T1059.001", name: "PowerShell", role: "context", units: 1, evidence: 1 },
+    ]);
+    expect(matrix[1]?.techniques).toEqual([
+      { attackId: "T1033", name: "System Owner/User Discovery", role: "feature", units: 2, evidence: 2 },
+      { attackId: "T1087", name: "Account Discovery", role: "unmatched", units: 1, evidence: 1 },
+    ]);
+    // a technique the pinned ATT&CK version does not know is shown, not dropped
+    expect(matrix[2]?.techniques.map((t) => t.attackId)).toEqual(["T9999"]);
+  });
+
+  it("keeps empty tactic columns", () => {
+    const matrix = matrixFromActivity(events.slice(3, 4), index);
+    expect(matrix.map((c) => c.techniques.length)).toEqual([1, 0]);
+  });
+
+  it("bins Evidence over time per tactic lane and counts what it cannot draw", () => {
+    const timeline = timelineFromActivity(events, index, 10);
+    expect(timeline).not.toBeNull();
+    if (!timeline) return;
+    expect(timeline.lanes.map((l) => l.key)).toEqual(["actor-specific", "execution", "discovery"]);
+    expect(timeline.end - timeline.start).toBe(600_000);
+    expect([timeline.drawn, timeline.undrawn]).toEqual([5, 2]);
+    const discovery = timeline.lanes[2];
+    expect(discovery?.evidence).toBe(3);
+    expect(discovery?.bins.map((b) => [b.index, b.role, b.events.length])).toEqual([
+      [0, "feature", 2],
+      [9, "context", 1],
+    ]);
+    expect(timeline.lanes[1]?.bins.map((b) => b.index)).toEqual([5]);
+    expect(timeline.lanes[0]?.bins[0]?.role).toBe("actor");
+  });
+
+  it("draws nothing when no Evidence has a time and a tactic", () => {
+    expect(timelineFromActivity([...events.slice(5, 6), event({ time: null })], index)).toBeNull();
   });
 });

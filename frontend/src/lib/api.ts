@@ -561,6 +561,75 @@ export interface Validation {
 
 export type ApiFailureKind = "unreachable" | "not_found" | "bad_request" | "backend" | "server";
 
+/** ADR-0019: one Evidence item of an investigation's units, for the matrix and timeline views. */
+export interface ActivityEvent {
+  time: string | null;
+  group_id: string;
+  evidence_id: string;
+  host: string | null;
+  /** A short name of what was observed (a process name or an action) — never a command line. */
+  label: string | null;
+  attack_id: string | null;
+  attack_stix_id: string | null;
+  attack_object_type: string | null;
+  /** Low-level (enrich-tier) Evidence. */
+  context: boolean;
+  /** Its technique is a decision feature of its unit. */
+  decision_feature: boolean;
+}
+
+export interface Activity {
+  investigation_id: string;
+  evidence_in_units: number;
+  evidence_outside_units: number | null;
+  events: ActivityEvent[];
+}
+
+export type StepOutcome =
+  | "technique_detected_in_step"
+  | "step_activity_detected"
+  | "technique_detected_elsewhere"
+  | "not_detected";
+
+export interface EmulationStepComparison {
+  order: number;
+  name: string;
+  technique_id: string | null;
+  technique_name: string | null;
+  tactic: string | null;
+  host: string | null;
+  status: string;
+  issued_at: string | null;
+  collected_at: string | null;
+  pid: number | null;
+  /** Evidence grounded in the step's own process, inside its time window. */
+  step_evidence: number;
+  step_technique_ids: string[];
+  step_unit_ids: string[];
+  /** Evidence for the step's technique anywhere in the investigation. */
+  technique_evidence_core: number;
+  technique_evidence_context: number;
+  outcome: StepOutcome;
+}
+
+/** ADR-0019: what an emulation tool reports having run, beside what was detected. */
+export interface EmulationComparison {
+  investigation_id: string;
+  tool: string;
+  operation_name: string;
+  profile_name: string | null;
+  started_at: string | null;
+  finished_at: string | null;
+  report_sha256: string;
+  steps: EmulationStepComparison[];
+  outcome_counts: Record<StepOutcome, number>;
+  distinct_techniques: number;
+  distinct_techniques_with_evidence: number;
+  window_slack_seconds: number;
+  method_version: string;
+  schema_version: string;
+}
+
 export class ApiFailure extends Error {
   readonly kind: ApiFailureKind;
   readonly status: number | null;
@@ -625,6 +694,8 @@ export const paths = {
   dossier: (id: string) => `/investigations/${encodeURIComponent(id)}/dossier`,
   assessment: (id: string) => `/investigations/${encodeURIComponent(id)}/assessment`,
   validation: () => "/validation",
+  activity: (id: string) => `/investigations/${encodeURIComponent(id)}/activity`,
+  emulation: (id: string) => `/investigations/${encodeURIComponent(id)}/emulation`,
   unit: (id: string) => `/units/${encodeURIComponent(id)}`,
   unitEvidence: (id: string) => `/units/${encodeURIComponent(id)}/evidence`,
   units: (filters: Record<string, string>) => {

@@ -4,6 +4,7 @@ results through the read-model API (ADR-0009) and the analyst frontend
 
     python -m attribution_platform.investigation <recording> [<recording> ...]
         [--serve] [--port N] [--elasticsearch] [--json out.json] [--dossier out.md]
+        [--emulation-report caldera-report.json]
 
 Each ``<recording>`` is either a recording id pinned in
 ``data/calibration/corpus/v2/recordings.json`` (e.g. ``otrf-apt3-empire``) or a
@@ -20,8 +21,11 @@ persists them to the cluster configured by the same environment variables as
 ``python -m attribution_platform.api``. ``--serve`` then starts the read-model API
 on 127.0.0.1 (``--port``, default 8000); when the frontend has been built
 (``npm run build`` in ``frontend/``) the same address serves it. ``--dossier``
-needs exactly one recording. Nothing here ranks candidates or emits a
-confidence: analyses are uncalibrated until a calibration_version exists.
+needs exactly one recording. ``--emulation-report`` (one recording) is the emulation
+tool's own report of a lab run (a MITRE CALDERA operation report): each step it lists is
+compared with what was detected (ADR-0019); its command text is never read. Nothing here
+ranks candidates or emits a confidence: analyses are uncalibrated until a
+calibration_version exists.
 """
 
 from __future__ import annotations
@@ -58,6 +62,10 @@ from attribution_platform.detection_content.pinned import (
 from attribution_platform.detection_content.pinned import SIGMA_IMPORT_REPORT as IMPORT_REPORT
 from attribution_platform.intel.indicators import IndicatorSet, load_indicator_set
 from attribution_platform.investigation.dossier import render_dossier
+from attribution_platform.investigation.emulation import (
+    EmulationReportError,
+    load_caldera_report,
+)
 from attribution_platform.investigation.records import (
     InvestigationRecord,
     load_attribution_analysis,
@@ -143,6 +151,7 @@ def investigate(
     client: ElasticClient,
     recordings: Path = RECORDINGS,
     workbench: Workbench | None = None,
+    emulation_report: Path | None = None,
 ) -> Session:
     """Resolve, run and persist one investigation."""
     source = resolve_source(argument, recordings=recordings)
@@ -155,6 +164,7 @@ def investigate(
         detection_pack_content_hash=bench.detection_pack_content_hash,
         detectability=bench.detectability,
         indicators=bench.indicators,
+        emulation=load_caldera_report(emulation_report) if emulation_report else None,
     )
     return Session(record=record, client=client)
 
@@ -210,11 +220,23 @@ def main(argv: Sequence[str] | None = None, env: dict[str, str] | None = None) -
         print("--dossier needs exactly one recording.", file=sys.stderr)
         return 2
 
+    emulation_report: Path | None = None
+    if "--emulation-report" in args:
+        if len(arguments) != 1:
+            print("--emulation-report needs exactly one recording.", file=sys.stderr)
+            return 2
+        emulation_report = Path(args[args.index("--emulation-report") + 1])
+        if not emulation_report.is_file():
+            print(f"refused: no emulation report at {emulation_report}", file=sys.stderr)
+            return 1
+
     reports: list[dict[str, object]] = []
     try:
         workbench = load_workbench()
         for argument in arguments:
-            session = investigate(argument, client=client, workbench=workbench)
+            session = investigate(
+                argument, client=client, workbench=workbench, emulation_report=emulation_report
+            )
             report = summary(session)
             reports.append(report)
             print(f"investigation {report['investigation_id']}")
@@ -226,7 +248,7 @@ def main(argv: Sequence[str] | None = None, env: dict[str, str] | None = None) -
                     f"{unit['observed_techniques']:>3}  candidates {unit['candidates']:>4}  "
                     f"{unit['calibration_status']}"
                 )
-    except CliError as exc:
+    except (CliError, EmulationReportError) as exc:
         print(f"refused: {exc}", file=sys.stderr)
         return 1
 

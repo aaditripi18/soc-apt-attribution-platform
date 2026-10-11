@@ -124,7 +124,8 @@ manifests).
 ### The analyst console
 
 A reader over the read-model API ([ADR-0016](docs/architecture/adr/0016-analyst-frontend.md)): investigations, a
-host timeline, and per unit the attack sequence, evidence with the rule and the raw observation behind each item,
+host timeline, the observed techniques laid out as an ATT&CK matrix, all Evidence over time by tactic
+([ADR-0019](docs/architecture/adr/0019-investigation-views-and-ran-versus-detected.md)), and per unit the attack sequence, evidence with the rule and the raw observation behind each item,
 techniques with their Group prevalence, an alphabetical candidate × technique matrix, what evidence would separate
 the candidates, advisory indicator context, provenance — plus detection coverage and the written dossier. It
 computes nothing and shows no likelihood, confidence or ranking: none exists until there is a calibration version.
@@ -135,6 +136,13 @@ Requires **Node.js 20+**.
 cd frontend && npm ci && npm run build && cd ..        # once; output in frontend/dist (git-ignored)
 python -m attribution_platform.investigation otrf-lsass-01-logonpasswords otrf-apt29-day1 --serve
 # open http://127.0.0.1:8000/
+```
+
+For a lab recording, add the emulation tool's own report and the console sets what ran beside what was detected,
+step by step (a MITRE CALDERA operation report; its command text is never read):
+
+```bash
+python -m attribution_platform.investigation my-run.zip --emulation-report my-run-report.json --serve
 ```
 
 For frontend work, run the API as above and `npm run dev` in `frontend/` (http://localhost:5173, `/api` proxied
@@ -165,7 +173,9 @@ to port 8000; set `VITE_API_TARGET` for another address). `npm run typecheck`, `
   observation, every candidate set rebuilt from ATT&CK — and must pass before a result is trusted.
 - **A self-built lab** ([docs/operations/lab-pilot-results.md](docs/operations/lab-pilot-results.md)): an isolated
   two-VM lab recorded a CALDERA run; the platform accepted and analysed it, found the agent's masquerading and
-  hidden launches, and missed four of the seven discovery techniques that were run — reported as measured.
+  hidden launches, and — set step by step against CALDERA's own report
+  ([ADR-0019](docs/architecture/adr/0019-investigation-views-and-ran-versus-detected.md)) — detected the named
+  technique in 3 of 8 steps and has no Evidence for 3 of the 7 techniques that were run. Reported as measured.
 
 Not claimed: a calibrated confidence. No calibration version exists, so none is shown.
 

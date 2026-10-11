@@ -27,6 +27,8 @@ Routes (all GET, nothing else) — G0.10 plus ADR-0009 v1:
 - ADR-0016 (the analyst frontend's reads; need an :class:`ApiContext`):
   ``GET /units/<group_id>/evidence``, ``GET /investigations/<id>/dossier``,
   ``GET /investigations/<id>/assessment`` (ADR-0017),
+  ``GET /investigations/<id>/activity`` and ``GET /investigations/<id>/emulation``
+  (ADR-0019),
   ``GET /coverage``, ``GET /attack/techniques``, ``GET /validation`` (ADR-0017)
 
 Every route also answers under ``/api`` (``/api/units/...``): the frontend
@@ -70,9 +72,11 @@ from attribution_platform.api.read_model import (
     get_attack_techniques,
     get_coverage,
     get_dossier,
+    get_emulation_comparison,
     get_evidence,
     get_health,
     get_investigation,
+    get_investigation_activity,
     get_observation,
     get_unit,
     get_unit_evidence,
@@ -107,7 +111,12 @@ _COLLECTION_PARAMETERS: dict[str, frozenset[str]] = {
 }
 _UNITS_SUFFIX = "/units"
 _DOSSIER_SUFFIX = "/dossier"
-_ASSESSMENT_SUFFIX = "/assessment"
+#: /investigations/<id>/<suffix> routes over stored records alone.
+_INVESTIGATION_VIEWS: dict[str, Callable[[ElasticClient, str], Any]] = {
+    "/assessment": get_assessment,
+    "/activity": get_investigation_activity,
+    "/emulation": get_emulation_comparison,
+}
 _EVIDENCE_SUFFIX = "/evidence"
 #: Reference routes answered from the :class:`ApiContext` alone.
 _REFERENCE: dict[str, Callable[[ApiContext], Any]] = {
@@ -201,8 +210,10 @@ def _dispatch(
         return search_units(client, {**params, "investigation": investigation_id})
     if params:
         raise InvalidIdentifierError("this route takes no query parameters")
-    if resource == "investigations" and raw_identifier.endswith(_ASSESSMENT_SUFFIX):
-        return get_assessment(client, unquote(raw_identifier[: -len(_ASSESSMENT_SUFFIX)]))
+    if resource == "investigations":
+        for suffix, view in _INVESTIGATION_VIEWS.items():
+            if raw_identifier.endswith(suffix):
+                return view(client, unquote(raw_identifier[: -len(suffix)]))
     if resource == "investigations" and raw_identifier.endswith(_DOSSIER_SUFFIX):
         return get_dossier(client, context, unquote(raw_identifier[: -len(_DOSSIER_SUFFIX)]))
     if resource == "units" and raw_identifier.endswith(_EVIDENCE_SUFFIX):

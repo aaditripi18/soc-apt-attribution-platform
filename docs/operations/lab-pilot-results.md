@@ -30,22 +30,40 @@ run window written on the run sheet.
 
 ## `pilot-02`: what was run against what was found
 
-CALDERA's report lists the ATT&CK technique of each step. The platform was given the recording only.
+CALDERA's report lists each step with its ATT&CK technique, host, times and process id. The platform was given the
+recording only. The comparison below is the stored ran-versus-detected record (ADR-0019,
+`--emulation-report`): a step's own Evidence is Evidence grounded in the step's process (its process id or a
+child of it) on its host inside its time window ± 10 s.
 
-| Step (from CALDERA's report) | Technique | Result in the lab | Evidence the platform extracted for that technique |
-|---|---|---|---|
-| Identify active user | T1033 | ran | none |
-| Identify local users | T1087.001 | ran | none |
-| Find user processes | T1057 | ran | 3, low-level (context) |
-| View admin shares | T1135 | ran | none |
-| Discover domain controller | T1018 | failed (no domain) | 2, low-level (context) |
-| Discover antivirus programs | T1518.001 | failed | none |
-| Permission Groups Discovery | T1069.001 | ran | 115, low-level (context) |
-| Identify Firewalls | T1518.001 | ran | none |
+| # | Step (from CALDERA's report) | Technique named | Lab result | Evidence from the step's own process | Named technique among it | Named technique anywhere (core · context) |
+|---|---|---|---|---|---|---|
+| 1 | Identify active user | T1033 | ran | 3 (in no unit) | **yes** | 0 · 1 |
+| 2 | Identify local users | T1087.001 | ran | 4 | no | none |
+| 3 | Find user processes | T1057 | ran | 5 | **yes** | 0 · 3 |
+| 4 | View admin shares | T1135 | ran | 120 | no | none |
+| 5 | Discover domain controller | T1018 | failed (no domain) | 11 | **yes** | 0 · 2 |
+| 6 | Discover antivirus programs | T1518.001 | failed | 4 | no | none |
+| 7 | Permission Groups Discovery | T1069.001 | ran | 5 | no | 0 · 115 |
+| 8 | Identify Firewalls | T1518.001 | ran | 4 | no | none |
 
-**3 of the 7 distinct techniques produced Evidence, all of it at the low-level (context) tier; 4 produced none.**
+- **Every step left Evidence** (8 of 8): each was launched through a hidden interpreter window, which the pinned
+  rules recognise (T1059, T1059.001, T1564).
+- **The technique the report names was detected in its own step for 3 of 8 steps** (T1033, T1057, T1018), each time
+  at the low-level (context) tier only.
+- **4 of the 7 distinct techniques have Evidence somewhere in the investigation; 3 have none** (T1087.001, T1135,
+  T1518.001).
+- **T1069.001 was detected, but not where the plan ran it.** All 115 items are PowerShell module and script-block
+  records of step 4's process ("View admin shares", 14:59:23–14:59:25 UTC); step 7, which the report labels
+  T1069.001, produced none. Matching by technique name alone would have credited step 7.
+
+> **Correction (2026-10-11).** The first version of this table was compiled by hand from the units' technique
+> lists. It reported T1033 as not detected (its one Evidence item is low-level and in no unit, so the units did not
+> show it), counted "3 of 7" techniques, and credited the 115 T1069.001 items to step 7 by name. The stored
+> comparison above replaces it.
+
 The steps were issued through PowerShell, and rules that read PowerShell script-block text are a documented gap
-(ADR-0015: "PowerShell script-block text" not offered), which is the likely reason — not yet confirmed rule by rule.
+(ADR-0015: "PowerShell script-block text" not offered), which is the likely reason for the misses — not yet
+confirmed rule by rule.
 
 What the platform did find, beyond the plan's own technique labels (224 Evidence items, 2 attribution units):
 
@@ -67,7 +85,8 @@ actor-specific rule fired.
 - A lab built from the guide yields recordings that pass intake and run through detection, correlation, the unit
   analyses, the investigation assessment and the dossier without manual editing.
 - The platform recognised the *way* the activity was carried out (a masquerading agent, hidden interpreter
-  launches) more reliably than the individual discovery techniques, four of which it missed.
+  launches) more reliably than the individual discovery techniques: it detected the named technique in 3 of 8 steps and
+  has no Evidence at all for 3 of the 7 techniques.
 - It does **not** measure detection recall in general: one host, one profile, eight steps.
 - It is **not** calibration data. Calibration would need recordings of several named actors' published plans
   (`lab-recording-guide.md` §4); the owner decided on 2026-10-11 not to record them.

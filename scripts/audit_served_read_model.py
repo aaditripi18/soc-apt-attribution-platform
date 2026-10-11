@@ -26,6 +26,7 @@ from __future__ import annotations
 
 import json
 import sys
+import urllib.error
 import urllib.parse
 import urllib.request
 from collections import Counter
@@ -131,6 +132,7 @@ def main(argv: list[str]) -> int:
         pooled_candidates: set[str] = set()
         named_leads = 0
         pooled_actor_evidence: set[str] = set()
+        expected_activity: dict[str, tuple[Any, ...]] = {}
 
         for unit_summary in listed["units"]:
             group_id = unit_summary["group_id"]
@@ -198,6 +200,14 @@ def main(argv: list[str]) -> int:
             )
             pooled_actor_evidence |= set(actor_evidence)
             observed = set(analysis["observed_feature_technique_ids"])
+            for item in evidence:
+                ref = item["attack_ref"]
+                expected_activity[item["evidence_id"]] = (
+                    group_id,
+                    ref["stix_id"] if ref else None,
+                    item["quality"] == "low",
+                    ref is not None and ref["stix_id"] in observed,
+                )
             pooled |= observed
             pooled_candidates |= {c["stix_id"] for c in analysis["candidates"]}
             named_leads += sum(1 for m in analysis["indicator_matches"] if m.get("named_actor"))
@@ -409,6 +419,83 @@ def main(argv: list[str]) -> int:
             == investigation["evidence"],
             f"{summary['source_id']}: {evidence_total} in units",
         )
+        # --- ADR-0019: the activity view is exactly the units' Evidence ----------
+        activity = audit.get(f"/investigations/{_quote(summary['investigation_id'])}/activity")
+        served_activity = {
+            e["evidence_id"]: (
+                e["group_id"],
+                e["attack_stix_id"],
+                e["context"],
+                e["decision_feature"],
+            )
+            for e in activity["events"]
+        }
+        audit.check(
+            "activity.is_the_units_evidence",
+            served_activity == expected_activity
+            and len(activity["events"]) == len(expected_activity) == activity["evidence_in_units"],
+            f"{summary['source_id']}: {len(activity['events'])} events",
+        )
+        times = [e["time"] for e in activity["events"] if e["time"] is not None]
+        audit.check("activity.time_ordered", times == sorted(times), summary["source_id"])
+        audit.check(
+            "activity.no_command_line",
+            not [k for k in set(_keys(activity)) if "command" in k],
+            summary["source_id"],
+        )
+        # --- ADR-0019: ran versus detected, where a report was given ------------
+        try:
+            emulation = audit.get(
+                f"/investigations/{_quote(summary['investigation_id'])}/emulation"
+            )
+        except urllib.error.HTTPError as exc:
+            audit.check("emulation.absent_is_404", exc.code == 404, str(exc.code))
+            emulation = None
+        if emulation is not None:
+            steps = emulation["steps"]
+            audit.check(
+                "emulation.outcome_counts",
+                dict(Counter(s["outcome"] for s in steps))
+                == {k: v for k, v in emulation["outcome_counts"].items() if v},
+                str(emulation["outcome_counts"]),
+            )
+            audit.check(
+                "emulation.no_command_text",
+                not [
+                    k
+                    for k in set(_keys(emulation))
+                    if any(word in k for word in ("command", "output", "plaintext"))
+                ],
+            )
+            technique_events = Counter(e["attack_id"] for e in activity["events"])
+            for step in steps:
+                own = step["step_evidence"] > 0
+                named = step["technique_evidence_core"] + step["technique_evidence_context"]
+                expected_outcome = (
+                    "technique_detected_in_step"
+                    if step["technique_id"] in step["step_technique_ids"]
+                    else "step_activity_detected"
+                    if own
+                    else "technique_detected_elsewhere"
+                    if named
+                    else "not_detected"
+                )
+                audit.check(
+                    "emulation.outcome_follows_the_rule",
+                    step["outcome"] == expected_outcome,
+                    str(step["order"]),
+                )
+                # Evidence in units for the technique can only be part of the total.
+                audit.check(
+                    "emulation.technique_evidence_covers_the_units",
+                    named >= technique_events.get(step["technique_id"], 0),
+                    str(step["order"]),
+                )
+                audit.check(
+                    "emulation.step_units_exist",
+                    set(step["step_unit_ids"]) <= set(investigation["units"]),
+                    str(step["order"]),
+                )
         # --- ADR-0017: the investigation's assessment, recomputed ----------------
         assessment = audit.get(f"/investigations/{_quote(summary['investigation_id'])}/assessment")
         audit.check(

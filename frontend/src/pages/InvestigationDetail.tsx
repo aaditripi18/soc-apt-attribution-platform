@@ -21,8 +21,16 @@ import {
   UncalibratedBadge,
   cx,
 } from "../components/ui";
-import { paths, useApi, type Investigation, type UnitSearch, type UnitSummary } from "../lib/api";
-import { buildTimeline } from "../lib/derive";
+import {
+  paths,
+  useApi,
+  type Activity,
+  type Investigation,
+  type TechniqueCatalogue,
+  type UnitSearch,
+  type UnitSummary,
+} from "../lib/api";
+import { buildTimeline, indexTechniques } from "../lib/derive";
 import {
   duration,
   durationMs,
@@ -36,6 +44,36 @@ import {
   utcDateTime,
 } from "../lib/format";
 import { links, navigate } from "../lib/router";
+import { ActivityTimelineTab } from "./investigation/ActivityTimeline";
+import { EmulationTab } from "./investigation/Emulation";
+import { MatrixTab } from "./investigation/Matrix";
+
+const TABS = [
+  { key: "overview", label: "Overview" },
+  { key: "matrix", label: "ATT&CK matrix" },
+  { key: "timeline", label: "Timeline" },
+  { key: "emulation", label: "Ran vs detected" },
+] as const;
+
+type TabKey = (typeof TABS)[number]["key"];
+
+/** The matrix and the timeline are two drawings of one read: the investigation's activity. */
+function ActivityView({ id, view }: { id: string; view: "matrix" | "timeline" }) {
+  const activity = useApi<Activity>(paths.activity(id));
+  const catalogue = useApi<TechniqueCatalogue>(paths.techniques());
+  const index = useMemo(
+    () => (catalogue.state === "ready" ? indexTechniques(catalogue.data) : null),
+    [catalogue.state, catalogue.data],
+  );
+  if (activity.state === "error") return <ErrorState failure={activity.error} onRetry={activity.reload} />;
+  if (catalogue.state === "error") return <ErrorState failure={catalogue.error} onRetry={catalogue.reload} />;
+  if (activity.state !== "ready" || !index) return <PageSkeleton rows={5} />;
+  return view === "matrix" ? (
+    <MatrixTab activity={activity.data} index={index} investigationId={id} />
+  ) : (
+    <ActivityTimelineTab activity={activity.data} index={index} />
+  );
+}
 
 const MAX_CHIPS = 5;
 
@@ -126,7 +164,7 @@ function Timeline({ units, onOpen }: { units: UnitSummary[]; onOpen: (id: string
   );
 }
 
-export function InvestigationDetailPage({ id }: { id: string }) {
+export function InvestigationDetailPage({ id, tab }: { id: string; tab?: string }) {
   const investigation = useApi<Investigation>(paths.investigation(id));
   const search = useApi<UnitSearch>(paths.investigationUnits(id));
   const [host, setHost] = useState("");
@@ -156,6 +194,8 @@ export function InvestigationDetailPage({ id }: { id: string }) {
   if (search.state === "error") return <ErrorState failure={search.error} onRetry={search.reload} />;
 
   const record = investigation.data;
+  const found = search.data;
+  const active: TabKey = TABS.some((t) => t.key === tab) ? (tab as TabKey) : "overview";
   const filtering = host !== "" || technique !== "" || text.trim() !== "";
   const times = units.flatMap((u) => [u.first_seen, u.last_seen]).sort();
   return (
@@ -202,171 +242,207 @@ export function InvestigationDetailPage({ id }: { id: string }) {
         </div>
       </PageHeader>
 
-      <div className="mb-6 grid grid-cols-2 gap-4 lg:grid-cols-3 xl:grid-cols-6">
-        <Stat label="Observations" value={integer(record.observations_persisted)} sub="persisted (matched by a rule)" />
-        <Stat
-          label="Evidence"
-          value={integer(record.evidence)}
-          sub={`${integer(record.evidence_in_units)} in units · ${integer(record.evidence_outside_units)} low-level, in no unit`}
-        />
-        <Stat label="Units" value={integer(record.units.length)} accent />
-        <Stat label="Hosts" value={integer(hosts.length)} />
-        <Stat label="Techniques" value={integer(techniques.length)} sub="observed, incl. parents" />
-        <Stat
-          label="Time span"
-          value={<span className="text-headline-lg">{times.length ? duration(times[0], times[times.length - 1]) : "—"}</span>}
-          sub={times.length ? `from ${utcDateTime(times[0])}` : undefined}
-        />
+      <div
+        role="tablist"
+        aria-label="Investigation views"
+        className="no-print sticky top-14 z-10 -mx-6 mb-6 flex gap-1 overflow-x-auto border-b border-outline-variant/70 bg-background/95 px-6 backdrop-blur"
+      >
+        {TABS.map((item) => {
+          const selected = item.key === active;
+          return (
+            <a
+              key={item.key}
+              role="tab"
+              aria-selected={selected}
+              href={links.investigation(id, item.key === "overview" ? undefined : item.key)}
+              className={cx(
+                "-mb-px flex h-10 shrink-0 items-center border-b-2 px-3 text-label-md transition-colors",
+                selected
+                  ? "border-primary text-primary"
+                  : "border-transparent text-on-surface-variant hover:text-on-surface",
+              )}
+            >
+              {item.label}
+            </a>
+          );
+        })}
       </div>
 
-      {units.length === 0 ? (
-        <EmptyState title="No units — no detection matched this recording">
-          <p>
-            The engine read the source and no pinned rule fired on it, so there is no Evidence, no
-            unit and nothing to attribute. That is a result, not an error.
-          </p>
-          <p>
-            <a href={links.coverage()} className="text-primary hover:underline">
-              Detection Coverage
-            </a>{" "}
-            shows which techniques the pinned content can see on which log sources.
-          </p>
-        </EmptyState>
-      ) : (
-        <div className="space-y-6">
-          <AssessmentCard investigationId={record.investigation_id} />
-          {record.evidence_outside_units > 0 && (
-            <p className="max-w-4xl text-body-md text-on-surface-variant">
-              <span className="text-on-surface">{integer(record.evidence_outside_units)} low-level Evidence items are in no unit.</span>{" "}
-              They come from enrich-tier rules (common administrative behaviour) and have no structural link to core
-              Evidence, so they neither form a unit nor add a technique to any comparison (ADR-0003 Amendment H). Units below
-              account for the other {integer(record.evidence_in_units)}.
-            </p>
-          )}
-          <Timeline units={filtered} onOpen={(unitId) => navigate(links.unit(unitId))} />
-          <Card padded={false}>
-            <CardHeader
-              title="Attribution units"
-              hint={
-                <>
-                  {filtering
-                    ? `${integer(filtered.length)} of ${integer(units.length)} units`
-                    : plural(units.length, "unit")}{" "}
-                  · ordered by first observation
-                  {search.data.truncated && (
-                    <span className="text-warning">
-                      {" "}
-                      · the API returned only the first {integer(search.data.limit)}
-                    </span>
-                  )}
-                </>
-              }
-              right={
-                <>
-                  <Select
-                    ariaLabel="Host"
-                    value={host}
-                    onChange={setHost}
-                    options={[{ value: "", label: "All hosts" }, ...hosts.map((h) => ({ value: h, label: h }))]}
-                  />
-                  <Select
-                    ariaLabel="Technique"
-                    value={technique}
-                    onChange={setTechnique}
-                    options={[
-                      { value: "", label: "All techniques" },
-                      ...techniques.map((t) => ({ value: t, label: t })),
-                    ]}
-                  />
-                  <TextInput
-                    value={text}
-                    onChange={setText}
-                    placeholder="Unit id, G0016, T1059…"
-                    icon={<Search size={14} />}
-                    className="w-52"
-                    mono
-                  />
-                  {filtering && (
-                    <Button
-                      variant="ghost"
-                      onClick={() => {
-                        setHost("");
-                        setTechnique("");
-                        setText("");
-                      }}
-                    >
-                      <X size={13} />
-                      Clear
-                    </Button>
-                  )}
-                </>
-              }
-            />
-            <div className="overflow-x-auto">
-              <table className="w-full border-collapse text-body-md">
-                <thead>
-                  <tr>
-                    <Th>First observation (UTC)</Th>
-                    <Th>Duration</Th>
-                    <Th>Host</Th>
-                    <Th>Techniques observed</Th>
-                    <Th align="right">Candidates</Th>
-                    <Th align="right">Evidence</Th>
-                    <Th align="right">Steps</Th>
-                    <Th>Unit</Th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {filtered.map((unit) => (
-                    <tr
-                      key={unit.group_id}
-                      onClick={() => navigate(links.unit(unit.group_id))}
-                      className="cursor-pointer hover:bg-surface"
-                    >
-                      <Td className="whitespace-nowrap font-mono text-code-md">
-                        <span className="text-on-surface-variant">{utcDate(unit.first_seen)}</span>{" "}
-                        {utcClock(unit.first_seen, true)}
-                      </Td>
-                      <Td className="whitespace-nowrap font-mono text-code-md text-on-surface-variant">
-                        {duration(unit.first_seen, unit.last_seen)}
-                      </Td>
-                      <Td className="font-mono text-code-md">{unit.host_names.join(", ") || "—"}</Td>
-                      <Td>
-                        <TechniqueChips ids={unit.technique_ids} />
-                      </Td>
-                      <Td align="right" className="font-mono tabular-nums">
-                        {integer(unit.candidate_ids.length)}
-                      </Td>
-                      <Td align="right" className="font-mono tabular-nums">
-                        {integer(unit.evidence)}
-                      </Td>
-                      <Td align="right" className="font-mono tabular-nums">
-                        {integer(unit.steps)}
-                      </Td>
-                      <Td>
-                        <a
-                          href={links.unit(unit.group_id)}
-                          className="whitespace-nowrap font-mono text-code-sm text-primary hover:underline"
-                          title={unit.group_id}
-                        >
-                          {shortId(unit.group_id, 8).replace("corr-group::", "")}
-                        </a>
-                      </Td>
-                    </tr>
-                  ))}
-                  {filtered.length === 0 && (
-                    <tr>
-                      <Td colSpan={8} className="py-8 text-center text-on-surface-variant">
-                        No unit matches these filters.
-                      </Td>
-                    </tr>
-                  )}
-                </tbody>
-              </table>
-            </div>
-          </Card>
-        </div>
-      )}
+      {(active === "matrix" || active === "timeline") && <ActivityView id={id} view={active} />}
+      {active === "emulation" && <EmulationTab investigationId={id} />}
+      {active === "overview" && renderOverview()}
     </>
   );
+
+  function renderOverview() {
+    return (
+      <>
+        <div className="mb-6 grid grid-cols-2 gap-4 lg:grid-cols-3 xl:grid-cols-6">
+          <Stat label="Observations" value={integer(record.observations_persisted)} sub="persisted (matched by a rule)" />
+          <Stat
+            label="Evidence"
+            value={integer(record.evidence)}
+            sub={`${integer(record.evidence_in_units)} in units · ${integer(record.evidence_outside_units)} low-level, in no unit`}
+          />
+          <Stat label="Units" value={integer(record.units.length)} accent />
+          <Stat label="Hosts" value={integer(hosts.length)} />
+          <Stat label="Techniques" value={integer(techniques.length)} sub="observed, incl. parents" />
+          <Stat
+            label="Time span"
+            value={<span className="text-headline-lg">{times.length ? duration(times[0], times[times.length - 1]) : "—"}</span>}
+            sub={times.length ? `from ${utcDateTime(times[0])}` : undefined}
+          />
+        </div>
+
+        {units.length === 0 ? (
+          <EmptyState title="No units — no detection matched this recording">
+            <p>
+              The engine read the source and no pinned rule fired on it, so there is no Evidence, no
+              unit and nothing to attribute. That is a result, not an error.
+            </p>
+            <p>
+              <a href={links.coverage()} className="text-primary hover:underline">
+                Detection Coverage
+              </a>{" "}
+              shows which techniques the pinned content can see on which log sources.
+            </p>
+          </EmptyState>
+        ) : (
+          <div className="space-y-6">
+            <AssessmentCard investigationId={record.investigation_id} />
+            {record.evidence_outside_units > 0 && (
+              <p className="max-w-4xl text-body-md text-on-surface-variant">
+                <span className="text-on-surface">{integer(record.evidence_outside_units)} low-level Evidence items are in no unit.</span>{" "}
+                They come from enrich-tier rules (common administrative behaviour) and have no structural link to core
+                Evidence, so they neither form a unit nor add a technique to any comparison (ADR-0003 Amendment H). Units below
+                account for the other {integer(record.evidence_in_units)}.
+              </p>
+            )}
+            <Timeline units={filtered} onOpen={(unitId) => navigate(links.unit(unitId))} />
+            <Card padded={false}>
+              <CardHeader
+                title="Attribution units"
+                hint={
+                  <>
+                    {filtering
+                      ? `${integer(filtered.length)} of ${integer(units.length)} units`
+                      : plural(units.length, "unit")}{" "}
+                    · ordered by first observation
+                    {found.truncated && (
+                      <span className="text-warning">
+                        {" "}
+                        · the API returned only the first {integer(found.limit)}
+                      </span>
+                    )}
+                  </>
+                }
+                right={
+                  <>
+                    <Select
+                      ariaLabel="Host"
+                      value={host}
+                      onChange={setHost}
+                      options={[{ value: "", label: "All hosts" }, ...hosts.map((h) => ({ value: h, label: h }))]}
+                    />
+                    <Select
+                      ariaLabel="Technique"
+                      value={technique}
+                      onChange={setTechnique}
+                      options={[
+                        { value: "", label: "All techniques" },
+                        ...techniques.map((t) => ({ value: t, label: t })),
+                      ]}
+                    />
+                    <TextInput
+                      value={text}
+                      onChange={setText}
+                      placeholder="Unit id, G0016, T1059…"
+                      icon={<Search size={14} />}
+                      className="w-52"
+                      mono
+                    />
+                    {filtering && (
+                      <Button
+                        variant="ghost"
+                        onClick={() => {
+                          setHost("");
+                          setTechnique("");
+                          setText("");
+                        }}
+                      >
+                        <X size={13} />
+                        Clear
+                      </Button>
+                    )}
+                  </>
+                }
+              />
+              <div className="overflow-x-auto">
+                <table className="w-full border-collapse text-body-md">
+                  <thead>
+                    <tr>
+                      <Th>First observation (UTC)</Th>
+                      <Th>Duration</Th>
+                      <Th>Host</Th>
+                      <Th>Techniques observed</Th>
+                      <Th align="right">Candidates</Th>
+                      <Th align="right">Evidence</Th>
+                      <Th align="right">Steps</Th>
+                      <Th>Unit</Th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {filtered.map((unit) => (
+                      <tr
+                        key={unit.group_id}
+                        onClick={() => navigate(links.unit(unit.group_id))}
+                        className="cursor-pointer hover:bg-surface"
+                      >
+                        <Td className="whitespace-nowrap font-mono text-code-md">
+                          <span className="text-on-surface-variant">{utcDate(unit.first_seen)}</span>{" "}
+                          {utcClock(unit.first_seen, true)}
+                        </Td>
+                        <Td className="whitespace-nowrap font-mono text-code-md text-on-surface-variant">
+                          {duration(unit.first_seen, unit.last_seen)}
+                        </Td>
+                        <Td className="font-mono text-code-md">{unit.host_names.join(", ") || "—"}</Td>
+                        <Td>
+                          <TechniqueChips ids={unit.technique_ids} />
+                        </Td>
+                        <Td align="right" className="font-mono tabular-nums">
+                          {integer(unit.candidate_ids.length)}
+                        </Td>
+                        <Td align="right" className="font-mono tabular-nums">
+                          {integer(unit.evidence)}
+                        </Td>
+                        <Td align="right" className="font-mono tabular-nums">
+                          {integer(unit.steps)}
+                        </Td>
+                        <Td>
+                          <a
+                            href={links.unit(unit.group_id)}
+                            className="whitespace-nowrap font-mono text-code-sm text-primary hover:underline"
+                            title={unit.group_id}
+                          >
+                            {shortId(unit.group_id, 8).replace("corr-group::", "")}
+                          </a>
+                        </Td>
+                      </tr>
+                    ))}
+                    {filtered.length === 0 && (
+                      <tr>
+                        <Td colSpan={8} className="py-8 text-center text-on-surface-variant">
+                          No unit matches these filters.
+                        </Td>
+                      </tr>
+                    )}
+                  </tbody>
+                </table>
+              </div>
+            </Card>
+          </div>
+        )}
+      </>
+    );
+  }
 }

@@ -18,13 +18,13 @@ function Titled({ crumbs, children }: { crumbs: Crumb[]; children: React.ReactNo
   return <>{children}</>;
 }
 
-function InvestigationRoute({ id }: { id: string }) {
+function InvestigationRoute({ id, tab }: { id: string; tab: string | undefined }) {
   const record = useApi<Investigation>(paths.investigation(id));
   useCrumbs([
     { label: "Investigations", href: links.investigations() },
     { label: record.state === "ready" ? record.data.source_id : shortId(id, 8) },
   ]);
-  return <InvestigationDetailPage id={id} />;
+  return <InvestigationDetailPage id={id} tab={tab} />;
 }
 
 function UnknownPage({ route }: { route: Route }) {
@@ -57,8 +57,8 @@ function Page({ route }: { route: Route }) {
       </Titled>
     );
   }
-  if (head === "investigations" && second !== undefined && third === undefined) {
-    return <InvestigationRoute key={second} id={second} />;
+  if (head === "investigations" && second !== undefined && rest.length === 0) {
+    return <InvestigationRoute key={second} id={second} tab={third} />;
   }
   if (head === "units" && second === undefined) {
     return (
