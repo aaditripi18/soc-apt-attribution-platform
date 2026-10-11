@@ -123,6 +123,9 @@ def main(argv: list[str]) -> int:
         starts = [u["first_seen"] for u in listed["units"]]
         audit.check("investigation.units_time_ordered", starts == sorted(starts))
         evidence_total = 0
+        pooled: set[str] = set()
+        pooled_candidates: set[str] = set()
+        named_leads = 0
 
         for unit_summary in listed["units"]:
             group_id = unit_summary["group_id"]
@@ -176,6 +179,9 @@ def main(argv: list[str]) -> int:
                 if e["attack_ref"] and e["quality"] != "low"
             }
             observed = set(analysis["observed_feature_technique_ids"])
+            pooled |= observed
+            pooled_candidates |= {c["stix_id"] for c in analysis["candidates"]}
+            named_leads += sum(1 for m in analysis["indicator_matches"] if m.get("named_actor"))
             # A decision feature is a core-Evidence technique that places a candidate:
             # one no active Group or Campaign uses yields no assessment (ADR-0005).
             placing = {t for t in core if any(t in profile for profile in profiles.values())}
@@ -384,6 +390,65 @@ def main(argv: list[str]) -> int:
             == investigation["evidence"],
             f"{summary['source_id']}: {evidence_total} in units",
         )
+        # --- ADR-0017: the investigation's assessment, recomputed ----------------
+        assessment = audit.get(f"/investigations/{_quote(summary['investigation_id'])}/assessment")
+        audit.check(
+            "assessment.observed_techniques_are_the_pooled_features",
+            {t["technique_stix_id"] for t in assessment["observed_techniques"]} == pooled,
+            summary["source_id"],
+        )
+        audit.check(
+            "assessment.candidates_are_the_units_candidates",
+            {c["stix_id"] for c in assessment["candidates"]} == pooled_candidates,
+            summary["source_id"],
+        )
+        pooled_ids = {by_stix[t]["attack_id"] for t in pooled if t in by_stix}
+        for candidate in assessment["candidates"]:
+            want = {by_stix[t]["attack_id"] for t in profiles[candidate["stix_id"]] & pooled}
+            audit.check(
+                "assessment.overlap_equals_profile",
+                set(candidate["matched_technique_ids"]) == want <= pooled_ids
+                and candidate["profile_techniques"] == len(profiles[candidate["stix_id"]]),
+                candidate["name"],
+            )
+        names = [c["name"].lower() for c in assessment["candidates"]]
+        audit.check("assessment.candidates_in_name_order", names == sorted(names))
+        for row in assessment["overlap_counts"]:
+            audit.check(
+                "assessment.overlap_counts",
+                row["candidates"]
+                == sum(
+                    1
+                    for c in assessment["candidates"]
+                    if len(c["matched_technique_ids"]) >= row["min_matched"]
+                ),
+                str(row),
+            )
+        expected_verdict = (
+            "no_decision_features"
+            if not pooled
+            else "third_party_lead"
+            if named_leads
+            else "not_distinguishable"
+        )
+        audit.check(
+            "assessment.verdict",
+            assessment["verdict"] == expected_verdict
+            and len(assessment["indicator_leads"]) == named_leads,
+            f"{summary['source_id']}: {assessment['verdict']}",
+        )
+        leads = {lead["actor_name"] for lead in assessment["indicator_leads"]}
+        said = assessment["statement"] + " " + " ".join(assessment["reasons"])
+        audit.check(
+            "assessment.words_name_no_candidate",
+            not [
+                c["name"]
+                for c in assessment["candidates"]
+                if c["name"] in said and c["name"] not in leads
+            ],
+            summary["source_id"],
+        )
+
         dossier = audit.get(f"/investigations/{_quote(summary['investigation_id'])}/dossier")[
             "markdown"
         ]

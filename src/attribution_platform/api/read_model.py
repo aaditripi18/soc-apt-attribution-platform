@@ -42,6 +42,7 @@ from attribution_platform.dataplane import (
     load_observation,
 )
 from attribution_platform.domain import Evidence, Observation, to_serializable
+from attribution_platform.investigation.assessment import load_assessment
 from attribution_platform.investigation.dossier import DOSSIER_VERSION, render_dossier
 from attribution_platform.investigation.records import (
     list_investigations,
@@ -95,6 +96,18 @@ def get_investigation(client: ElasticClient, investigation_id: str) -> Mapping[s
         raise BackendError(f"could not load Investigation {investigation_id!r}: {exc}") from exc
     if record is None:
         raise NotFoundError(f"no Investigation found with investigation_id={investigation_id!r}")
+    return record
+
+
+def get_assessment(client: ElasticClient, investigation_id: str) -> Mapping[str, Any]:
+    """The stored attribution assessment of one investigation (ADR-0017), or raise."""
+    investigation_id = _validate_identifier(investigation_id, field="investigation_id")
+    try:
+        record = load_assessment(client, investigation_id)
+    except ElasticIntegrationError as exc:
+        raise BackendError(f"could not load the assessment of {investigation_id!r}: {exc}") from exc
+    if record is None:
+        raise NotFoundError(f"no assessment found for investigation_id={investigation_id!r}")
     return record
 
 
@@ -258,6 +271,12 @@ def _reference(value: Any, what: str) -> Any:
 def get_attack_techniques(context: ApiContext) -> Mapping[str, Any]:
     """Active ATT&CK techniques with tactics and Group prevalence."""
     return _reference(context.techniques, "the ATT&CK technique catalogue")  # type: ignore[no-any-return]
+
+
+def get_validation(context: ApiContext) -> Mapping[str, Any]:
+    """Known-answer checks (ADR-0017): the verdicts given on recordings whose
+    answer is known, and what ordering candidates would have named instead."""
+    return _reference(context.validation, "the known-answer checks")  # type: ignore[no-any-return]
 
 
 def get_coverage(context: ApiContext) -> Mapping[str, Any]:

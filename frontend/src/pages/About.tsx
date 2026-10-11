@@ -1,6 +1,15 @@
 import type { ReactNode } from "react";
-import { Badge, Card, CardHeader, ErrorState, Id, PageHeader, PageSkeleton } from "../components/ui";
-import { paths, useApi, useHealth, type Coverage, type TechniqueCatalogue } from "../lib/api";
+import { TrackRecordLine, VERDICT_LABEL } from "../components/Assessment";
+import { Badge, Card, CardHeader, ErrorState, Id, PageHeader, PageSkeleton, Td, Th } from "../components/ui";
+import {
+  paths,
+  useApi,
+  useHealth,
+  type Coverage,
+  type KnownAnswerCase,
+  type TechniqueCatalogue,
+  type Validation,
+} from "../lib/api";
 import { integer } from "../lib/format";
 import { links } from "../lib/router";
 
@@ -40,10 +49,82 @@ const STAGES: { name: string; text: string }[] = [
   },
 ];
 
+function positions(item: KnownAnswerCase): string {
+  const seen = item.orderings.map((o) => o.known_actor_position).filter((p): p is number => p !== null);
+  if (seen.length === 0) return "—";
+  const groups = Math.max(...item.orderings.map((o) => o.groups_ordered));
+  return `${Math.min(...seen)}–${Math.max(...seen)} of about ${groups}`;
+}
+
+function KnownAnswerChecks({ validation }: { validation: Validation }) {
+  return (
+    <Card padded={false}>
+      <CardHeader
+        title="Known-answer checks"
+        hint="Recordings where the answer is known in advance: what verdict the platform gave, and what ordering candidates by technique overlap would have named instead."
+      />
+      <p className="border-b border-outline-variant/70 px-4 py-3 text-body-lg text-on-surface-variant">
+        <TrackRecordLine validation={validation} /> No verdict of this platform names an actor, so it named none wrongly.
+        This is why candidates are never ordered here.
+      </p>
+      <div className="overflow-x-auto">
+        <table className="w-full border-collapse text-body-md">
+          <thead>
+            <tr>
+              <Th>Recording</Th>
+              <Th>Known answer</Th>
+              <Th>Verdict given</Th>
+              <Th>Its techniques observed</Th>
+              <Th>Its position if candidates were ordered</Th>
+              <Th>An ordering would have named</Th>
+            </tr>
+          </thead>
+          <tbody>
+            {validation.cases.map((item) => {
+              const named = [...new Set(item.orderings.map((o) => o.would_name).filter((n): n is string => !!n))].sort();
+              return (
+                <tr key={item.investigation_id}>
+                  <Td className="font-medium text-on-surface">
+                    <span title={item.known_basis}>{item.source_id}</span>
+                  </Td>
+                  <Td>
+                    {item.known_actor ? (
+                      <span className="text-on-surface">
+                        {item.known_actor.name} <span className="font-mono text-code-sm text-outline">{item.known_actor.attack_id}</span>
+                      </span>
+                    ) : (
+                      <span className="text-on-surface-variant">no actor (tool test)</span>
+                    )}
+                  </Td>
+                  <Td>
+                    <Badge tone="warning">{VERDICT_LABEL[item.verdict]}</Badge>
+                  </Td>
+                  <Td className="font-mono text-code-md">
+                    {item.known_actor
+                      ? `${item.known_actor_techniques_observed} of ${item.observed_techniques} (profile ${item.known_actor_profile_techniques})`
+                      : "—"}
+                  </Td>
+                  <Td className="font-mono text-code-md">{positions(item)}</Td>
+                  <Td className="max-w-md text-on-surface-variant">{named.join(", ") || "—"}</Td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
+      <p className="border-t border-outline-variant/70 px-4 py-2.5 font-mono text-code-sm text-outline">
+        {validation.version} · {validation.summary.orderings_measured} orderings measured ·{" "}
+        {validation.pinned.attack_kb_version} · reproduce with scripts/measure_actor_ranking.py
+      </p>
+    </Card>
+  );
+}
+
 export function AboutPage() {
   const coverage = useApi<Coverage>(paths.coverage());
   const catalogue = useApi<TechniqueCatalogue>(paths.techniques());
   const { health } = useHealth(60000);
+  const validation = useApi<Validation>(paths.validation());
 
   if (coverage.state === "error") return <ErrorState failure={coverage.error} onRetry={coverage.reload} />;
   if (catalogue.state === "error") return <ErrorState failure={catalogue.error} onRetry={catalogue.reload} />;
@@ -71,10 +152,13 @@ export function AboutPage() {
             calibration version exists for this platform, so it emits none: no likelihood, no confidence band, no verdict and
             no ranking. Candidates are always listed alphabetically. What you get instead is the evidence itself — what was
             observed, which techniques it supports and why, which ATT&amp;CK profiles include those techniques, and what
-            additional evidence would separate them. Overlap with a Group’s published profile is not attribution: techniques
-            are shared, copied and under-reported.
+            additional evidence would separate them — and, per investigation, a verdict on whether any actor can be
+            singled out. Overlap with a Group’s published profile is not attribution: techniques are shared, copied and
+            under-reported, and the checks below show what treating it as attribution would have got wrong.
           </p>
         </Card>
+
+        {validation.state === "ready" && <KnownAnswerChecks validation={validation.data} />}
 
         <Card padded={false}>
           <CardHeader title="From telemetry to explanation" hint="Each stage is deterministic and stores what it produced." />

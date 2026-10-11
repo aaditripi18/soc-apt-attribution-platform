@@ -45,12 +45,13 @@ from attribution_platform.dataplane.behavioral_sequence_persistence import (
 from attribution_platform.dataplane.correlation_persistence import load_correlation_group
 from attribution_platform.dataplane.persistence import load_evidence, load_observation
 from attribution_platform.domain import Evidence, EvidenceQuality, Observation
+from attribution_platform.investigation.assessment import load_assessment
 from attribution_platform.investigation.records import (
     load_attribution_analysis,
     load_investigation,
 )
 
-DOSSIER_VERSION = "dossier/2"
+DOSSIER_VERSION = "dossier/3"
 _MAX_CANDIDATES_LISTED = 25
 _MAX_QUESTIONS = 5
 
@@ -273,6 +274,26 @@ def _section_unit(
     return lines
 
 
+def _section_assessment(assessment: Mapping[str, Any] | None) -> list[str]:
+    """The investigation-level verdict (ADR-0017), exactly as stored."""
+    if assessment is None:
+        return []
+    lines = ["## Attribution assessment", "", f"**{assessment['statement']}**", ""]
+    lines += [f"- {reason}" for reason in assessment["reasons"]]
+    for lead in assessment["indicator_leads"]:
+        validity = {True: "inside", False: "outside", None: "no stated"}[lead["within_validity"]]
+        lines.append(
+            f"- Lead: {_code(str(lead['value']))} equals indicator "
+            f"*{_text(str(lead['indicator_name']))}* in {_text(str(lead['report_name']))} "
+            f"({validity} its validity window), which the publisher attributes to "
+            f"**{_text(str(lead['actor_name']))}**."
+        )
+    lines += ["", "What this assessment does not establish:", ""]
+    lines += [f"- {limit}" for limit in assessment["limits"]]
+    lines.append("")
+    return lines
+
+
 def render_dossier(client: ElasticClient, knowledge: AttackKnowledge, investigation_id: str) -> str:
     """The dossier of one persisted investigation (module docstring)."""
     investigation: Mapping[str, Any] | None = load_investigation(client, investigation_id)
@@ -299,6 +320,7 @@ def render_dossier(client: ElasticClient, knowledge: AttackKnowledge, investigat
         "Amendment H).",
         "",
     ]
+    lines += _section_assessment(load_assessment(client, investigation_id))
     for number, group_id in enumerate(investigation["units"], start=1):
         lines += _section_unit(client, knowledge, str(group_id), number)
     return "\n".join(lines).rstrip() + "\n"

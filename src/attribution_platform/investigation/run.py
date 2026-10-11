@@ -18,6 +18,7 @@ import dataclasses
 import hashlib
 import json
 from collections.abc import Mapping
+from typing import Any
 
 from attribution_platform.attack_knowledge.loader import AttackKnowledge
 from attribution_platform.attribution.ach_matrix import build_ach_matrix
@@ -58,6 +59,10 @@ from attribution_platform.intel.indicators import (
     IndicatorSet,
     match_observations,
 )
+from attribution_platform.investigation.assessment import (
+    assess_investigation,
+    persist_assessment,
+)
 from attribution_platform.investigation.records import (
     AttributionAnalysisRecord,
     CandidateView,
@@ -72,6 +77,7 @@ from attribution_platform.investigation.records import (
     persist_attribution_analysis,
     persist_investigation,
     persist_unit_summary,
+    record_to_json,
 )
 from attribution_platform.replay import (
     DetectionReplayFixture,
@@ -84,8 +90,9 @@ from attribution_platform.replay.recording_pipeline import RecordingSource, anal
 #: 1.4: a unit beyond the exact comparison search's work bound is recorded as
 #: "comparison not computed" instead of aborting the run, and the record says how
 #: much Evidence is in units and how much is not (ADR-0009 Amendment D).
-#: 1.5: the baseline search is kept apart from the per-candidate one.
-INVESTIGATION_METHOD_VERSION = "1.5"
+#: 1.5: the baseline search is kept apart from the per-candidate one; 1.6: an
+#: investigation-level attribution assessment is stored (ADR-0017).
+INVESTIGATION_METHOD_VERSION = "1.6"
 #: ADR-0005 §D16 structural lower bound; the fitted floor needs a calibration_version.
 STRUCTURAL_MIN_PROFILE_FLOOR = 1
 
@@ -362,6 +369,7 @@ def run_investigation(
         )
 
     sequence_by_group = {s.group_id: s for s in sequences}
+    stored_analyses: list[dict[str, Any]] = []
     for group in groups:
         persist_correlation_group(client, group)
         sequence = sequence_by_group[group.group_id]
@@ -388,6 +396,7 @@ def run_investigation(
                 ),
             )
         persist_attribution_analysis(client, analysis_record)
+        stored_analyses.append(record_to_json(analysis_record))
         persist_unit_summary(client, summarize_unit(group, sequence, analysis_record, members))
 
     record = InvestigationRecord(
@@ -405,6 +414,10 @@ def run_investigation(
         evidence_outside_units=evidence_count - len(in_units),
     )
     persist_investigation(client, record)
+    # ADR-0017: the verdict about the whole investigation, from the same JSON the
+    # read model holds for its units.
+    stored_analyses.sort(key=lambda analysis: str(analysis["group_id"]))
+    persist_assessment(client, assess_investigation(knowledge, investigation_id, stored_analyses))
     return record
 
 

@@ -1,4 +1,5 @@
 import { FileText, Search, X } from "lucide-react";
+import { AssessmentCard } from "../components/Assessment";
 import { useMemo, useState } from "react";
 import {
   AttackId,
@@ -233,6 +234,7 @@ export function InvestigationDetailPage({ id }: { id: string }) {
         </EmptyState>
       ) : (
         <div className="space-y-6">
+          <AssessmentCard investigationId={record.investigation_id} />
           {record.evidence_outside_units > 0 && (
             <p className="max-w-4xl text-body-md text-on-surface-variant">
               <span className="text-on-surface">{integer(record.evidence_outside_units)} low-level Evidence items are in no unit.</span>{" "}

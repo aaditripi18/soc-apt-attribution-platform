@@ -53,6 +53,8 @@ class ApiContext:
     coverage: Mapping[str, Any] | None = None
     rules: Mapping[str, Mapping[str, Any]] = field(default_factory=dict)
     static_dir: Path | None = None
+    #: the ``GET /validation`` body (ADR-0017): known-answer checks, as measured
+    validation: Mapping[str, Any] | None = None
 
 
 def _external_id(obj: Mapping[str, Any]) -> str | None:
@@ -227,6 +229,7 @@ def load_api_context(
     sigma_import_report: Path,
     elastic_import_report: Path,
     static_dir: Path | None = None,
+    known_answer_checks: Path | None = None,
 ) -> ApiContext:
     """Read the pinned artefacts once and shape them for the API. The built
     frontend is served only when ``static_dir`` holds an ``index.html``."""
@@ -241,6 +244,11 @@ def load_api_context(
         coverage=build_coverage_view(_read(coverage_report), sigma, elastic, rules),
         rules=rules,
         static_dir=served,
+        validation=(
+            _read(known_answer_checks)
+            if known_answer_checks is not None and known_answer_checks.is_file()
+            else None
+        ),
     )
 
 

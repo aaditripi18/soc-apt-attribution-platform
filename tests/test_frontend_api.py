@@ -467,3 +467,87 @@ def test_baseline_beyond_the_bound_keeps_the_per_candidate_comparison(
         assert [h.support_value for h in record.hypotheses] == [
             h["support_value"] for h in stored["hypotheses"]
         ]
+
+
+def test_assessment_route_serves_the_stored_verdict(
+    served: tuple[str, FakeElasticClient, str, tuple[str, ...]], knowledge: AttackKnowledge
+) -> None:
+    """ADR-0017: the run stores the investigation's assessment; the API serves it
+    unchanged and the dossier quotes its statement."""
+    from attribution_platform.investigation import load_attribution_analysis
+    from attribution_platform.investigation.assessment import (
+        assess_investigation,
+        assessment_to_json,
+    )
+
+    base, client, investigation_id, units = served
+    status, _, body = _get(f"{base}/api/investigations/{investigation_id}/assessment")
+    assert status == 200 and body["investigation_id"] == investigation_id
+    assert body["verdict"] in {"no_decision_features", "not_distinguishable", "third_party_lead"}
+    analyses = [dict(load_attribution_analysis(client, g) or {}) for g in sorted(units)]
+    assert body == json.loads(
+        json.dumps(assessment_to_json(assess_investigation(knowledge, investigation_id, analyses)))
+    )
+    assert body["units_total"] == len(units)
+    names = [c["name"].lower() for c in body["candidates"]]
+    assert names == sorted(names)
+    _, _, dossier = _get(f"{base}/api/investigations/{investigation_id}/dossier")
+    assert "## Attribution assessment" in dossier["markdown"]
+    assert body["statement"] in dossier["markdown"]
+    assert _get(f"{base}/api/investigations/absent/assessment")[0] == 404
+
+
+def test_known_answer_checks_are_served_and_internally_consistent(
+    knowledge: AttackKnowledge,
+) -> None:
+    """ADR-0017 D5: the tracked known-answer checks are what ``/validation`` serves,
+    and their summary is a count of their own cases."""
+    from attribution_platform.api.read_model import get_validation
+    from attribution_platform.detection_content.pinned import KNOWN_ANSWER_CHECKS
+
+    context = load_api_context(
+        knowledge,
+        coverage_report=COVERAGE_REPORT,
+        sigma_import_report=SIGMA_IMPORT_REPORT,
+        elastic_import_report=ELASTIC_IMPORT_REPORT,
+        known_answer_checks=KNOWN_ANSWER_CHECKS,
+    )
+    body = dict(get_validation(context))
+    assert body == json.loads(KNOWN_ANSWER_CHECKS.read_text(encoding="utf-8"))
+    cases, summary = body["cases"], body["summary"]
+    emulations = [c for c in cases if c["kind"] == "emulation"]
+    tool_tests = [c for c in cases if c["kind"] == "tool_test"]
+    assert (summary["cases"], summary["emulations"], summary["tool_tests"]) == (
+        len(cases),
+        len(emulations),
+        len(tool_tests),
+    )
+    positions = [
+        o["known_actor_position"]
+        for c in emulations
+        for o in c["orderings"]
+        if o["known_actor_position"] is not None
+    ]
+    assert summary["orderings_measured"] == len(positions)
+    assert summary["orderings_naming_the_known_actor_first"] == positions.count(1)
+    assert summary["best_position_of_a_known_actor"] == min(positions)
+    assert summary["worst_position_of_a_known_actor"] == max(positions)
+    for case in cases:
+        assert (case["known_actor"] is None) == (case["kind"] == "tool_test")
+        # no verdict names an actor, on any known-answer case
+        assert case["verdict"] in {
+            "no_decision_features",
+            "not_distinguishable",
+            "third_party_lead",
+        }
+        assert case["known_actor"] is None or case["known_actor"]["name"] not in case["statement"]
+    assert summary["verdicts_naming_an_actor"] == 0
+    # without the file the route says so
+    bare = load_api_context(
+        knowledge,
+        coverage_report=COVERAGE_REPORT,
+        sigma_import_report=SIGMA_IMPORT_REPORT,
+        elastic_import_report=ELASTIC_IMPORT_REPORT,
+    )
+    with pytest.raises(Exception, match="not available"):
+        get_validation(bare)

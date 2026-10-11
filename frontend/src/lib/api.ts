@@ -403,6 +403,106 @@ export interface Coverage {
   techniques: CoverageTechnique[];
 }
 
+/** ADR-0017: the verdict about a whole investigation. It can never name an actor. */
+export type Verdict = "no_decision_features" | "not_distinguishable" | "third_party_lead";
+
+export interface Assessment {
+  investigation_id: string;
+  attack_kb_version: string;
+  units_total: number;
+  units_with_decision_features: number;
+  active_groups: number;
+  observed_techniques: {
+    technique_id: string;
+    technique_stix_id: string;
+    technique_name: string;
+    units: number;
+    groups_using: number;
+    campaigns_using: number;
+  }[];
+  candidate_groups: number;
+  candidate_campaigns: number;
+  /** In name order. Overlap is a stored fact per candidate, never an ordering. */
+  candidates: {
+    candidate_id: string;
+    stix_id: string;
+    name: string;
+    kind: string;
+    profile_techniques: number;
+    matched_technique_ids: string[];
+    units_as_candidate: number;
+  }[];
+  overlap_counts: { min_matched: number; candidates: number }[];
+  indicator_leads: {
+    actor_name: string;
+    actor_attack_id: string | null;
+    indicator_name: string;
+    kind: string;
+    value: string;
+    report_name: string | null;
+    within_validity: boolean | null;
+    attribution_quote: string | null;
+    group_id: string;
+  }[];
+  verdict: Verdict;
+  statement: string;
+  reasons: string[];
+  limits: string[];
+  method_version: string;
+  schema_version: string;
+}
+
+/** ADR-0017: what naming an actor would have got right on known-answer recordings. */
+export interface KnownAnswerCase {
+  source_id: string;
+  source_sha256: string;
+  investigation_id: string;
+  kind: "emulation" | "tool_test";
+  known_actor: { attack_id: string; name: string } | null;
+  known_basis: string;
+  verdict: Verdict;
+  statement: string;
+  units: number;
+  observed_techniques: number;
+  candidates: number;
+  known_actor_profile_techniques: number | null;
+  known_actor_techniques_observed: number | null;
+  units_with_known_actor_as_candidate: number | null;
+  unit_level: {
+    units_compared: number;
+    first: number;
+    top_10: number;
+    median_position: number;
+    median_candidates: number;
+  } | null;
+  orderings: {
+    ordering: string;
+    level: string;
+    groups_ordered: number;
+    would_name: string | null;
+    known_actor_position: number | null;
+  }[];
+}
+
+export interface Validation {
+  version: string;
+  pinned: { attack_kb_version?: string; detection_pack_content_hash?: string; method_versions?: Record<string, string> };
+  summary: {
+    cases: number;
+    emulations: number;
+    tool_tests: number;
+    verdicts_naming_an_actor: number;
+    orderings_measured: number;
+    orderings_naming_the_known_actor_first: number;
+    orderings_with_the_known_actor_in_top_10: number;
+    best_position_of_a_known_actor: number | null;
+    worst_position_of_a_known_actor: number | null;
+    actors_an_ordering_would_name_on_tool_tests: number;
+    orderings_on_tool_tests: number;
+  };
+  cases: KnownAnswerCase[];
+}
+
 // ---------------------------------------------------------------------------
 // Transport
 // ---------------------------------------------------------------------------
@@ -471,6 +571,8 @@ export const paths = {
   investigation: (id: string) => `/investigations/${encodeURIComponent(id)}`,
   investigationUnits: (id: string) => `/investigations/${encodeURIComponent(id)}/units?limit=1000`,
   dossier: (id: string) => `/investigations/${encodeURIComponent(id)}/dossier`,
+  assessment: (id: string) => `/investigations/${encodeURIComponent(id)}/assessment`,
+  validation: () => "/validation",
   unit: (id: string) => `/units/${encodeURIComponent(id)}`,
   unitEvidence: (id: string) => `/units/${encodeURIComponent(id)}/evidence`,
   units: (filters: Record<string, string>) => {

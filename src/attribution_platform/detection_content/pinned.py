@@ -23,6 +23,10 @@ ELASTIC_IMPORT_REPORT = _ELASTIC_GENERATED / "elastic-195f15c0bac8.import-report
 #: ADR-0007 D9/D10: the full-universe coverage report over both packs.
 COVERAGE_REPORT = _SIGMA_GENERATED / "coverage-report.json"
 
+#: ADR-0017: what naming an actor would have got right on known-answer recordings
+#: (``scripts/measure_actor_ranking.py --json``).
+KNOWN_ANSWER_CHECKS = REPO_ROOT / "data" / "validation" / "known-answer-checks.json"
+
 #: ADR-0016: the built analyst frontend (``npm run build`` in ``frontend/``).
 FRONTEND_DIST = REPO_ROOT / "frontend" / "dist"
 
@@ -31,6 +35,7 @@ __all__ = [
     "ELASTIC_IMPORT_REPORT",
     "ELASTIC_PACK",
     "FRONTEND_DIST",
+    "KNOWN_ANSWER_CHECKS",
     "REPO_ROOT",
     "SIGMA_IMPORT_REPORT",
     "SIGMA_PACK",

@@ -26,7 +26,8 @@ Routes (all GET, nothing else) — G0.10 plus ADR-0009 v1:
 - ``GET /evidence/<evidence_id>``
 - ADR-0016 (the analyst frontend's reads; need an :class:`ApiContext`):
   ``GET /units/<group_id>/evidence``, ``GET /investigations/<id>/dossier``,
-  ``GET /coverage``, ``GET /attack/techniques``
+  ``GET /investigations/<id>/assessment`` (ADR-0017),
+  ``GET /coverage``, ``GET /attack/techniques``, ``GET /validation`` (ADR-0017)
 
 Every route also answers under ``/api`` (``/api/units/...``): the frontend
 calls that prefix, so the same paths work behind the Vite dev proxy and when
@@ -65,6 +66,7 @@ from attribution_platform.api.context import ApiContext
 from attribution_platform.api.errors import ApiError, InvalidIdentifierError, NotFoundError
 from attribution_platform.api.read_model import (
     UNIT_SEARCH_PARAMETERS,
+    get_assessment,
     get_attack_techniques,
     get_coverage,
     get_dossier,
@@ -74,6 +76,7 @@ from attribution_platform.api.read_model import (
     get_observation,
     get_unit,
     get_unit_evidence,
+    get_validation,
     list_investigation_summaries,
     search_units,
 )
@@ -104,11 +107,13 @@ _COLLECTION_PARAMETERS: dict[str, frozenset[str]] = {
 }
 _UNITS_SUFFIX = "/units"
 _DOSSIER_SUFFIX = "/dossier"
+_ASSESSMENT_SUFFIX = "/assessment"
 _EVIDENCE_SUFFIX = "/evidence"
 #: Reference routes answered from the :class:`ApiContext` alone.
 _REFERENCE: dict[str, Callable[[ApiContext], Any]] = {
     "coverage": get_coverage,
     "attack/techniques": get_attack_techniques,
+    "validation": get_validation,
 }
 _API_PREFIX = "/api"
 #: Built-frontend paths served from ``static_dir`` (everything else is JSON).
@@ -196,6 +201,8 @@ def _dispatch(
         return search_units(client, {**params, "investigation": investigation_id})
     if params:
         raise InvalidIdentifierError("this route takes no query parameters")
+    if resource == "investigations" and raw_identifier.endswith(_ASSESSMENT_SUFFIX):
+        return get_assessment(client, unquote(raw_identifier[: -len(_ASSESSMENT_SUFFIX)]))
     if resource == "investigations" and raw_identifier.endswith(_DOSSIER_SUFFIX):
         return get_dossier(client, context, unquote(raw_identifier[: -len(_DOSSIER_SUFFIX)]))
     if resource == "units" and raw_identifier.endswith(_EVIDENCE_SUFFIX):
