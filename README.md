@@ -171,12 +171,20 @@ to port 8000; set `VITE_API_TARGET` for another address). `npm run typecheck`, `
 - **Per investigation, a verdict with reasons** ([ADR-0017](docs/architecture/adr/0017-investigation-attribution-assessment.md)):
   nothing attributable, no actor can be singled out, or a lead. It never names an actor from technique overlap.
 - **A Group is named only on evidence specific to it** ([ADR-0018](docs/architecture/adr/0018-actor-specific-evidence.md)):
-  Sigma rules that name a Group count only where a written, per-rule review accepts them (14 of 52), and the result
-  is a lead to verify. 0 firings on 1.13 M real observations that contain none of that tooling.
+  Sigma rules associated with one Group — by tag, or filed under the Group's name or under software ATT&CK records
+  for that Group alone — count only where a written, per-rule review accepts them (41 of 141). 32 rules are usable
+  for 15 Groups; Detection Coverage lists them and every decision. Each rule has a known-answer test: its published
+  artefact fires it and names its Group, neutral values fire nothing. On 1.15 M real observations the pack fired
+  once: the service name published for APT29's CosmicDuke, in the recording of an APT29 emulation that reproduces
+  it — so that recording is now reported as a lead to APT29, and no other recording names anyone.
+- **Advisory indicators** ([ADR-0013](docs/architecture/adr/0013-indicator-intelligence-layer.md)): 454 file
+  hashes, addresses and domains from seven pinned CISA bundles, each attributed only through the publisher's own
+  sentence (Volt Typhoon, APT28, APT29, Andariel, Fox Kitten, Ember Bear). A match is reported as the advisory's
+  claim, not the platform's.
 - **Known-answer checks** (`data/validation/known-answer-checks.json`, shown on the site): on recordings of APT29
   and APT3 emulations, ordering candidates by technique overlap never put the emulated actor first under 16
   orderings (positions 14–121), and on tool tests with no actor it would still have named one every time. The
-  platform named none wrongly.
+  platform's own verdicts named an actor in 1 of the 4 cases — the right one, as a lead — and none wrongly.
 - **`scripts/audit_served_read_model.py`** recomputes what a running server states — every rule re-fired on its
   observation, every candidate set rebuilt from ATT&CK — and must pass before a result is trusted.
 - **A self-built lab** ([docs/operations/lab-pilot-results.md](docs/operations/lab-pilot-results.md)): an isolated

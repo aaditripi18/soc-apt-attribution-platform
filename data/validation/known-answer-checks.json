@@ -2,7 +2,7 @@
  "version": "known-answer-checks/2",
  "pinned": {
   "attack_kb_version": "enterprise-attack-19.2",
-  "detection_pack_content_hash": "05f02a4be0c0b94775e958998037849a364b68eb10f79a382758ba8d893df516",
+  "detection_pack_content_hash": "3a7235ec5df331bdb52b45f58908e5e8d86c8a3b0378949a22601fbf93d9dc48",
   "method_versions": {
    "contextual_correlation": "1.2",
    "investigation": "1.7",
@@ -15,7 +15,7 @@
   "cases": 4,
   "emulations": 2,
   "tool_tests": 2,
-  "verdicts_naming_an_actor": 0,
+  "verdicts_naming_an_actor": 1,
   "verdicts_naming_a_wrong_actor": 0,
   "orderings_measured": 16,
   "orderings_naming_the_known_actor_first": 0,
@@ -29,17 +29,19 @@
   {
    "source_id": "otrf-apt29-day1",
    "source_sha256": "98a073140860560d70080ace9142961be4f64b4862bae892d62d0f254d0fdbe5",
-   "investigation_id": "investigation::647a49fc881f911bb09f575c68479d58fbf46abf7af19c26746acedbf062ab00",
+   "investigation_id": "investigation::da5575de9d060b2ec6c125965ea62c86de8fd98d16616eec2ee28d18c62366c9",
    "kind": "emulation",
    "known_actor": {
     "attack_id": "G0016",
     "name": "APT29"
    },
    "known_basis": "OTRF Security Datasets: APT29 emulation (ATT&CK Evaluations plan)",
-   "verdict": "not_distinguishable",
-   "named_actors": [],
-   "statement": "No actor can be singled out from this evidence. Many Groups are consistent with it, and nothing observed is specific to one of them.",
-   "units": 65,
+   "verdict": "actor_specific_evidence",
+   "named_actors": [
+    "G0016"
+   ],
+   "statement": "Evidence specific to APT29 was observed: 1 match of 1 rule written from published reporting on that Group's own tooling. This points to APT29 and is a lead to verify — not a calibrated conclusion, and anyone who has the same tooling or copies its artefacts would produce it too.",
+   "units": 66,
    "observed_techniques": 42,
    "candidates": 204,
    "known_actor_profile_techniques": 66,
@@ -114,7 +116,7 @@
   {
    "source_id": "otrf-apt3-empire",
    "source_sha256": "ab4d1ec4e44102c87946a974f93aa248e49e5001e01fac3f137ec7e61bbc18ed",
-   "investigation_id": "investigation::f59dc8174a23e82f4ed974e8e6f2951867006b2828d627741db0dcbb84bf0d37",
+   "investigation_id": "investigation::ab679d79ce244b566af2fa2e17b20ccc5334295dcd81edf45ac9485bea95e737",
    "kind": "emulation",
    "known_actor": {
     "attack_id": "G0022",
@@ -199,7 +201,7 @@
   {
    "source_id": "otrf-lsass-01-logonpasswords",
    "source_sha256": "79045fcc5a8689efed8db4911cadc11b554ef8b0bed1428ee490bb8c3f2578e6",
-   "investigation_id": "investigation::440dc204be50e40113eec8b7d10f0d317f7bf25c3f82e4dc6d3d6967d678a211",
+   "investigation_id": "investigation::8d05068cbff7a57415510297b4f388ab501e3227564909ad2367f5c1fb6f9253",
    "kind": "tool_test",
    "known_actor": null,
    "known_basis": "OTRF Security Datasets: one credential-dumping tool run; no actor",
@@ -275,7 +277,7 @@
   {
    "source_id": "otrf-lsass-03-comsvcs",
    "source_sha256": "97a834cd72b0803d544c62cc45a41b18a4cc04a605735096be4bc5dad5e9fe7b",
-   "investigation_id": "investigation::70a21606c763db96d0db5b5cbf99a6d6badeef2d6f56ad97a3f312a62967f010",
+   "investigation_id": "investigation::45fa5cbac2d228c7e0c71e848c2a60d130bb7c750822f769b0901e4e8986b9ea",
    "kind": "tool_test",
    "known_actor": null,
    "known_basis": "OTRF Security Datasets: one credential-dumping tool run; no actor",

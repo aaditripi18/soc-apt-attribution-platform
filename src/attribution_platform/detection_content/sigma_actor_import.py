@@ -5,9 +5,11 @@ ADR-0017). What can is evidence specific to one actor: a file name, path, hash,
 address or payload fragment published for that Group's own tooling. SigmaHQ
 carries such rules, tagged with an ATT&CK Group id (``attack.gNNNN``) — and
 carries many more whose Group tag sits on a generic technique or a public
-framework. So the tag alone is never trusted:
+framework. Amendment B widens the *candidates* to rules SigmaHQ files under a
+directory named after one Group, or after software ATT&CK records for one
+Group (:mod:`.actor_association`). No association is trusted on its own:
 
-- every ``(rule, Group tag)`` in the pinned archive must have a decision in the
+- every ``(rule, Group)`` candidate in the pinned archive must have a decision in the
   reviewed file (``actor-tag-review.json``) or the import fails closed;
 - only an **accepted** tag becomes a mapping, and then the rule maps to that
   Group **only** — its technique tags are not mapped here (the same rule, where
@@ -36,6 +38,10 @@ from sigma.rule import SigmaRule
 
 from attribution_platform.attack_knowledge.external_ids import ExternalIdResolver, external_id
 from attribution_platform.attack_knowledge.loader import AttackKnowledge
+from attribution_platform.detection_content.actor_association import (
+    BASES,
+    ActorAssociationIndex,
+)
 from attribution_platform.detection_content.sigma_field_map import FIELD_MAP_VERSION
 from attribution_platform.detection_content.sigma_import import (
     DEFAULT_DNF_BOUND,
@@ -51,7 +57,7 @@ from attribution_platform.detection_content.sigma_import import (
 )
 
 ACTOR_IMPORTER_METHOD = "sigma-actor-importer"
-ACTOR_IMPORTER_VERSION = "1.0"
+ACTOR_IMPORTER_VERSION = "1.1"
 ACTOR_RULE_PREFIX = "sigma-actor"
 _GROUP_TYPE = "intrusion-set"
 
@@ -74,16 +80,6 @@ def load_actor_tag_review(path: Path) -> dict[tuple[str, str], tuple[bool, str]]
     return decisions
 
 
-def _group_tags(rule: SigmaRule) -> list[str]:
-    tags = []
-    for tag in rule.tags:
-        text = str(tag).lower()
-        namespace, _, name = text.partition(".")
-        if namespace == "attack" and name[:1] == "g" and name[1:].isdigit():
-            tags.append(text)
-    return sorted(set(tags))
-
-
 def import_sigma_actor_archive(
     archive_path: Path,
     *,
@@ -103,6 +99,7 @@ def import_sigma_actor_archive(
     review = load_actor_tag_review(actor_tag_review)
     groups = ExternalIdResolver(knowledge, (_GROUP_TYPE,))
     index = _AttackIndex(knowledge)
+    associations = ActorAssociationIndex(knowledge)
     rows: list[dict[str, Any]] = []
     rules: list[dict[str, Any]] = []
     seen: set[tuple[str, str]] = set()
@@ -115,17 +112,21 @@ def import_sigma_actor_archive(
             sigma_id = str(rule.id)
             mappings: list[ResolvedMapping] = []
             tag_rows: list[dict[str, Any]] = []
-            for tag in _group_tags(rule):
+            for association in associations.associations(member, (str(t) for t in rule.tags)):
+                tag = association.tag
                 decision = review.get((sigma_id, tag))
                 if decision is None:
                     raise SigmaImportError(
-                        f"{member}: Group tag {tag} of rule {sigma_id} has no reviewed decision"
+                        f"{member}: Group association {tag} of rule {sigma_id} "
+                        f"({', '.join(association.bases)}) has no reviewed decision"
                     )
                 seen.add((sigma_id, tag))
                 accepted, reason = decision
                 resolved = groups.resolve(tag.split(".", 1)[1].upper())
                 tag_row: dict[str, Any] = {
                     "tag": tag,
+                    "bases": list(association.bases),
+                    "matched": list(association.matched),
                     "decision": "accept" if accepted else "reject",
                     "reason": reason,
                     "group_id": None,
@@ -142,7 +143,8 @@ def import_sigma_actor_archive(
                                 object_type=_GROUP_TYPE,
                                 external_id=str(external_id(obj)),
                                 tag=tag,
-                                note=f"accepted by the actor-tag review: {reason}",
+                                note=f"accepted by the actor review "
+                                f"({', '.join(association.bases)}): {reason}",
                             )
                         )
                 elif accepted:
@@ -171,7 +173,7 @@ def import_sigma_actor_archive(
                     f"{rule.logsource.category or rule.logsource.service or ''}",
                     status=RuleStatus.REJECTED,
                     rejection=RejectionReason.EXCLUDED_BY_POLICY,
-                    reasons={"actor_review:no_accepted_group_tag": 1},
+                    reasons={"actor_review:no_accepted_group": 1},
                 )
                 rule_dicts = []
             rows.append({**outcome.to_json(release_tag), "actor_tags": tag_rows})
@@ -210,6 +212,20 @@ def import_sigma_actor_archive(
             "sigma_rules_total": len(rows),
             "group_tags_reviewed": len(review),
             "group_tags_accepted": sum(1 for ok, _ in review.values() if ok),
+            "associations_by_basis": {
+                basis: {
+                    "reviewed": sum(
+                        1 for r in rows for t in r["actor_tags"] if basis in t["bases"]
+                    ),
+                    "accepted": sum(
+                        1
+                        for r in rows
+                        for t in r["actor_tags"]
+                        if basis in t["bases"] and t["decision"] == "accept"
+                    ),
+                }
+                for basis in BASES
+            },
             "by_status": by_status,
             "generated_rules": len(rules),
             "groups_with_a_usable_rule": sorted(

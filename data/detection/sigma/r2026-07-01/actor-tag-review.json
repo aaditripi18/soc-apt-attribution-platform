@@ -1,8 +1,8 @@
 {
- "review_version": "actor-tag-review/1",
+ "review_version": "actor-tag-review/2",
  "sigma_release": "r2026-07-01",
  "reviewed_on": "2026-10-11",
- "policy": "ADR-0018: a Sigma attack.gNNNN (Group) tag becomes actor-specific evidence only if this review accepts it for that rule. Accepted only when every branch of the rule's detection logic matches a literal artefact published for that Group's own tooling or operation (a name, path, hash, address or payload fragment that unrelated software or another actor would not plausibly produce) and the source supports the Group named. A rule that matches a technique, a public tool or framework, or anything generic in even one branch is rejected: a miss is acceptable, a false lead is not.",
+ "policy": "ADR-0018 and its Amendment B: a Sigma rule becomes actor-specific evidence for a Group only if this review accepts that (rule, Group) pair. The candidate pairs are derived mechanically: an attack.gNNNN tag; a rules-emerging-threats TA/Malware directory named after exactly one active Group (by ATT&CK name or alias) or after software ATT&CK records for exactly one active Group; or an attack.sNNNN tag for such software ('basis'; absent = Group tag). Accepted only when every branch of the rule's detection logic matches a literal artefact published for that Group's own tooling or operation (a name, path, hash, address or payload fragment that unrelated software or another actor would not plausibly produce) and the Group named is supported. A rule that matches a technique, a public tool or framework, commodity malware, an exploit others reuse, or anything generic in even one branch is rejected: a miss is acceptable, a false lead is not.",
  "decisions": [
   {
    "sigma_id": "023394c4-29d5-46ab-92b8-6a534c6f447b",
@@ -13,12 +13,35 @@
    "reason": "It matches Hancom Office starting its Ghostscript helper, an exploitation technique several actors have used."
   },
   {
+   "sigma_id": "02cbc035-b390-49fe-a9ff-3bb402c826db",
+   "title": "Potential SNAKE Malware Installation CLI Arguments Indicator",
+   "tag": "attack.g0010",
+   "group": "Turla",
+   "basis": [
+    "directory_alias",
+    "directory_software"
+   ],
+   "decision": "reject",
+   "reason": "A pattern of two hexadecimal arguments that unrelated software can produce."
+  },
+  {
    "sigma_id": "03e2746e-2b31-42f1-ab7a-eb39365b2422",
    "title": "APT31 Judgement Panda Activity",
    "tag": "attack.g0128",
    "group": "ZIRCONIUM",
    "decision": "accept",
    "reason": "Both branches are literal artefacts published for the Judgement Panda intrusion: the ldifde export to eprod.ldf and lateral copies through a \\c$\\aaaa\\ staging directory with its named tools."
+  },
+  {
+   "sigma_id": "07db928c-8632-488e-ac7d-3db847489175",
+   "title": "Forest Blizzard APT - Process Creation Activity",
+   "tag": "attack.g0007",
+   "group": "APT28",
+   "basis": [
+    "directory_alias"
+   ],
+   "decision": "accept",
+   "reason": "Every branch is published for Forest Blizzard's GooseEgg tool: its two file hashes, its scheduled task path (\\Microsoft\\Windows\\WinSrv) with its batch-file names, and its literal archive command; ATT&CK lists Forest Blizzard as APT28."
   },
   {
    "sigma_id": "1228f8e2-7e79-4dea-b0ad-c91f1d5016c1",
@@ -37,12 +60,89 @@
    "reason": "It matches a renamed PsExec running netstat. The command is from a report on Dragonfly, but renaming PsExec to ps.exe is a tool-usage pattern, not an artefact only that Group produces."
   },
   {
+   "sigma_id": "19b041f6-e583-40dc-b842-d6fa8011493f",
+   "title": "HackTool Named File Stream Created",
+   "tag": "attack.g0016",
+   "group": "APT29",
+   "basis": [
+    "software_tag"
+   ],
+   "decision": "reject",
+   "reason": "A list of import hashes of public hacking tools carrying a software tag."
+  },
+  {
+   "sigma_id": "1bf0ba65-9a39-42a2-9271-31d31bf2f0bf",
+   "title": "Pikabot Fake DLL Extension Execution Via Rundll32.EXE",
+   "tag": "attack.g1037",
+   "group": "TA577",
+   "basis": [
+    "directory_software"
+   ],
+   "decision": "reject",
+   "reason": "Pikabot is commodity malware distributed for and by many operators; the one Group ATT&CK records using it is not the only one, and the rule matches behaviour rather than an artefact of one actor."
+  },
+  {
    "sigma_id": "1df8b3da-b0ac-4d8a-b7c7-6cb7c24160e4",
    "title": "Turla Service Install",
    "tag": "attack.g0010",
    "group": "Turla",
    "decision": "reject",
    "reason": "One of the three service names, hkmsvc, is a genuine Windows service (Health Key and Certificate Management); its installation is not Turla-specific."
+  },
+  {
+   "sigma_id": "1f32d820-1d5c-43fe-8fe2-feef0c952eb7",
+   "title": "Emotet Loader Execution Via .LNK File",
+   "tag": "attack.g0102",
+   "group": "Wizard Spider",
+   "basis": [
+    "directory_software"
+   ],
+   "decision": "reject",
+   "reason": "Emotet is commodity malware distributed for and by many operators; the one Group ATT&CK records using it is not the only one, and the rule matches behaviour rather than an artefact of one actor."
+  },
+  {
+   "sigma_id": "1fac1481-2dbc-48b2-9096-753c49b4ec71",
+   "title": "Adwind RAT / JRAT",
+   "tag": "attack.g1018",
+   "group": "TA2541",
+   "basis": [
+    "directory_software"
+   ],
+   "decision": "reject",
+   "reason": "jRAT / Adwind is a commodity RAT sold to many operators; the rule matches its generic Java install path and a script name."
+  },
+  {
+   "sigma_id": "20228d05-dd68-435d-8b4e-e7e64938880c",
+   "title": "Potential Kapeka Decrypted Backdoor Indicator",
+   "tag": "attack.g0034",
+   "group": "Sandworm Team",
+   "basis": [
+    "directory_software"
+   ],
+   "decision": "reject",
+   "reason": "One branch matches any five- or six-letter .wll file in ProgramData or AppData; another, two short executable names."
+  },
+  {
+   "sigma_id": "21117127-21c8-437a-ae03-4b51e5a8a088",
+   "title": "Small Sieve Malware CommandLine Indicator",
+   "tag": "attack.g0069",
+   "group": "MuddyWater",
+   "basis": [
+    "directory_software"
+   ],
+   "decision": "accept",
+   "reason": "The only branch is Small Sieve's own activation argument ('Platypus'), published by NCSC; ATT&CK and CISA record the backdoor for MuddyWater."
+  },
+  {
+   "sigma_id": "21f17060-b282-4249-ade0-589ea3591558",
+   "title": "Potential Ursnif Malware Activity - Registry",
+   "tag": "attack.g0127",
+   "group": "TA551",
+   "basis": [
+    "directory_software"
+   ],
+   "decision": "reject",
+   "reason": "Ursnif is commodity malware distributed for and by many operators; the one Group ATT&CK records using it is not the only one, and the rule matches behaviour rather than an artefact of one actor."
   },
   {
    "sigma_id": "24007168-a26b-4049-90d0-ce138e13a5cf",
@@ -61,6 +161,73 @@
    "reason": "One branch matches a command line with ' /c ' and ' -p 0x' under C:\\ProgramData\\ or C:\\RECYCLER\\, which is not specific to Lazarus tooling."
   },
   {
+   "sigma_id": "2b30fa36-3a18-402f-a22d-bf4ce2189f35",
+   "title": "Potential Baby Shark Malware Activity",
+   "tag": "attack.g0094",
+   "group": "Kimsuky",
+   "basis": [
+    "directory_software"
+   ],
+   "decision": "reject",
+   "reason": "Several branches are generic commands (taskkill of cmd.exe, a registry query, a WebClient upload)."
+  },
+  {
+   "sigma_id": "2bfc1373-0220-4fbd-8b10-33ddafd2a142",
+   "title": "Scheduled Tasks Names Used By SVR For GraphicalProton Backdoor - Task Scheduler",
+   "tag": "attack.g0016",
+   "group": "APT29",
+   "basis": [
+    "directory_alias",
+    "directory_software"
+   ],
+   "decision": "reject",
+   "reason": "Most task names are literal look-alikes from the advisory, but two ('\\defender', '\\WindowUpdate') are names other malware plausibly uses."
+  },
+  {
+   "sigma_id": "2d87d610-d760-45ee-a7e6-7a6f2a65de00",
+   "title": "Mustang Panda Dropper",
+   "tag": "attack.g0129",
+   "group": "Mustang Panda",
+   "basis": [
+    "directory_alias"
+   ],
+   "decision": "reject",
+   "reason": "One branch ('%windir:~-1,1%') is a generic command-obfuscation idiom."
+  },
+  {
+   "sigma_id": "2e7bbd54-2f26-476e-b4a1-ba5f1a012614",
+   "title": "Peach Sandstorm APT Process Activity Indicators",
+   "tag": "attack.g0064",
+   "group": "APT33",
+   "basis": [
+    "directory_alias"
+   ],
+   "decision": "accept",
+   "reason": "The only branch is the literal password string of the FalseFont backdoor Microsoft attributed to Peach Sandstorm, which ATT&CK lists as APT33."
+  },
+  {
+   "sigma_id": "2f47f1fd-0901-466e-a770-3b7092834a1b",
+   "title": "Potential Conti Ransomware Database Dumping Activity Via SQLCmd",
+   "tag": "attack.g0102",
+   "group": "Wizard Spider",
+   "basis": [
+    "directory_software"
+   ],
+   "decision": "reject",
+   "reason": "Conti was ransomware-as-a-service run by many affiliates, and the command matched is a generic administrative one."
+  },
+  {
+   "sigma_id": "2fef4fd9-7206-40d1-b4f5-ad6441d0cd9b",
+   "title": "Onyx Sleet APT File Creation Indicators",
+   "tag": "attack.g0138",
+   "group": "Andariel",
+   "basis": [
+    "directory_alias"
+   ],
+   "decision": "accept",
+   "reason": "The only branch is the exact path Microsoft published for this actor's payload (inetmgr.exe under Windows\\ADFS\\bg); ATT&CK lists Onyx Sleet as Andariel."
+  },
+  {
    "sigma_id": "3121461b-5aa0-4a41-b910-66d25524edbb",
    "title": "Winnti Malware HK University Campaign",
    "tag": "attack.g0044",
@@ -77,12 +244,46 @@
    "reason": "One branch matches a system-survey command line built from standard WMI classes, which other inventory scripts also combine."
   },
   {
+   "sigma_id": "36603778-030c-43c4-8cbb-cd3c1d1a80c7",
+   "title": "LiteLLM / TeamPCP Supply Chain Attack Indicators",
+   "tag": "attack.g1056",
+   "group": "TeamPCP",
+   "basis": [
+    "directory_alias"
+   ],
+   "decision": "reject",
+   "reason": "One branch matches any Python process running systemctl on a user service named sysmon."
+  },
+  {
    "sigma_id": "3711eee4-a808-4849-8a14-faf733da3612",
    "title": "Greenbug Espionage Group Indicators",
    "tag": "attack.g0049",
    "group": "OilRig",
    "decision": "reject",
    "reason": "One branch matches any executable named revshell.exe, a generic tool name."
+  },
+  {
+   "sigma_id": "39466c42-c189-476a-989f-8cdb135c163a",
+   "title": "Small Sieve Malware File Indicator Creation",
+   "tag": "attack.g0069",
+   "group": "MuddyWater",
+   "basis": [
+    "directory_software"
+   ],
+   "decision": "accept",
+   "reason": "Both alternatives are artefacts the NCSC report publishes for Small Sieve, a backdoor ATT&CK and CISA record for MuddyWater: the deliberate 'Microsift' misspelling in a profile path, and its named data file."
+  },
+  {
+   "sigma_id": "3a3f81ca-652c-482b-adeb-b1c804727f74",
+   "title": "APT29 2018 Phishing Campaign File Indicators",
+   "tag": "attack.g0016",
+   "group": "APT29",
+   "basis": [
+    "directory_alias",
+    "directory_software"
+   ],
+   "decision": "reject",
+   "reason": "The file names are literal, but the reporting the rule cites describes the campaign as suspected APT29 only."
   },
   {
    "sigma_id": "3b4b232a-af90-427c-a22f-30b0c0837b95",
@@ -101,12 +302,45 @@
    "reason": "It matches the CMSTP UAC-bypass technique (cmlua.dll in a call trace), which is public and used by many actors."
   },
   {
+   "sigma_id": "3b8e5084-4de9-449a-a40d-0e11014f2e2d",
+   "title": "Diamond Sleet APT Scheduled Task Creation",
+   "tag": "attack.g0032",
+   "group": "Lazarus Group",
+   "basis": [
+    "directory_alias"
+   ],
+   "decision": "accept",
+   "reason": "The published task name together with the actor's literal key string in the task content; ATT&CK lists Diamond Sleet as Lazarus Group."
+  },
+  {
    "sigma_id": "3ceb2083-a27f-449a-be33-14ec1b7cc973",
    "title": "Silence.EDA Detection",
    "tag": "attack.g0091",
    "group": "Silence",
    "decision": "reject",
    "reason": "Its script fragments come from the public Empire and dnscat2 tools that Silence.EDA embeds; they identify those tools, not the Group."
+  },
+  {
+   "sigma_id": "3db10f25-2527-4b79-8d4b-471eb900ee29",
+   "title": "GALLIUM Artefacts - Builtin",
+   "tag": "attack.g0093",
+   "group": "GALLIUM",
+   "basis": [
+    "directory_alias"
+   ],
+   "decision": "accept",
+   "reason": "The only branch is the list of dynamic-DNS host names Microsoft published as GALLIUM's own command-and-control domains."
+  },
+  {
+   "sigma_id": "41d40bff-377a-43e2-8e1b-2e543069e079",
+   "title": "WannaCry Ransomware Activity",
+   "tag": "attack.g0032",
+   "group": "Lazarus Group",
+   "basis": [
+    "directory_software"
+   ],
+   "decision": "reject",
+   "reason": "WannaCry is a self-propagating worm: finding it does not place Lazarus Group in the network, and several of the image names are generic."
   },
   {
    "sigma_id": "41e5c73d-9983-4b69-bd03-e13b67e9623c",
@@ -125,6 +359,17 @@
    "reason": "Its values are SHA-256 hashes of files published as GALLIUM tooling; a hash identifies one exact file."
   },
   {
+   "sigma_id": "4ac5fc44-a601-4c06-955b-309df8c4e9d4",
+   "title": "OceanLotus Registry Activity",
+   "tag": "attack.g0050",
+   "group": "APT32",
+   "basis": [
+    "directory_alias"
+   ],
+   "decision": "accept",
+   "reason": "Every branch is a CLSID or AppX class key published in ESET's OceanLotus indicators for that Group's own backdoor; none is a key Windows or other software creates."
+  },
+  {
    "sigma_id": "4b60e6f2-bf39-47b4-b4ea-398e33cfe253",
    "title": "CMSTP UAC Bypass via COM Object Access",
    "tag": "attack.g0069",
@@ -141,12 +386,34 @@
    "reason": "It matches generic in-memory loader constructs (DeflateStream, FromBase64String, GetDelegateForFunctionPointer) used by many reflective loaders."
   },
   {
+   "sigma_id": "52182dfb-afb7-41db-b4bc-5336cb29b464",
+   "title": "Suspicious File Download From File Sharing Websites -  File Stream",
+   "tag": "attack.g0016",
+   "group": "APT29",
+   "basis": [
+    "software_tag"
+   ],
+   "decision": "reject",
+   "reason": "A generic rule (downloads from file-sharing sites) carrying a software tag."
+  },
+  {
    "sigma_id": "53ba33fd-3a50-4468-a5ef-c583635cfa92",
    "title": "OilRig APT Schedule Task Persistence - System",
    "tag": "attack.g0049",
    "group": "OilRig",
    "decision": "accept",
    "reason": "The service names 'SC Scheduled Scan' and 'UpdatMachine' (sic) are the persistence artefacts published for OilRig's 2018 campaign."
+  },
+  {
+   "sigma_id": "54e57ce3-0672-46eb-a402-2c0948d5e3e9",
+   "title": "Potential Emotet Rundll32 Execution",
+   "tag": "attack.g0102",
+   "group": "Wizard Spider",
+   "basis": [
+    "directory_software"
+   ],
+   "decision": "reject",
+   "reason": "Emotet is commodity malware distributed for and by many operators; the one Group ATT&CK records using it is not the only one, and the rule matches behaviour rather than an artefact of one actor."
   },
   {
    "sigma_id": "56c217c3-2de2-479b-990f-5c109ba8458f",
@@ -165,6 +432,39 @@
    "reason": "It matches the default persistence task of the public Empire and PowerSploit frameworks, which identifies the framework and not any one Group."
   },
   {
+   "sigma_id": "58d8341a-5849-44cd-8ac8-8b020413a31b",
+   "title": "Mint Sandstorm - ManageEngine Suspicious Process Execution",
+   "tag": "attack.g0059",
+   "group": "Magic Hound",
+   "basis": [
+    "directory_alias"
+   ],
+   "decision": "reject",
+   "reason": "Generic post-exploitation commands under a web application's process; any actor exploiting the product would match."
+  },
+  {
+   "sigma_id": "5ba715b6-71b7-44fd-8245-f66893e81b3d",
+   "title": "APT40 Dropbox Tool User Agent",
+   "tag": "attack.g0065",
+   "group": "Leviathan",
+   "basis": [
+    "directory_alias"
+   ],
+   "decision": "reject",
+   "reason": "A common browser user-agent string together with the Dropbox API host; nothing in it is specific to one actor."
+  },
+  {
+   "sigma_id": "5cdeb555-65de-4767-99fe-e26807465148",
+   "title": "Forest Blizzard APT - Custom Protocol Handler Creation",
+   "tag": "attack.g0007",
+   "group": "APT28",
+   "basis": [
+    "directory_alias"
+   ],
+   "decision": "accept",
+   "reason": "The 'rogue' protocol handler with the CLSID Microsoft published for GooseEgg; ATT&CK lists Forest Blizzard as APT28."
+  },
+  {
    "sigma_id": "5de632bc-7fbd-4c8a-944a-fce55c59eae5",
    "title": "REvil Kaseya Incident Malware Patterns",
    "tag": "attack.g0115",
@@ -173,12 +473,113 @@
    "reason": "One literal is a generic log clean-up command (rmdir of %SystemDrive%\\inetpub\\logs); not every value is specific to the incident."
   },
   {
+   "sigma_id": "640dc51c-7713-4faa-8a0e-e7c0d9d4654c",
+   "title": "FoggyWeb Backdoor DLL Loading",
+   "tag": "attack.g0016",
+   "group": "APT29",
+   "basis": [
+    "directory_software"
+   ],
+   "decision": "accept",
+   "reason": "The only branch is the exact path Microsoft published for the FoggyWeb loader (version.dll inside the AD FS directory), a backdoor of APT29's own; no legitimate file has that path."
+  },
+  {
+   "sigma_id": "64827580-e4c3-4c64-97eb-c72325d45399",
+   "title": "SNAKE Malware WerFault Persistence File Creation",
+   "tag": "attack.g0010",
+   "group": "Turla",
+   "basis": [
+    "directory_alias",
+    "directory_software"
+   ],
+   "decision": "reject",
+   "reason": "It matches any process outside the system directories writing a WerFault.exe under WinSxS: a behaviour, not an artefact of one actor."
+  },
+  {
+   "sigma_id": "64a871dd-83f6-4e5f-80fc-5a7ca3a8a819",
+   "title": "Kapeka Backdoor Persistence Activity",
+   "tag": "attack.g0034",
+   "group": "Sandworm Team",
+   "basis": [
+    "directory_software"
+   ],
+   "decision": "accept",
+   "reason": "A scheduled task or Run entry that starts rundll32 on a .wll file by ordinal #1 under the names 'Sens Api' or 'OneDrive': Kapeka's published persistence; ATT&CK records Kapeka for Sandworm Team alone."
+  },
+  {
+   "sigma_id": "65c6e3c1-fb28-4c03-a51e-84919d8185f1",
+   "title": "Small Sieve Malware Registry Persistence",
+   "tag": "attack.g0069",
+   "group": "MuddyWater",
+   "basis": [
+    "directory_software"
+   ],
+   "decision": "accept",
+   "reason": "A Run-key entry carrying Small Sieve's own misspelling ('Microsift') or its activation argument ('Platypus'), both published by NCSC for this MuddyWater backdoor."
+  },
+  {
+   "sigma_id": "6676896b-2cce-422d-82af-5a1abe65e241",
+   "title": "Potential APT FIN7 Exploitation Activity",
+   "tag": "attack.g0046",
+   "group": "FIN7",
+   "basis": [
+    "directory_alias"
+   ],
+   "decision": "reject",
+   "reason": "Parent-child pairs of ordinary programs (Notepad++ starting cmd.exe)."
+  },
+  {
    "sigma_id": "67bce556-312f-4c81-9162-c3c9ff2599b2",
    "title": "Exchange Exploitation Used by HAFNIUM",
    "tag": "attack.g0125",
    "group": "HAFNIUM",
    "decision": "reject",
    "reason": "It matches exploitation requests against Exchange that many actors issued once the vulnerabilities were public."
+  },
+  {
+   "sigma_id": "689308fc-cfba-4f72-9897-796c1dc61487",
+   "title": "Potential Conti Ransomware Activity",
+   "tag": "attack.g0102",
+   "group": "Wizard Spider",
+   "basis": [
+    "directory_software",
+    "software_tag"
+   ],
+   "decision": "reject",
+   "reason": "Conti was ransomware-as-a-service run by many affiliates, and the command matched is a generic administrative one."
+  },
+  {
+   "sigma_id": "698d4431-514f-4c82-af4d-cf573872a9f5",
+   "title": "Potential Pikabot Discovery Activity",
+   "tag": "attack.g1037",
+   "group": "TA577",
+   "basis": [
+    "directory_software"
+   ],
+   "decision": "reject",
+   "reason": "Pikabot is commodity malware distributed for and by many operators; the one Group ATT&CK records using it is not the only one, and the rule matches behaviour rather than an artefact of one actor."
+  },
+  {
+   "sigma_id": "6c130acd-0adb-4545-bcc4-2e85d0883c9a",
+   "title": "Kapeka Backdoor Scheduled Task Creation",
+   "tag": "attack.g0034",
+   "group": "Sandworm Team",
+   "basis": [
+    "directory_software"
+   ],
+   "decision": "accept",
+   "reason": "A scheduled task whose content starts rundll32 on a .wll file by ordinal #1 under the names 'OneDrive' or 'Sens Api': Kapeka's published persistence; ATT&CK records Kapeka for Sandworm Team alone."
+  },
+  {
+   "sigma_id": "70d43542-cd2d-483c-8f30-f16b436fd7db",
+   "title": "Leviathan Registry Key Activity",
+   "tag": "attack.g0065",
+   "group": "Leviathan",
+   "basis": [
+    "directory_alias"
+   ],
+   "decision": "reject",
+   "reason": "A single Run-key value name; the attribution in the cited report was not confirmed in this review."
   },
   {
    "sigma_id": "71c432c4-e4da-4eab-ba49-e60ea9a81bca",
@@ -205,6 +606,29 @@
    "reason": "It matches setup.exe / setup0.exe with short switches, names and arguments common to ordinary installers."
   },
   {
+   "sigma_id": "7453575c-a747-40b9-839b-125a0aae324b",
+   "title": "APT29 2018 Phishing Campaign CommandLine Indicators",
+   "tag": "attack.g0016",
+   "group": "APT29",
+   "basis": [
+    "directory_alias",
+    "directory_software"
+   ],
+   "decision": "reject",
+   "reason": "The first branch ('-noni -ep bypass $') is a generic PowerShell launch."
+  },
+  {
+   "sigma_id": "74db3488-fd28-480a-95aa-b7af626de068",
+   "title": "LockerGoga Ransomware Activity",
+   "tag": "attack.g0037",
+   "group": "FIN6",
+   "basis": [
+    "directory_software"
+   ],
+   "decision": "reject",
+   "reason": "LockerGoga is ransomware deployed in several intrusions; ATT&CK's single recorded user (FIN6) does not make its argument string evidence of FIN6."
+  },
+  {
    "sigma_id": "7806bb49-f653-48d3-a915-5115c1a85234",
    "title": "Potential APT Mustang Panda Activity Against Australian Gov",
    "tag": "attack.g0129",
@@ -219,6 +643,39 @@
    "group": "Turla",
    "decision": "reject",
    "reason": "The URI pattern /index/index.php?h= is a generic PHP path that unrelated web applications use."
+  },
+  {
+   "sigma_id": "79aeeb41-8156-4fac-a0cd-076495ab82a1",
+   "title": "NotPetya Ransomware Activity",
+   "tag": "attack.g0034",
+   "group": "Sandworm Team",
+   "basis": [
+    "directory_software"
+   ],
+   "decision": "reject",
+   "reason": "The rundll32 branch matches any '.dat,#1' launch, and NotPetya spread as a worm far beyond the networks Sandworm Team operated in."
+  },
+  {
+   "sigma_id": "7aaa5739-12fc-41aa-b98b-23ec27d42bdf",
+   "title": "Ursnif Redirection Of Discovery Commands",
+   "tag": "attack.g0127",
+   "group": "TA551",
+   "basis": [
+    "directory_software"
+   ],
+   "decision": "reject",
+   "reason": "Ursnif is commodity malware distributed for and by many operators; the one Group ATT&CK records using it is not the only one, and the rule matches behaviour rather than an artefact of one actor."
+  },
+  {
+   "sigma_id": "7b30e0a7-c675-4b24-8a46-82fa67e2433d",
+   "title": "Conti Volume Shadow Listing",
+   "tag": "attack.g0102",
+   "group": "Wizard Spider",
+   "basis": [
+    "directory_software"
+   ],
+   "decision": "reject",
+   "reason": "Conti was ransomware-as-a-service run by many affiliates, and the command matched is a generic administrative one."
   },
   {
    "sigma_id": "7b544661-69fc-419f-9a59-82ccc328f205",
@@ -237,6 +694,17 @@
    "reason": "The Run-key value names ...\\CurrentVersion\\UMe and ...\\CurrentVersion\\UT are the persistence artefacts published for OilRig's 2018 campaign; neither is a Windows or common-software value."
   },
   {
+   "sigma_id": "7c97c625-0350-4f0a-8943-f6cadc88125e",
+   "title": "Mint Sandstorm - Log4J Wstomcat Process Execution",
+   "tag": "attack.g0059",
+   "group": "Magic Hound",
+   "basis": [
+    "directory_alias"
+   ],
+   "decision": "reject",
+   "reason": "Any child process of a Tomcat service wrapper; any actor exploiting the product would match."
+  },
+  {
    "sigma_id": "7d4cdc5a-0076-40ca-aac8-f7e714570e47",
    "title": "CMSTP Execution Process Creation",
    "tag": "attack.g0069",
@@ -245,12 +713,46 @@
    "reason": "It matches any child process of cmstp.exe, a generic technique."
   },
   {
+   "sigma_id": "7e163e96-b9a5-45d6-b2cd-d7d87b13c60b",
+   "title": "Potential Encrypted Registry Blob Related To SNAKE Malware",
+   "tag": "attack.g0010",
+   "group": "Turla",
+   "basis": [
+    "directory_alias",
+    "directory_software"
+   ],
+   "decision": "reject",
+   "reason": "A heuristic on .wav file-association keys with exclusions, not a literal artefact."
+  },
+  {
    "sigma_id": "7fc30d63-728d-48d9-ad6f-14d14f4accf7",
    "title": "Potential Operation Triangulation C2 Beaconing Activity - DNS",
    "tag": "attack.g0020",
    "group": "Equation",
    "decision": "reject",
    "reason": "The domains are published indicators of Operation Triangulation, but the source reporting does not attribute that operation to Equation; the Group tag is not supported by it."
+  },
+  {
+   "sigma_id": "81c0b7f5-81c9-435e-a291-bc32fc2b72cd",
+   "title": "TeamPCP LiteLLM Supply Chain Attack Persistence Indicators",
+   "tag": "attack.g1056",
+   "group": "TeamPCP",
+   "basis": [
+    "directory_alias"
+   ],
+   "decision": "accept",
+   "reason": "Both paths are the persistence files of the LiteLLM supply-chain backdoor (a 'sysmon' script and user service under ~/.config), an operation ATT&CK itself records for TeamPCP."
+  },
+  {
+   "sigma_id": "83314318-052a-4c90-a1ad-660ece38d276",
+   "title": "Blackbyte Ransomware Registry",
+   "tag": "attack.g1043",
+   "group": "BlackByte",
+   "basis": [
+    "directory_alias"
+   ],
+   "decision": "reject",
+   "reason": "Three registry settings administrators also change; nothing specific to one actor."
   },
   {
    "sigma_id": "871b9555-69ca-4993-99d3-35a59f9f3599",
@@ -269,6 +771,52 @@
    "reason": "Its only values are two IP addresses published as Equation Group command-and-control infrastructure."
   },
   {
+   "sigma_id": "8acf3cfa-1e8c-4099-83de-a0c4038e18f0",
+   "title": "EvilNum APT Golden Chickens Deployment Via OCX Files",
+   "tag": "attack.g0120",
+   "group": "Evilnum",
+   "basis": [
+    "directory_alias",
+    "directory_software"
+   ],
+   "decision": "reject",
+   "reason": "A generic regsvr32 launch of an .ocx file from AppData."
+  },
+  {
+   "sigma_id": "8c7090c3-e0a0-4944-bd08-08c3a0cecf79",
+   "title": "TropicTrooper Campaign November 2018",
+   "tag": "attack.g0081",
+   "group": "Tropic Trooper",
+   "basis": [
+    "directory_alias"
+   ],
+   "decision": "reject",
+   "reason": "The padding string comes from a weaponised-document builder; this review could not tie it to Tropic Trooper alone."
+  },
+  {
+   "sigma_id": "8fa65166-f463-4fd2-ad4f-1436133c52e1",
+   "title": "Scheduled Tasks Names Used By SVR For GraphicalProton Backdoor",
+   "tag": "attack.g0016",
+   "group": "APT29",
+   "basis": [
+    "directory_alias",
+    "directory_software"
+   ],
+   "decision": "reject",
+   "reason": "Most task names are literal look-alikes from the advisory, but two ('\\defender', '\\WindowUpdate') are names other malware plausibly uses."
+  },
+  {
+   "sigma_id": "91048c0d-5b81-4b85-a099-c9ee4fb87979",
+   "title": "Mint Sandstorm - AsperaFaspex Suspicious Process Execution",
+   "tag": "attack.g0059",
+   "group": "Magic Hound",
+   "basis": [
+    "directory_alias"
+   ],
+   "decision": "reject",
+   "reason": "Generic post-exploitation commands under a web application's process; any actor exploiting the product would match."
+  },
+  {
    "sigma_id": "911389c7-5ae3-43ea-bab3-a947ebdeb85e",
    "title": "Potential APT FIN7 Reconnaissance/POWERTRASH Related Activity",
    "tag": "attack.g0046",
@@ -277,12 +825,56 @@
    "reason": "It matches PowerShell launch switches running a script from ADMIN$ or C:\\Windows\\Temp, a generic lateral-execution pattern."
   },
   {
+   "sigma_id": "92b0b372-a939-44ed-a11b-5136cf680e27",
+   "title": "Blue Mockingbird - Registry",
+   "tag": "attack.g0108",
+   "group": "Blue Mockingbird",
+   "basis": [
+    "directory_alias"
+   ],
+   "decision": "reject",
+   "reason": "It matches the ServiceDll value of a Windows service that exists on every system."
+  },
+  {
+   "sigma_id": "932ac737-33ca-4afd-9869-0d48b391fcc9",
+   "title": "Ursnif Malware C2 URL Pattern",
+   "tag": "attack.g0127",
+   "group": "TA551",
+   "basis": [
+    "directory_software"
+   ],
+   "decision": "reject",
+   "reason": "Ursnif is commodity malware distributed for and by many operators; the one Group ATT&CK records using it is not the only one, and the rule matches behaviour rather than an artefact of one actor."
+  },
+  {
    "sigma_id": "966e4016-627f-44f7-8341-f394905c361f",
    "title": "Potential APT10 Cloud Hopper Activity",
    "tag": "attack.g0045",
    "group": "menuPass",
    "decision": "reject",
    "reason": "One branch matches any cscript.exe run of a .vbs with a /shell argument, which is not specific to the Cloud Hopper tooling."
+  },
+  {
+   "sigma_id": "97805087-93ab-4203-b5cb-287cda6aecaa",
+   "title": "FakeUpdates/SocGholish Activity",
+   "tag": "attack.g1020",
+   "group": "Mustard Tempest",
+   "basis": [
+    "directory_software"
+   ],
+   "decision": "reject",
+   "reason": "SocGholish is commodity malware distributed for and by many operators; the one Group ATT&CK records using it is not the only one, and the rule matches behaviour rather than an artefact of one actor."
+  },
+  {
+   "sigma_id": "999e8307-a775-4d5f-addc-4855632335be",
+   "title": "Potential BlackByte Ransomware Activity",
+   "tag": "attack.g1043",
+   "group": "BlackByte",
+   "basis": [
+    "directory_alias"
+   ],
+   "decision": "reject",
+   "reason": "Generic branches (a '-single' argument from a public folder, deleting Taskmgr.exe, a base64 PowerShell idiom), and BlackByte is ransomware-as-a-service."
   },
   {
    "sigma_id": "9aa01d62-7667-4d3b-acb8-8cb5103e2014",
@@ -309,12 +901,56 @@
    "reason": "A service named NtsSrv whose image path ends in ' LocalService' is the installation artefact published for the StoneDrill wiper attributed to APT33; neither value is a Windows default."
   },
   {
+   "sigma_id": "9ef27c24-4903-4192-881a-3adde7ff92a5",
+   "title": "Renamed Remote Utilities RAT (RURAT) Execution",
+   "tag": "attack.g0069",
+   "group": "MuddyWater",
+   "basis": [
+    "software_tag"
+   ],
+   "decision": "reject",
+   "reason": "Remote Utilities is a commercial remote-administration product anyone can buy."
+  },
+  {
+   "sigma_id": "9f9f92ba-5300-43a4-b435-87d1ee571688",
+   "title": "Diamond Sleet APT Scheduled Task Creation - Registry",
+   "tag": "attack.g0032",
+   "group": "Lazarus Group",
+   "basis": [
+    "directory_alias"
+   ],
+   "decision": "accept",
+   "reason": "The only branch is the scheduled task name Microsoft published for this intrusion ('Windows TeamCity Settings User Interface'); ATT&CK lists Diamond Sleet as Lazarus Group."
+  },
+  {
+   "sigma_id": "a36ce77e-30db-4ea0-8795-644d7af5dfb4",
+   "title": "Ursnif Malware Download URL Pattern",
+   "tag": "attack.g0127",
+   "group": "TA551",
+   "basis": [
+    "directory_software"
+   ],
+   "decision": "reject",
+   "reason": "Ursnif is commodity malware distributed for and by many operators; the one Group ATT&CK records using it is not the only one, and the rule matches behaviour rather than an artefact of one actor."
+  },
+  {
    "sigma_id": "a62298a3-1fe0-422f-9a68-ffbcbc5a123d",
    "title": "MERCURY APT Activity",
    "tag": "attack.g0069",
    "group": "MuddyWater",
    "decision": "accept",
    "reason": "It requires a specific Base64-encoded PowerShell payload prefix published for MERCURY (MuddyWater) activity, together with its launch switches."
+  },
+  {
+   "sigma_id": "a7e6b1f9-8d2c-4f1e-9a7d-63e4c8a2bf4c",
+   "title": "Kapeka Backdoor Loaded Via Rundll32.EXE",
+   "tag": "attack.g0034",
+   "group": "Sandworm Team",
+   "basis": [
+    "directory_software"
+   ],
+   "decision": "accept",
+   "reason": "rundll32 loading a .wll file from ProgramData or AppData\\Local is how ATT&CK itself describes Kapeka (a DLL masquerading as a Word add-in, run through rundll32), which it records for Sandworm Team alone; Word add-ins are not loaded this way."
   },
   {
    "sigma_id": "a88d9f45-ec8a-4b0e-85ee-c9f6a65e9128",
@@ -341,12 +977,101 @@
    "reason": "It matches an Office application starting any executable under C:\\Users\\, a generic initial-access pattern."
   },
   {
+   "sigma_id": "aa92fd02-09f2-48b0-8a93-864813fb8f41",
+   "title": "Conti NTDS Exfiltration Command",
+   "tag": "attack.g0102",
+   "group": "Wizard Spider",
+   "basis": [
+    "directory_software"
+   ],
+   "decision": "reject",
+   "reason": "Conti was ransomware-as-a-service run by many affiliates, and the command matched is a generic administrative one."
+  },
+  {
+   "sigma_id": "ae02ed70-11aa-4a22-b397-c0d0e8f6ea99",
+   "title": "Unusual File Download From File Sharing Websites - File Stream",
+   "tag": "attack.g0016",
+   "group": "APT29",
+   "basis": [
+    "software_tag"
+   ],
+   "decision": "reject",
+   "reason": "A generic rule (downloads from file-sharing sites) carrying a software tag."
+  },
+  {
+   "sigma_id": "b0422664-37a4-4e78-949a-4a139309eaf0",
+   "title": "Small Sieve Malware Potential C2 Communication",
+   "tag": "attack.g0069",
+   "group": "MuddyWater",
+   "basis": [
+    "directory_software"
+   ],
+   "decision": "accept",
+   "reason": "The only branch is the Telegram chat id hard-coded in Small Sieve, published by NCSC; ATT&CK and CISA record the backdoor for MuddyWater."
+  },
+  {
+   "sigma_id": "b2e60816-96b2-45bd-ba91-b63578c03ef6",
+   "title": "SNAKE Malware Service Persistence",
+   "tag": "attack.g0010",
+   "group": "Turla",
+   "basis": [
+    "directory_alias",
+    "directory_software"
+   ],
+   "decision": "accept",
+   "reason": "The service name WerFaultSvc with a WerFault.exe under WinSxS is the persistence the joint advisory publishes for Snake, which it attributes to the FSB unit ATT&CK tracks as Turla."
+  },
+  {
+   "sigma_id": "b5495d8d-24ad-4a44-8caf-ceae9a07a5c2",
+   "title": "Diamond Sleet APT Process Activity Indicators",
+   "tag": "attack.g0032",
+   "group": "Lazarus Group",
+   "basis": [
+    "directory_alias"
+   ],
+   "decision": "accept",
+   "reason": "The only branch is the literal key string Microsoft published from this actor's payload launch; ATT&CK lists Diamond Sleet as Lazarus Group."
+  },
+  {
+   "sigma_id": "b69888d4-380c-45ce-9cf9-d9ce46e67821",
+   "title": "Hidden Executable In NTFS Alternate Data Stream",
+   "tag": "attack.g0016",
+   "group": "APT29",
+   "basis": [
+    "software_tag"
+   ],
+   "decision": "reject",
+   "reason": "A generic rule (any executable hidden in an alternate data stream) carrying a software tag."
+  },
+  {
    "sigma_id": "b6d235fc-1d38-4b12-adbe-325f06728f37",
    "title": "CMSTP Execution Registry Event",
    "tag": "attack.g0069",
    "group": "MuddyWater",
    "decision": "reject",
    "reason": "It matches any registry value referencing cmmgr32.exe, a generic technique."
+  },
+  {
+   "sigma_id": "b8225208-81d0-4715-a822-12bcdd583e0f",
+   "title": "Potential Peach Sandstorm APT C2 Communication Activity",
+   "tag": "attack.g0064",
+   "group": "APT33",
+   "basis": [
+    "directory_alias"
+   ],
+   "decision": "reject",
+   "reason": "Two short API paths that unrelated web applications could serve."
+  },
+  {
+   "sigma_id": "b92d1d19-f5c9-4ed6-bbd5-7476709dc389",
+   "title": "Forest Blizzard APT - File Creation Activity",
+   "tag": "attack.g0007",
+   "group": "APT28",
+   "basis": [
+    "directory_alias"
+   ],
+   "decision": "reject",
+   "reason": "One branch matches any '.save' file under ProgramData."
   },
   {
    "sigma_id": "ba778144-5e3d-40cf-8af9-e28fb1df1e20",
@@ -365,12 +1090,45 @@
    "reason": "One branch matches attrib hiding any .aspx file, a generic web-shell step used by many actors after the Exchange vulnerabilities were published."
   },
   {
+   "sigma_id": "bcc6f179-11cd-4111-a9a6-0fab68515cf7",
+   "title": "Griffon Malware Attack Pattern",
+   "tag": "attack.g0046",
+   "group": "FIN7",
+   "basis": [
+    "directory_software"
+   ],
+   "decision": "reject",
+   "reason": "A generic JScript launch from the temp directory."
+  },
+  {
    "sigma_id": "c0580559-a6bd-4ef6-b9b7-83703d98b561",
    "title": "OilRig APT Schedule Task Persistence - Security",
    "tag": "attack.g0049",
    "group": "OilRig",
    "decision": "accept",
    "reason": "The scheduled-task names 'SC Scheduled Scan' and 'UpdatMachine' (sic) are the persistence artefacts published for OilRig's 2018 campaign."
+  },
+  {
+   "sigma_id": "c0c67b21-eb8a-4c84-a395-40473ec3b482",
+   "title": "Kapeka Backdoor Autorun Persistence",
+   "tag": "attack.g0034",
+   "group": "Sandworm Team",
+   "basis": [
+    "directory_software"
+   ],
+   "decision": "accept",
+   "reason": "A Run value named 'Sens Api' or 'OneDrive' that starts rundll32 on a .wll file by ordinal #1: Kapeka's published autorun; ATT&CK records Kapeka for Sandworm Team alone."
+  },
+  {
+   "sigma_id": "c3198a27-23a0-4c2c-af19-e5328d49680e",
+   "title": "Blue Mockingbird",
+   "tag": "attack.g0108",
+   "group": "Blue Mockingbird",
+   "basis": [
+    "directory_alias"
+   ],
+   "decision": "reject",
+   "reason": "The wmic branch matches any COR_PROFILER setting, a technique not specific to this actor."
   },
   {
    "sigma_id": "c601f20d-570a-4cde-a7d6-e17f99cb8e7f",
@@ -381,6 +1139,50 @@
    "reason": "Two of its three literal commands are generic file listings (dir c:\\*.doc* /s, dir %TEMP%\\*.exe) any operator or administrator may type."
   },
   {
+   "sigma_id": "cae6cee6-0244-44d2-84ed-e65f548eb7dc",
+   "title": "Potential Pikabot C2 Activity",
+   "tag": "attack.g1037",
+   "group": "TA577",
+   "basis": [
+    "directory_software"
+   ],
+   "decision": "reject",
+   "reason": "Pikabot is commodity malware distributed for and by many operators; the one Group ATT&CK records using it is not the only one, and the rule matches behaviour rather than an artefact of one actor."
+  },
+  {
+   "sigma_id": "cb062102-587e-4414-8efa-dbe3c7bf19c6",
+   "title": "CosmicDuke Service Installation",
+   "tag": "attack.g0016",
+   "group": "APT29",
+   "basis": [
+    "directory_software"
+   ],
+   "decision": "accept",
+   "reason": "The service name javamtsup is the persistence artefact ATT&CK itself records for CosmicDuke, malware of APT29's own toolset; the rule has no other branch."
+  },
+  {
+   "sigma_id": "cbaa3ef3-07a9-4c8e-82d1-9e40578da7fd",
+   "title": "Kapeka Backdoor Configuration Persistence",
+   "tag": "attack.g0034",
+   "group": "Sandworm Team",
+   "basis": [
+    "directory_software"
+   ],
+   "decision": "reject",
+   "reason": "It matches any non-empty Seed value under a cryptography provider key."
+  },
+  {
+   "sigma_id": "cd5cfd80-aa5f-44c0-9c20-108c4ae12e3c",
+   "title": "New Firewall Rule Added Via Netsh.EXE",
+   "tag": "attack.g0032",
+   "group": "Lazarus Group",
+   "basis": [
+    "software_tag"
+   ],
+   "decision": "reject",
+   "reason": "A generic rule (any netsh firewall rule added) carrying a software tag."
+  },
+  {
    "sigma_id": "ce6e34ca-966d-41c9-8d93-5b06c8b97a06",
    "title": "OilRig APT Activity",
    "tag": "attack.g0049",
@@ -389,12 +1191,114 @@
    "reason": "One branch matches any executable under \\Windows\\Temp\\DB\\, a path other software could use; not every branch is specific."
   },
   {
+   "sigma_id": "d02e8cf5-6099-48cf-9bfc-1eec2d0c7b18",
+   "title": "Potential Emotet Activity",
+   "tag": "attack.g0102",
+   "group": "Wizard Spider",
+   "basis": [
+    "directory_software"
+   ],
+   "decision": "reject",
+   "reason": "Emotet is commodity malware distributed for and by many operators; the one Group ATT&CK records using it is not the only one, and the rule matches behaviour rather than an artefact of one actor."
+  },
+  {
+   "sigma_id": "d0fa35db-0e92-400e-aa16-d32ae2521618",
+   "title": "SNAKE Malware Covert Store Registry Key",
+   "tag": "attack.g0010",
+   "group": "Turla",
+   "basis": [
+    "directory_alias",
+    "directory_software"
+   ],
+   "decision": "accept",
+   "reason": "The only branch is the registry key the joint advisory publishes as Snake's covert store (SECURITY\\Policy\\Secrets\\n); the advisory attributes Snake to the FSB unit ATT&CK tracks as Turla."
+  },
+  {
+   "sigma_id": "d1b65d98-37d7-4ff6-b139-2d87c1af3042",
+   "title": "Diamond Sleet APT DLL Sideloading Indicators",
+   "tag": "attack.g0032",
+   "group": "Lazarus Group",
+   "basis": [
+    "directory_alias"
+   ],
+   "decision": "accept",
+   "reason": "Both branches are the exact side-loading pairs Microsoft published for this intrusion (clip.exe with Version.dll, wsmprovhost.exe with DSROLE.dll, all in ProgramData); ATT&CK lists Diamond Sleet as Lazarus Group."
+  },
+  {
    "sigma_id": "d465d1d8-27a2-4cca-9621-a800f37cf72e",
    "title": "Equation Group DLL_U Export Function Load",
    "tag": "attack.g0020",
    "group": "Equation",
    "decision": "accept",
    "reason": "It matches a DLL export named dll_u invoked from the command line, the loader convention published for Equation Group implants; the name is not used by Windows components."
+  },
+  {
+   "sigma_id": "d6d9d23f-69c1-41b5-8305-fa8250bd027f",
+   "title": "SNAKE Malware Kernel Driver File Indicator",
+   "tag": "attack.g0010",
+   "group": "Turla",
+   "basis": [
+    "directory_alias",
+    "directory_software"
+   ],
+   "decision": "accept",
+   "reason": "The only branch is the exact path of Snake's encrypted component (Comadmin.dat under System32\\Com), published in the joint advisory that attributes Snake to the FSB unit ATT&CK tracks as Turla."
+  },
+  {
+   "sigma_id": "d807056b-0e00-4cec-b7f8-b8b7518e382b",
+   "title": "Forest Blizzard APT - Custom Protocol Handler DLL Registry Set",
+   "tag": "attack.g0007",
+   "group": "APT28",
+   "basis": [
+    "directory_alias"
+   ],
+   "decision": "accept",
+   "reason": "A server DLL registered under the CLSID Microsoft published for GooseEgg; ATT&CK lists Forest Blizzard as APT28."
+  },
+  {
+   "sigma_id": "d8937fe7-42d5-4b4d-8178-e089c908f63f",
+   "title": "Potential Pikabot Hollowing Activity",
+   "tag": "attack.g1037",
+   "group": "TA577",
+   "basis": [
+    "directory_software"
+   ],
+   "decision": "reject",
+   "reason": "Pikabot is commodity malware distributed for and by many operators; the one Group ATT&CK records using it is not the only one, and the rule matches behaviour rather than an artefact of one actor."
+  },
+  {
+   "sigma_id": "d91ff53f-fd0c-419d-a6b8-ae038d5c3733",
+   "title": "Potential SNAKE Malware Installation Binary Indicator",
+   "tag": "attack.g0010",
+   "group": "Turla",
+   "basis": [
+    "directory_alias",
+    "directory_software"
+   ],
+   "decision": "reject",
+   "reason": "Two short installer file names that unrelated software can share."
+  },
+  {
+   "sigma_id": "e1118a8f-82f5-44b3-bb6b-8a284e5df602",
+   "title": "Potential ACTINIUM Persistence Activity",
+   "tag": "attack.g0047",
+   "group": "Gamaredon Group",
+   "basis": [
+    "directory_alias"
+   ],
+   "decision": "reject",
+   "reason": "A generic scheduled task that runs wscript with a VBScript engine."
+  },
+  {
+   "sigma_id": "e1212b32-55ff-4dfb-a595-62b572248056",
+   "title": "Diamond Sleet APT File Creation Indicators",
+   "tag": "attack.g0032",
+   "group": "Lazarus Group",
+   "basis": [
+    "directory_alias"
+   ],
+   "decision": "reject",
+   "reason": "Some paths are generic (readme.md and clip.exe in ProgramData)."
   },
   {
    "sigma_id": "e507feb7-5f73-4ef6-a970-91bb6f6d744f",
@@ -413,12 +1317,102 @@
    "reason": "The rule identifies the Elise backdoor, which ATT&CK records for Lotus Blossom and not for APT32."
   },
   {
+   "sigma_id": "e5144106-8198-4f6e-bfc2-0a551cc8dd94",
+   "title": "Potential Pikabot Infection - Suspicious Command Combinations Via Cmd.EXE",
+   "tag": "attack.g1037",
+   "group": "TA577",
+   "basis": [
+    "directory_software"
+   ],
+   "decision": "reject",
+   "reason": "Pikabot is commodity malware distributed for and by many operators; the one Group ATT&CK records using it is not the only one, and the rule matches behaviour rather than an artefact of one actor."
+  },
+  {
+   "sigma_id": "e64c8ef3-9f98-40c8-b71e-96110991cb4c",
+   "title": "DLL Names Used By SVR For GraphicalProton Backdoor",
+   "tag": "attack.g0016",
+   "group": "APT29",
+   "basis": [
+    "directory_alias",
+    "directory_software"
+   ],
+   "decision": "accept",
+   "reason": "The only branch is the list of fifteen DLL names CISA advisory AA23-347A publishes for the GraphicalProton backdoor of the SVR actor ATT&CK tracks as APT29."
+  },
+  {
+   "sigma_id": "e98f741c-6a5b-4c83-bc2a-1f4e58d07b12",
+   "title": "Kapeka Backdoor Execution Via RunDLL32.EXE",
+   "tag": "attack.g0034",
+   "group": "Sandworm Team",
+   "basis": [
+    "directory_software"
+   ],
+   "decision": "accept",
+   "reason": "rundll32 running a .wll file by ordinal #1 from ProgramData or AppData\\Local is Kapeka's published launch, described the same way in ATT&CK, which records it for Sandworm Team alone."
+  },
+  {
+   "sigma_id": "ec7c4e9b-9bc9-47c7-a32f-b53b598da642",
+   "title": "Forest Blizzard APT - JavaScript Constrained File Creation",
+   "tag": "attack.g0007",
+   "group": "APT28",
+   "basis": [
+    "directory_alias"
+   ],
+   "decision": "reject",
+   "reason": "It detects exploitation of a since-published vulnerability, which any actor can reuse."
+  },
+  {
    "sigma_id": "f0b70adb-0075-43b0-9745-e82a1c608fcc",
    "title": "ZxShell Malware",
    "tag": "attack.g0001",
    "group": "Axiom",
    "decision": "reject",
    "reason": "The rule identifies the ZxShell malware (its rundll32 export names). ATT&CK records ZxShell for three Groups, so a match names the malware, not Axiom."
+  },
+  {
+   "sigma_id": "f1531fa4-5b84-4342-8f68-9cf3fdbd83d4",
+   "title": "Potential Dtrack RAT Activity",
+   "tag": "attack.g0032",
+   "group": "Lazarus Group",
+   "basis": [
+    "directory_software"
+   ],
+   "decision": "reject",
+   "reason": "The reporting the rule cites ties Dtrack to Andariel as well as Lazarus Group, which are separate Groups in ATT&CK."
+  },
+  {
+   "sigma_id": "f7536642-4a08-4dd9-b6d5-c3286d8975ed",
+   "title": "Potential SNAKE Malware Persistence Service Execution",
+   "tag": "attack.g0010",
+   "group": "Turla",
+   "basis": [
+    "directory_alias",
+    "directory_software"
+   ],
+   "decision": "reject",
+   "reason": "It matches a WerFault.exe under WinSxS started by services.exe, without the service name that would tie it to Snake."
+  },
+  {
+   "sigma_id": "fb502828-2db0-438e-93e6-801c7548686d",
+   "title": "Chafer Malware URL Pattern",
+   "tag": "attack.g0087",
+   "group": "APT39",
+   "basis": [
+    "directory_alias"
+   ],
+   "decision": "reject",
+   "reason": "A short URL fragment ('/asp.asp?ui=') that unrelated web applications could produce."
+  },
+  {
+   "sigma_id": "fba38e0f-4607-4344-bb8f-a4b50cdeef7f",
+   "title": "Diamond Sleet APT DNS Communication Indicators",
+   "tag": "attack.g0032",
+   "group": "Lazarus Group",
+   "basis": [
+    "directory_alias"
+   ],
+   "decision": "reject",
+   "reason": "The domains are legitimate sites the actor compromised; ordinary visits to them would match."
   }
  ]
 }

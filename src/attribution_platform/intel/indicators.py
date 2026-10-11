@@ -10,9 +10,20 @@ equality comparisons joined by ``OR`` are read —
 ``[file:hashes.'SHA-256' = '…' OR file:hashes.'MD5' = '…']``,
 ``[ipv4-addr:value = '…']``, ``[ipv6-addr:value = '…']``,
 ``[domain-name:value = '…']``, ``[url:value = '…']`` — because each such
-comparison is an exact value with an exact meaning. ``AND``, other operators,
-qualifiers (``WITHIN``, ``START``…), multiple observation expressions and other
-object paths are refused and counted (``unsupported``), never approximated.
+comparison is an exact value with an exact meaning. Redundant parentheses around
+a comparison or an ``OR`` group are read as written.
+
+One ``AND`` shape is read too (1.1), because advisories publish most file
+indicators that way: file-hash comparisons joined with ``file:name`` and
+``file:size`` — ``[(file:name = 'x') AND file:size = 1 AND (file:hashes.MD5 = '…'
+OR …)]``, or several hashes of one file joined by ``AND``. Its meaning is kept
+exactly as far as an Observation can show it: equality of a hash identifies the
+file's content, which fixes its size and its other hashes, so those conjuncts
+add nothing to check; the **name does not follow from the content**, so the
+observed file name must equal a published one (case-insensitively) or there is
+no match. Every other use of ``AND``, other operators, qualifiers (``WITHIN``,
+``START``…), multiple observation expressions and other object paths are refused
+and counted (``unsupported``), never approximated.
 
 **Attribution.** An indicator is attributed only through the reviewed
 ``data/intel/advisory-attributions.json``: the actor the publisher names in the
@@ -40,11 +51,13 @@ from typing import Any
 
 from attribution_platform.domain import Observation
 
-INDICATOR_MATCHING_METHOD_VERSION = "1.0"
+INDICATOR_MATCHING_METHOD_VERSION = "1.1"
 _COMPARISON = re.compile(
-    r"\A(?P<path>file:hashes\.'(?P<algo>MD5|SHA-1|SHA-256|SHA-512)'|ipv4-addr:value|"
+    r"\A(?P<path>file:hashes\.(?:'(?P<algo>MD5|SHA-1|SHA-256|SHA-512)'|(?P<bare>MD5))|ipv4-addr:value|"
     r"ipv6-addr:value|domain-name:value|url:value)\s*=\s*'(?P<value>(?:[^'\\]|\\.)*)'\Z"
 )
+_FILE_NAME = re.compile(r"\Afile:name\s*=\s*'(?P<value>(?:[^'\\]|\\.)*)'\Z")
+_FILE_SIZE = re.compile(r"\Afile:size\s*=\s*\d+\Z")
 #: STIX hash algorithm -> the kind matched against Observation hashes.
 _HASH_KINDS = {"MD5": "md5", "SHA-1": "sha1", "SHA-256": "sha256", "SHA-512": "sha512"}
 
@@ -68,6 +81,9 @@ class AdvisoryIndicator:
     actor_name: str | None
     attack_group_id: str | None
     attribution_quote: str | None
+    #: Lower-case file names, one of which the observed file must carry (an
+    #: ``AND file:name`` pattern); empty: no name condition.
+    required_names: tuple[str, ...] = ()
 
 
 @dataclass(frozen=True)
@@ -100,13 +116,12 @@ class IndicatorSet:
         return {k: tuple(v) for k, v in out.items()}
 
 
-def _split_or(pattern: str) -> list[str] | None:
-    """The comparisons of ``[a OR b OR …]`` (``None`` if not that shape). ``OR``
-    inside a quoted value is not a separator."""
-    text = pattern.strip()
-    if not (text.startswith("[") and text.endswith("]")) or text.count("[") != 1:
-        return None
-    body, parts, current, quoted, i = text[1:-1], [], [], False, 0
+def _split_top(body: str, separator: str) -> list[str] | None:
+    """``body`` split on ``separator`` outside quotes and parentheses (``None``
+    if quotes or parentheses do not balance)."""
+    parts: list[str] = []
+    current: list[str] = []
+    quoted, depth, i = False, 0, 0
     while i < len(body):
         char = body[i]
         if char == "\\" and quoted:
@@ -115,16 +130,33 @@ def _split_or(pattern: str) -> list[str] | None:
             continue
         if char == "'":
             quoted = not quoted
-        if not quoted and body[i : i + 4] == " OR ":
-            parts.append("".join(current).strip())
-            current, i = [], i + 4
+        elif not quoted and char == "(":
+            depth += 1
+        elif not quoted and char == ")":
+            depth -= 1
+            if depth < 0:
+                return None
+        if not quoted and depth == 0 and body.startswith(separator, i):
+            parts.append("".join(current))
+            current, i = [], i + len(separator)
             continue
-        if not quoted and (body[i : i + 5] == " AND " or body[i : i + 3] in (" !=", " IN")):
-            return None
         current.append(char)
         i += 1
-    parts.append("".join(current).strip())
+    if quoted or depth != 0:
+        return None
+    parts.append("".join(current))
     return parts
+
+
+def _unwrap(text: str) -> str:
+    """``text`` without parentheses that enclose all of it."""
+    text = text.strip()
+    while text.startswith("(") and text.endswith(")"):
+        inner = _split_top(text[1:-1], "\x00")  # balance check only
+        if inner is None:
+            break
+        text = text[1:-1].strip()
+    return text
 
 
 def _normalize(kind: str, value: str) -> str | None:
@@ -140,30 +172,64 @@ def _normalize(kind: str, value: str) -> str | None:
     return value
 
 
-def _comparison_values(pattern: str) -> tuple[tuple[str, str], ...] | None:
-    comparisons = _split_or(pattern)
-    if not comparisons:
+def _value(comparison: str) -> tuple[str, str] | None:
+    match = _COMPARISON.match(comparison)
+    if match is None:
         return None
-    values = []
-    for comparison in comparisons:
-        match = _COMPARISON.match(comparison)
-        if match is None:
+    path, raw = match["path"], match["value"].replace("\\'", "'").replace("\\\\", "\\")
+    kind = (
+        _HASH_KINDS[match["algo"] or match["bare"]]
+        if match["algo"] or match["bare"]
+        else "ip"
+        if path.startswith("ipv")
+        else "domain"
+        if path.startswith("domain")
+        else "url"
+    )
+    normalized = _normalize(kind, raw)
+    return (kind, normalized) if normalized is not None else None
+
+
+def _parse_pattern(pattern: str) -> tuple[tuple[tuple[str, str], ...], tuple[str, ...]] | None:
+    """``(values, required file names)`` of a supported pattern, else ``None``
+    (module docstring)."""
+    text = pattern.strip()
+    if not (text.startswith("[") and text.endswith("]")) or text.count("[") != 1:
+        return None
+    terms = _split_top(text[1:-1], " AND ")
+    if terms is None:
+        return None
+    values: list[tuple[str, str]] = []
+    names: list[str] = []
+    hash_terms = name_terms = 0
+    for term in terms:
+        comparisons = _split_top(_unwrap(term), " OR ")
+        if not comparisons:
             return None
-        path, raw = match["path"], match["value"].replace("\\'", "'").replace("\\\\", "\\")
-        kind = (
-            _HASH_KINDS[match["algo"]]
-            if match["algo"]
-            else "ip"
-            if path.startswith("ipv")
-            else "domain"
-            if path.startswith("domain")
-            else "url"
-        )
-        normalized = _normalize(kind, raw)
-        if normalized is None:
+        parsed = [_unwrap(c) for c in comparisons]
+        if all(_FILE_SIZE.match(c) for c in parsed) and len(parsed) == 1:
+            continue  # fixed by the content a hash identifies
+        found_names = [_FILE_NAME.match(c) for c in parsed]
+        if all(found_names):
+            name_terms += 1
+            names.extend(
+                m["value"].replace("\\'", "'").replace("\\\\", "\\").lower()
+                for m in found_names
+                if m is not None
+            )
+            continue
+        found = [_value(c) for c in parsed]
+        if any(v is None for v in found):
             return None
-        values.append((kind, normalized))
-    return tuple(values)
+        term_values = [v for v in found if v is not None]
+        is_hash = all(kind in _HASH_KINDS.values() for kind, _ in term_values)
+        if len(terms) > 1 and not is_hash:
+            return None  # AND is read for file hashes only
+        hash_terms += is_hash
+        values.extend(term_values)
+    if not values or name_terms > 1 or (len(terms) > 1 and hash_terms == 0):
+        return None
+    return tuple(dict.fromkeys(values)), tuple(sorted(set(names)))
 
 
 def load_indicator_set(advisories_dir: Path, attributions_file: Path) -> IndicatorSet:
@@ -194,14 +260,15 @@ def load_indicator_set(advisories_dir: Path, attributions_file: Path) -> Indicat
         for obj in objects:
             if obj.get("type") != "indicator":
                 continue
-            values = (
-                _comparison_values(str(obj.get("pattern", "")))
+            parsed = (
+                _parse_pattern(str(obj.get("pattern", "")))
                 if obj.get("pattern_type") == "stix"
                 else None
             )
-            if values is None:
+            if parsed is None:
                 unsupported += 1
                 continue
+            values, required_names = parsed
             named = review is not None and obj["id"] in attributed
             indicators.append(
                 AdvisoryIndicator(
@@ -216,6 +283,7 @@ def load_indicator_set(advisories_dir: Path, attributions_file: Path) -> Indicat
                     actor_name=review["actor_name"] if named and review else None,
                     attack_group_id=review["attack_group_id"] if named and review else None,
                     attribution_quote=review["quote"] if named and review else None,
+                    required_names=required_names,
                 )
             )
     return IndicatorSet(
@@ -253,6 +321,22 @@ def _observed_values(observation: Observation) -> Iterable[tuple[str, str]]:
         yield "domain", observation.dns.question_name.lower().rstrip(".")
 
 
+def _observed_names(observation: Observation) -> frozenset[str]:
+    """The file names an Observation states, lower-case: of its process image
+    and of its file."""
+    names: set[str] = set()
+    process, file = observation.process, observation.file
+    for value in (
+        process.name if process else None,
+        process.executable if process else None,
+        file.name if file else None,
+        file.path if file else None,
+    ):
+        if value:
+            names.add(str(value).replace("\\", "/").rsplit("/", 1)[-1].lower())
+    return frozenset(names)
+
+
 def _within(indicator: AdvisoryIndicator, at: datetime) -> bool | None:
     if indicator.valid_from is None and indicator.valid_until is None:
         return None
@@ -272,8 +356,11 @@ def match_observations(
     index = indicator_set.index()
     matches = set()
     for observation in observations:
+        names = _observed_names(observation)
         for key in set(_observed_values(observation)):
             for indicator in index.get(key, ()):
+                if indicator.required_names and not names.intersection(indicator.required_names):
+                    continue  # the published name is part of the pattern
                 matches.add(
                     IndicatorMatch(
                         indicator_id=indicator.indicator_id,

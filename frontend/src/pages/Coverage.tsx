@@ -117,15 +117,67 @@ function Source({ name, source, version }: { name: string; source: ContentSource
   );
 }
 
-function ActorSpecific({ actor }: { actor: NonNullable<Coverage["actor_specific"]> }) {
+const BASIS_LABEL: Record<string, string> = {
+  group_tag: "Group tag on the rule",
+  directory_alias: "Filed under the Group's name",
+  directory_software: "Filed under software of one Group",
+  software_tag: "Tag for software of one Group",
+};
+
+function ActorSpecific({
+  actor,
+  activeGroups,
+}: {
+  actor: NonNullable<Coverage["actor_specific"]>;
+  activeGroups: number;
+}) {
+  // Groups the platform can name today: an accepted association on a rule that runs here.
+  const nameable = new Map<string, { name: string; rules: number }>();
+  for (const rule of actor.rules) {
+    if (rule.status === "rejected") continue;
+    for (const tag of rule.actor_tags) {
+      if (tag.decision !== "accept" || !tag.group_id) continue;
+      const entry = nameable.get(tag.group_id) ?? { name: tag.group_name ?? tag.group_id, rules: 0 };
+      entry.rules += 1;
+      nameable.set(tag.group_id, entry);
+    }
+  }
+  const named = [...nameable.entries()].sort(([, a], [, b]) => a.name.localeCompare(b.name));
   const [show, setShow] = useState<"accepted" | "all">("accepted");
   const rows = actor.rules.filter((rule) => show === "all" || rule.actor_tags.some((tag) => tag.decision === "accept"));
   const usable = actor.summary.by_status.imported + actor.summary.by_status.partial;
   return (
+    <>
+    <Card>
+      <h2 className="text-headline-sm text-on-surface">Groups this platform can name</h2>
+      <p className="mt-1 max-w-4xl text-body-md text-on-surface-variant">
+        <span className="text-on-surface">
+          {named.length} of {activeGroups} active ATT&CK Groups.
+        </span>{" "}
+        A Group can be named only when a rule accepted by the review below fires on an artefact of that Group's own
+        tooling. For every other Group the platform has no such content: its activity can be detected and compared by
+        technique, but the verdict will not single it out. A named Group is a lead to verify, not a conclusion.
+      </p>
+      <div className="mt-3 flex flex-wrap gap-2">
+        {named.map(([id, entry]) => (
+          <span
+            key={id}
+            data-nameable-group={id}
+            className="inline-flex items-center gap-2 rounded-sm border border-outline-variant bg-surface px-2 py-1 text-body-sm"
+          >
+            <span className="text-on-surface">{entry.name}</span>
+            <AttackId id={id} tone="muted" />
+            <span className="font-mono text-code-sm text-outline">
+              {entry.rules} {entry.rules === 1 ? "rule" : "rules"}
+            </span>
+          </span>
+        ))}
+      </div>
+    </Card>
     <Card padded={false}>
       <CardHeader
         title="Actor-specific content"
-        hint={`Sigma rules that name an ATT&CK Group. A Group tag counts only if a review of the rule's logic accepts it: ${actor.summary.group_tags_accepted} of ${actor.summary.group_tags_reviewed} tags accepted, ${usable} rules usable on ingested telemetry, for ${actor.summary.groups_with_a_usable_rule.length} Groups. This is the only content that can name an actor.`}
+        hint={`Sigma rules associated with one ATT&CK Group — by a Group tag, or by being filed under the Group's name or under software ATT&CK records for that Group alone. An association counts only if a review of the rule's logic accepts it: ${actor.summary.group_tags_accepted} of ${actor.summary.group_tags_reviewed} accepted, ${usable} rules usable on ingested telemetry, for ${actor.summary.groups_with_a_usable_rule.length} Groups. This is the only content that can name an actor.`}
         right={
           <Segmented
             ariaLabel="Actor rules shown"
@@ -161,6 +213,9 @@ function ActorSpecific({ actor }: { actor: NonNullable<Coverage["actor_specific"
                   </Td>
                   <Td className="whitespace-nowrap">
                     {tag.group_name ?? "—"} {tag.group_id && <AttackId id={tag.group_id} tone="muted" />}
+                    <div className="mt-0.5 whitespace-normal text-body-sm text-outline">
+                      {(tag.bases ?? []).map((basis) => BASIS_LABEL[basis] ?? basis).join(" · ")}
+                    </div>
                   </Td>
                   <Td>
                     <Badge tone={tag.decision === "accept" ? "primary" : "muted"}>{tag.decision === "accept" ? "accepted" : "rejected"}</Badge>
@@ -182,6 +237,7 @@ function ActorSpecific({ actor }: { actor: NonNullable<Coverage["actor_specific"
         </table>
       </div>
     </Card>
+    </>
   );
 }
 
@@ -341,7 +397,9 @@ export function CoveragePage() {
           <Source name="Elastic prebuilt rules" source={report.content.elastic} version={`elastic/detection-rules @ ${shortHash(String(elastic.source_commit ?? ""), 12)} · ${String(elastic.importer ?? "")} · ${String(elastic.field_map_version ?? "")}`} />
         </div>
 
-        {report.actor_specific && <ActorSpecific actor={report.actor_specific} />}
+        {report.actor_specific && (
+          <ActorSpecific actor={report.actor_specific} activeGroups={report.groups.length} />
+        )}
 
         <Card padded={false}>
           <CardHeader title="Telemetry the content can fire on" hint="Translated rules per log source, grouped by product. A log source listed here is one the platform ingests and at least one rule reads." />

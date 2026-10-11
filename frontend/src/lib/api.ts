@@ -313,6 +313,9 @@ export interface ActorTag {
   reason: string;
   group_id: string | null;
   group_name: string | null;
+  /** How the rule was associated with the Group (ADR-0018 Amendment B). */
+  bases?: string[];
+  matched?: string[];
 }
 
 export interface UnitEvidence {

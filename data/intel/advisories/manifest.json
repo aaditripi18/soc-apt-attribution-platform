@@ -1,8 +1,8 @@
 {
   "source": "Government advisory STIX 2.1 indicator bundles (ADR-0013)",
-  "retrieved_at_utc": "2026-10-09T08:44:53Z",
+  "retrieved_at_utc": "2026-10-11T17:12:38Z",
   "method": "scripts/acquire_advisory_indicators.py (URL + SHA-256 pinned)",
-  "approval": "owner instruction 2026-10-09 ('finish all other tasks'; ADR-0013 D1-D2)",
+  "approval": "owner instructions 2026-10-09 ('finish all other tasks'; ADR-0013 D1-D2) and 2026-10-11 (advisory bundles for group-specific evidence; ADR-0013 Amendment A)",
   "bundles": [
     {
       "file": "MAR-10448362.c1.v1.CLEAR_stix2.json",
@@ -11,6 +11,60 @@
       "size_bytes": 53239,
       "advisory": "CISA MAR-10448362.c1 (with joint advisory AA24-038A, PRC state-sponsored actors)",
       "reuse": "TLP:CLEAR (disclosure not limited); a work of the U.S. Government",
+      "obtained_via": "--from-file (fetched with another client; SHA-256 verified)"
+    },
+    {
+      "file": "AA23-144A.stix.json",
+      "download_url": "https://www.cisa.gov/sites/default/files/STIX/AA23-144A_PRC_State-Sponsored_Cyber_Actor_Living_Off_the_Land_to_Evade_Detection.stix.json",
+      "sha256": "a44ae1fff3f239877a663cae1ba244d1c15bbc013e1cc5a6338f1d5d2c1cb789",
+      "size_bytes": 29410,
+      "advisory": "CISA joint advisory AA23-144A (PRC state-sponsored actor living off the land)",
+      "reuse": "TLP:CLEAR (disclosure not limited); a work of the U.S. Government and partner agencies",
+      "obtained_via": "--from-file (fetched with another client; SHA-256 verified)"
+    },
+    {
+      "file": "AA23-347A.stix.json",
+      "download_url": "https://www.cisa.gov/sites/default/files/2023-12/aa23-347a-russian-foreign-intelligence-service-svr-exploiting-jetbrains-teamcity-cve-globally.json",
+      "sha256": "2b0b6cdb06bb4e6fc596d753f90d855311b5fd35bbcdcf8d95cc61e84b0d0297",
+      "size_bytes": 70951,
+      "advisory": "CISA joint advisory AA23-347A (SVR exploiting JetBrains TeamCity)",
+      "reuse": "TLP:CLEAR (disclosure not limited); a work of the U.S. Government and partner agencies",
+      "obtained_via": "--from-file (fetched with another client; SHA-256 verified)"
+    },
+    {
+      "file": "AA24-207A.stix.json",
+      "download_url": "https://www.cisa.gov/sites/default/files/2024-07/AA24-207A-North-Korea-Cyber-Group-Conducts-Global-Espionage-Campaign-to-Advance-Regimes-Military-and-Nuclear-Programs.stix_.json",
+      "sha256": "130898d5a0baff1aefc1e378fbfda16d76fc889ad6268ae2032d9e5150274f6e",
+      "size_bytes": 144222,
+      "advisory": "CISA joint advisory AA24-207A (DPRK RGB 3rd Bureau espionage campaign)",
+      "reuse": "TLP:CLEAR (disclosure not limited); a work of the U.S. Government and partner agencies",
+      "obtained_via": "--from-file (fetched with another client; SHA-256 verified)"
+    },
+    {
+      "file": "AA24-241A.stix.json",
+      "download_url": "https://www.cisa.gov/sites/default/files/2024-08/AA24-241A-Iran-based-Cyber-Actors-Enabling-Ransomware-Attacks-on-US-Organizations.stix_.json",
+      "sha256": "3439082a0064a753b9bc55c3502860796bc2e0aed34e16aaeb0ac50fb085fc54",
+      "size_bytes": 29893,
+      "advisory": "CISA joint advisory AA24-241A (Iran-based actors enabling ransomware attacks)",
+      "reuse": "TLP:CLEAR (disclosure not limited); a work of the U.S. Government and partner agencies",
+      "obtained_via": "--from-file (fetched with another client; SHA-256 verified)"
+    },
+    {
+      "file": "AA24-249A.stix.json",
+      "download_url": "https://www.cisa.gov/sites/default/files/2024-09/AA24-249A-Russian-Military-Cyber-Actors-Target-US-and-Global-Critical-Infrastructure.stix_.json",
+      "sha256": "02ef014a32c3fd747c5029a4c4bf6cc02adc3d6d32e30ada5d79e65ec3bafbac",
+      "size_bytes": 206220,
+      "advisory": "CISA joint advisory AA24-249A (GRU Unit 29155)",
+      "reuse": "TLP:CLEAR (disclosure not limited); a work of the U.S. Government and partner agencies",
+      "obtained_via": "--from-file (fetched with another client; SHA-256 verified)"
+    },
+    {
+      "file": "AA25-141A.stix.json",
+      "download_url": "https://www.cisa.gov/sites/default/files/AA25-141A_Russian_GRU_Targeting_Western_Logistics_Entities_and_Technology_Companies.stix.json",
+      "sha256": "c6102ca1da59c0865a4671f406f36c74a7ed1783c004a0641296655bb7c80dea",
+      "size_bytes": 90030,
+      "advisory": "CISA joint advisory AA25-141A (GRU unit 26165 targeting logistics entities)",
+      "reuse": "TLP:CLEAR (disclosure not limited); a work of the U.S. Government and partner agencies",
       "obtained_via": "--from-file (fetched with another client; SHA-256 verified)"
     }
   ]

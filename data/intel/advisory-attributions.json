@@ -1,6 +1,6 @@
 {
-  "review_version": "advisory-attribution-review/1",
-  "reviewed_on": "2026-10-09",
+  "review_version": "advisory-attribution-review/2",
+  "reviewed_on": "2026-10-11",
   "policy": "An advisory's indicators are attributed only to an actor the publisher names in the bundle itself; the naming sentence is quoted verbatim and must be present in the pinned bundle (checked at load). Matches are contextual annotations only — never ATT&CK features, never scored (ADR-0013 D1).",
   "attributions": [
     {
@@ -13,6 +13,72 @@
       "publisher": "CISA",
       "quote": "CISA received three files for analysis obtained from a critical infrastructure compromised by the People’s Republic of China (PRC) state-sponsored cyber group known as Volt Typhoon.",
       "scope": "files recovered from one compromised critical-infrastructure environment; the publisher states the environment was compromised by the actor, not that the files are unique to it"
+    },
+    {
+      "bundle_file": "AA23-144A.stix.json",
+      "report_id": "report--f3eff8fe-4ab6-42be-9a28-51c68eb5b676",
+      "report_name": "AA23-144A PRC State-Sponsored Cyber Actor Living Off the Land to Evade Detection",
+      "actor_name": "Volt Typhoon",
+      "attack_group_id": "G1017",
+      "attack_group_stix_id": "intrusion-set--174279b4-399f-4ddb-966e-5efedd1dd5f2",
+      "publisher": "CISA and partner agencies",
+      "quote": "state-sponsored cyber actor known as Volt Typhoon",
+      "scope": "file hashes of tools the publisher observed in this activity; some are builds of public tools, which other actors may hold"
+    },
+    {
+      "bundle_file": "AA23-347A.stix.json",
+      "report_id": "report--62e17cb7-ff23-48f1-b00d-227ff9248e83",
+      "report_name": "AA23-347A Russian Foreign Intelligence Service (SVR) Exploiting JetBrains TeamCity CVE Globally",
+      "actor_name": "APT29",
+      "attack_group_id": "G0016",
+      "attack_group_stix_id": "intrusion-set--899ce53f-13a0-479b-a0e4-67d46e241542",
+      "publisher": "FBI, CISA, NSA, SKW, CERT Polska, NCSC",
+      "quote": "also known as Advanced Persistent Threat 29 (APT 29), the Dukes, CozyBear",
+      "scope": "file hashes and infrastructure the publishers observed in the SVR's exploitation of TeamCity servers. Network indicators are addresses the publisher observed in the activity; an address can be shared, reassigned or compromised infrastructure, so a match outside the stated validity is weak."
+    },
+    {
+      "bundle_file": "AA24-207A.stix.json",
+      "report_id": "report--b4c819a4-f4df-4618-bb39-fa1d8365b7dd",
+      "report_name": "AA24-207A North Korea Cyber Group Conducts Global Espionage Campaign",
+      "actor_name": "Andariel",
+      "attack_group_id": "G0138",
+      "attack_group_stix_id": "intrusion-set--39d6890e-7f23-4474-b8ef-e7b0343c5fc8",
+      "publisher": "FBI and partner agencies",
+      "quote": "state-sponsored cyber group known publicly as Andariel, Onyx Sleet (formerly PLUTONIUM), DarkSeoul, Silent Chollima, and Stonefly/Clasiopa.",
+      "scope": "file hashes of malware and tools the publishers tie to this group's campaign; the set includes public tools, which other actors may hold"
+    },
+    {
+      "bundle_file": "AA24-241A.stix.json",
+      "report_id": "report--dcf911ee-17b3-4902-aa15-4ecabf2e40ce",
+      "report_name": "AA24-241A Iran-based Cyber Actors Enabling Ransomware Attacks on US Organizations",
+      "actor_name": "Fox Kitten",
+      "attack_group_id": "G0117",
+      "attack_group_stix_id": "intrusion-set--c21dd6f1-1364-4a70-a1f7-783080ec34ee",
+      "publisher": "FBI, CISA, DC3",
+      "quote": "These Iranian cyber actors are known in the private sector by the names Pioneer Kitten, Fox Kitten, UNC757, Parisite, RUBIDIUM, and Lemon Sandstorm",
+      "scope": "addresses and domains the publishers observed in this group's activity. Network indicators are addresses the publisher observed in the activity; an address can be shared, reassigned or compromised infrastructure, so a match outside the stated validity is weak."
+    },
+    {
+      "bundle_file": "AA24-249A.stix.json",
+      "report_id": "report--d67bfbe0-e01d-4e2e-8a56-214805d85aee",
+      "report_name": "AA24-249A: Russian Military Cyber Actors Target U.S. and Global Critical Infrastructure",
+      "actor_name": "Ember Bear (GRU Unit 29155)",
+      "attack_group_id": "G1003",
+      "attack_group_stix_id": "intrusion-set--a7f57cc1-4540-4429-823f-f4e56b8473c9",
+      "publisher": "FBI, CISA, NSA and partner agencies",
+      "quote": "cyber actors affiliated with the Russian General Staff Main Intelligence Directorate (GRU) 161st Specialist Training Center (Unit 29155) are responsible for computer network operations against global targets",
+      "scope": "the publishers name the unit, not a vendor label; ATT&CK records Ember Bear as linked to Unit 29155 and cites this advisory, and the advisory notes vendor names may not map one to one. Many file hashes are of public tools the unit used. Network indicators are addresses the publisher observed in the activity; an address can be shared, reassigned or compromised infrastructure, so a match outside the stated validity is weak."
+    },
+    {
+      "bundle_file": "AA25-141A.stix.json",
+      "report_id": "report--80c639af-0677-4a94-8a28-5d642203f5ba",
+      "report_name": "AA25-141A Russian GRU Targeting Western Logistics Entities and Technology Companies",
+      "actor_name": "APT28 (GRU unit 26165)",
+      "attack_group_id": "G0007",
+      "attack_group_stix_id": "intrusion-set--bef4c620-0787-42a8-a96d-b7eb6e85917c",
+      "publisher": "NSA, FBI, CISA and partner agencies",
+      "quote": "targeting by the Russian General Staff Main Intelligence Directorate (GRU) 85th Main Special Service Center (85th GTsSS), military unit 26165",
+      "scope": "the publishers name the unit, which ATT&CK records as APT28; the indicators are addresses the publishers observed, many of them shared or compromised infrastructure by the advisory's own description. Network indicators are addresses the publisher observed in the activity; an address can be shared, reassigned or compromised infrastructure, so a match outside the stated validity is weak."
     }
   ]
 }

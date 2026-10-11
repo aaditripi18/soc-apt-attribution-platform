@@ -1,0 +1,102 @@
+{
+ "actor_pack": "sigma-r2026-07-01-actor-specific",
+ "actor_pack_content_hash": "77884f7264f2ee0da944f96f2a4cbeac109a4c6311afab56cc7a4abd5e74c2aa",
+ "actor_rules": 100,
+ "attack_kb_version": "enterprise-attack-19.2",
+ "recordings_measured": 11,
+ "recordings_absent": 0,
+ "observations": 1146524,
+ "firings": 1,
+ "recordings": [
+  {
+   "recording_id": "otrf-apt29-day1",
+   "present": true,
+   "sha256": "98a073140860560d70080ace9142961be4f64b4862bae892d62d0f254d0fdbe5",
+   "observations": 175143,
+   "firings": 1,
+   "firings_by_rule": {
+    "sigma-actor:cb062102-587e-4414-8efa-dbe3c7bf19c6:000": 1
+   }
+  },
+  {
+   "recording_id": "otrf-apt29-day2",
+   "present": true,
+   "sha256": "377f8cba5db95a453a3ee8bd19f493efafc23724541482a4da99da28ee4665f9",
+   "observations": 494098,
+   "firings": 0,
+   "firings_by_rule": {}
+  },
+  {
+   "recording_id": "otrf-apt3-caldera",
+   "present": true,
+   "sha256": "37d2f27f2c4fa35fa1cda926fa5b1a45497777107dd33ba04f03e0613a09636f",
+   "observations": 63824,
+   "firings": 0,
+   "firings_by_rule": {}
+  },
+  {
+   "recording_id": "otrf-apt3-empire",
+   "present": true,
+   "sha256": "ab4d1ec4e44102c87946a974f93aa248e49e5001e01fac3f137ec7e61bbc18ed",
+   "observations": 87929,
+   "firings": 0,
+   "firings_by_rule": {}
+  },
+  {
+   "recording_id": "otrf-lsass-01-logonpasswords",
+   "present": true,
+   "sha256": "79045fcc5a8689efed8db4911cadc11b554ef8b0bed1428ee490bb8c3f2578e6",
+   "observations": 47599,
+   "firings": 0,
+   "firings_by_rule": {}
+  },
+  {
+   "recording_id": "otrf-lsass-02-procdump",
+   "present": true,
+   "sha256": "2b32f11b1465f49df8bb4040652b001e4bb8a92de6ae7e84c2977abe68273f04",
+   "observations": 37191,
+   "firings": 0,
+   "firings_by_rule": {}
+  },
+  {
+   "recording_id": "otrf-lsass-03-comsvcs",
+   "present": true,
+   "sha256": "97a834cd72b0803d544c62cc45a41b18a4cc04a605735096be4bc5dad5e9fe7b",
+   "observations": 36650,
+   "firings": 0,
+   "firings_by_rule": {}
+  },
+  {
+   "recording_id": "otrf-lsass-04-out-minidump",
+   "present": true,
+   "sha256": "d6150eab4013ed0a7fc9c6b7266187214706c543c9dc3a370603f524def5de63",
+   "observations": 34550,
+   "firings": 0,
+   "firings_by_rule": {}
+  },
+  {
+   "recording_id": "otrf-lsass-05-sharpdump",
+   "present": true,
+   "sha256": "79e347b411beefaf5c7d0c951fdcb9d308fce20f8eabe666c11fa7b6165053b8",
+   "observations": 57301,
+   "firings": 0,
+   "firings_by_rule": {}
+  },
+  {
+   "recording_id": "otrf-lsass-06-outflank-dumpert",
+   "present": true,
+   "sha256": "ee996c0ddc32611c572f59a68869f7d4327aaac04a3aeee65916b7221347dc1d",
+   "observations": 56189,
+   "firings": 0,
+   "firings_by_rule": {}
+  },
+  {
+   "recording_id": "otrf-lsass-07-nanodump",
+   "present": true,
+   "sha256": "5335635ef2bce0fb3f8704e17fb04a3be7400ac7c4bcd6ec7c14454632acaaaf",
+   "observations": 56050,
+   "firings": 0,
+   "firings_by_rule": {}
+  }
+ ]
+}

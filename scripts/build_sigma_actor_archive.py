@@ -1,12 +1,16 @@
 #!/usr/bin/env python3
-"""Build the pinned archive of Sigma rules that name an ATT&CK Group (ADR-0018).
+"""Build the pinned archive of Sigma rules associated with an ATT&CK Group
+(ADR-0018 and its Amendment B).
 
 SigmaHQ's Core++ package leaves out ``rules-emerging-threats`` — the rules
 written from published reporting on one actor's tooling. They are in the
 release's own ``sigma_all_rules.zip`` (acquired 2026-10-01 by
 ``scripts/acquire_sigma_release.py``; kept in the git-ignored cache). This
-script, offline, takes from that archive every rule carrying an ``attack.gNNNN``
-tag and writes:
+script, offline, takes from that archive every rule with a candidate Group
+association — an ``attack.gNNNN`` tag, an emerging-threats directory named after
+one Group or after software ATT&CK records for one Group, or an ``attack.sNNNN``
+tag for such software (``detection_content/actor_association.py``, derived from
+the pinned ATT&CK version) — and writes:
 
 - ``sigma_actor_specific.zip`` beside the Core++ archive — a reproducible zip
   (sorted members, fixed timestamps, fixed compression level);
@@ -25,12 +29,14 @@ from __future__ import annotations
 import hashlib
 import io
 import json
-import re
 import sys
 import zipfile
 from pathlib import Path
 
 import yaml
+
+from attribution_platform.attack_knowledge.loader import load_attack_knowledge
+from attribution_platform.detection_content.actor_association import ActorAssociationIndex
 
 TAG = "r2026-07-01"
 REPO_ROOT = Path(__file__).resolve().parents[1]
@@ -40,7 +46,6 @@ SOURCE_MANIFEST = CACHE / "manifest-sigma_all_rules.json"
 OUT_DIR = REPO_ROOT / "data" / "detection" / "sigma" / TAG
 ARCHIVE = OUT_DIR / "sigma_actor_specific.zip"
 MANIFEST = OUT_DIR / "manifest-sigma_actor_specific.json"
-_GROUP_TAG = re.compile(r"attack\.g\d{4}")
 _FIXED_TIME = (1980, 1, 1, 0, 0, 0)
 
 
@@ -51,6 +56,8 @@ def main() -> int:
     if hashlib.sha256(raw).hexdigest() != pinned:
         print(f"{SOURCE}: does not match its pinned SHA-256 {pinned} — refusing")
         return 1
+    knowledge = load_attack_knowledge()
+    index = ActorAssociationIndex(knowledge)
     files = []
     buffer = io.BytesIO()
     with zipfile.ZipFile(io.BytesIO(raw)) as source, zipfile.ZipFile(buffer, "w") as out:
@@ -59,12 +66,8 @@ def main() -> int:
             document = yaml.safe_load(content.decode("utf-8"))
             if not isinstance(document, dict):
                 continue
-            tags = sorted(
-                str(t).lower()
-                for t in document.get("tags") or ()
-                if _GROUP_TAG.fullmatch(str(t).lower())
-            )
-            if not tags:
+            associations = index.associations(member, document.get("tags") or ())
+            if not associations:
                 continue
             info = zipfile.ZipInfo(member, date_time=_FIXED_TIME)
             info.compress_type = zipfile.ZIP_DEFLATED
@@ -75,14 +78,14 @@ def main() -> int:
                     "sigma_id": str(document.get("id")),
                     "sha256": hashlib.sha256(content).hexdigest(),
                     "size_bytes": len(content),
-                    "group_tags": tags,
+                    "associations": [a.to_json() for a in associations],
                 }
             )
     data = buffer.getvalue()
     ARCHIVE.write_bytes(data)
     manifest = {
         "package": ARCHIVE.name,
-        "purpose": "ADR-0018 actor-specific evidence: Sigma rules that name an ATT&CK Group",
+        "purpose": "ADR-0018 actor-specific evidence: Sigma rules associated with an ATT&CK Group",
         "source": {
             "repository": source_manifest["source"]["repository"],
             "release_tag": TAG,
@@ -90,7 +93,9 @@ def main() -> int:
             "archive_sha256": pinned,
             "download_url": source_manifest["source"]["download_url"],
             "retrieved_at_utc": source_manifest["acquisition"]["retrieved_at_utc"],
-            "selection": "every rule in the release archive with an attack.gNNNN tag",
+            "selection": "every rule in the release archive with a candidate Group association "
+            "(Group tag, actor/malware directory, or single-Group software tag), derived from "
+            f"ATT&CK {knowledge.attack_kb_version}",
         },
         "artifact": {
             "filename": ARCHIVE.name,

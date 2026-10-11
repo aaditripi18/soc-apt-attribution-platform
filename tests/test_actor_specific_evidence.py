@@ -150,7 +150,7 @@ def test_only_accepted_group_tags_become_rules_and_they_map_to_the_group_alone(
         for mapping in rule.technique_mappings:
             tag = f"attack.{(mapping.attack_ref.external_id or '').lower()}"
             assert review[(sigma_id, tag)][0] is True
-            assert "accepted by the actor-tag review" in mapping.mapping_basis
+            assert "accepted by the actor review" in mapping.mapping_basis
     # a framework's default task is not a Group (the Empire rule Sigma tags APT3)
     rejected_titles = {
         r["title"]
@@ -202,7 +202,7 @@ def test_a_matched_artefact_names_its_group_as_a_lead(
     (item,) = hits[0]["actor_specific_evidence"]
     assert (item["actor_name"], item["actor_attack_id"]) == ("Mustang Panda", "G0129")
     assert item["rule_id"].startswith("sigma-actor:")
-    assert "accepted by the actor-tag review" in item["claim"]
+    assert "accepted by the actor review" in item["claim"]
 
     # a Group reference is never a technique: not a decision feature, not in the summary
     assert not [t for t in hits[0]["observed_feature_technique_ids"] if "intrusion-set" in t]

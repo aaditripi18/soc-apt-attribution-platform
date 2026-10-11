@@ -534,14 +534,23 @@ def test_known_answer_checks_are_served_and_internally_consistent(
     assert summary["worst_position_of_a_known_actor"] == max(positions)
     for case in cases:
         assert (case["known_actor"] is None) == (case["kind"] == "tool_test")
-        # no verdict names an actor, on any known-answer case
-        assert case["verdict"] in {
-            "no_decision_features",
-            "not_distinguishable",
-            "third_party_lead",
-        }
-        assert case["known_actor"] is None or case["known_actor"]["name"] not in case["statement"]
-    assert summary["verdicts_naming_an_actor"] == 0
+        named = case["named_actors"]
+        if case["verdict"] == "actor_specific_evidence":
+            # ADR-0018: a verdict may name a Group, and on a known-answer case
+            # the only acceptable name is the known one
+            assert case["known_actor"] is not None
+            assert named == [case["known_actor"]["attack_id"]]
+            assert case["known_actor"]["name"] in case["statement"]
+            assert "lead to verify" in case["statement"]
+        else:
+            assert not named
+            assert case["known_actor"] is None or (
+                case["known_actor"]["name"] not in case["statement"]
+            )
+    assert summary["verdicts_naming_a_wrong_actor"] == 0
+    assert summary["verdicts_naming_an_actor"] == sum(1 for c in cases if c["named_actors"])
+    # no tool test (no actor) is given a name
+    assert not [c for c in tool_tests if c["named_actors"]]
     # without the file the route says so
     bare = load_api_context(
         knowledge,

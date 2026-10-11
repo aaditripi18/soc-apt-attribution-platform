@@ -92,3 +92,51 @@ infrastructure (none exists in the corpus).
   two labelled changes) with and without the indicator set: the match appears, and **every attribution quantity
   in the analysis is identical**. The corpus contains only lab-built tooling and private infrastructure, so no
   match is expected there (ADR context).
+
+## Amendment A (2026-10-11) — six more advisory bundles, and the patterns they use
+
+**Why:** the owner requires that the platform name the responsible Group wherever evidence allows (see ADR-0018
+Amendment B). Advisory indicators are the second kind of evidence that can point at one Group, and one bundle was
+too little.
+
+**Sources added.** Six CISA joint-advisory STIX 2.1 bundles, each published as TLP:CLEAR with its advisory, pinned
+by URL and SHA-256 and vendored (`data/intel/advisories/`, short file names: the published names exceed Windows
+path limits; the manifest keeps the published URL). All were fetched with an ordinary client and accepted only on
+their pinned hash (`--from-file`, as before).
+
+| Bundle | Publisher's actor (quoted in the review) | ATT&CK Group | Indicators read |
+|---|---|---|---|
+| AA23-144A | "state-sponsored cyber actor known as Volt Typhoon" | Volt Typhoon G1017 | 9 file hashes |
+| AA23-347A | SVR, "also known as … (APT 29), the Dukes, CozyBear" | APT29 G0016 | 33 (hashes, 3 addresses, a domain, a URL) |
+| AA24-207A | "known publicly as Andariel, Onyx Sleet …" | Andariel G0138 | 124 file hashes |
+| AA24-241A | "Pioneer Kitten, Fox Kitten, UNC757 …" | Fox Kitten G0117 | 12 addresses and domains |
+| AA24-249A | GRU "161st Specialist Training Center (Unit 29155)" | Ember Bear G1003 | 208 (mostly file hashes) |
+| AA25-141A | GRU "85th GTsSS, military unit 26165" | APT28 G0007 | 65 addresses |
+
+Two attributions go through a unit rather than a vendor name: the publishers name GRU Unit 29155 and unit 26165.
+ATT&CK records Ember Bear as linked to Unit 29155 (citing this advisory) and APT28 as unit 26165; the review states
+this in each entry's `scope`, and AA24-249A's own caveat that vendor names may not map one to one. Every entry's
+quote is checked against the pinned bundle at load, as before.
+
+**Patterns (matching 1.1).** Most file indicators in these bundles are not plain `OR` lists. Read exactly:
+
+- redundant parentheses around a comparison or an `OR` group, and the unquoted `file:hashes.MD5` key;
+- file-hash comparisons joined by `AND` with `file:name` and `file:size`. Equality of a hash identifies the
+  file's content, which fixes its size and its other hashes, so those conjuncts add nothing an Observation could
+  contradict. **The name does not follow from the content**: where a pattern states a name, the observed file or
+  process image must carry one of the published names (case-insensitive) or there is no match — a renamed copy is
+  a miss, by design.
+
+Still refused and counted: `AND` between anything else, a name or size without a hash, `directory:path`,
+`email-addr` (no Observation carries one), and malformed patterns. Of 469 indicators in the seven bundles, 454 load
+(67 with a name condition) and 15 are refused (13 e-mail addresses, 2 malformed).
+
+**What a match means — unchanged.** D1 holds: a match is a contextual annotation and the verdict it can produce is
+`third_party_lead` (ADR-0017) — "an advisory names this actor for a value seen here" — never a technique feature,
+never a score. The review's `scope` says what each bundle's indicators are: many hashes are builds of public tools
+the actor used, and published addresses are often shared or compromised infrastructure, so a match outside the
+indicator's validity window is flagged (`within_validity: false`) and should be read as weak.
+
+**Checks.** `tests/test_indicators.py`: all seven bundles load with exactly their reviewed actor; every supported
+and refused pattern shape; a published file name is required where the pattern states one (same hash, other name:
+no match). The known-answer checks (`data/validation/known-answer-checks.json`) were regenerated with this set.
