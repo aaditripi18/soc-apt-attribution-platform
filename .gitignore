@@ -62,3 +62,6 @@ Thumbs.db
 # Interrupted-download temp file from scripts/acquire_attack_bundle.py's
 # atomic-write step — must never be committed even if a download fails.
 *.part
+
+# Local assistant/tooling settings (not part of the project)
+.claude/
