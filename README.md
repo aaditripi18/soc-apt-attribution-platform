@@ -138,6 +138,14 @@ python -m attribution_platform.investigation otrf-lsass-01-logonpasswords otrf-a
 # open http://127.0.0.1:8000/
 ```
 
+To investigate your own logs from the browser, start the console empty and use **Upload a Recording**
+([ADR-0020](docs/architecture/adr/0020-recording-upload.md)): the file goes through the same intake check and
+investigation as the command line, one at a time, and stays on this machine.
+
+```bash
+python -m attribution_platform.investigation --serve
+```
+
 For a lab recording, add the emulation tool's own report and the console sets what ran beside what was detected,
 step by step (a MITRE CALDERA operation report; its command text is never read):
 

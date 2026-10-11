@@ -65,6 +65,7 @@ export const links = {
   investigation: (id: string, tab?: string) => href(tab ? ["investigations", id, tab] : ["investigations", id]),
   unit: (id: string, tab?: string) => href(tab ? ["units", id, tab] : ["units", id]),
   units: (filters: Record<string, string | undefined> = {}) => href(["units"], filters),
+  upload: () => href(["upload"]),
   coverage: () => href(["coverage"]),
   dossier: (id?: string) => href(id ? ["dossier", id] : ["dossier"]),
   about: () => href(["about"]),

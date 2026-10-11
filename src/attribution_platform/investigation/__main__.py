@@ -4,7 +4,7 @@ results through the read-model API (ADR-0009) and the analyst frontend
 
     python -m attribution_platform.investigation <recording> [<recording> ...]
         [--serve] [--port N] [--elasticsearch] [--json out.json] [--dossier out.md]
-        [--emulation-report caldera-report.json]
+        [--emulation-report caldera-report.json] [--no-upload]
 
 Each ``<recording>`` is either a recording id pinned in
 ``data/calibration/corpus/v2/recordings.json`` (e.g. ``otrf-apt3-empire``) or a
@@ -21,8 +21,11 @@ persists them to the cluster configured by the same environment variables as
 ``python -m attribution_platform.api``. ``--serve`` then starts the read-model API
 on 127.0.0.1 (``--port``, default 8000); when the frontend has been built
 (``npm run build`` in ``frontend/``) the same address serves it. ``--dossier``
-needs exactly one recording. ``--emulation-report`` (one recording) is the emulation
-tool's own report of a lab run (a MITRE CALDERA operation report): each step it lists is
+needs exactly one recording. With ``--serve`` the console can also take a recording by
+upload (ADR-0020; this machine only, one investigation at a time, files kept in the
+git-ignored ``data/cache/uploads``); ``--serve`` alone starts an empty console to upload
+into, and ``--no-upload`` turns uploading off. ``--emulation-report`` (one recording) is the
+emulation tool's own report of a lab run (a MITRE CALDERA operation report): each step it lists is
 compared with what was detected (ADR-0019); its command text is never read. Nothing here
 ranks candidates or emits a confidence: analyses are uncalibrated until a
 calibration_version exists.
@@ -40,9 +43,10 @@ from pathlib import Path
 from attribution_platform.api.__main__ import elasticsearch_client_from_env
 from attribution_platform.api.context import load_api_context
 from attribution_platform.api.server import create_server
+from attribution_platform.api.uploads import RunResult, UploadService
 from attribution_platform.attack_knowledge.loader import AttackKnowledge, load_attack_knowledge
 from attribution_platform.attribution.collection_guidance import Detectability
-from attribution_platform.dataplane import ElasticClient, FakeElasticClient
+from attribution_platform.dataplane import ElasticClient, FakeElasticClient, SharedMemoryClient
 from attribution_platform.detection import (
     DetectionEngine,
     load_rule_pack,
@@ -169,6 +173,40 @@ def investigate(
     return Session(record=record, client=client)
 
 
+UPLOADS = REPO_ROOT / "data" / "cache" / "uploads"
+
+
+def upload_service(
+    client: ElasticClient, workbench: Workbench, *, directory: Path = UPLOADS
+) -> UploadService:
+    """The upload service of a serving session (ADR-0020): the same intake
+    check and the same investigation as the command line. With the in-memory
+    store, a run is prepared apart and published in one step, so a reader never
+    sees half an investigation."""
+
+    def run(source: RecordingSource) -> RunResult:
+        shared = client if isinstance(client, SharedMemoryClient) else None
+        target: ElasticClient = FakeElasticClient() if shared is not None else client
+        record = run_investigation(
+            source,
+            client=target,
+            engine=workbench.engine,
+            knowledge=workbench.knowledge,
+            detection_pack_content_hash=workbench.detection_pack_content_hash,
+            detectability=workbench.detectability,
+            indicators=workbench.indicators,
+        )
+        if shared is not None and isinstance(target, FakeElasticClient):
+            shared.absorb(target)
+        return RunResult(
+            investigation_id=record.investigation_id,
+            evidence=record.evidence,
+            units=len(record.units),
+        )
+
+    return UploadService(directory=directory, check=check_recording, run=run)
+
+
 def summary(session: Session) -> dict[str, object]:
     """Per-unit facts only — no ranking, no confidence."""
     units = []
@@ -209,7 +247,7 @@ def main(argv: Sequence[str] | None = None, env: dict[str, str] | None = None) -
             return 1
         client = configured
     else:
-        client = FakeElasticClient()
+        client = SharedMemoryClient()
 
     arguments = []
     for argument in args:
@@ -275,7 +313,10 @@ def main(argv: Sequence[str] | None = None, env: dict[str, str] | None = None) -
             known_answer_checks=KNOWN_ANSWER_CHECKS,
             actor_import_report=SIGMA_ACTOR_IMPORT_REPORT,
         )
-        server = create_server(client, host="127.0.0.1", port=port, context=context)
+        uploads = None if "--no-upload" in args else upload_service(client, workbench)
+        server = create_server(
+            client, host="127.0.0.1", port=port, context=context, uploads=uploads
+        )
         print(f"Serving the read-model API on http://127.0.0.1:{port}/api  (Ctrl+C to stop)")
         if context.static_dir is not None:
             print(f"Analyst frontend: http://127.0.0.1:{port}/")

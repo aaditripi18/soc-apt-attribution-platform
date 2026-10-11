@@ -57,8 +57,11 @@ export function InvestigationsPage() {
       {all.length === 0 ? (
         <EmptyState title="No investigations in the read model">
           <p>
-            Nothing has been investigated in this session. Run a recording through the engine; the
-            server keeps serving it afterwards.
+            Nothing has been investigated in this session.{" "}
+            <a href={links.upload()} className="text-primary hover:underline">
+              Upload a recording
+            </a>
+            , or run one through the engine from the command line; the server keeps serving it afterwards.
           </p>
           <Command>python -m attribution_platform.investigation otrf-apt3-empire --serve</Command>
         </EmptyState>

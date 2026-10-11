@@ -11,6 +11,7 @@ import { DossierPage } from "./pages/Dossier";
 import { InvestigationDetailPage } from "./pages/InvestigationDetail";
 import { InvestigationsPage } from "./pages/Investigations";
 import { UnitPage } from "./pages/Unit";
+import { UploadPage } from "./pages/Upload";
 import { UnitsSearchPage } from "./pages/UnitsSearch";
 
 function Titled({ crumbs, children }: { crumbs: Crumb[]; children: React.ReactNode }) {
@@ -69,6 +70,13 @@ function Page({ route }: { route: Route }) {
   }
   if (head === "units" && second !== undefined && rest.length === 0) {
     return <UnitPage key={second} id={second} tab={third} query={route.query} />;
+  }
+  if (head === "upload" && second === undefined) {
+    return (
+      <Titled crumbs={[{ label: "Upload a Recording" }]}>
+        <UploadPage />
+      </Titled>
+    );
   }
   if (head === "coverage" && second === undefined) {
     return (

@@ -9,6 +9,7 @@ import {
   Search,
   ShieldCheck,
   Target,
+  UploadCloud,
 } from "lucide-react";
 import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import {
@@ -29,6 +30,7 @@ export interface Crumb {
 
 const NAV = [
   { key: "investigations", label: "Investigations", href: links.investigations(), icon: FolderSearch },
+  { key: "upload", label: "Upload a Recording", href: links.upload(), icon: UploadCloud },
   { key: "units", label: "Units Search", href: links.units(), icon: Target },
   { key: "coverage", label: "Detection Coverage", href: links.coverage(), icon: Radar },
   { key: "dossier", label: "Attribution Dossier", href: links.dossier(), icon: FileText },
@@ -41,6 +43,7 @@ export function sectionOf(route: Route): Section {
   const head = route.segments[0];
   // A unit workspace is reached from its investigation; only the search is "Units Search".
   if (head === "units") return route.segments.length > 1 ? "investigations" : "units";
+  if (head === "upload") return "upload";
   if (head === "coverage") return "coverage";
   if (head === "dossier") return "dossier";
   if (head === "about") return "about";

@@ -71,7 +71,7 @@ from attribution_platform.dataplane.correlation_persistence import (
     persist_correlation_link,
 )
 from attribution_platform.dataplane.errors import ElasticIntegrationError
-from attribution_platform.dataplane.fake_client import FakeElasticClient
+from attribution_platform.dataplane.fake_client import FakeElasticClient, SharedMemoryClient
 from attribution_platform.dataplane.http_client import ElasticsearchHttpClient
 from attribution_platform.dataplane.mappings import (
     BEHAVIORAL_SEQUENCES_INDEX,
@@ -98,6 +98,7 @@ __all__ = [
     "ElasticIntegrationError",
     "ElasticsearchHttpClient",
     "FakeElasticClient",
+    "SharedMemoryClient",
     "OBSERVATIONS_INDEX",
     "OBSERVATIONS_MAPPING",
     "EVIDENCE_INDEX",

@@ -49,7 +49,11 @@ G0.3 already defined; no second schema). An unrecognized route or HTTP
 method needs no special handling: :class:`http.server.BaseHTTPRequestHandler`
 returns 404/501 on its own when no route matches or no ``do_<METHOD>`` is
 defined. Mutation methods (``POST``/``PUT``/``PATCH``/``DELETE``) are explicitly
-refused with 501 — no mutation endpoint exists; the request body is drained
+refused with 501 — no stored record can be changed. The one route that
+accepts input is ``POST /uploads`` (ADR-0020): it hands the server a new
+recording to investigate, only when the server was started with an upload
+service; ``GET /uploads`` and ``GET /uploads/<job_id>`` report on it. For a
+refused method the request body is drained
 first so the refusal always reaches the client (a real, intermittent
 connection-reset on Windows when it was not).
 """
@@ -83,6 +87,15 @@ from attribution_platform.api.read_model import (
     get_validation,
     list_investigation_summaries,
     search_units,
+)
+from attribution_platform.api.uploads import (
+    LengthRequiredError,
+    UploadRefusedError,
+    UploadsDisabledError,
+    UploadService,
+    disabled,
+    is_loopback,
+    same_origin,
 )
 from attribution_platform.dataplane import ElasticClient
 from attribution_platform.domain import Evidence, Observation, to_canonical_json
@@ -125,6 +138,8 @@ _REFERENCE: dict[str, Callable[[ApiContext], Any]] = {
     "validation": get_validation,
 }
 _API_PREFIX = "/api"
+#: ADR-0020: the one route that accepts input.
+_UPLOADS = "/uploads"
 #: Built-frontend paths served from ``static_dir`` (everything else is JSON).
 _STATIC_EXACT = frozenset({"/", "/index.html", "/favicon.svg", "/favicon.ico"})
 _STATIC_PREFIX = "/assets/"
@@ -225,7 +240,9 @@ def _dispatch(
 
 
 def make_handler(
-    client: ElasticClient, context: ApiContext | None = None
+    client: ElasticClient,
+    context: ApiContext | None = None,
+    uploads: UploadService | None = None,
 ) -> type[BaseHTTPRequestHandler]:
     """Build a ``BaseHTTPRequestHandler`` subclass bound to ``client``.
 
@@ -248,7 +265,53 @@ def make_handler(
                     self._write_file(found, immutable=path.startswith(_STATIC_PREFIX))
                     return
             try:
+                if path == _UPLOADS or path.startswith(_UPLOADS + "/"):
+                    self._write_json(HTTPStatus.OK, _serialize(self._uploads(path)))
+                    return
                 self._write_json(HTTPStatus.OK, _serialize(_dispatch(path, client, query, context)))
+            except ApiError as exc:
+                self._write_json(
+                    exc.status_code, json.dumps({"error": exc.message}, sort_keys=True)
+                )
+            except Exception as exc:  # noqa: BLE001 - last-resort safety net, never silent
+                self._write_json(
+                    HTTPStatus.INTERNAL_SERVER_ERROR,
+                    json.dumps({"error": f"unexpected server error: {exc}"}, sort_keys=True),
+                )
+
+        def _uploads(self, path: str) -> Any:
+            """``GET /uploads`` (the service and its jobs) and ``GET /uploads/<job_id>``."""
+            if path == _UPLOADS:
+                return uploads.describe() if uploads is not None else disabled()
+            if uploads is None:
+                raise NotFoundError(f"no such route: {path!r}")
+            return uploads.job(unquote(path[len(_UPLOADS) + 1 :]))
+
+        def do_POST(self) -> None:  # noqa: N802 - fixed name required by the base class
+            """``POST /api/uploads?name=<file name>`` with the archive as the raw
+            body (ADR-0020). Every other POST is refused like any mutation."""
+            parts = urlsplit(self.path)
+            if parts.path not in (_UPLOADS, _API_PREFIX + _UPLOADS):
+                self._refuse_mutation()
+                return
+            # The body is not read on a refusal, so the connection cannot be reused.
+            self.close_connection = True
+            try:
+                if uploads is None:
+                    raise UploadsDisabledError("this server was started without the upload service")
+                if not is_loopback(str(self.client_address[0])):
+                    raise UploadRefusedError("uploads are accepted from this machine only")
+                if not same_origin(self.headers.get("Origin"), self.headers.get("Host")):
+                    raise UploadRefusedError("uploads are accepted from this console only")
+                params = _parameters(parts.query)
+                if set(params) != {"name"}:
+                    raise InvalidIdentifierError("give the file name as ?name=<file name>")
+                raw_length = self.headers.get("Content-Length")
+                if raw_length is None or not raw_length.isdigit():
+                    raise LengthRequiredError("the upload must declare its Content-Length")
+                job = uploads.receive(params["name"], self.rfile, int(raw_length))
+                self.close_connection = False
+                self._write_json(HTTPStatus.ACCEPTED, _serialize(job))
             except ApiError as exc:
                 self._write_json(
                     exc.status_code, json.dumps({"error": exc.message}, sort_keys=True)
@@ -278,7 +341,7 @@ def make_handler(
                 ),
             )
 
-        do_POST = do_PUT = do_PATCH = do_DELETE = _refuse_mutation  # noqa: N815
+        do_PUT = do_PATCH = do_DELETE = _refuse_mutation  # noqa: N815
 
         def _write_json(self, status: int, json_body: str) -> None:
             body = json_body.encode("utf-8")
@@ -318,6 +381,7 @@ def create_server(
     host: str = "127.0.0.1",
     port: int = 0,
     context: ApiContext | None = None,
+    uploads: UploadService | None = None,
 ) -> ThreadingHTTPServer:
     """Build (but do not start) a server bound to ``client``.
 
@@ -329,5 +393,5 @@ def create_server(
     ``server.serve_forever()`` to actually accept connections;
     ``server.server_address`` gives the bound ``(host, port)`` once created.
     """
-    handler_cls = make_handler(client, context)
+    handler_cls = make_handler(client, context, uploads)
     return ThreadingHTTPServer((host, port), handler_cls)

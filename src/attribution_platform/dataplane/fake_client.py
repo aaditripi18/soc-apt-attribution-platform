@@ -22,6 +22,7 @@ tested deterministically and offline.
 
 from __future__ import annotations
 
+import threading
 from collections.abc import Mapping, Sequence
 from typing import Any
 
@@ -109,3 +110,46 @@ class FakeElasticClient:
     def mappings_for(self, index: str) -> Mapping[str, Any] | None:
         """The mappings ``ensure_index`` recorded for ``index`` (test convenience)."""
         return self._mappings.get(index)
+
+
+class SharedMemoryClient(FakeElasticClient):
+    """The in-memory store for a session in which one thread writes while
+    request threads read (ADR-0020): every operation holds one lock, and
+    :meth:`absorb` publishes a finished investigation in a single step, so a
+    reader sees either none of it or all of it."""
+
+    def __init__(self) -> None:
+        super().__init__()
+        self._lock = threading.RLock()
+
+    def ensure_index(self, index: str, mappings: Mapping[str, Any]) -> None:
+        with self._lock:
+            super().ensure_index(index, mappings)
+
+    def index_document(self, index: str, document_id: str, document: Mapping[str, Any]) -> None:
+        with self._lock:
+            super().index_document(index, document_id, document)
+
+    def get_document(self, index: str, document_id: str) -> Mapping[str, Any] | None:
+        with self._lock:
+            return super().get_document(index, document_id)
+
+    def search(
+        self,
+        index: str,
+        query: Mapping[str, Any],
+        *,
+        size: int,
+        sort: Sequence[str] = (),
+    ) -> tuple[Mapping[str, Any], ...]:
+        with self._lock:
+            return super().search(index, query, size=size, sort=sort)
+
+    def absorb(self, other: FakeElasticClient) -> None:
+        """Copy every index and document of ``other`` into this store at once."""
+        with self._lock:
+            for index, mappings in other._mappings.items():
+                super().ensure_index(index, mappings)
+                self._documents[index].update(
+                    {key: dict(document) for key, document in other._documents[index].items()}
+                )

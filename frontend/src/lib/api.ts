@@ -630,6 +630,37 @@ export interface EmulationComparison {
   schema_version: string;
 }
 
+export type UploadState = "queued" | "checking" | "analysing" | "done" | "refused" | "failed";
+
+/** ADR-0020: one uploaded recording and what became of it. */
+export interface UploadJob {
+  job_id: string;
+  file_name: string;
+  size_bytes: number;
+  sha256: string;
+  received_at: string;
+  state: UploadState;
+  started_at: string | null;
+  finished_at: string | null;
+  problems: string[];
+  warnings: string[];
+  records: number | null;
+  converted_by_source: Record<string, number>;
+  refused_records: number | null;
+  first_event: string | null;
+  last_event: string | null;
+  investigation_id: string | null;
+  evidence: number | null;
+  units: number | null;
+}
+
+export interface Uploads {
+  enabled: boolean;
+  max_bytes: number;
+  supported_suffixes: string[];
+  jobs: UploadJob[];
+}
+
 export class ApiFailure extends Error {
   readonly kind: ApiFailureKind;
   readonly status: number | null;
@@ -694,6 +725,7 @@ export const paths = {
   dossier: (id: string) => `/investigations/${encodeURIComponent(id)}/dossier`,
   assessment: (id: string) => `/investigations/${encodeURIComponent(id)}/assessment`,
   validation: () => "/validation",
+  uploads: () => "/uploads",
   activity: (id: string) => `/investigations/${encodeURIComponent(id)}/activity`,
   emulation: (id: string) => `/investigations/${encodeURIComponent(id)}/emulation`,
   unit: (id: string) => `/units/${encodeURIComponent(id)}`,
@@ -707,6 +739,41 @@ export const paths = {
   coverage: () => "/coverage",
   techniques: () => "/attack/techniques",
 };
+
+/**
+ * Send a recording to the server (ADR-0020): the file is the raw request body.
+ * XMLHttpRequest, not fetch, because only it reports upload progress.
+ */
+export function uploadRecording(file: File, onProgress: (fraction: number) => void): Promise<UploadJob> {
+  const path = `${paths.uploads()}?name=${encodeURIComponent(file.name)}`;
+  return new Promise((resolve, reject) => {
+    const xhr = new XMLHttpRequest();
+    xhr.open("POST", BASE + path);
+    xhr.setRequestHeader("Content-Type", "application/octet-stream");
+    xhr.upload.onprogress = (event) => {
+      if (event.lengthComputable) onProgress(event.loaded / event.total);
+    };
+    xhr.onerror = () => reject(new ApiFailure("unreachable", "The server did not answer the upload.", path, null));
+    xhr.onload = () => {
+      let body: unknown = null;
+      try {
+        body = JSON.parse(xhr.responseText);
+      } catch {
+        // handled below as a failure without a message
+      }
+      if (xhr.status === 202 && body) {
+        resolve(body as UploadJob);
+        return;
+      }
+      const message =
+        body && typeof body === "object" && "error" in body
+          ? String((body as { error: unknown }).error)
+          : `HTTP ${xhr.status}`;
+      reject(new ApiFailure(kindOf(xhr.status), message, path, xhr.status));
+    };
+    xhr.send(file);
+  });
+}
 
 // ---------------------------------------------------------------------------
 // Hook: one cached read per path
