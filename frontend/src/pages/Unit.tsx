@@ -5,7 +5,6 @@ import {
   Id,
   PageHeader,
   PageSkeleton,
-  UncalibratedBadge,
   cx,
 } from "../components/ui";
 import {
@@ -142,7 +141,6 @@ export function UnitPage({ id, tab, query }: { id: string; tab: string | undefin
             </span>
           </span>
         }
-        right={<UncalibratedBadge />}
       >
         <div className="mt-4 grid grid-cols-2 gap-x-8 gap-y-4 rounded-md border border-outline-variant/70 bg-surface-low p-4 lg:grid-cols-4 xl:grid-cols-6">
           <Field label="Unit id">

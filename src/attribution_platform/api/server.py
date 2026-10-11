@@ -28,8 +28,9 @@ Routes (all GET, nothing else) — G0.10 plus ADR-0009 v1:
   ``GET /units/<group_id>/evidence``, ``GET /investigations/<id>/dossier``,
   ``GET /investigations/<id>/assessment`` (ADR-0017),
   ``GET /investigations/<id>/activity`` and ``GET /investigations/<id>/emulation``
-  (ADR-0019),
-  ``GET /coverage``, ``GET /attack/techniques``, ``GET /validation`` (ADR-0017)
+  (ADR-0019), ``GET /investigations/<id>/profile-match`` (ADR-0021),
+  ``GET /coverage``, ``GET /attack/techniques``, ``GET /attack/groups`` (ADR-0021),
+  ``GET /validation`` (ADR-0017)
 
 Every route also answers under ``/api`` (``/api/units/...``): the frontend
 calls that prefix, so the same paths work behind the Vite dev proxy and when
@@ -73,6 +74,7 @@ from attribution_platform.api.errors import ApiError, InvalidIdentifierError, No
 from attribution_platform.api.read_model import (
     UNIT_SEARCH_PARAMETERS,
     get_assessment,
+    get_attack_groups,
     get_attack_techniques,
     get_coverage,
     get_dossier,
@@ -82,6 +84,7 @@ from attribution_platform.api.read_model import (
     get_investigation,
     get_investigation_activity,
     get_observation,
+    get_profile_match,
     get_unit,
     get_unit_evidence,
     get_validation,
@@ -129,12 +132,14 @@ _INVESTIGATION_VIEWS: dict[str, Callable[[ElasticClient, str], Any]] = {
     "/assessment": get_assessment,
     "/activity": get_investigation_activity,
     "/emulation": get_emulation_comparison,
+    "/profile-match": get_profile_match,
 }
 _EVIDENCE_SUFFIX = "/evidence"
 #: Reference routes answered from the :class:`ApiContext` alone.
 _REFERENCE: dict[str, Callable[[ApiContext], Any]] = {
     "coverage": get_coverage,
     "attack/techniques": get_attack_techniques,
+    "attack/groups": get_attack_groups,
     "validation": get_validation,
 }
 _API_PREFIX = "/api"

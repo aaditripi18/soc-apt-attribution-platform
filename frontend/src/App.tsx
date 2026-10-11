@@ -6,7 +6,9 @@ import { CrumbsContext, useCrumbs, type Crumb } from "./lib/crumbs";
 import { shortId } from "./lib/format";
 import { links, useRoute, type Route } from "./lib/router";
 import { AboutPage } from "./pages/About";
+import { ActorPage, ActorsPage } from "./pages/Actors";
 import { CoveragePage } from "./pages/Coverage";
+import { DashboardPage } from "./pages/Dashboard";
 import { DossierPage } from "./pages/Dossier";
 import { InvestigationDetailPage } from "./pages/InvestigationDetail";
 import { InvestigationsPage } from "./pages/Investigations";
@@ -34,8 +36,8 @@ function UnknownPage({ route }: { route: Route }) {
     <NotFoundState title="No such page">
       <p className="font-mono text-code-md">#/{route.segments.join("/")}</p>
       <div>
-        <Button href={links.investigations()} variant="primary">
-          Go to Investigations
+        <Button href={links.home()} variant="primary">
+          Go to Overview
         </Button>
       </div>
     </NotFoundState>
@@ -46,10 +48,20 @@ function Page({ route }: { route: Route }) {
   const [head, second, third, ...rest] = route.segments;
   if (head === undefined) {
     return (
-      <Titled crumbs={[{ label: "Investigations" }]}>
-        <InvestigationsPage />
+      <Titled crumbs={[{ label: "Overview" }]}>
+        <DashboardPage />
       </Titled>
     );
+  }
+  if (head === "actors" && second === undefined) {
+    return (
+      <Titled crumbs={[{ label: "Threat Actors" }]}>
+        <ActorsPage query={route.query} />
+      </Titled>
+    );
+  }
+  if (head === "actors" && second !== undefined && third === undefined) {
+    return <ActorPage key={second} id={second} />;
   }
   if (head === "investigations" && second === undefined) {
     return (
@@ -63,7 +75,7 @@ function Page({ route }: { route: Route }) {
   }
   if (head === "units" && second === undefined) {
     return (
-      <Titled crumbs={[{ label: "Units Search" }]}>
+      <Titled crumbs={[{ label: "Activity Search" }]}>
         <UnitsSearchPage query={route.query} />
       </Titled>
     );
@@ -73,28 +85,28 @@ function Page({ route }: { route: Route }) {
   }
   if (head === "upload" && second === undefined) {
     return (
-      <Titled crumbs={[{ label: "Upload a Recording" }]}>
+      <Titled crumbs={[{ label: "Analyze Logs" }]}>
         <UploadPage />
       </Titled>
     );
   }
   if (head === "coverage" && second === undefined) {
     return (
-      <Titled crumbs={[{ label: "Detection Coverage" }]}>
+      <Titled crumbs={[{ label: "Technique Coverage" }]}>
         <CoveragePage />
       </Titled>
     );
   }
   if (head === "dossier" && third === undefined) {
     return (
-      <Titled crumbs={[{ label: "Attribution Dossier" }]}>
+      <Titled crumbs={[{ label: "Reports" }]}>
         <DossierPage key={second ?? ""} id={second} />
       </Titled>
     );
   }
   if (head === "about" && second === undefined) {
     return (
-      <Titled crumbs={[{ label: "About & Provenance" }]}>
+      <Titled crumbs={[{ label: "Methodology" }]}>
         <AboutPage />
       </Titled>
     );

@@ -209,3 +209,82 @@ Admin Signal" fires 1,747 times — enrich-tier Evidence, as its Elastic classif
   construction, but needs the data indexed as Elastic integrations produce it (ingest pipelines, `process.args`,
   `winlog.*`), a running stack, and gives no offline, testable pipeline; kept as a possible later mode.
 - **Approximating `new_terms`, threshold or ES|QL aggregations as single-event rules** — changes their meaning.
+
+## Amendment B (2026-10-12) — PowerShell script-block rules, by exact token matching
+
+**Why:** owner instruction 2026-10-11 ("go ahead with the recommended steps"). Amendment A left Elastic's PowerShell
+rules out because `powershell.file.script_block_text` is an analysed `text` field with "no exact equivalent here".
+This amendment builds the exact equivalent instead of approximating it.
+
+**What the field is — read from the pinned repository, not assumed.** The data stream's manifest
+(`packages/windows/data_stream/powershell_operational/manifest.yml` @ `ff5328128a30`) defines
+
+```yaml
+powershell_script_analyzer: {type: pattern, pattern: '[\W&&[^-]]+'}
+```
+
+and its field definition gives `script_block_text` that analyzer. An Elasticsearch `pattern` analyzer splits the
+text on the pattern, drops empty pieces and lower-cases the rest; the pattern is a Java regular expression without
+the Unicode flag, so a token is a run of ASCII letters, digits, `_` and `-`, lower-cased.
+`detection/derived_powershell.py::powershell_script_tokens` is that analyzer.
+
+**What a rule's value means.** All 36 rules that read this data stream are KQL, and they compare the field with
+quoted values. On an analysed field that is a *phrase* query: the value is analysed the same way and matches when
+its tokens occur consecutively, in order. So `"System.Reflection.Assembly"` matches `[System.Reflection.Assembly]`
+and does not match `System.Assembly`; `"Invoke-Mimikatz"` is one token and does not match `Invoke-Mimikatzzz`.
+
+**How it is decided without a new operator.** The view returns the text as its tokens joined and enclosed by single
+spaces; a phrase is translated to the same form of its own tokens. No token contains a space, so "the phrase's form
+is a substring of the text's form" is exactly "its tokens occur consecutively" — the engine's existing `contains`
+decides it. Alternative phrases on the field (`field : ("a" or "b" …)`) become one any-of condition, as they are
+one clause in Elasticsearch, instead of one branch each.
+
+**Refused, never loosened** (each a counted translation gap that drops only its own branch):
+
+| Construct | Why |
+|---|---|
+| an unquoted value of several tokens | it is not a phrase: Elasticsearch matches any of its tokens |
+| a wildcard on the field | matched against individual tokens in Elasticsearch, not reproduced |
+| a value with no token (`"::"`) | matches no document; among alternatives it is simply left out |
+| the entropy / length fields (`kql:range`) | numeric ranges are not translated (2 rules) |
+
+**The rest of the stream.** One event profile, script-block event 4104: the pipeline's constants for it
+(`event.category: process`, `event.type: info`, `event.code`, `event.provider`; no `event.action`) and the views
+`file.path` / `file.name` / `file.directory` / `file.extension` (the pipeline's own rule: name and directory only
+for a path containing a backslash), `user.id` and `process.pid`. The shared pipeline file is the one the vendored
+`default.yml.link` names by SHA-256 (`e07f1bff…8948`), and the views are checked against Elastic's pipeline fixtures
+for this data stream (`windows_powershell_operational`, both fixture forms). No fixture script block carries a
+script path; those four views are verified by reading the pipeline and are listed as such in the test.
+
+**Result.**
+
+| | Before | After |
+|---|---|---|
+| Elastic rules usable | 440 | 470 (444 whole, 26 in part) |
+| Elastic PowerShell rules usable | 0 | 30 of 36 (2 need numeric ranges, 3 exceed the branch bound, 1 targets another PowerShell event) |
+| Techniques with an Elastic rule | 271 | 291 |
+| Techniques covered by any content | 395 of 697 | 398 of 697 |
+| …of those used by an active Group | 314 of 498 | 317 of 498 |
+
+The net gain is three techniques because Sigma already covered most of what these rules map to. What changes more
+is depth: PowerShell activity that Sigma's substring rules missed now has a second, independently written rule set.
+
+**Measured on real recordings** (the 30 rules alone, over every 4104 event):
+
+| Recording | Script-block events | Firings |
+|---|---|---|
+| `otrf-apt3-empire` | 140 | 5 — AMSI bypass (4), clipboard retrieval (1) |
+| `otrf-lsass-01-logonpasswords` | 0 | 0 |
+| lab `pilot-02` | 157 | 0 |
+
+`pilot-02` is the lab run whose missed discovery steps `lab-pilot-results.md` tentatively put down to this gap. It
+was not the cause: the run's steps are plain built-in commands that none of these rules is written for. That
+document is corrected.
+
+**Also in this change (ADR-0008 record of 2026-10-11):** the Windows System log adapter, and a fix to
+`scripts/build_coverage_report.py`, which selected "the first `*.rules.json`" and had silently started reading the
+actor-specific pack once ADR-0018 added it beside the technique pack.
+
+**Not done:** Elastic's sequence, threshold, new-terms, ES|QL and machine-learning rules (they need state across
+events or another query engine); the Elastic Defend, CrowdStrike and SentinelOne data streams (telemetry this
+platform does not ingest); Linux `auditd_manager`; Azure activity logs.

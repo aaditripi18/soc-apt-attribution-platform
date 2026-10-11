@@ -78,6 +78,7 @@ _FIELDS = {
     "scheduled_task.name": ("task", "TaskName"),
     "scheduled_task.content": ("task", "TaskContent"),
     "service.name": ("service", "ServiceName"),
+    "service.file_name": ("service", "ImagePath"),
 }
 _NEUTRAL = {
     "CommandLine": "C:\\Windows\\System32\\notepad.exe C:\\Users\\a\\notes.txt",
@@ -90,6 +91,7 @@ _NEUTRAL = {
     "TaskName": "\\Example Task",
     "TaskContent": "<Task><Actions><Exec><Command>notepad.exe</Command></Exec></Actions></Task>",
     "ServiceName": "ExampleService",
+    "ImagePath": "C:\\Program Files\\Example\\service.exe",
 }
 
 
@@ -142,7 +144,12 @@ def _record(rule: DetectionRule, *, neutral: bool) -> dict[str, Any]:
                 **fields,
             },
         )
-    record = copy.deepcopy(_golden("b-4698" if kind == "task" else "b-4697"))
+    system_log = any(
+        c.field_path == "event.dataset" and c.value == "system.system" for c in rule.conditions
+    )
+    record = copy.deepcopy(
+        _golden("b-4698" if kind == "task" else "sys-7045" if system_log else "b-4697")
+    )
     record.pop("message", None)
     _event_data(record).update(fields)
     return record

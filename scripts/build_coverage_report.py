@@ -38,8 +38,14 @@ def main() -> int:
     args = parser.parse_args()
 
     generated = REPO_ROOT / "data" / "detection" / "sigma" / args.tag / "generated"
-    sigma_pack = next(generated.glob("*.rules.json"))
-    sigma_report = next(generated.glob("*.import-report.json"))
+    # The technique pack only: the actor-specific pack (ADR-0018) beside it maps
+    # rules to Groups, not techniques, and is no part of technique coverage.
+    sigma_pack = next(
+        p for p in sorted(generated.glob("*.rules.json")) if "actor-specific" not in p.name
+    )
+    sigma_report = sigma_pack.with_name(
+        sigma_pack.name.replace(".rules.json", ".import-report.json")
+    )
 
     # Production detection content = the Sigma pack generated against the
     # current ATT&CK pin. fixtures/phase1_core_rules.json is a Phase-1

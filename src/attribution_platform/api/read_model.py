@@ -50,6 +50,7 @@ from attribution_platform.domain import (
 from attribution_platform.investigation.assessment import load_assessment
 from attribution_platform.investigation.dossier import DOSSIER_VERSION, render_dossier
 from attribution_platform.investigation.emulation import load_emulation_comparison
+from attribution_platform.investigation.profile_match import load_profile_match
 from attribution_platform.investigation.records import (
     list_investigations,
     load_attribution_analysis,
@@ -114,6 +115,20 @@ def get_assessment(client: ElasticClient, investigation_id: str) -> Mapping[str,
         raise BackendError(f"could not load the assessment of {investigation_id!r}: {exc}") from exc
     if record is None:
         raise NotFoundError(f"no assessment found for investigation_id={investigation_id!r}")
+    return record
+
+
+def get_profile_match(client: ElasticClient, investigation_id: str) -> Mapping[str, Any]:
+    """The stored behavioural profile match of one investigation (ADR-0021)."""
+    investigation_id = _validate_identifier(investigation_id, field="investigation_id")
+    try:
+        record = load_profile_match(client, investigation_id)
+    except ElasticIntegrationError as exc:
+        raise BackendError(
+            f"could not load the profile match of {investigation_id!r}: {exc}"
+        ) from exc
+    if record is None:
+        raise NotFoundError(f"no profile match for investigation_id={investigation_id!r}")
     return record
 
 
@@ -357,6 +372,12 @@ def _reference(value: Any, what: str) -> Any:
 def get_attack_techniques(context: ApiContext) -> Mapping[str, Any]:
     """Active ATT&CK techniques with tactics and Group prevalence."""
     return _reference(context.techniques, "the ATT&CK technique catalogue")  # type: ignore[no-any-return]
+
+
+def get_attack_groups(context: ApiContext) -> Mapping[str, Any]:
+    """Every active ATT&CK Group's profile and the group-specific evidence the
+    platform holds for it (ADR-0021)."""
+    return _reference(context.groups, "the ATT&CK Group catalogue")  # type: ignore[no-any-return]
 
 
 def get_validation(context: ApiContext) -> Mapping[str, Any]:

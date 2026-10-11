@@ -4,7 +4,6 @@ import {
   Badge,
   Card,
   CardHeader,
-  Command,
   EmptyState,
   ErrorState,
   Id,
@@ -55,15 +54,13 @@ export function InvestigationsPage() {
       </div>
 
       {all.length === 0 ? (
-        <EmptyState title="No investigations in the read model">
+        <EmptyState title="No investigations yet">
           <p>
-            Nothing has been investigated in this session.{" "}
+            Upload a log archive to start.{" "}
             <a href={links.upload()} className="text-primary hover:underline">
-              Upload a recording
+              Analyze logs
             </a>
-            , or run one through the engine from the command line; the server keeps serving it afterwards.
           </p>
-          <Command>python -m attribution_platform.investigation otrf-apt3-empire --serve</Command>
         </EmptyState>
       ) : (
         <Card padded={false}>

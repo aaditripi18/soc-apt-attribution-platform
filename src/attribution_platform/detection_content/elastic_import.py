@@ -73,7 +73,7 @@ from attribution_platform.detection_content.sigma_import import (
 )
 
 IMPORTER_METHOD = "elastic-importer"
-IMPORTER_VERSION = "1.1"  # 1.1: several data streams
+IMPORTER_VERSION = "1.2"  # 1.1: several data streams; 1.2: analysed text fields
 
 CORE_SEVERITIES = frozenset({"medium", "high", "critical"})
 ENRICH_SEVERITIES = frozenset({"low"})
@@ -238,6 +238,32 @@ def _literal(pred: Pred, negate: bool, views: ViewSet) -> Item:
     if ecs_type is None:
         return Gap(GapKind.TELEMETRY, f"field:{pred.field}")
     operator, value, case_insensitive = pred.operator, pred.value, pred.case_insensitive
+    if ecs_type == "text":
+        # An analysed field (ADR-0015 Amendment B): a quoted value is a phrase of
+        # the field's tokens. Any other use is not reproduced.
+        if operator not in ("equals", "in") or pred.boolean:
+            return Gap(GapKind.TRANSLATION, f"text_field:{pred.field}:{operator}")
+        forms = []
+        for phrase in value if isinstance(value, tuple) else (str(value),):
+            form = views.analyzers[pred.field](phrase)
+            if form is None:
+                # no token: in Elasticsearch such a phrase matches no document, so
+                # among alternatives it adds nothing
+                continue
+            if not pred.quoted and form.count(" ") > 2:
+                # an unquoted value of several tokens is not a phrase (any token matches)
+                return Gap(GapKind.TRANSLATION, f"text_field:{pred.field}:unquoted_multi_token")
+            forms.append(form)
+        if not forms:
+            return Gap(GapKind.TRANSLATION, f"text_field:{pred.field}:value_without_tokens")
+        unique = tuple(dict.fromkeys(forms))
+        return Literal(
+            views.path(pred.field),
+            "contains",
+            unique[0] if len(unique) == 1 else unique,  # type: ignore[arg-type]
+            False,
+            negate,
+        )
     if ecs_type == "boolean":
         # A boolean field holds only true / false (the view renders them so).
         values = value if isinstance(value, tuple) else (value,)
@@ -280,9 +306,40 @@ def _literal(pred: Pred, negate: bool, views: ViewSet) -> Item:
     )
 
 
+def _merge_phrases(node: Or, views: ViewSet) -> Node:
+    """Alternative quoted phrases on one analysed field as a single any-of
+    predicate (what ``field : ("a" or "b")`` is), so a long list of phrases is one
+    condition rather than one branch each."""
+    phrases: dict[str, list[str]] = {}
+    rest: list[Node] = []
+    for child in node.args:
+        if (
+            isinstance(child, Pred)
+            and child.quoted
+            and child.operator == "equals"
+            and isinstance(child.value, str)
+            and views.type_of(child.field) == "text"
+        ):
+            phrases.setdefault(child.field, []).append(child.value)
+        else:
+            rest.append(child)
+    merged: list[Node] = [
+        Pred(field, "equals", values[0], False, quoted=True)
+        if len(values) == 1
+        else Pred(field, "in", tuple(dict.fromkeys(values)), False, quoted=True)
+        for field, values in phrases.items()
+    ]
+    args = (*merged, *rest)
+    return args[0] if len(args) == 1 else Or(args)
+
+
 def _dnf(node: Node, negated: bool, bound: int, views: ViewSet) -> list[Conjunct]:
     if isinstance(node, Not):
         return _dnf(node.arg, not negated, bound, views)
+    if isinstance(node, Or):
+        node = _merge_phrases(node, views)
+        if not isinstance(node, And | Or):
+            return _dnf(node, negated, bound, views)
     if isinstance(node, And | Or):
         conjunctive = isinstance(node, And) != negated
         children = [_dnf(child, negated, bound, views) for child in node.args]

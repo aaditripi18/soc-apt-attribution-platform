@@ -49,6 +49,7 @@ the later ADRs below record each subsystem as it was designed, measured and buil
 | [adr/0018-actor-specific-evidence.md](adr/0018-actor-specific-evidence.md) | Actor-specific evidence: Sigma rules that name a Group, used only where a per-rule review accepts the tag (14 of 52); Group-referenced Evidence; the one verdict that names a Group, as a lead; 0 firings on 1.13 M real observations | **ACCEPTED** (2026-10-11), implemented |
 | [adr/0019-investigation-views-and-ran-versus-detected.md](adr/0019-investigation-views-and-ran-versus-detected.md) | Investigation views drawn from one activity route (ATT&CK matrix, Evidence over time by tactic) and ran versus detected: an emulation tool's report set beside the Evidence step by step, by fixed rules, never reading its command text | **ACCEPTED** (2026-10-11), implemented |
 | [adr/0020-recording-upload.md](adr/0020-recording-upload.md) | Recording upload: one bounded, local-only input route; a job runs the command line's own intake check and investigation, one at a time, and publishes the result whole | **ACCEPTED** (2026-10-11), implemented |
+| [adr/0021-behavioural-profile-match-and-response.md](adr/0021-behavioural-profile-match-and-response.md) | Behavioural overlap per Group (one stated formula; a similarity, not a confidence), clusters of Groups the evidence cannot separate, ATT&CK mitigations for what was observed, a Group catalogue, and the console reorganised around detection, attribution and response | **ACCEPTED** (2026-10-12), implemented |
 
 ## The one-paragraph summary
 

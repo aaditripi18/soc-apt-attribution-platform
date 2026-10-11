@@ -12,7 +12,6 @@ import {
   Td,
   TextInput,
   Th,
-  UncalibratedBadge,
   cx,
 } from "../../components/ui";
 import type { CandidateRow } from "../../lib/derive";
@@ -45,7 +44,7 @@ function Contributions({ row, data }: { row: CandidateRow; data: UnitData }) {
         <Info size={13} className="mt-0.5 shrink-0 text-warning" />
         <p className="max-w-3xl">
           These are ADR-0005’s documented quantities for this candidate, shown so the comparison can be checked by hand. They
-          are uncalibrated: not probabilities, not a confidence, and this table is never ordered by them.
+          are comparison quantities, not probabilities; the investigation's Attribution tab orders groups by overlap.
         </p>
       </div>
       {row.candidate.attack_external_id && (
@@ -174,8 +173,7 @@ export function CandidatesTab({ data }: { data: UnitData }) {
 
   return (
     <div className="space-y-4">
-      <div className="flex items-start gap-3 rounded-md border border-warning/30 bg-warning/5 px-4 py-3">
-        <UncalibratedBadge compact />
+      <div className="flex items-start gap-3 rounded-md border border-outline-variant/70 bg-surface-low px-4 py-3">
         <p className="text-body-md text-on-surface-variant">
           Every ATT&amp;CK Group or Campaign whose recorded profile includes at least one observed technique,{" "}
           <span className="font-semibold text-on-surface">in alphabetical order</span>. A filled dot means ATT&amp;CK records

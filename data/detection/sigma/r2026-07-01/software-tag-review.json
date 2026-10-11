@@ -85,6 +85,22 @@
       "reason": "Requires the \\PSEXESVC named pipe, created by the Sysinternals PsExec service itself. Reviewed 2026-09-25 when pipe_created became importable (ADR-0008 batch C)."
     },
     {
+      "sigma_id": "42c575ea-e41e-41f1-b248-8093c3e82a28",
+      "title": "PsExec Service Installation",
+      "tag": "attack.s0029",
+      "software": "PsExec",
+      "decision": "accept",
+      "reason": "Both alternatives are PsExec's own service: the service name PSEXESVC, or an image path ending in \\PSEXESVC.exe (System log 7045)."
+    },
+    {
+      "sigma_id": "4976aa50-8f41-45c6-8b15-ab3fc10e79ed",
+      "title": "Credential Dumping Tools Service Execution - System",
+      "tag": "attack.s0005",
+      "software": "Windows Credential Editor",
+      "decision": "reject",
+      "reason": "The image-path list names several other tools (cachedump, gsecdump, mimidrv, pwdump, fgexec); a match does not identify Windows Credential Editor."
+    },
+    {
       "sigma_id": "4e2ed651-1906-4a59-a78a-18220fca1b22",
       "title": "PUA - NirCmd Execution",
       "tag": "attack.s0029",
@@ -219,6 +235,14 @@
       "software": "BITSAdmin",
       "decision": "accept",
       "reason": "Requires bitsadmin.exe (image or OriginalFileName)."
+    },
+    {
+      "sigma_id": "d26ce60c-2151-403c-9a42-49420d87b5e4",
+      "title": "HackTool Service Registration or Execution",
+      "tag": "attack.s0029",
+      "software": "PsExec",
+      "decision": "reject",
+      "reason": "It matches service names of several unrelated tools and any image path containing 'bypass'; nothing in it identifies PsExec."
     },
     {
       "sigma_id": "d9047477-0359-48c9-b8c7-792cedcdc9c4",

@@ -18,10 +18,10 @@ import {
 } from "./ui";
 
 export const VERDICT_LABEL: Record<Verdict, string> = {
-  no_decision_features: "Nothing attributable",
-  not_distinguishable: "No actor can be singled out",
-  third_party_lead: "No actor singled out · advisory lead",
-  actor_specific_evidence: "Actor-specific evidence · a lead",
+  no_decision_features: "No comparable behaviour",
+  not_distinguishable: "Behavioural match only",
+  third_party_lead: "Advisory indicator match",
+  actor_specific_evidence: "Group identified",
 };
 
 /** One sentence on how the platform has done on recordings with a known answer. */

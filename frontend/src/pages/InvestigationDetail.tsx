@@ -1,9 +1,7 @@
 import { FileText, Search, X } from "lucide-react";
-import { AssessmentCard } from "../components/Assessment";
 import { useMemo, useState } from "react";
 import {
   AttackId,
-  Badge,
   Button,
   Card,
   CardHeader,
@@ -18,14 +16,15 @@ import {
   Td,
   TextInput,
   Th,
-  UncalibratedBadge,
   cx,
 } from "../components/ui";
 import {
   paths,
   useApi,
   type Activity,
+  type Assessment,
   type Investigation,
+  type ProfileMatchRecord,
   type TechniqueCatalogue,
   type UnitSearch,
   type UnitSummary,
@@ -45,17 +44,41 @@ import {
 } from "../lib/format";
 import { links, navigate } from "../lib/router";
 import { ActivityTimelineTab } from "./investigation/ActivityTimeline";
+import { AttributionHeadline, AttributionTab } from "./investigation/Attribution";
 import { EmulationTab } from "./investigation/Emulation";
 import { MatrixTab } from "./investigation/Matrix";
+import { ResponseTab } from "./investigation/Response";
 
 const TABS = [
   { key: "overview", label: "Overview" },
+  { key: "attribution", label: "Attribution" },
   { key: "matrix", label: "ATT&CK matrix" },
   { key: "timeline", label: "Timeline" },
-  { key: "emulation", label: "Ran vs detected" },
+  { key: "response", label: "Response" },
+  { key: "emulation", label: "Detection validation" },
 ] as const;
 
 type TabKey = (typeof TABS)[number]["key"];
+
+/** The attribution outcome in brief, with the way into its detail. */
+function AttributionSummary({ id }: { id: string }) {
+  const assessment = useApi<Assessment>(paths.assessment(id));
+  const profile = useApi<ProfileMatchRecord>(paths.profileMatch(id));
+  if (assessment.state !== "ready" || profile.state !== "ready") return null;
+  return (
+    <Card>
+      <div className="flex flex-wrap items-start justify-between gap-4">
+        <AttributionHeadline assessment={assessment.data} match={profile.data} />
+        <div className="flex shrink-0 gap-2">
+          <Button href={links.investigation(id, "attribution")} variant="primary">
+            Attribution detail
+          </Button>
+          <Button href={links.investigation(id, "response")}>Response</Button>
+        </div>
+      </div>
+    </Card>
+  );
+}
 
 /** The matrix and the timeline are two drawings of one read: the investigation's activity. */
 function ActivityView({ id, view }: { id: string; view: "matrix" | "timeline" }) {
@@ -205,15 +228,14 @@ export function InvestigationDetailPage({ id, tab }: { id: string; tab?: string 
         title={record.source_id}
         right={
           <>
-            <UncalibratedBadge />
             <Button href={links.dossier(record.investigation_id)} variant="primary">
               <FileText size={14} />
-              Attribution dossier
+              Full report
             </Button>
           </>
         }
       >
-        <div className="mt-4 grid grid-cols-1 gap-x-8 gap-y-4 rounded-md border border-outline-variant/70 bg-surface-low p-4 md:grid-cols-2 xl:grid-cols-4">
+        <div className="mt-4 grid grid-cols-1 gap-x-8 gap-y-4 rounded-md border border-outline-variant/70 bg-surface-low p-4 md:grid-cols-2 xl:grid-cols-3">
           <Field label="Investigation id">
             <Id value={record.investigation_id} display={shortId(record.investigation_id, 18)} />
           </Field>
@@ -223,22 +245,6 @@ export function InvestigationDetailPage({ id, tab }: { id: string; tab?: string 
           <Field label="ATT&CK knowledge base">
             <span className="font-mono text-code-md">{record.attack_kb_version}</span>
           </Field>
-          <Field label="Detection pack set">
-            <Id
-              value={record.detection_pack_content_hash}
-              display={shortHash(record.detection_pack_content_hash, 20)}
-            />
-          </Field>
-          <div className="md:col-span-2 xl:col-span-4">
-            <div className="label mb-1.5">Method versions</div>
-            <div className="flex flex-wrap gap-1.5">
-              {Object.entries(record.method_versions).map(([name, version]) => (
-                <Badge key={name} tone="muted" className="normal-case tracking-normal">
-                  {name} <span className="text-on-surface">{version}</span>
-                </Badge>
-              ))}
-            </div>
-          </div>
         </div>
       </PageHeader>
 
@@ -270,6 +276,8 @@ export function InvestigationDetailPage({ id, tab }: { id: string; tab?: string 
 
       {(active === "matrix" || active === "timeline") && <ActivityView id={id} view={active} />}
       {active === "emulation" && <EmulationTab investigationId={id} />}
+      {active === "attribution" && <AttributionTab investigationId={id} />}
+      {active === "response" && <ResponseTab investigationId={id} />}
       {active === "overview" && renderOverview()}
     </>
   );
@@ -295,7 +303,7 @@ export function InvestigationDetailPage({ id, tab }: { id: string; tab?: string 
         </div>
 
         {units.length === 0 ? (
-          <EmptyState title="No units — no detection matched this recording">
+          <EmptyState title="No detections in this log source">
             <p>
               The engine read the source and no pinned rule fired on it, so there is no Evidence, no
               unit and nothing to attribute. That is a result, not an error.
@@ -309,7 +317,7 @@ export function InvestigationDetailPage({ id, tab }: { id: string; tab?: string 
           </EmptyState>
         ) : (
           <div className="space-y-6">
-            <AssessmentCard investigationId={record.investigation_id} />
+            <AttributionSummary id={record.investigation_id} />
             {record.evidence_outside_units > 0 && (
               <p className="max-w-4xl text-body-md text-on-surface-variant">
                 <span className="text-on-surface">{integer(record.evidence_outside_units)} low-level Evidence items are in no unit.</span>{" "}

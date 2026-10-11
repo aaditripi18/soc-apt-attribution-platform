@@ -66,6 +66,7 @@ from attribution_platform.sources.precedence import apply_source_precedence
 from attribution_platform.sources.sysmon import SysmonSourceAdapter
 from attribution_platform.sources.sysmon_xml import is_sysmon_event_xml
 from attribution_platform.sources.windows_security import WindowsSecuritySourceAdapter
+from attribution_platform.sources.windows_system import WindowsSystemSourceAdapter
 from attribution_platform.sources.zeek import (
     ZeekSourceAdapter,
     ZeekTsvReader,
@@ -112,6 +113,7 @@ DEFAULT_CHANNEL_ADAPTERS: Mapping[str, Any] = {
     ZEEK_CHANNEL: ZeekSourceAdapter(),
     "microsoft-windows-powershell/operational": PowerShellSourceAdapter(),
     "security": WindowsSecuritySourceAdapter(),
+    "system": WindowsSystemSourceAdapter(),
 }
 
 

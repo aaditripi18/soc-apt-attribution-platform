@@ -86,12 +86,8 @@ export function ProvenanceTab({ data, unitId }: { data: UnitData; unitId: string
       </Card>
 
       <Card padded={false}>
-        <CardHeader title="Attribution analysis" hint="Why this page shows no likelihood, confidence or ranking." />
+        <CardHeader title="Attribution analysis" />
         <dl>
-          <Row label="Calibration status">
-            <Badge tone="warning">{analysis.calibration_status}</Badge>
-          </Row>
-          <Row label="Calibration version">{analysis.calibration_version ?? "none exists"}</Row>
           <Row label="ATT&CK knowledge base">{analysis.attack_kb_version}</Row>
           <Row label="Comparison">
             {analysis.comparison_status === "computed" ? (
@@ -104,9 +100,6 @@ export function ProvenanceTab({ data, unitId }: { data: UnitData; unitId: string
           <Row label="Guidance method">{analysis.collection_guidance?.method_version ?? "—"}</Row>
           <Row label="Record schema">{analysis.schema_version}</Row>
         </dl>
-        <p className="border-t border-outline-variant/40 px-4 py-3 text-body-md text-on-surface-variant">
-          {analysis.calibration_note}
-        </p>
       </Card>
 
       <Card padded={false}>

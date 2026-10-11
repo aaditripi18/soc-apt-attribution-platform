@@ -1,7 +1,7 @@
 {
  "report_version": 1,
  "source_manifest_sha256": "2ce2f153668819910602fa4d66004383b86d977975223f87a6a8eb0403db8de1",
- "sigma_pack_sha256": "8b9e2cba85a166c003ebcabc110b2793cdeadfa89213316dd7ee1335c8399e09",
+ "sigma_pack_sha256": "09381bfa006cb9e42fe545fe37fd89c9a58e9f0a9baa0583209281614135bb23",
  "entra_id": {
   "observations": 579,
   "os_types": [],

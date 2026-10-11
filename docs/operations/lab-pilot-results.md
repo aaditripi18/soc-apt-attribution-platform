@@ -61,9 +61,10 @@ child of it) on its host inside its time window ± 10 s.
 > show it), counted "3 of 7" techniques, and credited the 115 T1069.001 items to step 7 by name. The stored
 > comparison above replaces it.
 
-The steps were issued through PowerShell, and rules that read PowerShell script-block text are a documented gap
-(ADR-0015: "PowerShell script-block text" not offered), which is the likely reason for the misses — not yet
-confirmed rule by rule.
+The first version of this page put the misses down to Elastic's PowerShell script-block rules not being imported.
+That was a guess and it was wrong: those rules were imported on 2026-10-12 (ADR-0015 Amendment B) and fire on none
+of this run's 157 script-block events. The missed steps are single built-in commands; no pinned rule, Sigma or
+Elastic, is written for them at a level that separates them from ordinary administration.
 
 What the platform did find, beyond the plan's own technique labels (224 Evidence items, 2 attribution units):
 

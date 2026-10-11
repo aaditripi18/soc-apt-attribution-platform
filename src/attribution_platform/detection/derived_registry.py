@@ -21,6 +21,7 @@ from attribution_platform.detection.derived_cloud import (
     OKTA_VIEWS,
 )
 from attribution_platform.detection.derived_fields import SYSMON_VIEWS
+from attribution_platform.detection.derived_powershell import POWERSHELL_VIEWS
 from attribution_platform.detection.derived_security import SECURITY_VIEWS
 from attribution_platform.detection.derived_views import ViewSet
 from attribution_platform.domain import Observation
@@ -31,6 +32,7 @@ VIEW_SETS: Mapping[str, ViewSet] = MappingProxyType(
         for views in (
             SYSMON_VIEWS,
             SECURITY_VIEWS,
+            POWERSHELL_VIEWS,
             CLOUDTRAIL_VIEWS,
             O365_VIEWS,
             AZURE_AUDIT_VIEWS,

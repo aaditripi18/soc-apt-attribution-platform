@@ -1,0 +1,33 @@
+{
+ "source": "elastic/integrations (Elastic integration ingest pipeline and pipeline test fixtures)",
+ "source_commit": "ff5328128a30c75046130ae58ddba450caa1f2dc",
+ "license": "Elastic License 2.0",
+ "license_url": "https://github.com/elastic/integrations/blob/ff5328128a30c75046130ae58ddba450caa1f2dc/LICENSE.txt",
+ "retrieved_at_utc": "2026-10-11T18:33:25Z",
+ "method": "scripts/acquire_elastic_conformance.py (commit-pinned; each file verified against its git blob id)",
+ "approval": "owner instruction 2026-10-10 (extend Elastic rules to further log sources)",
+ "purpose": "Conformance oracle for the derived ECS views of this data stream (ADR-0015).",
+ "files": [
+  {
+   "path": "fixtures/test-events.json",
+   "upstream_path": "packages/windows/data_stream/powershell_operational/_dev/test/pipeline/test-events.json",
+   "blob_id": "562f628f2d9b1a349a50aa3c4fda7b5e850316fd",
+   "size_bytes": 59731,
+   "sha256": "cbfc027f2c2b63a58a1a362ef727c70460ceac78963581ec803abf5565b922fc"
+  },
+  {
+   "path": "fixtures/test-events.json-expected.json",
+   "upstream_path": "packages/windows/data_stream/powershell_operational/_dev/test/pipeline/test-events.json-expected.json",
+   "blob_id": "3cd9b02ff7d2b1b4f6df1bba12f23edc1be5014a",
+   "size_bytes": 76125,
+   "sha256": "80b467b6d225401aa8f7216200df3176baf5e10d45d703eab0519fce1b893bb6"
+  },
+  {
+   "path": "pipeline/default.yml.link",
+   "upstream_path": "packages/windows/data_stream/powershell_operational/elasticsearch/ingest_pipeline/default.yml.link",
+   "blob_id": "4003e1d77f58accd052ad8324092d5aaf0d32893",
+   "size_bytes": 132,
+   "sha256": "48c975b483d98368bc37551adad490fd4b229b09282b3bedf88665831becc780"
+  }
+ ]
+}

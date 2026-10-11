@@ -4,7 +4,6 @@ import { Badge, Card, CardHeader, ErrorState, Id, PageHeader, PageSkeleton, Td, 
 import {
   paths,
   useApi,
-  useHealth,
   type Coverage,
   type KnownAnswerCase,
   type TechniqueCatalogue,
@@ -45,7 +44,7 @@ const STAGES: { name: string; text: string }[] = [
   },
   {
     name: "Explanation",
-    text: "The result is a set of facts: which candidates’ profiles include which observed techniques, what would tell them apart, and which advisory indicators coincide. Nothing is ranked.",
+    text: "The result is a set of facts: which candidates’ profiles include which observed techniques, what would tell them apart, and which advisory indicators coincide. Groups are ordered by behavioural overlap, and identified only on evidence specific to them.",
   },
 ];
 
@@ -60,14 +59,14 @@ function KnownAnswerChecks({ validation }: { validation: Validation }) {
   return (
     <Card padded={false}>
       <CardHeader
-        title="Known-answer checks"
-        hint="Recordings where the answer is known in advance: what verdict the platform gave, and what ordering candidates by technique overlap would have named instead."
+        title="Validation on known cases"
+        hint="Recordings of emulated intrusions and tool tests where the answer is known in advance: what the platform concluded, and where the true group fell when ordered by overlap alone."
       />
       <p className="border-b border-outline-variant/70 px-4 py-3 text-body-lg text-on-surface-variant">
-        <TrackRecordLine validation={validation} /> The platform’s own verdicts named an actor in{" "}
-        {validation.summary.verdicts_naming_an_actor} of these {validation.summary.cases} cases, and a wrong one in{" "}
-        {validation.summary.verdicts_naming_a_wrong_actor}: it names a Group only when an artefact specific to that Group
-        matched, and none did here. This is why candidates are never ordered.
+        The platform identified a group in {validation.summary.verdicts_naming_an_actor} of these{" "}
+        {validation.summary.cases} cases and a wrong one in {validation.summary.verdicts_naming_a_wrong_actor}.{" "}
+        <TrackRecordLine validation={validation} /> This is the measured reason identification relies on group-specific
+        evidence and overlap is presented as similarity.
       </p>
       <div className="overflow-x-auto">
         <table className="w-full border-collapse text-body-md">
@@ -75,10 +74,10 @@ function KnownAnswerChecks({ validation }: { validation: Validation }) {
             <tr>
               <Th>Recording</Th>
               <Th>Known answer</Th>
-              <Th>Verdict given</Th>
+              <Th>Platform conclusion</Th>
               <Th>Its techniques observed</Th>
-              <Th>Its position if candidates were ordered</Th>
-              <Th>An ordering would have named</Th>
+              <Th>Its position by overlap alone</Th>
+              <Th>Top of the overlap order</Th>
             </tr>
           </thead>
           <tbody>
@@ -99,7 +98,7 @@ function KnownAnswerChecks({ validation }: { validation: Validation }) {
                     )}
                   </Td>
                   <Td>
-                    <Badge tone="warning">{VERDICT_LABEL[item.verdict]}</Badge>
+                    <Badge tone={item.verdict === "actor_specific_evidence" ? "primary" : "muted"}>{VERDICT_LABEL[item.verdict]}</Badge>
                   </Td>
                   <Td className="font-mono text-code-md">
                     {item.known_actor
@@ -115,8 +114,7 @@ function KnownAnswerChecks({ validation }: { validation: Validation }) {
         </table>
       </div>
       <p className="border-t border-outline-variant/70 px-4 py-2.5 font-mono text-code-sm text-outline">
-        {validation.version} · {validation.summary.orderings_measured} orderings measured ·{" "}
-        {validation.pinned.attack_kb_version} · reproduce with scripts/measure_actor_ranking.py
+        {validation.summary.orderings_measured} orderings measured · {validation.pinned.attack_kb_version}
       </p>
     </Card>
   );
@@ -125,7 +123,6 @@ function KnownAnswerChecks({ validation }: { validation: Validation }) {
 export function AboutPage() {
   const coverage = useApi<Coverage>(paths.coverage());
   const catalogue = useApi<TechniqueCatalogue>(paths.techniques());
-  const { health } = useHealth(60000);
   const validation = useApi<Validation>(paths.validation());
 
   if (coverage.state === "error") return <ErrorState failure={coverage.error} onRetry={coverage.reload} />;
@@ -139,31 +136,53 @@ export function AboutPage() {
   return (
     <>
       <PageHeader
-        eyebrow="About & provenance"
-        title="How this console reaches its statements"
-        description="A research platform for evidence-based, explainable APT attribution. This console is a reader: it shows what the engine stored, and every number on every page traces to a record you can open."
+        eyebrow="Methodology"
+        title="How detection and attribution work"
+        description="Every result on this platform traces to a log event, a detection rule and a MITRE ATT&CK record you can open. This page explains how techniques are detected, how threat groups are matched, and how the method was validated."
       />
       <div className="space-y-6">
-        <Card className="border-warning/30 bg-warning/5">
-          <div className="flex flex-wrap items-center gap-3">
-            <Badge tone="warning">Uncalibrated — explainable facts only</Badge>
-            <h2 className="text-headline-md text-on-surface">Why there is no “most likely actor”</h2>
+        <Card padded={false}>
+          <CardHeader title="Attribution in two tiers" hint="What the platform can say about who is behind an intrusion, and on what basis." />
+          <div className="grid grid-cols-1 gap-px bg-outline-variant/40 xl:grid-cols-2">
+            <div className="bg-surface-low p-4">
+              <Badge tone="primary">Identification</Badge>
+              <h3 className="mt-2 text-headline-sm text-on-surface">Group-specific evidence</h3>
+              <p className="mt-1.5 text-body-md text-on-surface-variant">
+                A group is identified when the logs contain something only that group is known for: an artefact of its
+                own tooling (a service name, file path, hash or payload string from published reporting), or an indicator
+                a government advisory attributes to it. Every such rule was reviewed individually, and rules that also
+                match generic activity, public tools or commodity malware were rejected. The{" "}
+                <a href={links.actors({ evidence: "specific" })} className="text-primary hover:underline">
+                  Threat Actors
+                </a>{" "}
+                page lists the groups this covers.
+              </p>
+            </div>
+            <div className="bg-surface-low p-4">
+              <Badge tone="tertiary">Behavioural profiling</Badge>
+              <h3 className="mt-2 text-headline-sm text-on-surface">Overlap with group profiles</h3>
+              <p className="mt-1.5 text-body-md text-on-surface-variant">
+                For every tracked group, the platform measures how much of the observed behaviour its public ATT&amp;CK
+                profile contains. Each observed technique is weighted by its rarity — one minus the share of groups
+                recorded using it — so a technique nearly everyone uses counts for little and a rare one for a lot.
+              </p>
+              <p className="mt-2 rounded-sm border border-outline-variant/70 bg-surface-lowest px-3 py-2 font-mono text-code-md text-on-surface">
+                overlap = Σ weight(observed ∩ profile) ÷ Σ weight(observed)
+              </p>
+              <p className="mt-2 text-body-md text-on-surface-variant">
+                Groups with identical matches form a cluster: the evidence cannot separate them. Overlap measures
+                similarity to a public profile. It is not the probability that a group is responsible — techniques are
+                shared between groups, and well-documented groups overlap with almost anything — which is why
+                identification rests on the first tier.
+              </p>
+            </div>
           </div>
-          <p className="mt-3 max-w-4xl text-body-lg text-on-surface-variant">
-            A likelihood or confidence is only honest if it has been checked against cases where the answer is known. No
-            calibration version exists for this platform, so it emits none: no likelihood, no confidence band, no verdict and
-            no ranking. Candidates are always listed alphabetically. What you get instead is the evidence itself — what was
-            observed, which techniques it supports and why, which ATT&amp;CK profiles include those techniques, and what
-            additional evidence would separate them — and, per investigation, a verdict on whether any actor can be
-            singled out. Overlap with a Group’s published profile is not attribution: techniques are shared, copied and
-            under-reported, and the checks below show what treating it as attribution would have got wrong.
-          </p>
         </Card>
 
         {validation.state === "ready" && <KnownAnswerChecks validation={validation.data} />}
 
         <Card padded={false}>
-          <CardHeader title="From telemetry to explanation" hint="Each stage is deterministic and stores what it produced." />
+          <CardHeader title="From logs to attribution" hint="Each stage is deterministic and keeps what it produced." />
           <ol className="grid grid-cols-1 gap-px bg-outline-variant/40 md:grid-cols-2 xl:grid-cols-3">
             {STAGES.map((stage, i) => (
               <li key={stage.name} className="bg-surface-low p-4">
@@ -190,15 +209,6 @@ export function AboutPage() {
               <Row label="Active techniques">{integer(catalogue.data.techniques.length)}</Row>
               <Row label="Active Groups">{integer(catalogue.data.active_groups)}</Row>
               <Row label="Tactics">{integer(catalogue.data.tactics.length)}</Row>
-            </dl>
-          </Card>
-          <Card padded={false}>
-            <CardHeader title="This session" hint="What is answering this page." />
-            <dl>
-              <Row label="API">{health?.api ?? "—"}</Row>
-              <Row label="Record store">{health?.backend ?? "—"}</Row>
-              <Row label="Access">read-only; every mutation method is refused</Row>
-              <Row label="Coverage report">{coverage.data.report_version}</Row>
             </dl>
           </Card>
           <Card padded={false}>
@@ -246,11 +256,11 @@ export function AboutPage() {
         <p className="text-body-md text-on-surface-variant">
           What the content can and cannot see is on{" "}
           <a href={links.coverage()} className="text-primary hover:underline">
-            Detection Coverage
+            Technique Coverage
           </a>
           . The written explanation of an investigation is its{" "}
           <a href={links.dossier()} className="text-primary hover:underline">
-            Attribution Dossier
+            report
           </a>
           .
         </p>

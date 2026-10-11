@@ -588,7 +588,8 @@ def test_real_review_covers_every_imported_software_tag_and_is_applied() -> None
         if m["object_type"] != "attack-pattern"
     }
     assert in_pack == accepted
-    assert len(accepted) == 14  # + WCE wceaux.dll, SDelete (batch A); PSEXESVC.exe (enrich tier)
+    # + WCE wceaux.dll, SDelete (batch A); PSEXESVC.exe (enrich tier); PSEXESVC service (System log)
+    assert len(accepted) == 15
 
 
 # ===========================================================================

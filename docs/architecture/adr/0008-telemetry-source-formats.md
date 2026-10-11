@@ -465,3 +465,43 @@ read model → HTTP API) on real records of each Wave 2 family found three integ
 7 units served by the API with uncalibrated analyses; Zeek (JSON + TSV) and Linux (Sysmon for Linux) read with no
 detection, as their reports measured; macOS → 12 low-level Evidence and, by design, no unit. Full suite: 2,179
 tests.
+
+## Record — Windows System log: service installation (2026-10-11)
+
+**Why now.** Owner instruction 2026-10-11 ("go ahead with the recommended steps"): four accepted actor-specific
+rules (ADR-0018) and 41 of Sigma's 58 `windows/system` rules could not run because the platform did not read the
+System channel.
+
+**Scope: one event.** `sources/windows_system.py` reads Service Control Manager **7045** (a service was installed)
+and refuses every other System event and every other provider's 7045 — event ids are per provider. 7045 is what the
+detection content asks for; the other System events found on the real recordings (7036 state changes, SAM 16968,
+boot and driver notices) have almost no content written against them and are left as refusals, counted by the
+intake check like any other.
+
+**D2 standard, as met.**
+
+| Requirement | How |
+|---|---|
+| Exact mapping | `ServiceName`, `ImagePath`, `ServiceType`, `StartType`, `AccountName` → `service.*`, each as logged (7045 renders type and start type as text where 4697 logs codes; neither is converted) |
+| Fail closed | other event ids, other providers, wrong channel, no record id / host / `ServiceName`, a flat record without `EventTime` |
+| Real-sample golden tests | two real OTRF records in `golden-records.jsonl`: `sys-7045` (Winlogbeat 6, APT3) and `sys-7045-apt29` (flat NXLog, APT29) |
+| Source-agnostic content | `windows/system` scope = `event.dataset equals system.system`; field map `/15`; `SUPPORTED_EVENT_CODES` pins it to 7045, so a rule on another System event is a telemetry gap and never counted as coverage |
+| Sigma wiring | 33 more Core++ rules usable (30 whole, 3 in part); 4 more accepted actor rules usable (36 in all; the same 15 Groups) |
+
+**D3 — both records of one installation are kept.** Security 4697 and System 7045 log the same installation. They
+are not interchangeable: on the real APT29 pair, 4697's `ServiceName` is the key name (`javamtsup`) and 7045's is
+the display name (`Java(TM) Virtual Machine Support Service`), and rules are written against each event's own
+fields. Different `event.dataset` / `event.code` means no rule fires twice on one record, and a technique seen
+through both is one technique in every comparison. No precedence rule is added.
+
+**A real ambiguity, refused rather than guessed.** In a flat NXLog record the collector's `AccountName` / `Domain`
+(the account of the event's `UserID`) and 7045's own `AccountName` (the account the service runs as) share one
+key. The real record holds `pbeesly`; whether that is the installing user or the service account cannot be told
+from the record. In that shape the adapter takes neither: `service.account` is absent and the acting user is its
+SID alone. Winlogbeat keeps the two apart and both are read.
+
+**Correlation.** 7045 names no process, so its Evidence joins no unit structurally and forms a single-Evidence unit
+(ADR-0003 Amendment F), like other Security-log events without a process identity.
+
+**Not done.** Other System events; the Windows Application log; Elastic's prebuilt rules for the System data
+stream.

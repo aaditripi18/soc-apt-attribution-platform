@@ -15,6 +15,7 @@ stored records exactly as before and answers the reference routes with 404.
 from __future__ import annotations
 
 import json
+import re
 from collections import Counter
 from collections.abc import Mapping
 from dataclasses import dataclass, field
@@ -26,6 +27,8 @@ from attribution_platform.attack_knowledge.traversal import (
     active_groups,
     groups_using_technique,
     is_active,
+    software_used_by,
+    techniques_used_by,
 )
 
 API_CONTEXT_VERSION = "api-context/1"
@@ -55,6 +58,8 @@ class ApiContext:
     static_dir: Path | None = None
     #: the ``GET /validation`` body (ADR-0017): known-answer checks, as measured
     validation: Mapping[str, Any] | None = None
+    #: the ``GET /attack/groups`` body (ADR-0021): every active Group's profile
+    groups: Mapping[str, Any] | None = None
 
 
 def _external_id(obj: Mapping[str, Any]) -> str | None:
@@ -263,6 +268,88 @@ def _read(path: Path) -> dict[str, Any]:
     return data
 
 
+def _plain(text: str) -> str:
+    """An ATT&CK description's first paragraph as plain text: citations removed,
+    Markdown links reduced to their label."""
+    paragraph = text.strip().split("\n\n", 1)[0].replace("\n", " ")
+    paragraph = re.sub(r"\(Citation:[^)]*\)", "", paragraph)
+    paragraph = re.sub(r"\[([^\]]+)\]\([^)]*\)", r"\1", paragraph)
+    return " ".join(paragraph.split())
+
+
+def build_group_catalogue(
+    knowledge: AttackKnowledge,
+    actor_report: Mapping[str, Any] | None = None,
+    advisory_attributions: Mapping[str, Any] | None = None,
+) -> dict[str, Any]:
+    """Every active ATT&CK Group as ATT&CK records it — aliases, techniques,
+    software — and the group-specific evidence this platform holds for it: the
+    accepted actor rules that run here (ADR-0018) and the advisory bundles
+    attributed to it (ADR-0013). A Group with neither can be compared by
+    behaviour but not named."""
+    rules: dict[str, list[dict[str, Any]]] = {}
+    for row in (actor_report or {}).get("rules") or ():
+        if row.get("status") == "rejected":
+            continue
+        for tag in row.get("actor_tags") or ():
+            if tag.get("decision") == "accept" and tag.get("group_id"):
+                rules.setdefault(str(tag["group_id"]), []).append(
+                    {"title": row.get("title"), "url": row.get("rule_url"), "reason": tag["reason"]}
+                )
+    advisories: dict[str, list[dict[str, Any]]] = {}
+    for entry in (advisory_attributions or {}).get("attributions") or ():
+        advisories.setdefault(str(entry["attack_group_id"]), []).append(
+            {"report_name": entry["report_name"], "publisher": entry["publisher"]}
+        )
+    names = {
+        str(obj["id"]): (_external_id(obj), str(obj.get("name", "")))
+        for obj in (*knowledge.techniques(), *knowledge.sub_techniques(), *knowledge.software())
+    }
+    groups: list[dict[str, Any]] = []
+    for obj in active_groups(knowledge):
+        attack_id = _external_id(obj)
+        if attack_id is None:
+            continue
+        stix_id = str(obj["id"])
+        techniques = sorted(
+            str(names[t][0])
+            for t in techniques_used_by(knowledge, stix_id)
+            if names.get(t, (None,))[0]
+        )
+        software = sorted(
+            (
+                {"attack_id": names[s][0], "name": names[s][1]}
+                for s in software_used_by(knowledge, stix_id)
+                if names.get(s, (None,))[0]
+            ),
+            key=lambda item: str(item["name"]).lower(),
+        )
+        groups.append(
+            {
+                "attack_id": attack_id,
+                "stix_id": stix_id,
+                "name": str(obj.get("name", "")),
+                "aliases": sorted(
+                    str(a) for a in obj.get("aliases") or () if str(a) != str(obj.get("name"))
+                ),
+                "description": _plain(str(obj.get("description", ""))),
+                "technique_ids": techniques,
+                "software": software,
+                "actor_rules": sorted(rules.get(attack_id, []), key=lambda r: str(r["title"])),
+                "advisories": advisories.get(attack_id, []),
+            }
+        )
+    groups.sort(key=lambda g: (str(g["name"]).lower(), str(g["attack_id"])))
+    return {
+        "attack_kb_version": knowledge.attack_kb_version,
+        "active_groups": len(groups),
+        "groups_with_specific_evidence": sum(
+            1 for g in groups if g["actor_rules"] or g["advisories"]
+        ),
+        "groups": groups,
+    }
+
+
 def load_api_context(
     knowledge: AttackKnowledge,
     *,
@@ -272,6 +359,7 @@ def load_api_context(
     static_dir: Path | None = None,
     known_answer_checks: Path | None = None,
     actor_import_report: Path | None = None,
+    advisory_attributions: Path | None = None,
 ) -> ApiContext:
     """Read the pinned artefacts once and shape them for the API. The built
     frontend is served only when ``static_dir`` holds an ``index.html``."""
@@ -298,6 +386,13 @@ def load_api_context(
             if known_answer_checks is not None and known_answer_checks.is_file()
             else None
         ),
+        groups=build_group_catalogue(
+            knowledge,
+            actor,
+            _read(advisory_attributions)
+            if advisory_attributions is not None and advisory_attributions.is_file()
+            else None,
+        ),
     )
 
 
@@ -305,6 +400,7 @@ __all__ = [
     "API_CONTEXT_VERSION",
     "ApiContext",
     "build_coverage_view",
+    "build_group_catalogue",
     "build_technique_catalogue",
     "load_api_context",
     "rule_key",

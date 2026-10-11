@@ -65,6 +65,10 @@ STREAMS: dict[str, tuple[str, str]] = {
         "packages/system/data_stream/security/elasticsearch/ingest_pipeline",
         "packages/system/data_stream/security/_dev/test/pipeline",
     ),
+    "windows_powershell_operational": (
+        "packages/windows/data_stream/powershell_operational/elasticsearch/ingest_pipeline",
+        "packages/windows/data_stream/powershell_operational/_dev/test/pipeline",
+    ),
 }
 
 

@@ -61,6 +61,7 @@ from attribution_platform.intel.indicators import (
 )
 from attribution_platform.investigation.assessment import (
     assess_investigation,
+    assessment_to_json,
     persist_assessment,
 )
 from attribution_platform.investigation.emulation import (
@@ -68,6 +69,7 @@ from attribution_platform.investigation.emulation import (
     compare_emulation,
     persist_emulation_comparison,
 )
+from attribution_platform.investigation.profile_match import match_profiles, persist_profile_match
 from attribution_platform.investigation.records import (
     ActorEvidenceView,
     AttributionAnalysisRecord,
@@ -98,8 +100,8 @@ from attribution_platform.replay.recording_pipeline import RecordingSource, anal
 #: much Evidence is in units and how much is not (ADR-0009 Amendment D).
 #: 1.5: the baseline search is kept apart from the per-candidate one; 1.6: an
 #: investigation-level attribution assessment is stored (ADR-0017); 1.7:
-#: actor-specific Evidence (ADR-0018).
-INVESTIGATION_METHOD_VERSION = "1.7"
+#: actor-specific Evidence (ADR-0018); 1.8: behavioural profile match (ADR-0021).
+INVESTIGATION_METHOD_VERSION = "1.8"
 #: ADR-0005 §D16 structural lower bound; the fitted floor needs a calibration_version.
 STRUCTURAL_MIN_PROFILE_FLOOR = 1
 
@@ -467,7 +469,10 @@ def run_investigation(
     # ADR-0017: the verdict about the whole investigation, from the same JSON the
     # read model holds for its units.
     stored_analyses.sort(key=lambda analysis: str(analysis["group_id"]))
-    persist_assessment(client, assess_investigation(knowledge, investigation_id, stored_analyses))
+    assessment = assess_investigation(knowledge, investigation_id, stored_analyses)
+    persist_assessment(client, assessment)
+    # ADR-0021: how close the behaviour is to each profile, and what addresses it.
+    persist_profile_match(client, match_profiles(knowledge, assessment_to_json(assessment)))
     return record
 
 

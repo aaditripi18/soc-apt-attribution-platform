@@ -67,7 +67,7 @@ from __future__ import annotations
 
 from types import MappingProxyType
 
-FIELD_MAP_VERSION = "sigma-field-map/14"
+FIELD_MAP_VERSION = "sigma-field-map/15"
 
 #: ``(product, category)`` → the ``(field_path, operator, value)`` scope
 #: conditions an Observation must satisfy to be the kind of event the Sigma
@@ -163,6 +163,9 @@ LOGSOURCE_SCOPES: MappingProxyType[tuple[str, str], tuple[tuple[str, str, str], 
             ),
             # Sigma service: security = the Windows Security channel.
             ("windows", "security"): (("event.dataset", "equals", "system.security"),),
+            # Sigma service: system = the Windows System channel (/15: Service
+            # Control Manager 7045 only — SUPPORTED_EVENT_CODES).
+            ("windows", "system"): (("event.dataset", "equals", "system.system"),),
             # Linux (ADR-0010): the same ECS kinds; the platform is told apart by
             # PRODUCT_OS_SCOPES, never by these conditions.
             ("linux", "process_creation"): (
@@ -588,6 +591,18 @@ FIELD_MAPS: MappingProxyType[tuple[str, str], MappingProxyType[str, str]] = Mapp
                 "status_code": "zeek.status_code",
             }
         ),
+        ("windows", "system"): MappingProxyType(
+            {
+                "EventID": "event.code",
+                "Provider_Name": "event.provider",
+                # 7045, each exactly as the event logs it
+                "ServiceName": "service.name",
+                "ImagePath": "service.file_name",
+                "ServiceType": "service.type",
+                "StartType": "service.start_type",
+                "AccountName": "service.account",
+            }
+        ),
         ("windows", "security"): MappingProxyType(
             {
                 "EventID": "event.code",
@@ -701,6 +716,7 @@ SUPPORTED_EVENT_CODES: MappingProxyType[tuple[str, str], frozenset[str]] = Mappi
                 *("4768", "4769", "4771", "5379", "5441", "5447"),
             }
         ),
+        ("windows", "system"): frozenset({"7045"}),
     }
 )
 

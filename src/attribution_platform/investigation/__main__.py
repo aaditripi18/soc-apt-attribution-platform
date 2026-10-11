@@ -312,6 +312,7 @@ def main(argv: Sequence[str] | None = None, env: dict[str, str] | None = None) -
             static_dir=FRONTEND_DIST,
             known_answer_checks=KNOWN_ANSWER_CHECKS,
             actor_import_report=SIGMA_ACTOR_IMPORT_REPORT,
+            advisory_attributions=ADVISORY_ATTRIBUTIONS,
         )
         uploads = None if "--no-upload" in args else upload_service(client, workbench)
         server = create_server(

@@ -3,7 +3,6 @@ import {
   Badge,
   Card,
   CardHeader,
-  Command,
   EmptyState,
   ErrorState,
   Field,
@@ -70,11 +69,10 @@ export function EmulationTab({ investigationId }: { investigationId: string }) {
           report, the platform sets each step beside the Evidence it extracted — it measures detection against a
           known answer instead of asserting it.
         </p>
-        <p>The comparison is made when the investigation is run (a MITRE CALDERA operation report is supported):</p>
-        <Command>
-          python -m attribution_platform.investigation recording.zip --emulation-report report.json --serve
-        </Command>
-        <p>Only step names, techniques, hosts, times and process ids are read from the report. Its command text is never read.</p>
+        <p>
+          Supply the emulation tool's operation report together with the recording to enable this view. Only step
+          names, techniques, hosts, times and process ids are read from it.
+        </p>
       </EmptyState>
     );
   }

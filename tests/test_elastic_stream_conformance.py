@@ -10,6 +10,7 @@ fixture event this platform's adapter accepts. (Sysmon has its own, older test:
 from __future__ import annotations
 
 import json
+import re
 import sys
 from collections.abc import Callable, Iterable, Mapping
 from dataclasses import dataclass
@@ -33,6 +34,7 @@ from attribution_platform.detection.derived_json import (
     java_hashmap_order,
     java_to_string,
 )
+from attribution_platform.detection.derived_powershell import POWERSHELL_VIEWS
 from attribution_platform.detection.derived_registry import VIEW_SETS
 from attribution_platform.detection.derived_security import SECURITY_VIEWS, security_argv
 from attribution_platform.detection.derived_views import ViewSet
@@ -40,10 +42,13 @@ from attribution_platform.detection_content.elastic_field_map import STREAMS
 from attribution_platform.domain import Observation
 from attribution_platform.sources.cloudtrail import CloudTrailSourceAdapter
 from attribution_platform.sources.entra import EntraIdSourceAdapter
+from attribution_platform.sources.errors import SourceAdapterError
 from attribution_platform.sources.github_audit import GitHubAuditSourceAdapter
 from attribution_platform.sources.kubernetes_audit import KubernetesAuditSourceAdapter
 from attribution_platform.sources.o365 import O365SourceAdapter
 from attribution_platform.sources.okta import OktaSourceAdapter
+from attribution_platform.sources.powershell import PowerShellSourceAdapter
+from attribution_platform.sources.sysmon_xml import parse_sysmon_event_xml
 from attribution_platform.sources.windows_security import WindowsSecuritySourceAdapter
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
@@ -67,6 +72,37 @@ def _json_event(event: Any) -> Any:
         return json.loads(text)
     except json.JSONDecodeError:
         return None
+
+
+_EXECUTION_PID = re.compile(r"<Execution ProcessID='(\d+)'")
+_SECURITY_SID = re.compile(r"<Security UserID='([^']+)'")
+
+
+def _powershell_event(event: Any) -> Any:
+    """A PowerShell fixture event as the collector record the adapter reads.
+    Elastic's fixtures come in two forms, as the pipeline accepts both: an event
+    already decoded by the agent (a ``winlog`` object, which the pipeline then
+    uses), or only the XML in ``event.original``."""
+    winlog = event.get("winlog")
+    if isinstance(winlog, dict) and "event_id" in winlog:
+        record: dict[str, Any] = {"winlog": dict(winlog), "@timestamp": event["@timestamp"]}
+    else:
+        original = str((event.get("event") or {}).get("original", ""))
+        first = original.split("</Event>", 1)[0] + "</Event>"
+        try:
+            record = parse_sysmon_event_xml(first.strip())  # one envelope, any channel
+        except SourceAdapterError:
+            return None
+        record["@timestamp"] = event["@timestamp"]
+        pid, sid = _EXECUTION_PID.search(first), _SECURITY_SID.search(first)
+        if pid is not None:
+            record["winlog"]["process"] = {"pid": int(pid.group(1))}
+        if sid is not None:
+            record["winlog"]["user"] = {"identifier": sid.group(1)}
+    record["winlog"]["event_id"] = int(record["winlog"]["event_id"])
+    if record["winlog"]["event_id"] != 4104:
+        return None  # the stream's views are for script-block events
+    return record
 
 
 @dataclass(frozen=True)
@@ -108,6 +144,13 @@ CASES = [
         43,
         decode=lambda event: event,
     ),
+    Case(
+        "windows_powershell_operational",
+        POWERSHELL_VIEWS,
+        PowerShellSourceAdapter().to_observations,
+        2,
+        decode=_powershell_event,
+    ),
 ]
 
 
@@ -132,6 +175,13 @@ def test_every_view_equals_the_pipeline_output(case: Case) -> None:
 _NOT_IN_FIXTURES: dict[str, set[str]] = {
     "okta_system": {"okta.outcome.reason"},
     "kubernetes_audit_logs": {"kubernetes.audit.objectRef.subresource"},
+    # no fixture script block carries a script path
+    "windows_powershell_operational": {
+        "file.path",
+        "file.name",
+        "file.directory",
+        "file.extension",
+    },
     "system_security": {
         "winlog.event_data.AdditionalInfo",
         "winlog.event_data.OperationType",

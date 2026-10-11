@@ -8,7 +8,7 @@
   "sigma_archive": "sigma_actor_specific.zip",
   "sigma_archive_sha256": "1ab1ecb0e25d06dc3323c013ebec90d96b3c821d12b03a5061be04a0e9b8aa16",
   "pysigma_version": "1.5.1",
-  "field_map_version": "sigma-field-map/14",
+  "field_map_version": "sigma-field-map/15",
   "attack_kb_version": "enterprise-attack-19.2",
   "dnf_bound": 64,
   "actor_tag_review": {
@@ -810,6 +810,69 @@
    "evidence_type": "behavioral",
    "rule_source": "sigma-actor:07db928c-8632-488e-ac7d-3db847489175",
    "rule_family": "sigma-actor:07db928c-8632-488e-ac7d-3db847489175"
+  },
+  {
+   "rule_id": "sigma-actor:1228f8e2-7e79-4dea-b0ad-c91f1d5016c1:000",
+   "rule_version": "r2026-07-01",
+   "conditions": [
+    {
+     "field_path": "event.dataset",
+     "operator": "equals",
+     "value": "system.system"
+    },
+    {
+     "field_path": "host.os_type",
+     "operator": "equals",
+     "value": "linux",
+     "negate": true
+    },
+    {
+     "field_path": "host.os_type",
+     "operator": "equals",
+     "value": "macos",
+     "negate": true
+    },
+    {
+     "field_path": "cloud.account_id",
+     "operator": "exists",
+     "negate": true
+    },
+    {
+     "field_path": "observer.product",
+     "operator": "exists",
+     "negate": true
+    },
+    {
+     "field_path": "event.provider",
+     "operator": "equals",
+     "value": "Service Control Manager",
+     "case_insensitive": true
+    },
+    {
+     "field_path": "event.code",
+     "operator": "equals",
+     "value": "7045"
+    },
+    {
+     "field_path": "service.name",
+     "operator": "equals",
+     "value": "WerFaultSvc",
+     "case_insensitive": true
+    }
+   ],
+   "technique_mappings": [
+    {
+     "stix_id": "intrusion-set--7a19ecb1-3c65-4de3-a230-993516aed6a6",
+     "object_type": "intrusion-set",
+     "attack_kb_version": "enterprise-attack-19.2",
+     "external_id": "G0010",
+     "mapping_basis": "Sigma rule 1228f8e2-7e79-4dea-b0ad-c91f1d5016c1 'Turla PNG Dropper Service' (author: Florian Roth (Nextron Systems)) tag attack.g0010; accepted by the actor review (group_tag, directory_alias): The service name WerFaultSvc is the persistence artefact published for Turla's PNG dropper; Windows has no service of that name.",
+     "mapping_source": "sigma"
+    }
+   ],
+   "evidence_type": "behavioral",
+   "rule_source": "sigma-actor:1228f8e2-7e79-4dea-b0ad-c91f1d5016c1",
+   "rule_family": "sigma-actor:1228f8e2-7e79-4dea-b0ad-c91f1d5016c1"
   },
   {
    "rule_id": "sigma-actor:21117127-21c8-437a-ae03-4b51e5a8a088:000",
@@ -2167,6 +2230,132 @@
    "evidence_type": "behavioral",
    "rule_source": "sigma-actor:4ac5fc44-a601-4c06-955b-309df8c4e9d4",
    "rule_family": "sigma-actor:4ac5fc44-a601-4c06-955b-309df8c4e9d4"
+  },
+  {
+   "rule_id": "sigma-actor:53ba33fd-3a50-4468-a5ef-c583635cfa92:000",
+   "rule_version": "r2026-07-01",
+   "conditions": [
+    {
+     "field_path": "event.dataset",
+     "operator": "equals",
+     "value": "system.system"
+    },
+    {
+     "field_path": "host.os_type",
+     "operator": "equals",
+     "value": "linux",
+     "negate": true
+    },
+    {
+     "field_path": "host.os_type",
+     "operator": "equals",
+     "value": "macos",
+     "negate": true
+    },
+    {
+     "field_path": "cloud.account_id",
+     "operator": "exists",
+     "negate": true
+    },
+    {
+     "field_path": "observer.product",
+     "operator": "exists",
+     "negate": true
+    },
+    {
+     "field_path": "event.provider",
+     "operator": "equals",
+     "value": "Service Control Manager",
+     "case_insensitive": true
+    },
+    {
+     "field_path": "event.code",
+     "operator": "equals",
+     "value": "7045"
+    },
+    {
+     "field_path": "service.name",
+     "operator": "equals",
+     "value": "SC Scheduled Scan",
+     "case_insensitive": true
+    }
+   ],
+   "technique_mappings": [
+    {
+     "stix_id": "intrusion-set--4ca1929c-7d64-4aab-b849-badbfc0c760d",
+     "object_type": "intrusion-set",
+     "attack_kb_version": "enterprise-attack-19.2",
+     "external_id": "G0049",
+     "mapping_basis": "Sigma rule 53ba33fd-3a50-4468-a5ef-c583635cfa92 'OilRig APT Schedule Task Persistence - System' (author: Florian Roth (Nextron Systems), Markus Neis, Jonhnathan Ribeiro, Daniil Yugoslavskiy, oscd.community) tag attack.g0049; accepted by the actor review (group_tag, directory_alias): The service names 'SC Scheduled Scan' and 'UpdatMachine' (sic) are the persistence artefacts published for OilRig's 2018 campaign.",
+     "mapping_source": "sigma"
+    }
+   ],
+   "evidence_type": "behavioral",
+   "rule_source": "sigma-actor:53ba33fd-3a50-4468-a5ef-c583635cfa92",
+   "rule_family": "sigma-actor:53ba33fd-3a50-4468-a5ef-c583635cfa92"
+  },
+  {
+   "rule_id": "sigma-actor:53ba33fd-3a50-4468-a5ef-c583635cfa92:001",
+   "rule_version": "r2026-07-01",
+   "conditions": [
+    {
+     "field_path": "event.dataset",
+     "operator": "equals",
+     "value": "system.system"
+    },
+    {
+     "field_path": "host.os_type",
+     "operator": "equals",
+     "value": "linux",
+     "negate": true
+    },
+    {
+     "field_path": "host.os_type",
+     "operator": "equals",
+     "value": "macos",
+     "negate": true
+    },
+    {
+     "field_path": "cloud.account_id",
+     "operator": "exists",
+     "negate": true
+    },
+    {
+     "field_path": "observer.product",
+     "operator": "exists",
+     "negate": true
+    },
+    {
+     "field_path": "event.provider",
+     "operator": "equals",
+     "value": "Service Control Manager",
+     "case_insensitive": true
+    },
+    {
+     "field_path": "event.code",
+     "operator": "equals",
+     "value": "7045"
+    },
+    {
+     "field_path": "service.name",
+     "operator": "equals",
+     "value": "UpdatMachine",
+     "case_insensitive": true
+    }
+   ],
+   "technique_mappings": [
+    {
+     "stix_id": "intrusion-set--4ca1929c-7d64-4aab-b849-badbfc0c760d",
+     "object_type": "intrusion-set",
+     "attack_kb_version": "enterprise-attack-19.2",
+     "external_id": "G0049",
+     "mapping_basis": "Sigma rule 53ba33fd-3a50-4468-a5ef-c583635cfa92 'OilRig APT Schedule Task Persistence - System' (author: Florian Roth (Nextron Systems), Markus Neis, Jonhnathan Ribeiro, Daniil Yugoslavskiy, oscd.community) tag attack.g0049; accepted by the actor review (group_tag, directory_alias): The service names 'SC Scheduled Scan' and 'UpdatMachine' (sic) are the persistence artefacts published for OilRig's 2018 campaign.",
+     "mapping_source": "sigma"
+    }
+   ],
+   "evidence_type": "behavioral",
+   "rule_source": "sigma-actor:53ba33fd-3a50-4468-a5ef-c583635cfa92",
+   "rule_family": "sigma-actor:53ba33fd-3a50-4468-a5ef-c583635cfa92"
   },
   {
    "rule_id": "sigma-actor:5cdeb555-65de-4767-99fe-e26807465148:000",
@@ -4018,6 +4207,75 @@
    "rule_family": "sigma-actor:9e2e51c5-c699-4794-ba5a-29f5da40ac0c"
   },
   {
+   "rule_id": "sigma-actor:9e987c6c-4c1e-40d8-bd85-dd26fba8fdd6:000",
+   "rule_version": "r2026-07-01",
+   "conditions": [
+    {
+     "field_path": "event.dataset",
+     "operator": "equals",
+     "value": "system.system"
+    },
+    {
+     "field_path": "host.os_type",
+     "operator": "equals",
+     "value": "linux",
+     "negate": true
+    },
+    {
+     "field_path": "host.os_type",
+     "operator": "equals",
+     "value": "macos",
+     "negate": true
+    },
+    {
+     "field_path": "cloud.account_id",
+     "operator": "exists",
+     "negate": true
+    },
+    {
+     "field_path": "observer.product",
+     "operator": "exists",
+     "negate": true
+    },
+    {
+     "field_path": "event.provider",
+     "operator": "equals",
+     "value": "Service Control Manager",
+     "case_insensitive": true
+    },
+    {
+     "field_path": "event.code",
+     "operator": "equals",
+     "value": "7045"
+    },
+    {
+     "field_path": "service.name",
+     "operator": "equals",
+     "value": "NtsSrv",
+     "case_insensitive": true
+    },
+    {
+     "field_path": "service.file_name",
+     "operator": "endswith",
+     "value": " LocalService",
+     "case_insensitive": true
+    }
+   ],
+   "technique_mappings": [
+    {
+     "stix_id": "intrusion-set--fbd29c89-18ba-4c2d-b792-51c0adee049f",
+     "object_type": "intrusion-set",
+     "attack_kb_version": "enterprise-attack-19.2",
+     "external_id": "G0064",
+     "mapping_basis": "Sigma rule 9e987c6c-4c1e-40d8-bd85-dd26fba8fdd6 'StoneDrill Service Install' (author: Florian Roth (Nextron Systems)) tag attack.g0064; accepted by the actor review (group_tag, directory_software): A service named NtsSrv whose image path ends in ' LocalService' is the installation artefact published for the StoneDrill wiper attributed to APT33; neither value is a Windows default.",
+     "mapping_source": "sigma"
+    }
+   ],
+   "evidence_type": "behavioral",
+   "rule_source": "sigma-actor:9e987c6c-4c1e-40d8-bd85-dd26fba8fdd6",
+   "rule_family": "sigma-actor:9e987c6c-4c1e-40d8-bd85-dd26fba8fdd6"
+  },
+  {
    "rule_id": "sigma-actor:9f9f92ba-5300-43a4-b435-87d1ee571688:000",
    "rule_version": "r2026-07-01",
    "conditions": [
@@ -4137,6 +4395,81 @@
    "evidence_type": "behavioral",
    "rule_source": "sigma-actor:a62298a3-1fe0-422f-9a68-ffbcbc5a123d",
    "rule_family": "sigma-actor:a62298a3-1fe0-422f-9a68-ffbcbc5a123d"
+  },
+  {
+   "rule_id": "sigma-actor:b2e60816-96b2-45bd-ba91-b63578c03ef6:000",
+   "rule_version": "r2026-07-01",
+   "conditions": [
+    {
+     "field_path": "event.dataset",
+     "operator": "equals",
+     "value": "system.system"
+    },
+    {
+     "field_path": "host.os_type",
+     "operator": "equals",
+     "value": "linux",
+     "negate": true
+    },
+    {
+     "field_path": "host.os_type",
+     "operator": "equals",
+     "value": "macos",
+     "negate": true
+    },
+    {
+     "field_path": "cloud.account_id",
+     "operator": "exists",
+     "negate": true
+    },
+    {
+     "field_path": "observer.product",
+     "operator": "exists",
+     "negate": true
+    },
+    {
+     "field_path": "event.provider",
+     "operator": "equals",
+     "value": "Service Control Manager",
+     "case_insensitive": true
+    },
+    {
+     "field_path": "event.code",
+     "operator": "equals",
+     "value": "7045"
+    },
+    {
+     "field_path": "service.name",
+     "operator": "contains",
+     "value": "WerFaultSvc",
+     "case_insensitive": true
+    },
+    {
+     "field_path": "service.file_name",
+     "operator": "startswith",
+     "value": "C:\\Windows\\WinSxS\\",
+     "case_insensitive": true
+    },
+    {
+     "field_path": "service.file_name",
+     "operator": "endswith",
+     "value": "\\WerFault.exe",
+     "case_insensitive": true
+    }
+   ],
+   "technique_mappings": [
+    {
+     "stix_id": "intrusion-set--7a19ecb1-3c65-4de3-a230-993516aed6a6",
+     "object_type": "intrusion-set",
+     "attack_kb_version": "enterprise-attack-19.2",
+     "external_id": "G0010",
+     "mapping_basis": "Sigma rule b2e60816-96b2-45bd-ba91-b63578c03ef6 'SNAKE Malware Service Persistence' (author: Nasreddine Bencherchali (Nextron Systems)) tag attack.g0010; accepted by the actor review (directory_alias, directory_software): The service name WerFaultSvc with a WerFault.exe under WinSxS is the persistence the joint advisory publishes for Snake, which it attributes to the FSB unit ATT&CK tracks as Turla.",
+     "mapping_source": "sigma"
+    }
+   ],
+   "evidence_type": "behavioral",
+   "rule_source": "sigma-actor:b2e60816-96b2-45bd-ba91-b63578c03ef6",
+   "rule_family": "sigma-actor:b2e60816-96b2-45bd-ba91-b63578c03ef6"
   },
   {
    "rule_id": "sigma-actor:b5495d8d-24ad-4a44-8caf-ceae9a07a5c2:000",

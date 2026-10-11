@@ -51,7 +51,7 @@ from attribution_platform.investigation.records import (
     load_investigation,
 )
 
-DOSSIER_VERSION = "dossier/4"
+DOSSIER_VERSION = "dossier/5"
 _MAX_CANDIDATES_LISTED = 25
 _MAX_QUESTIONS = 5
 
@@ -230,7 +230,9 @@ def _section_unit(
     lines += [
         "### 5. How strong is this — and what remains uncertain",
         "",
-        f"- {analysis['calibration_note']}",
+        "- The candidates above are those whose public ATT&CK profile contains an observed "
+        "technique. Their behavioural overlap is on the investigation's Attribution view; a "
+        "group is identified only on evidence specific to it (ADR-0018, ADR-0021).",
         "- Low-level Evidence is context: it joins the unit but adds no technique to the "
         "comparison "
         "(ADR-0003 Amendment H)."
@@ -306,11 +308,10 @@ def render_dossier(client: ElasticClient, knowledge: AttackKnowledge, investigat
     if investigation is None:
         raise KeyError(f"no investigation {investigation_id!r} in the read model")
     lines = [
-        f"# Attribution dossier — {investigation['source_id']}",
+        f"# Attribution report — {investigation['source_id']}",
         "",
         "_Generated from the persisted read model by `attribution_platform.investigation.dossier` "
-        f"({DOSSIER_VERSION}). Every statement below is a fact the pipeline computed; nothing is "
-        "ranked or scored before calibration._",
+        f"({DOSSIER_VERSION}). Every statement below is a fact derived from the stored evidence._",
         "",
         "## Provenance",
         "",

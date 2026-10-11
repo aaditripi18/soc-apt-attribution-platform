@@ -29,6 +29,7 @@ engine's exact ``wildcard`` operator, with literal backslash, ``*`` and ``?`` es
 
 from __future__ import annotations
 
+import dataclasses
 import re
 from dataclasses import dataclass
 from importlib.resources import files
@@ -56,13 +57,15 @@ class Pred:
     a tuple for ``in``, a ``str`` or a tuple (*any of*) for the substring and
     wildcard operators, ``None`` for ``exists``. ``boolean`` marks a comparison
     with a boolean literal (``value`` ``"true"`` / ``"false"``), which only a
-    boolean-typed field can satisfy."""
+    boolean-typed field can satisfy. ``quoted`` marks a KQL value written in
+    double quotes: on an analysed ``text`` field that is a phrase."""
 
     field: str
     operator: str
     value: str | tuple[str, ...] | None
     case_insensitive: bool
     boolean: bool = False
+    quoted: bool = False
 
 
 @dataclass(frozen=True)
@@ -271,7 +274,10 @@ def _kql_values(field: str, node: Any) -> Node:
         if kind == "wildcard":
             return _patterns(field, [value], False)
         if kind in ("string", "number"):
-            return _literals(field, [value], False)
+            literal = _literals(field, [value], False)
+            if node.type == "QUOTED_STRING" and isinstance(literal, Pred):
+                return dataclasses.replace(literal, quoted=True)
+            return literal
         if kind == "boolean":
             return Pred(field, "equals", value, False, boolean=True)
         return Unsupported(value)

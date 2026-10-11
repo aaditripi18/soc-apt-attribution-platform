@@ -57,7 +57,7 @@ flowchart LR
 
 | Family | Sources | Real data used |
 |---|---|---|
-| Windows | Sysmon (events 1, 3, 5, 7, 8, 10, 11, 12, 13, 15, 17–23); Windows Security (32 events: logons, Kerberos, services, tasks, account changes, object access, WFP …); PowerShell 4103 / 4104 | OTRF Security-Datasets (APT29 evaluation, APT3, LSASS campaigns) |
+| Windows | Sysmon (events 1, 3, 5, 7, 8, 10, 11, 12, 13, 15, 17–23); Windows Security (32 events: logons, Kerberos, services, tasks, account changes, object access, WFP …); PowerShell 4103 / 4104; System log service installs (7045) | OTRF Security-Datasets (APT29 evaluation, APT3, LSASS campaigns) |
 | Linux | Sysmon for Linux; Linux Audit (raw `audit.log`) | Splunk `attack_data` |
 | Cloud / SaaS | Entra ID, Office 365, AWS CloudTrail, Azure Activity, Okta, GitHub audit, Kubernetes audit | Splunk `attack_data` |
 | Network | Zeek (JSON and TSV) | OTRF Zeek logs of the corpus runs |
@@ -74,15 +74,16 @@ Every dataset is pinned by commit or URL and verified by hash; manifests live be
 From the generated [coverage report](data/detection/sigma/r2026-07-01/generated/coverage-summary.md),
 against ATT&CK Enterprise v19.2, SigmaHQ `r2026-07-01` and Elastic `detection-rules` @ `195f15c0`:
 
-- **1,883** Sigma rules imported (plus 75 partial), mapped to **344** ATT&CK ids; every rejected rule is
+- **1,913** Sigma rules imported (plus 78 partial), mapped to **344** ATT&CK ids; every rejected rule is
   listed with its reason (telemetry gap, untranslatable construct, policy).
-- **440** Elastic prebuilt rules translated exactly (414 whole, 26 partial) for Sysmon, Windows
-  Security, AWS CloudTrail, Microsoft 365, Entra ID, Okta, GitHub and Kubernetes telemetry, mapped to
-  271 ATT&CK ids — **59 not covered by Sigma**
+- **470** Elastic prebuilt rules translated exactly (444 whole, 26 partial) for Sysmon, Windows
+  Security, PowerShell script blocks, AWS CloudTrail, Microsoft 365, Entra ID, Okta, GitHub and Kubernetes telemetry, mapped to
+  291 ATT&CK ids — **62 not covered by Sigma**
   ([ADR-0015](docs/architecture/adr/0015-elastic-prebuilt-rules.md)). Every ECS field they read is
   reproduced from Elastic's own ingest pipeline for that source and checked against Elastic's own
-  pipeline test fixtures — down to the Java `HashMap` key order of CloudTrail's request parameters.
-- **395 of 697** active techniques are covered, and **314 of 498** of those used by active Groups (336
+  pipeline test fixtures — down to the Java `HashMap` key order of CloudTrail's request parameters, and
+  the tokeniser Elasticsearch applies to PowerShell script text (phrase matches are token-exact).
+- **398 of 697** active techniques are covered, and **317 of 498** of those used by active Groups (336
   and 276 with Sigma alone); **163 of 176**
   active Groups have at least two covered techniques (the minimum to attribute at all).
 - Uncovered techniques are classified, not hidden: no Sigma rule exists, a telemetry gap blocks it, or ATT&CK
@@ -123,12 +124,17 @@ manifests).
 
 ### The analyst console
 
-A reader over the read-model API ([ADR-0016](docs/architecture/adr/0016-analyst-frontend.md)): investigations, a
-host timeline, the observed techniques laid out as an ATT&CK matrix, all Evidence over time by tactic
-([ADR-0019](docs/architecture/adr/0019-investigation-views-and-ran-versus-detected.md)), and per unit the attack sequence, evidence with the rule and the raw observation behind each item,
-techniques with their Group prevalence, an alphabetical candidate × technique matrix, what evidence would separate
-the candidates, advisory indicator context, provenance — plus detection coverage and the written dossier. It
-computes nothing and shows no likelihood, confidence or ranking: none exists until there is a calibration version.
+A web console over the API ([ADR-0016](docs/architecture/adr/0016-analyst-frontend.md),
+[ADR-0021](docs/architecture/adr/0021-behavioural-profile-match-and-response.md)): an overview, investigations
+with their attack sequence, ATT&CK matrix and timeline
+([ADR-0019](docs/architecture/adr/0019-investigation-views-and-ran-versus-detected.md)), and for each one:
+
+- **Attribution** — the Group identified by evidence specific to it, or the closest behavioural profiles ordered
+  by overlap (rare techniques weigh more), grouped into the clusters the evidence cannot separate, with an overlap
+  matrix. Overlap is a stated similarity measure, not a confidence: the Methodology page gives the formula and the
+  validation results.
+- **Response** — MITRE ATT&CK mitigations for the observed techniques, by how many each addresses.
+- **Threat Actors** — all 176 ATT&CK Groups with techniques, software and the evidence that can identify them.
 
 Requires **Node.js 20+**.
 
@@ -172,7 +178,7 @@ to port 8000; set `VITE_API_TARGET` for another address). `npm run typecheck`, `
   nothing attributable, no actor can be singled out, or a lead. It never names an actor from technique overlap.
 - **A Group is named only on evidence specific to it** ([ADR-0018](docs/architecture/adr/0018-actor-specific-evidence.md)):
   Sigma rules associated with one Group — by tag, or filed under the Group's name or under software ATT&CK records
-  for that Group alone — count only where a written, per-rule review accepts them (41 of 141). 32 rules are usable
+  for that Group alone — count only where a written, per-rule review accepts them (41 of 141). 36 rules are usable
   for 15 Groups; Detection Coverage lists them and every decision. Each rule has a known-answer test: its published
   artefact fires it and names its Group, neutral values fire nothing. On 1.15 M real observations the pack fired
   once: the service name published for APT29's CosmicDuke, in the recording of an APT29 emulation that reproduces

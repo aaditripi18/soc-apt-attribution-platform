@@ -1,16 +1,17 @@
 {
  "provenance": {
-  "importer": "elastic-importer/1.1",
+  "importer": "elastic-importer/1.2",
   "source": "elastic/detection-rules (Elastic prebuilt detection rules)",
   "source_commit": "195f15c0bac84540bfe47abb8e26dbf8184eb69a",
   "manifest_sha256": "9031b14885213de2801db475aac1d28504c4aef8cb798d606c38313bf1578071",
   "lark_version": "1.3.1",
-  "field_map_version": "elastic-field-map/2",
+  "field_map_version": "elastic-field-map/3",
   "integrations_commit": "ff5328128a30c75046130ae58ddba450caa1f2dc",
   "ecs_version": "8.17.0",
   "data_streams": [
    "logs-windows.sysmon_operational-default",
    "logs-system.security-default",
+   "logs-windows.powershell_operational-default",
    "logs-aws.cloudtrail-default",
    "logs-o365.audit-default",
    "logs-azure.auditlogs-default",
@@ -26,20 +27,20 @@
  "summary": {
   "elastic_rules_total": 2215,
   "by_status": {
-   "imported": 414,
+   "imported": 444,
    "partial": 26,
-   "rejected": 1775
+   "rejected": 1745
   },
   "rejected_by_reason": {
    "no_attack_mapping": 88,
-   "telemetry_gap": 811,
-   "translation_gap": 876
+   "telemetry_gap": 776,
+   "translation_gap": 881
   },
-  "generated_rules": 2378,
-  "attack_ids_with_imported_rule": 271
+  "generated_rules": 2652,
+  "attack_ids_with_imported_rule": 291
  },
  "gap_reasons": {
-  "index:no_supported_data_stream": 694,
+  "index:no_supported_data_stream": 658,
   "telemetry_gap:field:user.id": 291,
   "rule_type:new_terms/kuery": 254,
   "rule_type:esql/esql": 241,
@@ -61,7 +62,7 @@
   "telemetry_gap:field:o365.audit.ParticipantInfo.HasOtherGuestUsers": 37,
   "telemetry_gap:field:event.provider": 34,
   "telemetry_gap:field:message": 32,
-  "event:no_supported_event_satisfies_scope": 27,
+  "event:no_supported_event_satisfies_scope": 28,
   "rule_type:threshold/kuery": 27,
   "telemetry_gap:field:user_agent.original": 27,
   "telemetry_gap:field:user.domain": 24,
@@ -106,6 +107,7 @@
   "telemetry_gap:field:source.domain": 4,
   "telemetry_gap:field:winlog.event_data.ClientProcessId": 4,
   "translation_gap:boolean_value:aws.cloudtrail.flattened.request_parameters.activate": 4,
+  "dnf_bound_exceeded:powershell:4104:>64": 3,
   "dnf_bound_exceeded:sysmon:1:>64": 3,
   "dnf_bound_exceeded:sysmon:7:>64": 3,
   "telemetry_gap:field:azure.auditlogs.properties.additional_details.key": 3,
@@ -121,6 +123,7 @@
   "telemetry_gap:field:winlog.event_data.ParentProcessId": 3,
   "translation_gap:eql:function_args:stringcontains": 3,
   "translation_gap:eql:ordering_comparison": 3,
+  "translation_gap:kql:range": 3,
   "dnf_bound_exceeded:kubernetes:>64": 2,
   "dnf_bound_exceeded:security:4688:>64": 2,
   "telemetry_gap:field:azure.auditlogs.identity": 2,
@@ -186,8 +189,7 @@
   "telemetry_gap:field:winlog.event_data.AllowedToDelegateTo": 1,
   "telemetry_gap:field:winlog.event_data.RpcCallClientLocality": 1,
   "translation_gap:boolean_value:aws.cloudtrail.flattened.request_parameters.enable": 1,
-  "translation_gap:boolean_value:aws.cloudtrail.flattened.request_parameters.omitted": 1,
-  "translation_gap:kql:range": 1
+  "translation_gap:boolean_value:aws.cloudtrail.flattened.request_parameters.omitted": 1
  },
  "attack_ids_with_imported_rule": [
   "T1003",
@@ -195,6 +197,8 @@
   "T1003.002",
   "T1003.003",
   "T1003.004",
+  "T1003.005",
+  "T1003.006",
   "T1003.008",
   "T1005",
   "T1006",
@@ -213,6 +217,7 @@
   "T1027",
   "T1027.004",
   "T1027.010",
+  "T1027.013",
   "T1033",
   "T1036",
   "T1036.002",
@@ -220,6 +225,7 @@
   "T1036.005",
   "T1039",
   "T1040",
+  "T1046",
   "T1047",
   "T1048",
   "T1049",
@@ -227,7 +233,11 @@
   "T1053.002",
   "T1053.005",
   "T1055",
+  "T1055.001",
+  "T1055.002",
   "T1055.012",
+  "T1056",
+  "T1056.001",
   "T1057",
   "T1059",
   "T1059.001",
@@ -281,14 +291,18 @@
   "T1114.001",
   "T1114.002",
   "T1114.003",
+  "T1115",
   "T1119",
   "T1120",
+  "T1123",
+  "T1125",
   "T1127",
   "T1127.001",
   "T1129",
   "T1133",
   "T1134",
   "T1134.001",
+  "T1134.002",
   "T1135",
   "T1136",
   "T1136.001",
@@ -310,6 +324,7 @@
   "T1195.002",
   "T1197",
   "T1199",
+  "T1201",
   "T1202",
   "T1203",
   "T1204",
@@ -342,6 +357,7 @@
   "T1484.002",
   "T1485",
   "T1485.001",
+  "T1486",
   "T1489",
   "T1490",
   "T1496",
@@ -351,6 +367,7 @@
   "T1499.002",
   "T1499.003",
   "T1505",
+  "T1505.002",
   "T1505.003",
   "T1518",
   "T1518.001",
@@ -382,9 +399,11 @@
   "T1550",
   "T1550.001",
   "T1550.002",
+  "T1550.003",
   "T1552",
   "T1552.001",
   "T1552.004",
+  "T1552.006",
   "T1552.007",
   "T1553",
   "T1553.003",
@@ -401,10 +420,12 @@
   "T1557",
   "T1557.001",
   "T1558",
+  "T1558.003",
   "T1559",
   "T1559.001",
   "T1560",
   "T1560.001",
+  "T1560.002",
   "T1563",
   "T1563.002",
   "T1564",
@@ -453,6 +474,7 @@
   "T1615",
   "T1620",
   "T1648",
+  "T1649",
   "T1651",
   "T1685",
   "T1685.001",
@@ -2583,15 +2605,17 @@
    "path": "rules_building_block/lateral_movement_posh_winrm_activity.toml",
    "rule_url": "https://github.com/elastic/detection-rules/blob/195f15c0bac84540bfe47abb8e26dbf8184eb69a/rules_building_block/lateral_movement_posh_winrm_activity.toml",
    "rule_type": "query/kuery",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "profiles": [],
-   "logsources": [],
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "index:no_supported_data_stream": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "profiles": [
+    "powershell:4104"
+   ],
+   "logsources": [
+    "windows/ps_script"
+   ],
+   "conjuncts_total": 2,
+   "conjuncts_imported": 2,
+   "gap_reasons": {},
    "attack_ids": [
     "T1047",
     "T1021",
@@ -4005,15 +4029,17 @@
    "path": "rules/windows/privilege_escalation_posh_token_impersonation.toml",
    "rule_url": "https://github.com/elastic/detection-rules/blob/195f15c0bac84540bfe47abb8e26dbf8184eb69a/rules/windows/privilege_escalation_posh_token_impersonation.toml",
    "rule_type": "query/kuery",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "profiles": [],
-   "logsources": [],
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "index:no_supported_data_stream": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "profiles": [
+    "powershell:4104"
+   ],
+   "logsources": [
+    "windows/ps_script"
+   ],
+   "conjuncts_total": 48,
+   "conjuncts_imported": 48,
+   "gap_reasons": {},
    "attack_ids": [
     "T1106",
     "T1134.002",
@@ -6631,15 +6657,17 @@
    "path": "rules/windows/defense_evasion_posh_encryption.toml",
    "rule_url": "https://github.com/elastic/detection-rules/blob/195f15c0bac84540bfe47abb8e26dbf8184eb69a/rules/windows/defense_evasion_posh_encryption.toml",
    "rule_type": "query/kuery",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "profiles": [],
-   "logsources": [],
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "index:no_supported_data_stream": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "profiles": [
+    "powershell:4104"
+   ],
+   "logsources": [
+    "windows/ps_script"
+   ],
+   "conjuncts_total": 2,
+   "conjuncts_imported": 2,
+   "gap_reasons": {},
    "attack_ids": [
     "T1027.013",
     "T1140",
@@ -6781,13 +6809,13 @@
    "rule_url": "https://github.com/elastic/detection-rules/blob/195f15c0bac84540bfe47abb8e26dbf8184eb69a/rules_building_block/discovery_posh_generic.toml",
    "rule_type": "query/kuery",
    "status": "rejected",
-   "rejection": "telemetry_gap",
+   "rejection": "translation_gap",
    "profiles": [],
    "logsources": [],
-   "conjuncts_total": 0,
+   "conjuncts_total": 1,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "index:no_supported_data_stream": 1
+    "dnf_bound_exceeded:powershell:4104:>64": 1
    },
    "attack_ids": [
     "T1069",
@@ -7004,15 +7032,17 @@
    "path": "rules/windows/defense_evasion_amsi_bypass_powershell.toml",
    "rule_url": "https://github.com/elastic/detection-rules/blob/195f15c0bac84540bfe47abb8e26dbf8184eb69a/rules/windows/defense_evasion_amsi_bypass_powershell.toml",
    "rule_type": "query/kuery",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "profiles": [],
-   "logsources": [],
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "index:no_supported_data_stream": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "profiles": [
+    "powershell:4104"
+   ],
+   "logsources": [
+    "windows/ps_script"
+   ],
+   "conjuncts_total": 26,
+   "conjuncts_imported": 26,
+   "gap_reasons": {},
    "attack_ids": [
     "T1059",
     "T1059.001",
@@ -8071,15 +8101,17 @@
    "path": "rules/windows/execution_posh_hacktool_authors.toml",
    "rule_url": "https://github.com/elastic/detection-rules/blob/195f15c0bac84540bfe47abb8e26dbf8184eb69a/rules/windows/execution_posh_hacktool_authors.toml",
    "rule_type": "query/kuery",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "profiles": [],
-   "logsources": [],
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "index:no_supported_data_stream": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "profiles": [
+    "powershell:4104"
+   ],
+   "logsources": [
+    "windows/ps_script"
+   ],
+   "conjuncts_total": 1,
+   "conjuncts_imported": 1,
+   "gap_reasons": {},
    "attack_ids": [
     "T1059",
     "T1059.001"
@@ -8558,15 +8590,17 @@
    "path": "rules_building_block/collection_posh_compression.toml",
    "rule_url": "https://github.com/elastic/detection-rules/blob/195f15c0bac84540bfe47abb8e26dbf8184eb69a/rules_building_block/collection_posh_compression.toml",
    "rule_type": "query/kuery",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "profiles": [],
-   "logsources": [],
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "index:no_supported_data_stream": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "profiles": [
+    "powershell:4104"
+   ],
+   "logsources": [
+    "windows/ps_script"
+   ],
+   "conjuncts_total": 4,
+   "conjuncts_imported": 4,
+   "gap_reasons": {},
    "attack_ids": [
     "T1560.001",
     "T1560.002",
@@ -10100,13 +10134,13 @@
    "rule_url": "https://github.com/elastic/detection-rules/blob/195f15c0bac84540bfe47abb8e26dbf8184eb69a/rules/windows/defense_evasion_posh_process_injection.toml",
    "rule_type": "query/kuery",
    "status": "rejected",
-   "rejection": "telemetry_gap",
+   "rejection": "translation_gap",
    "profiles": [],
    "logsources": [],
-   "conjuncts_total": 0,
+   "conjuncts_total": 1,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "index:no_supported_data_stream": 1
+    "dnf_bound_exceeded:powershell:4104:>64": 1
    },
    "attack_ids": [
     "T1106",
@@ -10314,15 +10348,17 @@
    "path": "rules/windows/collection_posh_audio_capture.toml",
    "rule_url": "https://github.com/elastic/detection-rules/blob/195f15c0bac84540bfe47abb8e26dbf8184eb69a/rules/windows/collection_posh_audio_capture.toml",
    "rule_type": "query/kuery",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "profiles": [],
-   "logsources": [],
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "index:no_supported_data_stream": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "profiles": [
+    "powershell:4104"
+   ],
+   "logsources": [
+    "windows/ps_script"
+   ],
+   "conjuncts_total": 9,
+   "conjuncts_imported": 9,
+   "gap_reasons": {},
    "attack_ids": [
     "T1123",
     "T1120",
@@ -12838,15 +12874,17 @@
    "path": "rules_building_block/defense_evasion_powershell_clear_logs_script.toml",
    "rule_url": "https://github.com/elastic/detection-rules/blob/195f15c0bac84540bfe47abb8e26dbf8184eb69a/rules_building_block/defense_evasion_powershell_clear_logs_script.toml",
    "rule_type": "query/kuery",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "profiles": [],
-   "logsources": [],
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "index:no_supported_data_stream": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "profiles": [
+    "powershell:4104"
+   ],
+   "logsources": [
+    "windows/ps_script"
+   ],
+   "conjuncts_total": 3,
+   "conjuncts_imported": 3,
+   "gap_reasons": {},
    "attack_ids": [
     "T1059",
     "T1685.005",
@@ -13570,15 +13608,17 @@
    "path": "rules/windows/defense_evasion_amsi_bypass_rpc_ndrclientcall.toml",
    "rule_url": "https://github.com/elastic/detection-rules/blob/195f15c0bac84540bfe47abb8e26dbf8184eb69a/rules/windows/defense_evasion_amsi_bypass_rpc_ndrclientcall.toml",
    "rule_type": "query/kuery",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "profiles": [],
-   "logsources": [],
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "index:no_supported_data_stream": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "profiles": [
+    "powershell:4104"
+   ],
+   "logsources": [
+    "windows/ps_script"
+   ],
+   "conjuncts_total": 1,
+   "conjuncts_imported": 1,
+   "gap_reasons": {},
    "attack_ids": [
     "T1059",
     "T1059.001",
@@ -15986,15 +16026,17 @@
    "path": "rules/windows/discovery_posh_invoke_sharefinder.toml",
    "rule_url": "https://github.com/elastic/detection-rules/blob/195f15c0bac84540bfe47abb8e26dbf8184eb69a/rules/windows/discovery_posh_invoke_sharefinder.toml",
    "rule_type": "query/kuery",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "profiles": [],
-   "logsources": [],
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "index:no_supported_data_stream": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "profiles": [
+    "powershell:4104"
+   ],
+   "logsources": [
+    "windows/ps_script"
+   ],
+   "conjuncts_total": 3,
+   "conjuncts_imported": 3,
+   "gap_reasons": {},
    "attack_ids": [
     "T1135",
     "T1106",
@@ -17413,15 +17455,17 @@
    "path": "rules/windows/collection_mailbox_export_winlog.toml",
    "rule_url": "https://github.com/elastic/detection-rules/blob/195f15c0bac84540bfe47abb8e26dbf8184eb69a/rules/windows/collection_mailbox_export_winlog.toml",
    "rule_type": "query/kuery",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "profiles": [],
-   "logsources": [],
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "index:no_supported_data_stream": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "profiles": [
+    "powershell:4104"
+   ],
+   "logsources": [
+    "windows/ps_script"
+   ],
+   "conjuncts_total": 1,
+   "conjuncts_imported": 1,
+   "gap_reasons": {},
    "attack_ids": [
     "T1114",
     "T1074.001",
@@ -17962,15 +18006,17 @@
    "path": "rules/windows/execution_posh_psreflect.toml",
    "rule_url": "https://github.com/elastic/detection-rules/blob/195f15c0bac84540bfe47abb8e26dbf8184eb69a/rules/windows/execution_posh_psreflect.toml",
    "rule_type": "query/kuery",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "profiles": [],
-   "logsources": [],
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "index:no_supported_data_stream": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "profiles": [
+    "powershell:4104"
+   ],
+   "logsources": [
+    "windows/ps_script"
+   ],
+   "conjuncts_total": 4,
+   "conjuncts_imported": 4,
+   "gap_reasons": {},
    "attack_ids": [
     "T1106",
     "T1059",
@@ -18124,15 +18170,17 @@
    "path": "rules/windows/credential_access_posh_minidump.toml",
    "rule_url": "https://github.com/elastic/detection-rules/blob/195f15c0bac84540bfe47abb8e26dbf8184eb69a/rules/windows/credential_access_posh_minidump.toml",
    "rule_type": "query/kuery",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "profiles": [],
-   "logsources": [],
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "index:no_supported_data_stream": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "profiles": [
+    "powershell:4104"
+   ],
+   "logsources": [
+    "windows/ps_script"
+   ],
+   "conjuncts_total": 3,
+   "conjuncts_imported": 3,
+   "gap_reasons": {},
    "attack_ids": [
     "T1003",
     "T1003.001",
@@ -19064,15 +19112,17 @@
    "path": "rules/windows/credential_access_posh_veeam_sql.toml",
    "rule_url": "https://github.com/elastic/detection-rules/blob/195f15c0bac84540bfe47abb8e26dbf8184eb69a/rules/windows/credential_access_posh_veeam_sql.toml",
    "rule_type": "query/kuery",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "profiles": [],
-   "logsources": [],
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "index:no_supported_data_stream": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "profiles": [
+    "powershell:4104"
+   ],
+   "logsources": [
+    "windows/ps_script"
+   ],
+   "conjuncts_total": 2,
+   "conjuncts_imported": 2,
+   "gap_reasons": {},
    "attack_ids": [
     "T1003",
     "T1555",
@@ -20080,13 +20130,13 @@
    "rule_url": "https://github.com/elastic/detection-rules/blob/195f15c0bac84540bfe47abb8e26dbf8184eb69a/rules/windows/discovery_posh_suspicious_api_functions.toml",
    "rule_type": "query/kuery",
    "status": "rejected",
-   "rejection": "telemetry_gap",
+   "rejection": "translation_gap",
    "profiles": [],
    "logsources": [],
-   "conjuncts_total": 0,
+   "conjuncts_total": 1,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "index:no_supported_data_stream": 1
+    "dnf_bound_exceeded:powershell:4104:>64": 1
    },
    "attack_ids": [
     "T1033",
@@ -23381,13 +23431,15 @@
    "rule_url": "https://github.com/elastic/detection-rules/blob/195f15c0bac84540bfe47abb8e26dbf8184eb69a/rules/windows/defense_evasion_posh_high_entropy.toml",
    "rule_type": "query/kuery",
    "status": "rejected",
-   "rejection": "telemetry_gap",
-   "profiles": [],
+   "rejection": "translation_gap",
+   "profiles": [
+    "powershell:4104"
+   ],
    "logsources": [],
-   "conjuncts_total": 0,
+   "conjuncts_total": 1,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "index:no_supported_data_stream": 1
+    "translation_gap:kql:range": 1
    },
    "attack_ids": [
     "T1140",
@@ -26066,13 +26118,15 @@
    "rule_url": "https://github.com/elastic/detection-rules/blob/195f15c0bac84540bfe47abb8e26dbf8184eb69a/rules/windows/defense_evasion_posh_compressed.toml",
    "rule_type": "query/kuery",
    "status": "rejected",
-   "rejection": "telemetry_gap",
-   "profiles": [],
+   "rejection": "translation_gap",
+   "profiles": [
+    "powershell:4104"
+   ],
    "logsources": [],
-   "conjuncts_total": 0,
+   "conjuncts_total": 1,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "index:no_supported_data_stream": 1
+    "translation_gap:kql:range": 1
    },
    "attack_ids": [
     "T1140",
@@ -26444,15 +26498,17 @@
    "path": "rules_building_block/persistence_transport_agent_exchange.toml",
    "rule_url": "https://github.com/elastic/detection-rules/blob/195f15c0bac84540bfe47abb8e26dbf8184eb69a/rules_building_block/persistence_transport_agent_exchange.toml",
    "rule_type": "query/kuery",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "profiles": [],
-   "logsources": [],
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "index:no_supported_data_stream": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "profiles": [
+    "powershell:4104"
+   ],
+   "logsources": [
+    "windows/ps_script"
+   ],
+   "conjuncts_total": 2,
+   "conjuncts_imported": 2,
+   "gap_reasons": {},
    "attack_ids": [
     "T1505.002",
     "T1059",
@@ -29118,15 +29174,17 @@
    "path": "rules/windows/collection_posh_clipboard_capture.toml",
    "rule_url": "https://github.com/elastic/detection-rules/blob/195f15c0bac84540bfe47abb8e26dbf8184eb69a/rules/windows/collection_posh_clipboard_capture.toml",
    "rule_type": "query/kuery",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "profiles": [],
-   "logsources": [],
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "index:no_supported_data_stream": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "profiles": [
+    "powershell:4104"
+   ],
+   "logsources": [
+    "windows/ps_script"
+   ],
+   "conjuncts_total": 12,
+   "conjuncts_imported": 12,
+   "gap_reasons": {},
    "attack_ids": [
     "T1115",
     "T1059",
@@ -29592,15 +29650,17 @@
    "path": "rules/windows/credential_access_posh_relay_tools.toml",
    "rule_url": "https://github.com/elastic/detection-rules/blob/195f15c0bac84540bfe47abb8e26dbf8184eb69a/rules/windows/credential_access_posh_relay_tools.toml",
    "rule_type": "query/kuery",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "profiles": [],
-   "logsources": [],
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "index:no_supported_data_stream": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "profiles": [
+    "powershell:4104"
+   ],
+   "logsources": [
+    "windows/ps_script"
+   ],
+   "conjuncts_total": 2,
+   "conjuncts_imported": 2,
+   "gap_reasons": {},
    "attack_ids": [
     "T1557",
     "T1550",
@@ -29708,15 +29768,17 @@
    "path": "rules/windows/collection_posh_screen_grabber.toml",
    "rule_url": "https://github.com/elastic/detection-rules/blob/195f15c0bac84540bfe47abb8e26dbf8184eb69a/rules/windows/collection_posh_screen_grabber.toml",
    "rule_type": "query/kuery",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "profiles": [],
-   "logsources": [],
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "index:no_supported_data_stream": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "profiles": [
+    "powershell:4104"
+   ],
+   "logsources": [
+    "windows/ps_script"
+   ],
+   "conjuncts_total": 1,
+   "conjuncts_imported": 1,
+   "gap_reasons": {},
    "attack_ids": [
     "T1113",
     "T1059",
@@ -32632,15 +32694,17 @@
    "path": "rules/windows/collection_posh_mailbox.toml",
    "rule_url": "https://github.com/elastic/detection-rules/blob/195f15c0bac84540bfe47abb8e26dbf8184eb69a/rules/windows/collection_posh_mailbox.toml",
    "rule_type": "query/kuery",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "profiles": [],
-   "logsources": [],
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "index:no_supported_data_stream": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "profiles": [
+    "powershell:4104"
+   ],
+   "logsources": [
+    "windows/ps_script"
+   ],
+   "conjuncts_total": 2,
+   "conjuncts_imported": 2,
+   "gap_reasons": {},
    "attack_ids": [
     "T1114",
     "T1114.001",
@@ -32850,7 +32914,7 @@
    "conjuncts_total": 0,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "index:no_supported_data_stream": 1
+    "event:no_supported_event_satisfies_scope": 1
    },
    "attack_ids": [
     "T1059",
@@ -34801,15 +34865,17 @@
    "path": "rules/windows/credential_access_mimikatz_powershell_module.toml",
    "rule_url": "https://github.com/elastic/detection-rules/blob/195f15c0bac84540bfe47abb8e26dbf8184eb69a/rules/windows/credential_access_mimikatz_powershell_module.toml",
    "rule_type": "query/kuery",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "profiles": [],
-   "logsources": [],
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "index:no_supported_data_stream": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "profiles": [
+    "powershell:4104"
+   ],
+   "logsources": [
+    "windows/ps_script"
+   ],
+   "conjuncts_total": 3,
+   "conjuncts_imported": 3,
+   "gap_reasons": {},
    "attack_ids": [
     "T1003",
     "T1003.002",
@@ -35056,15 +35122,17 @@
    "path": "rules/windows/execution_posh_portable_executable.toml",
    "rule_url": "https://github.com/elastic/detection-rules/blob/195f15c0bac84540bfe47abb8e26dbf8184eb69a/rules/windows/execution_posh_portable_executable.toml",
    "rule_type": "query/kuery",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "profiles": [],
-   "logsources": [],
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "index:no_supported_data_stream": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "profiles": [
+    "powershell:4104"
+   ],
+   "logsources": [
+    "windows/ps_script"
+   ],
+   "conjuncts_total": 1,
+   "conjuncts_imported": 1,
+   "gap_reasons": {},
    "attack_ids": [
     "T1027.013",
     "T1055",
@@ -37078,15 +37146,17 @@
    "path": "rules/windows/credential_access_posh_invoke_ninjacopy.toml",
    "rule_url": "https://github.com/elastic/detection-rules/blob/195f15c0bac84540bfe47abb8e26dbf8184eb69a/rules/windows/credential_access_posh_invoke_ninjacopy.toml",
    "rule_type": "query/kuery",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "profiles": [],
-   "logsources": [],
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "index:no_supported_data_stream": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "profiles": [
+    "powershell:4104"
+   ],
+   "logsources": [
+    "windows/ps_script"
+   ],
+   "conjuncts_total": 3,
+   "conjuncts_imported": 3,
+   "gap_reasons": {},
    "attack_ids": [
     "T1003",
     "T1006",
@@ -38094,15 +38164,17 @@
    "path": "rules/windows/collection_posh_keylogger.toml",
    "rule_url": "https://github.com/elastic/detection-rules/blob/195f15c0bac84540bfe47abb8e26dbf8184eb69a/rules/windows/collection_posh_keylogger.toml",
    "rule_type": "query/kuery",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "profiles": [],
-   "logsources": [],
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "index:no_supported_data_stream": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "profiles": [
+    "powershell:4104"
+   ],
+   "logsources": [
+    "windows/ps_script"
+   ],
+   "conjuncts_total": 40,
+   "conjuncts_imported": 40,
+   "gap_reasons": {},
    "attack_ids": [
     "T1056.001",
     "T1106",
@@ -38670,15 +38742,17 @@
    "path": "rules/windows/defense_evasion_posh_defender_tampering.toml",
    "rule_url": "https://github.com/elastic/detection-rules/blob/195f15c0bac84540bfe47abb8e26dbf8184eb69a/rules/windows/defense_evasion_posh_defender_tampering.toml",
    "rule_type": "query/kuery",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "profiles": [],
-   "logsources": [],
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "index:no_supported_data_stream": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "profiles": [
+    "powershell:4104"
+   ],
+   "logsources": [
+    "windows/ps_script"
+   ],
+   "conjuncts_total": 52,
+   "conjuncts_imported": 52,
+   "gap_reasons": {},
    "attack_ids": [
     "T1059",
     "T1059.001",
@@ -41348,15 +41422,17 @@
    "path": "rules/windows/execution_posh_hacktool_functions.toml",
    "rule_url": "https://github.com/elastic/detection-rules/blob/195f15c0bac84540bfe47abb8e26dbf8184eb69a/rules/windows/execution_posh_hacktool_functions.toml",
    "rule_type": "query/kuery",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "profiles": [],
-   "logsources": [],
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "index:no_supported_data_stream": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "profiles": [
+    "powershell:4104"
+   ],
+   "logsources": [
+    "windows/ps_script"
+   ],
+   "conjuncts_total": 2,
+   "conjuncts_imported": 2,
+   "gap_reasons": {},
    "attack_ids": [
     "T1053.005",
     "T1003",
@@ -45316,15 +45392,17 @@
    "path": "rules/windows/defense_evasion_posh_assembly_load.toml",
    "rule_url": "https://github.com/elastic/detection-rules/blob/195f15c0bac84540bfe47abb8e26dbf8184eb69a/rules/windows/defense_evasion_posh_assembly_load.toml",
    "rule_type": "query/kuery",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "profiles": [],
-   "logsources": [],
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "index:no_supported_data_stream": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "profiles": [
+    "powershell:4104"
+   ],
+   "logsources": [
+    "windows/ps_script"
+   ],
+   "conjuncts_total": 1,
+   "conjuncts_imported": 1,
+   "gap_reasons": {},
    "attack_ids": [
     "T1140",
     "T1055",
@@ -47352,15 +47430,17 @@
    "path": "rules/windows/collection_posh_webcam_video_capture.toml",
    "rule_url": "https://github.com/elastic/detection-rules/blob/195f15c0bac84540bfe47abb8e26dbf8184eb69a/rules/windows/collection_posh_webcam_video_capture.toml",
    "rule_type": "query/kuery",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "profiles": [],
-   "logsources": [],
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "index:no_supported_data_stream": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "profiles": [
+    "powershell:4104"
+   ],
+   "logsources": [
+    "windows/ps_script"
+   ],
+   "conjuncts_total": 2,
+   "conjuncts_imported": 2,
+   "gap_reasons": {},
    "attack_ids": [
     "T1125",
     "T1059",
@@ -47417,15 +47497,17 @@
    "path": "rules/windows/credential_access_posh_request_ticket.toml",
    "rule_url": "https://github.com/elastic/detection-rules/blob/195f15c0bac84540bfe47abb8e26dbf8184eb69a/rules/windows/credential_access_posh_request_ticket.toml",
    "rule_type": "query/kuery",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "profiles": [],
-   "logsources": [],
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "index:no_supported_data_stream": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "profiles": [
+    "powershell:4104"
+   ],
+   "logsources": [
+    "windows/ps_script"
+   ],
+   "conjuncts_total": 4,
+   "conjuncts_imported": 4,
+   "gap_reasons": {},
    "attack_ids": [
     "T1558",
     "T1059",
@@ -51740,15 +51822,17 @@
    "path": "rules/windows/credential_access_posh_kerb_ticket_dump.toml",
    "rule_url": "https://github.com/elastic/detection-rules/blob/195f15c0bac84540bfe47abb8e26dbf8184eb69a/rules/windows/credential_access_posh_kerb_ticket_dump.toml",
    "rule_type": "query/kuery",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "profiles": [],
-   "logsources": [],
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "index:no_supported_data_stream": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "profiles": [
+    "powershell:4104"
+   ],
+   "logsources": [
+    "windows/ps_script"
+   ],
+   "conjuncts_total": 2,
+   "conjuncts_imported": 2,
+   "gap_reasons": {},
    "attack_ids": [
     "T1003",
     "T1106",
@@ -51813,15 +51897,17 @@
    "path": "rules_building_block/discovery_posh_password_policy.toml",
    "rule_url": "https://github.com/elastic/detection-rules/blob/195f15c0bac84540bfe47abb8e26dbf8184eb69a/rules_building_block/discovery_posh_password_policy.toml",
    "rule_type": "query/kuery",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "profiles": [],
-   "logsources": [],
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "index:no_supported_data_stream": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "profiles": [
+    "powershell:4104"
+   ],
+   "logsources": [
+    "windows/ps_script"
+   ],
+   "conjuncts_total": 36,
+   "conjuncts_imported": 36,
+   "gap_reasons": {},
    "attack_ids": [
     "T1552",
     "T1059",

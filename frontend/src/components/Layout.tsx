@@ -4,7 +4,9 @@ import {
   CornerDownLeft,
   FileText,
   FolderSearch,
-  Info,
+  BookOpen,
+  LayoutDashboard,
+  Users,
   Radar,
   Search,
   ShieldCheck,
@@ -15,13 +17,12 @@ import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import {
   paths,
   useApi,
-  useHealth,
   type InvestigationSummary,
   type TechniqueCatalogue,
 } from "../lib/api";
 import { shortId } from "../lib/format";
 import { links, navigate, type Route } from "../lib/router";
-import { UncalibratedBadge, cx } from "./ui";
+import { cx } from "./ui";
 
 export interface Crumb {
   label: string;
@@ -29,12 +30,14 @@ export interface Crumb {
 }
 
 const NAV = [
-  { key: "investigations", label: "Investigations", href: links.investigations(), icon: FolderSearch },
-  { key: "upload", label: "Upload a Recording", href: links.upload(), icon: UploadCloud },
-  { key: "units", label: "Units Search", href: links.units(), icon: Target },
-  { key: "coverage", label: "Detection Coverage", href: links.coverage(), icon: Radar },
-  { key: "dossier", label: "Attribution Dossier", href: links.dossier(), icon: FileText },
-  { key: "about", label: "About & Provenance", href: links.about(), icon: Info },
+  { key: "overview", label: "Overview", href: links.home(), icon: LayoutDashboard, group: "Operations" },
+  { key: "investigations", label: "Investigations", href: links.investigations(), icon: FolderSearch, group: "Operations" },
+  { key: "upload", label: "Analyze Logs", href: links.upload(), icon: UploadCloud, group: "Operations" },
+  { key: "units", label: "Activity Search", href: links.units(), icon: Target, group: "Operations" },
+  { key: "actors", label: "Threat Actors", href: links.actors(), icon: Users, group: "Intelligence" },
+  { key: "coverage", label: "Technique Coverage", href: links.coverage(), icon: Radar, group: "Intelligence" },
+  { key: "dossier", label: "Reports", href: links.dossier(), icon: FileText, group: "Reporting" },
+  { key: "about", label: "Methodology", href: links.about(), icon: BookOpen, group: "Reporting" },
 ] as const;
 
 export type Section = (typeof NAV)[number]["key"];
@@ -43,7 +46,9 @@ export function sectionOf(route: Route): Section {
   const head = route.segments[0];
   // A unit workspace is reached from its investigation; only the search is "Units Search".
   if (head === "units") return route.segments.length > 1 ? "investigations" : "units";
+  if (head === undefined) return "overview";
   if (head === "upload") return "upload";
+  if (head === "actors") return "actors";
   if (head === "coverage") return "coverage";
   if (head === "dossier") return "dossier";
   if (head === "about") return "about";
@@ -54,22 +59,24 @@ function Sidebar({ section }: { section: Section }) {
   const catalogue = useApi<TechniqueCatalogue>(paths.techniques());
   return (
     <aside className="no-print fixed inset-y-0 left-0 z-30 flex w-64 flex-col border-r border-outline-variant/70 bg-surface-lowest">
-      <a href={links.investigations()} className="flex h-14 items-center gap-2.5 border-b border-outline-variant/70 px-4">
+      <a href={links.home()} className="flex h-14 items-center gap-2.5 border-b border-outline-variant/70 px-4">
         <span className="flex h-8 w-8 items-center justify-center rounded-md border border-primary/40 bg-primary/10 text-primary">
           <ShieldCheck size={17} strokeWidth={2} />
         </span>
         <span className="min-w-0">
           <span className="block truncate text-headline-sm text-on-surface">APT Attribution</span>
-          <span className="label block truncate">SOC analyst console</span>
+          <span className="label block truncate">Detection &amp; attribution</span>
         </span>
       </a>
       <nav aria-label="Primary" className="flex-1 space-y-0.5 overflow-y-auto p-2">
-        {NAV.map((item) => {
+        {NAV.map((item, position) => {
           const active = item.key === section;
           const Icon = item.icon;
+          const heading = position === 0 || NAV[position - 1]?.group !== item.group;
           return (
+            <div key={item.key}>
+              {heading && <div className="label px-3 pb-1 pt-3 first:pt-1">{item.group}</div>}
             <a
-              key={item.key}
               href={item.href}
               aria-current={active ? "page" : undefined}
               className={cx(
@@ -82,61 +89,14 @@ function Sidebar({ section }: { section: Section }) {
               <Icon size={16} strokeWidth={1.8} className="shrink-0" />
               <span className="truncate">{item.label}</span>
             </a>
+            </div>
           );
         })}
       </nav>
-      <div className="space-y-3 border-t border-outline-variant/70 p-4">
-        <UncalibratedBadge compact />
-        <p className="text-body-sm text-on-surface-variant">
-          No likelihood, confidence or ranking is shown anywhere: no calibration version exists.
-          Candidates are always listed alphabetically.
-        </p>
-        <dl className="space-y-1 font-mono text-code-sm text-outline">
-          <div className="flex justify-between gap-2">
-            <dt>ATT&amp;CK</dt>
-            <dd className="truncate text-on-surface-variant">
-              {catalogue.state === "ready" ? catalogue.data.attack_kb_version : "—"}
-            </dd>
-          </div>
-        </dl>
+      <div className="border-t border-outline-variant/70 px-4 py-3 font-mono text-code-sm text-outline">
+        MITRE {catalogue.state === "ready" ? catalogue.data.attack_kb_version.replace("enterprise-attack-", "ATT&CK v") : "ATT&CK"}
       </div>
     </aside>
-  );
-}
-
-function HealthIndicator() {
-  const { health, failure, checkedAt, recheck } = useHealth();
-  const pending = !health && !failure;
-  const ok = health?.backend === "reachable";
-  const label = pending
-    ? "Checking API…"
-    : failure
-      ? "API unreachable"
-      : ok
-        ? "Backend reachable"
-        : "Store unreachable";
-  const detail = failure
-    ? failure.message
-    : health
-      ? `${health.api} — store ${health.backend}`
-      : "";
-  return (
-    <button
-      type="button"
-      onClick={recheck}
-      title={`${detail}${checkedAt ? ` (checked ${checkedAt.toLocaleTimeString()})` : ""} — click to re-check`}
-      className="flex h-8 items-center gap-2 rounded-sm border border-outline-variant/70 bg-surface-low px-2.5 text-label-md text-on-surface-variant hover:border-outline"
-    >
-      <span className="relative flex h-2 w-2">
-        <span
-          className={cx(
-            "relative inline-flex h-2 w-2 rounded-full",
-            pending ? "bg-outline" : ok ? "bg-primary" : "bg-error",
-          )}
-        />
-      </span>
-      <span className={cx(!pending && !ok && "text-error")}>{label}</span>
-    </button>
   );
 }
 
@@ -397,7 +357,6 @@ export function Shell({
           <span className="flex-1 truncate text-left">Search units, techniques, recordings…</span>
           <kbd className="rounded-sm border border-outline-variant px-1 font-mono text-code-sm">Ctrl K</kbd>
         </button>
-        <HealthIndicator />
       </header>
       <main className="print-root ml-64 px-6 pb-16 pt-20">
         <div className="mx-auto max-w-[1500px]">{children}</div>

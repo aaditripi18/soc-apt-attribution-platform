@@ -45,11 +45,17 @@ from attribution_platform.detection.derived_cloud import (
     OKTA_VIEWS,
 )
 from attribution_platform.detection.derived_fields import SYSMON_VIEWS
+from attribution_platform.detection.derived_powershell import (
+    POWERSHELL_PROVIDER,
+    POWERSHELL_VIEWS,
+    SCRIPT_BLOCK_ACTION,
+    SCRIPT_BLOCK_CODE,
+)
 from attribution_platform.detection.derived_security import SECURITY_VIEWS
 from attribution_platform.detection.derived_views import ViewSet
 from attribution_platform.sources.windows_security import SUPPORTED_EVENT_IDS
 
-ELASTIC_FIELD_MAP_VERSION = "elastic-field-map/2"  # 2: several data streams
+ELASTIC_FIELD_MAP_VERSION = "elastic-field-map/3"  # 2: several data streams; 3: PowerShell
 
 INTEGRATIONS_COMMIT = "ff5328128a30c75046130ae58ddba450caa1f2dc"
 ECS_VERSION = "8.17.0"
@@ -430,10 +436,57 @@ SECURITY_STREAM = DataStream(
     known_absent=SECURITY_KNOWN_ABSENT,
 )
 
+#: PowerShell script-block events (4104), the one PowerShell event with script
+#: text. ``event.category`` / ``event.type`` / ``event.code`` / ``event.provider``
+#: are the pinned pipeline's constants for it; it sets no ``event.action`` or
+#: ``event.outcome``. A script-block event describes no process beyond its pid.
+POWERSHELL_STREAM = DataStream(
+    stream_id="powershell",
+    data_stream="logs-windows.powershell_operational-default",
+    views=POWERSHELL_VIEWS,
+    profiles=(
+        EventProfile(
+            profile_id=f"powershell:{SCRIPT_BLOCK_CODE}",
+            logsource="windows/ps_script",
+            constants=MappingProxyType(
+                {
+                    "event.kind": ("event",),
+                    "event.module": ("windows",),
+                    "event.dataset": ("windows.powershell_operational",),
+                    "data_stream.dataset": ("windows.powershell_operational",),
+                    "data_stream.type": ("logs",),
+                    "event.provider": (POWERSHELL_PROVIDER,),
+                    "host.os.type": ("windows",),
+                    "event.code": (SCRIPT_BLOCK_CODE,),
+                    "event.category": ("process",),
+                    "event.type": ("info",),
+                    "event.action": None,
+                    "event.outcome": None,
+                }
+            ),
+            selector=(
+                ("event.category", "has_element", "process", False),
+                ("event.action", "equals", SCRIPT_BLOCK_ACTION, False),
+            ),
+        ),
+    ),
+    known_absent=(
+        *KNOWN_ABSENT_PREFIXES,
+        "process.name",
+        "process.executable",
+        "process.args",
+        "process.command_line",
+        "process.parent.",
+        "process.pe.",
+        "process.hash.",
+    ),
+)
+
 #: Every data stream Elastic rules are translated for, in a fixed order.
 STREAMS: tuple[DataStream, ...] = (
     SYSMON_STREAM,
     SECURITY_STREAM,
+    POWERSHELL_STREAM,
     _audit_stream(
         "cloudtrail", "aws.cloudtrail", "aws", CLOUDTRAIL_VIEWS, "aws/cloudtrail", "aws.cloudtrail"
     ),

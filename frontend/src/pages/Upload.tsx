@@ -5,7 +5,6 @@ import {
   Button,
   Card,
   CardHeader,
-  Command,
   EmptyState,
   ErrorState,
   Id,
@@ -211,14 +210,13 @@ export function UploadPage() {
     <>
       <PageHeader
         eyebrow="New investigation"
-        title="Upload a recording"
-        description="Give the platform a log archive. It runs the same intake check and the same investigation as the command line, and the result opens in this console. The file stays on this machine."
+        title="Analyze logs"
+        description="Upload a log archive to detect ATT&CK techniques, reconstruct the attack chain and match the behaviour against threat group profiles. Files are processed locally."
       />
 
       {!uploads.enabled ? (
-        <EmptyState title="Uploading is switched off on this server">
-          <p>Start the console with its upload service (the default of the serving command):</p>
-          <Command>python -m attribution_platform.investigation --serve</Command>
+        <EmptyState title="Log upload is unavailable">
+          <p>Log upload is not enabled on this deployment.</p>
         </EmptyState>
       ) : (
         <div className="space-y-6">
@@ -314,25 +312,22 @@ export function UploadPage() {
           </Card>
 
           <Card>
-            <h2 className="text-headline-sm text-on-surface">What you get, and what you do not</h2>
+            <h2 className="text-headline-sm text-on-surface">What the analysis produces</h2>
             <ul className="mt-3 max-w-4xl list-disc space-y-2 pl-5 text-body-md text-on-surface-variant">
               <li>
-                <span className="text-on-surface">ATT&CK techniques with the evidence behind each</span> — the rule that
-                fired, the raw event it fired on, the attack sequence, a matrix and a timeline.
+                <span className="text-on-surface">Detected ATT&CK techniques</span> with the evidence behind each: the
+                rule that fired, the raw event, the attack sequence, a matrix and a timeline.
               </li>
               <li>
-                <span className="text-on-surface">The actors consistent with that evidence, and a verdict with reasons.</span>{" "}
-                The platform names a Group only on evidence specific to that Group. Shared techniques alone do not single
-                one out, so most recordings end in "no actor can be singled out" with the candidates listed.
+                <span className="text-on-surface">Attribution.</span> A threat group is identified when evidence specific
+                to it is found. Otherwise the closest behavioural profiles are shown with their overlap, grouped into the
+                clusters the evidence cannot separate.
               </li>
               <li>
-                <span className="text-on-surface">No confidence percentage.</span> None is shown because no calibration
-                exists; a number here would be invented.
+                <span className="text-on-surface">Response guidance.</span> ATT&CK mitigations for the techniques
+                observed, prioritised by how many they address.
               </li>
-              <li>
-                An investigation typically takes a few minutes and up to about twenty for a large recording. You can
-                leave this page; the upload keeps running while the server does.
-              </li>
+              <li>Analysis typically takes a few minutes, longer for large archives. You can leave this page while it runs.</li>
             </ul>
           </Card>
         </div>

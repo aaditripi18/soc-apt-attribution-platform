@@ -6,7 +6,7 @@
   "sigma_archive": "sigma_actor_specific.zip",
   "sigma_archive_sha256": "1ab1ecb0e25d06dc3323c013ebec90d96b3c821d12b03a5061be04a0e9b8aa16",
   "pysigma_version": "1.5.1",
-  "field_map_version": "sigma-field-map/14",
+  "field_map_version": "sigma-field-map/15",
   "attack_kb_version": "enterprise-attack-19.2",
   "dnf_bound": 64,
   "actor_tag_review": {
@@ -81,11 +81,11 @@
    }
   },
   "by_status": {
-   "imported": 30,
+   "imported": 34,
    "partial": 2,
-   "rejected": 106
+   "rejected": 102
   },
-  "generated_rules": 100,
+  "generated_rules": 105,
   "groups_with_a_usable_rule": [
    "G0007",
    "G0010",
@@ -249,13 +249,11 @@
    "path": "rules-emerging-threats/2017/TA/Turla/win_system_apt_turla_service_png.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules-emerging-threats/2017/TA/Turla/win_system_apt_turla_service_png.yml",
    "logsource": "windows/system",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:windows/system": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 1,
+   "conjuncts_imported": 1,
+   "gap_reasons": {},
    "attack_ids": [
     "G0010"
    ],
@@ -1439,13 +1437,11 @@
    "path": "rules-emerging-threats/2018/TA/OilRig/win_system_apt_oilrig_mar18.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules-emerging-threats/2018/TA/OilRig/win_system_apt_oilrig_mar18.yml",
    "logsource": "windows/system",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:windows/system": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 2,
+   "conjuncts_imported": 2,
+   "gap_reasons": {},
    "attack_ids": [
     "G0049"
    ],
@@ -3113,13 +3109,11 @@
    "path": "rules-emerging-threats/2017/Malware/StoneDrill/win_system_apt_stonedrill.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules-emerging-threats/2017/Malware/StoneDrill/win_system_apt_stonedrill.yml",
    "logsource": "windows/system",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:windows/system": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 1,
+   "conjuncts_imported": 1,
+   "gap_reasons": {},
    "attack_ids": [
     "G0064"
    ],
@@ -3521,13 +3515,11 @@
    "path": "rules-emerging-threats/2023/Malware/SNAKE/win_system_malware_snake_persistence_service.yml",
    "rule_url": "https://github.com/SigmaHQ/sigma/blob/r2026-07-01/rules-emerging-threats/2023/Malware/SNAKE/win_system_malware_snake_persistence_service.yml",
    "logsource": "windows/system",
-   "status": "rejected",
-   "rejection": "telemetry_gap",
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "logsource:windows/system": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "conjuncts_total": 1,
+   "conjuncts_imported": 1,
+   "gap_reasons": {},
    "attack_ids": [
     "G0010"
    ],

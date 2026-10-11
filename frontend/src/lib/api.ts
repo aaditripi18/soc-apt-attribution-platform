@@ -633,6 +633,75 @@ export interface EmulationComparison {
   schema_version: string;
 }
 
+/** ADR-0021: one candidate's behavioural overlap with what was observed. */
+export interface ProfileMatch {
+  candidate_id: string;
+  stix_id: string;
+  name: string;
+  kind: "group" | "campaign";
+  matched_technique_ids: string[];
+  matched: number;
+  profile_techniques: number;
+  /** Weighted share of the observed behaviour the profile contains (0..1). A similarity, not a likelihood. */
+  overlap: number;
+  profile_share: number;
+  cluster_id: string;
+  named_by: "actor_specific" | "advisory_indicator" | null;
+}
+
+export interface ProfileMatchRecord {
+  investigation_id: string;
+  attack_kb_version: string;
+  active_groups: number;
+  observed: {
+    technique_id: string;
+    technique_stix_id: string;
+    technique_name: string;
+    groups_using: number;
+    weight: number;
+  }[];
+  total_weight: number;
+  matches: ProfileMatch[];
+  clusters: {
+    cluster_id: string;
+    label: string;
+    overlap: number;
+    matched_technique_ids: string[];
+    member_ids: string[];
+    member_names: string[];
+  }[];
+  mitigations: {
+    mitigation_id: string;
+    stix_id: string;
+    name: string;
+    description: string;
+    technique_ids: string[];
+  }[];
+  techniques_without_mitigation: string[];
+  method_version: string;
+  schema_version: string;
+}
+
+/** ADR-0021: one ATT&CK Group as the catalogue serves it. */
+export interface ActorProfile {
+  attack_id: string;
+  stix_id: string;
+  name: string;
+  aliases: string[];
+  description: string;
+  technique_ids: string[];
+  software: { attack_id: string; name: string }[];
+  actor_rules: { title: string; url: string | null; reason: string }[];
+  advisories: { report_name: string; publisher: string }[];
+}
+
+export interface GroupCatalogue {
+  attack_kb_version: string;
+  active_groups: number;
+  groups_with_specific_evidence: number;
+  groups: ActorProfile[];
+}
+
 export type UploadState = "queued" | "checking" | "analysing" | "done" | "refused" | "failed";
 
 /** ADR-0020: one uploaded recording and what became of it. */
@@ -729,6 +798,8 @@ export const paths = {
   assessment: (id: string) => `/investigations/${encodeURIComponent(id)}/assessment`,
   validation: () => "/validation",
   uploads: () => "/uploads",
+  profileMatch: (id: string) => `/investigations/${encodeURIComponent(id)}/profile-match`,
+  groups: () => "/attack/groups",
   activity: (id: string) => `/investigations/${encodeURIComponent(id)}/activity`,
   emulation: (id: string) => `/investigations/${encodeURIComponent(id)}/emulation`,
   unit: (id: string) => `/units/${encodeURIComponent(id)}`,

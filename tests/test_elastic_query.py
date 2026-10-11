@@ -150,6 +150,7 @@ def test_kql_values_are_case_sensitive_and_exact() -> None:
         "equals",
         "Create*User",
         False,  # quoted: the * is literal
+        quoted=True,
     )
 
 

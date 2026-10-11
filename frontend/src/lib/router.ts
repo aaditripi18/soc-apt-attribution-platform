@@ -61,7 +61,10 @@ export function useRoute(): Route {
 }
 
 export const links = {
-  investigations: () => href([]),
+  home: () => href([]),
+  investigations: () => href(["investigations"]),
+  actors: (filters: Record<string, string | undefined> = {}) => href(["actors"], filters),
+  actor: (id: string) => href(["actors", id]),
   investigation: (id: string, tab?: string) => href(tab ? ["investigations", id, tab] : ["investigations", id]),
   unit: (id: string, tab?: string) => href(tab ? ["units", id, tab] : ["units", id]),
   units: (filters: Record<string, string | undefined> = {}) => href(["units"], filters),

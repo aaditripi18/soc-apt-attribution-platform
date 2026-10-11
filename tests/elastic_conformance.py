@@ -136,6 +136,9 @@ def compare(
             theirs = _normalise(get(document, ecs_field))
             if ecs_field in views.arrays and isinstance(theirs, str):
                 theirs = (theirs,)
+            if ecs_field in views.analyzers and isinstance(theirs, str):
+                # an analysed text field: queries see its tokens, so compare those
+                theirs = views.analyzers[ecs_field](theirs)
             if ours is None and theirs is None:
                 continue
             if ours is UNDETERMINED:  # never matches anything: nothing to compare

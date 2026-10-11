@@ -142,6 +142,16 @@ SELECTIONS: tuple[tuple[str, str, Callable[[Record], bool]], ...] = (
     ("b-5379", APT29_DAY1, _nx(5379)),
     ("b-5441", APT29_DAY1, _nx(5441)),
     ("b-5447", APT29_DAY1, _nx(5447)),
+    # Windows System log (ADR-0008 Amendment): service installed, both shapes.
+    ("sys-7045", EMPIRE, _v6("System", 7045)),
+    (
+        "sys-7045-apt29",
+        APT29_DAY1,
+        lambda r: str(r.get("Channel", "")).lower() == "system"
+        and r.get("EventID") == 7045
+        and "EventTime" in r
+        and str(r.get("ImagePath", "")).endswith("javamtsup.exe"),
+    ),
 )
 
 

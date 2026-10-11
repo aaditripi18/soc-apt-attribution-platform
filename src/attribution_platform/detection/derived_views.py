@@ -56,7 +56,7 @@ class ViewSet:
     """One data stream's derived views.
 
     ``types`` gives each field's Elasticsearch type (``keyword`` / ``wildcard`` /
-    ``long`` / ``boolean``); ``arrays`` names the fields whose value is a tuple
+    ``long`` / ``boolean`` / ``text``); ``arrays`` names the fields whose value is a tuple
     (the engine's ``element_*`` operators only). ``dynamic`` maps a field-name
     prefix (ending in a dot) to a family of sub-fields — an Elasticsearch
     ``flattened`` object, whose leaves are keyword strings and always read as a
@@ -67,6 +67,10 @@ class ViewSet:
     types: Mapping[str, str]
     arrays: frozenset[str]
     dynamic: Mapping[str, DynamicView] = MappingProxyType({})
+    #: For each analysed ``text`` field: a query value -> the form in which a
+    #: phrase match on the field is a substring match of the view's value
+    #: (``None``: the value has no token and matches nothing).
+    analyzers: Mapping[str, Callable[[str], str | None]] = MappingProxyType({})
 
     def path(self, ecs_field: str) -> str:
         return f"{self.namespace}.{ecs_field}"
@@ -117,6 +121,7 @@ def build_view_set(
     arrays: frozenset[str] = frozenset(),
     dynamic: Mapping[str, DynamicView] | None = None,
     ignore_above: Mapping[str, int] | None = None,
+    analyzers: Mapping[str, Callable[[str], str | None]] | None = None,
 ) -> ViewSet:
     """Wrap pipeline-level derivations with the index mapping. Every field is a
     ``keyword`` with ``ignore_above: 1024`` unless ``non_keyword`` gives another
@@ -127,6 +132,9 @@ def build_view_set(
     )
     if unknown:
         raise ValueError(f"{namespace}: types/arrays name unknown fields {sorted(unknown)}")
+    text_fields = {name for name, ecs_type in types.items() if ecs_type == "text"}
+    if text_fields != set(analyzers or {}):
+        raise ValueError(f"{namespace}: every text field needs its analyzer, and only those")
 
     def view(name: str) -> View:
         derive, ecs_type = pipeline_fields[name], types[name]
@@ -139,6 +147,7 @@ def build_view_set(
         types=MappingProxyType(types),
         arrays=arrays,
         dynamic=MappingProxyType(dict(dynamic or {})),
+        analyzers=MappingProxyType(dict(analyzers or {})),
     )
 
 

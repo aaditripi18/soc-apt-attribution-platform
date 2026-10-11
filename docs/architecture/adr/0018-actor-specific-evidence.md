@@ -163,3 +163,8 @@ produces that Group's lead. The lead is correct about the artefact and says so; 
 **Still not established** (unchanged from Validation): that these rules fire on the real malware in the field, and
 how often a firing is the named Group. The known-answer events prove the path from artefact to lead, not field
 recall. 161 of 176 active Groups have no such content; for them the verdict stays "no actor can be singled out".
+
+**Update 2026-10-11 (ADR-0008 System-log record).** With the Windows System log read (service installs, 7045),
+four more accepted rules run — Turla's PNG-dropper service, Snake's `WerFaultSvc` service, OilRig's scheduled-task
+service and APT33's StoneDrill service: **36 usable rules** (34 whole, 2 in part) for the same 15 Groups. Five
+accepted rules remain unusable (DNS-server, firewall and proxy logs; two untranslatable).

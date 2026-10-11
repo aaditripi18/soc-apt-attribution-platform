@@ -57,19 +57,6 @@ export function Badge({
   );
 }
 
-/** The standing product rule, shown wherever attribution data is. */
-export function UncalibratedBadge({ compact = false }: { compact?: boolean }) {
-  return (
-    <Badge
-      tone="warning"
-      title="No calibration version exists, so no likelihood, confidence or ranking is emitted."
-    >
-      <AlertTriangle size={11} strokeWidth={2.2} />
-      {compact ? "Uncalibrated" : "Uncalibrated — explainable facts only"}
-    </Badge>
-  );
-}
-
 export function Mono({ children, className }: { children: ReactNode; className?: string }) {
   return <span className={cx("font-mono text-code-md", className)}>{children}</span>;
 }
@@ -669,15 +656,8 @@ export function ErrorState({ failure, onRetry }: { failure: ApiFailure; onRetry?
   );
   if (failure.kind === "unreachable") {
     return (
-      <StateFrame icon={<ServerOff size={20} />} title="The read-model API is not answering" tone="error">
-        <p>
-          Nothing can be shown without it: this console only displays what the backend computed.
-          Start an investigation session, then try again.
-        </p>
-        <Command>python -m attribution_platform.investigation otrf-apt3-empire --serve</Command>
-        <p className="font-mono text-code-sm text-outline">
-          GET /api{failure.path} — {failure.message}
-        </p>
+      <StateFrame icon={<ServerOff size={20} />} title="The analysis service is not responding" tone="error">
+        <p>This page could not be loaded. Check that the platform is running, then try again.</p>
         {retry}
       </StateFrame>
     );

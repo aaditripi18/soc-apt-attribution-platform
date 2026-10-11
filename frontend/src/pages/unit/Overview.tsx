@@ -160,8 +160,10 @@ export function OverviewTab({ data, unitId }: { data: UnitData; unitId: string }
         <Card padded={false}>
           <CardHeader title="How strong is this?" />
           <div className="space-y-4 p-4">
-            <Badge tone="warning">{analysis.calibration_status}</Badge>
-            <p className="text-body-md text-on-surface-variant">{analysis.calibration_note}</p>
+            <p className="text-body-md text-on-surface-variant">
+              This cluster is compared with every threat group profile. Its overlap with each, and whether any group is
+              identified by evidence specific to it, is on the investigation's Attribution tab.
+            </p>
             {analysis.comparison_status !== "computed" ? (
               <div className="rounded-sm border border-warning/30 bg-warning/5 p-3">
                 <div className="label text-warning">
