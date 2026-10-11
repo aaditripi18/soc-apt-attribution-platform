@@ -195,7 +195,7 @@ to port 8000; set `VITE_API_TARGET` for another address). `npm run typecheck`, `
   claim, not the platform's.
 - **Known-answer checks** (`data/validation/known-answer-checks.json`, shown on the site): on recordings of APT29
   and APT3 emulations, ordering candidates by technique overlap never put the emulated actor first under 16
-  orderings (positions 14–121), and on tool tests with no actor it would still have named one every time. The
+  orderings (positions 15–125), and on tool tests with no actor it would still have named one every time. The
   platform's own verdicts named an actor in 1 of the 4 cases — the right one, as a lead — and none wrongly.
 - **`scripts/audit_served_read_model.py`** recomputes what a running server states — every rule re-fired on its
   observation, every candidate set rebuilt from ATT&CK — and must pass before a result is trusted.

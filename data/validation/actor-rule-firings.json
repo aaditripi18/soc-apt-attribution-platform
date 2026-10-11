@@ -1,18 +1,18 @@
 {
  "actor_pack": "sigma-r2026-07-01-actor-specific",
- "actor_pack_content_hash": "77884f7264f2ee0da944f96f2a4cbeac109a4c6311afab56cc7a4abd5e74c2aa",
- "actor_rules": 100,
+ "actor_pack_content_hash": "2a6b552f419f406cb1b6cb017e8b1f0ce718278d2de9c9dd50d81f7e0666916b",
+ "actor_rules": 105,
  "attack_kb_version": "enterprise-attack-19.2",
  "recordings_measured": 11,
  "recordings_absent": 0,
- "observations": 1146524,
+ "observations": 1146530,
  "firings": 1,
  "recordings": [
   {
    "recording_id": "otrf-apt29-day1",
    "present": true,
    "sha256": "98a073140860560d70080ace9142961be4f64b4862bae892d62d0f254d0fdbe5",
-   "observations": 175143,
+   "observations": 175148,
    "firings": 1,
    "firings_by_rule": {
     "sigma-actor:cb062102-587e-4414-8efa-dbe3c7bf19c6:000": 1
@@ -38,7 +38,7 @@
    "recording_id": "otrf-apt3-empire",
    "present": true,
    "sha256": "ab4d1ec4e44102c87946a974f93aa248e49e5001e01fac3f137ec7e61bbc18ed",
-   "observations": 87929,
+   "observations": 87930,
    "firings": 0,
    "firings_by_rule": {}
   },
