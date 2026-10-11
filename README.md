@@ -150,6 +150,25 @@ to port 8000; set `VITE_API_TARGET` for another address). `npm run typecheck`, `
 > **Windows + Git Bash:** if a `.venv/Scripts/` launcher fails with `Permission denied`, use the module
 > form (`python -m mypy`, `python -m pytest`).
 
+## What it concludes, and how that was checked
+
+- **Per investigation, a verdict with reasons** ([ADR-0017](docs/architecture/adr/0017-investigation-attribution-assessment.md)):
+  nothing attributable, no actor can be singled out, or a lead. It never names an actor from technique overlap.
+- **A Group is named only on evidence specific to it** ([ADR-0018](docs/architecture/adr/0018-actor-specific-evidence.md)):
+  Sigma rules that name a Group count only where a written, per-rule review accepts them (14 of 52), and the result
+  is a lead to verify. 0 firings on 1.13 M real observations that contain none of that tooling.
+- **Known-answer checks** (`data/validation/known-answer-checks.json`, shown on the site): on recordings of APT29
+  and APT3 emulations, ordering candidates by technique overlap never put the emulated actor first under 16
+  orderings (positions 14–121), and on tool tests with no actor it would still have named one every time. The
+  platform named none wrongly.
+- **`scripts/audit_served_read_model.py`** recomputes what a running server states — every rule re-fired on its
+  observation, every candidate set rebuilt from ATT&CK — and must pass before a result is trusted.
+- **A self-built lab** ([docs/operations/lab-pilot-results.md](docs/operations/lab-pilot-results.md)): an isolated
+  two-VM lab recorded a CALDERA run; the platform accepted and analysed it, found the agent's masquerading and
+  hidden launches, and missed four of the seven discovery techniques that were run — reported as measured.
+
+Not claimed: a calibrated confidence. No calibration version exists, so none is shown.
+
 ## Platform stack (Elasticsearch + Kibana)
 
 [`docker-compose.yml`](docker-compose.yml) brings up a single-node, security-enabled Elasticsearch + Kibana
