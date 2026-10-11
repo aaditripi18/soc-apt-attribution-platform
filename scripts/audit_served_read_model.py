@@ -41,7 +41,11 @@ from attribution_platform.attack_knowledge.traversal import (
 )
 from attribution_platform.dataplane.persistence import _observation_from_document
 from attribution_platform.detection import load_rule_pack
-from attribution_platform.detection_content.pinned import ELASTIC_PACK, SIGMA_PACK
+from attribution_platform.detection_content.pinned import (
+    ELASTIC_PACK,
+    SIGMA_ACTOR_PACK,
+    SIGMA_PACK,
+)
 
 #: The analysis also stores the candidate-independent "Unattributed" hypothesis.
 UNATTRIBUTED = "candidate::unattributed"
@@ -86,7 +90,7 @@ def main(argv: list[str]) -> int:
     knowledge = load_attack_knowledge()
     rules = {
         rule.rule_ref.rule_id: rule
-        for path in (SIGMA_PACK, ELASTIC_PACK)
+        for path in (SIGMA_PACK, ELASTIC_PACK, SIGMA_ACTOR_PACK)
         for rule in load_rule_pack(path, knowledge=knowledge).rules
     }
     total_groups = len(active_groups(knowledge))
@@ -126,6 +130,7 @@ def main(argv: list[str]) -> int:
         pooled: set[str] = set()
         pooled_candidates: set[str] = set()
         named_leads = 0
+        pooled_actor_evidence: set[str] = set()
 
         for unit_summary in listed["units"]:
             group_id = unit_summary["group_id"]
@@ -173,11 +178,25 @@ def main(argv: list[str]) -> int:
                     )
 
             # --- Decision features = techniques of core Evidence ----------------
-            core = {
-                e["attack_ref"]["stix_id"]
+            technique_evidence = [
+                e
                 for e in evidence
-                if e["attack_ref"] and e["quality"] != "low"
+                if e["attack_ref"] and e["attack_ref"]["object_type"] == "attack-pattern"
+            ]
+            core = {e["attack_ref"]["stix_id"] for e in technique_evidence if e["quality"] != "low"}
+            # --- ADR-0018: actor-specific Evidence is listed, and is no technique ---
+            actor_evidence = {
+                e["evidence_id"]: e["attack_ref"]
+                for e in evidence
+                if e["attack_ref"] and e["attack_ref"]["object_type"] == "intrusion-set"
             }
+            audit.check(
+                "actor.unit_lists_exactly_its_group_referenced_evidence",
+                {a["evidence_id"]: a["actor_stix_id"] for a in analysis["actor_specific_evidence"]}
+                == {k: v["stix_id"] for k, v in actor_evidence.items()},
+                group_id,
+            )
+            pooled_actor_evidence |= set(actor_evidence)
             observed = set(analysis["observed_feature_technique_ids"])
             pooled |= observed
             pooled_candidates |= {c["stix_id"] for c in analysis["candidates"]}
@@ -190,7 +209,7 @@ def main(argv: list[str]) -> int:
             )
 
             # --- Unit summary --------------------------------------------------
-            external = {e["attack_ref"]["external_id"] for e in evidence if e["attack_ref"]}
+            external = {e["attack_ref"]["external_id"] for e in technique_evidence}
             with_parents = external | {x.split(".")[0] for x in external}
             audit.check(
                 "summary.techniques", set(unit_summary["technique_ids"]) == with_parents, group_id
@@ -425,11 +444,18 @@ def main(argv: list[str]) -> int:
                 str(row),
             )
         expected_verdict = (
-            "no_decision_features"
+            "actor_specific_evidence"
+            if pooled_actor_evidence
+            else "no_decision_features"
             if not pooled
             else "third_party_lead"
             if named_leads
             else "not_distinguishable"
+        )
+        audit.check(
+            "assessment.actor_leads_are_the_units_actor_evidence",
+            {lead["evidence_id"] for lead in assessment["actor_leads"]} == pooled_actor_evidence,
+            summary["source_id"],
         )
         audit.check(
             "assessment.verdict",
@@ -437,10 +463,12 @@ def main(argv: list[str]) -> int:
             and len(assessment["indicator_leads"]) == named_leads,
             f"{summary['source_id']}: {assessment['verdict']}",
         )
-        leads = {lead["actor_name"] for lead in assessment["indicator_leads"]}
+        leads = {lead["actor_name"] for lead in assessment["indicator_leads"]} | {
+            lead["actor_name"] for lead in assessment["actor_leads"]
+        }
         said = assessment["statement"] + " " + " ".join(assessment["reasons"])
         audit.check(
-            "assessment.words_name_no_candidate",
+            "assessment.words_name_no_actor_without_specific_evidence",
             not [
                 c["name"]
                 for c in assessment["candidates"]

@@ -117,6 +117,74 @@ function Source({ name, source, version }: { name: string; source: ContentSource
   );
 }
 
+function ActorSpecific({ actor }: { actor: NonNullable<Coverage["actor_specific"]> }) {
+  const [show, setShow] = useState<"accepted" | "all">("accepted");
+  const rows = actor.rules.filter((rule) => show === "all" || rule.actor_tags.some((tag) => tag.decision === "accept"));
+  const usable = actor.summary.by_status.imported + actor.summary.by_status.partial;
+  return (
+    <Card padded={false}>
+      <CardHeader
+        title="Actor-specific content"
+        hint={`Sigma rules that name an ATT&CK Group. A Group tag counts only if a review of the rule's logic accepts it: ${actor.summary.group_tags_accepted} of ${actor.summary.group_tags_reviewed} tags accepted, ${usable} rules usable on ingested telemetry, for ${actor.summary.groups_with_a_usable_rule.length} Groups. This is the only content that can name an actor.`}
+        right={
+          <Segmented
+            ariaLabel="Actor rules shown"
+            value={show}
+            onChange={setShow}
+            options={[
+              { value: "accepted", label: "Accepted", count: actor.rules.filter((r) => r.actor_tags.some((t) => t.decision === "accept")).length },
+              { value: "all", label: "All reviewed", count: actor.rules.length },
+            ]}
+          />
+        }
+      />
+      <div className="max-h-[32rem] overflow-auto">
+        <table className="w-full border-collapse text-body-md">
+          <thead>
+            <tr>
+              <Th>Rule</Th>
+              <Th>Group named</Th>
+              <Th>Decision</Th>
+              <Th>Reason</Th>
+              <Th>On this platform</Th>
+            </tr>
+          </thead>
+          <tbody>
+            {rows.flatMap((rule) =>
+              rule.actor_tags.map((tag) => (
+                <tr key={`${rule.sigma_id}::${tag.tag}`} className="align-top hover:bg-surface">
+                  <Td className="max-w-xs">
+                    <a href={rule.url} target="_blank" rel="noreferrer noopener" className="text-primary hover:underline">
+                      {rule.title}
+                    </a>
+                    <div className="font-mono text-code-sm text-outline">{rule.logsource}</div>
+                  </Td>
+                  <Td className="whitespace-nowrap">
+                    {tag.group_name ?? "—"} {tag.group_id && <AttackId id={tag.group_id} tone="muted" />}
+                  </Td>
+                  <Td>
+                    <Badge tone={tag.decision === "accept" ? "primary" : "muted"}>{tag.decision === "accept" ? "accepted" : "rejected"}</Badge>
+                  </Td>
+                  <Td className="max-w-xl text-body-sm text-on-surface-variant">{tag.reason}</Td>
+                  <Td className="whitespace-nowrap text-body-sm text-on-surface-variant">
+                    {tag.decision !== "accept"
+                      ? "not used"
+                      : rule.status === "rejected"
+                        ? `not usable: ${(rule.rejection ?? "").replace(/_/g, " ")}`
+                        : rule.status === "partial"
+                          ? "usable in part"
+                          : "usable"}
+                  </Td>
+                </tr>
+              )),
+            )}
+          </tbody>
+        </table>
+      </div>
+    </Card>
+  );
+}
+
 export function CoveragePage() {
   const coverage = useApi<Coverage>(paths.coverage());
   const catalogue = useApi<TechniqueCatalogue>(paths.techniques());
@@ -272,6 +340,8 @@ export function CoveragePage() {
           <Source name="Sigma rules" source={report.content.sigma} version={`SigmaHQ ${String(sigma.sigma_release ?? "")} · ${String(sigma.importer ?? "")} · ${String(sigma.field_map_version ?? "")}`} />
           <Source name="Elastic prebuilt rules" source={report.content.elastic} version={`elastic/detection-rules @ ${shortHash(String(elastic.source_commit ?? ""), 12)} · ${String(elastic.importer ?? "")} · ${String(elastic.field_map_version ?? "")}`} />
         </div>
+
+        {report.actor_specific && <ActorSpecific actor={report.actor_specific} />}
 
         <Card padded={false}>
           <CardHeader title="Telemetry the content can fire on" hint="Translated rules per log source, grouped by product. A log source listed here is one the platform ingests and at least one rule reads." />

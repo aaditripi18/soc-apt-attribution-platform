@@ -1,0 +1,474 @@
+{
+  "package": "sigma_actor_specific.zip",
+  "purpose": "ADR-0018 actor-specific evidence: Sigma rules that name an ATT&CK Group",
+  "source": {
+    "repository": "SigmaHQ/sigma",
+    "release_tag": "r2026-07-01",
+    "archive": "sigma_all_rules.zip",
+    "archive_sha256": "5725c91b5813587ad6a4b0b8e0233fa44348b1595f818d8b7fd39d6033385085",
+    "download_url": "https://github.com/SigmaHQ/sigma/releases/download/r2026-07-01/sigma_all_rules.zip",
+    "retrieved_at_utc": "2026-10-01T19:04:02Z",
+    "selection": "every rule in the release archive with an attack.gNNNN tag"
+  },
+  "artifact": {
+    "filename": "sigma_actor_specific.zip",
+    "relative_path": "data/detection/sigma/r2026-07-01/sigma_actor_specific.zip",
+    "size_bytes": 44351,
+    "sha256": "6a8b62100f2e53aa40e38025343209aa39c62bebfec2017d4e728fa3f6238d11",
+    "members": 49
+  },
+  "acquisition": {
+    "method": "scripts/build_sigma_actor_archive.py (offline, from the pinned release archive; reproducible zip)",
+    "approval": "owner instruction 2026-10-11 (group-specific evidence)"
+  },
+  "license": {
+    "rules": "Detection Rule License (DRL) 1.1",
+    "notice_file": "data/detection/sigma/r2026-07-01/NOTICE.md"
+  },
+  "files": [
+    {
+      "path": "rules-emerging-threats/2014/TA/Axiom/proc_creation_win_apt_zxshell.yml",
+      "sigma_id": "f0b70adb-0075-43b0-9745-e82a1c608fcc",
+      "sha256": "7e550dd1c8239a9fc85000abef18dbc7be2307555eb5c4983aa6056410f2c100",
+      "size_bytes": 970,
+      "group_tags": [
+        "attack.g0001"
+      ]
+    },
+    {
+      "path": "rules-emerging-threats/2014/TA/Turla/proc_creation_win_apt_turla_commands_critical.yml",
+      "sigma_id": "c601f20d-570a-4cde-a7d6-e17f99cb8e7f",
+      "sha256": "933803addd4d1c6a2b760f48f11025947bd9c480b65701475dda7311d6df1e0d",
+      "size_bytes": 810,
+      "group_tags": [
+        "attack.g0010"
+      ]
+    },
+    {
+      "path": "rules-emerging-threats/2014/TA/Turla/proc_creation_win_apt_turla_comrat_may20.yml",
+      "sigma_id": "9e2e51c5-c699-4794-ba5a-29f5da40ac0c",
+      "sha256": "1361fa7e278d1e45c951cb66c989dd6c4b41aa595d1e0f52d8737563eafc7d49",
+      "size_bytes": 1011,
+      "group_tags": [
+        "attack.g0010"
+      ]
+    },
+    {
+      "path": "rules-emerging-threats/2017/Malware/StoneDrill/win_system_apt_stonedrill.yml",
+      "sigma_id": "9e987c6c-4c1e-40d8-bd85-dd26fba8fdd6",
+      "sha256": "c354498f58014b70cb24b06488b07870bf5de245cc0890f37dcff7ebb6e1aec6",
+      "size_bytes": 849,
+      "group_tags": [
+        "attack.g0064"
+      ]
+    },
+    {
+      "path": "rules-emerging-threats/2017/TA/APT10/proc_creation_win_apt_apt10_cloud_hopper.yml",
+      "sigma_id": "966e4016-627f-44f7-8341-f394905c361f",
+      "sha256": "eceaacaa477ced8019d93c8fa1c941464f725a170eb59172ef6cd9d50ee0e1ab",
+      "size_bytes": 888,
+      "group_tags": [
+        "attack.g0045"
+      ]
+    },
+    {
+      "path": "rules-emerging-threats/2017/TA/Dragonfly/proc_creation_win_apt_ta17_293a_ps.yml",
+      "sigma_id": "18da1007-3f26-470f-875d-f77faf1cab31",
+      "sha256": "a92d2dc9bc324300b11219ca273f5a78901ed595961ffac99b876ef1f475200d",
+      "size_bytes": 786,
+      "group_tags": [
+        "attack.g0035"
+      ]
+    },
+    {
+      "path": "rules-emerging-threats/2017/TA/Equation-Group/net_firewall_apt_equationgroup_c2.yml",
+      "sigma_id": "881834a4-6659-4773-821e-1c151789d873",
+      "sha256": "83418cbe7d7d5658efe9568f994a39ca47edabe38b475916291aa26e90861a4a",
+      "size_bytes": 901,
+      "group_tags": [
+        "attack.g0020"
+      ]
+    },
+    {
+      "path": "rules-emerging-threats/2017/TA/Turla/pipe_created_apt_turla_named_pipes.yml",
+      "sigma_id": "739915e4-1e70-4778-8b8a-17db02f66db1",
+      "sha256": "890a0832b5c27ac25757ef8ec937bf57de45af1a6f1949436b6e3520e1310766",
+      "size_bytes": 1626,
+      "group_tags": [
+        "attack.g0010"
+      ]
+    },
+    {
+      "path": "rules-emerging-threats/2017/TA/Turla/win_system_apt_carbonpaper_turla.yml",
+      "sigma_id": "1df8b3da-b0ac-4d8a-b7c7-6cb7c24160e4",
+      "sha256": "066d3aed0e887c65414bedb297e401b0b9cb1c136dfcd8267d76ae71ea2a147d",
+      "size_bytes": 841,
+      "group_tags": [
+        "attack.g0010"
+      ]
+    },
+    {
+      "path": "rules-emerging-threats/2017/TA/Turla/win_system_apt_turla_service_png.yml",
+      "sigma_id": "1228f8e2-7e79-4dea-b0ad-c91f1d5016c1",
+      "sha256": "82a424f61e581e434e5d388cbe3efac829a8d431d4cbcca7bccb600114406017",
+      "size_bytes": 766,
+      "group_tags": [
+        "attack.g0010"
+      ]
+    },
+    {
+      "path": "rules-emerging-threats/2018/Malware/Elise-Backdoor/proc_creation_win_malware_elise.yml",
+      "sigma_id": "e507feb7-5f73-4ef6-a970-91bb6f6d744f",
+      "sha256": "174a033a0c0795df5c98acd7fbbb2356b51344ef17203ddb14c5105f0cf687e3",
+      "size_bytes": 1367,
+      "group_tags": [
+        "attack.g0030",
+        "attack.g0050"
+      ]
+    },
+    {
+      "path": "rules-emerging-threats/2018/TA/APT27/proc_creation_win_apt_apt27_emissary_panda.yml",
+      "sigma_id": "9aa01d62-7667-4d3b-acb8-8cb5103e2014",
+      "sha256": "f0d39de0b197274f12696d581cd089f3b52ed6c56111864dde3a78ddf8c822c1",
+      "size_bytes": 1113,
+      "group_tags": [
+        "attack.g0027"
+      ]
+    },
+    {
+      "path": "rules-emerging-threats/2018/TA/APT28/proc_creation_win_apt_sofacy.yml",
+      "sigma_id": "ba778144-5e3d-40cf-8af9-e28fb1df1e20",
+      "sha256": "8a81d395423726100d19d74bebc093566f1c85379fc4b246ffa374360f72335f",
+      "size_bytes": 1341,
+      "group_tags": [
+        "attack.g0007"
+      ]
+    },
+    {
+      "path": "rules-emerging-threats/2018/TA/MuddyWater/proc_creation_win_apt_muddywater_activity.yml",
+      "sigma_id": "36222790-0d43-4fe8-86e4-674b27809543",
+      "sha256": "f800d1167e1b765d0176f5e91904441cf1f543a24d74650cc9278a040eaa53d8",
+      "size_bytes": 1288,
+      "group_tags": [
+        "attack.g0069"
+      ]
+    },
+    {
+      "path": "rules-emerging-threats/2018/TA/OilRig/proc_creation_win_apt_oilrig_mar18.yml",
+      "sigma_id": "ce6e34ca-966d-41c9-8d93-5b06c8b97a06",
+      "sha256": "4e72b0c0033188b0e1e5f55a6d994b5260f0c4332daebf21895be0a50bd52667",
+      "size_bytes": 1724,
+      "group_tags": [
+        "attack.g0049"
+      ]
+    },
+    {
+      "path": "rules-emerging-threats/2018/TA/OilRig/registry_event_apt_oilrig_mar18.yml",
+      "sigma_id": "7bdf2a7c-3acc-4091-9581-0a77dad1c5b5",
+      "sha256": "62f6ad7a846d1b8e92ac47824e2581bfd5c59d126c0aeaa86431865e58bca771",
+      "size_bytes": 1366,
+      "group_tags": [
+        "attack.g0049"
+      ]
+    },
+    {
+      "path": "rules-emerging-threats/2018/TA/OilRig/win_security_apt_oilrig_mar18.yml",
+      "sigma_id": "c0580559-a6bd-4ef6-b9b7-83703d98b561",
+      "sha256": "07030f397b08eb10857b5b710798345096414fc1dcbd386b105f194d6b0352ba",
+      "size_bytes": 1345,
+      "group_tags": [
+        "attack.g0049"
+      ]
+    },
+    {
+      "path": "rules-emerging-threats/2018/TA/OilRig/win_system_apt_oilrig_mar18.yml",
+      "sigma_id": "53ba33fd-3a50-4468-a5ef-c583635cfa92",
+      "sha256": "ae7ab98621551b1796afcdaef694090e6a08c58428280ed7feb114f163b41d33",
+      "size_bytes": 1379,
+      "group_tags": [
+        "attack.g0049"
+      ]
+    },
+    {
+      "path": "rules-emerging-threats/2019/TA/APT31/proc_creation_win_apt_apt31_judgement_panda.yml",
+      "sigma_id": "03e2746e-2b31-42f1-ab7a-eb39365b2422",
+      "sha256": "147168a529c99e0d751b730720c8b56f0828a41e61b22c4f0e8c2b0b29f8864f",
+      "size_bytes": 1113,
+      "group_tags": [
+        "attack.g0128"
+      ]
+    },
+    {
+      "path": "rules-emerging-threats/2019/TA/EquationGroup/proc_creation_win_apt_equationgroup_dll_u_load.yml",
+      "sigma_id": "d465d1d8-27a2-4cca-9621-a800f37cf72e",
+      "sha256": "a12485e7723f6f9436442e4200d5ac9c5ad9fb8613a2df0203a5ad27fde96276",
+      "size_bytes": 822,
+      "group_tags": [
+        "attack.g0020"
+      ]
+    },
+    {
+      "path": "rules-emerging-threats/2020/Malware/ComRAT/proxy_malware_comrat_network_indicators.yml",
+      "sigma_id": "7857f021-007f-4928-8b2c-7aedbe64bb82",
+      "sha256": "a8f59d1f94e0054b5474264b0ea2d0501ca42ec53eb44bf0682165b83b39a139",
+      "size_bytes": 607,
+      "group_tags": [
+        "attack.g0010"
+      ]
+    },
+    {
+      "path": "rules-emerging-threats/2020/Malware/Ke3chang-TidePool/proc_creation_win_malware_ke3chang_tidepool.yml",
+      "sigma_id": "7b544661-69fc-419f-9a59-82ccc328f205",
+      "sha256": "7d556d96c5bb48b087391b231b187d975698dfdcdaf8bc90c3afcb22de52d6f2",
+      "size_bytes": 1520,
+      "group_tags": [
+        "attack.g0004"
+      ]
+    },
+    {
+      "path": "rules-emerging-threats/2020/TA/GALLIUM/proc_creation_win_apt_gallium_iocs.yml",
+      "sigma_id": "440a56bf-7873-4439-940a-1c8a671073c2",
+      "sha256": "d64c522d183644dc7a512f1393aae7e3568f65388ddeb31d8b9161809ca17459",
+      "size_bytes": 3763,
+      "group_tags": [
+        "attack.g0093"
+      ]
+    },
+    {
+      "path": "rules-emerging-threats/2020/TA/Greenbug/proc_creation_win_apt_greenbug_may20.yml",
+      "sigma_id": "3711eee4-a808-4849-8a14-faf733da3612",
+      "sha256": "b3c7252efaa73d1f8e532742024755a986ac56441f41590e4bdd086d32cfc62f",
+      "size_bytes": 1817,
+      "group_tags": [
+        "attack.g0049"
+      ]
+    },
+    {
+      "path": "rules-emerging-threats/2020/TA/Lazarus/proc_creation_win_apt_lazarus_group_activity.yml",
+      "sigma_id": "24c4d154-05a4-4b99-b57d-9b977472443a",
+      "sha256": "99323834a96a7419cfb089f48a73e8d179bb8535287fe7e7769a2ee48f9e7db1",
+      "size_bytes": 1757,
+      "group_tags": [
+        "attack.g0032"
+      ]
+    },
+    {
+      "path": "rules-emerging-threats/2020/TA/Winnti/proc_creation_win_apt_winnti_mal_hk_jan20.yml",
+      "sigma_id": "3121461b-5aa0-4a41-b910-66d25524edbb",
+      "sha256": "541b141629e399ccbd577ff431b1bc8ba6d63e257fc42eaf1db16d1964820761",
+      "size_bytes": 1324,
+      "group_tags": [
+        "attack.g0044"
+      ]
+    },
+    {
+      "path": "rules-emerging-threats/2020/TA/Winnti/proc_creation_win_apt_winnti_pipemon.yml",
+      "sigma_id": "73d70463-75c9-4258-92c6-17500fe972f2",
+      "sha256": "bed3899118f925419cb2c10b0e1ba8a8c2b7e224fe2e186e9582d94c4631adfd",
+      "size_bytes": 955,
+      "group_tags": [
+        "attack.g0044"
+      ]
+    },
+    {
+      "path": "rules-emerging-threats/2021/TA/HAFNIUM/proc_creation_win_apt_hafnium.yml",
+      "sigma_id": "bbb2dedd-a0e3-46ab-ba6c-6c82ae7a9aa7",
+      "sha256": "e782b2e72aa31fd9e5ecb1fe1bea2334769f0ab9d1208cc1148a317ceb27629d",
+      "size_bytes": 2555,
+      "group_tags": [
+        "attack.g0125"
+      ]
+    },
+    {
+      "path": "rules-emerging-threats/2021/TA/HAFNIUM/web_exchange_exploitation_hafnium.yml",
+      "sigma_id": "67bce556-312f-4c81-9162-c3c9ff2599b2",
+      "sha256": "94a07078e7366c038a83c36b3f00677c296425e7067bb7a9c0c0b3ea6c799b12",
+      "size_bytes": 2837,
+      "group_tags": [
+        "attack.g0125"
+      ]
+    },
+    {
+      "path": "rules-emerging-threats/2021/TA/Kaseya-Supply-Chain/proc_creation_win_apt_revil_kaseya.yml",
+      "sigma_id": "5de632bc-7fbd-4c8a-944a-fce55c59eae5",
+      "sha256": "5ecb32f107e45a3a366acb6bd4552bdfece667dedaddbcc89d936d2ba1e96d9f",
+      "size_bytes": 1784,
+      "group_tags": [
+        "attack.g0115"
+      ]
+    },
+    {
+      "path": "rules-emerging-threats/2022/TA/MERCURY/proc_creation_win_apt_mercury.yml",
+      "sigma_id": "a62298a3-1fe0-422f-9a68-ffbcbc5a123d",
+      "sha256": "bee69715cf85b0edbca2105467669a25436242ed2d258f67df9a7dc92e439e9b",
+      "size_bytes": 874,
+      "group_tags": [
+        "attack.g0069"
+      ]
+    },
+    {
+      "path": "rules-emerging-threats/2023/TA/EquationGroup/net_dns_apt_equation_group_triangulation_c2_coms.yml",
+      "sigma_id": "7fc30d63-728d-48d9-ad6f-14d14f4accf7",
+      "sha256": "d28c06a2865da08a0d4e1b9632d4eac1b250ecfa9594ffaef55fba6f602769f1",
+      "size_bytes": 1376,
+      "group_tags": [
+        "attack.g0020"
+      ]
+    },
+    {
+      "path": "rules-emerging-threats/2023/TA/EquationGroup/proxy_apt_equation_group_triangulation_c2_coms.yml",
+      "sigma_id": "aa03c712-75c6-438b-8d42-de88f2427e09",
+      "sha256": "eaf1bc8110c2a685b2dcf458110421cacb0fc12bec19a18af4d53aaced09c840",
+      "size_bytes": 1389,
+      "group_tags": [
+        "attack.g0020"
+      ]
+    },
+    {
+      "path": "rules-emerging-threats/2023/TA/FIN7/file_event_win_apt_fin7_powershell_scripts_naming_convention.yml",
+      "sigma_id": "a88d9f45-ec8a-4b0e-85ee-c9f6a65e9128",
+      "sha256": "8c95e72c9373cfedb736e74f69d94247dcb2e7b7ae73499f3bf4a90d39061b36",
+      "size_bytes": 727,
+      "group_tags": [
+        "attack.g0046"
+      ]
+    },
+    {
+      "path": "rules-emerging-threats/2023/TA/FIN7/posh_ps_apt_fin7_powerhold.yml",
+      "sigma_id": "71c432c4-e4da-4eab-ba49-e60ea9a81bca",
+      "sha256": "197ced3c4dfd23c5c7a4e31a9c1b469a2e82746a1f8e6cb19199a38e8db6b85e",
+      "size_bytes": 825,
+      "group_tags": [
+        "attack.g0046"
+      ]
+    },
+    {
+      "path": "rules-emerging-threats/2023/TA/FIN7/posh_ps_apt_fin7_powertrash_execution.yml",
+      "sigma_id": "4e19528a-f081-40dd-be09-90c39352bd64",
+      "sha256": "024ef1b39f847c453a6eac9f8b3d1922328efcbbb3a1e8091254a5b9e89e2629",
+      "size_bytes": 892,
+      "group_tags": [
+        "attack.g0046"
+      ]
+    },
+    {
+      "path": "rules-emerging-threats/2023/TA/FIN7/proc_creation_win_apt_fin7_powertrash_lateral_movement.yml",
+      "sigma_id": "911389c7-5ae3-43ea-bab3-a947ebdeb85e",
+      "sha256": "d8fcd5968e785849fb963f6485f8c192e382afc4dbd375b2340f1adbbd2416c2",
+      "size_bytes": 1190,
+      "group_tags": [
+        "attack.g0046"
+      ]
+    },
+    {
+      "path": "rules-emerging-threats/2023/TA/Lazarus/image_load_apt_lazarus_side_load_activity.yml",
+      "sigma_id": "24007168-a26b-4049-90d0-ce138e13a5cf",
+      "sha256": "6fb8d889bb3bcf694fb83adaaa78f031949d1aeee8b3a9dab98f42378a040989",
+      "size_bytes": 1432,
+      "group_tags": [
+        "attack.g0032"
+      ]
+    },
+    {
+      "path": "rules-emerging-threats/2023/TA/Mustang-Panda-Australia-Campaign/proc_creation_win_apt_mustang_panda_indicators.yml",
+      "sigma_id": "7806bb49-f653-48d3-a915-5115c1a85234",
+      "sha256": "7cacdd5d2e92a9389db60b69eeb178feaf1074fe2ae27150f119fd44e8e40530",
+      "size_bytes": 1016,
+      "group_tags": [
+        "attack.g0129"
+      ]
+    },
+    {
+      "path": "rules/linux/builtin/lnx_apt_equationgroup_lnx.yml",
+      "sigma_id": "41e5c73d-9983-4b69-bd03-e13b67e9623c",
+      "sha256": "39d4bc254ac74c81d226308e39c2887eff0c6696c7cceaac57dd231bbfe449f6",
+      "size_bytes": 2634,
+      "group_tags": [
+        "attack.g0020"
+      ]
+    },
+    {
+      "path": "rules/windows/powershell/powershell_script/posh_ps_apt_silence_eda.yml",
+      "sigma_id": "3ceb2083-a27f-449a-be33-14ec1b7cc973",
+      "sha256": "73a67d10262bc8d19ddf40fcd858981b27ce262f97ef29db88d4eb5628327f58",
+      "size_bytes": 1421,
+      "group_tags": [
+        "attack.g0091"
+      ]
+    },
+    {
+      "path": "rules/windows/process_access/proc_access_win_cmstp_execution_by_access.yml",
+      "sigma_id": "3b4b232a-af90-427c-a22f-30b0c0837b95",
+      "sha256": "e84194eab91ba72d5ee9ba417037ba6d01fe9277df19ab475b98ea85bf78a856",
+      "size_bytes": 853,
+      "group_tags": [
+        "attack.g0069",
+        "attack.g0080"
+      ]
+    },
+    {
+      "path": "rules/windows/process_creation/proc_creation_win_cmstp_execution_by_creation.yml",
+      "sigma_id": "7d4cdc5a-0076-40ca-aac8-f7e714570e47",
+      "sha256": "bf996988a325bbf86725b2e8e01d859133abb7868fe81a584baef94c5ace8ace",
+      "size_bytes": 821,
+      "group_tags": [
+        "attack.g0069"
+      ]
+    },
+    {
+      "path": "rules/windows/process_creation/proc_creation_win_hktl_powersploit_empire_default_schtasks.yml",
+      "sigma_id": "56c217c3-2de2-479b-990f-5c109ba8458f",
+      "sha256": "23ba3e795c8d8f7806e51816f76f5c2c44e64f32bd6d07bbec896bfed9290c1d",
+      "size_bytes": 1344,
+      "group_tags": [
+        "attack.g0022",
+        "attack.g0060"
+      ]
+    },
+    {
+      "path": "rules/windows/process_creation/proc_creation_win_hwp_exploits.yml",
+      "sigma_id": "023394c4-29d5-46ab-92b8-6a534c6f447b",
+      "sha256": "8362e5730a725fc743cf15b1dff9042dce435de762b20ad6334c67139eaf1d9e",
+      "size_bytes": 1102,
+      "group_tags": [
+        "attack.g0032"
+      ]
+    },
+    {
+      "path": "rules/windows/process_creation/proc_creation_win_office_spawn_exe_from_users_directory.yml",
+      "sigma_id": "aa3a6f94-890e-4e22-b634-ffdfd54792cc",
+      "sha256": "0ed895a7f7b19049f40f6e208730e072eaac658f6ee3578fa240395da8dcf86b",
+      "size_bytes": 1203,
+      "group_tags": [
+        "attack.g0046"
+      ]
+    },
+    {
+      "path": "rules/windows/process_creation/proc_creation_win_uac_bypass_cmstp_com_object_access.yml",
+      "sigma_id": "4b60e6f2-bf39-47b4-b4ea-398e33cfe253",
+      "sha256": "4dbb1a6e0e5615218630fc10b1df7b2fc8fb875479fbf69dafc0dbf9ca4014d5",
+      "size_bytes": 1740,
+      "group_tags": [
+        "attack.g0069"
+      ]
+    },
+    {
+      "path": "rules/windows/process_creation/proc_creation_win_ultravnc_susp_execution.yml",
+      "sigma_id": "871b9555-69ca-4993-99d3-35a59f9f3599",
+      "sha256": "e753d166dbfb4fb203fb9c0e77954bb82f388629ed11f710547655d80e1d00fe",
+      "size_bytes": 1127,
+      "group_tags": [
+        "attack.g0047"
+      ]
+    },
+    {
+      "path": "rules/windows/registry/registry_event/registry_event_cmstp_execution_by_registry.yml",
+      "sigma_id": "b6d235fc-1d38-4b12-adbe-325f06728f37",
+      "sha256": "7c3c94ab524f9728cdfd6880bbd90ee194456e3d9c84cb7e7659a59f08b8157e",
+      "size_bytes": 785,
+      "group_tags": [
+        "attack.g0069"
+      ]
+    }
+  ]
+}

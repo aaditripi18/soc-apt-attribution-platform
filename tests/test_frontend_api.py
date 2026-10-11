@@ -551,3 +551,39 @@ def test_known_answer_checks_are_served_and_internally_consistent(
     )
     with pytest.raises(Exception, match="not available"):
         get_validation(bare)
+
+
+def test_actor_specific_content_is_described_and_labels_its_evidence(
+    knowledge: AttackKnowledge,
+) -> None:
+    """ADR-0018 D5: `/coverage` lists every reviewed actor rule with its decision
+    and reason; an actor rule's Evidence is labelled with the reason it counts."""
+    from attribution_platform.api.context import rule_key
+    from attribution_platform.detection_content.pinned import SIGMA_ACTOR_IMPORT_REPORT
+
+    context = load_api_context(
+        knowledge,
+        coverage_report=COVERAGE_REPORT,
+        sigma_import_report=SIGMA_IMPORT_REPORT,
+        elastic_import_report=ELASTIC_IMPORT_REPORT,
+        actor_import_report=SIGMA_ACTOR_IMPORT_REPORT,
+    )
+    report = json.loads(SIGMA_ACTOR_IMPORT_REPORT.read_text(encoding="utf-8"))
+    view = dict((context.coverage or {})["actor_specific"])
+    assert view["summary"] == report["summary"]
+    assert len(view["rules"]) == len(report["rules"])
+    assert all(tag["reason"] for rule in view["rules"] for tag in rule["actor_tags"])
+    usable = [r for r in report["rules"] if r["status"] != "rejected"]
+    assert usable
+    for row in usable:
+        label = context.rules[rule_key(f"sigma-actor:{row['sigma_id']}:000")]
+        assert label["content_tier"] == "actor" and label["url"].startswith("https://github.com/")
+        assert label["actor_tags"] and all(t["decision"] == "accept" for t in label["actor_tags"])
+    # without the report the section is absent, not invented
+    bare = load_api_context(
+        knowledge,
+        coverage_report=COVERAGE_REPORT,
+        sigma_import_report=SIGMA_IMPORT_REPORT,
+        elastic_import_report=ELASTIC_IMPORT_REPORT,
+    )
+    assert (bare.coverage or {})["actor_specific"] is None

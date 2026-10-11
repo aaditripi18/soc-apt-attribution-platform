@@ -64,8 +64,10 @@ function KnownAnswerChecks({ validation }: { validation: Validation }) {
         hint="Recordings where the answer is known in advance: what verdict the platform gave, and what ordering candidates by technique overlap would have named instead."
       />
       <p className="border-b border-outline-variant/70 px-4 py-3 text-body-lg text-on-surface-variant">
-        <TrackRecordLine validation={validation} /> No verdict of this platform names an actor, so it named none wrongly.
-        This is why candidates are never ordered here.
+        <TrackRecordLine validation={validation} /> The platform’s own verdicts named an actor in{" "}
+        {validation.summary.verdicts_naming_an_actor} of these {validation.summary.cases} cases, and a wrong one in{" "}
+        {validation.summary.verdicts_naming_a_wrong_actor}: it names a Group only when an artefact specific to that Group
+        matched, and none did here. This is why candidates are never ordered.
       </p>
       <div className="overflow-x-auto">
         <table className="w-full border-collapse text-body-md">

@@ -35,6 +35,7 @@ from attribution_platform.detection_content.pinned import (
     ELASTIC_IMPORT_REPORT,
     FRONTEND_DIST,
     KNOWN_ANSWER_CHECKS,
+    SIGMA_ACTOR_IMPORT_REPORT,
     SIGMA_IMPORT_REPORT,
 )
 
@@ -71,6 +72,7 @@ def main(env: dict[str, str] | None = None) -> int:
         elastic_import_report=ELASTIC_IMPORT_REPORT,
         static_dir=FRONTEND_DIST,
         known_answer_checks=KNOWN_ANSWER_CHECKS,
+        actor_import_report=SIGMA_ACTOR_IMPORT_REPORT,
     )
     server = create_server(client, host=host, port=port, context=context)
     print(f"Serving the read-model API on http://{host}:{port}/api (Ctrl+C to stop)")

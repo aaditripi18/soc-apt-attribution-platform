@@ -1,0 +1,424 @@
+{
+ "review_version": "actor-tag-review/1",
+ "sigma_release": "r2026-07-01",
+ "reviewed_on": "2026-10-11",
+ "policy": "ADR-0018: a Sigma attack.gNNNN (Group) tag becomes actor-specific evidence only if this review accepts it for that rule. Accepted only when every branch of the rule's detection logic matches a literal artefact published for that Group's own tooling or operation (a name, path, hash, address or payload fragment that unrelated software or another actor would not plausibly produce) and the source supports the Group named. A rule that matches a technique, a public tool or framework, or anything generic in even one branch is rejected: a miss is acceptable, a false lead is not.",
+ "decisions": [
+  {
+   "sigma_id": "023394c4-29d5-46ab-92b8-6a534c6f447b",
+   "title": "Suspicious HWP Sub Processes",
+   "tag": "attack.g0032",
+   "group": "Lazarus Group",
+   "decision": "reject",
+   "reason": "It matches Hancom Office starting its Ghostscript helper, an exploitation technique several actors have used."
+  },
+  {
+   "sigma_id": "03e2746e-2b31-42f1-ab7a-eb39365b2422",
+   "title": "APT31 Judgement Panda Activity",
+   "tag": "attack.g0128",
+   "group": "ZIRCONIUM",
+   "decision": "accept",
+   "reason": "Both branches are literal artefacts published for the Judgement Panda intrusion: the ldifde export to eprod.ldf and lateral copies through a \\c$\\aaaa\\ staging directory with its named tools."
+  },
+  {
+   "sigma_id": "1228f8e2-7e79-4dea-b0ad-c91f1d5016c1",
+   "title": "Turla PNG Dropper Service",
+   "tag": "attack.g0010",
+   "group": "Turla",
+   "decision": "accept",
+   "reason": "The service name WerFaultSvc is the persistence artefact published for Turla's PNG dropper; Windows has no service of that name."
+  },
+  {
+   "sigma_id": "18da1007-3f26-470f-875d-f77faf1cab31",
+   "title": "Ps.exe Renamed SysInternals Tool",
+   "tag": "attack.g0035",
+   "group": "Dragonfly",
+   "decision": "reject",
+   "reason": "It matches a renamed PsExec running netstat. The command is from a report on Dragonfly, but renaming PsExec to ps.exe is a tool-usage pattern, not an artefact only that Group produces."
+  },
+  {
+   "sigma_id": "1df8b3da-b0ac-4d8a-b7c7-6cb7c24160e4",
+   "title": "Turla Service Install",
+   "tag": "attack.g0010",
+   "group": "Turla",
+   "decision": "reject",
+   "reason": "One of the three service names, hkmsvc, is a genuine Windows service (Health Key and Certificate Management); its installation is not Turla-specific."
+  },
+  {
+   "sigma_id": "24007168-a26b-4049-90d0-ce138e13a5cf",
+   "title": "Lazarus APT DLL Sideloading Activity",
+   "tag": "attack.g0032",
+   "group": "Lazarus Group",
+   "decision": "accept",
+   "reason": "Every branch pairs one exact, non-default executable path with the exact DLL it side-loads there, as published for Lazarus; none of the directories is a product's real install location."
+  },
+  {
+   "sigma_id": "24c4d154-05a4-4b99-b57d-9b977472443a",
+   "title": "Lazarus Group Activity",
+   "tag": "attack.g0032",
+   "group": "Lazarus Group",
+   "decision": "reject",
+   "reason": "One branch matches a command line with ' /c ' and ' -p 0x' under C:\\ProgramData\\ or C:\\RECYCLER\\, which is not specific to Lazarus tooling."
+  },
+  {
+   "sigma_id": "3121461b-5aa0-4a41-b910-66d25524edbb",
+   "title": "Winnti Malware HK University Campaign",
+   "tag": "attack.g0044",
+   "group": "Winnti Group",
+   "decision": "reject",
+   "reason": "One branch matches any Test.exe starting wmplayer.exe, built from generic file names."
+  },
+  {
+   "sigma_id": "36222790-0d43-4fe8-86e4-674b27809543",
+   "title": "Potential MuddyWater APT Activity",
+   "tag": "attack.g0069",
+   "group": "MuddyWater",
+   "decision": "reject",
+   "reason": "One branch matches a system-survey command line built from standard WMI classes, which other inventory scripts also combine."
+  },
+  {
+   "sigma_id": "3711eee4-a808-4849-8a14-faf733da3612",
+   "title": "Greenbug Espionage Group Indicators",
+   "tag": "attack.g0049",
+   "group": "OilRig",
+   "decision": "reject",
+   "reason": "One branch matches any executable named revshell.exe, a generic tool name."
+  },
+  {
+   "sigma_id": "3b4b232a-af90-427c-a22f-30b0c0837b95",
+   "title": "CMSTP Execution Process Access",
+   "tag": "attack.g0069",
+   "group": "MuddyWater",
+   "decision": "reject",
+   "reason": "It matches the CMSTP UAC-bypass technique (cmlua.dll in a call trace), which is public and used by many actors."
+  },
+  {
+   "sigma_id": "3b4b232a-af90-427c-a22f-30b0c0837b95",
+   "title": "CMSTP Execution Process Access",
+   "tag": "attack.g0080",
+   "group": "Cobalt Group",
+   "decision": "reject",
+   "reason": "It matches the CMSTP UAC-bypass technique (cmlua.dll in a call trace), which is public and used by many actors."
+  },
+  {
+   "sigma_id": "3ceb2083-a27f-449a-be33-14ec1b7cc973",
+   "title": "Silence.EDA Detection",
+   "tag": "attack.g0091",
+   "group": "Silence",
+   "decision": "reject",
+   "reason": "Its script fragments come from the public Empire and dnscat2 tools that Silence.EDA embeds; they identify those tools, not the Group."
+  },
+  {
+   "sigma_id": "41e5c73d-9983-4b69-bd03-e13b67e9623c",
+   "title": "Equation Group Indicators",
+   "tag": "attack.g0020",
+   "group": "Equation",
+   "decision": "reject",
+   "reason": "It is an unanchored keyword list that includes generic shell fragments (chown root:root x;)."
+  },
+  {
+   "sigma_id": "440a56bf-7873-4439-940a-1c8a671073c2",
+   "title": "GALLIUM IOCs",
+   "tag": "attack.g0093",
+   "group": "GALLIUM",
+   "decision": "accept",
+   "reason": "Its values are SHA-256 hashes of files published as GALLIUM tooling; a hash identifies one exact file."
+  },
+  {
+   "sigma_id": "4b60e6f2-bf39-47b4-b4ea-398e33cfe253",
+   "title": "CMSTP UAC Bypass via COM Object Access",
+   "tag": "attack.g0069",
+   "group": "MuddyWater",
+   "decision": "reject",
+   "reason": "It matches the public CMSTP COM-object UAC bypass by its class ids, a generic technique."
+  },
+  {
+   "sigma_id": "4e19528a-f081-40dd-be09-90c39352bd64",
+   "title": "Potential POWERTRASH Script Execution",
+   "tag": "attack.g0046",
+   "group": "FIN7",
+   "decision": "reject",
+   "reason": "It matches generic in-memory loader constructs (DeflateStream, FromBase64String, GetDelegateForFunctionPointer) used by many reflective loaders."
+  },
+  {
+   "sigma_id": "53ba33fd-3a50-4468-a5ef-c583635cfa92",
+   "title": "OilRig APT Schedule Task Persistence - System",
+   "tag": "attack.g0049",
+   "group": "OilRig",
+   "decision": "accept",
+   "reason": "The service names 'SC Scheduled Scan' and 'UpdatMachine' (sic) are the persistence artefacts published for OilRig's 2018 campaign."
+  },
+  {
+   "sigma_id": "56c217c3-2de2-479b-990f-5c109ba8458f",
+   "title": "HackTool - Default PowerSploit/Empire Scheduled Task Creation",
+   "tag": "attack.g0022",
+   "group": "APT3",
+   "decision": "reject",
+   "reason": "It matches the default persistence task of the public Empire and PowerSploit frameworks, which identifies the framework and not any one Group."
+  },
+  {
+   "sigma_id": "56c217c3-2de2-479b-990f-5c109ba8458f",
+   "title": "HackTool - Default PowerSploit/Empire Scheduled Task Creation",
+   "tag": "attack.g0060",
+   "group": "BRONZE BUTLER",
+   "decision": "reject",
+   "reason": "It matches the default persistence task of the public Empire and PowerSploit frameworks, which identifies the framework and not any one Group."
+  },
+  {
+   "sigma_id": "5de632bc-7fbd-4c8a-944a-fce55c59eae5",
+   "title": "REvil Kaseya Incident Malware Patterns",
+   "tag": "attack.g0115",
+   "group": "GOLD SOUTHFIELD",
+   "decision": "reject",
+   "reason": "One literal is a generic log clean-up command (rmdir of %SystemDrive%\\inetpub\\logs); not every value is specific to the incident."
+  },
+  {
+   "sigma_id": "67bce556-312f-4c81-9162-c3c9ff2599b2",
+   "title": "Exchange Exploitation Used by HAFNIUM",
+   "tag": "attack.g0125",
+   "group": "HAFNIUM",
+   "decision": "reject",
+   "reason": "It matches exploitation requests against Exchange that many actors issued once the vulnerabilities were public."
+  },
+  {
+   "sigma_id": "71c432c4-e4da-4eab-ba49-e60ea9a81bca",
+   "title": "Potential APT FIN7 POWERHOLD Execution",
+   "tag": "attack.g0046",
+   "group": "FIN7",
+   "decision": "reject",
+   "reason": "It matches a combination of common PowerShell constructs (APPDATA, WriteAllBytes, wscript.exe) that unrelated droppers share."
+  },
+  {
+   "sigma_id": "739915e4-1e70-4778-8b8a-17db02f66db1",
+   "title": "Turla Group Named Pipes",
+   "tag": "attack.g0010",
+   "group": "Turla",
+   "decision": "reject",
+   "reason": "Some of the pipe names are short generic words (\\userpipe, \\iehelper) that unrelated software could plausibly use; not every value is specific."
+  },
+  {
+   "sigma_id": "73d70463-75c9-4258-92c6-17500fe972f2",
+   "title": "Winnti Pipemon Characteristics",
+   "tag": "attack.g0044",
+   "group": "Winnti Group",
+   "decision": "reject",
+   "reason": "It matches setup.exe / setup0.exe with short switches, names and arguments common to ordinary installers."
+  },
+  {
+   "sigma_id": "7806bb49-f653-48d3-a915-5115c1a85234",
+   "title": "Potential APT Mustang Panda Activity Against Australian Gov",
+   "tag": "attack.g0129",
+   "group": "Mustang Panda",
+   "decision": "accept",
+   "reason": "Both branches require SolidPDFCreator.dll under C:\\Users\\Public\\Libraries\\PhotoTvRHD\\, the staging path published for this Mustang Panda campaign."
+  },
+  {
+   "sigma_id": "7857f021-007f-4928-8b2c-7aedbe64bb82",
+   "title": "ComRAT Network Communication",
+   "tag": "attack.g0010",
+   "group": "Turla",
+   "decision": "reject",
+   "reason": "The URI pattern /index/index.php?h= is a generic PHP path that unrelated web applications use."
+  },
+  {
+   "sigma_id": "7b544661-69fc-419f-9a59-82ccc328f205",
+   "title": "Potential Ke3chang/TidePool Malware Activity",
+   "tag": "attack.g0004",
+   "group": "Ke3chang",
+   "decision": "reject",
+   "reason": "It matches PowerShell setting Internet Explorer first-run and hardening values, which hardening and deployment scripts also set."
+  },
+  {
+   "sigma_id": "7bdf2a7c-3acc-4091-9581-0a77dad1c5b5",
+   "title": "OilRig APT Registry Persistence",
+   "tag": "attack.g0049",
+   "group": "OilRig",
+   "decision": "accept",
+   "reason": "The Run-key value names ...\\CurrentVersion\\UMe and ...\\CurrentVersion\\UT are the persistence artefacts published for OilRig's 2018 campaign; neither is a Windows or common-software value."
+  },
+  {
+   "sigma_id": "7d4cdc5a-0076-40ca-aac8-f7e714570e47",
+   "title": "CMSTP Execution Process Creation",
+   "tag": "attack.g0069",
+   "group": "MuddyWater",
+   "decision": "reject",
+   "reason": "It matches any child process of cmstp.exe, a generic technique."
+  },
+  {
+   "sigma_id": "7fc30d63-728d-48d9-ad6f-14d14f4accf7",
+   "title": "Potential Operation Triangulation C2 Beaconing Activity - DNS",
+   "tag": "attack.g0020",
+   "group": "Equation",
+   "decision": "reject",
+   "reason": "The domains are published indicators of Operation Triangulation, but the source reporting does not attribute that operation to Equation; the Group tag is not supported by it."
+  },
+  {
+   "sigma_id": "871b9555-69ca-4993-99d3-35a59f9f3599",
+   "title": "Suspicious UltraVNC Execution",
+   "tag": "attack.g0047",
+   "group": "Gamaredon Group",
+   "decision": "reject",
+   "reason": "It matches UltraVNC's own reverse-connection switches, which any user of the tool produces."
+  },
+  {
+   "sigma_id": "881834a4-6659-4773-821e-1c151789d873",
+   "title": "Equation Group C2 Communication",
+   "tag": "attack.g0020",
+   "group": "Equation",
+   "decision": "accept",
+   "reason": "Its only values are two IP addresses published as Equation Group command-and-control infrastructure."
+  },
+  {
+   "sigma_id": "911389c7-5ae3-43ea-bab3-a947ebdeb85e",
+   "title": "Potential APT FIN7 Reconnaissance/POWERTRASH Related Activity",
+   "tag": "attack.g0046",
+   "group": "FIN7",
+   "decision": "reject",
+   "reason": "It matches PowerShell launch switches running a script from ADMIN$ or C:\\Windows\\Temp, a generic lateral-execution pattern."
+  },
+  {
+   "sigma_id": "966e4016-627f-44f7-8341-f394905c361f",
+   "title": "Potential APT10 Cloud Hopper Activity",
+   "tag": "attack.g0045",
+   "group": "menuPass",
+   "decision": "reject",
+   "reason": "One branch matches any cscript.exe run of a .vbs with a /shell argument, which is not specific to the Cloud Hopper tooling."
+  },
+  {
+   "sigma_id": "9aa01d62-7667-4d3b-acb8-8cb5103e2014",
+   "title": "APT27 - Emissary Panda Activity",
+   "tag": "attack.g0027",
+   "group": "Threat Group-3390",
+   "decision": "reject",
+   "reason": "One branch matches any svchost.exe -k started from a parent under \\AppData\\Roaming\\, a generic masquerading pattern."
+  },
+  {
+   "sigma_id": "9e2e51c5-c699-4794-ba5a-29f5da40ac0c",
+   "title": "Turla Group Commands May 2020",
+   "tag": "attack.g0010",
+   "group": "Turla",
+   "decision": "accept",
+   "reason": "Every branch is a literal string published for Turla's 2020 ComRAT v4 operation: the tracert/yahoo connectivity check, the WSqmCons PowerShell loader fragment, its back-tick-obfuscated FromBase64String, and the OneDrive net use with an @aol.co.uk account."
+  },
+  {
+   "sigma_id": "9e987c6c-4c1e-40d8-bd85-dd26fba8fdd6",
+   "title": "StoneDrill Service Install",
+   "tag": "attack.g0064",
+   "group": "APT33",
+   "decision": "accept",
+   "reason": "A service named NtsSrv whose image path ends in ' LocalService' is the installation artefact published for the StoneDrill wiper attributed to APT33; neither value is a Windows default."
+  },
+  {
+   "sigma_id": "a62298a3-1fe0-422f-9a68-ffbcbc5a123d",
+   "title": "MERCURY APT Activity",
+   "tag": "attack.g0069",
+   "group": "MuddyWater",
+   "decision": "accept",
+   "reason": "It requires a specific Base64-encoded PowerShell payload prefix published for MERCURY (MuddyWater) activity, together with its launch switches."
+  },
+  {
+   "sigma_id": "a88d9f45-ec8a-4b0e-85ee-c9f6a65e9128",
+   "title": "Potential APT FIN7 Related PowerShell Script Created",
+   "tag": "attack.g0046",
+   "group": "FIN7",
+   "decision": "reject",
+   "reason": "One branch matches any file named host_ip.ps1, a generic script name."
+  },
+  {
+   "sigma_id": "aa03c712-75c6-438b-8d42-de88f2427e09",
+   "title": "Potential Operation Triangulation C2 Beaconing Activity - Proxy",
+   "tag": "attack.g0020",
+   "group": "Equation",
+   "decision": "reject",
+   "reason": "The domains are published indicators of Operation Triangulation, but the source reporting does not attribute that operation to Equation; the Group tag is not supported by it."
+  },
+  {
+   "sigma_id": "aa3a6f94-890e-4e22-b634-ffdfd54792cc",
+   "title": "Suspicious Binary In User Directory Spawned From Office Application",
+   "tag": "attack.g0046",
+   "group": "FIN7",
+   "decision": "reject",
+   "reason": "It matches an Office application starting any executable under C:\\Users\\, a generic initial-access pattern."
+  },
+  {
+   "sigma_id": "b6d235fc-1d38-4b12-adbe-325f06728f37",
+   "title": "CMSTP Execution Registry Event",
+   "tag": "attack.g0069",
+   "group": "MuddyWater",
+   "decision": "reject",
+   "reason": "It matches any registry value referencing cmmgr32.exe, a generic technique."
+  },
+  {
+   "sigma_id": "ba778144-5e3d-40cf-8af9-e28fb1df1e20",
+   "title": "Sofacy Trojan Loader Activity",
+   "tag": "attack.g0007",
+   "group": "APT28",
+   "decision": "reject",
+   "reason": "It matches rundll32 loading a .dat or .dll from the local application-data folder by ordinal, a generic loader pattern."
+  },
+  {
+   "sigma_id": "bbb2dedd-a0e3-46ab-ba6c-6c82ae7a9aa7",
+   "title": "HAFNIUM Exchange Exploitation Activity",
+   "tag": "attack.g0125",
+   "group": "HAFNIUM",
+   "decision": "reject",
+   "reason": "One branch matches attrib hiding any .aspx file, a generic web-shell step used by many actors after the Exchange vulnerabilities were published."
+  },
+  {
+   "sigma_id": "c0580559-a6bd-4ef6-b9b7-83703d98b561",
+   "title": "OilRig APT Schedule Task Persistence - Security",
+   "tag": "attack.g0049",
+   "group": "OilRig",
+   "decision": "accept",
+   "reason": "The scheduled-task names 'SC Scheduled Scan' and 'UpdatMachine' (sic) are the persistence artefacts published for OilRig's 2018 campaign."
+  },
+  {
+   "sigma_id": "c601f20d-570a-4cde-a7d6-e17f99cb8e7f",
+   "title": "Turla Group Lateral Movement",
+   "tag": "attack.g0010",
+   "group": "Turla",
+   "decision": "reject",
+   "reason": "Two of its three literal commands are generic file listings (dir c:\\*.doc* /s, dir %TEMP%\\*.exe) any operator or administrator may type."
+  },
+  {
+   "sigma_id": "ce6e34ca-966d-41c9-8d93-5b06c8b97a06",
+   "title": "OilRig APT Activity",
+   "tag": "attack.g0049",
+   "group": "OilRig",
+   "decision": "reject",
+   "reason": "One branch matches any executable under \\Windows\\Temp\\DB\\, a path other software could use; not every branch is specific."
+  },
+  {
+   "sigma_id": "d465d1d8-27a2-4cca-9621-a800f37cf72e",
+   "title": "Equation Group DLL_U Export Function Load",
+   "tag": "attack.g0020",
+   "group": "Equation",
+   "decision": "accept",
+   "reason": "It matches a DLL export named dll_u invoked from the command line, the loader convention published for Equation Group implants; the name is not used by Windows components."
+  },
+  {
+   "sigma_id": "e507feb7-5f73-4ef6-a970-91bb6f6d744f",
+   "title": "Elise Backdoor Activity",
+   "tag": "attack.g0030",
+   "group": "Lotus Blossom",
+   "decision": "accept",
+   "reason": "Every branch matches a literal artefact of the Elise backdoor (svchost.exe under \\Microsoft\\Network\\, NavShExt.dll under \\Windows\\Caches\\ with its Setting export), and ATT&CK records Elise for Lotus Blossom alone."
+  },
+  {
+   "sigma_id": "e507feb7-5f73-4ef6-a970-91bb6f6d744f",
+   "title": "Elise Backdoor Activity",
+   "tag": "attack.g0050",
+   "group": "APT32",
+   "decision": "reject",
+   "reason": "The rule identifies the Elise backdoor, which ATT&CK records for Lotus Blossom and not for APT32."
+  },
+  {
+   "sigma_id": "f0b70adb-0075-43b0-9745-e82a1c608fcc",
+   "title": "ZxShell Malware",
+   "tag": "attack.g0001",
+   "group": "Axiom",
+   "decision": "reject",
+   "reason": "The rule identifies the ZxShell malware (its rundll32 export names). ATT&CK records ZxShell for three Groups, so a match names the malware, not Axiom."
+  }
+ ]
+}

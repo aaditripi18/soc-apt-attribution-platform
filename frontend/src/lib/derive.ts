@@ -6,6 +6,7 @@
  * arithmetic this file does on attribution data is `n of m`.
  */
 import type {
+  AttackRef,
   AttributionAnalysis,
   BehavioralSequence,
   Candidate,
@@ -53,6 +54,15 @@ export function ruleOf(evidence: Evidence, rules: Record<string, RuleInfo>): Rul
   return rules[ruleKey(evidence.provenance.method)] ?? null;
 }
 
+/** Evidence mapped to a technique (not unmapped, and not a Group reference — ADR-0018). */
+export function isTechniqueEvidence(evidence: Evidence): evidence is Evidence & { attack_ref: AttackRef } {
+  return evidence.attack_ref?.object_type === "attack-pattern";
+}
+
+/** Actor-specific Evidence: its rule is specific to one Group (ADR-0018). */
+export const isActorEvidence = (evidence: Evidence): boolean =>
+  evidence.attack_ref?.object_type === "intrusion-set";
+
 /** Low-quality Evidence is context: it joins a unit but adds no attribution feature. */
 export const isContextEvidence = (evidence: Evidence): boolean => evidence.quality === "low";
 
@@ -88,7 +98,7 @@ export function unitTechniques(
   const features = new Set(analysis.observed_feature_technique_ids);
   const byStix = new Map<string, Evidence[]>();
   for (const item of evidence) {
-    if (!item.attack_ref) continue;
+    if (!isTechniqueEvidence(item)) continue;
     const list = byStix.get(item.attack_ref.stix_id) ?? [];
     list.push(item);
     byStix.set(item.attack_ref.stix_id, list);

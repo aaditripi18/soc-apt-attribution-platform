@@ -59,6 +59,7 @@ function analysis(partial: Partial<AttributionAnalysis>): AttributionAnalysis {
     hypotheses: [],
     collection_guidance: null,
     indicator_matches: [],
+    actor_specific_evidence: [],
     comparison_status: "computed",
     comparison_note: null,
     calibration_status: "uncalibrated",
@@ -135,6 +136,15 @@ describe("unitTechniques", () => {
     ]);
     expect(rows[0]?.g).toBeCloseTo(0.4);
     expect(rows[0]?.d).toBeCloseTo(0.6);
+  });
+
+  it("never treats a Group reference as a technique", () => {
+    const actor: Evidence = {
+      ...evidence("e9", null, null),
+      attack_ref: { stix_id: "intrusion-set--x", object_type: "intrusion-set", external_id: "G0129", attack_kb_version: "v" },
+    };
+    const rows = unitTechniques(analysis({ observed_feature_technique_ids: ["ap--a"] }), [evidence("e1", "ap--a", null), actor], index);
+    expect(rows.map((r) => r.attackId)).toEqual(["T1033"]);
   });
 
   it("keeps a technique the catalogue does not know, without inventing g", () => {

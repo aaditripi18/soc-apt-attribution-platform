@@ -35,7 +35,8 @@ UNIT_SUMMARY_SCHEMA_VERSION = "unit-summary/1"
 #: ``indicator_matches`` (ADR-0013, contextual only); /4 adds
 #: ``comparison_status`` / ``comparison_note`` and lets the baseline be absent
 #: (ADR-0009 Amendment D: a unit beyond the exact search's work bound).
-ATTRIBUTION_ANALYSIS_SCHEMA_VERSION = "attribution-analysis/4"
+#: /5 adds ``actor_specific_evidence`` (ADR-0018).
+ATTRIBUTION_ANALYSIS_SCHEMA_VERSION = "attribution-analysis/5"
 
 # Field mappings in the same form as dataplane/mappings.py: the "properties"
 # body itself (ensure_index wraps it); a "properties"-wrapped form would be
@@ -174,6 +175,23 @@ class IndicatorMatchView:
 
 
 @dataclass(frozen=True)
+class ActorEvidenceView:
+    """Evidence whose rule is specific to one ATT&CK Group (ADR-0018): a literal
+    artefact published for that Group's own tooling matched, and the reviewed
+    actor-tag decision accepted the rule. It is a lead with its basis in
+    ``claim`` — never an input to the technique comparison above."""
+
+    actor_stix_id: str
+    actor_attack_id: str | None
+    actor_name: str
+    evidence_id: str
+    rule_id: str
+    claim: str
+    observation_id: str
+    observed_at: str | None
+
+
+@dataclass(frozen=True)
 class AttributionAnalysisRecord:
     group_id: str
     sequence_id: str
@@ -186,6 +204,7 @@ class AttributionAnalysisRecord:
     hypotheses: tuple[HypothesisView, ...]
     collection_guidance: CollectionGuidanceView | None = None
     indicator_matches: tuple[IndicatorMatchView, ...] = ()
+    actor_specific_evidence: tuple[ActorEvidenceView, ...] = ()
     comparison_status: ComparisonStatus = ComparisonStatus.COMPUTED
     comparison_note: str | None = None
     calibration_status: CalibrationStatus = CalibrationStatus.UNCALIBRATED
@@ -335,6 +354,7 @@ def list_investigations(client: ElasticClient, *, size: int = 100) -> tuple[Mapp
 
 __all__ = [
     "ATTRIBUTION_ANALYSES_INDEX",
+    "ActorEvidenceView",
     "INVESTIGATIONS_INDEX",
     "AttributionAnalysisRecord",
     "CalibrationStatus",

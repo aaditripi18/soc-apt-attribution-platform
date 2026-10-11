@@ -39,6 +39,36 @@ export function OverviewTab({ data, unitId }: { data: UnitData; unitId: string }
 
   return (
     <div className="space-y-6">
+      {analysis.actor_specific_evidence.length > 0 && (
+        <Card className="border-warning/40 bg-warning/5">
+          <div className="flex flex-wrap items-center gap-2">
+            <Badge tone="warning">Actor-specific evidence</Badge>
+            <h2 className="text-headline-md text-on-surface">
+              {[...new Set(analysis.actor_specific_evidence.map((e) => e.actor_name))].sort().join(", ")}
+            </h2>
+          </div>
+          <p className="mt-2 max-w-4xl text-body-md text-on-surface-variant">
+            A rule written from published reporting on this Group’s own tooling matched here, and the reviewed decision
+            for that rule accepts it as specific. It is a lead to verify — anyone with the same tooling, or copying its
+            artefacts, would produce it too — and it is not part of the technique comparison.
+          </p>
+          <ul className="mt-3 space-y-2">
+            {analysis.actor_specific_evidence.map((item) => (
+              <li key={item.evidence_id} className="rounded-sm border border-outline-variant/60 bg-surface-lowest p-3">
+                <div className="flex flex-wrap items-center gap-2 text-body-md">
+                  <span className="font-semibold text-on-surface">{item.actor_name}</span>
+                  {item.actor_attack_id && <AttackId id={item.actor_attack_id} tone="warning" />}
+                  <span className="font-mono text-code-sm text-on-surface-variant">{utcDateTime(item.observed_at, true)}</span>
+                </div>
+                <p className="mt-1.5 break-words font-mono text-code-sm leading-relaxed text-on-surface-variant">{item.claim}</p>
+              </li>
+            ))}
+          </ul>
+          <div className="mt-3">
+            <More href={links.unit(unitId, "evidence")}>Evidence</More>
+          </div>
+        </Card>
+      )}
       <div className="grid grid-cols-1 gap-6 xl:grid-cols-3">
         <Card padded={false} className="xl:col-span-2">
           <CardHeader title="What this unit establishes" hint="Each statement is a stored fact; open the tab beside it for the records behind it." />

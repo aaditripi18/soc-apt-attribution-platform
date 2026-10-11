@@ -175,6 +175,7 @@ def test_no_verdict_names_an_actor_and_no_field_orders_them(knowledge: AttackKno
         "no_decision_features",
         "not_distinguishable",
         "third_party_lead",
+        "actor_specific_evidence",  # ADR-0018: only from evidence specific to the Group
     }
     fields = {f.name for f in dataclasses.fields(InvestigationAssessmentRecord)}
     assert not [f for f in fields if any(word in f for word in FORBIDDEN_KEYS)]

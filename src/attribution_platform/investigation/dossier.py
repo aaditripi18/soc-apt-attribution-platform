@@ -51,7 +51,7 @@ from attribution_platform.investigation.records import (
     load_investigation,
 )
 
-DOSSIER_VERSION = "dossier/3"
+DOSSIER_VERSION = "dossier/4"
 _MAX_CANDIDATES_LISTED = 25
 _MAX_QUESTIONS = 5
 
@@ -280,6 +280,12 @@ def _section_assessment(assessment: Mapping[str, Any] | None) -> list[str]:
         return []
     lines = ["## Attribution assessment", "", f"**{assessment['statement']}**", ""]
     lines += [f"- {reason}" for reason in assessment["reasons"]]
+    for actor in assessment.get("actor_leads") or ():
+        lines.append(
+            f"- Actor-specific evidence — **{_text(str(actor['actor_name']))}** "
+            f"({actor['actor_attack_id']}), unit {_code(str(actor['group_id']))}: "
+            f"{_text(str(actor['claim']))}"
+        )
     for lead in assessment["indicator_leads"]:
         validity = {True: "inside", False: "outside", None: "no stated"}[lead["within_validity"]]
         lines.append(

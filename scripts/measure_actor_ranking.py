@@ -42,7 +42,7 @@ from attribution_platform.attack_knowledge.traversal import (
     techniques_used_by,
 )
 
-CHECKS_VERSION = "known-answer-checks/1"
+CHECKS_VERSION = "known-answer-checks/2"
 #: source id prefix -> (ATT&CK Group id the recording emulates, or None for "no actor"; basis)
 KNOWN: dict[str, tuple[str | None, str]] = {
     "otrf-apt29": ("G0016", "OTRF Security Datasets: APT29 emulation (ATT&CK Evaluations plan)"),
@@ -184,6 +184,9 @@ def measure(base_url: str) -> dict[str, Any]:
             ),
             "known_basis": basis,
             "verdict": assessment["verdict"],
+            "named_actors": sorted(
+                {str(lead["actor_attack_id"]) for lead in assessment.get("actor_leads") or ()}
+            ),
             "statement": assessment["statement"],
             "units": len(units["units"]),
             "observed_techniques": len(pooled),
@@ -223,7 +226,16 @@ def measure(base_url: str) -> dict[str, Any]:
             "cases": len(cases),
             "emulations": len(emulations),
             "tool_tests": len(tool_tests),
-            "verdicts_naming_an_actor": 0,  # no verdict can (ADR-0017)
+            # ADR-0018: a verdict names an actor only on actor-specific evidence.
+            "verdicts_naming_an_actor": sum(1 for c in cases if c["named_actors"]),
+            "verdicts_naming_a_wrong_actor": sum(
+                1
+                for c in cases
+                if c["named_actors"]
+                and (
+                    c["known_actor"] is None or c["named_actors"] != [c["known_actor"]["attack_id"]]
+                )
+            ),
             "orderings_measured": len(positions),
             "orderings_naming_the_known_actor_first": sum(1 for p in positions if p == 1),
             "orderings_with_the_known_actor_in_top_10": sum(1 for p in positions if p <= 10),

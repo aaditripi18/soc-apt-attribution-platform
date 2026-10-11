@@ -64,6 +64,7 @@ from attribution_platform.investigation.assessment import (
     persist_assessment,
 )
 from attribution_platform.investigation.records import (
+    ActorEvidenceView,
     AttributionAnalysisRecord,
     CandidateView,
     CollectionGuidanceView,
@@ -91,8 +92,9 @@ from attribution_platform.replay.recording_pipeline import RecordingSource, anal
 #: "comparison not computed" instead of aborting the run, and the record says how
 #: much Evidence is in units and how much is not (ADR-0009 Amendment D).
 #: 1.5: the baseline search is kept apart from the per-candidate one; 1.6: an
-#: investigation-level attribution assessment is stored (ADR-0017).
-INVESTIGATION_METHOD_VERSION = "1.6"
+#: investigation-level attribution assessment is stored (ADR-0017); 1.7:
+#: actor-specific Evidence (ADR-0018).
+INVESTIGATION_METHOD_VERSION = "1.7"
 #: ADR-0005 §D16 structural lower bound; the fitted floor needs a calibration_version.
 STRUCTURAL_MIN_PROFILE_FLOOR = 1
 
@@ -172,6 +174,28 @@ def _guidance_view(guidance: CollectionGuidance) -> CollectionGuidanceView:
             )
             for q in guidance.questions
         ),
+    )
+
+
+_TECHNIQUE_TYPE = "attack-pattern"
+_GROUP_TYPE = "intrusion-set"
+
+
+def _actor_view(
+    evidence: Evidence, observation: Observation, knowledge: AttackKnowledge
+) -> ActorEvidenceView:
+    ref = evidence.attack_ref
+    assert ref is not None  # the caller selects Group-referenced Evidence
+    group = knowledge.get_by_id(ref.stix_id)
+    return ActorEvidenceView(
+        actor_stix_id=ref.stix_id,
+        actor_attack_id=ref.external_id,
+        actor_name=str(group.get("name")) if group is not None else ref.stix_id,
+        evidence_id=evidence.evidence_id,
+        rule_id=evidence.provenance.method,
+        claim=evidence.claim,
+        observation_id=observation.observation_id,
+        observed_at=observation.timestamp.isoformat(),
     )
 
 
@@ -283,7 +307,9 @@ def summarize_unit(
     observations = {o.observation_id: o for _, o in pairs}
     techniques: set[str] = set()
     for evidence, _ in pairs:
-        external = evidence.attack_ref.external_id if evidence.attack_ref else None
+        ref = evidence.attack_ref
+        # a Group reference (ADR-0018 actor-specific Evidence) is not a technique
+        external = ref.external_id if ref and ref.object_type == _TECHNIQUE_TYPE else None
         if external:
             techniques.add(external)
             techniques.add(external.split(".", 1)[0])  # parent technique
@@ -394,6 +420,18 @@ def run_investigation(
                     _match_view(m)
                     for m in match_observations(indicators, unit_observations.values())
                 ),
+            )
+        actor_evidence = tuple(
+            _actor_view(evidence, observation, knowledge)
+            for evidence, observation in sorted(
+                (members[e] for e in group.member_evidence_ids if e in members),
+                key=lambda pair: pair[0].evidence_id,
+            )
+            if evidence.attack_ref is not None and evidence.attack_ref.object_type == _GROUP_TYPE
+        )
+        if actor_evidence:
+            analysis_record = dataclasses.replace(
+                analysis_record, actor_specific_evidence=actor_evidence
             )
         persist_attribution_analysis(client, analysis_record)
         stored_analyses.append(record_to_json(analysis_record))

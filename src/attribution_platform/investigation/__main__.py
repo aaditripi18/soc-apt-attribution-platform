@@ -51,6 +51,8 @@ from attribution_platform.detection_content.pinned import (
     ELASTIC_PACK,
     FRONTEND_DIST,
     KNOWN_ANSWER_CHECKS,
+    SIGMA_ACTOR_IMPORT_REPORT,
+    SIGMA_ACTOR_PACK,
     SIGMA_PACK,
 )
 from attribution_platform.detection_content.pinned import SIGMA_IMPORT_REPORT as IMPORT_REPORT
@@ -117,10 +119,15 @@ class Workbench:
 def load_workbench() -> Workbench:
     knowledge = load_attack_knowledge()
     packs = [load_rule_pack(path, knowledge=knowledge) for path in (SIGMA_PACK, ELASTIC_PACK)]
+    # ADR-0018: actor-specific rules are detection content like the rest, but the
+    # coverage report (and so detectability) is about techniques and covers the
+    # two technique packs only.
+    actor_pack = load_rule_pack(SIGMA_ACTOR_PACK, knowledge=knowledge)
+    engine_packs = [*packs, actor_pack]
     return Workbench(
         knowledge=knowledge,
-        engine=DetectionEngine(rules=tuple(r for pack in packs for r in pack.rules)),
-        detection_pack_content_hash=pack_set_content_hash(packs),
+        engine=DetectionEngine(rules=tuple(r for pack in engine_packs for r in pack.rules)),
+        detection_pack_content_hash=pack_set_content_hash(engine_packs),
         detectability=load_detectability(
             COVERAGE_REPORT,
             (IMPORT_REPORT, ELASTIC_IMPORT_REPORT),
@@ -244,6 +251,7 @@ def main(argv: Sequence[str] | None = None, env: dict[str, str] | None = None) -
             elastic_import_report=ELASTIC_IMPORT_REPORT,
             static_dir=FRONTEND_DIST,
             known_answer_checks=KNOWN_ANSWER_CHECKS,
+            actor_import_report=SIGMA_ACTOR_IMPORT_REPORT,
         )
         server = create_server(client, host="127.0.0.1", port=port, context=context)
         print(f"Serving the read-model API on http://127.0.0.1:{port}/api  (Ctrl+C to stop)")

@@ -89,3 +89,10 @@ was measured on).
 - `tests/test_frontend_api.py`: the route serves exactly `assess_investigation` over the stored analyses; the
   dossier quotes the statement.
 - `scripts/audit_served_read_model.py` recomputes every assessment from the served units.
+
+## Amendment A (2026-10-11) — a fourth verdict
+
+ADR-0018 adds `actor_specific_evidence`: a Group is named when an artefact specific to it matched (a reviewed,
+Group-tagged rule), as a lead and not a calibrated conclusion. D2's rule is unchanged for everything else:
+technique overlap never names an actor. The known-answer checks (`known-answer-checks/2`) now count the verdicts
+that named an actor and those that named a wrong one.

@@ -2,7 +2,7 @@ import { ArrowRight } from "lucide-react";
 import { useMemo, useState } from "react";
 import { AttackId, Badge, Button, Card, CardHeader, Id, Segmented, Td, Th, cx } from "../../components/ui";
 import type { BehavioralStep, Evidence, Observation, SequenceEdge } from "../../lib/api";
-import { isContextEvidence, layoutSequence, ruleOf } from "../../lib/derive";
+import { isContextEvidence, isTechniqueEvidence, layoutSequence, ruleOf } from "../../lib/derive";
 import { integer, parseTime, plural, shortHash, titleCase, utcClock, utcDateTime } from "../../lib/format";
 import { href } from "../../lib/router";
 import type { UnitData } from "../Unit";
@@ -408,7 +408,14 @@ export function SequenceTab({ data, unitId }: { data: UnitData; unitId: string }
         step,
         observation,
         evidence,
-        techniqueIds: [...new Set(evidence.map((e) => e.attack_ref?.external_id).filter((id): id is string => !!id))],
+        techniqueIds: [
+          ...new Set(
+            evidence
+              .filter(isTechniqueEvidence)
+              .map((e) => e.attack_ref.external_id)
+              .filter((id): id is string => !!id),
+          ),
+        ],
         contextOnly: evidence.length > 0 && evidence.every(isContextEvidence),
         time: parseTime(observation?.timestamp)?.getTime() ?? 0,
       });

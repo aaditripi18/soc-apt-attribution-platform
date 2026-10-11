@@ -20,7 +20,11 @@ SIGMA_IMPORT_REPORT = _SIGMA_GENERATED / "sigma-r2026-07-01-sigma_core++.import-
 #: ADR-0015: Elastic prebuilt rules, translated exactly, beside the Sigma pack.
 ELASTIC_PACK = _ELASTIC_GENERATED / "elastic-195f15c0bac8.rules.json"
 ELASTIC_IMPORT_REPORT = _ELASTIC_GENERATED / "elastic-195f15c0bac8.import-report.json"
-#: ADR-0007 D9/D10: the full-universe coverage report over both packs.
+#: ADR-0018: Sigma rules that name a Group, kept only where the reviewed
+#: actor-tag decisions accept the tag; their Evidence references the Group.
+SIGMA_ACTOR_PACK = _SIGMA_GENERATED / "sigma-r2026-07-01-actor-specific.rules.json"
+SIGMA_ACTOR_IMPORT_REPORT = _SIGMA_GENERATED / "sigma-r2026-07-01-actor-specific.import-report.json"
+#: ADR-0007 D9/D10: the full-universe coverage report over the Sigma and Elastic packs.
 COVERAGE_REPORT = _SIGMA_GENERATED / "coverage-report.json"
 
 #: ADR-0017: what naming an actor would have got right on known-answer recordings
@@ -37,6 +41,8 @@ __all__ = [
     "FRONTEND_DIST",
     "KNOWN_ANSWER_CHECKS",
     "REPO_ROOT",
+    "SIGMA_ACTOR_IMPORT_REPORT",
+    "SIGMA_ACTOR_PACK",
     "SIGMA_IMPORT_REPORT",
     "SIGMA_PACK",
 ]

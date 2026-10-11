@@ -21,6 +21,7 @@ export const VERDICT_LABEL: Record<Verdict, string> = {
   no_decision_features: "Nothing attributable",
   not_distinguishable: "No actor can be singled out",
   third_party_lead: "No actor singled out · advisory lead",
+  actor_specific_evidence: "Actor-specific evidence · a lead",
 };
 
 /** One sentence on how the platform has done on recordings with a known answer. */
@@ -162,7 +163,7 @@ export function AssessmentCard({ investigationId }: { investigationId: string })
     <Card padded={false}>
       <CardHeader
         title="Attribution assessment"
-        hint="The verdict about the whole investigation, with its reasons. It can say that no actor stands out; it cannot name one from technique overlap."
+        hint="The verdict about the whole investigation, with its reasons. It never names an actor from technique overlap; it names one only when an artefact specific to that Group matched, and then as a lead."
         right={<Badge tone={a.verdict === "third_party_lead" ? "tertiary" : "warning"}>{VERDICT_LABEL[a.verdict]}</Badge>}
       />
       <div className="grid grid-cols-1 gap-6 p-4 xl:grid-cols-[1fr_22rem]">
@@ -188,6 +189,19 @@ export function AssessmentCard({ investigationId }: { investigationId: string })
               )}
             </ul>
           )}
+          {a.actor_leads.map((lead) => (
+            <div key={lead.evidence_id} className="ml-8 rounded-sm border border-warning/40 bg-warning/5 p-3">
+              <div className="flex flex-wrap items-center gap-2 text-body-md">
+                <Badge tone="warning">Actor-specific evidence</Badge>
+                <span className="font-semibold text-on-surface">{lead.actor_name}</span>
+                {lead.actor_attack_id && <AttackId id={lead.actor_attack_id} tone="warning" />}
+                <a href={links.unit(lead.group_id, "evidence")} className="text-label-md text-primary hover:underline">
+                  Open the unit
+                </a>
+              </div>
+              <p className="mt-1.5 break-words font-mono text-code-sm leading-relaxed text-on-surface-variant">{lead.claim}</p>
+            </div>
+          ))}
           {a.indicator_leads.map((lead) => (
             <div key={`${lead.value}::${lead.group_id}`} className="ml-8 rounded-sm border border-tertiary-dim/40 bg-tertiary-dim/5 p-3">
               <div className="flex flex-wrap items-center gap-2 text-body-md">

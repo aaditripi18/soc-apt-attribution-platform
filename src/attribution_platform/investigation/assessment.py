@@ -16,12 +16,19 @@ What the verdict may say, and why no more:
   publisher's claim about the indicator, reported as a lead and never promoted
   to a conclusion.
 
-There is deliberately **no** "attributed to X" verdict. On the recordings whose
-emulated actor is known, every ordering of technique overlap named the wrong
-actor, and a technique ATT&CK records for a single Group pointed at the wrong
-Group every time (ADR-0005 implementation record 2026-10-11; ADR-0017
-"Measured"). Overlap counts are therefore stored as facts per candidate, in
-name order, and nothing here orders candidates by them or singles one out.
+- ``ACTOR_SPECIFIC_EVIDENCE`` (ADR-0018) — a rule written from published
+  reporting on one Group's own tooling matched, and the reviewed actor-tag
+  decision accepted that rule. The Group is named, with the matched artefact
+  and the review's reason, as a lead to verify.
+
+Technique overlap never names anyone. On the recordings whose emulated actor is
+known, every ordering of technique overlap named the wrong actor, and a
+technique ATT&CK records for a single Group pointed at the wrong Group every
+time (ADR-0005 implementation record 2026-10-11; ADR-0017 "Measured"). Overlap
+counts are therefore stored as facts per candidate, in name order, and nothing
+here orders candidates by them or singles one out. A Group is named only by
+evidence specific to it, and even then the verdict is not a calibrated
+conclusion: no calibration version exists.
 
 Pooling every unit treats the investigation as one intrusion. That is an
 assumption about the source, stated in ``limits``, not something this module
@@ -46,8 +53,9 @@ from attribution_platform.attack_knowledge.traversal import (
 from attribution_platform.dataplane import ElasticClient
 from attribution_platform.investigation.records import _load, _persist, _to_json
 
-ASSESSMENT_METHOD_VERSION = "1.0"
-ASSESSMENT_SCHEMA_VERSION = "investigation-assessment/1"
+#: 1.1: actor-specific Evidence (ADR-0018).
+ASSESSMENT_METHOD_VERSION = "1.1"
+ASSESSMENT_SCHEMA_VERSION = "investigation-assessment/2"
 ASSESSMENTS_INDEX = "attribution-platform-investigation-assessments-v1"
 ASSESSMENTS_MAPPING: Mapping[str, Any] = {"investigation_id": {"type": "keyword"}}
 
@@ -68,6 +76,7 @@ class Verdict(Enum):
     NO_DECISION_FEATURES = "no_decision_features"
     NOT_DISTINGUISHABLE = "not_distinguishable"
     THIRD_PARTY_LEAD = "third_party_lead"
+    ACTOR_SPECIFIC_EVIDENCE = "actor_specific_evidence"
 
 
 @dataclass(frozen=True)
@@ -119,6 +128,21 @@ class IndicatorLead:
 
 
 @dataclass(frozen=True)
+class ActorLead:
+    """Actor-specific Evidence (ADR-0018): the Group, and what matched."""
+
+    actor_name: str
+    actor_attack_id: str | None
+    actor_stix_id: str
+    rule_id: str
+    claim: str
+    evidence_id: str
+    observation_id: str
+    observed_at: str | None
+    group_id: str
+
+
+@dataclass(frozen=True)
 class InvestigationAssessmentRecord:
     investigation_id: str
     attack_kb_version: str
@@ -131,6 +155,7 @@ class InvestigationAssessmentRecord:
     candidates: tuple[CandidateOverlap, ...]
     overlap_counts: tuple[OverlapCount, ...]
     indicator_leads: tuple[IndicatorLead, ...]
+    actor_leads: tuple[ActorLead, ...]
     verdict: Verdict
     statement: str
     reasons: tuple[str, ...]
@@ -161,6 +186,7 @@ def assess_investigation(
     units_per_candidate: dict[str, int] = {}
     candidate_view: dict[str, Mapping[str, Any]] = {}
     leads: list[IndicatorLead] = []
+    actor_leads: list[ActorLead] = []
     for analysis in analyses:
         for stix_id in analysis["observed_feature_technique_ids"]:
             units_per_technique[stix_id] = units_per_technique.get(stix_id, 0) + 1
@@ -168,6 +194,20 @@ def assess_investigation(
             stix_id = str(candidate["stix_id"])
             units_per_candidate[stix_id] = units_per_candidate.get(stix_id, 0) + 1
             candidate_view.setdefault(stix_id, candidate)
+        for item in analysis.get("actor_specific_evidence") or ():
+            actor_leads.append(
+                ActorLead(
+                    actor_name=str(item["actor_name"]),
+                    actor_attack_id=item.get("actor_attack_id"),
+                    actor_stix_id=str(item["actor_stix_id"]),
+                    rule_id=str(item["rule_id"]),
+                    claim=str(item["claim"]),
+                    evidence_id=str(item["evidence_id"]),
+                    observation_id=str(item["observation_id"]),
+                    observed_at=item.get("observed_at"),
+                    group_id=str(analysis["group_id"]),
+                )
+            )
         for match in analysis.get("indicator_matches") or ():
             if match.get("named_actor"):
                 leads.append(
@@ -184,6 +224,7 @@ def assess_investigation(
                     )
                 )
     leads.sort(key=lambda lead: (lead.actor_name.lower(), lead.value, lead.group_id))
+    actor_leads.sort(key=lambda lead: (lead.actor_name.lower(), lead.evidence_id))
 
     observed = set(units_per_technique)
     techniques = []
@@ -275,6 +316,34 @@ def assess_investigation(
             )
             if len(names) > 1:
                 reasons.append(f"The advisory leads name {len(names)} different actors.")
+    if actor_leads:
+        verdict = Verdict.ACTOR_SPECIFIC_EVIDENCE
+        named = sorted({lead.actor_name for lead in actor_leads}, key=str.lower)
+        rule_count = len({lead.rule_id.rsplit(":", 1)[0] for lead in actor_leads})
+        matches = _plural(len(actor_leads), "match", "matches")
+        rules_text = _plural(rule_count, "rule")
+        if len(named) == 1:
+            statement = (
+                f"Evidence specific to {named[0]} was observed: {matches} of {rules_text} written "
+                "from published reporting on that Group's own tooling. This points to "
+                f"{named[0]} and is a lead to verify — not a calibrated conclusion, and anyone "
+                "who has the same tooling or copies its artefacts would produce it too."
+            )
+        else:
+            statement = (
+                f"Evidence specific to {len(named)} different Groups was observed "
+                f"({', '.join(named)}): {matches} of {rules_text} written from published "
+                "reporting on each Group's own tooling. The leads disagree, so none is "
+                "singled out; each is to be verified."
+            )
+        reasons.insert(
+            0,
+            "Technique overlap does not single out an actor here (the counts below); the Group "
+            "is named only because an artefact specific to it matched."
+            if total
+            else "No technique comparison applies; the Group is named only because an artefact "
+            "specific to it matched.",
+        )
     return InvestigationAssessmentRecord(
         investigation_id=investigation_id,
         attack_kb_version=knowledge.attack_kb_version,
@@ -287,6 +356,7 @@ def assess_investigation(
         candidates=tuple(candidates),
         overlap_counts=overlap_counts,
         indicator_leads=tuple(leads),
+        actor_leads=tuple(actor_leads),
         verdict=verdict,
         statement=statement,
         reasons=tuple(reasons),

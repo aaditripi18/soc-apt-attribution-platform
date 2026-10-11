@@ -188,6 +188,17 @@ export interface IndicatorMatch {
   attribution_quote: string | null;
 }
 
+export interface ActorEvidence {
+  actor_stix_id: string;
+  actor_attack_id: string | null;
+  actor_name: string;
+  evidence_id: string;
+  rule_id: string;
+  claim: string;
+  observation_id: string;
+  observed_at: string | null;
+}
+
 export interface AttributionAnalysis {
   group_id: string;
   sequence_id: string;
@@ -202,6 +213,8 @@ export interface AttributionAnalysis {
   hypotheses: Hypothesis[];
   collection_guidance: CollectionGuidance | null;
   indicator_matches: IndicatorMatch[];
+  /** ADR-0018: Evidence whose rule is specific to one Group. A lead, never a comparison input. */
+  actor_specific_evidence: ActorEvidence[];
   /**
    * The exact search stops at a work bound instead of approximating.
    * "baseline_not_computed": per-candidate quantities exist, the Unattributed baseline does not.
@@ -287,9 +300,19 @@ export interface RuleInfo {
   source_id: string;
   title: string | null;
   url: string | null;
-  content_tier: "core" | "enrich" | string;
+  /** "actor": a rule specific to one Group (ADR-0018). */
+  content_tier: "core" | "enrich" | "actor" | string;
   logsources: string[];
   translation: "imported" | "partial" | string;
+  actor_tags?: ActorTag[];
+}
+
+export interface ActorTag {
+  tag: string;
+  decision: "accept" | "reject";
+  reason: string;
+  group_id: string | null;
+  group_name: string | null;
 }
 
 export interface UnitEvidence {
@@ -385,6 +408,26 @@ export interface Coverage {
     groups_with_at_least_10_covered: number;
   };
   content: { sigma: ContentSource; elastic: ContentSource };
+  /** ADR-0018: every Sigma rule that names a Group, with the reviewed decision per tag. */
+  actor_specific: {
+    summary: {
+      sigma_rules_total: number;
+      group_tags_reviewed: number;
+      group_tags_accepted: number;
+      by_status: { imported: number; partial: number; rejected: number };
+      generated_rules: number;
+      groups_with_a_usable_rule: string[];
+    };
+    rules: {
+      sigma_id: string;
+      title: string;
+      url: string;
+      logsource: string;
+      status: string;
+      rejection: string | null;
+      actor_tags: ActorTag[];
+    }[];
+  } | null;
   logsources: { logsource: string; product: string; sigma_rules: number; elastic_rules: number }[];
   gap_ranking: {
     blocker: string;
@@ -404,7 +447,12 @@ export interface Coverage {
 }
 
 /** ADR-0017: the verdict about a whole investigation. It can never name an actor. */
-export type Verdict = "no_decision_features" | "not_distinguishable" | "third_party_lead";
+export type Verdict =
+  | "no_decision_features"
+  | "not_distinguishable"
+  | "third_party_lead"
+  /** ADR-0018: an artefact specific to one Group matched. The only verdict that names one. */
+  | "actor_specific_evidence";
 
 export interface Assessment {
   investigation_id: string;
@@ -444,6 +492,7 @@ export interface Assessment {
     attribution_quote: string | null;
     group_id: string;
   }[];
+  actor_leads: (ActorEvidence & { group_id: string })[];
   verdict: Verdict;
   statement: string;
   reasons: string[];
@@ -461,6 +510,8 @@ export interface KnownAnswerCase {
   known_actor: { attack_id: string; name: string } | null;
   known_basis: string;
   verdict: Verdict;
+  /** ATT&CK ids of Groups the verdict named (actor-specific evidence only). */
+  named_actors: string[];
   statement: string;
   units: number;
   observed_techniques: number;
@@ -492,6 +543,7 @@ export interface Validation {
     emulations: number;
     tool_tests: number;
     verdicts_naming_an_actor: number;
+    verdicts_naming_a_wrong_actor: number;
     orderings_measured: number;
     orderings_naming_the_known_actor_first: number;
     orderings_with_the_known_actor_in_top_10: number;

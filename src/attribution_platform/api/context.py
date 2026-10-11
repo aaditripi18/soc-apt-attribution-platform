@@ -141,6 +141,44 @@ def _rule_index(
     return rules
 
 
+def _actor_rule_index(actor_report: Mapping[str, Any]) -> dict[str, Any]:
+    """Actor-specific rules (ADR-0018) by ``sigma-actor:<sigma id>``."""
+    rules: dict[str, Any] = {}
+    for row in actor_report.get("rules") or ():
+        if row.get("status") == "rejected":
+            continue
+        rules[f"sigma-actor:{row['sigma_id']}"] = {
+            "origin": "sigma",
+            "source_id": row["sigma_id"],
+            "title": row.get("title"),
+            "url": row.get("rule_url"),
+            "content_tier": "actor",
+            "logsources": [row["logsource"]] if row.get("logsource") else [],
+            "translation": row.get("status"),
+            "actor_tags": [t for t in row.get("actor_tags") or () if t["decision"] == "accept"],
+        }
+    return rules
+
+
+def _actor_view(actor_report: Mapping[str, Any]) -> dict[str, Any]:
+    return {
+        "summary": actor_report.get("summary"),
+        "provenance": actor_report.get("provenance"),
+        "rules": [
+            {
+                "sigma_id": row["sigma_id"],
+                "title": row.get("title"),
+                "url": row.get("rule_url"),
+                "logsource": row.get("logsource"),
+                "status": row.get("status"),
+                "rejection": row.get("rejection"),
+                "actor_tags": row.get("actor_tags"),
+            }
+            for row in actor_report.get("rules") or ()
+        ],
+    }
+
+
 def rule_key(method: str) -> str:
     """The rule-index key of an Evidence's ``provenance.method`` (an engine rule
     id such as ``sigma:<uuid>:000`` or ``elastic:<uuid>:<profile>:000``)."""
@@ -181,6 +219,7 @@ def build_coverage_view(
     sigma_report: Mapping[str, Any],
     elastic_report: Mapping[str, Any],
     rules: Mapping[str, Mapping[str, Any]],
+    actor_report: Mapping[str, Any] | None = None,
 ) -> dict[str, Any]:
     """The ``GET /coverage`` body: the committed coverage report (per-Group
     uncovered lists dropped — they repeat the technique rows) beside what each
@@ -207,6 +246,8 @@ def build_coverage_view(
                 "top_rejection_reasons": _top_reasons(elastic_report),
             },
         },
+        # ADR-0018: rules specific to one Group — every reviewed tag with its reason.
+        "actor_specific": _actor_view(actor_report) if actor_report is not None else None,
         "logsources": _logsources(rules),
         "gap_ranking": coverage_report.get("gap_ranking"),
         "groups": [
@@ -230,18 +271,26 @@ def load_api_context(
     elastic_import_report: Path,
     static_dir: Path | None = None,
     known_answer_checks: Path | None = None,
+    actor_import_report: Path | None = None,
 ) -> ApiContext:
     """Read the pinned artefacts once and shape them for the API. The built
     frontend is served only when ``static_dir`` holds an ``index.html``."""
     sigma, elastic = _read(sigma_import_report), _read(elastic_import_report)
     rules = _rule_index(sigma, elastic)
+    actor = (
+        _read(actor_import_report)
+        if actor_import_report is not None and actor_import_report.is_file()
+        else None
+    )
+    if actor is not None:
+        rules.update(_actor_rule_index(actor))
     served = (
         static_dir if static_dir is not None and (static_dir / "index.html").is_file() else None
     )
     return ApiContext(
         knowledge=knowledge,
         techniques=build_technique_catalogue(knowledge),
-        coverage=build_coverage_view(_read(coverage_report), sigma, elastic, rules),
+        coverage=build_coverage_view(_read(coverage_report), sigma, elastic, rules, actor),
         rules=rules,
         static_dir=served,
         validation=(

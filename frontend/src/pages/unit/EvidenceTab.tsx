@@ -18,13 +18,27 @@ import {
   cx,
 } from "../../components/ui";
 import type { Evidence, Observation, RuleInfo } from "../../lib/api";
-import { describeObservation, isContextEvidence, observationFacets, ruleOf } from "../../lib/derive";
+import {
+  describeObservation,
+  isActorEvidence,
+  isContextEvidence,
+  isTechniqueEvidence,
+  observationFacets,
+  ruleOf,
+} from "../../lib/derive";
 import { integer, shortHash, utcClock, utcDate } from "../../lib/format";
 import type { UnitData } from "../Unit";
 
 const PAGE = 100;
 
 export function TierBadge({ evidence }: { evidence: Evidence }) {
+  if (isActorEvidence(evidence)) {
+    return (
+      <Badge tone="warning" title="The rule is specific to one Group's own tooling (reviewed). A lead; not part of the technique comparison.">
+        Actor-specific
+      </Badge>
+    );
+  }
   return isContextEvidence(evidence) ? (
     <Badge tone="muted" title="Low-level (enrich-tier) content: context, adds no attribution feature.">
       Context
@@ -99,6 +113,14 @@ function Detail({
                   </span>
                   {rule.logsources.length > 0 && <span>log source {rule.logsources.join(", ")}</span>}
                 </div>
+                {(rule.actor_tags ?? []).map((tag) => (
+                  <p key={tag.tag} className="rounded-sm border border-warning/30 bg-warning/5 p-2 text-body-sm text-on-surface-variant">
+                    <span className="font-semibold text-on-surface">
+                      Why this rule counts as specific to {tag.group_name} ({tag.group_id}):
+                    </span>{" "}
+                    {tag.reason}
+                  </p>
+                ))}
               </>
             ) : (
               <p className="text-on-surface-variant">This rule is not listed in the pinned import reports.</p>
@@ -171,7 +193,15 @@ export function EvidenceTab({ data, query }: { data: UnitData; query: URLSearchP
   const [limit, setLimit] = useState(PAGE);
 
   const techniqueIds = useMemo(
-    () => [...new Set(evidence.map((e) => e.attack_ref?.external_id).filter((id): id is string => !!id))].sort(),
+    () =>
+      [
+        ...new Set(
+          evidence
+            .filter(isTechniqueEvidence)
+            .map((e) => e.attack_ref.external_id)
+            .filter((id): id is string => !!id),
+        ),
+      ].sort(),
     [evidence],
   );
   const origins = useMemo(() => [...new Set(Object.values(rules).map((r) => r.origin))].sort(), [rules]);
@@ -272,7 +302,7 @@ export function EvidenceTab({ data, query }: { data: UnitData; query: URLSearchP
             <tr>
               <Th />
               <Th>Time (UTC)</Th>
-              <Th>Technique</Th>
+              <Th>Maps to</Th>
               <Th>Tier</Th>
               <Th>Rule</Th>
               <Th>Observed</Th>
@@ -297,7 +327,13 @@ export function EvidenceTab({ data, query }: { data: UnitData; query: URLSearchP
                     <span className="text-on-surface-variant">{utcDate(item.time_span?.start)}</span>{" "}
                     {utcClock(item.time_span?.start, true)}
                   </Td>
-                  <Td>{item.attack_ref?.external_id ? <AttackId id={item.attack_ref.external_id} /> : <span className="text-outline">unmapped</span>}</Td>
+                  <Td>
+                    {item.attack_ref?.external_id ? (
+                      <AttackId id={item.attack_ref.external_id} tone={isActorEvidence(item) ? "warning" : "tertiary"} />
+                    ) : (
+                      <span className="text-outline">unmapped</span>
+                    )}
+                  </Td>
                   <Td>
                     <TierBadge evidence={item} />
                   </Td>

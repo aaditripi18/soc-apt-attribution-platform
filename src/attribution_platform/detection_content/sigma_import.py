@@ -37,7 +37,7 @@ import hashlib
 import io
 import json
 import zipfile
-from collections.abc import Iterable, Mapping
+from collections.abc import Iterable, Mapping, Sequence
 from dataclasses import dataclass, field
 from importlib.metadata import version as installed_version
 from pathlib import Path
@@ -159,6 +159,8 @@ class ResolvedMapping:
     external_id: str
     tag: str
     revoked_from: str | None = None
+    #: appended to the mapping basis (ADR-0018: the review's reason for an actor tag)
+    note: str | None = None
 
 
 @dataclass
@@ -420,7 +422,13 @@ def _import_rule(
     bound: int,
     software_review: Mapping[tuple[str, str], bool],
     tier: str = "core",
+    mapping_override: Sequence[ResolvedMapping] | None = None,
+    rule_prefix: str = "sigma",
 ) -> tuple[RuleOutcome, list[dict[str, Any]]]:
+    """``mapping_override`` (ADR-0018) replaces the tag-derived mappings with the
+    given ones — the actor-specific importer maps a rule to its reviewed Group
+    only; ``rule_prefix`` namespaces the generated rule ids. Defaults leave the
+    Core++ / enrich import exactly as it was."""
     sigma_id = str(rule.id)
     product, category = _logsource_key(rule)
     outcome = RuleOutcome(
@@ -442,6 +450,8 @@ def _import_rule(
     mappings, ignored_groups, ignored_software, dropped = _resolve_tags(
         (str(t) for t in rule.tags), index, sigma_id=sigma_id, software_review=software_review
     )
+    if mapping_override is not None:
+        mappings, ignored_groups, ignored_software, dropped = list(mapping_override), [], [], []
     outcome.ignored_software_tags = tuple(ignored_software)
     outcome.technique_ids = tuple(m.external_id for m in mappings)
     outcome.ignored_group_tags = tuple(ignored_groups)
@@ -494,6 +504,7 @@ def _import_rule(
                     if m.revoked_from
                     else ""
                 )
+                + (f"; {m.note}" if m.note else "")
             ),
             "mapping_source": "sigma",
         }
@@ -542,14 +553,14 @@ def _import_rule(
                 continue
         rules.append(
             {
-                "rule_id": f"sigma:{sigma_id}:{position:03d}",
+                "rule_id": f"{rule_prefix}:{sigma_id}:{position:03d}",
                 "rule_version": release_tag,
                 "conditions": [lit.to_json() for lit in [*scope_literals, *literals]],
                 "technique_mappings": technique_mappings,
                 "evidence_type": "behavioral",
-                "rule_source": f"sigma:{sigma_id}",
+                "rule_source": f"{rule_prefix}:{sigma_id}",
                 # Conjuncts of one Sigma rule are one detection (engine dedups).
-                "rule_family": f"sigma:{sigma_id}",
+                "rule_family": f"{rule_prefix}:{sigma_id}",
                 **({"evidence_quality": "low"} if tier == "enrich" else {}),
             }
         )
