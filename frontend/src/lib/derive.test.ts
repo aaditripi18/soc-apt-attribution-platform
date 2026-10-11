@@ -12,6 +12,7 @@ import type {
 } from "./api";
 import {
   activityRole,
+  attackChain,
   buildTimeline,
   candidateRows,
   coverageByTactic,
@@ -319,5 +320,49 @@ describe("investigation views (ADR-0019)", () => {
 
   it("draws nothing when no Evidence has a time and a tactic", () => {
     expect(timelineFromActivity([...events.slice(5, 6), event({ time: null })], index)).toBeNull();
+  });
+});
+
+describe("attack chain (ADR-0022)", () => {
+  const event = (over: Partial<ActivityEvent>): ActivityEvent => ({
+    time: "2026-01-01T00:00:00+00:00",
+    group_id: "u1",
+    evidence_id: "e",
+    host: "h1",
+    label: "x.exe",
+    attack_id: "T1033",
+    attack_stix_id: "ap--a",
+    attack_object_type: "attack-pattern",
+    context: false,
+    decision_feature: true,
+    ...over,
+  });
+
+  it("orders tactics by first observation, and techniques inside a stage the same way", () => {
+    const chain = attackChain(
+      [
+        event({ evidence_id: "e1", time: "2026-01-01T00:10:00+00:00" }),
+        event({ evidence_id: "e2", attack_id: "T1087", attack_stix_id: "ap--c", time: "2026-01-01T00:05:00+00:00", host: "h2", group_id: "u2", decision_feature: false }),
+        event({ evidence_id: "e3", attack_id: "T1059.001", attack_stix_id: "ap--b", time: "2026-01-01T00:07:00+00:00", context: true, decision_feature: false }),
+        event({ evidence_id: "e4", time: "2026-01-01T00:20:00+00:00" }),
+        event({ evidence_id: "e5", attack_id: "G0016", attack_object_type: "intrusion-set" }),
+        event({ evidence_id: "e6", time: null }),
+      ],
+      index,
+    );
+    // discovery was seen first (00:05), although execution comes first in the matrix
+    expect(chain.map((s) => s.tactic)).toEqual(["discovery", "execution"]);
+    const discovery = chain[0];
+    expect(discovery?.techniques.map((t) => [t.attackId, t.evidence, t.role])).toEqual([
+      ["T1087", 1, "unmatched"],
+      ["T1033", 2, "feature"],
+    ]);
+    expect([discovery?.evidence, discovery?.hosts, discovery?.units]).toEqual([3, ["h1", "h2"], ["u1", "u2"]]);
+    expect((discovery?.lastSeen ?? 0) - (discovery?.firstSeen ?? 0)).toBe(15 * 60_000);
+    expect(chain[1]?.techniques.map((t) => t.role)).toEqual(["context"]);
+  });
+
+  it("is empty when nothing has a time and a tactic", () => {
+    expect(attackChain([event({ time: null })], index)).toEqual([]);
   });
 });

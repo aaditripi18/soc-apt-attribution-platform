@@ -1,5 +1,6 @@
 import { FileText, Search, X } from "lucide-react";
 import { useMemo, useState } from "react";
+import { AssistantPanel } from "../components/Assistant";
 import {
   AttackId,
   Button,
@@ -45,15 +46,19 @@ import {
 import { links, navigate } from "../lib/router";
 import { ActivityTimelineTab } from "./investigation/ActivityTimeline";
 import { AttributionHeadline, AttributionTab } from "./investigation/Attribution";
+import { ChainTab } from "./investigation/Chain";
 import { EmulationTab } from "./investigation/Emulation";
+import { IndicatorsTab } from "./investigation/Indicators";
 import { MatrixTab } from "./investigation/Matrix";
 import { ResponseTab } from "./investigation/Response";
 
 const TABS = [
   { key: "overview", label: "Overview" },
-  { key: "attribution", label: "Attribution" },
+  { key: "chain", label: "Attack chain" },
   { key: "matrix", label: "ATT&CK matrix" },
   { key: "timeline", label: "Timeline" },
+  { key: "indicators", label: "Indicators" },
+  { key: "attribution", label: "Attribution" },
   { key: "response", label: "Response" },
   { key: "emulation", label: "Detection validation" },
 ] as const;
@@ -73,6 +78,7 @@ function AttributionSummary({ id }: { id: string }) {
           <Button href={links.investigation(id, "attribution")} variant="primary">
             Attribution detail
           </Button>
+          <Button href={links.investigation(id, "chain")}>Attack chain</Button>
           <Button href={links.investigation(id, "response")}>Response</Button>
         </div>
       </div>
@@ -81,7 +87,15 @@ function AttributionSummary({ id }: { id: string }) {
 }
 
 /** The matrix and the timeline are two drawings of one read: the investigation's activity. */
-function ActivityView({ id, view }: { id: string; view: "matrix" | "timeline" }) {
+function ActivityView({
+  id,
+  view,
+  units,
+}: {
+  id: string;
+  view: "matrix" | "timeline" | "chain";
+  units: UnitSummary[];
+}) {
   const activity = useApi<Activity>(paths.activity(id));
   const catalogue = useApi<TechniqueCatalogue>(paths.techniques());
   const index = useMemo(
@@ -91,6 +105,9 @@ function ActivityView({ id, view }: { id: string; view: "matrix" | "timeline" })
   if (activity.state === "error") return <ErrorState failure={activity.error} onRetry={activity.reload} />;
   if (catalogue.state === "error") return <ErrorState failure={catalogue.error} onRetry={catalogue.reload} />;
   if (activity.state !== "ready" || !index) return <PageSkeleton rows={5} />;
+  if (view === "chain") {
+    return <ChainTab activity={activity.data} index={index} units={units} investigationId={id} />;
+  }
   return view === "matrix" ? (
     <MatrixTab activity={activity.data} index={index} investigationId={id} />
   ) : (
@@ -274,7 +291,11 @@ export function InvestigationDetailPage({ id, tab }: { id: string; tab?: string 
         })}
       </div>
 
-      {(active === "matrix" || active === "timeline") && <ActivityView id={id} view={active} />}
+      {(active === "matrix" || active === "timeline" || active === "chain") && (
+        <ActivityView id={id} view={active} units={units} />
+      )}
+      {active === "indicators" && <IndicatorsTab investigationId={id} source={record.source_id} />}
+      <AssistantPanel investigationId={id} source={record.source_id} />
       {active === "emulation" && <EmulationTab investigationId={id} />}
       {active === "attribution" && <AttributionTab investigationId={id} />}
       {active === "response" && <ResponseTab investigationId={id} />}

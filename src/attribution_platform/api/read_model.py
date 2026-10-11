@@ -31,6 +31,7 @@ import re
 from collections.abc import Mapping
 from typing import Any
 
+from attribution_platform.api.assistant import build_digest
 from attribution_platform.api.context import ApiContext, rule_key
 from attribution_platform.api.errors import BackendError, InvalidIdentifierError, NotFoundError
 from attribution_platform.dataplane import (
@@ -50,6 +51,11 @@ from attribution_platform.domain import (
 from attribution_platform.investigation.assessment import load_assessment
 from attribution_platform.investigation.dossier import DOSSIER_VERSION, render_dossier
 from attribution_platform.investigation.emulation import load_emulation_comparison
+from attribution_platform.investigation.observables import KINDS as OBSERVABLE_KINDS
+from attribution_platform.investigation.observables import (
+    OBSERVABLES_METHOD_VERSION,
+    collect_observables,
+)
 from attribution_platform.investigation.profile_match import load_profile_match
 from attribution_platform.investigation.records import (
     list_investigations,
@@ -210,6 +216,74 @@ def get_investigation_activity(client: ElasticClient, investigation_id: str) -> 
         "evidence_outside_units": record.get("evidence_outside_units"),
         "events": events,
     }
+
+
+def get_investigation_observables(client: ElasticClient, investigation_id: str) -> dict[str, Any]:
+    """The observables of an investigation's units (ADR-0022): hashes, addresses
+    and domains stated by the events that ground its Evidence, each with where
+    and when it was seen and any advisory indicator it equals. A join of stored
+    records; nothing is judged malicious here."""
+    record = get_investigation(client, investigation_id)
+    members: list[tuple[str, Evidence, Observation]] = []
+    advisory: dict[tuple[str, str], Mapping[str, Any]] = {}
+    try:
+        for group_id in record["units"]:
+            group = load_correlation_group(client, str(group_id))
+            analysis = load_attribution_analysis(client, str(group_id))
+            if group is None:
+                continue
+            for match in (analysis or {}).get("indicator_matches") or ():
+                advisory.setdefault((str(match["kind"]), str(match["value"])), match)
+            for evidence_id in group.member_evidence_ids:
+                evidence = load_evidence(client, evidence_id)
+                if evidence is None:
+                    continue
+                observation = load_observation(
+                    client, evidence.provenance.source_observation_ids[0]
+                )
+                if observation is not None:
+                    members.append((str(group_id), evidence, observation))
+    except ElasticIntegrationError as exc:
+        raise BackendError(
+            f"could not load the observables of {investigation_id!r}: {exc}"
+        ) from exc
+    observables = collect_observables(members, advisory)
+    return {
+        "investigation_id": investigation_id,
+        "method_version": OBSERVABLES_METHOD_VERSION,
+        "observables": observables,
+        "counts": {
+            kind: sum(1 for o in observables if o["kind"] == kind) for kind in OBSERVABLE_KINDS
+        },
+        "advisory_matches": sum(1 for o in observables if o["advisory"] is not None),
+    }
+
+
+def get_assistant_digest(
+    client: ElasticClient, context: ApiContext, investigation_id: str
+) -> dict[str, Any]:
+    """The facts the analyst assistant may use about one investigation
+    (ADR-0022): assembled from the stored records the pages show."""
+    investigation = get_investigation(client, investigation_id)
+
+    def optional(read: Any) -> Any:
+        try:
+            return read(client, investigation_id)
+        except NotFoundError:
+            return None
+
+    catalogue = (context.techniques or {}).get("techniques") or ()
+    return build_digest(
+        investigation=investigation,
+        assessment=optional(get_assessment),
+        profile_match=optional(get_profile_match),
+        activity=get_investigation_activity(client, investigation_id),
+        observables=get_investigation_observables(client, investigation_id)["observables"],
+        techniques={
+            str(t["attack_id"]): {"name": t["name"], "tactics": t["tactics"]} for t in catalogue
+        },
+        emulation=optional(get_emulation_comparison),
+    )
 
 
 def list_investigation_summaries(client: ElasticClient) -> list[dict[str, Any]]:

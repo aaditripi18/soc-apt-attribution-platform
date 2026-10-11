@@ -133,7 +133,13 @@ with their attack sequence, ATT&CK matrix and timeline
   by overlap (rare techniques weigh more), grouped into the clusters the evidence cannot separate, with an overlap
   matrix. Overlap is a stated similarity measure, not a confidence: the Methodology page gives the formula and the
   validation results.
+- **Attack chain** — tactics in the order they were first observed, with the process sequences behind them; and
+  **Indicators** — hashes, addresses and domains from the detected events, checked against the advisory bundles,
+  exportable as CSV ([ADR-0022](docs/architecture/adr/0022-attack-chain-observables-and-analyst-assistant.md)).
 - **Response** — MITRE ATT&CK mitigations for the observed techniques, by how many each addresses.
+- **AI analyst** — optional: with `ANTHROPIC_API_KEY` set in the environment, a chat panel answers questions about
+  an investigation and summarises it, from a digest of the stored results (never the raw logs). Without a key it is
+  off and nothing leaves the machine.
 - **Threat Actors** — all 176 ATT&CK Groups with techniques, software and the evidence that can identify them.
 
 Requires **Node.js 20+**.

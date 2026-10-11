@@ -702,6 +702,46 @@ export interface GroupCatalogue {
   groups: ActorProfile[];
 }
 
+/** ADR-0022: a value stated by an event behind a detection. Never judged malicious here. */
+export interface Observable {
+  kind: "sha256" | "sha1" | "md5" | "ip" | "domain";
+  value: string;
+  scope: "internal" | "external" | null;
+  context: string[];
+  hosts: string[];
+  unit_ids: string[];
+  technique_ids: string[];
+  observations: number;
+  first_seen: string;
+  last_seen: string;
+  advisory: {
+    indicator_name: string | null;
+    report_name: string | null;
+    named_actor: string | null;
+    named_actor_attack_id: string | null;
+    within_validity: boolean | null;
+  } | null;
+}
+
+export interface Observables {
+  investigation_id: string;
+  method_version: string;
+  observables: Observable[];
+  counts: Record<Observable["kind"], number>;
+  advisory_matches: number;
+}
+
+export interface AssistantStatus {
+  enabled: boolean;
+  model: string | null;
+  version: string;
+}
+
+export interface ChatMessage {
+  role: "user" | "assistant";
+  content: string;
+}
+
 export type UploadState = "queued" | "checking" | "analysing" | "done" | "refused" | "failed";
 
 /** ADR-0020: one uploaded recording and what became of it. */
@@ -800,6 +840,8 @@ export const paths = {
   uploads: () => "/uploads",
   profileMatch: (id: string) => `/investigations/${encodeURIComponent(id)}/profile-match`,
   groups: () => "/attack/groups",
+  observables: (id: string) => `/investigations/${encodeURIComponent(id)}/observables`,
+  assistant: () => "/assistant",
   activity: (id: string) => `/investigations/${encodeURIComponent(id)}/activity`,
   emulation: (id: string) => `/investigations/${encodeURIComponent(id)}/emulation`,
   unit: (id: string) => `/units/${encodeURIComponent(id)}`,
@@ -813,6 +855,39 @@ export const paths = {
   coverage: () => "/coverage",
   techniques: () => "/attack/techniques",
 };
+
+/** Ask the analyst assistant about one investigation (ADR-0022). The whole
+ * conversation is sent each time; the server keeps none of it. */
+export async function askAssistant(
+  investigationId: string,
+  messages: ChatMessage[],
+): Promise<{ reply: string; model: string }> {
+  const path = paths.assistant();
+  let response: Response;
+  try {
+    response = await fetch(BASE + path, {
+      method: "POST",
+      headers: { "Content-Type": "application/json", Accept: "application/json" },
+      body: JSON.stringify({ investigation_id: investigationId, messages }),
+    });
+  } catch {
+    throw new ApiFailure("unreachable", "The assistant did not answer.", path, null);
+  }
+  let body: unknown = null;
+  try {
+    body = await response.json();
+  } catch {
+    // handled below
+  }
+  if (!response.ok || body === null) {
+    const message =
+      body && typeof body === "object" && "error" in body
+        ? String((body as { error: unknown }).error)
+        : `HTTP ${response.status}`;
+    throw new ApiFailure(kindOf(response.status), message, path, response.status);
+  }
+  return body as { reply: string; model: string };
+}
 
 /**
  * Send a recording to the server (ADR-0020): the file is the raw request body.

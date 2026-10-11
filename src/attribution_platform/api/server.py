@@ -53,8 +53,10 @@ defined. Mutation methods (``POST``/``PUT``/``PATCH``/``DELETE``) are explicitly
 refused with 501 — no stored record can be changed. The one route that
 accepts input is ``POST /uploads`` (ADR-0020): it hands the server a new
 recording to investigate, only when the server was started with an upload
-service; ``GET /uploads`` and ``GET /uploads/<job_id>`` report on it. For a
-refused method the request body is drained
+service; ``GET /uploads`` and ``GET /uploads/<job_id>`` report on it.
+``POST /assistant`` (ADR-0022) answers an analyst's question about one
+investigation with a language model, only when an API key was configured;
+``GET /assistant`` says whether it is. For a refused method the request body is drained
 first so the refusal always reaches the client (a real, intermittent
 connection-reset on Windows when it was not).
 """
@@ -69,11 +71,14 @@ from pathlib import Path
 from typing import Any
 from urllib.parse import parse_qs, unquote, urlsplit
 
+from attribution_platform.api.assistant import AssistantDisabledError, AssistantService
+from attribution_platform.api.assistant import disabled as assistant_disabled
 from attribution_platform.api.context import ApiContext
 from attribution_platform.api.errors import ApiError, InvalidIdentifierError, NotFoundError
 from attribution_platform.api.read_model import (
     UNIT_SEARCH_PARAMETERS,
     get_assessment,
+    get_assistant_digest,
     get_attack_groups,
     get_attack_techniques,
     get_coverage,
@@ -83,6 +88,7 @@ from attribution_platform.api.read_model import (
     get_health,
     get_investigation,
     get_investigation_activity,
+    get_investigation_observables,
     get_observation,
     get_profile_match,
     get_unit,
@@ -133,6 +139,7 @@ _INVESTIGATION_VIEWS: dict[str, Callable[[ElasticClient, str], Any]] = {
     "/activity": get_investigation_activity,
     "/emulation": get_emulation_comparison,
     "/profile-match": get_profile_match,
+    "/observables": get_investigation_observables,
 }
 _EVIDENCE_SUFFIX = "/evidence"
 #: Reference routes answered from the :class:`ApiContext` alone.
@@ -145,6 +152,10 @@ _REFERENCE: dict[str, Callable[[ApiContext], Any]] = {
 _API_PREFIX = "/api"
 #: ADR-0020: the one route that accepts input.
 _UPLOADS = "/uploads"
+#: ADR-0022: the analyst assistant (a question in, a generated answer out).
+_ASSISTANT = "/assistant"
+#: Largest assistant request body read.
+_MAX_ASSISTANT_BODY = 256 * 1024
 #: Built-frontend paths served from ``static_dir`` (everything else is JSON).
 _STATIC_EXACT = frozenset({"/", "/index.html", "/favicon.svg", "/favicon.ico"})
 _STATIC_PREFIX = "/assets/"
@@ -248,6 +259,7 @@ def make_handler(
     client: ElasticClient,
     context: ApiContext | None = None,
     uploads: UploadService | None = None,
+    assistant: AssistantService | None = None,
 ) -> type[BaseHTTPRequestHandler]:
     """Build a ``BaseHTTPRequestHandler`` subclass bound to ``client``.
 
@@ -270,6 +282,10 @@ def make_handler(
                     self._write_file(found, immutable=path.startswith(_STATIC_PREFIX))
                     return
             try:
+                if path == _ASSISTANT:
+                    described = assistant.describe() if assistant else assistant_disabled()
+                    self._write_json(HTTPStatus.OK, _serialize(described))
+                    return
                 if path == _UPLOADS or path.startswith(_UPLOADS + "/"):
                     self._write_json(HTTPStatus.OK, _serialize(self._uploads(path)))
                     return
@@ -296,6 +312,9 @@ def make_handler(
             """``POST /api/uploads?name=<file name>`` with the archive as the raw
             body (ADR-0020). Every other POST is refused like any mutation."""
             parts = urlsplit(self.path)
+            if parts.path in (_ASSISTANT, _API_PREFIX + _ASSISTANT):
+                self._ask_assistant()
+                return
             if parts.path not in (_UPLOADS, _API_PREFIX + _UPLOADS):
                 self._refuse_mutation()
                 return
@@ -317,6 +336,47 @@ def make_handler(
                 job = uploads.receive(params["name"], self.rfile, int(raw_length))
                 self.close_connection = False
                 self._write_json(HTTPStatus.ACCEPTED, _serialize(job))
+            except ApiError as exc:
+                self._write_json(
+                    exc.status_code, json.dumps({"error": exc.message}, sort_keys=True)
+                )
+            except Exception as exc:  # noqa: BLE001 - last-resort safety net, never silent
+                self._write_json(
+                    HTTPStatus.INTERNAL_SERVER_ERROR,
+                    json.dumps({"error": f"unexpected server error: {exc}"}, sort_keys=True),
+                )
+
+        def _ask_assistant(self) -> None:
+            """``POST /api/assistant`` — ``{investigation_id, messages}`` in, a
+            generated answer out (ADR-0022). Same callers as an upload: this
+            machine, this console."""
+            self.close_connection = True
+            try:
+                if assistant is None:
+                    raise AssistantDisabledError("the assistant is not configured on this server")
+                if not is_loopback(str(self.client_address[0])):
+                    raise UploadRefusedError("the assistant answers this machine only")
+                if not same_origin(self.headers.get("Origin"), self.headers.get("Host")):
+                    raise UploadRefusedError("the assistant answers this console only")
+                raw_length = self.headers.get("Content-Length")
+                if raw_length is None or not raw_length.isdigit():
+                    raise LengthRequiredError("the request must declare its Content-Length")
+                if int(raw_length) > _MAX_ASSISTANT_BODY:
+                    raise InvalidIdentifierError("the request is too large")
+                try:
+                    request = json.loads(self.rfile.read(int(raw_length)).decode("utf-8"))
+                except (UnicodeDecodeError, json.JSONDecodeError) as exc:
+                    raise InvalidIdentifierError("the request body is not JSON") from exc
+                self.close_connection = False
+                if not isinstance(request, dict) or not isinstance(
+                    request.get("investigation_id"), str
+                ):
+                    raise InvalidIdentifierError("give investigation_id and messages")
+                digest = get_assistant_digest(
+                    client, context or ApiContext(), request["investigation_id"]
+                )
+                answer = assistant.answer(digest, request.get("messages"))
+                self._write_json(HTTPStatus.OK, _serialize(answer))
             except ApiError as exc:
                 self._write_json(
                     exc.status_code, json.dumps({"error": exc.message}, sort_keys=True)
@@ -387,6 +447,7 @@ def create_server(
     port: int = 0,
     context: ApiContext | None = None,
     uploads: UploadService | None = None,
+    assistant: AssistantService | None = None,
 ) -> ThreadingHTTPServer:
     """Build (but do not start) a server bound to ``client``.
 
@@ -398,5 +459,5 @@ def create_server(
     ``server.serve_forever()`` to actually accept connections;
     ``server.server_address`` gives the bound ``(host, port)`` once created.
     """
-    handler_cls = make_handler(client, context, uploads)
+    handler_cls = make_handler(client, context, uploads, assistant)
     return ThreadingHTTPServer((host, port), handler_cls)

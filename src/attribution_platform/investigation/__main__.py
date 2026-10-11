@@ -24,7 +24,9 @@ on 127.0.0.1 (``--port``, default 8000); when the frontend has been built
 needs exactly one recording. With ``--serve`` the console can also take a recording by
 upload (ADR-0020; this machine only, one investigation at a time, files kept in the
 git-ignored ``data/cache/uploads``); ``--serve`` alone starts an empty console to upload
-into, and ``--no-upload`` turns uploading off. ``--emulation-report`` (one recording) is the
+into, and ``--no-upload`` turns uploading off. With ``ANTHROPIC_API_KEY`` set in the
+environment the console's analyst assistant is on (ADR-0022); without it nothing is sent
+anywhere. ``--emulation-report`` (one recording) is the
 emulation tool's own report of a lab run (a MITRE CALDERA operation report): each step it lists is
 compared with what was detected (ADR-0019); its command text is never read. Nothing here
 ranks candidates or emits a confidence: analyses are uncalibrated until a
@@ -41,6 +43,7 @@ from dataclasses import dataclass
 from pathlib import Path
 
 from attribution_platform.api.__main__ import elasticsearch_client_from_env
+from attribution_platform.api.assistant import service_from_env
 from attribution_platform.api.context import load_api_context
 from attribution_platform.api.server import create_server
 from attribution_platform.api.uploads import RunResult, UploadService
@@ -315,8 +318,14 @@ def main(argv: Sequence[str] | None = None, env: dict[str, str] | None = None) -
             advisory_attributions=ADVISORY_ATTRIBUTIONS,
         )
         uploads = None if "--no-upload" in args else upload_service(client, workbench)
+        assistant = service_from_env(env)
         server = create_server(
-            client, host="127.0.0.1", port=port, context=context, uploads=uploads
+            client,
+            host="127.0.0.1",
+            port=port,
+            context=context,
+            uploads=uploads,
+            assistant=assistant,
         )
         print(f"Serving the read-model API on http://127.0.0.1:{port}/api  (Ctrl+C to stop)")
         if context.static_dir is not None:

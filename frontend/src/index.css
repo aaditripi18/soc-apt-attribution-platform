@@ -32,6 +32,10 @@
   --color-warning: #fbbf24;
   --color-warning-container: #4a3506;
 
+  --text-display-sm: 32px;
+  --text-display-sm--line-height: 40px;
+  --text-display-sm--font-weight: 600;
+  --text-display-sm--letter-spacing: -0.02em;
   --text-headline-xl: 24px;
   --text-headline-xl--line-height: 32px;
   --text-headline-xl--font-weight: 600;

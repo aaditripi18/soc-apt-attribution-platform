@@ -564,6 +564,75 @@ def main(argv: list[str]) -> int:
             summary["source_id"],
         )
 
+        # --- ADR-0021: the behavioural profile match, recomputed -------------------
+        match = audit.get(f"/investigations/{_quote(summary['investigation_id'])}/profile-match")
+        weight = {
+            t["technique_id"]: 1 - by_stix[t["technique_stix_id"]]["groups_using"] / total_groups
+            for t in match["observed"]
+        }
+        audit.check(
+            "profile_match.observed_are_the_assessments_techniques",
+            {t["technique_stix_id"] for t in match["observed"]} == pooled
+            and all(abs(t["weight"] - weight[t["technique_id"]]) < 1e-5 for t in match["observed"]),
+            summary["source_id"],
+        )
+        audit.check(
+            "profile_match.candidates_are_the_assessments",
+            {m["stix_id"] for m in match["matches"]} == pooled_candidates,
+            summary["source_id"],
+        )
+        total_weight = sum(weight.values())
+        for row in match["matches"]:
+            want_ids = sorted(
+                by_stix[t]["attack_id"] for t in profiles[row["stix_id"]] & pooled if t in by_stix
+            )
+            want_overlap = sum(weight[t] for t in want_ids) / total_weight if total_weight else 0.0
+            audit.check(
+                "profile_match.overlap_is_the_stated_formula",
+                row["matched_technique_ids"] == want_ids
+                and abs(row["overlap"] - want_overlap) < 1e-5
+                and row["profile_techniques"] == len(profiles[row["stix_id"]]),
+                row["name"],
+            )
+        order = [(-m["overlap"], -m["matched"], m["name"].lower()) for m in match["matches"]]
+        audit.check("profile_match.ordered_by_overlap", order == sorted(order))
+        clustered: dict[str, set[tuple[str, ...]]] = {}
+        for row in match["matches"]:
+            clustered.setdefault(row["cluster_id"], set()).add(tuple(row["matched_technique_ids"]))
+        audit.check(
+            "profile_match.a_cluster_is_one_matched_set",
+            all(len(sets) == 1 for sets in clustered.values())
+            and len({next(iter(sets)) for sets in clustered.values()}) == len(clustered)
+            and [c["cluster_id"] for c in match["clusters"]] == list(clustered),
+            summary["source_id"],
+        )
+        named_here = {
+            lead["actor_attack_id"]
+            for lead in (*assessment["actor_leads"], *assessment["indicator_leads"])
+            if lead["actor_attack_id"]
+        }
+        audit.check(
+            "profile_match.named_only_by_the_verdicts_leads",
+            {m["candidate_id"] for m in match["matches"] if m["named_by"]} <= named_here,
+            summary["source_id"],
+        )
+        audit.check(
+            "profile_match.claims_no_likelihood",
+            not [k for k in set(_keys(match)) if any(f in k for f in FORBIDDEN) or k == "rank"],
+            summary["source_id"],
+        )
+        observed_ids = {t["technique_id"] for t in match["observed"]}
+        for mitigation in match["mitigations"]:
+            obj = knowledge.get_by_id(mitigation["stix_id"])
+            audit.check(
+                "profile_match.mitigation_is_an_attack_mitigation",
+                obj is not None
+                and obj.get("type") == "course-of-action"
+                and obj.get("name") == mitigation["name"]
+                and set(mitigation["technique_ids"]) <= observed_ids,
+                mitigation["mitigation_id"],
+            )
+
         dossier = audit.get(f"/investigations/{_quote(summary['investigation_id'])}/dossier")[
             "markdown"
         ]

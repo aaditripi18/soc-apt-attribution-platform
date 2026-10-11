@@ -561,3 +561,78 @@ export function timelineFromActivity(
       })),
   };
 }
+
+// ---------------------------------------------------------------------------
+// Attack chain: tactics in the order they were first observed (ADR-0022)
+// ---------------------------------------------------------------------------
+
+export interface ChainTechnique {
+  attackId: string;
+  name: string;
+  role: ActivityRole;
+  evidence: number;
+  firstSeen: number;
+}
+
+export interface ChainStage {
+  tactic: string;
+  name: string;
+  firstSeen: number;
+  lastSeen: number;
+  evidence: number;
+  hosts: string[];
+  units: string[];
+  techniques: ChainTechnique[];
+}
+
+/**
+ * The attack chain of an investigation: one stage per ATT&CK tactic with
+ * Evidence, ordered by when that tactic was first observed (ties in matrix
+ * order). Within a stage, techniques are in the order they were first seen. A
+ * technique listed under several tactics is in each of those stages — the
+ * recording does not say which purpose it served. The order is the order of
+ * observation; it is not a claim that one stage caused the next.
+ */
+export function attackChain(events: ActivityEvent[], index: TechniqueIndex): ChainStage[] {
+  const stages = new Map<string, { events: { time: number; event: ActivityEvent }[] }>();
+  for (const event of events) {
+    const time = parseTime(event.time)?.getTime();
+    if (time === undefined || !isTechniqueEvent(event)) continue;
+    for (const tactic of index.byAttackId.get(event.attack_id as string)?.tactics ?? []) {
+      const stage = stages.get(tactic) ?? { events: [] };
+      stages.set(tactic, stage);
+      stage.events.push({ time, event });
+    }
+  }
+  const result: ChainStage[] = [];
+  for (const [tactic, stage] of stages) {
+    const byTechnique = new Map<string, { time: number; event: ActivityEvent }[]>();
+    for (const item of stage.events) {
+      const id = item.event.attack_id as string;
+      byTechnique.set(id, [...(byTechnique.get(id) ?? []), item]);
+    }
+    const techniques = [...byTechnique.entries()]
+      .map(([attackId, items]) => ({
+        attackId,
+        name: index.byAttackId.get(attackId)?.name ?? "",
+        role: strongest(items.map((i) => activityRole(i.event) ?? "context")),
+        evidence: items.length,
+        firstSeen: Math.min(...items.map((i) => i.time)),
+      }))
+      .sort((a, b) => a.firstSeen - b.firstSeen || a.attackId.localeCompare(b.attackId));
+    const times = stage.events.map((i) => i.time);
+    result.push({
+      tactic,
+      name: index.tacticName.get(tactic) ?? tactic,
+      firstSeen: Math.min(...times),
+      lastSeen: Math.max(...times),
+      evidence: stage.events.length,
+      hosts: [...new Set(stage.events.map((i) => i.event.host ?? "").filter(Boolean))].sort(),
+      units: [...new Set(stage.events.map((i) => i.event.group_id))].sort(),
+      techniques,
+    });
+  }
+  return result.sort(
+    (a, b) => a.firstSeen - b.firstSeen || index.tacticOrder.indexOf(a.tactic) - index.tacticOrder.indexOf(b.tactic),
+  );
+}
