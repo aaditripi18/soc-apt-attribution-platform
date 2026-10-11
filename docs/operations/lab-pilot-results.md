@@ -70,4 +70,4 @@ actor-specific rule fired.
   launches) more reliably than the individual discovery techniques, four of which it missed.
 - It does **not** measure detection recall in general: one host, one profile, eight steps.
 - It is **not** calibration data. Calibration would need recordings of several named actors' published plans
-  (`lab-recording-guide.md` §4); the owner decided on 2026-10-12 not to record them.
+  (`lab-recording-guide.md` §4); the owner decided on 2026-10-11 not to record them.
