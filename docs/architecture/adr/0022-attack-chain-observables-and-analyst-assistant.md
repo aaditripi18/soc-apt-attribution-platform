@@ -92,3 +92,29 @@ Groups, no command line, no likelihood wording); the request sent to the provide
 conversation, key only in the header); malformed conversations refused; provider failures reported without their
 body or the key; no key, no service; the HTTP route and its refusals; a server without a key. Frontend:
 `derive.test.ts` (attack-chain ordering).
+
+## Amendment A — the assistant's model runs on this machine (2026-10-12, owner instruction)
+
+The owner asked for a free model served by Ollama instead of a paid provider API. This replaces the
+"Off by default" and "Callers" provider details of D3; the digest, the rules, the conversation handling and the
+route guards are unchanged.
+
+- **Where the model runs.** A model served by [Ollama](https://ollama.com) on the same machine
+  (`POST /api/chat`, not streamed). The address comes from `ATTRIBUTION_ASSISTANT_URL` (default
+  `http://127.0.0.1:11434`) and **must be an http loopback address**: any other address is refused when the
+  service is built (tested), so a question cannot leave the machine. There is no key and no account.
+- **Model.** `ATTRIBUTION_ASSISTANT_MODEL`, default `llama3.1:8b`. The model is not shipped with the platform;
+  the operator installs Ollama and pulls it.
+- **Availability is reported, not assumed.** `GET /api/assistant` asks Ollama which models it has and answers
+  `enabled` with a `reason` when it is not: `not_running`, `model_missing`, or `off` (`--no-assistant`). The panel
+  shows the matching instruction.
+- **Context window.** Ollama's default window is smaller than a digest (measured on the reference recordings:
+  18,000–39,000 characters), and a prompt that does not fit is silently truncated — which would cut facts out
+  from under the rules. Each request therefore asks for a window sized to it (characters / 3 plus the reply,
+  rounded up to 4,096, between 8,192 and 32,768 tokens; tested). The digest is now rendered as compact JSON to
+  cut its length by about a quarter.
+- **Cost of the change, stated.** A small local model follows the grounding rules less reliably than a large
+  hosted one and is slower: on a CPU the first answer about a large investigation can take minutes (later
+  questions reuse the read prompt). The panel's notice that answers are generated and must be checked against
+  the evidence therefore matters more, not less. Nothing the assistant says is stored or used by any analysis.
+- **Version.** `assistant/2`.

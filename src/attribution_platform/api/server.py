@@ -55,9 +55,9 @@ accepts input is ``POST /uploads`` (ADR-0020): it hands the server a new
 recording to investigate, only when the server was started with an upload
 service; ``GET /uploads`` and ``GET /uploads/<job_id>`` report on it.
 ``POST /assistant`` (ADR-0022) answers an analyst's question about one
-investigation with a language model, only when an API key was configured;
-``GET /assistant`` says whether it is. For a refused method the request body is drained
-first so the refusal always reaches the client (a real, intermittent
+investigation with a language model served by Ollama on this machine;
+``GET /assistant`` says whether that model is ready. For a refused method the request body is
+drained first so the refusal always reaches the client (a real, intermittent
 connection-reset on Windows when it was not).
 """
 
@@ -353,7 +353,7 @@ def make_handler(
             self.close_connection = True
             try:
                 if assistant is None:
-                    raise AssistantDisabledError("the assistant is not configured on this server")
+                    raise AssistantDisabledError("the assistant is turned off on this server")
                 if not is_loopback(str(self.client_address[0])):
                     raise UploadRefusedError("the assistant answers this machine only")
                 if not same_origin(self.headers.get("Origin"), self.headers.get("Host")):

@@ -1,6 +1,6 @@
 """ADR-0022: observables are values the events state, never judged; the
-assistant is grounded in a digest of stored records, is off without a key, and
-sends nothing that is not in the digest."""
+assistant is grounded in a digest of stored records, asks a model on this
+machine only, and sends nothing that is not in the digest."""
 
 from __future__ import annotations
 
@@ -10,7 +10,7 @@ import threading
 import urllib.error
 import urllib.parse
 import urllib.request
-from collections.abc import Iterator, Mapping
+from collections.abc import Iterator
 from pathlib import Path
 from typing import Any
 
@@ -20,6 +20,8 @@ from attribution_platform.api.assistant import (
     MAX_MESSAGE_CHARS,
     SYSTEM_PROMPT,
     AssistantService,
+    context_tokens,
+    loopback_url,
     render_digest,
     service_from_env,
     validate_messages,
@@ -39,7 +41,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 from test_dossier import _investigate  # noqa: E402
 from test_indicators import ADVISORY_SHA256, _event_data, _sysmon_1, _with_hash  # noqa: E402
 
-SECRET = "sk-test-secret-never-shown"  # noqa: S105 - a marker, not a credential
+TAGS = json.dumps({"models": [{"name": "local-test:latest"}]}).encode()
 
 
 @pytest.fixture(scope="module")
@@ -130,17 +132,19 @@ def test_the_digest_is_built_from_stored_records_only(
 def _service(reply: str = "Observed T1033.") -> tuple[AssistantService, list[dict[str, Any]]]:
     sent: list[dict[str, Any]] = []
 
-    def transport(url: str, headers: Mapping[str, str], body: bytes) -> bytes:
-        sent.append({"url": url, "headers": dict(headers), "body": json.loads(body)})
+    def transport(url: str, body: bytes | None, timeout: float) -> bytes:
+        if body is None:
+            return TAGS
+        sent.append({"url": url, "body": json.loads(body)})
         return json.dumps(
-            {"model": "claude-test", "content": [{"type": "text", "text": reply}]}
+            {"model": "local-test", "message": {"role": "assistant", "content": reply}}
         ).encode()
 
-    return AssistantService(api_key=SECRET, model="claude-test", transport=transport), sent
+    return AssistantService(model="local-test", transport=transport), sent
 
 
-def test_a_question_is_answered_from_the_digest_and_the_key_stays_in_the_header() -> None:
-    service, sent = _service()
+def test_a_question_is_answered_from_the_digest_by_the_local_model() -> None:
+    service, sent = _service("<think>hidden reasoning</think>Observed T1033.")
     digest = {"source": "x.jsonl", "observed_techniques": [{"id": "T1033"}]}
     conversation = [
         {"role": "user", "content": "What was observed?"},
@@ -148,14 +152,15 @@ def test_a_question_is_answered_from_the_digest_and_the_key_stays_in_the_header(
         {"role": "user", "content": "Summarise."},
     ]
     answer = service.answer(digest, conversation)
-    assert answer == {"reply": "Observed T1033.", "model": "claude-test"}
+    assert answer == {"reply": "Observed T1033.", "model": "local-test"}
     (request,) = sent
-    assert request["url"] == "https://api.anthropic.com/v1/messages"
-    assert request["headers"]["x-api-key"] == SECRET
+    assert request["url"] == "http://127.0.0.1:11434/api/chat"
     body = request["body"]
-    assert body["model"] == "claude-test" and body["messages"] == conversation
-    assert body["system"].startswith(SYSTEM_PROMPT) and '"T1033"' in body["system"]
-    assert SECRET not in json.dumps(body) and SECRET not in json.dumps(answer)
+    assert body["model"] == "local-test" and body["stream"] is False
+    system, *rest = body["messages"]
+    assert rest == conversation and system["role"] == "system"
+    assert system["content"].startswith(SYSTEM_PROMPT) and '"T1033"' in system["content"]
+    assert body["options"]["num_ctx"] == context_tokens(system["content"], conversation)
     # the rules that keep the answer honest are part of every request
     for rule in (
         "ONLY from the INVESTIGATION DIGEST",
@@ -163,8 +168,67 @@ def test_a_question_is_answered_from_the_digest_and_the_key_stays_in_the_header(
         "NOT the probability",
         "Never guess",
     ):
-        assert rule in body["system"]
-    assert service.describe() == {"enabled": True, "model": "claude-test", "version": "assistant/1"}
+        assert rule in system["content"]
+    assert service.describe() == {
+        "enabled": True,
+        "model": "local-test",
+        "version": "assistant/2",
+        "reason": None,
+    }
+
+
+def test_the_context_window_fits_the_request_within_bounds() -> None:
+    assert context_tokens("x" * 100, [{"role": "user", "content": "q"}]) == 8_192
+    assert context_tokens("x" * 40_000, [{"role": "user", "content": "q"}]) == 16_384
+    assert context_tokens("x" * 900_000, [{"role": "user", "content": "q"}]) == 32_768
+
+
+@pytest.mark.parametrize(
+    "url",
+    [
+        "https://api.example.com",
+        "http://192.168.1.20:11434",
+        "http://example.com:11434",
+        "https://127.0.0.1:11434",
+        "http://127.0.0.1:11434/v1?x=1",
+        "file:///etc/passwd",
+        "",
+    ],
+)
+def test_only_a_model_on_this_machine_is_ever_asked(url: str) -> None:
+    with pytest.raises(ValueError, match="this machine"):
+        loopback_url(url)
+    with pytest.raises(ValueError, match="this machine"):
+        AssistantService(base_url=url)
+    with pytest.raises(ValueError, match="this machine"):
+        service_from_env({"ATTRIBUTION_ASSISTANT_URL": url or "ftp://x"})
+
+
+def test_loopback_addresses_are_accepted() -> None:
+    assert loopback_url("http://localhost:11434/") == "http://localhost:11434"
+    assert loopback_url("http://[::1]:11434") == "http://[::1]:11434"
+    configured = service_from_env({"ATTRIBUTION_ASSISTANT_MODEL": " m "})
+    assert configured.model == "m" and configured.base_url == "http://127.0.0.1:11434"
+
+
+def test_the_assistant_says_why_it_is_unavailable() -> None:
+    def down(url: str, body: bytes | None, timeout: float) -> bytes:
+        raise urllib.error.URLError("refused")
+
+    stopped = AssistantService(model="m", transport=down)
+    assert stopped.describe() == {
+        "enabled": False,
+        "model": "m",
+        "version": "assistant/2",
+        "reason": "not_running",
+    }
+    with pytest.raises(BackendError, match="not running"):
+        stopped.answer({}, [{"role": "user", "content": "q"}])
+    other = AssistantService(model="absent", transport=lambda *_: TAGS)
+    assert other.describe()["reason"] == "model_missing"
+    assert AssistantService(model="local-test:latest", transport=lambda *_: TAGS).describe()[
+        "enabled"
+    ]
 
 
 @pytest.mark.parametrize(
@@ -187,25 +251,24 @@ def test_malformed_conversations_are_refused(messages: Any) -> None:
         validate_messages(messages)
 
 
-def test_provider_failures_are_reported_without_their_body() -> None:
-    def failing(url: str, headers: Mapping[str, str], body: bytes) -> bytes:
-        raise urllib.error.HTTPError(url, 401, "Unauthorized", {}, None)  # type: ignore[arg-type]
+def test_model_failures_are_reported_plainly() -> None:
+    def missing(url: str, body: bytes | None, timeout: float) -> bytes:
+        raise urllib.error.HTTPError(url, 404, "Not Found", {}, None)  # type: ignore[arg-type]
 
-    service = AssistantService(api_key=SECRET, transport=failing)
-    with pytest.raises(BackendError, match="HTTP 401") as raised:
-        service.answer({}, [{"role": "user", "content": "q"}])
-    assert SECRET not in str(raised.value)
-    empty = AssistantService(api_key=SECRET, transport=lambda *_: b'{"content": []}')
+    with pytest.raises(BackendError, match="not installed in Ollama"):
+        AssistantService(transport=missing).answer({}, [{"role": "user", "content": "q"}])
+
+    def slow(url: str, body: bytes | None, timeout: float) -> bytes:
+        raise TimeoutError
+
+    with pytest.raises(BackendError, match="too long"):
+        AssistantService(transport=slow).answer({}, [{"role": "user", "content": "q"}])
+    empty = AssistantService(transport=lambda *_: b'{"message": {"content": "  "}}')
     with pytest.raises(BackendError, match="no text"):
         empty.answer({}, [{"role": "user", "content": "q"}])
-
-
-def test_without_a_key_there_is_no_service() -> None:
-    assert service_from_env({}) is None
-    assert service_from_env({"ANTHROPIC_API_KEY": "  "}) is None
-    configured = service_from_env({"ANTHROPIC_API_KEY": SECRET, "ATTRIBUTION_ASSISTANT_MODEL": "m"})
-    assert configured is not None and configured.model == "m"
-    assert SECRET not in json.dumps(configured.describe())
+    garbled = AssistantService(transport=lambda *_: b"not json")
+    with pytest.raises(BackendError, match="could not be read"):
+        garbled.answer({}, [{"role": "user", "content": "q"}])
 
 
 # --- HTTP -------------------------------------------------------------------------
@@ -247,9 +310,9 @@ def test_the_assistant_over_http(served: tuple[str, str, list[dict[str, Any]]]) 
     }
     status, answer = _call(base + "/api/assistant", question)
     assert status == 200 and "not an identification" in answer["reply"]
-    assert SECRET not in json.dumps(answer)
     (request,) = sent
-    assert "Volt Typhoon" in request["body"]["system"]  # the digest of that investigation
+    # the digest of that investigation
+    assert "Volt Typhoon" in request["body"]["messages"][0]["content"]
     # refusals
     assert (
         _call(
@@ -261,7 +324,7 @@ def test_the_assistant_over_http(served: tuple[str, str, list[dict[str, Any]]]) 
     assert _call(base + "/api/assistant", {"messages": question["messages"]})[0] == 400
     assert _call(base + "/api/assistant", {**question, "messages": []})[0] == 400
     assert _call(base + "/api/assistant", question, {"Origin": "https://evil.example"})[0] == 403
-    assert len(sent) == 1  # nothing else reached the provider
+    assert len(sent) == 1  # nothing else reached the model
     # the observables route is served beside it
     status, body = _call(
         base + f"/api/investigations/{urllib.parse.quote(investigation_id, safe="")}/observables"
@@ -269,7 +332,7 @@ def test_the_assistant_over_http(served: tuple[str, str, list[dict[str, Any]]]) 
     assert status == 200 and body["advisory_matches"] == 1
 
 
-def test_a_server_without_a_key_has_no_assistant(
+def test_a_server_started_without_the_assistant(
     investigated: tuple[FakeElasticClient, str], context: ApiContext
 ) -> None:
     client, investigation_id = investigated
@@ -281,7 +344,8 @@ def test_a_server_without_a_key_has_no_assistant(
         assert _call(base + "/api/assistant")[1] == {
             "enabled": False,
             "model": None,
-            "version": "assistant/1",
+            "version": "assistant/2",
+            "reason": "off",
         }
         question = {
             "investigation_id": investigation_id,

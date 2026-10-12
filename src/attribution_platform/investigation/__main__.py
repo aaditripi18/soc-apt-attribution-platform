@@ -4,7 +4,7 @@ results through the read-model API (ADR-0009) and the analyst frontend
 
     python -m attribution_platform.investigation <recording> [<recording> ...]
         [--serve] [--port N] [--elasticsearch] [--json out.json] [--dossier out.md]
-        [--emulation-report caldera-report.json] [--no-upload]
+        [--emulation-report caldera-report.json] [--no-upload] [--no-assistant]
 
 Each ``<recording>`` is either a recording id pinned in
 ``data/calibration/corpus/v2/recordings.json`` (e.g. ``otrf-apt3-empire``) or a
@@ -24,9 +24,10 @@ on 127.0.0.1 (``--port``, default 8000); when the frontend has been built
 needs exactly one recording. With ``--serve`` the console can also take a recording by
 upload (ADR-0020; this machine only, one investigation at a time, files kept in the
 git-ignored ``data/cache/uploads``); ``--serve`` alone starts an empty console to upload
-into, and ``--no-upload`` turns uploading off. With ``ANTHROPIC_API_KEY`` set in the
-environment the console's analyst assistant is on (ADR-0022); without it nothing is sent
-anywhere. ``--emulation-report`` (one recording) is the
+into, and ``--no-upload`` turns uploading off. The console's analyst
+assistant (ADR-0022) asks a model served by Ollama on this machine (``ATTRIBUTION_ASSISTANT_MODEL``,
+default ``llama3.1:8b``); nothing is sent off the machine, and ``--no-assistant`` turns it off.
+``--emulation-report`` (one recording) is the
 emulation tool's own report of a lab run (a MITRE CALDERA operation report): each step it lists is
 compared with what was detected (ADR-0019); its command text is never read. Nothing here
 ranks candidates or emits a confidence: analyses are uncalibrated until a
@@ -318,7 +319,7 @@ def main(argv: Sequence[str] | None = None, env: dict[str, str] | None = None) -
             advisory_attributions=ADVISORY_ATTRIBUTIONS,
         )
         uploads = None if "--no-upload" in args else upload_service(client, workbench)
-        assistant = service_from_env(env)
+        assistant = None if "--no-assistant" in args else service_from_env(env)
         server = create_server(
             client,
             host="127.0.0.1",

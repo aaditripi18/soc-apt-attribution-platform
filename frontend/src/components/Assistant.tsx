@@ -48,6 +48,7 @@ export function AssistantPanel({ investigationId, source }: { investigationId: s
   }, [messages, investigationId, busy]);
 
   const enabled = status.state === "ready" && status.data.enabled;
+  const model = status.state === "ready" ? status.data.model : null;
 
   const ask = async (question: string) => {
     const text = question.trim();
@@ -125,12 +126,29 @@ export function AssistantPanel({ investigationId, source }: { investigationId: s
           <div className="flex-1 space-y-4 overflow-y-auto px-4 py-4" data-assistant-messages>
             {status.state === "ready" && !status.data.enabled && (
               <div className="rounded-md border border-outline-variant/70 bg-surface-low p-4 text-body-md text-on-surface-variant">
-                <div className="text-headline-sm text-on-surface">The AI analyst is not enabled</div>
+                <div className="text-headline-sm text-on-surface">The AI analyst is not available yet</div>
                 <p className="mt-1.5">
-                  It answers questions about this investigation using a language model, and needs an API key for the
-                  model provider to be configured where the platform runs. Everything else on this page works without
-                  it.
+                  It answers questions about this investigation with a language model that runs on this machine
+                  through Ollama, so nothing is sent anywhere.
                 </p>
+                {status.data.reason === "not_running" && (
+                  <p className="mt-2">Ollama is not running. Start Ollama, then reopen this panel.</p>
+                )}
+                {status.data.reason === "model_missing" && (
+                  <p className="mt-2">
+                    The model is not installed yet. Run{" "}
+                    <code className="font-mono text-code-md text-on-surface">ollama pull {status.data.model}</code>,
+                    then reopen this panel.
+                  </p>
+                )}
+                {status.data.reason === "off" && <p className="mt-2">It was turned off when the platform was started.</p>}
+                <button
+                  type="button"
+                  onClick={status.reload}
+                  className="mt-3 rounded-sm border border-outline-variant px-3 py-1.5 text-label-md text-on-surface hover:border-primary/60"
+                >
+                  Check again
+                </button>
               </div>
             )}
             {enabled && messages.length === 0 && (
@@ -176,7 +194,7 @@ export function AssistantPanel({ investigationId, source }: { investigationId: s
             {busy && (
               <div className="flex items-center gap-2 text-body-md text-on-surface-variant">
                 <Loader2 size={15} className="animate-spin" />
-                Reading the investigation…
+                Reading the investigation… a local model can take a minute or two on the first question.
               </div>
             )}
             {failure && (
@@ -222,7 +240,7 @@ export function AssistantPanel({ investigationId, source }: { investigationId: s
               </div>
               <p className="mt-2 text-body-sm text-outline">
                 Answers are generated from this investigation's results and can be wrong — check them against the
-                evidence. Your question and a summary of the results are sent to the model provider.
+                evidence. The model runs on this machine{model ? ` (${model})` : ""}; nothing is sent anywhere.
               </p>
             </form>
           )}

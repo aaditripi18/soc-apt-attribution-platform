@@ -15,10 +15,11 @@ similarity. The instructions are a constraint on wording, not a guarantee: a
 language model can still be wrong, and the console says the answer is generated
 and shows the digest's facts on the pages themselves.
 
-**What leaves the machine.** Only when a question is asked, and only if an API
-key was configured by the operator: the digest, the conversation and the
-question go to the model provider's API. Command lines and raw events are not
-in the digest. Without a key the assistant is off and nothing is sent.
+**Where the model runs.** On this machine: the model is served by a local
+Ollama (ADR-0022 Amendment A), reached on a loopback address only — any other
+address is refused when the service is built. No key, no account, and nothing
+leaves the machine. If Ollama is not running, or the model has not been pulled,
+the assistant reports itself unavailable and says which.
 
 The conversation is held by the browser and sent with each question; the server
 keeps no transcript.
@@ -26,8 +27,12 @@ keeps no transcript.
 
 from __future__ import annotations
 
+import ipaddress
 import json
+import math
+import re
 import urllib.error
+import urllib.parse
 import urllib.request
 from collections.abc import Callable, Mapping, Sequence
 from dataclasses import dataclass
@@ -35,18 +40,27 @@ from typing import Any
 
 from attribution_platform.api.errors import ApiError, BackendError, InvalidIdentifierError
 
-ASSISTANT_VERSION = "assistant/1"
-API_URL = "https://api.anthropic.com/v1/messages"
-API_VERSION = "2023-06-01"
-DEFAULT_MODEL = "claude-opus-5-5"
-KEY_VARIABLE = "ANTHROPIC_API_KEY"
+ASSISTANT_VERSION = "assistant/2"
+DEFAULT_URL = "http://127.0.0.1:11434"
+DEFAULT_MODEL = "llama3.1:8b"
+URL_VARIABLE = "ATTRIBUTION_ASSISTANT_URL"
 MODEL_VARIABLE = "ATTRIBUTION_ASSISTANT_MODEL"
 
 MAX_TURNS = 40
 MAX_MESSAGE_CHARS = 4_000
 MAX_DIGEST_CHARS = 60_000
 MAX_REPLY_TOKENS = 1_500
-_TIMEOUT_SECONDS = 120
+#: The context window asked of the model: sized to the request, within these bounds.
+MIN_CONTEXT_TOKENS = 8_192
+MAX_CONTEXT_TOKENS = 32_768
+#: A deliberately low estimate of characters per token, so the window is never short.
+_CHARS_PER_TOKEN = 3
+#: A local model on a CPU reads a long digest slowly; the first answer may take minutes.
+_ANSWER_TIMEOUT_SECONDS = 900.0
+_PROBE_TIMEOUT_SECONDS = 3.0
+#: How long Ollama keeps the model loaded after an answer.
+_KEEP_ALIVE = "30m"
+_THINKING = re.compile(r"<think>.*?</think>", re.DOTALL)
 
 SYSTEM_PROMPT = """You are the analyst assistant of a threat detection and attribution platform. \
 You help a SOC analyst understand ONE investigation: what was detected in a set of logs, the \
@@ -76,18 +90,40 @@ general knowledge as general, separate from what was observed here.
 
 
 class AssistantDisabledError(ApiError):
-    """No API key was configured: the assistant is off."""
+    """The assistant is off on this server."""
 
     status_code = 501
 
 
-Transport = Callable[[str, Mapping[str, str], bytes], bytes]
+#: ``(url, body, timeout)`` -> response bytes; ``body`` None is a GET.
+Transport = Callable[[str, bytes | None, float], bytes]
 
 
-def _http_transport(url: str, headers: Mapping[str, str], body: bytes) -> bytes:
-    request = urllib.request.Request(url, data=body, headers=dict(headers), method="POST")  # noqa: S310
-    with urllib.request.urlopen(request, timeout=_TIMEOUT_SECONDS) as response:  # noqa: S310
+def _http_transport(url: str, body: bytes | None, timeout: float) -> bytes:
+    request = urllib.request.Request(  # noqa: S310 - a loopback http URL, checked at construction
+        url,
+        data=body,
+        headers={"content-type": "application/json"},
+        method="GET" if body is None else "POST",
+    )
+    with urllib.request.urlopen(request, timeout=timeout) as response:  # noqa: S310
         return bytes(response.read())
+
+
+def loopback_url(url: str) -> str:
+    """``url`` without a trailing slash, if it is an http address of this
+    machine; anything else is refused, so a question can never leave it."""
+    parts = urllib.parse.urlsplit(url.strip())
+    host = parts.hostname or ""
+    try:
+        local = host == "localhost" or ipaddress.ip_address(host).is_loopback
+    except ValueError:
+        local = False
+    if parts.scheme != "http" or not local or parts.path.strip("/") or parts.query:
+        raise ValueError(
+            f"{URL_VARIABLE} must be an http address of this machine, e.g. {DEFAULT_URL}"
+        )
+    return f"http://{parts.netloc}"
 
 
 def validate_messages(messages: Any) -> list[dict[str, str]]:
@@ -269,83 +305,123 @@ def build_digest(
 def render_digest(digest: Mapping[str, Any]) -> str:
     """The digest as the text the model reads, bounded in size: the longest
     lists are shortened first, and the text says so."""
-    text = json.dumps(digest, indent=1, sort_keys=False, ensure_ascii=False)
+    text = json.dumps(digest, separators=(",", ":"), sort_keys=False, ensure_ascii=False)
     if len(text) <= MAX_DIGEST_CHARS:
         return text
     trimmed = dict(digest)
     trimmed["observables"] = list(digest.get("observables") or ())[:25]
     trimmed["observed_techniques"] = list(digest.get("observed_techniques") or ())[:80]
     trimmed["note"] = "Lists were shortened to fit; totals are still exact."
-    return json.dumps(trimmed, indent=1, sort_keys=False, ensure_ascii=False)[:MAX_DIGEST_CHARS]
+    return json.dumps(trimmed, separators=(",", ":"), ensure_ascii=False)[:MAX_DIGEST_CHARS]
+
+
+def context_tokens(system: str, conversation: Sequence[Mapping[str, str]]) -> int:
+    """The context window to ask for: what the request needs plus the reply,
+    rounded up to 4,096 and kept within the bounds."""
+    characters = len(system) + sum(len(m["content"]) for m in conversation)
+    needed = math.ceil(characters / _CHARS_PER_TOKEN) + MAX_REPLY_TOKENS
+    rounded = 4_096 * math.ceil(needed / 4_096)
+    return max(MIN_CONTEXT_TOKENS, min(MAX_CONTEXT_TOKENS, rounded))
 
 
 @dataclass(frozen=True)
 class AssistantService:
-    """Calls the model provider. ``api_key`` is read from the environment by the
-    serving command and never leaves this object except as the request header."""
+    """Asks a model served by Ollama on this machine."""
 
-    api_key: str
+    base_url: str = DEFAULT_URL
     model: str = DEFAULT_MODEL
     transport: Transport = _http_transport
 
+    def __post_init__(self) -> None:
+        object.__setattr__(self, "base_url", loopback_url(self.base_url))
+
+    def _unavailable(self) -> str | None:
+        """Why a question cannot be answered now: ``not_running``,
+        ``model_missing``, or None when the model is ready."""
+        try:
+            listed = json.loads(
+                self.transport(f"{self.base_url}/api/tags", None, _PROBE_TIMEOUT_SECONDS)
+            )
+            names = {str(m.get("name")) for m in listed["models"]}
+        except (OSError, ValueError, KeyError, TypeError, AttributeError):
+            return "not_running"
+        wanted = {self.model, f"{self.model}:latest"}
+        return None if names & wanted else "model_missing"
+
     def describe(self) -> dict[str, Any]:
-        return {"enabled": True, "model": self.model, "version": ASSISTANT_VERSION}
+        reason = self._unavailable()
+        return {
+            "enabled": reason is None,
+            "model": self.model,
+            "version": ASSISTANT_VERSION,
+            "reason": reason,
+        }
 
     def answer(self, digest: Mapping[str, Any], messages: Any) -> dict[str, Any]:
         conversation = validate_messages(messages)
+        system = f"{SYSTEM_PROMPT}\n\nINVESTIGATION DIGEST\n{render_digest(digest)}"
         body = json.dumps(
             {
                 "model": self.model,
-                "max_tokens": MAX_REPLY_TOKENS,
-                "system": f"{SYSTEM_PROMPT}\n\nINVESTIGATION DIGEST\n{render_digest(digest)}",
-                "messages": conversation,
+                "messages": [{"role": "system", "content": system}, *conversation],
+                "stream": False,
+                "keep_alive": _KEEP_ALIVE,
+                "options": {
+                    "num_ctx": context_tokens(system, conversation),
+                    "num_predict": MAX_REPLY_TOKENS,
+                    "temperature": 0.2,
+                },
             }
         ).encode("utf-8")
-        headers = {
-            "content-type": "application/json",
-            "x-api-key": self.api_key,
-            "anthropic-version": API_VERSION,
-        }
         try:
-            raw = self.transport(API_URL, headers, body)
+            raw = self.transport(f"{self.base_url}/api/chat", body, _ANSWER_TIMEOUT_SECONDS)
         except urllib.error.HTTPError as exc:
-            # the provider's status only: its body may echo request details
-            raise BackendError(f"the model provider answered HTTP {exc.code}") from exc
-        except (urllib.error.URLError, TimeoutError, OSError) as exc:
-            raise BackendError(f"the model provider could not be reached: {exc}") from exc
+            if exc.code == 404:
+                raise BackendError(
+                    f"the model {self.model} is not installed in Ollama (ollama pull {self.model})"
+                ) from exc
+            raise BackendError(f"Ollama answered HTTP {exc.code}") from exc
+        except TimeoutError as exc:
+            raise BackendError("the local model took too long to answer") from exc
+        except OSError as exc:
+            raise BackendError("Ollama is not running on this machine") from exc
         try:
             payload = json.loads(raw)
-            reply = "".join(
-                block["text"] for block in payload["content"] if block.get("type") == "text"
-            )
+            reply = _THINKING.sub("", str(payload["message"]["content"]))
         except (ValueError, KeyError, TypeError) as exc:
-            raise BackendError("the model provider's answer could not be read") from exc
+            raise BackendError("the local model's answer could not be read") from exc
         if not reply.strip():
-            raise BackendError("the model provider returned no text")
-        return {"reply": reply, "model": str(payload.get("model", self.model))}
+            raise BackendError("the local model returned no text")
+        return {"reply": reply.strip(), "model": str(payload.get("model", self.model))}
 
 
 def disabled() -> dict[str, Any]:
-    return {"enabled": False, "model": None, "version": ASSISTANT_VERSION}
+    return {"enabled": False, "model": None, "version": ASSISTANT_VERSION, "reason": "off"}
 
 
-def service_from_env(env: Mapping[str, str]) -> AssistantService | None:
-    key = (env.get(KEY_VARIABLE) or "").strip()
-    if not key:
-        return None
-    return AssistantService(api_key=key, model=(env.get(MODEL_VARIABLE) or DEFAULT_MODEL).strip())
+def service_from_env(env: Mapping[str, str]) -> AssistantService:
+    """The service for the Ollama address and model the environment names
+    (defaults: this machine's standard port, :data:`DEFAULT_MODEL`). A
+    non-loopback address raises ``ValueError``."""
+    return AssistantService(
+        base_url=(env.get(URL_VARIABLE) or DEFAULT_URL).strip(),
+        model=(env.get(MODEL_VARIABLE) or DEFAULT_MODEL).strip(),
+    )
 
 
 __all__ = [
     "ASSISTANT_VERSION",
     "DEFAULT_MODEL",
-    "KEY_VARIABLE",
+    "DEFAULT_URL",
     "MODEL_VARIABLE",
     "SYSTEM_PROMPT",
+    "URL_VARIABLE",
     "AssistantDisabledError",
     "AssistantService",
     "build_digest",
+    "context_tokens",
     "disabled",
+    "loopback_url",
     "render_digest",
     "service_from_env",
     "validate_messages",

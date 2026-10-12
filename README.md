@@ -137,9 +137,11 @@ with their attack sequence, ATT&CK matrix and timeline
   **Indicators** — hashes, addresses and domains from the detected events, checked against the advisory bundles,
   exportable as CSV ([ADR-0022](docs/architecture/adr/0022-attack-chain-observables-and-analyst-assistant.md)).
 - **Response** — MITRE ATT&CK mitigations for the observed techniques, by how many each addresses.
-- **AI analyst** — optional: with `ANTHROPIC_API_KEY` set in the environment, a chat panel answers questions about
-  an investigation and summarises it, from a digest of the stored results (never the raw logs). Without a key it is
-  off and nothing leaves the machine.
+- **AI analyst** — a chat panel answers questions about an investigation and summarises it, from a digest of the
+  stored results (never the raw logs). The model is free and runs on this machine through
+  [Ollama](https://ollama.com): install Ollama, run `ollama pull llama3.1:8b`, and start the platform. No key, no
+  account, nothing leaves the machine. `ATTRIBUTION_ASSISTANT_MODEL` names another pulled model;
+  `--no-assistant` turns the panel off.
 - **Threat Actors** — all 176 ATT&CK Groups with techniques, software and the evidence that can identify them.
 
 Requires **Node.js 20+**.

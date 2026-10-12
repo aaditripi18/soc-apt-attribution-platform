@@ -737,6 +737,8 @@ export interface AssistantStatus {
   enabled: boolean;
   model: string | null;
   version: string;
+  /** Why it cannot answer now; null when the local model is ready. */
+  reason: "not_running" | "model_missing" | "off" | null;
 }
 
 export interface ChatMessage {
