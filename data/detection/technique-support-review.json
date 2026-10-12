@@ -60,6 +60,317 @@
    ],
    "establishes": [],
    "reason": "The rule matches any stream-creation event whose file hash has an import hash, i.e. whenever a stream is created on an executable. It does not test that the stream is a named alternate data stream. Inspected on a lab recording: it fired on a browser saving a downloaded executable (the event names the file, no alternate stream, no stream contents). That event matters - it is the download of the payload - but it does not show an executable hidden in an alternate data stream."
+  },
+  {
+   "rule_source": "elastic:cde1bafa-9f01-4f43-a872-605b678968b0",
+   "rule_name": "Potential PowerShell HackTool Script by Function Names",
+   "declares": [
+    "T1003",
+    "T1003.001",
+    "T1003.006",
+    "T1021",
+    "T1021.002",
+    "T1021.003",
+    "T1021.006",
+    "T1046",
+    "T1053",
+    "T1053.005",
+    "T1055",
+    "T1059",
+    "T1059.001",
+    "T1087",
+    "T1134",
+    "T1482",
+    "T1547",
+    "T1547.005",
+    "T1548",
+    "T1548.002",
+    "T1552",
+    "T1552.006",
+    "T1558",
+    "T1558.003",
+    "T1567",
+    "T1567.001",
+    "T1567.002"
+   ],
+   "establishes": [
+    "T1059",
+    "T1059.001"
+   ],
+   "reason": "A script block is logged when PowerShell compiles code to run it, so every match is PowerShell execution. Which of the many listed offensive functions is present differs by match, so none of the other declared techniques is established by every match."
+  },
+  {
+   "rule_source": "elastic:2d62889e-e758-4c5e-b57e-c735914ee32a",
+   "rule_name": "Command and Scripting Interpreter via Windows Scripts",
+   "declares": [
+    "T1059",
+    "T1059.001",
+    "T1059.003",
+    "T1059.005",
+    "T1059.007",
+    "T1218",
+    "T1218.005"
+   ],
+   "establishes": [
+    "T1059"
+   ],
+   "reason": "Every match is a command interpreter (PowerShell or cmd) started by a script host (wscript or mshta). Which interpreter, which script language and whether mshta was the parent differ by match, so no single sub-technique is established."
+  },
+  {
+   "rule_source": "elastic:83bf249e-4348-47ba-9741-1202a09556ad",
+   "rule_name": "Suspicious Windows Powershell Arguments",
+   "declares": [
+    "T1027",
+    "T1027.010",
+    "T1059",
+    "T1059.001",
+    "T1105",
+    "T1140"
+   ],
+   "establishes": [
+    "T1059",
+    "T1059.001"
+   ],
+   "reason": "Every match is a powershell.exe process start. The obfuscation, download and decoding patterns are alternatives on the command line, so none of them is established by every match."
+  },
+  {
+   "rule_source": "elastic:0022d47d-39c7-4f69-a232-4fe9dc7a3acd",
+   "rule_name": "System Shells via Services",
+   "declares": [
+    "T1059",
+    "T1059.001",
+    "T1059.003",
+    "T1543",
+    "T1543.003",
+    "T1569",
+    "T1569.002"
+   ],
+   "establishes": [
+    "T1059",
+    "T1569",
+    "T1569.002"
+   ],
+   "reason": "Every match is a command shell started directly by the service control manager: a command run through a service. Which shell differs by match; that a service was created or modified is not observed by this rule."
+  },
+  {
+   "rule_source": "sigma:8fbf3271-1ef6-4e94-8210-03c2317947f6",
+   "rule_name": "Cred Dump Tools Dropped Files",
+   "declares": [
+    "T1003.001",
+    "T1003.002",
+    "T1003.003",
+    "T1003.004",
+    "T1003.005"
+   ],
+   "establishes": [],
+   "reason": "The rule matches a file being written whose name is that of a credential-dumping tool or its output. A file name does not show which credential store, if any, was dumped."
+  },
+  {
+   "rule_source": "elastic:1f0a69c0-3392-4adf-b7d5-6012fd292da8",
+   "rule_name": "Potential Antimalware Scan Interface Bypass via PowerShell",
+   "declares": [
+    "T1027",
+    "T1027.010",
+    "T1059",
+    "T1059.001",
+    "T1685"
+   ],
+   "establishes": [
+    "T1059",
+    "T1059.001"
+   ],
+   "reason": "A script block is logged when PowerShell compiles code to run it, so every match is PowerShell execution. The rule looks for strings associated with AMSI tampering; several of them also occur in code that only inspects AMSI, so tampering and obfuscation are not established by every match."
+  },
+  {
+   "rule_source": "elastic:da87eee1-129c-4661-a7aa-57d0b9645fad",
+   "rule_name": "Suspicious Service was Installed in the System",
+   "declares": [
+    "T1543",
+    "T1543.003",
+    "T1569",
+    "T1569.002"
+   ],
+   "establishes": [
+    "T1543",
+    "T1543.003"
+   ],
+   "reason": "Every branch is a service-installation event (Security 4697 or System 7045) with a suspicious service binary: a Windows service was created. That the service then ran a command is not observed by this rule."
+  },
+  {
+   "rule_source": "elastic:92984446-aefb-4d5e-ad12-598042ca80ba",
+   "rule_name": "PowerShell Suspicious Script with Clipboard Retrieval Capabilities",
+   "declares": [
+    "T1059",
+    "T1059.001",
+    "T1115"
+   ],
+   "establishes": [
+    "T1059",
+    "T1059.001",
+    "T1115"
+   ],
+   "reason": "A script block is logged when PowerShell compiles code to run it, so every match is PowerShell execution. Every branch requires a call that reads the clipboard, so Clipboard Data is established as well."
+  },
+  {
+   "rule_source": "elastic:bd2c86a0-8b61-4457-ab38-96943984e889",
+   "rule_name": "PowerShell Keylogging Script",
+   "declares": [
+    "T1056",
+    "T1056.001",
+    "T1059",
+    "T1059.001",
+    "T1106"
+   ],
+   "establishes": [
+    "T1056",
+    "T1056.001",
+    "T1059",
+    "T1059.001"
+   ],
+   "reason": "A script block is logged when PowerShell compiles code to run it, so every match is PowerShell execution. Every branch requires keystroke-capture calls (key-state polling, or a keyboard hook with window tracking). Native API names the mechanism and is not separately established."
+  },
+  {
+   "rule_source": "elastic:45d273fb-1dca-457d-9855-bcb302180c21",
+   "rule_name": "Encrypting Files with WinRar or 7z",
+   "declares": [
+    "T1005",
+    "T1560",
+    "T1560.001"
+   ],
+   "establishes": [
+    "T1560",
+    "T1560.001"
+   ],
+   "reason": "Every branch is an archiving utility adding files to an archive with a password option: Archive via Utility. Where the archived data came from is not observed."
+  },
+  {
+   "rule_source": "elastic:56f2e9b5-4803-4e44-a0a4-a52dc79d57fe",
+   "rule_name": "PowerShell PSReflect Script",
+   "declares": [
+    "T1059",
+    "T1059.001",
+    "T1106"
+   ],
+   "establishes": [
+    "T1059",
+    "T1059.001"
+   ],
+   "reason": "A script block is logged when PowerShell compiles code to run it, so every match is PowerShell execution. The matched strings define types for calling native functions; that a native function was then called is not observed."
+  },
+  {
+   "rule_source": "sigma:2e65275c-8288-4ab4-aeb7-6274f58b6b20",
+   "rule_name": "Procdump Execution",
+   "declares": [
+    "T1003.001",
+    "T1036"
+   ],
+   "establishes": [],
+   "reason": "The rule matches the tool's file name alone. Neither what was dumped nor a renamed binary is observed."
+  },
+  {
+   "rule_source": "sigma:5bb68627-3198-40ca-b458-49f973db8752",
+   "rule_name": "Rundll32 Execution Without Parameters",
+   "declares": [
+    "T1021.002",
+    "T1569.002",
+    "T1570"
+   ],
+   "establishes": [],
+   "reason": "The rule matches a rundll32 command line with no arguments. That is a known sign of a sacrificial process but shows none of the three declared techniques by itself."
+  },
+  {
+   "rule_source": "elastic:fe794edd-487f-4a90-b285-3ee54f2af2d3",
+   "rule_name": "Microsoft Windows Defender Tampering",
+   "declares": [
+    "T1112",
+    "T1685"
+   ],
+   "establishes": [],
+   "reason": "Read from the logic, every branch is a registry value of Microsoft Defender being set to a disabling value, which looked like both declared techniques at once. The matched event in a lab recording showed otherwise: the process setting the value was Defender's own engine. The rule does not tell an adversary changing these values from the product managing its own settings, so neither technique is established by every match. (First recorded as establishing both; corrected after the event was inspected.)"
+  },
+  {
+   "rule_source": "sigma:fdb62a13-9a81-4e5c-a38f-ea93a16f6d7c",
+   "rule_name": "PowerShell Base64 Encoded FromBase64String Cmdlet",
+   "declares": [
+    "T1059.001",
+    "T1140"
+   ],
+   "establishes": [
+    "T1140"
+   ],
+   "reason": "Every branch is a command line containing a base64-decoding call (plain or in an encoded command): decoding at run time. The rule does not test which program was started, so PowerShell is not established by the rule itself."
+  },
+  {
+   "rule_source": "elastic:959a7353-1129-4aa7-9084-30746b256a70",
+   "rule_name": "PowerShell Suspicious Script with Screenshot Capabilities",
+   "declares": [
+    "T1059",
+    "T1059.001",
+    "T1113"
+   ],
+   "establishes": [
+    "T1059",
+    "T1059.001",
+    "T1113"
+   ],
+   "reason": "A script block is logged when PowerShell compiles code to run it, so every match is PowerShell execution. The rule requires a screen-copy call together with a bitmap type, so Screen Capture is established as well."
+  },
+  {
+   "rule_source": "sigma:aa35a627-33fb-4d04-a165-d33b4afca3e8",
+   "rule_name": "Remote LSASS Process Access Through Windows Remote Management",
+   "declares": [
+    "T1003.001",
+    "T1021.006",
+    "T1059.001"
+   ],
+   "establishes": [
+    "T1021.006"
+   ],
+   "reason": "Every match is the WinRM provider host process opening LSASS: Windows Remote Management is in use. Opening the process is not a memory dump, and the PowerShell session is implied, not observed."
+  },
+  {
+   "rule_source": "sigma:734f8d9b-42b8-41b2-bcf5-abaf49d5a3c8",
+   "rule_name": "Remote PowerShell Session Host Process (WinRM)",
+   "declares": [
+    "T1021.006",
+    "T1059.001"
+   ],
+   "establishes": [
+    "T1021.006"
+   ],
+   "reason": "Every match is the WinRM provider host process, as the image or the parent: a remote-management session. PowerShell is the usual plug-in but the rule does not observe it."
+  }
+ ],
+ "left_ambiguous_after_reading": [
+  {
+   "rule_source": "elastic:c4210e1c-64f2-4f48-b67e-b5a8ffe3aa14",
+   "rule_name": "Mounting Hidden or WebDav Remote Shares",
+   "why": "net use of a hidden share, a WebDAV share or an http location: the branches are different kinds of remote resource and the rest of the query was not read in full."
+  },
+  {
+   "rule_source": "elastic:00140285-b827-4aee-aa09-8113f58a08f3",
+   "rule_name": "Potential Credential Access via Windows Utilities",
+   "why": "Several dump utilities; the procdump branch does not test which process is dumped."
+  },
+  {
+   "rule_source": "sigma:15619216-e993-4721-b590-4c520615a67d",
+   "rule_name": "Potential Meterpreter/CobaltStrike Activity",
+   "why": "Named-pipe privilege escalation patterns; the later branches of the rule were not read in full."
+  },
+  {
+   "rule_source": "sigma:730fc21b-eaff-474b-ad23-90fd265d4988",
+   "rule_name": "Psexec Execution",
+   "why": "Matches the PsExec client by name; PsExec also runs commands locally."
+  },
+  {
+   "rule_source": "sigma:06b401f4-107c-4ff9-947f-9ec1e7649f1e",
+   "rule_name": "Potential Arbitrary Command Execution Via FTP.EXE",
+   "why": "One branch is a child of ftp.exe, the other only an ftp script option."
+  },
+  {
+   "rule_source": "sigma:646ea171-dded-4578-8a4d-65e9822892e3",
+   "rule_name": "Process Memory Dump Via Comsvcs.DLL",
+   "why": "A memory dump through comsvcs.dll; the rule does not test which process is dumped."
   }
  ]
 }

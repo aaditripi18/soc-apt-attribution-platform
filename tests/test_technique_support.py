@@ -138,13 +138,13 @@ def test_the_tracked_review_is_sound(knowledge: AttackKnowledge) -> None:
                 str(m.attack_ref.external_id) for m in rule.technique_mappings
             )
     raw = json.loads(REVIEW.read_text(encoding="utf-8"))["decisions"]
-    assert len(raw) == len(review.supported) >= 5
+    assert len(raw) == len(review.supported) >= 23
     for entry in raw:
         source = entry["rule_source"]
         # a decision is about a rule that exists, restates what it declares, and
         # establishes only some of that - never a technique the rule does not name
         assert set(entry["declares"]) == declared[source], source
-        assert review.for_source(source) < declared[source], source  # may be empty
+        assert review.for_source(source) <= declared[source], source  # all, some or none
 
 
 @pytest.mark.parametrize(

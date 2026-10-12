@@ -105,7 +105,7 @@ reports, not a different way of counting.
 - **Declared is not established.** A rule's ATT&CK tags describe the rule, not the match. Each detection records
   every technique its rule declares, but only what the match establishes is compared with group profiles
   ([ADR-0025](docs/architecture/adr/0025-declared-versus-established-techniques.md)): of the 384 techniques core rules
-  declare, 294 are established by at least one rule and 90 are declared only. "Established" means established under
+  declare, 297 are established by at least one rule and 87 are declared only (23 rules reviewed so far). "Established" means established under
   that documented policy (the structure of a rule's tags, or a recorded review of the rule), not proven by experiment.
 - **A technique is "covered"** when at least one counted rule maps to it. It does not mean the technique has been
   detected in real data: that has been shown only for the techniques that fire on the recordings under
@@ -119,7 +119,7 @@ reports, not a different way of counting.
   runs with no actor. "Correct" means the verdict names the known actor and no other. Result: APT29 named, from one
   match of one rule (a service name published in reporting on its tooling); APT3 not named; the two no-actor
   recordings left unnamed; no wrong name. By behavioural overlap alone the true actor is never first (positions
-  10–116), which is why overlap is shown as similarity only.
+  14–124), which is why overlap is shown as similarity only.
 - **Integrations: built versus exercised.** Wazuh alerts have been read only from sample alerts in the documented
   format, not from a running manager. The Kibana dashboard charts investigations run from the command line with
   `--elasticsearch`; recordings uploaded through the console are not exported to it. The AI analyst has answered
@@ -240,7 +240,7 @@ to port 8000; set `VITE_API_TARGET` for another address). `npm run typecheck`, `
   claim, not the platform's.
 - **Known-answer checks** (`data/validation/known-answer-checks.json`, shown on the site): on recordings of APT29
   and APT3 emulations, ordering candidates by technique overlap never put the emulated actor first under 16
-  orderings (positions 10–116), and on tool tests with no actor it would still have named one every time. The
+  orderings (positions 14–124), and on tool tests with no actor it would still have named one every time. The
   platform's own verdicts named an actor in 1 of the 4 cases — the right one, as a lead — and none wrongly.
 - **`scripts/audit_served_read_model.py`** recomputes what a running server states — every rule re-fired on its
   observation, every candidate set rebuilt from ATT&CK — and must pass before a result is trusted.

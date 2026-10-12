@@ -142,3 +142,39 @@ with. Recorded as a known source of ordinary-activity detections for the validat
 
 **What this says about the earlier guess.** One of the two "ordinary" detections was the payload download with
 the wrong technique attached. Reading the events first, as the review of this step asked, changed the fix.
+
+## Amendment B (2026-10-12) — first adjudication batch, by measured contribution
+
+**Selection.** Rules were ranked by the declared-only evidence they contribute across the five investigations.
+Only 28 rules contribute any, so all were read (five had been reviewed before). Each decision was made from the
+rule's logic in the pinned Sigma / Elastic source before its effect on any result was looked at.
+
+**Decisions** (`data/detection/technique-support-review.json`, 23 in total): 6 rules establish several of the
+techniques they declare, 11 establish part, 6 establish nothing; 6 more were read and **left ambiguous**
+(`left_ambiguous_after_reading`, with the reason — for two of them, that the rule text was not read in full).
+Established coverage of the packs: 294 -> 297 of 384 declared techniques.
+
+**One decision was wrong and was corrected by the events.** "Microsoft Windows Defender Tampering" was recorded,
+from its logic, as establishing Modify Registry and the defence-impairment technique. The event it matched in the
+APT29 recording was Defender's own engine setting its own value. The decision is now "establishes nothing", and
+its reason records the correction. Reading the logic is not sufficient; the matched events of the other newly
+counted techniques were checked at the level of the rule and process behind each (an archiver, PowerShell script
+blocks, a shell started by the service manager, a decode call) and are consistent — a light check, not a review of
+each full event.
+
+**Results** (before: `data/validation/history/investigations.before-review-batch-1.json`; after:
+`...after-review-batch-1.json`; audit 45,955 checks, all passing):
+
+| Recording | Verdict | Counted | Gained / lost | Top profile after |
+|---|---|---|---|---|
+| APT29 emulation | APT29 identified (unchanged) | 29 -> 32 | + Input Capture, Deobfuscate/Decode, Archive Collected Data | Kimsuky 46% (16 of 32) |
+| APT3 emulation | not distinguishable (unchanged) | 8 -> 11 | + Command and Scripting Interpreter, Clipboard Data, Service Execution | APT41 69% (8 of 11) |
+| LSASS run 01 | not distinguishable (unchanged) | 8 -> 7 | - NTFS File Attributes | Magic Hound 68% (5 of 7) |
+| LSASS run 03 | not distinguishable (unchanged) | 9 -> 8 | - NTFS File Attributes | Kimsuky 72% (6 of 8) |
+| Uploaded tool run | not distinguishable (unchanged) | 8 -> 7 | - NTFS File Attributes | APT32 82% (6 of 7) |
+
+- No verdict changed; no wrong name.
+- **The true actors became less similar, not more:** APT3 on its own emulation 46% (4 of 8) -> 32% (4 of 11); APT29
+  on its own 17% -> 15%. By overlap the known actor is now at positions 14-124 (before this batch 10-116). The
+  recovered evidence is real behaviour that those groups' public profiles do not list. Nothing was adjusted for it.
+- The browser stream rule had also been counted in both LSASS runs; it no longer is.

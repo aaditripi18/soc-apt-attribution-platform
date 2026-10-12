@@ -1,0 +1,144 @@
+{
+ "otrf-lsass-03-comsvcs": {
+  "verdict": "not_distinguishable",
+  "named": [],
+  "counted_techniques": [
+   "T1003",
+   "T1003.001",
+   "T1033",
+   "T1055",
+   "T1055.012",
+   "T1059.005",
+   "T1112",
+   "T1564.004",
+   "T1615"
+  ],
+  "groups_matching": 125,
+  "top": [
+   "APT32 75% (7 of 9)",
+   "Kimsuky 63% (6 of 9)",
+   "Operation Wocao 51% (5 of 9)"
+  ],
+  "known": {
+   "APT3": "19% (2 of 9)"
+  }
+ },
+ "otrf-lsass-01-logonpasswords": {
+  "verdict": "not_distinguishable",
+  "named": [],
+  "counted_techniques": [
+   "T1003",
+   "T1003.001",
+   "T1033",
+   "T1059.005",
+   "T1112",
+   "T1564.004",
+   "T1615",
+   "T1685.001"
+  ],
+  "groups_matching": 120,
+  "top": [
+   "APT32 72% (6 of 8)",
+   "Magic Hound 58% (5 of 8)",
+   "Threat Group-3390 48% (4 of 8)"
+  ],
+  "known": {
+   "APT3": "22% (2 of 8)"
+  }
+ },
+ "otrf-apt3-empire": {
+  "verdict": "not_distinguishable",
+  "named": [],
+  "counted_techniques": [
+   "T1021.002",
+   "T1033",
+   "T1059.001",
+   "T1087.002",
+   "T1201",
+   "T1543.003",
+   "T1550.002",
+   "T1685"
+  ],
+  "groups_matching": 138,
+  "top": [
+   "APT41 85% (7 of 8)",
+   "Wizard Spider 85% (7 of 8)",
+   "Chimera 75% (6 of 8)"
+  ],
+  "known": {
+   "APT3": "46% (4 of 8)",
+   "APT29": "8% (1 of 8)"
+  }
+ },
+ "otrf-apt29-day1": {
+  "verdict": "actor_specific_evidence",
+  "named": [
+   "APT29"
+  ],
+  "counted_techniques": [
+   "T1003",
+   "T1003.001",
+   "T1021.002",
+   "T1021.006",
+   "T1027.004",
+   "T1040",
+   "T1048.003",
+   "T1056.001",
+   "T1059",
+   "T1059.001",
+   "T1070.004",
+   "T1113",
+   "T1115",
+   "T1132.001",
+   "T1201",
+   "T1485",
+   "T1490",
+   "T1547.001",
+   "T1548",
+   "T1548.002",
+   "T1552.004",
+   "T1560.001",
+   "T1564.003",
+   "T1569.002",
+   "T1587.001",
+   "T1588.002",
+   "T1620",
+   "T1685",
+   "T1685.001"
+  ],
+  "groups_matching": 192,
+  "top": [
+   "Kimsuky 48% (15 of 29)",
+   "APT39 41% (13 of 29)",
+   "Lazarus Group 38% (12 of 29)"
+  ],
+  "known": {
+   "APT3": "24% (8 of 29)",
+   "APT29": "17% (6 of 29)"
+  }
+ },
+ "sample-windows-credential-dumping.zip": {
+  "verdict": "not_distinguishable",
+  "named": [],
+  "counted_techniques": [
+   "T1003",
+   "T1003.001",
+   "T1033",
+   "T1059.005",
+   "T1112",
+   "T1564.004",
+   "T1588.002",
+   "T1615"
+  ],
+  "groups_matching": 157,
+  "top": [
+   "APT32 85% (7 of 8)",
+   "APT39 57% (5 of 8)",
+   "Earth Lusca 55% (5 of 8)"
+  ],
+  "known": {
+   "APT3": "23% (2 of 8)",
+   "APT29": "8% (1 of 8)"
+  }
+ }
+}
