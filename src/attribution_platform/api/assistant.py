@@ -40,7 +40,7 @@ from typing import Any
 
 from attribution_platform.api.errors import ApiError, BackendError, InvalidIdentifierError
 
-ASSISTANT_VERSION = "assistant/2"
+ASSISTANT_VERSION = "assistant/3"
 DEFAULT_URL = "http://127.0.0.1:11434"
 DEFAULT_MODEL = "llama3.1:8b"
 URL_VARIABLE = "ATTRIBUTION_ASSISTANT_URL"
@@ -73,8 +73,13 @@ Do not add techniques, indicators, hosts, times, group names, tools or events th
 2. If the digest does not contain the answer, say so plainly and, where relevant, name the page \
 of the console that holds more detail (Attack chain, ATT&CK matrix, Timeline, Indicators, \
 Attribution, Response, or an activity cluster's Evidence tab). Never guess.
-3. Attribution: a group is IDENTIFIED only if the digest lists it under "identified_groups". \
-Otherwise no group is identified. "behavioural overlap" is a similarity between the observed \
+3. Attribution: a group is IDENTIFIED only if the digest lists it under "identified_groups" \
+(evidence specific to that group's own tooling was observed). Otherwise no group is identified. \
+A group under "advisory_indicator_leads" is different: a hash, address or domain seen here equals \
+an indicator that a published advisory attributes to that group. Report it as exactly that - an \
+advisory indicator match, a lead to verify - and never say that group is identified or \
+responsible; indicators are reused and shared. \
+"behavioural overlap" is a similarity between the observed \
 behaviour and a group's public ATT&CK profile; it is NOT the probability that the group is \
 responsible, and the group with the highest overlap is not "the attacker". Say "closest \
 behavioural profile" or "consistent with", never "it was X" or "most likely X", unless identified.
@@ -206,12 +211,18 @@ def build_digest(
         *((assessment or {}).get("actor_leads") or ()),
         *((assessment or {}).get("indicator_leads") or ()),
     ]
-    identified = sorted(
-        {
-            f"{lead['actor_name']} ({lead.get('actor_attack_id') or 'no ATT&CK id'})"
-            for lead in leads
-        }
-    )
+
+    def named(key: str) -> list[str]:
+        return sorted(
+            {
+                f"{lead['actor_name']} ({lead.get('actor_attack_id') or 'no ATT&CK id'})"
+                for lead in (assessment or {}).get(key) or ()
+            }
+        )
+
+    # Two different things (ADR-0013, ADR-0018): evidence specific to a group's own
+    # tooling identifies it; an advisory indicator match is a third party's lead.
+    identified, advisory_leads = named("actor_leads"), named("indicator_leads")
     match = profile_match or {}
     digest: dict[str, Any] = {
         "source": investigation.get("source_id"),
@@ -229,6 +240,7 @@ def build_digest(
             "statement": (assessment or {}).get("statement"),
             "reasons": list((assessment or {}).get("reasons") or ()),
             "identified_groups": identified,
+            "advisory_indicator_leads": advisory_leads,
             "group_specific_evidence": [
                 {
                     "group": lead.get("actor_name"),
@@ -243,7 +255,8 @@ def build_digest(
                     "id": m["candidate_id"],
                     "behavioural_overlap_percent": round(100 * float(m["overlap"])),
                     "matched_techniques": m["matched_technique_ids"],
-                    "identified": m.get("named_by") is not None,
+                    "identified": m.get("named_by") == "actor_specific",
+                    "advisory_indicator_lead": m.get("named_by") == "advisory_indicator",
                 }
                 for m in (match.get("matches") or ())[:15]
             ],

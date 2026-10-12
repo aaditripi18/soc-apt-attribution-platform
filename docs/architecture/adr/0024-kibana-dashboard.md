@@ -16,7 +16,9 @@ model the console serves**:
   (`@timestamp`, `host.name`, `threat.technique.id/name`, `threat.tactic.name`, cluster, tier).
 - `attribution-kibana-group-matches` — one document per Group or Campaign sharing an observed technique
   (`threat.group.*`, `behavioural_overlap_percent`, techniques matched / in profile, `identified`,
-  `identified_by`).
+  `advisory_lead`, `identified_by`). `identified` is true only for evidence specific to the group's own
+  tooling; an advisory indicator match is `advisory_lead`, charted in its own panel as a lead to verify
+  (export `kibana-export/2`).
 
 Nothing is computed for Kibana that the console does not show. No field is named confidence, probability,
 likelihood or score (tested). No command line or raw event is exported. Document ids derive from the
@@ -24,7 +26,7 @@ investigation, so a second export overwrites.
 
 ### D2 — The dashboard is generated, tracked and installable
 
-`scripts/build_kibana_dashboard.py` writes `kibana/attribution-dashboard.ndjson` (two data views, twelve
+`scripts/build_kibana_dashboard.py` writes `kibana/attribution-dashboard.ndjson` (two data views, thirteen
 visualisations, one dashboard) deterministically and, with `--install`, imports it through Kibana's saved-objects
 API. Aggregation-based visualisations are used because their saved-object format is the most stable across
 Kibana versions; Kibana migrates them on import. One panel states how to read overlap and what "identified" means.

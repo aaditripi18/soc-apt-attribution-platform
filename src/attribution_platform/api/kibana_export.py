@@ -10,8 +10,9 @@ serves — nothing is computed here that the console does not already show:
   and tactics, which cluster.
 - :data:`GROUP_MATCHES_INDEX` — one document per ATT&CK Group or Campaign whose
   profile shares an observed technique: the behavioural overlap as a
-  percentage, how many techniques matched, and whether group-specific evidence
-  identified it.
+  percentage, how many techniques matched, whether evidence specific to the
+  group identified it, and — separately — whether an indicator a published
+  advisory attributes to it was seen (a lead, not an identification).
 
 The overlap is a similarity (ADR-0021), and the field is named so: no document
 here carries a confidence, a probability or a rank. Command lines and raw
@@ -33,7 +34,7 @@ from attribution_platform.api.read_model import (
 )
 from attribution_platform.dataplane.client import ElasticClient
 
-KIBANA_EXPORT_VERSION = "kibana-export/1"
+KIBANA_EXPORT_VERSION = "kibana-export/2"
 DETECTIONS_INDEX = "attribution-kibana-detections"
 GROUP_MATCHES_INDEX = "attribution-kibana-group-matches"
 
@@ -76,6 +77,7 @@ _GROUP_MATCHES: Mapping[str, Any] = {
         "profile_techniques": {"type": "integer"},
         "matched_technique_ids": _KEYWORD,
         "identified": {"type": "boolean"},
+        "advisory_lead": {"type": "boolean"},
         "identified_by": _KEYWORD,
         "cluster_id": _KEYWORD,
     },
@@ -139,7 +141,10 @@ def build_documents(
                 "matched_techniques": int(match["matched"]),
                 "profile_techniques": int(match["profile_techniques"]),
                 "matched_technique_ids": list(match["matched_technique_ids"]),
-                "identified": match.get("named_by") is not None,
+                # identified: evidence specific to the group's own tooling (ADR-0018);
+                # advisory_lead: an indicator a published advisory attributes to it
+                "identified": match.get("named_by") == "actor_specific",
+                "advisory_lead": match.get("named_by") == "advisory_indicator",
                 "identified_by": match.get("named_by"),
                 "cluster_id": match.get("cluster_id"),
             }

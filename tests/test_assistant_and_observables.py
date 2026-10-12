@@ -108,8 +108,9 @@ def test_the_digest_is_built_from_stored_records_only(
     )
     assert {t for stage in chain for t in stage["techniques"]} <= set(techniques)
     attribution = digest["attribution"]
-    # the advisory names an actor for the hash: that, and nothing else, is "identified"
-    assert attribution["identified_groups"] == ["Volt Typhoon (G1017)"]
+    # the advisory names an actor for the hash: a lead, not an identification
+    assert attribution["identified_groups"] == []
+    assert attribution["advisory_indicator_leads"] == ["Volt Typhoon (G1017)"]
     assert attribution["statement"]
     for profile in attribution["closest_behavioural_profiles"]:
         assert 0 <= profile["behavioural_overlap_percent"] <= 100
@@ -165,6 +166,7 @@ def test_a_question_is_answered_from_the_digest_by_the_local_model() -> None:
     for rule in (
         "ONLY from the INVESTIGATION DIGEST",
         "identified_groups",
+        "never say that group is identified",
         "NOT the probability",
         "Never guess",
     ):
@@ -172,7 +174,7 @@ def test_a_question_is_answered_from_the_digest_by_the_local_model() -> None:
     assert service.describe() == {
         "enabled": True,
         "model": "local-test",
-        "version": "assistant/2",
+        "version": "assistant/3",
         "reason": None,
     }
 
@@ -219,7 +221,7 @@ def test_the_assistant_says_why_it_is_unavailable() -> None:
     assert stopped.describe() == {
         "enabled": False,
         "model": "m",
-        "version": "assistant/2",
+        "version": "assistant/3",
         "reason": "not_running",
     }
     with pytest.raises(BackendError, match="not running"):
@@ -344,7 +346,7 @@ def test_a_server_started_without_the_assistant(
         assert _call(base + "/api/assistant")[1] == {
             "enabled": False,
             "model": None,
-            "version": "assistant/2",
+            "version": "assistant/3",
             "reason": "off",
         }
         question = {

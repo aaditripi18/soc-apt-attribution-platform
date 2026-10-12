@@ -123,3 +123,6 @@ route guards are unchanged.
   smallest reference investigation were answered from the digest: the summary matched the stored results and the
   model declined to name a group, as instructed. Each answer took two to four minutes, and the summary listed hashes
   of ordinary system programs as indicators without saying they are only candidates to verify.
+- **Identification and advisory leads are separate (`assistant/3`, 2026-10-12).** The digest listed a group named by an
+  advisory indicator under `identified_groups`, beside groups identified by their own tooling. They are now two lists,
+  and the model is told to report an advisory match as a lead to verify and never as an identification.

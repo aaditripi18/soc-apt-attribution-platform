@@ -52,8 +52,11 @@ NOTE = """### Reading this dashboard
 contains, weighted towards techniques few groups use. It is a similarity, **not** the
 probability that the group is responsible: many groups share the same techniques.
 
-A group is **identified** only where evidence specific to it was found (a tooling artefact or a
-published advisory indicator). Open the platform console for the evidence behind every row."""
+A group is **identified** only where an artefact of its own tooling was found. An **advisory
+indicator lead** is weaker: a hash, address or domain seen here equals one a published advisory
+attributes to that group. Indicators are reused, so it is a lead to verify.
+
+Open the platform console for the evidence behind every row."""
 
 
 def _dumps(value: Any) -> str:
@@ -305,19 +308,34 @@ def visualizations() -> list[tuple[dict[str, Any], tuple[int, int, int, int]]]:
         (
             _visualization(
                 "identified",
-                "Groups identified by specific evidence",
+                "Groups identified by their own tooling",
                 "table",
                 _table_params(5),
                 [
                     overlap,
                     _terms("2", "threat.group.name", "Group", 10, "bucket"),
-                    _terms("3", "identified_by", "Identified by", 3, "bucket"),
                     _terms("4", "investigation.source", "Investigation", 5, "bucket"),
                 ],
                 MATCHES_VIEW,
                 "identified : true",
             ),
-            (0, 7, 24, 7),
+            (0, 7, 12, 7),
+        ),
+        (
+            _visualization(
+                "advisory-leads",
+                "Advisory indicator leads (to verify)",
+                "table",
+                _table_params(5),
+                [
+                    overlap,
+                    _terms("2", "threat.group.name", "Group", 10, "bucket"),
+                    _terms("4", "investigation.source", "Investigation", 5, "bucket"),
+                ],
+                MATCHES_VIEW,
+                "advisory_lead : true",
+            ),
+            (12, 7, 12, 7),
         ),
         (
             _visualization(

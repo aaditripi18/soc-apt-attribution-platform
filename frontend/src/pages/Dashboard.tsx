@@ -101,7 +101,7 @@ export function DashboardPage() {
           <Figure value={summary ? `${summary.techniques_by_status.covered}` : "—"} label={`of ${summary?.active_techniques ?? "—"} ATT&CK techniques detectable`} />
           <Figure value={rules ? integer(rules) : "—"} label="Sigma and Elastic detection rules" />
           <Figure value={groups.state === "ready" ? integer(groups.data.active_groups) : "—"} label="threat groups profiled" />
-          <Figure value={groups.state === "ready" ? integer(groups.data.groups_with_specific_evidence) : "—"} label="groups identifiable by their own artefacts" />
+          <Figure value={groups.state === "ready" ? integer(groups.data.groups_with_specific_evidence) : "—"} label="groups with identifying artefacts or advisory indicators" />
         </div>
       </section>
 

@@ -67,7 +67,7 @@ export function ActorsPage({ query }: { query: URLSearchParams }) {
       />
       <div className="mb-6 grid grid-cols-2 gap-4 lg:grid-cols-3">
         <Stat label="Groups tracked" value={integer(data.active_groups)} sub={data.attack_kb_version} accent />
-        <Stat label="Identifiable by specific evidence" value={integer(data.groups_with_specific_evidence)} sub="tooling artefacts or advisory indicators" />
+        <Stat label="With identifying evidence or advisory leads" value={integer(data.groups_with_specific_evidence)} sub="tooling artefacts or advisory indicators" />
         <Stat label="Matched by behaviour" value={integer(data.active_groups)} sub="all groups are scored by technique overlap" />
       </div>
       <Card padded={false}>

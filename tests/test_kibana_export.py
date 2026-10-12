@@ -55,7 +55,8 @@ def test_the_export_is_the_read_model_flattened(tmp_path: Path) -> None:
         match = served[document["threat"]["group"]["id"]]
         assert document["behavioural_overlap_percent"] == round(100 * match["overlap"], 2)
         assert document["matched_techniques"] == match["matched"]
-        assert document["identified"] is (match["named_by"] is not None)
+        assert document["identified"] is (match["named_by"] == "actor_specific")
+        assert document["advisory_lead"] is (match["named_by"] == "advisory_indicator")
     # a similarity is never exported under another name
     exported = json.dumps([*detections, *stored]).lower()
     assert not [w for w in ("confidence", "probability", "likelihood", "score") if w in exported]
@@ -76,7 +77,7 @@ def test_the_tracked_dashboard_is_what_the_builder_writes() -> None:
     }
     (dashboard,) = by_type["dashboard"]
     ids = {v["id"] for v in by_type["visualization"]}
-    assert {r["id"] for r in dashboard["references"]} == ids and len(ids) == 12
+    assert {r["id"] for r in dashboard["references"]} == ids and len(ids) == 13
     views = {v["id"] for v in by_type["index-pattern"]}
     for visualization in by_type["visualization"]:
         assert {r["id"] for r in visualization["references"]} <= views
