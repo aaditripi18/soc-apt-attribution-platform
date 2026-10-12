@@ -65,3 +65,6 @@ Thumbs.db
 
 # Local assistant/tooling settings (not part of the project)
 .claude/
+
+# local copies of sample recordings for trying the upload page
+samples/
