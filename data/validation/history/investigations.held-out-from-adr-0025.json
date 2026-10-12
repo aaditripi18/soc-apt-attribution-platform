@@ -1,0 +1,152 @@
+{
+ "otrf-lsass-07-nanodump": {
+  "verdict": "not_distinguishable",
+  "named": [],
+  "counted_techniques": [
+   "T1003",
+   "T1003.001",
+   "T1033"
+  ],
+  "groups_matching": 84,
+  "top": [
+   "APT32 100% (3 of 3)",
+   "APT39 100% (3 of 3)",
+   "APT28 68% (2 of 3)"
+  ],
+  "known": {
+   "APT3": "62% (2 of 3)"
+  }
+ },
+ "otrf-apt29-day2": {
+  "verdict": "not_distinguishable",
+  "named": [],
+  "counted_techniques": [
+   "T1003",
+   "T1003.001",
+   "T1021.002",
+   "T1021.006",
+   "T1027",
+   "T1027.004",
+   "T1040",
+   "T1048.003",
+   "T1059",
+   "T1059.001",
+   "T1070.006",
+   "T1078",
+   "T1114.001",
+   "T1115",
+   "T1136.001",
+   "T1140",
+   "T1201",
+   "T1490",
+   "T1497.001",
+   "T1546",
+   "T1546.003",
+   "T1548.002",
+   "T1564.003",
+   "T1574.001",
+   "T1588.002",
+   "T1685",
+   "T1685.001"
+  ],
+  "groups_matching": 188,
+  "top": [
+   "Kimsuky 42% (12 of 27)",
+   "Mustang Panda 38% (11 of 27)",
+   "OilRig 34% (10 of 27)"
+  ],
+  "known": {
+   "APT3": "24% (7 of 27)",
+   "APT29": "19% (6 of 27)"
+  }
+ },
+ "otrf-lsass-06-outflank-dumpert": {
+  "verdict": "not_distinguishable",
+  "named": [],
+  "counted_techniques": [
+   "T1003",
+   "T1003.001",
+   "T1033"
+  ],
+  "groups_matching": 84,
+  "top": [
+   "APT32 100% (3 of 3)",
+   "APT39 100% (3 of 3)",
+   "APT28 68% (2 of 3)"
+  ],
+  "known": {
+   "APT3": "62% (2 of 3)"
+  }
+ },
+ "otrf-lsass-05-sharpdump": {
+  "verdict": "not_distinguishable",
+  "named": [],
+  "counted_techniques": [
+   "T1003",
+   "T1003.001",
+   "T1033",
+   "T1059.005",
+   "T1112",
+   "T1615"
+  ],
+  "groups_matching": 120,
+  "top": [
+   "APT32 80% (5 of 6)",
+   "APT39 64% (4 of 6)",
+   "Earth Lusca 62% (4 of 6)"
+  ],
+  "known": {
+   "APT3": "30% (2 of 6)"
+  }
+ },
+ "otrf-apt3-caldera": {
+  "verdict": "not_distinguishable",
+  "named": [],
+  "counted_techniques": [
+   "T1003",
+   "T1003.001",
+   "T1021.006",
+   "T1036",
+   "T1036.005",
+   "T1053.005",
+   "T1059",
+   "T1059.001",
+   "T1087.002",
+   "T1098",
+   "T1113",
+   "T1201",
+   "T1204",
+   "T1685.001"
+  ],
+  "groups_matching": 166,
+  "top": [
+   "OilRig 59% (9 of 14)",
+   "APT39 45% (7 of 14)",
+   "APT32 45% (7 of 14)"
+  ],
+  "known": {
+   "APT3": "16% (3 of 14)",
+   "APT29": "16% (3 of 14)"
+  }
+ },
+ "otrf-lsass-04-out-minidump": {
+  "verdict": "not_distinguishable",
+  "named": [],
+  "counted_techniques": [
+   "T1003",
+   "T1003.001",
+   "T1033",
+   "T1059.001"
+  ],
+  "groups_matching": 125,
+  "top": [
+   "APT32 100% (4 of 4)",
+   "APT39 100% (4 of 4)",
+   "APT28 74% (3 of 4)"
+  ],
+  "known": {
+   "APT3": "69% (3 of 4)",
+   "APT29": "17% (1 of 4)"
+  }
+ }
+}

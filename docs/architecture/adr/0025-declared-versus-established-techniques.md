@@ -198,3 +198,43 @@ each full event.
 technique (Token Impersonation/Theft: 7 -> 8 and 8 -> 9); the two emulations and the uploaded recording are
 unchanged; no verdict, candidate count or known-actor position changed (positions 14-124). The outcome matched
 what was predicted before the re-run.
+
+## Amendment D (2026-10-13) — six further recordings, run unchanged
+
+**What this is, and is not.** The six catalogued recordings not among the five above were run on the committed
+build (`158a60f`) with no change to rules or decisions. They are held out from this ADR: none informed the
+declared / established rule, the 25 decisions or the overlap display. They are **not** unseen by the project:
+four have annotation files from the earlier calibration work, all were included when group-specific rule firings
+were measured, and two test files reference some of them. So this measures whether ADR-0025 generalises, not the
+platform as a whole. Snapshot: `data/validation/history/investigations.held-out-from-adr-0025.json`. The
+served-model audit passes on them (161,659 checks, 6 investigations, 71 units).
+
+| Recording | Known actor | Verdict | Counted | Declared only | Top profile | Known actor by overlap |
+|---|---|---|---|---|---|---|
+| LSASS tool run 04 | none | not distinguishable | 4 | 3 | two groups at 100% (4 of 4) | — |
+| LSASS tool run 05 | none | not distinguishable | 6 | 2 | 80% (5 of 6) | — |
+| LSASS tool run 06 | none | not distinguishable | 3 | 3 | two groups at 100% (3 of 3) | — |
+| LSASS tool run 07 | none | not distinguishable | 3 | 1 | two groups at 100% (3 of 3) | — |
+| APT3 emulation (CALDERA) | APT3 | not distinguishable | 14 | 40 | OilRig 59% (9 of 14) | APT3 16% (3 of 14), position 55 of 166 |
+| APT29 emulation, day 2 | APT29 | not distinguishable | 27 | 48 | Kimsuky 42% (12 of 27) | APT29 19% (6 of 27), position 35 of 188 |
+
+**Attribution.** No group was named on any of the six. For the four tool runs that is the right answer. For the
+two emulations it is a miss: the known actor was not identified (and was nowhere near the top by overlap). No
+wrong name. Across all eleven recordings: of four emulations one is identified (APT29 day 1, one rule match) and
+three are not; of seven tool runs none is given a name. Identification rests on a single artefact in a single
+recording — a demonstration that the path works, not evidence that it generalises.
+
+**Detection.** Each tool run yields three to six counted techniques. Whether those are the right techniques was
+not checked against ground truth here; that needs the recordings' own annotations and is a separate measurement.
+
+**What generalised and what did not.**
+- The declared / established rule did: nothing over-claimed was counted, and the audit holds.
+- The recovered evidence did not: the 25 decisions were made for the rules that mattered in five recordings. On
+  the two new emulations far more evidence is declared only than counted (40 against 14, 48 against 27), from 14
+  rules that have no decision. A review set built from some recordings under-recovers on others.
+- The small-denominator weakness is plain here: three tool runs show two groups at 100% overlap, resting on three
+  or four techniques. The count beside the percentage (ADR-0021 Amendment A) is what makes that readable; without
+  it these would look like strong matches.
+
+**Not done in this step, deliberately:** no rule was adjudicated and nothing was tuned on these six. The 14
+unreviewed rules are a candidate second batch; adjudicating them makes these recordings development data too.
