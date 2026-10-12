@@ -40,7 +40,7 @@ from typing import Any
 
 from attribution_platform.api.errors import ApiError, BackendError, InvalidIdentifierError
 
-ASSISTANT_VERSION = "assistant/4"
+ASSISTANT_VERSION = "assistant/5"
 DEFAULT_URL = "http://127.0.0.1:11434"
 DEFAULT_MODEL = "llama3.1:8b"
 URL_VARIABLE = "ATTRIBUTION_ASSISTANT_URL"
@@ -84,7 +84,9 @@ which groups are identified (or that none is), AND every group under \
 "advisory_indicator_leads" with the indicator that matched (or that there is no advisory \
 match). Never leave an advisory lead out of such an answer. The digest's \
 "attribution_in_one_sentence" already says both correctly: quote it word for word as the \
-attribution, then add detail; never contradict it. \
+attribution, then add detail; never contradict it. Whenever you state an overlap \
+percentage, state its "rests_on" beside it (e.g. "85%, resting on 6 of 8 counted \
+techniques"); a high percentage on few techniques is weak evidence. \
 "behavioural overlap" is a similarity between the observed \
 behaviour and a group's public ATT&CK profile; it is NOT the probability that the group is \
 responsible, and the group with the highest overlap is not "the attacker". Say "closest \
@@ -276,6 +278,8 @@ def build_digest(
                     "group": m["name"],
                     "id": m["candidate_id"],
                     "behavioural_overlap_percent": round(100 * float(m["overlap"])),
+                    "rests_on": f"{len(m['matched_technique_ids'])} of "
+                    f"{len(match.get('observed') or ())} counted techniques",
                     "matched_techniques": m["matched_technique_ids"],
                     "identified": m.get("named_by") == "actor_specific",
                     "advisory_indicator_lead": m.get("named_by") == "advisory_indicator",

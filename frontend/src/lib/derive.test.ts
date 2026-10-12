@@ -11,6 +11,8 @@ import type {
   UnitSummary,
 } from "./api";
 import {
+  overlapBasis,
+  overlapLabel,
   activityRole,
   attackChain,
   buildTimeline,
@@ -388,5 +390,15 @@ describe("declared-only techniques (ADR-0025)", () => {
     expect(activityRole({ ...base, declared_only: false })).toBe("unmatched");
     expect(activityRole({ ...base, context: true })).toBe("context");
     expect(activityRole({ ...base, declared_only: false, decision_feature: true })).toBe("feature");
+  });
+});
+
+describe("what an overlap percentage rests on (ADR-0021)", () => {
+  it("states matched and counted techniques beside the percentage, in one wording", () => {
+    expect(overlapLabel(0.85, 6, 8)).toBe("85% · 6 of 8 counted techniques");
+    // few techniques: the basis is what makes a high figure readable as weak
+    expect(overlapLabel(1, 1, 1)).toBe("100% · 1 of 1 counted technique");
+    expect(overlapLabel(0.174, 6, 29)).toBe("17% · 6 of 29 counted techniques");
+    expect(overlapBasis(0, 0)).toBe("0 of 0 counted techniques");
   });
 });

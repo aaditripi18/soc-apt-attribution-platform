@@ -106,3 +106,25 @@ attributed advisory bundles.
 partition the candidates by matched set; mitigations are ATT&CK's own for the observed techniques, citations
 stripped; a Group named by specific evidence is marked and not moved; no key claims a likelihood; an empty
 investigation gives an empty record.
+
+## Amendment A (2026-10-12) — every overlap percentage states what it rests on
+
+**Why.** ADR-0025 halved the techniques that count, and the top overlap percentages rose (one recording: 56% to
+85%), because overlap is the matched share of what was counted. A high figure on eight techniques is weak
+evidence, and the percentage alone did not show that.
+
+**Decision (display only; the formula, the evidence rules and the verdicts are unchanged).** Wherever an overlap
+percentage appears it is shown with the number of techniques matched and the number counted in the investigation,
+in one wording produced by one function (`frontend/src/lib/derive.ts::overlapLabel`): `85% · 7 of 8 counted
+techniques`. The denominator is the investigation's counted techniques — the denominator of the calculation — never
+the size of the group's profile. Because the percentage is weighted towards rarer techniques it is not simply
+matched divided by counted, and the page says so. Surfaces: the attribution headline, the profile table, the
+cluster cards and the technique matrix; the assistant's digest (`rests_on`, and an instruction to state it,
+`assistant/5`); the Kibana export (`counted_techniques`, `kibana-export/3`) and its profile table.
+
+**Not decided.** No minimum number of techniques below which a percentage is hidden or flagged: any threshold
+would be arbitrary until measured against more investigations. The count is shown; the reader judges.
+
+**Checks.** `derive.test.ts` (wording, few techniques, one technique, none); `tests/test_kibana_export.py`
+(counted techniques equal the profile match's, matched never exceeds counted); inspected on the live attribution
+page of the uploaded recording (`85% · 7 of 8 counted techniques` in the headline, table, clusters and matrix).

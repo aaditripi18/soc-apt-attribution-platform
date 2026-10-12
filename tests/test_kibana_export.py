@@ -55,6 +55,11 @@ def test_the_export_is_the_read_model_flattened(tmp_path: Path) -> None:
         match = served[document["threat"]["group"]["id"]]
         assert document["behavioural_overlap_percent"] == round(100 * match["overlap"], 2)
         assert document["matched_techniques"] == match["matched"]
+        # the basis of the percentage: matched, of the techniques counted
+        assert document["counted_techniques"] == len(
+            get_profile_match(client, investigation_id)["observed"]
+        )
+        assert document["matched_techniques"] <= document["counted_techniques"]
         assert document["identified"] is (match["named_by"] == "actor_specific")
         assert document["advisory_lead"] is (match["named_by"] == "advisory_indicator")
     # a similarity is never exported under another name

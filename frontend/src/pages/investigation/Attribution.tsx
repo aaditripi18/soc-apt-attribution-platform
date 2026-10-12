@@ -15,6 +15,7 @@ import {
   cx,
 } from "../../components/ui";
 import { paths, useApi, type Assessment, type ProfileMatch, type ProfileMatchRecord } from "../../lib/api";
+import { overlapBasis, overlapLabel } from "../../lib/derive";
 import { integer, plural } from "../../lib/format";
 import { links } from "../../lib/router";
 
@@ -23,7 +24,7 @@ const MATRIX_ROWS = 12;
 
 export const percent = (value: number): string => `${Math.round(value * 100)}%`;
 
-function OverlapBar({ value, strong = false }: { value: number; strong?: boolean }) {
+function OverlapBar({ value, strong = false, basis }: { value: number; strong?: boolean; basis?: string }) {
   return (
     <div className="flex items-center gap-2">
       <div className="h-1.5 w-28 overflow-hidden rounded-full bg-surface-highest">
@@ -33,6 +34,11 @@ function OverlapBar({ value, strong = false }: { value: number; strong?: boolean
         />
       </div>
       <span className="w-10 text-right font-mono text-code-md tabular-nums text-on-surface">{percent(value)}</span>
+      {basis && (
+        <span className="whitespace-nowrap font-mono text-code-sm text-on-surface-variant" data-overlap-basis>
+          · {basis}
+        </span>
+      )}
     </div>
   );
 }
@@ -84,7 +90,8 @@ export function AttributionHeadline({ assessment, match }: { assessment: Assessm
           )}
         </div>
         <p className="mt-1.5 max-w-3xl text-body-md text-on-surface-variant">
-          {percent(first.overlap)} behavioural overlap
+          {percent(first.overlap)} behavioural overlap, resting on{" "}
+          {overlapBasis(first.matched_technique_ids.length, match.observed.length)}
           {first.member_ids.length > 1
             ? `, shared by ${first.member_ids.length} groups that this evidence cannot tell apart.`
             : "."}{" "}
@@ -209,6 +216,13 @@ export function AttributionTab({ investigationId }: { investigationId: string })
                 </a>
               }
             />
+            <p className="border-b border-outline-variant/70 px-4 py-2.5 text-body-sm text-on-surface-variant" data-overlap-note>
+              Overlap is a similarity between what was observed and a group&apos;s public profile. It is not the
+              probability that the group is responsible, and not a confidence. Each percentage is shown with the
+              number of counted techniques it rests on: a high figure on a handful of techniques is weak evidence.
+              The percentage weights rarer techniques more, so it is not simply matched ÷ counted. Techniques a rule
+              only declares are not counted.
+            </p>
             <div className="overflow-x-auto">
               <table className="w-full border-collapse text-body-md">
                 <thead>
@@ -241,7 +255,11 @@ export function AttributionTab({ investigationId }: { investigationId: string })
                         </span>
                       </Td>
                       <Td>
-                        <OverlapBar value={row.overlap} strong={row.named_by !== null} />
+                        <OverlapBar
+                          value={row.overlap}
+                          strong={row.named_by !== null}
+                          basis={overlapBasis(row.matched, observed.length)}
+                        />
                       </Td>
                       <Td align="right" className="font-mono tabular-nums">
                         {row.matched} of {observed.length}
@@ -284,7 +302,10 @@ export function AttributionTab({ investigationId }: { investigationId: string })
                 <div key={cluster.cluster_id} className="rounded-sm border border-outline-variant/70 bg-surface-lowest p-3" data-cluster={cluster.label}>
                   <div className="flex items-center justify-between gap-3">
                     <span className="text-headline-sm text-on-surface">{cluster.label}</span>
-                    <OverlapBar value={cluster.overlap} />
+                    <OverlapBar
+                      value={cluster.overlap}
+                      basis={overlapBasis(cluster.matched_technique_ids.length, match.observed.length)}
+                    />
                   </div>
                   <div className="mt-2 flex flex-wrap gap-1">
                     {cluster.matched_technique_ids.map((id) => (
@@ -349,7 +370,9 @@ export function AttributionTab({ investigationId }: { investigationId: string })
                           </td>
                         );
                       })}
-                      <td className="py-1 pl-4 font-mono text-code-md tabular-nums text-on-surface">{percent(row.overlap)}</td>
+                      <td className="whitespace-nowrap py-1 pl-4 font-mono text-code-md tabular-nums text-on-surface">
+                        {overlapLabel(row.overlap, row.matched, observed.length)}
+                      </td>
                     </tr>
                   ))}
                 </tbody>

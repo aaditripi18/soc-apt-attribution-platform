@@ -179,7 +179,7 @@ def test_a_question_is_answered_from_the_digest_by_the_local_model() -> None:
     assert service.describe() == {
         "enabled": True,
         "model": "local-test",
-        "version": "assistant/4",
+        "version": "assistant/5",
         "reason": None,
     }
 
@@ -226,7 +226,7 @@ def test_the_assistant_says_why_it_is_unavailable() -> None:
     assert stopped.describe() == {
         "enabled": False,
         "model": "m",
-        "version": "assistant/4",
+        "version": "assistant/5",
         "reason": "not_running",
     }
     with pytest.raises(BackendError, match="not running"):
@@ -351,7 +351,7 @@ def test_a_server_started_without_the_assistant(
         assert _call(base + "/api/assistant")[1] == {
             "enabled": False,
             "model": None,
-            "version": "assistant/4",
+            "version": "assistant/5",
             "reason": "off",
         }
         question = {

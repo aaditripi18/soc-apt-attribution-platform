@@ -50,7 +50,9 @@ NOTE = """### Reading this dashboard
 
 **Behavioural overlap** is how much of the observed behaviour a group's public ATT&CK profile
 contains, weighted towards techniques few groups use. It is a similarity, **not** the
-probability that the group is responsible: many groups share the same techniques.
+probability that the group is responsible: many groups share the same techniques. Read each
+percentage with the two columns beside it - techniques matched, of techniques counted: a high
+figure resting on a handful of techniques is weak evidence.
 
 A group is **identified** only where an artefact of its own tooling was found. An **advisory
 indicator lead** is weaker: a hash, address or domain seen here equals one a published advisory
@@ -258,7 +260,7 @@ def visualizations() -> list[tuple[dict[str, Any], tuple[int, int, int, int]]]:
     """``(saved object, (x, y, w, h))`` on Kibana's 48-column grid."""
     overlap = _metric("max", "behavioural_overlap_percent", "Behavioural overlap %", "1")
     matched = _metric("max", "matched_techniques", "Techniques matched", "3")
-    profile = _metric("max", "profile_techniques", "Techniques in profile", "4")
+    profile = _metric("max", "counted_techniques", "of counted techniques", "4")
     group = _terms("2", "threat.group.name", "Group or campaign", 15, "bucket")
     return [
         (

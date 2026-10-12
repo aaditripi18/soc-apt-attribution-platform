@@ -34,7 +34,7 @@ from attribution_platform.api.read_model import (
 )
 from attribution_platform.dataplane.client import ElasticClient
 
-KIBANA_EXPORT_VERSION = "kibana-export/2"
+KIBANA_EXPORT_VERSION = "kibana-export/3"
 DETECTIONS_INDEX = "attribution-kibana-detections"
 GROUP_MATCHES_INDEX = "attribution-kibana-group-matches"
 
@@ -75,6 +75,8 @@ _GROUP_MATCHES: Mapping[str, Any] = {
         "behavioural_overlap_percent": {"type": "float"},
         "matched_techniques": {"type": "integer"},
         "profile_techniques": {"type": "integer"},
+        # what the percentage rests on: techniques counted in the investigation
+        "counted_techniques": {"type": "integer"},
         "matched_technique_ids": _KEYWORD,
         "identified": {"type": "boolean"},
         "advisory_lead": {"type": "boolean"},
@@ -140,6 +142,7 @@ def build_documents(
                 "behavioural_overlap_percent": round(100 * float(match["overlap"]), 2),
                 "matched_techniques": int(match["matched"]),
                 "profile_techniques": int(match["profile_techniques"]),
+                "counted_techniques": len((profile_match or {}).get("observed") or ()),
                 "matched_technique_ids": list(match["matched_technique_ids"]),
                 # identified: evidence specific to the group's own tooling (ADR-0018);
                 # advisory_lead: an indicator a published advisory attributes to it

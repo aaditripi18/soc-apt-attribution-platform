@@ -638,3 +638,18 @@ export function attackChain(events: ActivityEvent[], index: TechniqueIndex): Cha
     (a, b) => a.firstSeen - b.firstSeen || index.tacticOrder.indexOf(a.tactic) - index.tacticOrder.indexOf(b.tactic),
   );
 }
+
+/**
+ * What an overlap percentage rests on (ADR-0021, ADR-0025): how many of the
+ * techniques counted in this investigation the profile contains. The
+ * percentage is weighted towards techniques few groups use, so it is not this
+ * fraction; both are always shown together, in these words, on every surface.
+ */
+export function overlapBasis(matched: number, counted: number): string {
+  return `${matched} of ${counted} counted ${counted === 1 ? "technique" : "techniques"}`;
+}
+
+/** e.g. "85% · 6 of 8 counted techniques". */
+export function overlapLabel(overlap: number, matched: number, counted: number): string {
+  return `${Math.round(overlap * 100)}% · ${overlapBasis(matched, counted)}`;
+}
