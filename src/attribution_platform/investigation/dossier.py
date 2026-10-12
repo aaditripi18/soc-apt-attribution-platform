@@ -51,7 +51,7 @@ from attribution_platform.investigation.records import (
     load_investigation,
 )
 
-DOSSIER_VERSION = "dossier/5"
+DOSSIER_VERSION = "dossier/6"
 _MAX_CANDIDATES_LISTED = 25
 _MAX_QUESTIONS = 5
 
@@ -132,7 +132,10 @@ def _baseline_line(analysis: Mapping[str, Any]) -> str:
     baseline = analysis.get("unattributed_decision_support")
     if baseline is None:
         return f"- {analysis.get('comparison_note') or 'The baseline was not computed.'}"
-    return f"- Unattributed baseline (support if no Group is involved): {float(baseline):.3f}."
+    return (
+        '- For comparison, the same evidence fits "no known Group" with a support of '
+        f"{float(baseline):.3f} (0 to 1; a reference point, not a likelihood)."
+    )
 
 
 def _section_unit(
@@ -166,7 +169,7 @@ def _section_unit(
         + ".",
         f"- {len(sequence.steps) if sequence else 0} behavioural step(s), joined by "
         f"{len(group.structural_link_ids)} structural link(s) (same process, lineage, injection, "
-        "same audit event — never shared host or user alone, ADR-0003).",
+        "same audit event — never a shared host or user alone).",
         "",
         "### 2. Evidence extracted",
         "",
@@ -189,14 +192,17 @@ def _section_unit(
         share = users / total_groups if total_groups else 0.0
         lines += [
             f"- **{technique_id} {name}** — {len(supporting)} Evidence item(s); used by {users} of "
-            f"{total_groups} active ATT&CK Groups (g = {share:.3f}, D = {1 - share:.3f}: "
-            "the rarer, the "
-            "more it separates candidates).",
+            f"{total_groups} active ATT&CK Groups ({share:.0%}; the rarer a technique, the more "
+            "it separates candidates).",
         ]
-        for item in supporting[:3]:
-            lines.append(f"  - {_text(item.claim)}")
-        if len(supporting) > 3:
-            lines.append(f"  - … and {len(supporting) - 3} more with the same technique.")
+        claims: dict[str, int] = {}
+        for item in supporting:
+            claims[_text(item.claim)] = claims.get(_text(item.claim), 0) + 1
+        for claim, times_matched in list(claims.items())[:3]:
+            repeated = f" (matched {times_matched} times)" if times_matched > 1 else ""
+            lines.append(f"  - {claim}{repeated}")
+        if len(claims) > 3:
+            lines.append(f"  - … and {len(claims) - 3} more rule(s) for the same technique.")
     lines += ["", "### 4. Actors consistent with the evidence", ""]
     candidates = sorted(
         analysis["candidates"], key=lambda c: (str(c["name"]).lower(), c["candidate_id"])
@@ -232,10 +238,9 @@ def _section_unit(
         "",
         "- The candidates above are those whose public ATT&CK profile contains an observed "
         "technique. Their behavioural overlap is on the investigation's Attribution view; a "
-        "group is identified only on evidence specific to it (ADR-0018, ADR-0021).",
+        "group is identified only on evidence specific to it.",
         "- Low-level Evidence is context: it joins the unit but adds no technique to the "
-        "comparison "
-        "(ADR-0003 Amendment H)."
+        "comparison."
         if low
         else "- All Evidence here is core detection content.",
         _baseline_line(analysis),
@@ -323,8 +328,7 @@ def render_dossier(client: ElasticClient, knowledge: AttackKnowledge, investigat
         + ", ".join(f"{k} {v}" for k, v in sorted(dict(investigation["method_versions"]).items())),
         f"- {investigation['evidence']} Evidence item(s): {investigation['evidence_in_units']} in "
         f"{len(investigation['units'])} unit(s); {investigation['evidence_outside_units']} "
-        "low-level item(s) in no unit (no structural link to core Evidence — ADR-0003 "
-        "Amendment H).",
+        "low-level item(s) in no unit (no structural link to core Evidence).",
         "",
     ]
     lines += _section_assessment(load_assessment(client, investigation_id))
