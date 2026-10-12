@@ -40,7 +40,7 @@ from typing import Any
 
 from attribution_platform.api.errors import ApiError, BackendError, InvalidIdentifierError
 
-ASSISTANT_VERSION = "assistant/3"
+ASSISTANT_VERSION = "assistant/4"
 DEFAULT_URL = "http://127.0.0.1:11434"
 DEFAULT_MODEL = "llama3.1:8b"
 URL_VARIABLE = "ATTRIBUTION_ASSISTANT_URL"
@@ -79,6 +79,12 @@ A group under "advisory_indicator_leads" is different: a hash, address or domain
 an indicator that a published advisory attributes to that group. Report it as exactly that - an \
 advisory indicator match, a lead to verify - and never say that group is identified or \
 responsible; indicators are reused and shared. \
+Whenever you are asked who did this, about attribution, or for a summary, state BOTH things: \
+which groups are identified (or that none is), AND every group under \
+"advisory_indicator_leads" with the indicator that matched (or that there is no advisory \
+match). Never leave an advisory lead out of such an answer. The digest's \
+"attribution_in_one_sentence" already says both correctly: quote it word for word as the \
+attribution, then add detail; never contradict it. \
 "behavioural overlap" is a similarity between the observed \
 behaviour and a group's public ATT&CK profile; it is NOT the probability that the group is \
 responsible, and the group with the highest overlap is not "the attacker". Say "closest \
@@ -223,6 +229,21 @@ def build_digest(
     # Two different things (ADR-0013, ADR-0018): evidence specific to a group's own
     # tooling identifies it; an advisory indicator match is a third party's lead.
     identified, advisory_leads = named("actor_leads"), named("indicator_leads")
+    # Composed here, not by the model: a small model words this inconsistently.
+    one_sentence = (
+        (
+            f"Identified by evidence specific to the group's own tooling: {', '.join(identified)}."
+            if identified
+            else "No group is identified."
+        )
+        + " "
+        + (
+            "Advisory indicator lead to verify (a published advisory attributes a matching "
+            f"indicator to it; not an identification): {', '.join(advisory_leads)}."
+            if advisory_leads
+            else "No advisory indicator matched."
+        )
+    )
     match = profile_match or {}
     digest: dict[str, Any] = {
         "source": investigation.get("source_id"),
@@ -239,6 +260,7 @@ def build_digest(
         "attribution": {
             "statement": (assessment or {}).get("statement"),
             "reasons": list((assessment or {}).get("reasons") or ()),
+            "attribution_in_one_sentence": one_sentence,
             "identified_groups": identified,
             "advisory_indicator_leads": advisory_leads,
             "group_specific_evidence": [

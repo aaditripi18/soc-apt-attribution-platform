@@ -126,3 +126,10 @@ route guards are unchanged.
 - **Identification and advisory leads are separate (`assistant/3`, 2026-10-12).** The digest listed a group named by an
   advisory indicator under `identified_groups`, beside groups identified by their own tooling. They are now two lists,
   and the model is told to report an advisory match as a lead to verify and never as an identification.
+- **Advisory leads are always stated (`assistant/4`, 2026-10-12).** Checked live on a recording with an advisory match:
+  asked who did it, the model correctly named no group but did not mention the advisory lead until asked directly.
+  The instructions now require every answer about attribution, or a summary, to state both the identified groups and
+  the advisory leads (or that there are none).
+  A re-test showed the small model still wording the same case two ways in one session. The digest now carries
+  `attribution_in_one_sentence`, composed by code from the stored verdict, and the model is told to quote it and
+  never contradict it. This narrows the room for error; it does not remove it.
