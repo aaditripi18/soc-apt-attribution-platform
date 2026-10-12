@@ -38,8 +38,10 @@ console, which the dashboard's note points to.
 
 Verified against Elasticsearch and Kibana 8.15.3 from the project's `docker-compose.yml`: a reference recording
 was run with `--elasticsearch` (48 detections, 120 group matches exported), the file was imported (15 objects,
-migrated by Kibana without error), and the aggregation behind each chart returns data. **The rendered dashboard
-has not been looked at**: that needs a signed-in browser session, which is the operator's to open.
+migrated by Kibana without error), and the aggregation behind each chart returns data. The owner then opened the
+rendered dashboard in a signed-in browser (2026-10-12) and confirmed the expected figures: 48 detections, 16
+techniques, the tactic chart and the profile table led by APT32 at about 56%. Individual panels were not reviewed
+one by one.
 
 Recordings uploaded through the console are not exported; only investigations run from the command line with
 `--elasticsearch` are.

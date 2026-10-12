@@ -118,3 +118,8 @@ route guards are unchanged.
   questions reuse the read prompt). The panel's notice that answers are generated and must be checked against
   the evidence therefore matters more, not less. Nothing the assistant says is stored or used by any analysis.
 - **Version.** `assistant/2`.
+
+- **First real answers (2026-10-12).** With `llama3.1:8b` on the owner's laptop (CPU only), two questions about the
+  smallest reference investigation were answered from the digest: the summary matched the stored results and the
+  model declined to name a group, as instructed. Each answer took two to four minutes, and the summary listed hashes
+  of ordinary system programs as indicators without saying they are only candidates to verify.
