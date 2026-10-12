@@ -50,10 +50,8 @@ def load_technique_support_review(path: Path) -> TechniqueSupportReview:
         ids = entry.get("establishes")
         if not source.strip() or source in supported:
             raise TechniqueSupportError(f"{path}: missing or duplicate rule_source {source!r}")
-        if (
-            not isinstance(ids, list)
-            or not ids
-            or not all(isinstance(i, str) and _ATTACK_ID.match(i) for i in ids)
+        if not isinstance(ids, list) or not all(
+            isinstance(i, str) and _ATTACK_ID.match(i) for i in ids
         ):
             raise TechniqueSupportError(f"{path}: {source}: 'establishes' must list ATT&CK ids")
         if not str(entry.get("reason", "")).strip() or not str(entry.get("rule_name", "")).strip():
@@ -71,7 +69,10 @@ def established_ids(declared: frozenset[str], reviewed: frozenset[str] | None) -
     subs = {i for i in declared if "." in i}
     alternatives = len(parents) > 1
     ambiguous = set(declared) if alternatives else (subs if len(subs) > 1 else set())
-    return frozenset(declared - (ambiguous - (reviewed or frozenset())))
+    if reviewed is not None:
+        # a review is authoritative: exactly what it names, which may be nothing
+        return frozenset(declared & reviewed)
+    return frozenset(declared - ambiguous)
 
 
 __all__ = [

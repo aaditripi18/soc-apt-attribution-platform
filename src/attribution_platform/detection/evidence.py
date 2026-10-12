@@ -87,9 +87,10 @@ def ambiguous_technique_ids(
       the match alone.
 
     ``reviewed`` is the set of ATT&CK ids a recorded review of this rule found
-    its logic to establish whenever it fires (``None``: not reviewed); those
-    are never ambiguous, and a review can only name techniques the rule
-    declares. Mappings to software or Groups are not techniques and are never
+    its logic to establish whenever it fires (``None``: not reviewed). A review
+    is authoritative: exactly the techniques it names are established - an
+    empty review says a match establishes none - and it can only name
+    techniques the rule declares. Mappings to software or Groups are not techniques and are never
     returned. A mapping without an ATT&CK id is its own parent."""
     techniques = [
         m.attack_ref
@@ -102,8 +103,10 @@ def ambiguous_technique_ids(
     else:
         subs = [ref.stix_id for ref in techniques if "." in (ref.external_id or "")]
         ambiguous = set(subs) if len(subs) > 1 else set()
-    if reviewed:
-        ambiguous -= {ref.stix_id for ref in techniques if ref.external_id in reviewed}
+    if reviewed is not None:
+        # A reviewed rule establishes exactly what its review names - which may be
+        # nothing, when its logic cannot tell its technique from ordinary activity.
+        ambiguous = {ref.stix_id for ref in techniques if ref.external_id not in reviewed}
     return frozenset(ambiguous)
 
 

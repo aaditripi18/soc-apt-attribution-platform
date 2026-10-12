@@ -103,7 +103,10 @@ def test_what_one_match_establishes(knowledge: AttackKnowledge) -> None:
     assert _ambiguous(knowledge, LSASS, "S0002") == set()
     # a recorded review establishes exactly what it names
     assert _ambiguous(knowledge, LSASS, MASQUERADING, reviewed=frozenset({LSASS})) == {MASQUERADING}
-    assert _ambiguous(knowledge, LSASS, reviewed=frozenset({"T9999"})) == set()
+    # a review is authoritative: an empty one establishes nothing, even for a
+    # rule that declares a single technique
+    assert _ambiguous(knowledge, LSASS, reviewed=frozenset()) == {LSASS}
+    assert _ambiguous(knowledge, DUMPING, LSASS, reviewed=frozenset({DUMPING})) == {LSASS}
 
 
 def test_declared_techniques_are_kept_and_marked(knowledge: AttackKnowledge) -> None:
@@ -135,13 +138,13 @@ def test_the_tracked_review_is_sound(knowledge: AttackKnowledge) -> None:
                 str(m.attack_ref.external_id) for m in rule.technique_mappings
             )
     raw = json.loads(REVIEW.read_text(encoding="utf-8"))["decisions"]
-    assert len(raw) == len(review.supported) >= 4
+    assert len(raw) == len(review.supported) >= 5
     for entry in raw:
         source = entry["rule_source"]
         # a decision is about a rule that exists, restates what it declares, and
         # establishes only some of that - never a technique the rule does not name
         assert set(entry["declares"]) == declared[source], source
-        assert review.for_source(source) < declared[source], source
+        assert review.for_source(source) < declared[source], source  # may be empty
 
 
 @pytest.mark.parametrize(
@@ -150,7 +153,7 @@ def test_the_tracked_review_is_sound(knowledge: AttackKnowledge) -> None:
         {"version": "other"},
         {
             "decisions": [
-                {"rule_source": "sigma:a", "rule_name": "n", "reason": "r", "establishes": []}
+                {"rule_source": "sigma:a", "rule_name": "n", "reason": "r", "establishes": "T1003"}
             ]
         },
         {

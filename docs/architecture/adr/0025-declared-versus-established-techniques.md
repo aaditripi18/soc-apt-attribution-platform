@@ -117,3 +117,28 @@ a review establishes exactly what it names; the tracked review names only existi
 malformed reviews refused; end to end, a tool seen only by name establishes neither of the techniques its rules
 declare, and the same tool seen dumping memory establishes that technique through an adjudicated rule while the
 other declared technique still counts for nothing.
+
+## Amendment A (2026-10-12) — two detections that looked like ordinary activity, inspected
+
+After the re-run, two kinds of detection on the uploaded recording were suspected of being ordinary activity. The
+events were read before anything was changed. Neither was what it had been assumed to be.
+
+**1. "Hidden Executable In NTFS Alternate Data Stream" on the browser.** The events are the browser saving a
+downloaded executable with a double extension — in this lab scenario, the delivery of the payload. So the event is
+relevant, not noise. What is wrong is the technique: the events name the file, no alternate stream and no stream
+contents, and the rule's logic (a stream-creation event whose file has an import hash) never tests for a named
+stream. **Change:** a review may now record that a rule establishes **nothing** (`"establishes": []`), and a review
+is authoritative — exactly what it names is established. This rule is recorded so, with the reason. Its
+detections are still raised and shown, as declared only; NTFS File Attributes is no longer counted from it
+(uploaded recording: 8 counted techniques -> 7; verdict unchanged). The rule is not suppressed and no event is
+excluded.
+
+**2. A built-in Windows script (script host, registry values, group-policy query).** The parent process is
+`netsh trace stop`, which runs that script itself: it is a side effect of stopping a network trace — here, almost
+certainly the recording harness. The detections are true to the rules (a script host did run a Visual Basic
+script; registry values were set). **No change.** Starting a network trace is itself something an attacker may do,
+so the lineage cannot be declared benign by rule, and the platform has no baseline of normal activity to decide
+with. Recorded as a known source of ordinary-activity detections for the validation work.
+
+**What this says about the earlier guess.** One of the two "ordinary" detections was the payload download with
+the wrong technique attached. Reading the events first, as the review of this step asked, changed the fix.
