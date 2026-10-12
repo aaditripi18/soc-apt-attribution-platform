@@ -238,3 +238,42 @@ not checked against ground truth here; that needs the recordings' own annotation
 
 **Not done in this step, deliberately:** no rule was adjudicated and nothing was tuned on these six. The 14
 unreviewed rules are a candidate second batch; adjudicating them makes these recordings development data too.
+
+## Amendment E (2026-10-13) — counted techniques against the dataset authors' own mappings
+
+The measurement Amendment D left open. For the seven single-tool recordings the dataset's metadata lists the
+techniques its authors performed. `scripts/measure_technique_ground_truth.py` compares those with the techniques
+the platform counted, from the stored snapshots — nothing is run and nothing is tuned
+(`data/validation/technique-ground-truth.json`). Techniques of the Resource Development tactic are set apart: the
+authors state the recordings do not include the preparation of the files.
+
+| | Authors' techniques in the recordings | Counted exactly | Counted as parent / sub | Not counted |
+|---|---|---|---|---|
+| All seven | 45 | 15 | 1 | 29 |
+| Three whose results informed development | 21 | 7 | 1 | 13 |
+| Four held out from this ADR | 24 | 8 | 0 | 16 |
+
+**About a third of what the authors performed is counted** (16 of 45; 8 of 24 on the held-out four). The two
+figures are close, so this is not an effect of tuning; it is what the detection content sees.
+
+- **Counted every time:** LSASS Memory and System Owner/User Discovery — the core of each simulation.
+- **Never counted:**
+  - User Execution: Malicious File (the payload being run) — no rule recognises it; the same gap as the
+    double-extension download recorded in Amendment A.
+  - System Information Discovery — detected in the three recordings checked, but only by low-level (enrich)
+    rules, which are shown and never compared.
+  - Exfiltration Over C2 Channel and Ingress Tool Transfer — network behaviour; the host logs analysed here do
+    not show it, and the recordings' network captures were not part of these runs.
+  - Process Discovery, Process Injection, Windows Service, Query Registry — not detected in the recordings where
+    the authors list them.
+- **Counted but not listed by the authors:** 17 across the seven (4 on the held-out four). Not false positives by
+  that fact alone — the authors list the simulation's steps, not everything on the host — but they include the
+  side effects of the recording setup found in Amendment A (a built-in script and its registry writes).
+
+**What this changes.** "Coverage" in this project has meant that a rule exists (declared), then that a rule can
+establish the technique. This is the first figure for what is actually counted on real recordings of known
+content, and it is about one third. It says where detection work would pay: execution of a delivered file, the
+enrich-only discovery techniques, and network telemetry — not more rule imports for techniques already covered.
+
+**Limits.** Seven recordings of one family (credential dumping with different tools), one host each; the authors'
+lists are coarse (no times, no events), so a "found" technique was not checked to be found on the right event.

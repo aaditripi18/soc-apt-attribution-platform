@@ -1,0 +1,273 @@
+{
+ "version": "technique-ground-truth/1",
+ "ground_truth": "OTRF Security-Datasets metadata, attack_mappings (the dataset authors' own)",
+ "all": {
+  "authors_techniques_in_recordings": 45,
+  "found_exactly": 15,
+  "found_as_parent_or_sub": 1,
+  "missed": 29,
+  "counted_but_not_listed_by_authors": 17
+ },
+ "used_in_development": {
+  "authors_techniques_in_recordings": 21,
+  "found_exactly": 7,
+  "found_as_parent_or_sub": 1,
+  "missed": 13,
+  "counted_but_not_listed_by_authors": 13
+ },
+ "held_out_from_adr_0025": {
+  "authors_techniques_in_recordings": 24,
+  "found_exactly": 8,
+  "found_as_parent_or_sub": 0,
+  "missed": 16,
+  "counted_but_not_listed_by_authors": 4
+ },
+ "cases": [
+  {
+   "campaign": "LSASS_campaign_01",
+   "recording": "otrf-lsass-01-logonpasswords",
+   "results_informed_development": true,
+   "authors_techniques": [
+    "T1003.001",
+    "T1033",
+    "T1055.002",
+    "T1057",
+    "T1082",
+    "T1134.001",
+    "T1204.002",
+    "T1587.001",
+    "T1608.001"
+   ],
+   "not_in_the_recording_per_authors": [
+    "T1587.001",
+    "T1608.001"
+   ],
+   "found_exactly": [
+    "T1003.001",
+    "T1033",
+    "T1134.001"
+   ],
+   "found_as_parent_or_sub": [],
+   "missed": [
+    "T1055.002",
+    "T1057",
+    "T1082",
+    "T1204.002"
+   ],
+   "counted_but_not_listed_by_authors": [
+    "T1059.005",
+    "T1112",
+    "T1615",
+    "T1685.001"
+   ]
+  },
+  {
+   "campaign": "LSASS_campaign_02",
+   "recording": "sample-windows-credential-dumping.zip",
+   "results_informed_development": true,
+   "authors_techniques": [
+    "T1003.001",
+    "T1033",
+    "T1041",
+    "T1082",
+    "T1105",
+    "T1204.002",
+    "T1587.001",
+    "T1608.001"
+   ],
+   "not_in_the_recording_per_authors": [
+    "T1587.001",
+    "T1608.001"
+   ],
+   "found_exactly": [
+    "T1003.001",
+    "T1033"
+   ],
+   "found_as_parent_or_sub": [],
+   "missed": [
+    "T1041",
+    "T1082",
+    "T1105",
+    "T1204.002"
+   ],
+   "counted_but_not_listed_by_authors": [
+    "T1059.005",
+    "T1112",
+    "T1588.002",
+    "T1615"
+   ]
+  },
+  {
+   "campaign": "LSASS_campaign_03",
+   "recording": "otrf-lsass-03-comsvcs",
+   "results_informed_development": true,
+   "authors_techniques": [
+    "T1003.001",
+    "T1033",
+    "T1041",
+    "T1055.002",
+    "T1057",
+    "T1082",
+    "T1204.002",
+    "T1543.003",
+    "T1587.001",
+    "T1608.001"
+   ],
+   "not_in_the_recording_per_authors": [
+    "T1587.001",
+    "T1608.001"
+   ],
+   "found_exactly": [
+    "T1003.001",
+    "T1033"
+   ],
+   "found_as_parent_or_sub": [
+    "T1055.002"
+   ],
+   "missed": [
+    "T1041",
+    "T1057",
+    "T1082",
+    "T1204.002",
+    "T1543.003"
+   ],
+   "counted_but_not_listed_by_authors": [
+    "T1055.012",
+    "T1059.005",
+    "T1112",
+    "T1134.001",
+    "T1615"
+   ]
+  },
+  {
+   "campaign": "LSASS_campaign_04",
+   "recording": "otrf-lsass-04-out-minidump",
+   "results_informed_development": false,
+   "authors_techniques": [
+    "T1003.001",
+    "T1033",
+    "T1041",
+    "T1082",
+    "T1204.002",
+    "T1587.001",
+    "T1608.001"
+   ],
+   "not_in_the_recording_per_authors": [
+    "T1587.001",
+    "T1608.001"
+   ],
+   "found_exactly": [
+    "T1003.001",
+    "T1033"
+   ],
+   "found_as_parent_or_sub": [],
+   "missed": [
+    "T1041",
+    "T1082",
+    "T1204.002"
+   ],
+   "counted_but_not_listed_by_authors": [
+    "T1059.001"
+   ]
+  },
+  {
+   "campaign": "LSASS_campaign_05",
+   "recording": "otrf-lsass-05-sharpdump",
+   "results_informed_development": false,
+   "authors_techniques": [
+    "T1003.001",
+    "T1012",
+    "T1033",
+    "T1041",
+    "T1082",
+    "T1105",
+    "T1204.002",
+    "T1587.001",
+    "T1608.001"
+   ],
+   "not_in_the_recording_per_authors": [
+    "T1587.001",
+    "T1608.001"
+   ],
+   "found_exactly": [
+    "T1003.001",
+    "T1033"
+   ],
+   "found_as_parent_or_sub": [],
+   "missed": [
+    "T1012",
+    "T1041",
+    "T1082",
+    "T1105",
+    "T1204.002"
+   ],
+   "counted_but_not_listed_by_authors": [
+    "T1059.005",
+    "T1112",
+    "T1615"
+   ]
+  },
+  {
+   "campaign": "LSASS_campaign_06",
+   "recording": "otrf-lsass-06-outflank-dumpert",
+   "results_informed_development": false,
+   "authors_techniques": [
+    "T1003.001",
+    "T1033",
+    "T1041",
+    "T1082",
+    "T1105",
+    "T1204.002",
+    "T1587.001",
+    "T1608.001"
+   ],
+   "not_in_the_recording_per_authors": [
+    "T1587.001",
+    "T1608.001"
+   ],
+   "found_exactly": [
+    "T1003.001",
+    "T1033"
+   ],
+   "found_as_parent_or_sub": [],
+   "missed": [
+    "T1041",
+    "T1082",
+    "T1105",
+    "T1204.002"
+   ],
+   "counted_but_not_listed_by_authors": []
+  },
+  {
+   "campaign": "LSASS_campaign_07",
+   "recording": "otrf-lsass-07-nanodump",
+   "results_informed_development": false,
+   "authors_techniques": [
+    "T1003.001",
+    "T1033",
+    "T1041",
+    "T1082",
+    "T1105",
+    "T1204.002",
+    "T1587.001",
+    "T1608.001"
+   ],
+   "not_in_the_recording_per_authors": [
+    "T1587.001",
+    "T1608.001"
+   ],
+   "found_exactly": [
+    "T1003.001",
+    "T1033"
+   ],
+   "found_as_parent_or_sub": [],
+   "missed": [
+    "T1041",
+    "T1082",
+    "T1105",
+    "T1204.002"
+   ],
+   "counted_but_not_listed_by_authors": []
+  }
+ ]
+}
