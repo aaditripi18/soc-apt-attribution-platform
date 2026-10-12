@@ -178,3 +178,23 @@ each full event.
   on its own 17% -> 15%. By overlap the known actor is now at positions 14-124 (before this batch 10-116). The
   recovered evidence is real behaviour that those groups' public profiles do not list. Nothing was adjusted for it.
 - The browser stream rule had also been counted in both LSASS runs; it no longer is.
+
+## Amendment C (2026-10-12) — the two rules left unread, read in full with their events
+
+- **"Mounting Hidden or WebDav Remote Shares"** (the largest contributor: 47 events, counted once per declared
+  technique, 329 Evidence items). Establishes **nothing** at rule level: its three kinds of target (hidden share,
+  WebDAV over SSL, http) are alternatives that the translated branches do not separate, and the rule observes
+  neither the account used nor any account discovery. The 47 matched events were all mounts of another host's
+  administrative share with supplied credentials — SMB/Windows Admin Shares in fact, which the rule cannot establish
+  for every match. In that recording another rule establishes the technique, so nothing is lost there.
+  **Limitation recorded:** a decision is per rule and cannot depend on the matched event; an event-conditioned
+  decision would recover such evidence in general and is not supported.
+- **"Potential Meterpreter/CobaltStrike Activity"**. Establishes **Token Impersonation/Theft**: both branches are
+  the published named-pipe impersonation methods of one command, and the matched events (two recordings) are the
+  second branch exactly. Creating a process with the token is not observed and stays declared only.
+
+25 decisions; 4 rules remain read and left ambiguous. Re-run (audit 46,048 checks, all passing; snapshot
+`data/validation/history/investigations.after-review-batch-2.json`): the two LSASS tool runs each count one more
+technique (Token Impersonation/Theft: 7 -> 8 and 8 -> 9); the two emulations and the uploaded recording are
+unchanged; no verdict, candidate count or known-actor position changed (positions 14-124). The outcome matched
+what was predicted before the re-run.

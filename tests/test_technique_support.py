@@ -138,7 +138,7 @@ def test_the_tracked_review_is_sound(knowledge: AttackKnowledge) -> None:
                 str(m.attack_ref.external_id) for m in rule.technique_mappings
             )
     raw = json.loads(REVIEW.read_text(encoding="utf-8"))["decisions"]
-    assert len(raw) == len(review.supported) >= 23
+    assert len(raw) == len(review.supported) >= 25
     for entry in raw:
         source = entry["rule_source"]
         # a decision is about a rule that exists, restates what it declares, and

@@ -1,11 +1,11 @@
 {
  "version": "technique-support-coverage/1",
- "review_sha256": "cdc11be9670efa43f23d2c585a8e5f75d80cd34b49cc47cffb38dcd37f469473",
+ "review_sha256": "af40ce7c140cc82b654e6310e354921af8596a8fc500a28eec79764999039529",
  "scope": "core-tier rules of the Sigma and Elastic packs (the enrich tier is never compared)",
  "core_source_rules": {
   "one_claim": 1530,
-  "alternatives": 642,
-  "reviewed": 23
+  "alternatives": 640,
+  "reviewed": 25
  },
  "techniques_declared_by_a_core_rule": 384,
  "techniques_established_by_a_core_rule": 297,

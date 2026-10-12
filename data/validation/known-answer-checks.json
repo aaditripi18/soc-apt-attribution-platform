@@ -29,7 +29,7 @@
   {
    "source_id": "otrf-apt29-day1",
    "source_sha256": "98a073140860560d70080ace9142961be4f64b4862bae892d62d0f254d0fdbe5",
-   "investigation_id": "investigation::23f984e9e2440ff6686860efece6540f76cdfbfe9be1af8f2c653cb04b523eac",
+   "investigation_id": "investigation::0371460821b6238c7658c1eac25f8e63cef4cac9831aa9015778014d711235c7",
    "kind": "emulation",
    "known_actor": {
     "attack_id": "G0016",
@@ -116,7 +116,7 @@
   {
    "source_id": "otrf-apt3-empire",
    "source_sha256": "ab4d1ec4e44102c87946a974f93aa248e49e5001e01fac3f137ec7e61bbc18ed",
-   "investigation_id": "investigation::59ec9d8074f814b9794678c3c50141f874de755f4aec4e41aa6495c16a4499b6",
+   "investigation_id": "investigation::2aed7548b6af8ce248fbd03d77d5081c27011c73ae81ac87b3a5712fea358d71",
    "kind": "emulation",
    "known_actor": {
     "attack_id": "G0022",
@@ -201,7 +201,7 @@
   {
    "source_id": "otrf-lsass-01-logonpasswords",
    "source_sha256": "79045fcc5a8689efed8db4911cadc11b554ef8b0bed1428ee490bb8c3f2578e6",
-   "investigation_id": "investigation::89003a36a31279592f1495a7fd383443eef23057f268d4d634f408267d638ca3",
+   "investigation_id": "investigation::1227276cfe90bc3f8b8ccfc91b16b33e84d3358458e1088c22aa481c75faa1d8",
    "kind": "tool_test",
    "known_actor": null,
    "known_basis": "OTRF Security Datasets: one credential-dumping tool run; no actor",
@@ -209,7 +209,7 @@
    "named_actors": [],
    "statement": "No actor can be singled out from this evidence. Many Groups are consistent with it, and nothing observed is specific to one of them.",
    "units": 7,
-   "observed_techniques": 7,
+   "observed_techniques": 8,
    "candidates": 120,
    "known_actor_profile_techniques": null,
    "known_actor_techniques_observed": null,
@@ -241,14 +241,14 @@
      "ordering": "F1 of overlap/profile and overlap/observed",
      "level": "technique",
      "groups_ordered": 93,
-     "would_name": "Gorgon Group",
+     "would_name": "FIN8",
      "known_actor_position": null
     },
     {
      "ordering": "observed techniques in profile (count)",
      "level": "parent technique",
      "groups_ordered": 133,
-     "would_name": "Wizard Spider",
+     "would_name": "FIN8",
      "known_actor_position": null
     },
     {
@@ -277,7 +277,7 @@
   {
    "source_id": "otrf-lsass-03-comsvcs",
    "source_sha256": "97a834cd72b0803d544c62cc45a41b18a4cc04a605735096be4bc5dad5e9fe7b",
-   "investigation_id": "investigation::80e5a75e067a31c59435f5f61c969802039746c58bb3110f7a97253f6b87e815",
+   "investigation_id": "investigation::741ece107c0f88dcac5a86321534ce974f67f7eef85d63a75c2ca17cb7463290",
    "kind": "tool_test",
    "known_actor": null,
    "known_basis": "OTRF Security Datasets: one credential-dumping tool run; no actor",
@@ -285,7 +285,7 @@
    "named_actors": [],
    "statement": "No actor can be singled out from this evidence. Many Groups are consistent with it, and nothing observed is specific to one of them.",
    "units": 9,
-   "observed_techniques": 8,
+   "observed_techniques": 9,
    "candidates": 125,
    "known_actor_profile_techniques": null,
    "known_actor_techniques_observed": null,
@@ -324,7 +324,7 @@
      "ordering": "observed techniques in profile (count)",
      "level": "parent technique",
      "groups_ordered": 133,
-     "would_name": "Wizard Spider",
+     "would_name": "FIN8",
      "known_actor_position": null
     },
     {

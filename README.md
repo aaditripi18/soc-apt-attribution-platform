@@ -105,7 +105,7 @@ reports, not a different way of counting.
 - **Declared is not established.** A rule's ATT&CK tags describe the rule, not the match. Each detection records
   every technique its rule declares, but only what the match establishes is compared with group profiles
   ([ADR-0025](docs/architecture/adr/0025-declared-versus-established-techniques.md)): of the 384 techniques core rules
-  declare, 297 are established by at least one rule and 87 are declared only (23 rules reviewed so far). "Established" means established under
+  declare, 297 are established by at least one rule and 87 are declared only (25 rules reviewed so far). "Established" means established under
   that documented policy (the structure of a rule's tags, or a recorded review of the rule), not proven by experiment.
 - **A technique is "covered"** when at least one counted rule maps to it. It does not mean the technique has been
   detected in real data: that has been shown only for the techniques that fire on the recordings under

@@ -339,23 +339,40 @@
     "T1021.006"
    ],
    "reason": "Every match is the WinRM provider host process, as the image or the parent: a remote-management session. PowerShell is the usual plug-in but the rule does not observe it."
-  }
- ],
- "left_ambiguous_after_reading": [
+  },
   {
    "rule_source": "elastic:c4210e1c-64f2-4f48-b67e-b5a8ffe3aa14",
    "rule_name": "Mounting Hidden or WebDav Remote Shares",
-   "why": "net use of a hidden share, a WebDAV share or an http location: the branches are different kinds of remote resource and the rest of the query was not read in full."
-  },
-  {
-   "rule_source": "elastic:00140285-b827-4aee-aa09-8113f58a08f3",
-   "rule_name": "Potential Credential Access via Windows Utilities",
-   "why": "Several dump utilities; the procdump branch does not test which process is dumped."
+   "declares": [
+    "T1021",
+    "T1021.002",
+    "T1078",
+    "T1078.003",
+    "T1087",
+    "T1087.001",
+    "T1087.002"
+   ],
+   "establishes": [],
+   "reason": "Read in full: net.exe or net1.exe with 'use' and a target that is a hidden share, a WebDAV share over SSL, or an http location, excluding deletions. The three kinds of target are alternatives, and the translated branches keep the hidden-share and WebDAV patterns together, so a match does not say which was mounted. Mounting a WebDAV location is not SMB/Windows Admin Shares, and nothing in the rule observes which account was used or any account discovery. Inspected events (47, one recording): every one mounted an administrative share of another host with supplied credentials - those events are SMB/Windows Admin Shares, but the rule cannot establish that for every match. That technique is established there by another rule; nothing is lost in that recording. A decision conditioned on the matched event would recover it in general and is not supported yet."
   },
   {
    "rule_source": "sigma:15619216-e993-4721-b590-4c520615a67d",
    "rule_name": "Potential Meterpreter/CobaltStrike Activity",
-   "why": "Named-pipe privilege escalation patterns; the later branches of the rule were not read in full."
+   "declares": [
+    "T1134.001",
+    "T1134.002"
+   ],
+   "establishes": [
+    "T1134.001"
+   ],
+   "reason": "Read in full: a child of the service control manager that either echoes a value into a named pipe or runs rundll32 on a DLL with the ',a /p:' arguments - the two published named-pipe impersonation methods of the getsystem command. Both are Token Impersonation/Theft; neither branch observes a new process being created with the token. Inspected events (two recordings): the second branch exactly, a temporary DLL run by rundll32 under services.exe."
+  }
+ ],
+ "left_ambiguous_after_reading": [
+  {
+   "rule_source": "elastic:00140285-b827-4aee-aa09-8113f58a08f3",
+   "rule_name": "Potential Credential Access via Windows Utilities",
+   "why": "Several dump utilities; the procdump branch does not test which process is dumped."
   },
   {
    "rule_source": "sigma:730fc21b-eaff-474b-ad23-90fd265d4988",
