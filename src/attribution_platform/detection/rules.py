@@ -87,6 +87,7 @@ from attribution_platform.attack_knowledge.resolution import (
     AttackReferenceError,
     resolve_attack_ref,
 )
+from attribution_platform.detection.aggregation import Aggregation, aggregation_from_dict
 from attribution_platform.detection.contracts import (
     MATCH_OPERATORS,
     DetectionResult,
@@ -427,6 +428,9 @@ class DetectionRule:
     content_hash: str | None = None
     rule_family: str | None = None
     evidence_quality: EvidenceQuality | None = None
+    #: ADR-0015 Amendment C: set for a multi-event rule. Its conditions then only
+    #: select matching events; :mod:`.stateful` decides which sets of them detect.
+    aggregation: Aggregation | None = None
 
     def __post_init__(self) -> None:
         if not isinstance(self.rule_ref, RuleRef):
@@ -714,24 +718,40 @@ class DetectionEngine:
             return range(len(self.rules))  # unexpected shape: evaluate everything
         return sorted(scoped.union(index.unscoped))
 
+    def evaluate_split(
+        self, observation: Observation
+    ) -> tuple[tuple[DetectionResult, ...], tuple[tuple[DetectionRule, DetectionResult], ...]]:
+        """``(detections, matches of multi-event rules)`` for one Observation. A
+        multi-event rule (one with an ``aggregation``) never detects on its own:
+        its match is returned for :mod:`.stateful` to count (ADR-0015 Amendment C)."""
+        if not isinstance(observation, Observation):
+            raise DetectionError(
+                f"DetectionEngine.evaluate requires domain Observations, "
+                f"got {type(observation).__name__}"
+            )
+        results: list[DetectionResult] = []
+        pending: list[tuple[DetectionRule, DetectionResult]] = []
+        fired_families: set[str] = set()
+        for position in self._candidates(observation):
+            rule = self.rules[position]
+            if rule.rule_family is not None and rule.rule_family in fired_families:
+                continue
+            result = rule.evaluate(observation)
+            if result is not None:
+                if rule.aggregation is None:
+                    results.append(result)
+                else:
+                    pending.append((rule, result))
+                if rule.rule_family is not None:
+                    fired_families.add(rule.rule_family)
+        return tuple(results), tuple(pending)
+
     def evaluate(self, observations: Sequence[Observation]) -> tuple[DetectionResult, ...]:
+        """Every single-event detection. Multi-event rules need the whole
+        recording and are not evaluated here (see :meth:`evaluate_split`)."""
         results: list[DetectionResult] = []
         for observation in observations:
-            if not isinstance(observation, Observation):
-                raise DetectionError(
-                    f"DetectionEngine.evaluate requires domain Observations, "
-                    f"got {type(observation).__name__}"
-                )
-            fired_families: set[str] = set()
-            for position in self._candidates(observation):
-                rule = self.rules[position]
-                if rule.rule_family is not None and rule.rule_family in fired_families:
-                    continue
-                result = rule.evaluate(observation)
-                if result is not None:
-                    results.append(result)
-                    if rule.rule_family is not None:
-                        fired_families.add(rule.rule_family)
+            results.extend(self.evaluate_split(observation)[0])
         return tuple(results)
 
 
@@ -869,6 +889,11 @@ def _rule_from_dict(
             f"{where}: invalid evidence_quality {evidence_quality_raw!r}: {exc}"
         ) from exc
 
+    raw_aggregation = d.get("aggregation")
+    aggregation = (
+        aggregation_from_dict(raw_aggregation, where=where) if raw_aggregation is not None else None
+    )
+
     return DetectionRule(
         rule_ref=rule_ref,
         conditions=conditions,
@@ -878,6 +903,7 @@ def _rule_from_dict(
         content_hash=content_hash,
         rule_family=rule_family,
         evidence_quality=evidence_quality,
+        aggregation=aggregation,
     )
 
 

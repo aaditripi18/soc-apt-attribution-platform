@@ -31,6 +31,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import re
 import tomllib
 from collections.abc import Mapping
 from dataclasses import dataclass, field
@@ -73,7 +74,8 @@ from attribution_platform.detection_content.sigma_import import (
 )
 
 IMPORTER_METHOD = "elastic-importer"
-IMPORTER_VERSION = "1.2"  # 1.1: several data streams; 1.2: analysed text fields
+# 1.1: several data streams; 1.2: analysed text fields; 1.3: threshold and new-terms rules
+IMPORTER_VERSION = "1.3"
 
 CORE_SEVERITIES = frozenset({"medium", "high", "critical"})
 ENRICH_SEVERITIES = frozenset({"low"})
@@ -117,6 +119,8 @@ class ElasticRuleOutcome:
     rejection: RejectionReason | None = None
     technique_ids: tuple[str, ...] = ()
     dropped_ids: tuple[str, ...] = ()
+    #: ``threshold`` / ``new_terms`` for a multi-event rule (Amendment C)
+    multi_event: str | None = None
 
     def to_json(self, commit: str) -> dict[str, Any]:
         enrich = {"content_tier": "enrich"} if self.content_tier == "enrich" else {}
@@ -148,6 +152,7 @@ class ElasticRuleOutcome:
             "gap_reasons": dict(sorted(self.reasons.items())),
             "attack_ids": list(self.technique_ids),
             "dropped_attack_ids": list(self.dropped_ids),
+            **({"multi_event": self.multi_event} if self.multi_event else {}),
         }
 
 
@@ -371,6 +376,104 @@ def _dedupe(conjunct: Conjunct) -> Conjunct:
 # Per-rule import
 # ===========================================================================
 
+# ===========================================================================
+# Multi-event rules (Amendment C)
+# ===========================================================================
+
+_UNIT_SECONDS = {"s": 1, "m": 60, "h": 3600, "d": 86400}
+_DURATION = re.compile(r"\A(?:now-)?(\d+)([smhd])\Z")
+#: Kibana's defaults for a rule that states neither.
+_DEFAULT_FROM, _DEFAULT_INTERVAL = "now-6m", "5m"
+
+
+def _seconds(text: str) -> int | None:
+    found = _DURATION.match(text.strip())
+    return int(found.group(1)) * _UNIT_SECONDS[found.group(2)] if found else None
+
+
+def _aggregation_field(
+    name: str, profile: EventProfile, stream: DataStream
+) -> dict[str, str] | Gap | None:
+    """How a grouping field is read on ``profile``'s events; ``None`` when those
+    events never carry it (they are then never counted, as in Elasticsearch)."""
+    if name in profile.constants:
+        values = profile.constants[name]
+        if values is None:
+            return None
+        if len(values) != 1:
+            return Gap(GapKind.TRANSLATION, f"aggregation_field:{name}:multi_valued_constant")
+        return {"name": name, "constant": values[0]}
+    if name in profile.always_contains:
+        return Gap(GapKind.TRANSLATION, f"aggregation_field:{name}:undetermined")
+    if stream.absent(name):
+        return None
+    ecs_type = stream.views.type_of(name)
+    if ecs_type is None:
+        return Gap(GapKind.TELEMETRY, f"field:{name}")
+    if ecs_type == "text":
+        return Gap(GapKind.TRANSLATION, f"aggregation_field:{name}:text")
+    return {"name": name, "field_path": stream.views.path(name)}
+
+
+def _aggregation(
+    rule: Mapping[str, Any], profile: EventProfile, stream: DataStream
+) -> dict[str, Any] | Gap | None:
+    """The rule-pack ``aggregation`` of a threshold / new-terms rule on one event
+    profile, a :class:`Gap` when it cannot be reproduced exactly, or ``None``
+    when the profile's events can never be counted."""
+
+    def fields(names: list[str]) -> list[dict[str, str]] | Gap | None:
+        out = []
+        for name in names:
+            resolved = _aggregation_field(name, profile, stream)
+            if resolved is None or isinstance(resolved, Gap):
+                return resolved
+            out.append(resolved)
+        return out
+
+    if rule.get("type") == "new_terms":
+        spec = rule.get("new_terms") or {}
+        windows = spec.get("history_window_start") or [{}]
+        history = _seconds(str(windows[0].get("value", "")))
+        names = [str(n) for n in spec.get("value") or []]
+        if history is None or not names:
+            return Gap(GapKind.TRANSLATION, "new_terms:unreadable_specification")
+        resolved = fields(names)
+        if resolved is None or isinstance(resolved, Gap):
+            return resolved
+        return {"kind": "new_terms", "fields": resolved, "history_seconds": history}
+
+    spec = rule.get("threshold") or {}
+    raw_names = spec.get("field") or []
+    names = [raw_names] if isinstance(raw_names, str) else [str(n) for n in raw_names]
+    look_back = _seconds(str(rule.get("from") or _DEFAULT_FROM))
+    interval = _seconds(str(rule.get("interval") or _DEFAULT_INTERVAL))
+    value = spec.get("value")
+    if look_back is None or interval is None or not isinstance(value, int) or value < 1:
+        return Gap(GapKind.TRANSLATION, "threshold:unreadable_specification")
+    if look_back <= interval:
+        # no distance between events is inside one look-back window on every schedule
+        return Gap(GapKind.TRANSLATION, "threshold:no_guaranteed_window")
+    resolved = fields(names)
+    if resolved is None or isinstance(resolved, Gap):
+        return resolved
+    cardinality = []
+    for entry in spec.get("cardinality") or []:
+        counted = _aggregation_field(str(entry.get("field")), profile, stream)
+        if counted is None or isinstance(counted, Gap):
+            return counted
+        needed = entry.get("value")
+        if not isinstance(needed, int) or needed < 1:
+            return Gap(GapKind.TRANSLATION, "threshold:unreadable_specification")
+        cardinality.append({"field": counted, "count": needed})
+    return {
+        "kind": "threshold",
+        "fields": resolved,
+        "count": value,
+        "span_seconds": look_back - interval,
+        "cardinality": cardinality,
+    }
+
 
 def _threat_ids(rule: Mapping[str, Any]) -> list[str]:
     ids: list[str] = []
@@ -445,10 +548,14 @@ def _import_rule(
     if not mappings:
         return reject(RejectionReason.NO_ATTACK_MAPPING, "no_attack_mapping")
 
+    # Amendment C: a threshold or new-terms rule is a KQL query plus a statement of
+    # which sets of matching events detect.
+    multi_event = rule_type in ("threshold", "new_terms") and language == "kuery"
+    outcome.multi_event = rule_type if multi_event else None
     single_event = (rule_type == "eql" and is_single_event_eql(str(rule.get("query", "")))) or (
         rule_type == "query" and language == "kuery"
     )
-    if not single_event:
+    if not single_event and not multi_event:
         kind = "eql_sequence" if rule_type == "eql" else f"{rule_type}/{language or '-'}"
         return reject(RejectionReason.TRANSLATION_GAP, f"rule_type:{kind}")
     index_patterns = tuple(str(i) for i in rule.get("index", []) or [])
@@ -497,6 +604,17 @@ def _import_rule(
             outcome.reasons[key] = outcome.reasons.get(key, 0) + 1
             total += 1
             continue
+        aggregation: dict[str, Any] | None = None
+        if multi_event:
+            built = _aggregation(rule, profile, stream)
+            if built is None:
+                continue  # these events never carry a grouping field: never counted
+            if isinstance(built, Gap):
+                key = f"{built.kind.value}:{built.detail}"
+                outcome.reasons[key] = outcome.reasons.get(key, 0) + 1
+                total += 1
+                continue
+            aggregation = built
         profiles.append(profile.profile_id)
         selector = [Literal(p, o, v, False, n) for p, o, v, n in profile.selector]  # type: ignore[arg-type]
         for raw in conjuncts:
@@ -520,9 +638,15 @@ def _import_rule(
                     # Branches of one Elastic rule are one detection (engine dedups).
                     "rule_family": f"elastic:{outcome.rule_id}",
                     **({"evidence_quality": "low"} if outcome.content_tier == "enrich" else {}),
+                    **({"aggregation": aggregation} if aggregation is not None else {}),
                 }
             )
-    outcome.profiles = tuple(profiles)
+    if rule_type == "new_terms" and outcome.reasons:
+        # A branch that is not reproduced is history that is not seen: a value could
+        # then be called new when it is not. All of the query, or none of the rule.
+        outcome.reasons["new_terms:incomplete_query"] = 1
+        rules = []
+    outcome.profiles = tuple(profiles) if rules else ()
     outcome.conjuncts_total = total
     outcome.conjuncts_imported = len(rules)
     if not rules:

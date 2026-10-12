@@ -614,6 +614,9 @@ class AzureActivityRef:
     authorization_action: str | None = None
     subscription_id: str | None = None
     properties_message: str | None = None
+    #: diagnostic-export layout only: ``resultType`` and ``properties.result`` as logged
+    result_type: str | None = None
+    properties_result: str | None = None
 
 
 @dataclass(frozen=True)

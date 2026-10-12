@@ -12,6 +12,7 @@ from types import MappingProxyType
 from typing import Any
 
 from attribution_platform.detection.derived_cloud import (
+    AZURE_ACTIVITY_VIEWS,
     AZURE_AUDIT_VIEWS,
     AZURE_SIGNIN_VIEWS,
     CLOUDTRAIL_VIEWS,
@@ -37,6 +38,7 @@ VIEW_SETS: Mapping[str, ViewSet] = MappingProxyType(
             O365_VIEWS,
             AZURE_AUDIT_VIEWS,
             AZURE_SIGNIN_VIEWS,
+            AZURE_ACTIVITY_VIEWS,
             OKTA_VIEWS,
             GITHUB_VIEWS,
             KUBERNETES_VIEWS,

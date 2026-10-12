@@ -1,0 +1,89 @@
+{
+ "source": "elastic/integrations (Elastic integration ingest pipeline and pipeline test fixtures)",
+ "source_commit": "ff5328128a30c75046130ae58ddba450caa1f2dc",
+ "license": "Elastic License 2.0",
+ "license_url": "https://github.com/elastic/integrations/blob/ff5328128a30c75046130ae58ddba450caa1f2dc/LICENSE.txt",
+ "retrieved_at_utc": "2026-10-12T07:52:19Z",
+ "method": "scripts/acquire_elastic_conformance.py (commit-pinned; each file verified against its git blob id)",
+ "approval": "owner instruction 2026-10-10 (extend Elastic rules to further log sources)",
+ "purpose": "Conformance oracle for the derived ECS views of this data stream (ADR-0015).",
+ "files": [
+  {
+   "path": "fixtures/test-activitylogs-edgecases.log",
+   "upstream_path": "packages/azure/data_stream/activitylogs/_dev/test/pipeline/test-activitylogs-edgecases.log",
+   "blob_id": "40bd94ab96c623403e5b9e6ebc92f524ae6edaf9",
+   "size_bytes": 11670,
+   "sha256": "fc6d159635fe8e858c4bf58805794b9de0ce9d4af75729f5de2f46f342cf232e"
+  },
+  {
+   "path": "fixtures/test-activitylogs-edgecases.log-expected.json",
+   "upstream_path": "packages/azure/data_stream/activitylogs/_dev/test/pipeline/test-activitylogs-edgecases.log-expected.json",
+   "blob_id": "05950e39eee4dcff06becab4c77b37a07d6b9a5f",
+   "size_bytes": 40899,
+   "sha256": "69cd201b0aa97d9990d5ac007355bab3c2973b5248f59eb8bd77255f030a2474"
+  },
+  {
+   "path": "fixtures/test-activitylogs-identity.log",
+   "upstream_path": "packages/azure/data_stream/activitylogs/_dev/test/pipeline/test-activitylogs-identity.log",
+   "blob_id": "49b0e269a573f01cce9f61638d697eb527f459c2",
+   "size_bytes": 5590,
+   "sha256": "ad859c54e5557c042f715a44bbbcd3811cf35e69b85eaacae90e7c04dc574983"
+  },
+  {
+   "path": "fixtures/test-activitylogs-identity.log-expected.json",
+   "upstream_path": "packages/azure/data_stream/activitylogs/_dev/test/pipeline/test-activitylogs-identity.log-expected.json",
+   "blob_id": "26cae88715ed671e0ff9e564ca0a09e397fedea3",
+   "size_bytes": 19944,
+   "sha256": "bfd2ecbd61fb41b51a4725a845662004c49f73f4963233a86a58b687ac2f7548"
+  },
+  {
+   "path": "fixtures/test-activitylogs-raw.log",
+   "upstream_path": "packages/azure/data_stream/activitylogs/_dev/test/pipeline/test-activitylogs-raw.log",
+   "blob_id": "7e69b255cb5305067b5a2962f10464364bb2867e",
+   "size_bytes": 4534,
+   "sha256": "7e6a0d5d3fcb699a8211a8e8d7f3d01d37bcedbe25790f2cdae060d51ef2d645"
+  },
+  {
+   "path": "fixtures/test-activitylogs-raw.log-expected.json",
+   "upstream_path": "packages/azure/data_stream/activitylogs/_dev/test/pipeline/test-activitylogs-raw.log-expected.json",
+   "blob_id": "9ac8aa57e3aded698a73c3ef0f83faaa4c4583de",
+   "size_bytes": 17210,
+   "sha256": "cdbd533c2e19e7980baa0211cd3d4237503a81ed61c33e772ca2d28804d803b1"
+  },
+  {
+   "path": "fixtures/test-common-config.yml",
+   "upstream_path": "packages/azure/data_stream/activitylogs/_dev/test/pipeline/test-common-config.yml",
+   "blob_id": "4da226416540fb12d8c5a4c4b74ecce1f60b3e66",
+   "size_bytes": 46,
+   "sha256": "08ff6f4fc622fbd65822153c9a2e72550eacd5a354f69519f734c6ff4bc0cadf"
+  },
+  {
+   "path": "fixtures/test-time-formats-corner-cases.log",
+   "upstream_path": "packages/azure/data_stream/activitylogs/_dev/test/pipeline/test-time-formats-corner-cases.log",
+   "blob_id": "fba11dc417fd12e8eb06fb36036d962b3786592b",
+   "size_bytes": 733,
+   "sha256": "908c62188f5c753917fd3255053be1eb9f0ecbee4a030bda54d388c15b9a0ed7"
+  },
+  {
+   "path": "fixtures/test-time-formats-corner-cases.log-expected.json",
+   "upstream_path": "packages/azure/data_stream/activitylogs/_dev/test/pipeline/test-time-formats-corner-cases.log-expected.json",
+   "blob_id": "e5bd17bc9a1810241b8f2a282d1769ca3ec7fb57",
+   "size_bytes": 7394,
+   "sha256": "74619f0f9625721772b92b1af486f9732f8c35e1a5e2ef88a1d7c91abde7ab09"
+  },
+  {
+   "path": "pipeline/azure-shared-pipeline.yml",
+   "upstream_path": "packages/azure/data_stream/activitylogs/elasticsearch/ingest_pipeline/azure-shared-pipeline.yml",
+   "blob_id": "b0f2dc78ad62749c3fe0e482a6af08fce06f5ea2",
+   "size_bytes": 5400,
+   "sha256": "6c87cc8f34f8297e1461814f4388b83c1cc4df7bcdb38ddb6c89969fd393ec7f"
+  },
+  {
+   "path": "pipeline/default.yml",
+   "upstream_path": "packages/azure/data_stream/activitylogs/elasticsearch/ingest_pipeline/default.yml",
+   "blob_id": "b6ac1b385afea5338baec769a170add6a2a02554",
+   "size_bytes": 18186,
+   "sha256": "82ec2ad0bfbaf4405484ee553a10c626fc99ce818bfe8390953f1afce2d3ed30"
+  }
+ ]
+}

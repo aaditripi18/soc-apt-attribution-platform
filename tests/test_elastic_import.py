@@ -218,7 +218,7 @@ def test_rule_types_and_indices_outside_scope_are_rejected(
 ) -> None:
     rules = {
         "seq": _toml("seq", "sequence by host.id [process where true] [file where true]"),
-        "nt": _toml("nt", 'process.name:"a"', rule_type="new_terms", language="kuery"),
+        "nt": _toml("nt", "FROM logs-* | LIMIT 1", rule_type="esql", language="esql"),
         "endpoint": _toml(
             "endpoint", 'process where process.name : "a"', index='["logs-endpoint.events.*"]'
         ),
@@ -226,7 +226,7 @@ def test_rule_types_and_indices_outside_scope_are_rejected(
     }
     _, report, _ = _import(tmp_path, knowledge, rules)
     assert report["seq"]["gap_reasons"] == {"rule_type:eql_sequence": 1}
-    assert report["nt"]["gap_reasons"] == {"rule_type:new_terms/kuery": 1}
+    assert report["nt"]["gap_reasons"] == {"rule_type:esql/esql": 1}
     assert report["endpoint"]["gap_reasons"] == {"index:no_supported_data_stream": 1}
     assert report["nomap"]["rejection"] == "no_attack_mapping"
     assert report["nomap"]["dropped_attack_ids"] == ["T9999"]

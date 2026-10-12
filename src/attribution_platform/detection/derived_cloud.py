@@ -107,9 +107,32 @@ def _request_parameters_flattened(obs: Observation, sub_path: str) -> tuple[str,
     )
 
 
+def _cloudtrail_account(obs: Observation) -> str | None:
+    """``userIdentity.accountId`` when the record has one, else
+    ``recipientAccountId`` (the pipeline renames the first into
+    ``cloud.account.id`` and copies the second only into an empty field)."""
+    if attr(obs, "aws_cloudtrail") is None:
+        return None
+    acting = _trail(obs, "user_identity_account_id")
+    return str(acting) if acting is not None else attr(obs, "cloud", "account_id")
+
+
+def _cloudtrail_user_id(obs: Observation) -> Any:
+    """``userIdentity.principalId``. For an ``IdentityCenterUser`` without one the
+    pipeline falls back to ``onBehalfOf.userId``, which the adapter does not keep."""
+    if attr(obs, "aws_cloudtrail") is None:
+        return None
+    principal = _trail(obs, "user_identity_principal_id")
+    if principal is None and _trail(obs, "user_identity_type") == "IdentityCenterUser":
+        return UNDETERMINED
+    return principal
+
+
 CLOUDTRAIL_VIEWS: ViewSet = build_view_set(
     "elastic_cloudtrail",
     {
+        "cloud.account.id": _cloudtrail_account,
+        "user.id": _cloudtrail_user_id,
         "event.category": lambda o: _cloudtrail_category(o, "category"),
         "event.type": lambda o: _cloudtrail_category(o, "type"),
         "aws.cloudtrail.request_parameters": _request_parameters,
@@ -402,7 +425,62 @@ KUBERNETES_VIEWS: ViewSet = build_view_set(
     },
 )
 
+# ---------------------------------------------------------------------------
+# Azure Activity Log, diagnostic export (packages/azure/data_stream/activitylogs)
+# ---------------------------------------------------------------------------
+
+#: ``category`` (lower-cased) -> ``event.type``, the pipeline's own table.
+_ACTIVITY_EVENT_TYPE: Mapping[str, tuple[str, ...]] = MappingProxyType(
+    {"write": ("change",), "read": ("access",), "delete": ("deletion",), "action": ("change",)}
+)
+
+
+def _activity(obs: Observation, name: str) -> Any:
+    """A field of an exported Activity Log event. Elastic's integration reads
+    only that layout: for the REST form of the same log (same dataset here) what
+    its pipeline would produce is unknown, so every view is undetermined."""
+    if attr(obs, "azure_activity") is None:
+        return None
+    if obs.raw_reference.source_type != "azure_activity_export":
+        return UNDETERMINED
+    return attr(obs, "azure_activity", name)
+
+
+def _activity_outcome(obs: Observation) -> Any:
+    """``resultType`` as logged when it is success / failure in any case; else
+    ``properties.result`` when it is exactly success / failure / unknown."""
+    result_type = _activity(obs, "result_type")
+    if result_type is UNDETERMINED:
+        return UNDETERMINED
+    if result_type is not None and str(result_type).lower() in ("success", "failure"):
+        return result_type
+    fallback = _activity(obs, "properties_result")
+    return fallback if fallback in ("success", "failure", "unknown") else None
+
+
+def _activity_type(obs: Observation) -> Any:
+    category = _activity(obs, "category")
+    if category is None or category is UNDETERMINED:
+        return category
+    return _ACTIVITY_EVENT_TYPE.get(str(category).lower())
+
+
+AZURE_ACTIVITY_VIEWS: ViewSet = build_view_set(
+    "elastic_azure_activity",
+    {
+        "azure.activitylogs.operation_name": lambda o: _activity(o, "operation_name"),
+        "event.action": lambda o: _activity(o, "operation_name"),
+        "azure.activitylogs.result_type": lambda o: _activity(o, "result_type"),
+        "azure.activitylogs.category": lambda o: _activity(o, "category"),
+        "event.outcome": _activity_outcome,
+        "event.type": _activity_type,
+    },
+    arrays=frozenset({"event.type"}),
+)
+
+
 __all__ = [
+    "AZURE_ACTIVITY_VIEWS",
     "AZURE_AUDIT_VIEWS",
     "AZURE_SIGNIN_VIEWS",
     "CLOUDTRAIL_VIEWS",

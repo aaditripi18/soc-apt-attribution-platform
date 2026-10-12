@@ -20,6 +20,7 @@ from typing import Any
 import pytest
 
 from attribution_platform.detection.derived_cloud import (
+    AZURE_ACTIVITY_VIEWS,
     AZURE_AUDIT_VIEWS,
     AZURE_SIGNIN_VIEWS,
     CLOUDTRAIL_VIEWS,
@@ -40,6 +41,7 @@ from attribution_platform.detection.derived_security import SECURITY_VIEWS, secu
 from attribution_platform.detection.derived_views import ViewSet
 from attribution_platform.detection_content.elastic_field_map import STREAMS
 from attribution_platform.domain import Observation
+from attribution_platform.sources.azure_activity import AzureActivityExportSourceAdapter
 from attribution_platform.sources.cloudtrail import CloudTrailSourceAdapter
 from attribution_platform.sources.entra import EntraIdSourceAdapter
 from attribution_platform.sources.errors import SourceAdapterError
@@ -132,6 +134,12 @@ CASES = [
     Case("o365_audit", O365_VIEWS, O365SourceAdapter().to_observations, 370),
     Case("azure_auditlogs", AZURE_AUDIT_VIEWS, EntraIdSourceAdapter().to_observations, 11),
     Case("azure_signinlogs", AZURE_SIGNIN_VIEWS, EntraIdSourceAdapter().to_observations, 66),
+    Case(
+        "azure_activitylogs",
+        AZURE_ACTIVITY_VIEWS,
+        AzureActivityExportSourceAdapter().to_observations,
+        4,
+    ),
     Case("okta_system", OKTA_VIEWS, OktaSourceAdapter().to_observations, 26),
     Case("github_audit", GITHUB_VIEWS, GitHubAuditSourceAdapter().to_observations, 10),
     Case(
@@ -173,6 +181,8 @@ def test_every_view_equals_the_pipeline_output(case: Case) -> None:
 #: Views no fixture event of the stream has a value for (they stay verified by
 #: reading the pipeline; listed so a silently untested view cannot be added).
 _NOT_IN_FIXTURES: dict[str, set[str]] = {
+    # no fixture event of an Activity Log category has a success / failure result
+    "azure_activitylogs": {"event.outcome"},
     "okta_system": {"okta.outcome.reason"},
     "kubernetes_audit_logs": {"kubernetes.audit.objectRef.subresource"},
     # no fixture script block carries a script path

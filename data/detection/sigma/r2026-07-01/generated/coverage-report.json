@@ -6,7 +6,7 @@
   "rule_packs": [
    {
     "pack_id": "elastic-195f15c0bac8",
-    "content_hash": "4ba4b0a2c3a971f7617f6f9f0235d8a58d670f4f750335a45d5ac24d9cb6f651"
+    "content_hash": "6211b615c3a7cbffe11462376dfa9982ad2a2692aab3730fa3552eff34200543"
    },
    {
     "pack_id": "sigma-r2026-07-01-sigma_core++",
@@ -50,12 +50,12 @@
    }
   },
   "elastic_import": {
-   "importer": "elastic-importer/1.2",
+   "importer": "elastic-importer/1.3",
    "source": "elastic/detection-rules (Elastic prebuilt detection rules)",
    "source_commit": "195f15c0bac84540bfe47abb8e26dbf8184eb69a",
    "manifest_sha256": "9031b14885213de2801db475aac1d28504c4aef8cb798d606c38313bf1578071",
    "lark_version": "1.3.1",
-   "field_map_version": "elastic-field-map/3",
+   "field_map_version": "elastic-field-map/5",
    "integrations_commit": "ff5328128a30c75046130ae58ddba450caa1f2dc",
    "ecs_version": "8.17.0",
    "data_streams": [
@@ -66,6 +66,7 @@
     "logs-o365.audit-default",
     "logs-azure.auditlogs-default",
     "logs-azure.signinlogs-default",
+    "logs-azure.activitylogs-default",
     "logs-okta.system-default",
     "logs-github.audit-default",
     "logs-kubernetes.audit_logs-default"
@@ -97,26 +98,26 @@
   "group_used_techniques": 498,
   "active_groups": 176,
   "techniques_by_status": {
-   "covered": 398,
-   "telemetry_gap": 30,
+   "covered": 404,
+   "telemetry_gap": 29,
    "translation_gap": 5,
    "not_observable_on_supported_platforms": 87,
-   "no_sigma_rule": 177
+   "no_sigma_rule": 172
   },
   "covered_techniques_by_origin": {
-   "elastic": 291,
+   "elastic": 303,
    "sigma": 336
   },
   "covered_techniques_by_origin_only": {
-   "elastic": 62,
-   "sigma": 107
+   "elastic": 68,
+   "sigma": 101
   },
   "group_used_techniques_by_status": {
-   "covered": 317,
-   "telemetry_gap": 17,
+   "covered": 322,
+   "telemetry_gap": 16,
    "translation_gap": 4,
    "not_observable_on_supported_platforms": 63,
-   "no_sigma_rule": 97
+   "no_sigma_rule": 93
   },
   "groups_with_empty_technique_profile": 4,
   "groups_with_zero_covered": 5,
@@ -140,25 +141,11 @@
    "groups_touched_upper_bound": 7
   },
   {
-   "blocker": "field:ClassName",
-   "supported_product": true,
-   "techniques_upper_bound": 2,
-   "group_used_techniques_upper_bound": 2,
-   "groups_touched_upper_bound": 9
-  },
-  {
    "blocker": "field:DestinationHostname",
    "supported_product": true,
    "techniques_upper_bound": 2,
    "group_used_techniques_upper_bound": 2,
    "groups_touched_upper_bound": 29
-  },
-  {
-   "blocker": "field:DeviceDescription",
-   "supported_product": true,
-   "techniques_upper_bound": 2,
-   "group_used_techniques_upper_bound": 2,
-   "groups_touched_upper_bound": 9
   },
   {
    "blocker": "logsource:bitbucket/audit",
@@ -170,6 +157,20 @@
   {
    "blocker": "event_code:6423",
    "supported_product": false,
+   "techniques_upper_bound": 1,
+   "group_used_techniques_upper_bound": 1,
+   "groups_touched_upper_bound": 1
+  },
+  {
+   "blocker": "field:ClassName",
+   "supported_product": true,
+   "techniques_upper_bound": 1,
+   "group_used_techniques_upper_bound": 1,
+   "groups_touched_upper_bound": 1
+  },
+  {
+   "blocker": "field:DeviceDescription",
+   "supported_product": true,
    "techniques_upper_bound": 1,
    "group_used_techniques_upper_bound": 1,
    "groups_touched_upper_bound": 1
@@ -503,10 +504,10 @@
    "attack_id": "G0007",
    "name": "APT28",
    "profile_techniques": 93,
-   "covered": 71,
+   "covered": 72,
    "by_status": {
-    "covered": 71,
-    "telemetry_gap": 3,
+    "covered": 72,
+    "telemetry_gap": 2,
     "translation_gap": 0,
     "not_observable_on_supported_platforms": 10,
     "no_sigma_rule": 9
@@ -527,10 +528,6 @@
     {
      "attack_id": "T1071.003",
      "status": "no_sigma_rule"
-    },
-    {
-     "attack_id": "T1091",
-     "status": "telemetry_gap"
     },
     {
      "attack_id": "T1092",
@@ -696,19 +693,15 @@
    "attack_id": "G0012",
    "name": "Darkhotel",
    "profile_techniques": 24,
-   "covered": 20,
+   "covered": 21,
    "by_status": {
-    "covered": 20,
-    "telemetry_gap": 1,
+    "covered": 21,
+    "telemetry_gap": 0,
     "translation_gap": 0,
     "not_observable_on_supported_platforms": 0,
     "no_sigma_rule": 3
    },
    "uncovered": [
-    {
-     "attack_id": "T1091",
-     "status": "telemetry_gap"
-    },
     {
      "attack_id": "T1497",
      "status": "no_sigma_rule"
@@ -741,21 +734,17 @@
    "attack_id": "G0016",
    "name": "APT29",
    "profile_techniques": 66,
-   "covered": 55,
+   "covered": 56,
    "by_status": {
-    "covered": 55,
+    "covered": 56,
     "telemetry_gap": 3,
     "translation_gap": 0,
     "not_observable_on_supported_platforms": 2,
-    "no_sigma_rule": 6
+    "no_sigma_rule": 5
    },
    "uncovered": [
     {
      "attack_id": "T1027.006",
-     "status": "no_sigma_rule"
-    },
-    {
-     "attack_id": "T1037",
      "status": "no_sigma_rule"
     },
     {
@@ -1498,10 +1487,10 @@
    "attack_id": "G0046",
    "name": "FIN7",
    "profile_techniques": 67,
-   "covered": 58,
+   "covered": 59,
    "by_status": {
-    "covered": 58,
-    "telemetry_gap": 2,
+    "covered": 59,
+    "telemetry_gap": 1,
     "translation_gap": 1,
     "not_observable_on_supported_platforms": 3,
     "no_sigma_rule": 3
@@ -1514,10 +1503,6 @@
     {
      "attack_id": "T1036.004",
      "status": "translation_gap"
-    },
-    {
-     "attack_id": "T1091",
-     "status": "telemetry_gap"
     },
     {
      "attack_id": "T1497.002",
@@ -1549,10 +1534,10 @@
    "attack_id": "G0047",
    "name": "Gamaredon Group",
    "profile_techniques": 70,
-   "covered": 54,
+   "covered": 55,
    "by_status": {
-    "covered": 54,
-    "telemetry_gap": 6,
+    "covered": 55,
+    "telemetry_gap": 5,
     "translation_gap": 0,
     "not_observable_on_supported_platforms": 2,
     "no_sigma_rule": 8
@@ -1580,10 +1565,6 @@
     },
     {
      "attack_id": "T1041",
-     "status": "telemetry_gap"
-    },
-    {
-     "attack_id": "T1091",
      "status": "telemetry_gap"
     },
     {
@@ -2323,23 +2304,15 @@
    "attack_id": "G0081",
    "name": "Tropic Trooper",
    "profile_techniques": 40,
-   "covered": 35,
+   "covered": 37,
    "by_status": {
-    "covered": 35,
-    "telemetry_gap": 2,
+    "covered": 37,
+    "telemetry_gap": 1,
     "translation_gap": 0,
     "not_observable_on_supported_platforms": 0,
-    "no_sigma_rule": 3
+    "no_sigma_rule": 2
    },
    "uncovered": [
-    {
-     "attack_id": "T1052.001",
-     "status": "no_sigma_rule"
-    },
-    {
-     "attack_id": "T1091",
-     "status": "telemetry_gap"
-    },
     {
      "attack_id": "T1221",
      "status": "telemetry_gap"
@@ -2784,22 +2757,18 @@
    "attack_id": "G0096",
    "name": "APT41",
    "profile_techniques": 82,
-   "covered": 68,
+   "covered": 69,
    "by_status": {
-    "covered": 68,
+    "covered": 69,
     "telemetry_gap": 3,
     "translation_gap": 1,
     "not_observable_on_supported_platforms": 3,
-    "no_sigma_rule": 7
+    "no_sigma_rule": 6
    },
    "uncovered": [
     {
      "attack_id": "T1036.004",
      "status": "translation_gap"
-    },
-    {
-     "attack_id": "T1037",
-     "status": "no_sigma_rule"
     },
     {
      "attack_id": "T1071.002",
@@ -3041,19 +3010,15 @@
    "attack_id": "G0106",
    "name": "Rocke",
    "profile_techniques": 36,
-   "covered": 33,
+   "covered": 34,
    "by_status": {
-    "covered": 33,
+    "covered": 34,
     "telemetry_gap": 1,
     "translation_gap": 0,
     "not_observable_on_supported_platforms": 0,
-    "no_sigma_rule": 2
+    "no_sigma_rule": 1
    },
    "uncovered": [
-    {
-     "attack_id": "T1037",
-     "status": "no_sigma_rule"
-    },
     {
      "attack_id": "T1102.001",
      "status": "telemetry_gap"
@@ -3504,13 +3469,13 @@
    "attack_id": "G0129",
    "name": "Mustang Panda",
    "profile_techniques": 85,
-   "covered": 65,
+   "covered": 67,
    "by_status": {
-    "covered": 65,
-    "telemetry_gap": 2,
+    "covered": 67,
+    "telemetry_gap": 1,
     "translation_gap": 0,
     "not_observable_on_supported_platforms": 6,
-    "no_sigma_rule": 12
+    "no_sigma_rule": 11
    },
    "uncovered": [
     {
@@ -3531,14 +3496,6 @@
     },
     {
      "attack_id": "T1041",
-     "status": "telemetry_gap"
-    },
-    {
-     "attack_id": "T1052.001",
-     "status": "no_sigma_rule"
-    },
-    {
-     "attack_id": "T1091",
      "status": "telemetry_gap"
     },
     {
@@ -3752,13 +3709,13 @@
    "attack_id": "G0139",
    "name": "TeamTNT",
    "profile_techniques": 56,
-   "covered": 48,
+   "covered": 49,
    "by_status": {
-    "covered": 48,
+    "covered": 49,
     "telemetry_gap": 1,
     "translation_gap": 0,
     "not_observable_on_supported_platforms": 1,
-    "no_sigma_rule": 6
+    "no_sigma_rule": 5
    },
    "uncovered": [
     {
@@ -3771,10 +3728,6 @@
     },
     {
      "attack_id": "T1496.001",
-     "status": "no_sigma_rule"
-    },
-    {
-     "attack_id": "T1552.005",
      "status": "no_sigma_rule"
     },
     {
@@ -4121,20 +4074,15 @@
    "attack_id": "G1007",
    "name": "Aoqin Dragon",
    "profile_techniques": 9,
-   "covered": 8,
+   "covered": 9,
    "by_status": {
-    "covered": 8,
-    "telemetry_gap": 1,
+    "covered": 9,
+    "telemetry_gap": 0,
     "translation_gap": 0,
     "not_observable_on_supported_platforms": 0,
     "no_sigma_rule": 0
    },
-   "uncovered": [
-    {
-     "attack_id": "T1091",
-     "status": "telemetry_gap"
-    }
-   ]
+   "uncovered": []
   },
   {
    "attack_id": "G1008",
@@ -4294,10 +4242,10 @@
    "attack_id": "G1014",
    "name": "LuminousMoth",
    "profile_techniques": 28,
-   "covered": 21,
+   "covered": 22,
    "by_status": {
-    "covered": 21,
-    "telemetry_gap": 3,
+    "covered": 22,
+    "telemetry_gap": 2,
     "translation_gap": 0,
     "not_observable_on_supported_platforms": 3,
     "no_sigma_rule": 1
@@ -4305,10 +4253,6 @@
    "uncovered": [
     {
      "attack_id": "T1041",
-     "status": "telemetry_gap"
-    },
-    {
-     "attack_id": "T1091",
      "status": "telemetry_gap"
     },
     {
@@ -5274,22 +5218,18 @@
    "attack_id": "G1048",
    "name": "UNC3886",
    "profile_techniques": 49,
-   "covered": 34,
+   "covered": 35,
    "by_status": {
-    "covered": 34,
+    "covered": 35,
     "telemetry_gap": 1,
     "translation_gap": 1,
     "not_observable_on_supported_platforms": 5,
-    "no_sigma_rule": 8
+    "no_sigma_rule": 7
    },
    "uncovered": [
     {
      "attack_id": "T1036.004",
      "status": "translation_gap"
-    },
-    {
-     "attack_id": "T1037",
-     "status": "no_sigma_rule"
     },
     {
      "attack_id": "T1037.004",
@@ -5737,13 +5677,13 @@
    "attack_id": "G1057",
    "name": "ShinyHunters",
    "profile_techniques": 46,
-   "covered": 33,
+   "covered": 34,
    "by_status": {
-    "covered": 33,
+    "covered": 34,
     "telemetry_gap": 1,
     "translation_gap": 0,
     "not_observable_on_supported_platforms": 7,
-    "no_sigma_rule": 5
+    "no_sigma_rule": 4
    },
    "uncovered": [
     {
@@ -5785,10 +5725,6 @@
     {
      "attack_id": "T1598.003",
      "status": "not_observable_on_supported_platforms"
-    },
-    {
-     "attack_id": "T1619",
-     "status": "no_sigma_rule"
     },
     {
      "attack_id": "T1657",
@@ -5867,9 +5803,9 @@
    "attack_id": "T1003",
    "name": "OS Credential Dumping",
    "status": "covered",
-   "rule_sources": 51,
+   "rule_sources": 52,
    "rule_sources_by_origin": {
-    "elastic": 30,
+    "elastic": 31,
     "sigma": 21
    },
    "rejected_rules_blocked_by": [
@@ -5985,9 +5921,9 @@
    "attack_id": "T1003.006",
    "name": "DCSync",
    "status": "covered",
-   "rule_sources": 8,
+   "rule_sources": 9,
    "rule_sources_by_origin": {
-    "elastic": 2,
+    "elastic": 3,
     "sigma": 6
    },
    "rejected_rules_blocked_by": [
@@ -6268,9 +6204,9 @@
    "attack_id": "T1021",
    "name": "Remote Services",
    "status": "covered",
-   "rule_sources": 22,
+   "rule_sources": 23,
    "rule_sources_by_origin": {
-    "elastic": 18,
+    "elastic": 19,
     "sigma": 4
    },
    "rejected_rules_blocked_by": [
@@ -6406,8 +6342,9 @@
    "attack_id": "T1021.007",
    "name": "Cloud Services",
    "status": "covered",
-   "rule_sources": 1,
+   "rule_sources": 2,
    "rule_sources_by_origin": {
+    "elastic": 1,
     "sigma": 1
    },
    "rejected_rules_blocked_by": [],
@@ -6763,9 +6700,9 @@
    "attack_id": "T1033",
    "name": "System Owner/User Discovery",
    "status": "covered",
-   "rule_sources": 27,
+   "rule_sources": 28,
    "rule_sources_by_origin": {
-    "elastic": 6,
+    "elastic": 7,
     "sigma": 21
    },
    "rejected_rules_blocked_by": [
@@ -6985,9 +6922,11 @@
   {
    "attack_id": "T1037",
    "name": "Boot or Logon Initialization Scripts",
-   "status": "no_sigma_rule",
-   "rule_sources": 0,
-   "rule_sources_by_origin": {},
+   "status": "covered",
+   "rule_sources": 1,
+   "rule_sources_by_origin": {
+    "elastic": 1
+   },
    "rejected_rules_blocked_by": [],
    "supported_platforms": [
     "Linux",
@@ -7082,9 +7021,9 @@
    "attack_id": "T1040",
    "name": "Network Sniffing",
    "status": "covered",
-   "rule_sources": 9,
+   "rule_sources": 10,
    "rule_sources_by_origin": {
-    "elastic": 1,
+    "elastic": 2,
     "sigma": 8
    },
    "rejected_rules_blocked_by": [
@@ -7252,9 +7191,11 @@
   {
    "attack_id": "T1052",
    "name": "Exfiltration Over Physical Medium",
-   "status": "no_sigma_rule",
-   "rule_sources": 0,
-   "rule_sources_by_origin": {},
+   "status": "covered",
+   "rule_sources": 1,
+   "rule_sources_by_origin": {
+    "elastic": 1
+   },
    "rejected_rules_blocked_by": [],
    "supported_platforms": [
     "Linux",
@@ -7266,9 +7207,11 @@
   {
    "attack_id": "T1052.001",
    "name": "Exfiltration over USB",
-   "status": "no_sigma_rule",
-   "rule_sources": 0,
-   "rule_sources_by_origin": {},
+   "status": "covered",
+   "rule_sources": 1,
+   "rule_sources_by_origin": {
+    "elastic": 1
+   },
    "rejected_rules_blocked_by": [],
    "supported_platforms": [
     "Linux",
@@ -7281,9 +7224,9 @@
    "attack_id": "T1053",
    "name": "Scheduled Task/Job",
    "status": "covered",
-   "rule_sources": 15,
+   "rule_sources": 16,
    "rule_sources_by_origin": {
-    "elastic": 10,
+    "elastic": 11,
     "sigma": 5
    },
    "rejected_rules_blocked_by": [
@@ -7657,9 +7600,9 @@
    "attack_id": "T1059",
    "name": "Command and Scripting Interpreter",
    "status": "covered",
-   "rule_sources": 138,
+   "rule_sources": 140,
    "rule_sources_by_origin": {
-    "elastic": 78,
+    "elastic": 80,
     "sigma": 60
    },
    "rejected_rules_blocked_by": [
@@ -8320,9 +8263,9 @@
    "attack_id": "T1078",
    "name": "Valid Accounts",
    "status": "covered",
-   "rule_sources": 46,
+   "rule_sources": 54,
    "rule_sources_by_origin": {
-    "elastic": 25,
+    "elastic": 33,
     "sigma": 21
    },
    "rejected_rules_blocked_by": [
@@ -8355,8 +8298,9 @@
    "attack_id": "T1078.001",
    "name": "Default Accounts",
    "status": "covered",
-   "rule_sources": 3,
+   "rule_sources": 4,
    "rule_sources_by_origin": {
+    "elastic": 1,
     "sigma": 3
    },
    "rejected_rules_blocked_by": [],
@@ -8376,8 +8320,9 @@
    "attack_id": "T1078.002",
    "name": "Domain Accounts",
    "status": "covered",
-   "rule_sources": 4,
+   "rule_sources": 5,
    "rule_sources_by_origin": {
+    "elastic": 1,
     "sigma": 4
    },
    "rejected_rules_blocked_by": [],
@@ -8410,9 +8355,9 @@
    "attack_id": "T1078.004",
    "name": "Cloud Accounts",
    "status": "covered",
-   "rule_sources": 34,
+   "rule_sources": 39,
    "rule_sources_by_origin": {
-    "elastic": 21,
+    "elastic": 26,
     "sigma": 13
    },
    "rejected_rules_blocked_by": [
@@ -8502,9 +8447,9 @@
    "attack_id": "T1087",
    "name": "Account Discovery",
    "status": "covered",
-   "rule_sources": 13,
+   "rule_sources": 14,
    "rule_sources_by_origin": {
-    "elastic": 7,
+    "elastic": 8,
     "sigma": 6
    },
    "rejected_rules_blocked_by": [
@@ -8575,8 +8520,9 @@
    "attack_id": "T1087.004",
    "name": "Cloud Account",
    "status": "covered",
-   "rule_sources": 2,
+   "rule_sources": 3,
    "rule_sources_by_origin": {
+    "elastic": 1,
     "sigma": 2
    },
    "rejected_rules_blocked_by": [],
@@ -8694,9 +8640,11 @@
   {
    "attack_id": "T1091",
    "name": "Replication Through Removable Media",
-   "status": "telemetry_gap",
-   "rule_sources": 0,
-   "rule_sources_by_origin": {},
+   "status": "covered",
+   "rule_sources": 1,
+   "rule_sources_by_origin": {
+    "elastic": 1
+   },
    "rejected_rules_blocked_by": [
     "field:ClassName",
     "field:DeviceDescription"
@@ -8744,9 +8692,9 @@
    "attack_id": "T1098",
    "name": "Account Manipulation",
    "status": "covered",
-   "rule_sources": 56,
+   "rule_sources": 64,
    "rule_sources_by_origin": {
-    "elastic": 43,
+    "elastic": 51,
     "sigma": 13
    },
    "rejected_rules_blocked_by": [
@@ -8784,9 +8732,9 @@
    "attack_id": "T1098.001",
    "name": "Additional Cloud Credentials",
    "status": "covered",
-   "rule_sources": 12,
+   "rule_sources": 15,
    "rule_sources_by_origin": {
-    "elastic": 10,
+    "elastic": 13,
     "sigma": 2
    },
    "rejected_rules_blocked_by": [
@@ -8818,9 +8766,9 @@
    "attack_id": "T1098.003",
    "name": "Additional Cloud Roles",
    "status": "covered",
-   "rule_sources": 16,
+   "rule_sources": 19,
    "rule_sources_by_origin": {
-    "elastic": 14,
+    "elastic": 17,
     "sigma": 2
    },
    "rejected_rules_blocked_by": [
@@ -8874,9 +8822,9 @@
    "attack_id": "T1098.006",
    "name": "Additional Container Cluster Roles",
    "status": "covered",
-   "rule_sources": 5,
+   "rule_sources": 6,
    "rule_sources_by_origin": {
-    "elastic": 5
+    "elastic": 6
    },
    "rejected_rules_blocked_by": [],
    "supported_platforms": [
@@ -9031,9 +8979,9 @@
    "attack_id": "T1110",
    "name": "Brute Force",
    "status": "covered",
-   "rule_sources": 8,
+   "rule_sources": 10,
    "rule_sources_by_origin": {
-    "elastic": 1,
+    "elastic": 3,
     "sigma": 7
    },
    "rejected_rules_blocked_by": [
@@ -9064,8 +9012,9 @@
    "attack_id": "T1110.001",
    "name": "Password Guessing",
    "status": "covered",
-   "rule_sources": 2,
+   "rule_sources": 4,
    "rule_sources_by_origin": {
+    "elastic": 2,
     "sigma": 2
    },
    "rejected_rules_blocked_by": [
@@ -9105,9 +9054,9 @@
    "attack_id": "T1110.003",
    "name": "Password Spraying",
    "status": "covered",
-   "rule_sources": 1,
+   "rule_sources": 2,
    "rule_sources_by_origin": {
-    "elastic": 1
+    "elastic": 2
    },
    "rejected_rules_blocked_by": [],
    "supported_platforms": [
@@ -9615,9 +9564,9 @@
    "attack_id": "T1136",
    "name": "Create Account",
    "status": "covered",
-   "rule_sources": 8,
+   "rule_sources": 9,
    "rule_sources_by_origin": {
-    "elastic": 7,
+    "elastic": 8,
     "sigma": 1
    },
    "rejected_rules_blocked_by": [],
@@ -9676,9 +9625,9 @@
    "attack_id": "T1136.003",
    "name": "Cloud Account",
    "status": "covered",
-   "rule_sources": 4,
+   "rule_sources": 5,
    "rule_sources_by_origin": {
-    "elastic": 4
+    "elastic": 5
    },
    "rejected_rules_blocked_by": [
     "logsource:m365/exchange"
@@ -10858,9 +10807,9 @@
    "attack_id": "T1222",
    "name": "File and Directory Permissions Modification",
    "status": "covered",
-   "rule_sources": 4,
+   "rule_sources": 6,
    "rule_sources_by_origin": {
-    "elastic": 2,
+    "elastic": 4,
     "sigma": 2
    },
    "rejected_rules_blocked_by": [],
@@ -11016,9 +10965,9 @@
    "attack_id": "T1485",
    "name": "Data Destruction",
    "status": "covered",
-   "rule_sources": 28,
+   "rule_sources": 31,
    "rule_sources_by_origin": {
-    "elastic": 14,
+    "elastic": 17,
     "sigma": 14
    },
    "rejected_rules_blocked_by": [
@@ -11074,9 +11023,9 @@
    "attack_id": "T1489",
    "name": "Service Stop",
    "status": "covered",
-   "rule_sources": 14,
+   "rule_sources": 16,
    "rule_sources_by_origin": {
-    "elastic": 3,
+    "elastic": 5,
     "sigma": 11
    },
    "rejected_rules_blocked_by": [
@@ -11095,9 +11044,9 @@
    "attack_id": "T1490",
    "name": "Inhibit System Recovery",
    "status": "covered",
-   "rule_sources": 30,
+   "rule_sources": 32,
    "rule_sources_by_origin": {
-    "elastic": 12,
+    "elastic": 14,
     "sigma": 18
    },
    "rejected_rules_blocked_by": [
@@ -11459,9 +11408,9 @@
    "attack_id": "T1505",
    "name": "Server Software Component",
    "status": "covered",
-   "rule_sources": 7,
+   "rule_sources": 9,
    "rule_sources_by_origin": {
-    "elastic": 7
+    "elastic": 9
    },
    "rejected_rules_blocked_by": [
     "logsource:cisco/aaa"
@@ -11681,8 +11630,9 @@
    "attack_id": "T1529",
    "name": "System Shutdown/Reboot",
    "status": "covered",
-   "rule_sources": 6,
+   "rule_sources": 8,
    "rule_sources_by_origin": {
+    "elastic": 2,
     "sigma": 6
    },
    "rejected_rules_blocked_by": [
@@ -11699,9 +11649,9 @@
    "attack_id": "T1530",
    "name": "Data from Cloud Storage",
    "status": "covered",
-   "rule_sources": 5,
+   "rule_sources": 6,
    "rule_sources_by_origin": {
-    "elastic": 5
+    "elastic": 6
    },
    "rejected_rules_blocked_by": [],
    "supported_platforms": [
@@ -11768,9 +11718,9 @@
    "attack_id": "T1537",
    "name": "Transfer Data to Cloud Account",
    "status": "covered",
-   "rule_sources": 12,
+   "rule_sources": 13,
    "rule_sources_by_origin": {
-    "elastic": 9,
+    "elastic": 10,
     "sigma": 3
    },
    "rejected_rules_blocked_by": [
@@ -11991,9 +11941,9 @@
    "attack_id": "T1546",
    "name": "Event Triggered Execution",
    "status": "covered",
-   "rule_sources": 22,
+   "rule_sources": 23,
    "rule_sources_by_origin": {
-    "elastic": 15,
+    "elastic": 16,
     "sigma": 7
    },
    "rejected_rules_blocked_by": [],
@@ -12483,9 +12433,9 @@
    "attack_id": "T1548",
    "name": "Abuse Elevation Control Mechanism",
    "status": "covered",
-   "rule_sources": 26,
+   "rule_sources": 27,
    "rule_sources_by_origin": {
-    "elastic": 14,
+    "elastic": 15,
     "sigma": 12
    },
    "rejected_rules_blocked_by": [
@@ -12594,9 +12544,9 @@
    "attack_id": "T1550",
    "name": "Use Alternate Authentication Material",
    "status": "covered",
-   "rule_sources": 10,
+   "rule_sources": 13,
    "rule_sources_by_origin": {
-    "elastic": 8,
+    "elastic": 11,
     "sigma": 2
    },
    "rejected_rules_blocked_by": [],
@@ -12615,9 +12565,9 @@
    "attack_id": "T1550.001",
    "name": "Application Access Token",
    "status": "covered",
-   "rule_sources": 6,
+   "rule_sources": 9,
    "rule_sources_by_origin": {
-    "elastic": 4,
+    "elastic": 7,
     "sigma": 2
    },
    "rejected_rules_blocked_by": [],
@@ -12684,9 +12634,9 @@
    "attack_id": "T1552",
    "name": "Unsecured Credentials",
    "status": "covered",
-   "rule_sources": 19,
+   "rule_sources": 23,
    "rule_sources_by_origin": {
-    "elastic": 12,
+    "elastic": 16,
     "sigma": 7
    },
    "rejected_rules_blocked_by": [
@@ -12778,9 +12728,11 @@
   {
    "attack_id": "T1552.005",
    "name": "Cloud Instance Metadata API",
-   "status": "no_sigma_rule",
-   "rule_sources": 0,
-   "rule_sources_by_origin": {},
+   "status": "covered",
+   "rule_sources": 3,
+   "rule_sources_by_origin": {
+    "elastic": 3
+   },
    "rejected_rules_blocked_by": [],
    "supported_platforms": [
     "IaaS"
@@ -13079,9 +13031,9 @@
    "attack_id": "T1556",
    "name": "Modify Authentication Process",
    "status": "covered",
-   "rule_sources": 20,
+   "rule_sources": 21,
    "rule_sources_by_origin": {
-    "elastic": 15,
+    "elastic": 16,
     "sigma": 5
    },
    "rejected_rules_blocked_by": [
@@ -13168,9 +13120,9 @@
    "attack_id": "T1556.006",
    "name": "Multi-Factor Authentication",
    "status": "covered",
-   "rule_sources": 7,
+   "rule_sources": 8,
    "rule_sources_by_origin": {
-    "elastic": 5,
+    "elastic": 6,
     "sigma": 2
    },
    "rejected_rules_blocked_by": [],
@@ -13842,9 +13794,9 @@
    "attack_id": "T1565",
    "name": "Data Manipulation",
    "status": "covered",
-   "rule_sources": 6,
+   "rule_sources": 7,
    "rule_sources_by_origin": {
-    "elastic": 4,
+    "elastic": 5,
     "sigma": 2
    },
    "rejected_rules_blocked_by": [
@@ -13861,9 +13813,9 @@
    "attack_id": "T1565.001",
    "name": "Stored Data Manipulation",
    "status": "covered",
-   "rule_sources": 7,
+   "rule_sources": 8,
    "rule_sources_by_origin": {
-    "elastic": 4,
+    "elastic": 5,
     "sigma": 3
    },
    "rejected_rules_blocked_by": [
@@ -14157,9 +14109,9 @@
    "attack_id": "T1569",
    "name": "System Services",
    "status": "covered",
-   "rule_sources": 5,
+   "rule_sources": 6,
    "rule_sources_by_origin": {
-    "elastic": 4,
+    "elastic": 5,
     "sigma": 1
    },
    "rejected_rules_blocked_by": [],
@@ -14188,9 +14140,9 @@
    "attack_id": "T1569.002",
    "name": "Service Execution",
    "status": "covered",
-   "rule_sources": 38,
+   "rule_sources": 39,
    "rule_sources_by_origin": {
-    "elastic": 4,
+    "elastic": 5,
     "sigma": 34
    },
    "rejected_rules_blocked_by": [
@@ -15664,9 +15616,9 @@
    "attack_id": "T1608",
    "name": "Stage Capabilities",
    "status": "covered",
-   "rule_sources": 5,
+   "rule_sources": 7,
    "rule_sources_by_origin": {
-    "elastic": 3,
+    "elastic": 5,
     "sigma": 2
    },
    "rejected_rules_blocked_by": [],
@@ -15800,9 +15752,9 @@
    "attack_id": "T1613",
    "name": "Container and Resource Discovery",
    "status": "covered",
-   "rule_sources": 2,
+   "rule_sources": 3,
    "rule_sources_by_origin": {
-    "elastic": 1,
+    "elastic": 2,
     "sigma": 1
    },
    "rejected_rules_blocked_by": [],
@@ -15860,9 +15812,11 @@
   {
    "attack_id": "T1619",
    "name": "Cloud Storage Object Discovery",
-   "status": "no_sigma_rule",
-   "rule_sources": 0,
-   "rule_sources_by_origin": {},
+   "status": "covered",
+   "rule_sources": 1,
+   "rule_sources_by_origin": {
+    "elastic": 1
+   },
    "rejected_rules_blocked_by": [],
    "supported_platforms": [
     "IaaS"
@@ -15940,9 +15894,9 @@
    "attack_id": "T1648",
    "name": "Serverless Execution",
    "status": "covered",
-   "rule_sources": 6,
+   "rule_sources": 7,
    "rule_sources_by_origin": {
-    "elastic": 6
+    "elastic": 7
    },
    "rejected_rules_blocked_by": [],
    "supported_platforms": [
@@ -15987,9 +15941,9 @@
    "attack_id": "T1651",
    "name": "Cloud Administration Command",
    "status": "covered",
-   "rule_sources": 1,
+   "rule_sources": 2,
    "rule_sources_by_origin": {
-    "elastic": 1
+    "elastic": 2
    },
    "rejected_rules_blocked_by": [],
    "supported_platforms": [
@@ -16346,9 +16300,9 @@
    "attack_id": "T1685",
    "name": "Disable or Modify Tools",
    "status": "covered",
-   "rule_sources": 207,
+   "rule_sources": 216,
    "rule_sources_by_origin": {
-    "elastic": 88,
+    "elastic": 97,
     "sigma": 119
    },
    "rejected_rules_blocked_by": [
@@ -16395,9 +16349,9 @@
    "attack_id": "T1685.002",
    "name": "Disable or Modify Cloud Log",
    "status": "covered",
-   "rule_sources": 18,
+   "rule_sources": 21,
    "rule_sources_by_origin": {
-    "elastic": 15,
+    "elastic": 18,
     "sigma": 3
    },
    "rejected_rules_blocked_by": [],
@@ -16493,9 +16447,9 @@
    "attack_id": "T1686.001",
    "name": "Cloud Firewall",
    "status": "covered",
-   "rule_sources": 19,
+   "rule_sources": 22,
    "rule_sources_by_origin": {
-    "elastic": 15,
+    "elastic": 18,
     "sigma": 4
    },
    "rejected_rules_blocked_by": [],

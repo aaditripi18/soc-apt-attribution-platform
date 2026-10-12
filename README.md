@@ -76,14 +76,17 @@ against ATT&CK Enterprise v19.2, SigmaHQ `r2026-07-01` and Elastic `detection-ru
 
 - **1,913** Sigma rules imported (plus 78 partial), mapped to **344** ATT&CK ids; every rejected rule is
   listed with its reason (telemetry gap, untranslatable construct, policy).
-- **470** Elastic prebuilt rules translated exactly (444 whole, 26 partial) for Sysmon, Windows
-  Security, PowerShell script blocks, AWS CloudTrail, Microsoft 365, Entra ID, Okta, GitHub and Kubernetes telemetry, mapped to
-  291 ATT&CK ids — **62 not covered by Sigma**
+- **514** Elastic prebuilt rules translated exactly (488 whole, 26 partial) for Sysmon, Windows
+  Security, PowerShell script blocks, AWS CloudTrail, Microsoft 365, Entra ID, Azure activity logs, Okta, GitHub and
+  Kubernetes telemetry, mapped to 303 ATT&CK ids — **68 not covered by Sigma**
   ([ADR-0015](docs/architecture/adr/0015-elastic-prebuilt-rules.md)). Every ECS field they read is
   reproduced from Elastic's own ingest pipeline for that source and checked against Elastic's own
   pipeline test fixtures — down to the Java `HashMap` key order of CloudTrail's request parameters, and
   the tokeniser Elasticsearch applies to PowerShell script text (phrase matches are token-exact).
-- **398 of 697** active techniques are covered, and **317 of 498** of those used by active Groups (336
+  21 of them are multi-event rules: thresholds fire only for events close enough to be counted
+  together under any rule schedule, and "new terms" rules only when the recording itself holds the
+  history the rule compares against (Amendment C).
+- **404 of 697** active techniques are covered, and **322 of 498** of those used by active Groups (336
   and 276 with Sigma alone); **163 of 176**
   active Groups have at least two covered techniques (the minimum to attribute at all).
 - Uncovered techniques are classified, not hidden: no Sigma rule exists, a telemetry gap blocks it, or ATT&CK

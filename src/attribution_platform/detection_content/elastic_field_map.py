@@ -36,6 +36,7 @@ from importlib.resources import files
 from types import MappingProxyType
 
 from attribution_platform.detection.derived_cloud import (
+    AZURE_ACTIVITY_VIEWS,
     AZURE_AUDIT_VIEWS,
     AZURE_SIGNIN_VIEWS,
     CLOUDTRAIL_VIEWS,
@@ -55,7 +56,7 @@ from attribution_platform.detection.derived_security import SECURITY_VIEWS
 from attribution_platform.detection.derived_views import ViewSet
 from attribution_platform.sources.windows_security import SUPPORTED_EVENT_IDS
 
-ELASTIC_FIELD_MAP_VERSION = "elastic-field-map/3"  # 2: several data streams; 3: PowerShell
+ELASTIC_FIELD_MAP_VERSION = "elastic-field-map/5"  # 2: several data streams; 3: PowerShell
 
 INTEGRATIONS_COMMIT = "ff5328128a30c75046130ae58ddba450caa1f2dc"
 ECS_VERSION = "8.17.0"
@@ -516,6 +517,16 @@ STREAMS: tuple[DataStream, ...] = (
         AZURE_SIGNIN_VIEWS,
         "azure/signinlogs",
         "azure.signinlogs",
+    ),
+    # The diagnostic-export layout only (Amendment D): for the REST form of the
+    # same dataset every view is undetermined, so no rule fires on it.
+    _audit_stream(
+        "azure_activity",
+        "azure.activitylogs",
+        "azure",
+        AZURE_ACTIVITY_VIEWS,
+        "azure/activitylogs",
+        "azure.activitylogs",
     ),
     _audit_stream("okta", "okta.system", "okta", OKTA_VIEWS, "okta/okta", "okta.system"),
     _audit_stream("github", "github.audit", "github", GITHUB_VIEWS, "github/audit", "github.audit"),

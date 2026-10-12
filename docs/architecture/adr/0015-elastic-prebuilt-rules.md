@@ -288,3 +288,87 @@ actor-specific pack once ADR-0018 added it beside the technique pack.
 **Not done:** Elastic's sequence, threshold, new-terms, ES|QL and machine-learning rules (they need state across
 events or another query engine); the Elastic Defend, CrowdStrike and SentinelOne data streams (telemetry this
 platform does not ingest); Linux `auditd_manager`; Azure activity logs.
+
+## Amendment C (2026-10-12) — threshold and new-terms rules; what the remaining rules can add
+
+**Measured first.** Before building anything, the rejected rules were ranked by what they could add.
+All 1,745 rejected Elastic rules together name at most **95** techniques beyond the 398 then covered. By
+blocker (upper bounds, overlapping): rules for Elastic Defend endpoint events 58, Linux audit 23, new-terms rules
+on sources the platform reads 17, threshold rules 6, Azure activity logs 6, **EQL sequences on sources the
+platform reads 3**. No Elastic rule names a threat group in a form that could identify one (one rule names FIN7
+and needs network telemetry the platform lacks). The plan was reordered on these numbers.
+
+**Decision.** Threshold and new-terms rules (KQL) are imported: the query is translated exactly as for a
+single-event rule, and the rule pack rule carries an `aggregation` saying which sets of matching events are a
+detection (`detection/aggregation.py`, evaluated over a whole recording by `detection/stateful.py`). A rule with
+an aggregation never fires on one event.
+
+- **Threshold.** Elastic counts the matching events inside each scheduled look-back window, so whether events
+  further apart than *look-back − interval* are counted together depends on when the rule happens to run. Only
+  that guaranteed distance is used (`from` and `interval` of the rule, Kibana's defaults `now-6m` / `5m` when
+  absent; a rule with no such distance is not imported). A detection here is one Elastic raises under every
+  schedule. Grouping fields and `cardinality` (distinct values) are reproduced; an event without a grouping value
+  is not counted; after a detection the group starts from empty.
+- **New terms.** Elastic compares with the history it has indexed (5–15 days in these rules). A recording is all
+  the history there is. A value is called new only if no matching event carried it in the history window before
+  **and** the recording holds an event of the same log source at least that long before. On a recording shorter
+  than the window these rules never fire — the honest result, since the platform cannot know what happened before
+  the recording began. A new-terms rule is imported only if **every** branch of its query translates: a missing
+  branch is history not seen, which could make an old value look new (for a threshold a missing branch only
+  counts fewer events, so partial import stays sound).
+- **Evidence.** The detection is anchored on the event that completed it; the Evidence claim states what was
+  counted (how many events, for which values, within what time, first at when). The Evidence references the
+  anchoring Observation only; the other counted events are named by the claim, not linked.
+
+**Fields added with it.** `cloud.account.id` and `user.id` for AWS CloudTrail, the grouping fields most of these
+rules need: read as Elastic's pipeline sets them (`userIdentity.accountId`, else `recipientAccountId`;
+`userIdentity.principalId`, undetermined for an `IdentityCenterUser` without one) and checked against Elastic's
+CloudTrail fixtures with no divergence (field map `elastic-field-map/4`).
+
+**Result.** 21 multi-event rules imported (18 new-terms, 3 threshold): 493 usable Elastic rules, 300 ATT&CK
+ids; covered techniques **398 → 402** of 697 (317 → 320 of the 498 used by Groups). 260 more threshold /
+new-terms rules stay rejected, each with its reason — mostly a data stream the platform does not read or an
+identity field its views do not have (`user.name`, `host.id`, `user.id` on Windows, `source.ip`).
+
+**Not done, and why.** EQL sequences: at most 3 new techniques for a second parser and a join engine — not
+built. Linux audit rules (at most 23): Elastic's auditd integration merges all records of one audit event into
+one document and names the system call from a table, where this platform's adapter keeps one Observation per
+record and never guesses a system-call name; importing them needs a second, merging reader verified against
+Elastic's own normaliser. That is the largest remaining item and is left as the next step. Azure activity logs: Amendment D.
+
+**Checks.** `tests/test_multi_event_rules.py`: a threshold fires for events within the guaranteed distance and
+not beyond it, per group, once per burst; cardinality; a value is new only with the history recorded; an
+incompletely translated new-terms rule is refused; the claim states what was counted; malformed aggregations are
+refused at load; results do not depend on input order.
+
+## Amendment D (2026-10-12) — Azure activity logs in the diagnostic-export layout
+
+**Finding.** Elastic's Azure integration reads the Activity Log as a *diagnostic setting* exports it (Event Hub /
+storage account: flat `operationName`, `category`, `resultType`, `time`). The platform's Azure adapter read only
+the Azure Monitor REST API form of the same log (`operationName.value`, `status.value`, `eventDataId`). Elastic's
+rules are written against the export's values — operation names in upper case, outcome `Success` — and its
+pipeline has never seen the REST form, so no exact statement about those rules can be made on REST records.
+
+**Decision.**
+
+- A second reader, `AzureActivityExportSourceAdapter`, for the export layout (`sources/azure_activity.py`),
+  routed apart from the REST form and from Entra ID records (same envelope, other log) by `category` and
+  `resourceId`. Values are kept as logged. The layout has no event id: the Observation id is the SHA-256 of the
+  record's canonical JSON. The event dataset is the same as the REST form's, so the Sigma `azure/activitylogs`
+  rules apply to both layouts; the REST form's `status` is a different vocabulary and is not filled from
+  `resultType`.
+- A data stream `logs-azure.activitylogs-default` with views for the fields the rules read
+  (`azure.activitylogs.operation_name`, `event.action`, `event.outcome`, `event.type`,
+  `azure.activitylogs.result_type`, `azure.activitylogs.category`), each as the pinned pipeline derives it.
+  For a REST-form record every view is **undetermined**, so no Elastic rule fires on it, negated or not.
+- Pipeline and fixtures acquired at the pinned integrations commit by `scripts/acquire_elastic_conformance.py`
+  (manifest: `data/detection/elastic/conformance/azure_activitylogs/manifest.json`).
+
+**Verification, and its limit.** The views equal Elastic's expected documents on the fixture events the reader
+accepts (4 of 18; the others are sign-in records or have no operation name), with no divergence. No fixture event
+has a success / failure result, so `event.outcome` — which most of these rules test — is verified by reading the
+two pipeline processors and by unit tests of that reading (`tests/test_azure_activity_export.py`), not by a
+fixture. It is listed as such in the conformance test.
+
+**Result.** 21 Azure rules imported: 514 usable Elastic rules, 303 ATT&CK ids; covered techniques **404 of 697**
+(322 of the 498 used by Groups). Field map `elastic-field-map/5`.

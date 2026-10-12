@@ -24,6 +24,8 @@ when it is an IP address; ``event.action`` = ``operationName.value``.
 
 from __future__ import annotations
 
+import hashlib
+import json
 from collections.abc import Mapping
 from typing import Any
 
@@ -112,9 +114,128 @@ class AzureActivitySourceAdapter:
         )
 
 
+# ---------------------------------------------------------------------------
+# The diagnostic-setting export of the same log (Event Hub / storage account)
+# ---------------------------------------------------------------------------
+
+AZURE_ACTIVITY_EXPORT_SOURCE_TYPE = "azure_activity_export"
+_EXPORT_ADAPTER = "AzureActivityExportSourceAdapter"
+#: Activity Log categories (the Azure Monitor schema's eight, and the
+#: ``Write`` / ``Delete`` / ``Action`` / ``Read`` the export writes for
+#: administrative operations). A diagnostic record of another category belongs
+#: to another log (sign-ins, resource logs) and is not read here.
+ACTIVITY_EXPORT_CATEGORIES = frozenset(
+    {
+        "administrative",
+        "security",
+        "servicehealth",
+        "resourcehealth",
+        "alert",
+        "autoscale",
+        "recommendation",
+        "policy",
+        "write",
+        "delete",
+        "action",
+        "read",
+    }
+)
+
+
+def is_azure_activity_export_record(record: Mapping[str, Any]) -> bool:
+    """Whether ``record`` is an Activity Log event as a diagnostic setting
+    exports it: flat ``operationName`` / ``category`` strings, ``time``,
+    ``resourceId`` — and not an Entra ID record (same envelope, other log)."""
+    resource, category = record.get("resourceId"), record.get("category")
+    return (
+        isinstance(record.get("operationName"), str)
+        and isinstance(record.get("time"), str)
+        and isinstance(resource, str)
+        and "/providers/microsoft.aadiam" not in resource.casefold()
+        and isinstance(category, str)
+        and category.casefold() in ACTIVITY_EXPORT_CATEGORIES
+    )
+
+
+def _properties_result(properties: Any) -> str | None:
+    """``properties.result`` when it is a string. ``properties`` may be logged
+    as an object or as JSON text of one (Elastic's pipeline parses the text)."""
+    if isinstance(properties, str):
+        try:
+            properties = json.loads(properties)
+        except ValueError:
+            return None
+    if not isinstance(properties, Mapping):
+        return None
+    result = properties.get("result")
+    return result if isinstance(result, str) and result.strip() else None
+
+
+class AzureActivityExportSourceAdapter:
+    """Activity Log events in the diagnostic-export layout -> one ``Observation``
+    each (ADR-0015 Amendment D).
+
+    **Event time:** ``time``, ISO 8601 with a zone; without one it is refused.
+    **Identity:** the layout carries no event id, so the Observation id is the
+    SHA-256 of the record's canonical JSON — the same record always gets the
+    same id, and two different records never share one.
+    **Exact values:** ``operationName``, ``category``, ``resultType``, ``level``,
+    ``resourceId``, ``correlationId`` and ``properties.result`` as logged. The
+    REST form's ``status`` is a different vocabulary and is not filled from
+    ``resultType``.
+    """
+
+    @property
+    def source_type(self) -> str:
+        return AZURE_ACTIVITY_EXPORT_SOURCE_TYPE
+
+    def to_observations(self, raw_record: Any) -> tuple[Observation, ...]:
+        if not isinstance(raw_record, Mapping) or not is_azure_activity_export_record(raw_record):
+            raise SourceAdapterError(f"{_EXPORT_ADAPTER}: not an exported Activity Log event")
+        timestamp, precision = zoned_iso_time(raw_record["time"], "time", _EXPORT_ADAPTER)
+        operation = at_path(raw_record, ("operationName",), _EXPORT_ADAPTER)
+        if operation is None:
+            raise SourceAdapterError(f"{_EXPORT_ADAPTER}: operationName is blank")
+        result_type = raw_record.get("resultType")
+        activity = AzureActivityRef(
+            correlation_id=at_path(raw_record, ("correlationId",), _EXPORT_ADAPTER),
+            operation_name=operation,
+            category=at_path(raw_record, ("category",), _EXPORT_ADAPTER),
+            resource_id=at_path(raw_record, ("resourceId",), _EXPORT_ADAPTER),
+            level=at_path(raw_record, ("level",), _EXPORT_ADAPTER),
+            result_type=result_type if isinstance(result_type, str) and result_type else None,
+            properties_result=_properties_result(raw_record.get("properties")),
+        )
+        caller_ip = raw_record.get("callerIpAddress")
+        ip = ip_or_none(caller_ip) if isinstance(caller_ip, str) else None
+        canonical = json.dumps(
+            raw_record, sort_keys=True, separators=(",", ":"), ensure_ascii=False
+        )
+        digest = hashlib.sha256(canonical.encode("utf-8")).hexdigest()
+        observation_id = f"azure-activity-export:sha256:{digest}"
+        return (
+            Observation(
+                observation_id=observation_id,
+                timestamp=timestamp,
+                timestamp_precision=precision,
+                raw_reference=SourceRef(
+                    source_type=AZURE_ACTIVITY_EXPORT_SOURCE_TYPE, source_event_id=observation_id
+                ),
+                event=EventMetadata(kind="event", action=operation, dataset=AZURE_ACTIVITY_DATASET),
+                network=NetworkInfo(source=NetworkEndpoint(ip=ip)) if ip else None,
+                cloud=CloudRef(provider="azure"),
+                azure_activity=activity,
+            ),
+        )
+
+
 __all__ = [
+    "ACTIVITY_EXPORT_CATEGORIES",
     "AZURE_ACTIVITY_DATASET",
+    "AZURE_ACTIVITY_EXPORT_SOURCE_TYPE",
     "AZURE_ACTIVITY_SOURCE_TYPE",
+    "AzureActivityExportSourceAdapter",
     "AzureActivitySourceAdapter",
+    "is_azure_activity_export_record",
     "is_azure_activity_record",
 ]

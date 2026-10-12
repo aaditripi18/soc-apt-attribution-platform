@@ -28,7 +28,7 @@ const STAGES: { name: string; text: string }[] = [
   },
   {
     name: "Detection",
-    text: "Pinned Sigma and Elastic rules, translated exactly, are evaluated on every Observation. A match produces Evidence: one rule, one observation, one ATT&CK technique, with the matched values and the mapping basis in its claim.",
+    text: "Pinned Sigma and Elastic rules, translated exactly, are evaluated on every Observation. A match produces Evidence: one rule, one observation, one ATT&CK technique, with the matched values and the mapping basis in its claim. A few Elastic rules count several events: a threshold rule detects only when enough matching events fall close enough together to be counted under any rule schedule, and a first-time-seen rule only when the logs themselves cover the history it compares against.",
   },
   {
     name: "Correlation",

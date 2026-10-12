@@ -40,11 +40,19 @@ from attribution_platform.correlation import (
     correlate_structurally,
 )
 from attribution_platform.detection import DetectionEngine, derive_evidence_from_detection
+from attribution_platform.detection.contracts import DetectionResult
+from attribution_platform.detection.stateful import (
+    AggregatedMatch,
+    evaluate_aggregations,
+    source_starts,
+)
 from attribution_platform.domain import Evidence, HostRef, Observation
 from attribution_platform.replay.errors import ReplayError
 from attribution_platform.sources.auditd import AuditdSourceAdapter, is_audit_record
 from attribution_platform.sources.azure_activity import (
+    AzureActivityExportSourceAdapter,
     AzureActivitySourceAdapter,
+    is_azure_activity_export_record,
     is_azure_activity_record,
 )
 from attribution_platform.sources.cloudtrail import CloudTrailSourceAdapter, is_cloudtrail_record
@@ -89,6 +97,7 @@ ENTRA_CHANNEL = "<entra-id>"
 O365_CHANNEL = "<o365>"
 CLOUDTRAIL_CHANNEL = "<aws-cloudtrail>"
 AZURE_ACTIVITY_CHANNEL = "<azure-activity>"
+AZURE_ACTIVITY_EXPORT_CHANNEL = "<azure-activity-export>"
 OKTA_CHANNEL = "<okta>"
 GITHUB_CHANNEL = "<github-audit>"
 KUBERNETES_AUDIT_CHANNEL = "<kubernetes-audit>"
@@ -106,6 +115,7 @@ DEFAULT_CHANNEL_ADAPTERS: Mapping[str, Any] = {
     O365_CHANNEL: O365SourceAdapter(),
     CLOUDTRAIL_CHANNEL: CloudTrailSourceAdapter(),
     AZURE_ACTIVITY_CHANNEL: AzureActivitySourceAdapter(),
+    AZURE_ACTIVITY_EXPORT_CHANNEL: AzureActivityExportSourceAdapter(),
     OKTA_CHANNEL: OktaSourceAdapter(),
     GITHUB_CHANNEL: GitHubAuditSourceAdapter(),
     KUBERNETES_AUDIT_CHANNEL: KubernetesAuditSourceAdapter(),
@@ -279,6 +289,8 @@ def channel_of(record: Mapping[str, Any] | str) -> str:
         return CLOUDTRAIL_CHANNEL
     if is_azure_activity_record(record):
         return AZURE_ACTIVITY_CHANNEL
+    if is_azure_activity_export_record(record):
+        return AZURE_ACTIVITY_EXPORT_CHANNEL
     if is_okta_record(record):
         return OKTA_CHANNEL
     if is_github_audit_record(record):
@@ -331,12 +343,25 @@ def analyze_recording(
     ordered = sorted(observations.values(), key=lambda o: o.observation_id)
     precedence = apply_source_precedence(ordered, source.declared_sources)
 
+    detections: dict[str, list[DetectionResult]] = {}
+    pending: list[AggregatedMatch] = []
+    for observation in precedence.kept:
+        fired, matched = engine.evaluate_split(observation)
+        detections[observation.observation_id] = list(fired)
+        pending.extend(AggregatedMatch(rule, result, observation) for rule, result in matched)
+    # Multi-event rules (ADR-0015 Amendment C): counted over the whole recording,
+    # each detection anchored on the Observation that completed it.
+    for detection, anchor in evaluate_aggregations(
+        pending, source_start=source_starts(precedence.kept)
+    ):
+        detections[anchor.observation_id].append(detection)
+
     items: list[tuple[Evidence, Observation]] = []
     context: list[Observation] = []
     for observation in precedence.kept:
         evidences = [
             evidence
-            for detection in engine.evaluate([observation])
+            for detection in detections[observation.observation_id]
             for evidence in derive_evidence_from_detection(
                 detection, observation, knowledge=knowledge
             )

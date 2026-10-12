@@ -58,10 +58,13 @@ def _compose_claim(detection: DetectionResult) -> str:
     field_summary = "; ".join(
         _describe_matched_field(mf) for mf in detection.match_basis.matched_fields
     )
-    return (
+    claim = (
         f"rule {detection.rule_ref.rule_id} v{detection.rule_ref.rule_version} "
         f"({detection.detection_source}) matched: {field_summary}"
     )
+    if detection.aggregate_note is not None:
+        claim += f" [{detection.aggregate_note}]"
+    return claim
 
 
 def derive_evidence_from_detection(

@@ -9,14 +9,14 @@ Counts only — not detection-efficacy or attribution-accuracy claims.
 
 | Status | All active techniques | Used by ≥ 1 active Group |
 |---|---|---|
-| `covered` | 398 | 317 |
-| `telemetry_gap` | 30 | 17 |
+| `covered` | 404 | 322 |
+| `telemetry_gap` | 29 | 16 |
 | `translation_gap` | 5 | 4 |
 | `not_observable_on_supported_platforms` | 87 | 63 |
-| `no_sigma_rule` | 177 | 97 |
+| `no_sigma_rule` | 172 | 93 |
 | **total** | **697** | **498** |
 
-Covered techniques by content source: elastic 291 (62 only by it), sigma 336 (107 only by it).
+Covered techniques by content source: elastic 303 (68 only by it), sigma 336 (101 only by it).
 
 ## Groups
 
@@ -32,11 +32,11 @@ Covered techniques by content source: elastic 291 (62 only by it), sigma 336 (10
 |---|---|---|---|---|
 | `logsource:/proxy` | no | 5 | 4 | 17 |
 | `logsource:cisco/aaa` | no | 5 | 3 | 7 |
-| `field:ClassName` | yes | 2 | 2 | 9 |
 | `field:DestinationHostname` | yes | 2 | 2 | 29 |
-| `field:DeviceDescription` | yes | 2 | 2 | 9 |
 | `logsource:bitbucket/audit` | no | 2 | 1 | 4 |
 | `event_code:6423` | no | 1 | 1 | 1 |
+| `field:ClassName` | yes | 1 | 1 | 1 |
+| `field:DeviceDescription` | yes | 1 | 1 | 1 |
 | `field:Initiated` | yes | 1 | 1 | 27 |
 | `field:IsatapRouter` | yes | 1 | 1 | 1 |
 | `field:activityType` | yes | 1 | 1 | 1 |

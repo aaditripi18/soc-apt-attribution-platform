@@ -49,6 +49,10 @@ STREAMS: dict[str, tuple[str, str]] = {
         "packages/azure/data_stream/signinlogs/elasticsearch/ingest_pipeline",
         "packages/azure/data_stream/signinlogs/_dev/test/pipeline",
     ),
+    "azure_activitylogs": (
+        "packages/azure/data_stream/activitylogs/elasticsearch/ingest_pipeline",
+        "packages/azure/data_stream/activitylogs/_dev/test/pipeline",
+    ),
     "okta_system": (
         "packages/okta/data_stream/system/elasticsearch/ingest_pipeline",
         "packages/okta/data_stream/system/_dev/test/pipeline",

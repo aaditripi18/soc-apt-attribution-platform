@@ -282,6 +282,9 @@ class DetectionResult:
     #: ADR-0007 Amendment A: the firing rule's Evidence quality (``LOW`` for the
     #: enrich tier), passed to every Evidence derived from this detection.
     evidence_quality: EvidenceQuality | None = None
+    #: ADR-0015 Amendment C: for a multi-event rule, what was counted to reach the
+    #: detection (``supporting_observation_ids`` then names every counted event).
+    aggregate_note: str | None = None
     schema_version: str = field(default=DETECTION_RESULT_SCHEMA_VERSION)
 
     def __post_init__(self) -> None:
@@ -340,4 +343,6 @@ class DetectionResult:
             _require_nonempty_str(
                 self.rule_pack_content_hash, "DetectionResult.rule_pack_content_hash"
             )
+        if self.aggregate_note is not None:
+            _require_nonempty_str(self.aggregate_note, "DetectionResult.aggregate_note")
         _require_nonempty_str(self.schema_version, "DetectionResult.schema_version")
