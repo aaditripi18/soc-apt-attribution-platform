@@ -122,6 +122,7 @@ from attribution_platform.domain import (
     TimeSpan,
     UserAgentRef,
     UserRef,
+    WazuhAlertRef,
     WfpFilterRef,
     WmiRef,
     ZeekRef,
@@ -238,6 +239,7 @@ def _observation_from_document(doc: Mapping[str, Any]) -> Observation:
             azure_activity=_flat_ref_from_dict(AzureActivityRef, doc.get("azure_activity")),
             observer=_flat_ref_from_dict(ObserverRef, doc.get("observer")),
             zeek=_flat_ref_from_dict(ZeekRef, doc.get("zeek")),
+            wazuh=_flat_ref_from_dict(WazuhAlertRef, doc.get("wazuh")),
             schema_version=schema_version,
         )
     except ElasticIntegrationError:

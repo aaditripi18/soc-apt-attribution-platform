@@ -121,6 +121,7 @@ OBSERVATIONS_MAPPING: dict[str, Any] = {
     "azure_activity": {"type": "object"},
     "observer": {"type": "object"},
     "zeek": {"type": "object"},
+    "wazuh": {"type": "object"},
 }
 
 #: Explicit field mappings for the Evidence index (Elasticsearch "properties").

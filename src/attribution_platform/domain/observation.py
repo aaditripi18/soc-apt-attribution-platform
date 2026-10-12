@@ -69,6 +69,7 @@ from attribution_platform.domain.entities import (
     ShareRef,
     UserAgentRef,
     UserRef,
+    WazuhAlertRef,
     WfpFilterRef,
     WmiRef,
     ZeekRef,
@@ -105,7 +106,7 @@ class Observation:
       ``account_change`` / ``credential_read`` / ``wfp_filter`` / ``audit`` /
       ``cloud`` / ``user_agent`` / ``entra`` /
       ``o365`` / ``aws_cloudtrail`` / ``okta`` / ``github`` /
-      ``kubernetes_audit`` / ``azure_activity`` / ``observer`` / ``zeek`` — entity
+      ``kubernetes_audit`` / ``azure_activity`` / ``observer`` / ``zeek`` / ``wazuh`` — entity
       groups (added by ADR-0008 Wave 1 for image-load, registry,
       process-access, remote-thread, DNS, stream, pipe, WMI, PowerShell
       logging and Windows Security log events; ADR-0010 / 0011 for Linux Audit
@@ -160,6 +161,7 @@ class Observation:
     azure_activity: AzureActivityRef | None = None
     observer: ObserverRef | None = None
     zeek: ZeekRef | None = None
+    wazuh: WazuhAlertRef | None = None
     schema_version: str = field(default=OBSERVATION_SCHEMA_VERSION)
 
     def __post_init__(self) -> None:

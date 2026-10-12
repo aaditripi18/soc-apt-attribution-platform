@@ -256,7 +256,7 @@ export function UploadPage() {
                 <div className="max-w-xl text-body-sm text-on-surface-variant">
                   {uploads.supported_suffixes.join(" · ")} of JSON-lines logs, up to {megabytes(uploads.max_bytes)}.
                   Windows (Sysmon, Security, PowerShell) is the strongest format; Linux, macOS, cloud and network
-                  logs are read with less detection content behind them.
+                  logs are read with less detection content behind them. A Wazuh alerts.json is read too: its alerts are mapped to techniques and threat groups.
                 </div>
                 <Button variant="primary" onClick={() => input.current?.click()}>
                   <FileUp size={14} />

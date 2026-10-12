@@ -630,6 +630,24 @@ class ObserverRef:
 
 
 @dataclass(frozen=True)
+class WazuhAlertRef:
+    """One Wazuh alert (ADR-0023; all optional), as the manager wrote it.
+    ``rule_groups`` and ``mitre_ids`` are the alert's lists, space-separated
+    (neither a group name nor an ATT&CK id contains a space)."""
+
+    alert_id: str | None = None
+    rule_id: str | None = None
+    rule_level: str | None = None
+    rule_description: str | None = None
+    rule_groups: str | None = None
+    mitre_ids: str | None = None
+    agent_id: str | None = None
+    manager: str | None = None
+    decoder: str | None = None
+    location: str | None = None
+
+
+@dataclass(frozen=True)
 class ZeekRef:
     """One Zeek log record (ADR-0012; all optional), in Zeek's own field names
     and values as logged (``log`` is the Zeek log: ``conn``, ``dns``, …). ``uid``

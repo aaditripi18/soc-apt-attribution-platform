@@ -45,7 +45,8 @@ from pathlib import Path
 
 from attribution_platform.api.__main__ import elasticsearch_client_from_env
 from attribution_platform.api.assistant import service_from_env
-from attribution_platform.api.context import load_api_context
+from attribution_platform.api.context import ApiContext, build_technique_catalogue, load_api_context
+from attribution_platform.api.kibana_export import export_investigation
 from attribution_platform.api.server import create_server
 from attribution_platform.api.uploads import RunResult, UploadService
 from attribution_platform.attack_knowledge.loader import AttackKnowledge, load_attack_knowledge
@@ -293,6 +294,19 @@ def main(argv: Sequence[str] | None = None, env: dict[str, str] | None = None) -
     except (CliError, EmulationReportError) as exc:
         print(f"refused: {exc}", file=sys.stderr)
         return 1
+
+    if "--elasticsearch" in args:
+        # ADR-0024: the same results as flat documents for the Kibana dashboard.
+        charts = ApiContext(
+            knowledge=workbench.knowledge,
+            techniques=build_technique_catalogue(workbench.knowledge),
+        )
+        for report in reports:
+            counts = export_investigation(client, charts, str(report["investigation_id"]))
+            print(
+                f"kibana        {counts['detections']} detections, "
+                f"{counts['group_matches']} group matches exported"
+            )
 
     if "--json" in args:
         out = Path(args[args.index("--json") + 1])

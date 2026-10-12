@@ -73,6 +73,7 @@ from attribution_platform.sources.powershell import PowerShellSourceAdapter
 from attribution_platform.sources.precedence import apply_source_precedence
 from attribution_platform.sources.sysmon import SysmonSourceAdapter
 from attribution_platform.sources.sysmon_xml import is_sysmon_event_xml
+from attribution_platform.sources.wazuh import WazuhAlertSourceAdapter, is_wazuh_alert
 from attribution_platform.sources.windows_security import WindowsSecuritySourceAdapter
 from attribution_platform.sources.windows_system import WindowsSystemSourceAdapter
 from attribution_platform.sources.zeek import (
@@ -81,6 +82,7 @@ from attribution_platform.sources.zeek import (
     is_zeek_record,
     is_zeek_tsv_header,
 )
+from attribution_platform.wazuh_detections import WazuhAlertDetector
 
 #: Channel (case-folded) -> the adapter that reads it. XML event lines (Sysmon
 #: for Linux, ADR-0010 D1) are routed by :data:`XML_EVENT_CHANNEL`; the Sysmon
@@ -98,6 +100,7 @@ O365_CHANNEL = "<o365>"
 CLOUDTRAIL_CHANNEL = "<aws-cloudtrail>"
 AZURE_ACTIVITY_CHANNEL = "<azure-activity>"
 AZURE_ACTIVITY_EXPORT_CHANNEL = "<azure-activity-export>"
+WAZUH_CHANNEL = "<wazuh-alert>"
 OKTA_CHANNEL = "<okta>"
 GITHUB_CHANNEL = "<github-audit>"
 KUBERNETES_AUDIT_CHANNEL = "<kubernetes-audit>"
@@ -116,6 +119,7 @@ DEFAULT_CHANNEL_ADAPTERS: Mapping[str, Any] = {
     CLOUDTRAIL_CHANNEL: CloudTrailSourceAdapter(),
     AZURE_ACTIVITY_CHANNEL: AzureActivitySourceAdapter(),
     AZURE_ACTIVITY_EXPORT_CHANNEL: AzureActivityExportSourceAdapter(),
+    WAZUH_CHANNEL: WazuhAlertSourceAdapter(),
     OKTA_CHANNEL: OktaSourceAdapter(),
     GITHUB_CHANNEL: GitHubAuditSourceAdapter(),
     KUBERNETES_AUDIT_CHANNEL: KubernetesAuditSourceAdapter(),
@@ -281,6 +285,10 @@ def channel_of(record: Mapping[str, Any] | str) -> str:
     channels for records recognised by their own schema."""
     if isinstance(record, str):
         return AUDIT_CHANNEL if is_audit_record(record) else XML_EVENT_CHANNEL
+    # A Wazuh alert embeds the event it is about (``data.win`` ...): it is the
+    # alert that is read, so this check comes before every event schema.
+    if is_wazuh_alert(record):
+        return WAZUH_CHANNEL
     if is_entra_record(record):
         return ENTRA_CHANNEL
     if is_o365_record(record):
@@ -355,6 +363,13 @@ def analyze_recording(
         pending, source_start=source_starts(precedence.kept)
     ):
         detections[anchor.observation_id].append(detection)
+    # Wazuh alerts (ADR-0023): the detection Wazuh made, with its own ATT&CK ids.
+    wazuh = WazuhAlertDetector(knowledge)
+    for observation in precedence.kept:
+        if observation.wazuh is not None:
+            alerted = wazuh.detect(observation)
+            if alerted is not None:
+                detections[observation.observation_id].append(alerted)
 
     items: list[tuple[Evidence, Observation]] = []
     context: list[Observation] = []

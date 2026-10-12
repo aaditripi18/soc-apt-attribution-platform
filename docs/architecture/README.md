@@ -51,6 +51,8 @@ the later ADRs below record each subsystem as it was designed, measured and buil
 | [adr/0020-recording-upload.md](adr/0020-recording-upload.md) | Recording upload: one bounded, local-only input route; a job runs the command line's own intake check and investigation, one at a time, and publishes the result whole | **ACCEPTED** (2026-10-11), implemented |
 | [adr/0021-behavioural-profile-match-and-response.md](adr/0021-behavioural-profile-match-and-response.md) | Behavioural overlap per Group (one stated formula; a similarity, not a confidence), clusters of Groups the evidence cannot separate, ATT&CK mitigations for what was observed, a Group catalogue, and the console reorganised around detection, attribution and response | **ACCEPTED** (2026-10-12), implemented |
 | [adr/0022-attack-chain-observables-and-analyst-assistant.md](adr/0022-attack-chain-observables-and-analyst-assistant.md) | Attack chain by order of observation; observables (hashes, addresses, domains from detected events, never judged); an analyst assistant grounded in a digest of stored results, answered by a model run on this machine through Ollama (Amendment A); a front page that states the purpose | **ACCEPTED** (2026-10-12), implemented |
+| [adr/0023-wazuh-alerts-as-input.md](adr/0023-wazuh-alerts-as-input.md) | Wazuh alerts as an input: the alert read as written, its rule's ATT&CK ids validated against the pinned knowledge base, tiers by level | **ACCEPTED** (2026-10-12), implemented |
+| [adr/0024-kibana-dashboard.md](adr/0024-kibana-dashboard.md) | Flat derived indices and a generated, installable Kibana dashboard of detections and group matches | **ACCEPTED** (2026-10-12), implemented; rendered view not yet inspected |
 
 ## The one-paragraph summary
 

@@ -108,7 +108,7 @@ export function DashboardPage() {
       <section>
         <h2 className="text-headline-lg text-on-surface">How an analysis runs</h2>
         <ol className="mt-4 grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-5">
-          <Step number={1} title="Ingest" text="Windows (Sysmon, Security, PowerShell, System), Linux, macOS, cloud audit and network logs are normalised to one schema." />
+          <Step number={1} title="Ingest" text="Windows (Sysmon, Security, PowerShell, System), Linux, macOS, cloud audit and network logs, and Wazuh alerts, are normalised to one schema." />
           <Step number={2} title="Detect & map" text="Translated Sigma and Elastic rules fire on single events; each detection is mapped to its ATT&CK technique." />
           <Step number={3} title="Correlate" text="Detections are linked by process lineage into activity clusters and ordered into an attack chain." />
           <Step number={4} title="Attribute" text="Group-specific artefacts identify a group; otherwise behaviour is matched against every group profile." />

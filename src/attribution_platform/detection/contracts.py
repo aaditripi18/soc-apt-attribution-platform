@@ -282,8 +282,10 @@ class DetectionResult:
     #: ADR-0007 Amendment A: the firing rule's Evidence quality (``LOW`` for the
     #: enrich tier), passed to every Evidence derived from this detection.
     evidence_quality: EvidenceQuality | None = None
-    #: ADR-0015 Amendment C: for a multi-event rule, what was counted to reach the
-    #: detection (``supporting_observation_ids`` then names every counted event).
+    #: A statement appended to the Evidence claim. ADR-0015 Amendment C: for a
+    #: multi-event rule, what was counted to reach the detection
+    #: (``supporting_observation_ids`` then names every counted event). ADR-0023:
+    #: for a Wazuh alert, the declared ATT&CK ids that could not be mapped.
     aggregate_note: str | None = None
     schema_version: str = field(default=DETECTION_RESULT_SCHEMA_VERSION)
 

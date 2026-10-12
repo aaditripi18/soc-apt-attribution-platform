@@ -145,6 +145,13 @@ with their attack sequence, ATT&CK matrix and timeline
   [Ollama](https://ollama.com): install Ollama, run `ollama pull llama3.1:8b`, and start the platform. No key, no
   account, nothing leaves the machine. `ATTRIBUTION_ASSISTANT_MODEL` names another pulled model;
   `--no-assistant` turns the panel off.
+- **Wazuh alerts** — upload a Wazuh manager's `alerts.json`: each alert's own ATT&CK ids are checked against the
+  pinned ATT&CK data and fed into the same attack chain, indicators and group matching
+  ([ADR-0023](docs/architecture/adr/0023-wazuh-alerts-as-input.md)).
+- **Kibana dashboard** — run an investigation with `--elasticsearch` and import
+  `kibana/attribution-dashboard.ndjson` (`python scripts/build_kibana_dashboard.py --install`): detections by
+  tactic, technique, host and time, the closest behavioural profiles and the identified groups
+  ([ADR-0024](docs/architecture/adr/0024-kibana-dashboard.md)).
 - **Threat Actors** — all 176 ATT&CK Groups with techniques, software and the evidence that can identify them.
 
 Requires **Node.js 20+**.
