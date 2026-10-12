@@ -381,6 +381,9 @@ def _build_steps(
                     for evidence in step_evidences
                     if evidence.attack_ref is not None
                     and evidence.quality is not EvidenceQuality.LOW
+                    # ADR-0025: a technique its rule declares but the match does
+                    # not establish is shown, not compared
+                    and not evidence.technique_ambiguous
                 }
             )
         )

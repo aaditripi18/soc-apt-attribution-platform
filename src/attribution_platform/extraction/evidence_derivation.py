@@ -81,6 +81,7 @@ def derive_evidence(
     knowledge: AttackKnowledge | None = None,
     quality: EvidenceQuality | None = None,
     time_span: TimeSpan | None = None,
+    technique_ambiguous: bool = False,
     host: HostRef | None = None,
     user: UserRef | None = None,
     derived_at: datetime | None = None,
@@ -149,6 +150,7 @@ def derive_evidence(
             time_span=time_span,
             host=host,
             user=user,
+            technique_ambiguous=technique_ambiguous,
         )
     except DomainContractError as exc:
         raise EvidenceDerivationError(

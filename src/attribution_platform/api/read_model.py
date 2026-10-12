@@ -204,7 +204,12 @@ def get_investigation_activity(client: ElasticClient, investigation_id: str) -> 
                         "attack_stix_id": ref.stix_id if ref is not None else None,
                         "attack_object_type": ref.object_type if ref is not None else None,
                         "context": evidence.quality is EvidenceQuality.LOW,
-                        "decision_feature": ref is not None and ref.stix_id in features,
+                        # ADR-0025: the rule declares this technique among
+                        # alternatives; this match does not establish it
+                        "declared_only": evidence.technique_ambiguous,
+                        "decision_feature": ref is not None
+                        and ref.stix_id in features
+                        and not evidence.technique_ambiguous,
                     }
                 )
     except ElasticIntegrationError as exc:

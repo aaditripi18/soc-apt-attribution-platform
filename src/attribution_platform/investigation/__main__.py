@@ -69,6 +69,11 @@ from attribution_platform.detection_content.pinned import (
     SIGMA_PACK,
 )
 from attribution_platform.detection_content.pinned import SIGMA_IMPORT_REPORT as IMPORT_REPORT
+from attribution_platform.detection_content.technique_support import (
+    EMPTY_REVIEW,
+    TechniqueSupportReview,
+    load_technique_support_review,
+)
 from attribution_platform.intel.indicators import IndicatorSet, load_indicator_set
 from attribution_platform.investigation.dossier import render_dossier
 from attribution_platform.investigation.emulation import (
@@ -90,6 +95,7 @@ REPO_ROOT = Path(__file__).resolve().parents[3]
 RECORDINGS = REPO_ROOT / "data" / "calibration" / "corpus" / "v2" / "recordings.json"
 ADVISORIES = REPO_ROOT / "data" / "intel" / "advisories"
 ADVISORY_ATTRIBUTIONS = REPO_ROOT / "data" / "intel" / "advisory-attributions.json"
+TECHNIQUE_SUPPORT_REVIEW = REPO_ROOT / "data" / "detection" / "technique-support-review.json"
 
 
 class CliError(Exception):
@@ -131,6 +137,7 @@ class Workbench:
     detection_pack_content_hash: str
     detectability: Mapping[str, Detectability]
     indicators: IndicatorSet
+    technique_support: TechniqueSupportReview = EMPTY_REVIEW
 
 
 def load_workbench() -> Workbench:
@@ -151,6 +158,7 @@ def load_workbench() -> Workbench:
             pack_content_hash=[pack.content_hash for pack in packs],
         ),
         indicators=load_indicator_set(ADVISORIES, ADVISORY_ATTRIBUTIONS),
+        technique_support=load_technique_support_review(TECHNIQUE_SUPPORT_REVIEW),
     )
 
 
@@ -173,6 +181,7 @@ def investigate(
         detection_pack_content_hash=bench.detection_pack_content_hash,
         detectability=bench.detectability,
         indicators=bench.indicators,
+        technique_support=bench.technique_support,
         emulation=load_caldera_report(emulation_report) if emulation_report else None,
     )
     return Session(record=record, client=client)
@@ -200,6 +209,7 @@ def upload_service(
             detection_pack_content_hash=workbench.detection_pack_content_hash,
             detectability=workbench.detectability,
             indicators=workbench.indicators,
+            technique_support=workbench.technique_support,
         )
         if shared is not None and isinstance(target, FakeElasticClient):
             shared.absorb(target)

@@ -147,6 +147,7 @@ EVIDENCE_MAPPING: dict[str, Any] = {
         }
     },
     "quality": {"type": "keyword"},
+    "technique_ambiguous": {"type": "boolean"},
     "time_span": {
         "properties": {
             "start": {"type": "date"},

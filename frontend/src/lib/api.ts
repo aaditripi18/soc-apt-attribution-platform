@@ -579,6 +579,8 @@ export interface ActivityEvent {
   context: boolean;
   /** Its technique is a decision feature of its unit. */
   decision_feature: boolean;
+  /** The rule declares this technique among alternatives; the match does not establish it. */
+  declared_only: boolean;
 }
 
 export interface Activity {

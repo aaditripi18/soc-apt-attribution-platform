@@ -76,6 +76,9 @@ class Evidence:
     time_span: TimeSpan | None = None
     host: HostRef | None = None
     user: UserRef | None = None
+    #: ADR-0025: the technique in ``attack_ref`` is one of several its rule declares
+    #: and the match does not say which. Declared, shown, never compared.
+    technique_ambiguous: bool = False
     schema_version: str = field(default=EVIDENCE_SCHEMA_VERSION)
 
     def __post_init__(self) -> None:

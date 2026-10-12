@@ -67,11 +67,52 @@ def _compose_claim(detection: DetectionResult) -> str:
     return claim
 
 
+_TECHNIQUE_TYPE = "attack-pattern"
+
+
+def ambiguous_technique_ids(
+    detection: DetectionResult, reviewed: frozenset[str] | None = None
+) -> frozenset[str]:
+    """The STIX ids of the technique mappings this firing **declares but does
+    not establish** (ADR-0025).
+
+    A rule's ATT&CK tags describe the rule, not the match. One firing
+    establishes all of them only when they cannot be alternatives:
+
+    - a technique and its own sub-technique are one claim (the sub-technique
+      implies its parent);
+    - several sub-techniques of one parent are alternatives: the parent, if
+      declared, is established, each sub-technique is not;
+    - techniques of different parents are alternatives: none is established by
+      the match alone.
+
+    ``reviewed`` is the set of ATT&CK ids a recorded review of this rule found
+    its logic to establish whenever it fires (``None``: not reviewed); those
+    are never ambiguous, and a review can only name techniques the rule
+    declares. Mappings to software or Groups are not techniques and are never
+    returned. A mapping without an ATT&CK id is its own parent."""
+    techniques = [
+        m.attack_ref
+        for m in detection.technique_mappings
+        if m.attack_ref.object_type == _TECHNIQUE_TYPE
+    ]
+    parent_of = {ref.stix_id: (ref.external_id or ref.stix_id).split(".")[0] for ref in techniques}
+    if len(set(parent_of.values())) > 1:
+        ambiguous = set(parent_of)
+    else:
+        subs = [ref.stix_id for ref in techniques if "." in (ref.external_id or "")]
+        ambiguous = set(subs) if len(subs) > 1 else set()
+    if reviewed:
+        ambiguous -= {ref.stix_id for ref in techniques if ref.external_id in reviewed}
+    return frozenset(ambiguous)
+
+
 def derive_evidence_from_detection(
     detection: DetectionResult,
     observation: Observation,
     *,
     knowledge: AttackKnowledge,
+    reviewed: frozenset[str] | None = None,
 ) -> tuple[Evidence, ...]:
     """Derive one Evidence per technique mapping on ``detection`` (or one,
     unmapped, if it has none), grounded in ``observation``.
@@ -122,9 +163,16 @@ def derive_evidence_from_detection(
         return (evidence,)
 
     evidences = []
+    alternatives = ambiguous_technique_ids(detection, reviewed)
     for mapping in detection.technique_mappings:
         technique_label = mapping.attack_ref.external_id or mapping.attack_ref.stix_id
         mapped_claim = f"{claim} (maps to {technique_label}: {mapping.mapping_basis})"
+        if mapping.attack_ref.stix_id in alternatives:
+            # ADR-0025: stated, shown, and kept out of the group comparison.
+            mapped_claim += (
+                f" [one of {len(alternatives)} techniques this rule declares; the match does "
+                "not say which, so it is not counted when comparing with group profiles]"
+            )
         evidence = derive_evidence(
             evidence_id=f"{detection.detection_id}::{mapping.attack_ref.stix_id}",
             evidence_type=detection.evidence_type,
@@ -136,6 +184,7 @@ def derive_evidence_from_detection(
             time_span=detection.time_span,
             method_content_hash=detection.rule_pack_content_hash,
             quality=detection.evidence_quality,
+            technique_ambiguous=mapping.attack_ref.stix_id in alternatives,
         )
         evidences.append(evidence)
     return tuple(evidences)

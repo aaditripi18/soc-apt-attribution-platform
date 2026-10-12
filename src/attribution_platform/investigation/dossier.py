@@ -123,6 +123,8 @@ def _evidence_rows(
         when = item.time_span.start.isoformat() if item.time_span else "—"
         technique = item.attack_ref.external_id if item.attack_ref else "—"
         tier = "low-level (context)" if item.quality is EvidenceQuality.LOW else "core"
+        if item.technique_ambiguous:
+            tier += "; declared by the rule, not established"
         seen = _describe(observation) if observation else "—"
         rows.append(f"| {when} | {technique} | {tier} | {seen} |")
     return rows

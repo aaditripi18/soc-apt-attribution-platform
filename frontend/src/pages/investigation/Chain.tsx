@@ -11,6 +11,7 @@ const CHIP: Record<ActivityRole, string> = {
   actor: "border-tertiary-dim/60 bg-tertiary-dim/15",
   feature: "border-primary/60 bg-primary/15",
   unmatched: "border-warning/50 bg-warning/10",
+  declared: "border-dashed border-outline bg-surface-low",
   context: "border-outline-variant bg-surface",
 };
 

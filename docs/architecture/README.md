@@ -53,6 +53,7 @@ the later ADRs below record each subsystem as it was designed, measured and buil
 | [adr/0022-attack-chain-observables-and-analyst-assistant.md](adr/0022-attack-chain-observables-and-analyst-assistant.md) | Attack chain by order of observation; observables (hashes, addresses, domains from detected events, never judged); an analyst assistant grounded in a digest of stored results, answered by a model run on this machine through Ollama (Amendment A); a front page that states the purpose | **ACCEPTED** (2026-10-12), implemented |
 | [adr/0023-wazuh-alerts-as-input.md](adr/0023-wazuh-alerts-as-input.md) | Wazuh alerts as an input: the alert read as written, its rule's ATT&CK ids validated against the pinned knowledge base, tiers by level | **ACCEPTED** (2026-10-12), implemented |
 | [adr/0024-kibana-dashboard.md](adr/0024-kibana-dashboard.md) | Flat derived indices and a generated, installable Kibana dashboard of detections and group matches | **ACCEPTED** (2026-10-12), implemented; rendered view confirmed by the owner |
+| [adr/0025-declared-versus-established-techniques.md](adr/0025-declared-versus-established-techniques.md) | A rule's ATT&CK tags are declared; only what a match establishes (structurally, or by a recorded review) is compared with group profiles. Before/after results on five recordings | **ACCEPTED** (2026-10-12), implemented |
 
 ## The one-paragraph summary
 

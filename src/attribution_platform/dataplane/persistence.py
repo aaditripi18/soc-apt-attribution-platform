@@ -307,6 +307,7 @@ def _evidence_from_document(doc: Mapping[str, Any]) -> Evidence:
             time_span=_time_span_from_dict(doc.get("time_span")),
             host=_host_ref_from_dict(doc.get("host")),
             user=_user_ref_from_dict(doc.get("user")),
+            technique_ambiguous=bool(doc.get("technique_ambiguous", False)),
             schema_version=schema_version,
         )
     except ElasticIntegrationError:

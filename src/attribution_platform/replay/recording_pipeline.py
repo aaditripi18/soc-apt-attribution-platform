@@ -46,6 +46,10 @@ from attribution_platform.detection.stateful import (
     evaluate_aggregations,
     source_starts,
 )
+from attribution_platform.detection_content.technique_support import (
+    EMPTY_REVIEW,
+    TechniqueSupportReview,
+)
 from attribution_platform.domain import Evidence, HostRef, Observation
 from attribution_platform.replay.errors import ReplayError
 from attribution_platform.sources.auditd import AuditdSourceAdapter, is_audit_record
@@ -324,6 +328,7 @@ def analyze_recording(
     engine: DetectionEngine,
     knowledge: AttackKnowledge,
     adapters: Mapping[str, Any] = DEFAULT_CHANNEL_ADAPTERS,
+    technique_support: TechniqueSupportReview = EMPTY_REVIEW,
 ) -> RecordingAnalysis:
     """Run ``source`` through the full pipeline (module docstring)."""
     _verify(source)
@@ -378,7 +383,10 @@ def analyze_recording(
             evidence
             for detection in detections[observation.observation_id]
             for evidence in derive_evidence_from_detection(
-                detection, observation, knowledge=knowledge
+                detection,
+                observation,
+                knowledge=knowledge,
+                reviewed=technique_support.for_source(detection.detection_source),
             )
         ]
         if evidences:

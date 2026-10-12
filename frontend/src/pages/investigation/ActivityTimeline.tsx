@@ -17,10 +17,11 @@ const MARK: Record<ActivityRole, string> = {
   actor: "bg-tertiary-dim",
   feature: "bg-primary",
   unmatched: "bg-warning",
+  declared: "bg-outline-variant",
   context: "bg-outline",
 };
 
-const TONE = { actor: "tertiary", feature: "primary", unmatched: "warning", context: "muted" } as const;
+const TONE = { actor: "tertiary", feature: "primary", unmatched: "warning", declared: "muted", context: "muted" } as const;
 
 /** Rows of a selected interval shown at once; the rest is reachable through the units. */
 const MAX_ROWS = 200;

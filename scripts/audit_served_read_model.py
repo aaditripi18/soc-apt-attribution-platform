@@ -187,7 +187,13 @@ def main(argv: list[str]) -> int:
                 for e in evidence
                 if e["attack_ref"] and e["attack_ref"]["object_type"] == "attack-pattern"
             ]
-            core = {e["attack_ref"]["stix_id"] for e in technique_evidence if e["quality"] != "low"}
+            # ADR-0025: a technique counts only where a match establishes it - not where
+            # its rule merely declares it among alternatives.
+            core = {
+                e["attack_ref"]["stix_id"]
+                for e in technique_evidence
+                if e["quality"] != "low" and not e.get("technique_ambiguous", False)
+            }
             # --- ADR-0018: actor-specific Evidence is listed, and is no technique ---
             actor_evidence = {
                 e["evidence_id"]: e["attack_ref"]
@@ -208,7 +214,9 @@ def main(argv: list[str]) -> int:
                     group_id,
                     ref["stix_id"] if ref else None,
                     item["quality"] == "low",
-                    ref is not None and ref["stix_id"] in observed,
+                    ref is not None
+                    and ref["stix_id"] in observed
+                    and not item.get("technique_ambiguous", False),
                 )
             pooled |= observed
             pooled_candidates |= {c["stix_id"] for c in analysis["candidates"]}

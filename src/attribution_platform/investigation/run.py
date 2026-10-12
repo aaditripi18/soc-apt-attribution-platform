@@ -53,6 +53,10 @@ from attribution_platform.dataplane import (
     persist_observation,
 )
 from attribution_platform.detection import DetectionEngine
+from attribution_platform.detection_content.technique_support import (
+    EMPTY_REVIEW,
+    TechniqueSupportReview,
+)
 from attribution_platform.domain import Evidence, EvidenceQuality, Observation
 from attribution_platform.intel.indicators import (
     IndicatorMatch,
@@ -101,7 +105,7 @@ from attribution_platform.replay.recording_pipeline import RecordingSource, anal
 #: 1.5: the baseline search is kept apart from the per-candidate one; 1.6: an
 #: investigation-level attribution assessment is stored (ADR-0017); 1.7:
 #: actor-specific Evidence (ADR-0018); 1.8: behavioural profile match (ADR-0021).
-INVESTIGATION_METHOD_VERSION = "1.8"
+INVESTIGATION_METHOD_VERSION = "1.9"
 #: ADR-0005 §D16 structural lower bound; the fitted floor needs a calibration_version.
 STRUCTURAL_MIN_PROFILE_FLOOR = 1
 
@@ -348,10 +352,13 @@ def run_investigation(
     detectability: Mapping[str, Detectability] | None = None,
     indicators: IndicatorSet | None = None,
     emulation: EmulationRun | None = None,
+    technique_support: TechniqueSupportReview = EMPTY_REVIEW,
 ) -> InvestigationRecord:
     """Run ``source`` end to end and persist every read-model object."""
     versions = {
         **_method_versions(),
+        # ADR-0025: which declared techniques a reviewed rule establishes
+        "technique_support_review": technique_support.sha256,
         "attack_kb_version": knowledge.attack_kb_version,
         "detection_pack": detection_pack_content_hash,
     }
@@ -362,7 +369,9 @@ def run_investigation(
     investigation_id = _investigation_id(digest, versions)
 
     if isinstance(source, RecordingSource):
-        analysis = analyze_recording(source, engine=engine, knowledge=knowledge)
+        analysis = analyze_recording(
+            source, engine=engine, knowledge=knowledge, technique_support=technique_support
+        )
         observations = {o.observation_id: o for _, o in analysis.items.values()}
         for observation in observations.values():
             persist_observation(client, observation)

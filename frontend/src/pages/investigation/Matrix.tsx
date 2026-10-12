@@ -14,6 +14,7 @@ export const ROLE_LABEL: Record<ActivityRole, string> = {
   actor: "Actor-specific",
   feature: "Decision feature",
   unmatched: "No candidate uses it",
+  declared: "Declared by the rule only",
   context: "Context only",
 };
 
@@ -21,6 +22,8 @@ export const ROLE_MEANING: Record<ActivityRole, string> = {
   actor: "Evidence from a rule its author tied to one named Group (ADR-0018).",
   feature: "Core Evidence for a technique at least one Group or Campaign uses: it enters the comparison.",
   unmatched: "Core Evidence for a technique no Group or Campaign is recorded using: observed, but it compares nothing.",
+  declared:
+    "The rule that fired lists this technique among several alternatives and the match does not say which. Shown for review; not counted when comparing with group profiles.",
   context: "Low-level Evidence only (common administrative behaviour): shown for context, never compared.",
 };
 
@@ -28,6 +31,7 @@ const CELL: Record<ActivityRole, string> = {
   actor: "border-tertiary-dim/60 bg-tertiary-dim/15 hover:bg-tertiary-dim/25",
   feature: "border-primary/60 bg-primary/15 hover:bg-primary/25",
   unmatched: "border-warning/50 bg-warning/10 hover:bg-warning/20",
+  declared: "border-dashed border-outline bg-surface-low hover:bg-surface-high",
   context: "border-outline-variant bg-surface hover:bg-surface-high",
 };
 
@@ -35,6 +39,7 @@ const SWATCH: Record<ActivityRole, string> = {
   actor: "bg-tertiary-dim",
   feature: "bg-primary",
   unmatched: "bg-warning",
+  declared: "bg-outline-variant",
   context: "bg-outline",
 };
 

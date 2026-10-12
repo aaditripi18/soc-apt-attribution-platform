@@ -388,9 +388,9 @@ export function coverageByTactic(rows: CoverageTechnique[], index: TechniqueInde
 // ---------------------------------------------------------------------------
 
 /** The role of observed Evidence in the comparison, strongest first. */
-export type ActivityRole = "actor" | "feature" | "unmatched" | "context";
+export type ActivityRole = "actor" | "feature" | "unmatched" | "declared" | "context";
 
-const ROLE_STRENGTH: ActivityRole[] = ["actor", "feature", "unmatched", "context"];
+const ROLE_STRENGTH: ActivityRole[] = ["actor", "feature", "unmatched", "declared", "context"];
 
 const isTechniqueEvent = (event: ActivityEvent): boolean =>
   event.attack_object_type === "attack-pattern" && event.attack_id !== null;
@@ -400,7 +400,9 @@ export function activityRole(event: ActivityEvent): ActivityRole | null {
   if (event.attack_object_type === "intrusion-set") return "actor";
   if (!isTechniqueEvent(event)) return null;
   if (event.decision_feature) return "feature";
-  return event.context ? "context" : "unmatched";
+  if (event.context) return "context";
+  // the rule names this technique among alternatives; this match does not establish it
+  return event.declared_only ? "declared" : "unmatched";
 }
 
 function strongest(roles: Iterable<ActivityRole>): ActivityRole {

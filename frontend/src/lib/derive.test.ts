@@ -256,6 +256,7 @@ describe("identifiers and formatting", () => {
 
 describe("investigation views (ADR-0019)", () => {
   const event = (over: Partial<ActivityEvent>): ActivityEvent => ({
+    declared_only: false,
     time: "2026-01-01T00:00:00+00:00",
     group_id: "u1",
     evidence_id: "e",
@@ -325,6 +326,7 @@ describe("investigation views (ADR-0019)", () => {
 
 describe("attack chain (ADR-0022)", () => {
   const event = (over: Partial<ActivityEvent>): ActivityEvent => ({
+    declared_only: false,
     time: "2026-01-01T00:00:00+00:00",
     group_id: "u1",
     evidence_id: "e",
@@ -364,5 +366,27 @@ describe("attack chain (ADR-0022)", () => {
 
   it("is empty when nothing has a time and a tactic", () => {
     expect(attackChain([event({ time: null })], index)).toEqual([]);
+  });
+});
+
+describe("declared-only techniques (ADR-0025)", () => {
+  const base: ActivityEvent = {
+    time: "2026-01-01T00:00:00+00:00",
+    group_id: "g",
+    evidence_id: "e",
+    host: "h",
+    label: "x.exe",
+    attack_id: "T1036",
+    attack_stix_id: "attack-pattern--x",
+    attack_object_type: "attack-pattern",
+    context: false,
+    decision_feature: false,
+    declared_only: true,
+  };
+  it("are their own category, never 'no candidate uses it'", () => {
+    expect(activityRole(base)).toBe("declared");
+    expect(activityRole({ ...base, declared_only: false })).toBe("unmatched");
+    expect(activityRole({ ...base, context: true })).toBe("context");
+    expect(activityRole({ ...base, declared_only: false, decision_feature: true })).toBe("feature");
   });
 });
