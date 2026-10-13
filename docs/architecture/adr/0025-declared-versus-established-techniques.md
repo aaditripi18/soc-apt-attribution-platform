@@ -277,3 +277,28 @@ enrich-only discovery techniques, and network telemetry — not more rule import
 
 **Limits.** Seven recordings of one family (credential dumping with different tools), one host each; the authors'
 lists are coarse (no times, no events), so a "found" technique was not checked to be found on the right event.
+
+## Amendment F (2026-10-13) — the tool runs again, with their network logs: no change
+
+**Question.** Amendment E found network behaviour (exfiltration over the command channel, tool transfer) never
+counted, and the recordings' network logs had not been part of the runs. Would including them close that gap?
+
+**What was done.** Each of the seven tool runs comes with Zeek logs (connections, DNS, HTTP, file transfers,
+Kerberos, SMB). They were added to the host logs and the seven were re-run with nothing else changed
+(snapshot `data/validation/history/investigations.tool-runs-with-network.json`; audit 12,050 checks, all passing).
+No parser was needed: the existing Zeek reader recognises the files.
+
+**Result: nothing changed.** In all seven, the counted techniques, candidates, top profiles and verdicts are
+identical to the runs without network logs; no network Evidence is in any activity cluster; still 16 of 45.
+
+**Why.** The telemetry is read — one tool run yields 247 network Observations (116 connections, 121 DNS queries,
+4 file transfers, 4 HTTP requests, 1 Kerberos, 1 SMB mapping). 78 rules in the engine read Zeek data. **None of
+them fires on any of those Observations.** The gap is detection content, not ingestion: the pinned Zeek rules
+look for specific protocol abuse (remote administration over DCE/RPC, SMB file patterns and the like), not for a
+payload fetched over HTTP or a command channel that looks like an ordinary connection. One relevant log is not
+read at all: Zeek's executable-file log (`pe`), refused by the reader as "not a traffic log read here" — together
+with the file-transfer log it is the direct evidence of an executable arriving over the network.
+
+**Consequence for the plan.** Including network logs is necessary and not sufficient. The measured gaps are
+detection-engineering tasks: a transfer of an executable over HTTP (file-transfer and executable-file logs), then
+the delivered file being written and run (host logs), correlated — not more telemetry and not more rule imports.
