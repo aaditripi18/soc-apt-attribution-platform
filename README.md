@@ -115,7 +115,8 @@ reports, not a different way of counting.
   an **advisory indicator lead**, a third party's attribution to verify — never as an identification — because
   addresses, domains and even files are reused.
 - **Measured against the dataset authors' own technique lists** (seven single-tool recordings): about a third of
-  what was performed is counted — 16 of 45, and 8 of 24 on the four recordings held out from the latest changes.
+  what was performed is counted — 16 of 45, and 8 of 24 on the four recordings held out from the latest changes (17 of 45 after the
+  platform's own delivery-and-execution rule, [ADR-0026](docs/architecture/adr/0026-platform-rules-and-two-stage-sequences.md)).
   The core technique is found every time; execution of the delivered file, network behaviour and enrich-only
   discovery are not ([ADR-0025](docs/architecture/adr/0025-declared-versus-established-techniques.md), Amendments D and E).
 - **The known-answer check is a demonstration, not an accuracy figure.** Four public lab recordings, all used

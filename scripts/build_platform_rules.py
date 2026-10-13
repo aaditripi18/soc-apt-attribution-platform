@@ -1,0 +1,170 @@
+"""Build the platform's own rule pack (ADR-0026).
+
+The platform's detection content is translated from published rules (Sigma,
+Elastic). This pack holds the few rules written here, for behaviour measured as
+undetected on recordings of known content and not expressible as a single-event
+rule. Every rule is listed below with what it matches; the pack is generated
+deterministically so the tracked file can be reproduced byte for byte:
+
+    python scripts/build_platform_rules.py
+"""
+
+from __future__ import annotations
+
+import json
+import sys
+from pathlib import Path
+
+REPO = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(REPO / "src"))
+
+from attribution_platform.attack_knowledge.external_ids import ExternalIdResolver  # noqa: E402
+from attribution_platform.attack_knowledge.loader import load_attack_knowledge  # noqa: E402
+
+OUT = REPO / "data" / "detection" / "platform" / "platform-rules.json"
+VERSION = "1.0"
+#: Programs that save files a user fetched from the network.
+BROWSERS = ("msedge.exe", "chrome.exe", "firefox.exe", "brave.exe", "opera.exe", "iexplore.exe")
+#: Document, image, archive and media extensions that an executable's name may
+#: carry before ``.exe`` to pass for that kind of file.
+DECOY_EXTENSIONS = (
+    "doc", "docx", "gif", "jpeg", "jpg", "mp3", "mp4", "pdf", "png", "ppt", "pptx", "rtf", "txt",
+    "xls", "xlsx", "zip",
+)  # fmt: skip
+#: A file is "then run" if it starts within a day of being saved.
+SPAN_SECONDS = 86_400
+DECEPTIVE = "platform:deceptive-download-run"
+DOWNLOADED = "platform:browser-download-run"
+
+
+def _sequence(stage: int, name: str, field_path: str) -> dict[str, object]:
+    return {
+        "kind": "sequence",
+        "stage": stage,
+        "span_seconds": SPAN_SECONDS,
+        "key_form": "windows_path",
+        "fields": [{"name": name, "field_path": field_path}],
+    }
+
+
+def _condition(field_path: str, operator: str, value: str | None = None) -> dict[str, object]:
+    condition: dict[str, object] = {"field_path": field_path, "operator": operator}
+    if value is not None:
+        condition.update(value=value, case_insensitive=True)
+    return condition
+
+
+def build() -> dict[str, object]:
+    knowledge = load_attack_knowledge()
+    resolver = ExternalIdResolver(knowledge, ("attack-pattern",))
+
+    def mapping(external_id: str, basis: str) -> dict[str, str]:
+        resolved = resolver.resolve(external_id)
+        if resolved is None or resolved[1] is not None:
+            raise SystemExit(
+                f"{external_id} is not an active technique of the pinned knowledge base"
+            )
+        return {
+            "stix_id": str(resolved[0]["id"]),
+            "object_type": "attack-pattern",
+            "attack_kb_version": knowledge.attack_kb_version,
+            "external_id": external_id,
+            "mapping_basis": basis,
+            "mapping_source": "platform-rules",
+        }
+
+    run_basis = "a file saved by a web browser was started as a process on the same host"
+    user_execution = mapping("T1204.002", run_basis)
+    double_extension = mapping(
+        "T1036.007", "the started file's name carries a document or media extension before .exe"
+    )
+    rules: list[dict[str, object]] = []
+
+    def saved_by_browser(family: str) -> None:
+        for browser in BROWSERS:
+            rules.append(
+                {
+                    "rule_id": f"{family}:saved:{browser}",
+                    "rule_version": VERSION,
+                    "conditions": [
+                        _condition("event.category", "has_element", "file"),
+                        _condition("process.executable", "endswith", "\\" + browser),
+                        _condition("file.path", "exists"),
+                    ],
+                    "technique_mappings": [],
+                    "evidence_type": "behavioral",
+                    "rule_source": family,
+                    "rule_family": family,
+                    "aggregation": _sequence(1, "file.path", "file.path"),
+                }
+            )
+
+    # 1. A browser saves a file whose name passes for a document and ends in .exe;
+    #    that file is then run. Core tier.
+    saved_by_browser(DECEPTIVE)
+    for extension in DECOY_EXTENSIONS:
+        rules.append(
+            {
+                "rule_id": f"{DECEPTIVE}:run:{extension}",
+                "rule_version": VERSION,
+                "conditions": [
+                    _condition("event.category", "has_element", "process"),
+                    _condition("event.type", "has_element", "start"),
+                    _condition("process.executable", "endswith", f".{extension}.exe"),
+                ],
+                "technique_mappings": [double_extension, user_execution],
+                "evidence_type": "behavioral",
+                "rule_source": DECEPTIVE,
+                "rule_family": DECEPTIVE,
+                "aggregation": _sequence(2, "process.executable", "process.executable"),
+            }
+        )
+    # 2. A browser saves any file that is then run. Ordinary installers do this too:
+    #    enrich tier (context, never compared; ADR-0003 Amendment H).
+    saved_by_browser(DOWNLOADED)
+    rules.append(
+        {
+            "rule_id": f"{DOWNLOADED}:run",
+            "rule_version": VERSION,
+            "conditions": [
+                _condition("event.category", "has_element", "process"),
+                _condition("event.type", "has_element", "start"),
+                _condition("process.executable", "exists"),
+            ],
+            "technique_mappings": [user_execution],
+            "evidence_type": "behavioral",
+            "rule_source": DOWNLOADED,
+            "rule_family": DOWNLOADED,
+            "evidence_quality": "low",
+            "aggregation": _sequence(2, "process.executable", "process.executable"),
+        }
+    )
+    return {
+        "pack_id": f"platform-rules-{VERSION}",
+        "description": (
+            "Rules written for this platform (ADR-0026). Generated by "
+            "scripts/build_platform_rules.py; do not edit by hand."
+        ),
+        "attack_kb_version": knowledge.attack_kb_version,
+        # what each rule is called wherever its detections are shown
+        "titles": {
+            DECEPTIVE: "Deceptively named download run by the user",
+            DOWNLOADED: "File saved by a browser, then run",
+        },
+        "rules": rules,
+    }
+
+
+def render() -> str:
+    return json.dumps(build(), indent=1, ensure_ascii=False) + "\n"
+
+
+def main() -> int:
+    OUT.parent.mkdir(parents=True, exist_ok=True)
+    OUT.write_text(render(), encoding="utf-8", newline="\n")
+    print(f"Wrote {OUT} ({len(build()['rules'])} rules)")  # type: ignore[arg-type]
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())

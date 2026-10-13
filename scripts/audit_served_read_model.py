@@ -46,6 +46,7 @@ from attribution_platform.dataplane.persistence import _observation_from_documen
 from attribution_platform.detection import load_rule_pack
 from attribution_platform.detection_content.pinned import (
     ELASTIC_PACK,
+    PLATFORM_PACK,
     SIGMA_ACTOR_PACK,
     SIGMA_PACK,
 )
@@ -93,7 +94,7 @@ def main(argv: list[str]) -> int:
     knowledge = load_attack_knowledge()
     rules = {
         rule.rule_ref.rule_id: rule
-        for path in (SIGMA_PACK, ELASTIC_PACK, SIGMA_ACTOR_PACK)
+        for path in (SIGMA_PACK, ELASTIC_PACK, SIGMA_ACTOR_PACK, PLATFORM_PACK)
         for rule in load_rule_pack(path, knowledge=knowledge).rules
     }
     total_groups = len(active_groups(knowledge))

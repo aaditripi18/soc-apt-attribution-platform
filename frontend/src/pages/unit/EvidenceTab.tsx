@@ -52,7 +52,16 @@ export function TierBadge({ evidence }: { evidence: Evidence }) {
 
 export function OriginBadge({ origin }: { origin: string }) {
   return (
-    <Badge tone={origin === "elastic" ? "tertiary" : "neutral"} title={origin === "elastic" ? "Elastic prebuilt detection rule" : "SigmaHQ rule"}>
+    <Badge
+      tone={origin === "elastic" ? "tertiary" : origin === "platform" ? "primary" : "neutral"}
+      title={
+        origin === "elastic"
+          ? "Elastic prebuilt detection rule"
+          : origin === "platform"
+            ? "Rule written for this platform, not a translated published rule"
+            : "SigmaHQ rule"
+      }
+    >
       {origin}
     </Badge>
   );

@@ -2,7 +2,7 @@
  "version": "known-answer-checks/2",
  "pinned": {
   "attack_kb_version": "enterprise-attack-19.2",
-  "detection_pack_content_hash": "9bdc4122e5a3925bf55a22bf622089e34ee0f22d63c238f3fb2b67f4400bfbcc",
+  "detection_pack_content_hash": "9d68d67817bc8d845bd1b3ffa3f3bc5f5719d39b14e6023a80b1f1e65998b22e",
   "method_versions": {
    "contextual_correlation": "1.2",
    "investigation": "1.9",
@@ -29,7 +29,7 @@
   {
    "source_id": "otrf-apt29-day1",
    "source_sha256": "98a073140860560d70080ace9142961be4f64b4862bae892d62d0f254d0fdbe5",
-   "investigation_id": "investigation::0371460821b6238c7658c1eac25f8e63cef4cac9831aa9015778014d711235c7",
+   "investigation_id": "investigation::5215a1b6441cf50f2d9fc3d241f7b7c0d7ccc3b24d53fac380afb54351ea8835",
    "kind": "emulation",
    "known_actor": {
     "attack_id": "G0016",
@@ -116,7 +116,7 @@
   {
    "source_id": "otrf-apt3-empire",
    "source_sha256": "ab4d1ec4e44102c87946a974f93aa248e49e5001e01fac3f137ec7e61bbc18ed",
-   "investigation_id": "investigation::2aed7548b6af8ce248fbd03d77d5081c27011c73ae81ac87b3a5712fea358d71",
+   "investigation_id": "investigation::f5a961daf1c453ba5cee8063e176eedda2f9135f3f6dd68adb8a79ad45cabcee",
    "kind": "emulation",
    "known_actor": {
     "attack_id": "G0022",
@@ -201,7 +201,7 @@
   {
    "source_id": "otrf-lsass-01-logonpasswords",
    "source_sha256": "79045fcc5a8689efed8db4911cadc11b554ef8b0bed1428ee490bb8c3f2578e6",
-   "investigation_id": "investigation::1227276cfe90bc3f8b8ccfc91b16b33e84d3358458e1088c22aa481c75faa1d8",
+   "investigation_id": "investigation::0aea40a8a5baf6eaad9ac2049e15e1c26015b33d13a37c59f4168e0509044f02",
    "kind": "tool_test",
    "known_actor": null,
    "known_basis": "OTRF Security Datasets: one credential-dumping tool run; no actor",
@@ -277,7 +277,7 @@
   {
    "source_id": "otrf-lsass-03-comsvcs",
    "source_sha256": "97a834cd72b0803d544c62cc45a41b18a4cc04a605735096be4bc5dad5e9fe7b",
-   "investigation_id": "investigation::741ece107c0f88dcac5a86321534ce974f67f7eef85d63a75c2ca17cb7463290",
+   "investigation_id": "investigation::8945421565fcdaed8494d8fe36e43faa2945a6e727f8d2e29586b48eb5544935",
    "kind": "tool_test",
    "known_actor": null,
    "known_basis": "OTRF Security Datasets: one credential-dumping tool run; no actor",

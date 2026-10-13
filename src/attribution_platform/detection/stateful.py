@@ -25,6 +25,10 @@ A branch of one source rule is one rule of a ``rule_family``; state is kept per
 family, so the count is over the events matching the source rule's query.
 An event without a value for a grouping field is not counted (as in an
 Elasticsearch terms aggregation); a multi-valued field counts once per value.
+
+- *Sequence* (ADR-0026). Two rules of one family: a stage-2 match detects only
+  when a stage-1 match on the same host with the same key value preceded it
+  within the span. The detection names both Observations.
 """
 
 from __future__ import annotations
@@ -150,6 +154,47 @@ def _new_terms(
             yield match, (observation.observation_id,), note
 
 
+def _normalised(value: str, key_form: str | None) -> str:
+    if key_form != "windows_path":
+        return value
+    folder, separator, name = value.rpartition("\\")
+    return (folder + separator + name.split(":", 1)[0]).casefold()
+
+
+def _sequence(
+    matches: list[AggregatedMatch],
+) -> Iterable[tuple[AggregatedMatch, tuple[str, ...], str]]:
+    """Stage 2 detects when a stage-1 event of the same family, on the same
+    host and with the same key, came before it within the stage-2 rule's span.
+    The most recent such stage-1 event is the one named."""
+    earlier: dict[tuple[str, str], AggregatedMatch] = {}
+    for match in matches:
+        spec = match.rule.aggregation
+        assert spec is not None  # noqa: S101 - callers pass aggregated matches only
+        observation = match.observation
+        host = observation.host.name if observation.host is not None else None
+        values = _values(spec.fields[0], observation)
+        if not host or len(values) != 1:
+            continue
+        key = (str(host).casefold(), _normalised(values[0], spec.key_form))
+        if spec.stage == 1:
+            earlier[key] = match
+            continue
+        first = earlier.get(key)
+        if first is None:
+            continue
+        gap = (observation.timestamp - first.observation.timestamp).total_seconds()
+        if not 0 <= gap <= spec.span_seconds:
+            continue
+        writer = first.observation.process.executable if first.observation.process else None
+        note = (
+            f"sequence: {spec.fields[0].name}={values[0]!r} follows an event on the same host and "
+            f"path {gap:g}s earlier, at {_stamp(first.observation.timestamp)}"
+            + (f", by {writer!r}" if writer else "")
+        )
+        yield match, (first.observation.observation_id, observation.observation_id), note
+
+
 def source_starts(observations: Iterable[Observation]) -> dict[str, datetime]:
     """The earliest event time of each log source type among ``observations``."""
     starts: dict[str, datetime] = {}
@@ -183,11 +228,12 @@ def evaluate_aggregations(
         unique.reverse()
         spec = unique[0].rule.aggregation
         assert spec is not None  # noqa: S101 - checked above
-        fired = (
-            _threshold(spec, unique)
-            if spec.kind == "threshold"
-            else _new_terms(spec, unique, source_start)
-        )
+        if spec.kind == "sequence":
+            fired = _sequence(unique)
+        elif spec.kind == "threshold":
+            fired = _threshold(spec, unique)
+        else:
+            fired = _new_terms(spec, unique, source_start)
         for match, supporting, note in fired:
             out.append(
                 (

@@ -1,0 +1,354 @@
+{
+ "version": "known-answer-checks/2",
+ "pinned": {
+  "attack_kb_version": "enterprise-attack-19.2",
+  "detection_pack_content_hash": "9bdc4122e5a3925bf55a22bf622089e34ee0f22d63c238f3fb2b67f4400bfbcc",
+  "method_versions": {
+   "contextual_correlation": "1.2",
+   "investigation": "1.9",
+   "process_identity": "1.1",
+   "sequence_engine": "1.1",
+   "structural_correlation": "1.7"
+  }
+ },
+ "summary": {
+  "cases": 4,
+  "emulations": 2,
+  "tool_tests": 2,
+  "verdicts_naming_an_actor": 1,
+  "verdicts_naming_a_wrong_actor": 0,
+  "orderings_measured": 16,
+  "orderings_naming_the_known_actor_first": 0,
+  "orderings_with_the_known_actor_in_top_10": 0,
+  "best_position_of_a_known_actor": 14,
+  "worst_position_of_a_known_actor": 124,
+  "actors_an_ordering_would_name_on_tool_tests": 16,
+  "orderings_on_tool_tests": 16
+ },
+ "cases": [
+  {
+   "source_id": "otrf-apt29-day1",
+   "source_sha256": "98a073140860560d70080ace9142961be4f64b4862bae892d62d0f254d0fdbe5",
+   "investigation_id": "investigation::0371460821b6238c7658c1eac25f8e63cef4cac9831aa9015778014d711235c7",
+   "kind": "emulation",
+   "known_actor": {
+    "attack_id": "G0016",
+    "name": "APT29"
+   },
+   "known_basis": "OTRF Security Datasets: APT29 emulation (ATT&CK Evaluations plan)",
+   "verdict": "actor_specific_evidence",
+   "named_actors": [
+    "G0016"
+   ],
+   "statement": "Evidence specific to APT29 was observed: 1 match of 1 rule written from published reporting on that Group's own tooling. This points to APT29 and is a lead to verify — not a calibrated conclusion, and anyone who has the same tooling or copies its artefacts would produce it too.",
+   "units": 70,
+   "observed_techniques": 32,
+   "candidates": 196,
+   "known_actor_profile_techniques": 66,
+   "known_actor_techniques_observed": 6,
+   "units_with_known_actor_as_candidate": 18,
+   "unit_level": {
+    "units_compared": 18,
+    "first": 0,
+    "top_10": 0,
+    "median_position": 103.5,
+    "median_candidates": 106.5
+   },
+   "orderings": [
+    {
+     "ordering": "observed techniques in profile (count)",
+     "level": "technique",
+     "groups_ordered": 144,
+     "would_name": "Kimsuky",
+     "known_actor_position": 40
+    },
+    {
+     "ordering": "rarity-weighted overlap (sum of -ln g)",
+     "level": "technique",
+     "groups_ordered": 144,
+     "would_name": "Kimsuky",
+     "known_actor_position": 51
+    },
+    {
+     "ordering": "overlap / profile size (breadth-normalised)",
+     "level": "technique",
+     "groups_ordered": 144,
+     "would_name": "Thrip",
+     "known_actor_position": 124
+    },
+    {
+     "ordering": "F1 of overlap/profile and overlap/observed",
+     "level": "technique",
+     "groups_ordered": 144,
+     "would_name": "APT39",
+     "known_actor_position": 80
+    },
+    {
+     "ordering": "observed techniques in profile (count)",
+     "level": "parent technique",
+     "groups_ordered": 159,
+     "would_name": "Kimsuky",
+     "known_actor_position": 27
+    },
+    {
+     "ordering": "rarity-weighted overlap (sum of -ln g)",
+     "level": "parent technique",
+     "groups_ordered": 159,
+     "would_name": "Kimsuky",
+     "known_actor_position": 36
+    },
+    {
+     "ordering": "overlap / profile size (breadth-normalised)",
+     "level": "parent technique",
+     "groups_ordered": 159,
+     "would_name": "Moafee",
+     "known_actor_position": 106
+    },
+    {
+     "ordering": "F1 of overlap/profile and overlap/observed",
+     "level": "parent technique",
+     "groups_ordered": 159,
+     "would_name": "Play",
+     "known_actor_position": 45
+    }
+   ]
+  },
+  {
+   "source_id": "otrf-apt3-empire",
+   "source_sha256": "ab4d1ec4e44102c87946a974f93aa248e49e5001e01fac3f137ec7e61bbc18ed",
+   "investigation_id": "investigation::2aed7548b6af8ce248fbd03d77d5081c27011c73ae81ac87b3a5712fea358d71",
+   "kind": "emulation",
+   "known_actor": {
+    "attack_id": "G0022",
+    "name": "APT3"
+   },
+   "known_basis": "OTRF Security Datasets: APT3 emulation",
+   "verdict": "not_distinguishable",
+   "named_actors": [],
+   "statement": "No actor can be singled out from this evidence. Many Groups are consistent with it, and nothing observed is specific to one of them.",
+   "units": 68,
+   "observed_techniques": 11,
+   "candidates": 143,
+   "known_actor_profile_techniques": 44,
+   "known_actor_techniques_observed": 4,
+   "units_with_known_actor_as_candidate": 6,
+   "unit_level": {
+    "units_compared": 6,
+    "first": 0,
+    "top_10": 0,
+    "median_position": 47.5,
+    "median_candidates": 73.0
+   },
+   "orderings": [
+    {
+     "ordering": "observed techniques in profile (count)",
+     "level": "technique",
+     "groups_ordered": 110,
+     "would_name": "Wizard Spider",
+     "known_actor_position": 17
+    },
+    {
+     "ordering": "rarity-weighted overlap (sum of -ln g)",
+     "level": "technique",
+     "groups_ordered": 110,
+     "would_name": "OilRig",
+     "known_actor_position": 23
+    },
+    {
+     "ordering": "overlap / profile size (breadth-normalised)",
+     "level": "technique",
+     "groups_ordered": 110,
+     "would_name": "Orangeworm",
+     "known_actor_position": 46
+    },
+    {
+     "ordering": "F1 of overlap/profile and overlap/observed",
+     "level": "technique",
+     "groups_ordered": 110,
+     "would_name": "Aquatic Panda",
+     "known_actor_position": 33
+    },
+    {
+     "ordering": "observed techniques in profile (count)",
+     "level": "parent technique",
+     "groups_ordered": 137,
+     "would_name": "Wizard Spider",
+     "known_actor_position": 14
+    },
+    {
+     "ordering": "rarity-weighted overlap (sum of -ln g)",
+     "level": "parent technique",
+     "groups_ordered": 137,
+     "would_name": "Chimera",
+     "known_actor_position": 20
+    },
+    {
+     "ordering": "overlap / profile size (breadth-normalised)",
+     "level": "parent technique",
+     "groups_ordered": 137,
+     "would_name": "GCMAN",
+     "known_actor_position": 54
+    },
+    {
+     "ordering": "F1 of overlap/profile and overlap/observed",
+     "level": "parent technique",
+     "groups_ordered": 137,
+     "would_name": "Aquatic Panda",
+     "known_actor_position": 28
+    }
+   ]
+  },
+  {
+   "source_id": "otrf-lsass-01-logonpasswords",
+   "source_sha256": "79045fcc5a8689efed8db4911cadc11b554ef8b0bed1428ee490bb8c3f2578e6",
+   "investigation_id": "investigation::1227276cfe90bc3f8b8ccfc91b16b33e84d3358458e1088c22aa481c75faa1d8",
+   "kind": "tool_test",
+   "known_actor": null,
+   "known_basis": "OTRF Security Datasets: one credential-dumping tool run; no actor",
+   "verdict": "not_distinguishable",
+   "named_actors": [],
+   "statement": "No actor can be singled out from this evidence. Many Groups are consistent with it, and nothing observed is specific to one of them.",
+   "units": 7,
+   "observed_techniques": 8,
+   "candidates": 120,
+   "known_actor_profile_techniques": null,
+   "known_actor_techniques_observed": null,
+   "units_with_known_actor_as_candidate": null,
+   "unit_level": null,
+   "orderings": [
+    {
+     "ordering": "observed techniques in profile (count)",
+     "level": "technique",
+     "groups_ordered": 93,
+     "would_name": "Magic Hound",
+     "known_actor_position": null
+    },
+    {
+     "ordering": "rarity-weighted overlap (sum of -ln g)",
+     "level": "technique",
+     "groups_ordered": 93,
+     "would_name": "Magic Hound",
+     "known_actor_position": null
+    },
+    {
+     "ordering": "overlap / profile size (breadth-normalised)",
+     "level": "technique",
+     "groups_ordered": 93,
+     "would_name": "TA459",
+     "known_actor_position": null
+    },
+    {
+     "ordering": "F1 of overlap/profile and overlap/observed",
+     "level": "technique",
+     "groups_ordered": 93,
+     "would_name": "FIN8",
+     "known_actor_position": null
+    },
+    {
+     "ordering": "observed techniques in profile (count)",
+     "level": "parent technique",
+     "groups_ordered": 133,
+     "would_name": "FIN8",
+     "known_actor_position": null
+    },
+    {
+     "ordering": "rarity-weighted overlap (sum of -ln g)",
+     "level": "parent technique",
+     "groups_ordered": 133,
+     "would_name": "Turla",
+     "known_actor_position": null
+    },
+    {
+     "ordering": "overlap / profile size (breadth-normalised)",
+     "level": "parent technique",
+     "groups_ordered": 133,
+     "would_name": "Suckfly",
+     "known_actor_position": null
+    },
+    {
+     "ordering": "F1 of overlap/profile and overlap/observed",
+     "level": "parent technique",
+     "groups_ordered": 133,
+     "would_name": "Suckfly",
+     "known_actor_position": null
+    }
+   ]
+  },
+  {
+   "source_id": "otrf-lsass-03-comsvcs",
+   "source_sha256": "97a834cd72b0803d544c62cc45a41b18a4cc04a605735096be4bc5dad5e9fe7b",
+   "investigation_id": "investigation::741ece107c0f88dcac5a86321534ce974f67f7eef85d63a75c2ca17cb7463290",
+   "kind": "tool_test",
+   "known_actor": null,
+   "known_basis": "OTRF Security Datasets: one credential-dumping tool run; no actor",
+   "verdict": "not_distinguishable",
+   "named_actors": [],
+   "statement": "No actor can be singled out from this evidence. Many Groups are consistent with it, and nothing observed is specific to one of them.",
+   "units": 9,
+   "observed_techniques": 9,
+   "candidates": 125,
+   "known_actor_profile_techniques": null,
+   "known_actor_techniques_observed": null,
+   "units_with_known_actor_as_candidate": null,
+   "unit_level": null,
+   "orderings": [
+    {
+     "ordering": "observed techniques in profile (count)",
+     "level": "technique",
+     "groups_ordered": 95,
+     "would_name": "Kimsuky",
+     "known_actor_position": null
+    },
+    {
+     "ordering": "rarity-weighted overlap (sum of -ln g)",
+     "level": "technique",
+     "groups_ordered": 95,
+     "would_name": "Kimsuky",
+     "known_actor_position": null
+    },
+    {
+     "ordering": "overlap / profile size (breadth-normalised)",
+     "level": "technique",
+     "groups_ordered": 95,
+     "would_name": "TA459",
+     "known_actor_position": null
+    },
+    {
+     "ordering": "F1 of overlap/profile and overlap/observed",
+     "level": "technique",
+     "groups_ordered": 95,
+     "would_name": "Gorgon Group",
+     "known_actor_position": null
+    },
+    {
+     "ordering": "observed techniques in profile (count)",
+     "level": "parent technique",
+     "groups_ordered": 133,
+     "would_name": "FIN8",
+     "known_actor_position": null
+    },
+    {
+     "ordering": "rarity-weighted overlap (sum of -ln g)",
+     "level": "parent technique",
+     "groups_ordered": 133,
+     "would_name": "Turla",
+     "known_actor_position": null
+    },
+    {
+     "ordering": "overlap / profile size (breadth-normalised)",
+     "level": "parent technique",
+     "groups_ordered": 133,
+     "would_name": "Suckfly",
+     "known_actor_position": null
+    },
+    {
+     "ordering": "F1 of overlap/profile and overlap/observed",
+     "level": "parent technique",
+     "groups_ordered": 133,
+     "would_name": "Suckfly",
+     "known_actor_position": null
+    }
+   ]
+  }
+ ]
+}

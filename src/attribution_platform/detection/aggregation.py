@@ -22,7 +22,10 @@ from typing import Any
 
 from attribution_platform.detection.errors import DetectionError
 
-AGGREGATION_KINDS = ("threshold", "new_terms")
+AGGREGATION_KINDS = ("threshold", "new_terms", "sequence")
+#: How a sequence key is compared: a Windows file path, case-insensitively and
+#: without an NTFS stream suffix (``file.exe:Zone.Identifier`` is ``file.exe``).
+KEY_FORMS = (None, "windows_path")
 
 
 @dataclass(frozen=True)
@@ -55,10 +58,22 @@ class Aggregation:
     cardinality: tuple[tuple[AggregationField, int], ...] = ()
     #: new_terms: how far back the values must not have been seen
     history_seconds: float = 0.0
+    #: sequence: 1 for the event that must come first, 2 for the event that detects
+    stage: int = 0
+    #: sequence: how the key value is normalised before comparison (:data:`KEY_FORMS`)
+    key_form: str | None = None
 
     def __post_init__(self) -> None:
         if self.kind not in AGGREGATION_KINDS:
             raise DetectionError(f"Aggregation.kind must be one of {AGGREGATION_KINDS}")
+        if self.kind == "sequence":
+            if self.stage not in (1, 2) or len(self.fields) != 1 or self.span_seconds <= 0:
+                raise DetectionError(
+                    "a sequence needs stage 1 or 2, exactly one key field and span_seconds > 0"
+                )
+            if self.key_form not in KEY_FORMS or self.cardinality:
+                raise DetectionError(f"a sequence key_form must be one of {KEY_FORMS}")
+            return
         if self.kind == "threshold":
             if self.count < 1 or self.span_seconds <= 0:
                 raise DetectionError("a threshold needs count >= 1 and span_seconds > 0")
@@ -103,6 +118,18 @@ def aggregation_from_dict(raw: Any, *, where: str) -> Aggregation:
         raise DetectionError(f"{where}: aggregation 'fields' must be a list")
     fields = tuple(_field(f, where=where) for f in raw_fields)
     try:
+        if kind == "sequence":
+            stage = _number(raw.get("stage"), where=where, key="stage")
+            key_form = raw.get("key_form")
+            if key_form is not None and not isinstance(key_form, str):
+                raise DetectionError(f"{where}: 'key_form' must be a string")
+            return Aggregation(
+                kind=kind,
+                fields=fields,
+                span_seconds=_number(raw.get("span_seconds"), where=where, key="span_seconds"),
+                stage=int(stage),
+                key_form=key_form,
+            )
         if kind == "new_terms":
             return Aggregation(
                 kind=kind,
@@ -136,4 +163,10 @@ def aggregation_from_dict(raw: Any, *, where: str) -> Aggregation:
         raise DetectionError(f"{where}: {exc}") from exc
 
 
-__all__ = ["AGGREGATION_KINDS", "Aggregation", "AggregationField", "aggregation_from_dict"]
+__all__ = [
+    "AGGREGATION_KINDS",
+    "KEY_FORMS",
+    "Aggregation",
+    "AggregationField",
+    "aggregation_from_dict",
+]

@@ -132,6 +132,7 @@ def test_the_tracked_review_is_sound(knowledge: AttackKnowledge) -> None:
         REPO
         / "data/detection/sigma/r2026-07-01/generated/sigma-r2026-07-01-sigma_core++.rules.json",
         REPO / "data/detection/elastic/195f15c0bac8/generated/elastic-195f15c0bac8.rules.json",
+        REPO / "data/detection/platform/platform-rules.json",
     ):
         for rule in load_rule_pack(pack, knowledge=knowledge).rules:
             declared.setdefault(rule.rule_source, set()).update(

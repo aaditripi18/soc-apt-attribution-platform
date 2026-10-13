@@ -366,6 +366,19 @@
     "T1134.001"
    ],
    "reason": "Read in full: a child of the service control manager that either echoes a value into a named pipe or runs rundll32 on a DLL with the ',a /p:' arguments - the two published named-pipe impersonation methods of the getsystem command. Both are Token Impersonation/Theft; neither branch observes a new process being created with the token. Inspected events (two recordings): the second branch exactly, a temporary DLL run by rundll32 under services.exe."
+  },
+  {
+   "rule_source": "platform:deceptive-download-run",
+   "rule_name": "Deceptively named download run by the user (platform rule, ADR-0026)",
+   "declares": [
+    "T1036.007",
+    "T1204.002"
+   ],
+   "establishes": [
+    "T1036.007",
+    "T1204.002"
+   ],
+   "reason": "Written here, so its logic is known in full. A match requires two linked events on one host: a web browser saving a file, and that same file starting as a process within a day; and the file's name must end in a document, image, archive or media extension followed by .exe. The name is the double extension; the start of a browser-saved file is the user running a delivered file. Both hold for every match. It does not establish that the file is malicious."
   }
  ],
  "left_ambiguous_after_reading": [

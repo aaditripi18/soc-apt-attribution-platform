@@ -296,7 +296,7 @@ export interface Observation {
 }
 
 export interface RuleInfo {
-  origin: "sigma" | "elastic";
+  origin: "sigma" | "elastic" | "platform";
   source_id: string;
   title: string | null;
   url: string | null;

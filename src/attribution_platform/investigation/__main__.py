@@ -64,6 +64,7 @@ from attribution_platform.detection_content.pinned import (
     ELASTIC_PACK,
     FRONTEND_DIST,
     KNOWN_ANSWER_CHECKS,
+    PLATFORM_PACK,
     SIGMA_ACTOR_IMPORT_REPORT,
     SIGMA_ACTOR_PACK,
     SIGMA_PACK,
@@ -147,7 +148,9 @@ def load_workbench() -> Workbench:
     # coverage report (and so detectability) is about techniques and covers the
     # two technique packs only.
     actor_pack = load_rule_pack(SIGMA_ACTOR_PACK, knowledge=knowledge)
-    engine_packs = [*packs, actor_pack]
+    # ADR-0026: the few rules written here, for measured gaps no published rule covers.
+    platform_pack = load_rule_pack(PLATFORM_PACK, knowledge=knowledge)
+    engine_packs = [*packs, actor_pack, platform_pack]
     return Workbench(
         knowledge=knowledge,
         engine=DetectionEngine(rules=tuple(r for pack in engine_packs for r in pack.rules)),
@@ -341,6 +344,7 @@ def main(argv: Sequence[str] | None = None, env: dict[str, str] | None = None) -
             known_answer_checks=KNOWN_ANSWER_CHECKS,
             actor_import_report=SIGMA_ACTOR_IMPORT_REPORT,
             advisory_attributions=ADVISORY_ATTRIBUTIONS,
+            platform_pack=PLATFORM_PACK,
         )
         uploads = None if "--no-upload" in args else upload_service(client, workbench)
         assistant = None if "--no-assistant" in args else service_from_env(env)

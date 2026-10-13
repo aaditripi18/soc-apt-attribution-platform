@@ -146,6 +146,29 @@ def _rule_index(
     return rules
 
 
+def _platform_rule_index(pack: Mapping[str, Any]) -> dict[str, Any]:
+    """The platform's own rules (ADR-0026) by rule source: written here, so there
+    is no upstream rule to link to."""
+    tiers: dict[str, str] = {}
+    for rule in pack.get("rules") or ():
+        if not rule.get("technique_mappings"):
+            continue  # a first-stage rule is a precondition: it produces no Evidence
+        tier = "enrich" if rule.get("evidence_quality") == "low" else _DEFAULT_TIER
+        tiers.setdefault(str(rule["rule_source"]), tier)
+    return {
+        source: {
+            "origin": "platform",
+            "source_id": source,
+            "title": (pack.get("titles") or {}).get(source),
+            "url": None,
+            "content_tier": tier,
+            "logsources": [],
+            "translation": "authored",
+        }
+        for source, tier in tiers.items()
+    }
+
+
 def _actor_rule_index(actor_report: Mapping[str, Any]) -> dict[str, Any]:
     """Actor-specific rules (ADR-0018) by ``sigma-actor:<sigma id>``."""
     rules: dict[str, Any] = {}
@@ -360,6 +383,7 @@ def load_api_context(
     known_answer_checks: Path | None = None,
     actor_import_report: Path | None = None,
     advisory_attributions: Path | None = None,
+    platform_pack: Path | None = None,
 ) -> ApiContext:
     """Read the pinned artefacts once and shape them for the API. The built
     frontend is served only when ``static_dir`` holds an ``index.html``."""
@@ -372,6 +396,8 @@ def load_api_context(
     )
     if actor is not None:
         rules.update(_actor_rule_index(actor))
+    if platform_pack is not None and platform_pack.is_file():
+        rules.update(_platform_rule_index(_read(platform_pack)))
     served = (
         static_dir if static_dir is not None and (static_dir / "index.html").is_file() else None
     )
