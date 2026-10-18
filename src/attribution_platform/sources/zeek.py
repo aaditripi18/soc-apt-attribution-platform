@@ -290,6 +290,7 @@ class ZeekSourceAdapter:
             filename=_text(r.get("filename")),
             mime_type=_text(r.get("mime_type")),
             file_source=_text(r.get("source")) if log == "files" else None,
+            file_is_orig=_text(r.get("is_orig")) if log == "files" else None,
             md5=_text(r.get("md5")),
             sha1=_text(r.get("sha1")),
             conn_uids=_text(r.get("conn_uids")),

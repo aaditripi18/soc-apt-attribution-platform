@@ -4,7 +4,8 @@
  "attack_kb_version": "enterprise-attack-19.2",
  "titles": {
   "platform:deceptive-download-run": "Deceptively named download run by the user",
-  "platform:browser-download-run": "File saved by a browser, then run"
+  "platform:browser-download-run": "File saved by a browser, then run",
+  "platform:executable-received-over-http": "Executable received over HTTP"
  },
  "rules": [
   {
@@ -1422,6 +1423,51 @@
      }
     ]
    }
+  },
+  {
+   "rule_id": "platform:executable-received-over-http:files",
+   "rule_version": "1.0",
+   "conditions": [
+    {
+     "field_path": "event.dataset",
+     "operator": "equals",
+     "value": "zeek.files"
+    },
+    {
+     "field_path": "zeek.file_source",
+     "operator": "equals",
+     "value": "HTTP"
+    },
+    {
+     "field_path": "zeek.mime_type",
+     "operator": "in",
+     "value": [
+      "application/x-dosexec"
+     ]
+    },
+    {
+     "field_path": "zeek.file_is_orig",
+     "operator": "in",
+     "value": [
+      "F",
+      "false"
+     ]
+    }
+   ],
+   "technique_mappings": [
+    {
+     "stix_id": "attack-pattern--e6919abc-99f9-4c6c-95a5-14761e7b2add",
+     "object_type": "attack-pattern",
+     "attack_kb_version": "enterprise-attack-19.2",
+     "external_id": "T1105",
+     "mapping_basis": "network file analysis saw a Windows executable delivered to a host over HTTP",
+     "mapping_source": "platform-rules"
+    }
+   ],
+   "evidence_type": "behavioral",
+   "rule_source": "platform:executable-received-over-http",
+   "rule_family": "platform:executable-received-over-http",
+   "evidence_quality": "low"
   }
  ]
 }

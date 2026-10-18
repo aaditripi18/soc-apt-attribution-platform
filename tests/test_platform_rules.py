@@ -140,11 +140,19 @@ def test_what_does_not_detect(engine: DetectionEngine, observations: list[Observ
 def test_the_tracked_pack_is_what_the_builder_writes(knowledge: AttackKnowledge) -> None:
     assert PACK.read_text(encoding="utf-8") == builder.render()
     rules = load_rule_pack(PACK, knowledge=knowledge).rules
-    assert {r.rule_source for r in rules} == {builder.DECEPTIVE, builder.DOWNLOADED}
-    assert all(r.aggregation is not None and r.aggregation.kind == "sequence" for r in rules)
+    assert {r.rule_source for r in rules} == {
+        builder.DECEPTIVE,
+        builder.DOWNLOADED,
+        builder.NETWORK_EXECUTABLE,
+    }
+    sequences = [r for r in rules if r.rule_source != builder.NETWORK_EXECUTABLE]
+    assert all(r.aggregation is not None and r.aggregation.kind == "sequence" for r in sequences)
     # only the detecting stage maps to techniques; the first stage is a precondition
-    for rule in rules:
+    for rule in sequences:
+        assert rule.aggregation is not None
         assert bool(rule.technique_mappings) == (rule.aggregation.stage == 2)
+    (network,) = [r for r in rules if r.rule_source == builder.NETWORK_EXECUTABLE]
+    assert network.aggregation is None  # one event: Zeek's own file analysis
 
 
 @pytest.mark.parametrize(
@@ -186,5 +194,55 @@ def test_the_site_labels_each_rule_with_its_own_tier() -> None:
     assert {k: (v["origin"], v["content_tier"]) for k, v in labels.items()} == {
         builder.DECEPTIVE: ("platform", "core"),
         builder.DOWNLOADED: ("platform", "enrich"),  # from its detecting stage, not the first
+        builder.NETWORK_EXECUTABLE: ("platform", "enrich"),
     }
     assert all(v["title"] and v["url"] is None for v in labels.values())
+
+
+# --- an executable received over HTTP (network side of delivery) ------------------
+
+
+def _file_record(**changes: str) -> dict[str, str]:
+    """A Zeek ``files`` record as the TSV reader yields it (shape of a lab capture)."""
+    record = {
+        "@stream": "files",
+        "@proc": "zeek",
+        "ts": "1693173869.722281",
+        "fuid": "Fx8uMCfKrZqZwq1J9",
+        "uid": "Ch2Bdd2EGQ6SJwUXL5",
+        "id.orig_h": "192.168.1.40",
+        "id.orig_p": "56691",
+        "id.resp_h": "10.0.5.13",
+        "id.resp_p": "8080",
+        "source": "HTTP",
+        "mime_type": "application/x-dosexec",
+        "is_orig": "F",
+        "seen_bytes": "7168",
+    }
+    record.update(changes)
+    return record
+
+
+@pytest.mark.parametrize(
+    ("changes", "fires"),
+    [
+        ({}, True),  # downloaded over HTTP (TSV boolean)
+        ({"is_orig": "false"}, True),  # the same in Zeek's JSON spelling
+        ({"is_orig": "T"}, False),  # sent by the originator: an upload
+        ({"mime_type": "text/html"}, False),  # not an executable
+        ({"source": "SMB"}, False),  # not over HTTP
+    ],
+)
+def test_an_executable_received_over_http_is_context(
+    engine: DetectionEngine, changes: dict[str, str], fires: bool
+) -> None:
+    from attribution_platform.sources.zeek import ZeekSourceAdapter
+
+    (observation,) = ZeekSourceAdapter().to_observations(_file_record(**changes))
+    assert observation.zeek.file_is_orig == changes.get("is_orig", "F")
+    detections = engine.evaluate([observation])
+    assert bool(detections) is fires
+    for detection in detections:
+        assert detection.detection_source == builder.NETWORK_EXECUTABLE
+        assert detection.evidence_quality is EvidenceQuality.LOW  # ordinary downloads too
+        assert [m.attack_ref.external_id for m in detection.technique_mappings] == ["T1105"]

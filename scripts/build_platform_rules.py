@@ -35,6 +35,9 @@ DECOY_EXTENSIONS = (
 SPAN_SECONDS = 86_400
 DECEPTIVE = "platform:deceptive-download-run"
 DOWNLOADED = "platform:browser-download-run"
+NETWORK_EXECUTABLE = "platform:executable-received-over-http"
+#: Zeek's MIME types for Windows executables (its own file-type signatures).
+EXECUTABLE_MIME_TYPES = ("application/x-dosexec",)
 
 
 def _sequence(stage: int, name: str, field_path: str) -> dict[str, object]:
@@ -139,6 +142,36 @@ def build() -> dict[str, object]:
             "aggregation": _sequence(2, "process.executable", "process.executable"),
         }
     )
+    # 3. An executable received over HTTP, from Zeek's file analysis. Ordinary
+    #    software downloads do this too: enrich tier (context, never compared).
+    rules.append(
+        {
+            "rule_id": f"{NETWORK_EXECUTABLE}:files",
+            "rule_version": VERSION,
+            "conditions": [
+                {"field_path": "event.dataset", "operator": "equals", "value": "zeek.files"},
+                {"field_path": "zeek.file_source", "operator": "equals", "value": "HTTP"},
+                {
+                    "field_path": "zeek.mime_type",
+                    "operator": "in",
+                    "value": list(EXECUTABLE_MIME_TYPES),
+                },
+                # the originator received it: a download, not an upload
+                # Zeek writes a boolean as T / F in its TSV logs and true / false in JSON
+                {"field_path": "zeek.file_is_orig", "operator": "in", "value": ["F", "false"]},
+            ],
+            "technique_mappings": [
+                mapping(
+                    "T1105",
+                    "network file analysis saw a Windows executable delivered to a host over HTTP",
+                )
+            ],
+            "evidence_type": "behavioral",
+            "rule_source": NETWORK_EXECUTABLE,
+            "rule_family": NETWORK_EXECUTABLE,
+            "evidence_quality": "low",
+        }
+    )
     return {
         "pack_id": f"platform-rules-{VERSION}",
         "description": (
@@ -150,6 +183,7 @@ def build() -> dict[str, object]:
         "titles": {
             DECEPTIVE: "Deceptively named download run by the user",
             DOWNLOADED: "File saved by a browser, then run",
+            NETWORK_EXECUTABLE: "Executable received over HTTP",
         },
         "rules": rules,
     }

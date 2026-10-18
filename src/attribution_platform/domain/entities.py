@@ -703,6 +703,9 @@ class ZeekRef:
     filename: str | None = None
     mime_type: str | None = None
     file_source: str | None = None
+    #: ``files`` log ``is_orig``: whether the connection's originator sent the file
+    #: (``false``: it was received by the originator, i.e. downloaded)
+    file_is_orig: str | None = None
     md5: str | None = None
     sha1: str | None = None
     conn_uids: str | None = None

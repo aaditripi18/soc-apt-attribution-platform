@@ -77,3 +77,28 @@ cases that must not detect (name alone, saved never run, run before saved, more 
 a non-browser, a different file run); the tracked pack is what the builder writes; malformed sequences refused;
 the site's label takes its tier from the detecting stage. Served-model audit on a re-run with core and enrich
 platform evidence: every check passes.
+
+## Amendment A (2026-10-18) — the network side: an executable received over HTTP
+
+**Rule.** `platform:executable-received-over-http`, one event: Zeek's file analysis records a file of MIME type
+`application/x-dosexec` delivered over HTTP to the connection's originator (`is_orig` false — a download, not an
+upload). Ingress Tool Transfer, **enrich tier**: ordinary software downloads look the same. The network reader now
+keeps the `files` log's `is_orig` (`ZeekRef.file_is_orig`). Zeek writes booleans as `T`/`F` in its TSV logs and
+`true`/`false` in JSON; the reader keeps them as written (its documentation said `true`/`false` only), and the
+rule accepts both.
+
+**Where it fires.** Six of the seven tool runs, each on the payload fetched from the lab's attack server; not in
+the seventh, whose capture holds no executable transfer. Tests: an upload, a non-executable and a non-HTTP transfer
+do not fire.
+
+**Measured effect** (seven tool runs with their network logs; snapshot
+`data/validation/history/investigations.tool-runs-with-network-rule.json`; audit 12,680 checks, all passing): **no
+change to what is counted** — expected, since it is context. The two techniques gained on the recording with the
+deceptively named payload come from the host rule above, not from this one.
+
+**A limit this exposed.** Context Evidence is shown only inside activity clusters, and enrich Evidence never forms
+one on its own. Network Observations carry no process identity, so they never link structurally to the host's
+clusters. The six detections are therefore stored and counted in "low-level items in no unit" but **appear on no
+investigation page**. Making them visible needs either a place for Evidence outside clusters, or linking network
+and host events (by address and time), which ADR-0003 deliberately does not do on shared attributes alone. Not
+decided here.
