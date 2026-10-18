@@ -47,6 +47,7 @@ import { links, navigate } from "../lib/router";
 import { ActivityTimelineTab } from "./investigation/ActivityTimeline";
 import { AttributionHeadline, AttributionTab } from "./investigation/Attribution";
 import { ChainTab } from "./investigation/Chain";
+import { ContextPanel } from "./investigation/Context";
 import { EmulationTab } from "./investigation/Emulation";
 import { IndicatorsTab } from "./investigation/Indicators";
 import { MatrixTab } from "./investigation/Matrix";
@@ -323,6 +324,11 @@ export function InvestigationDetailPage({ id, tab }: { id: string; tab?: string 
           />
         </div>
 
+        {units.length === 0 && record.evidence_outside_units > 0 && (
+          <div className="mb-6">
+            <ContextPanel id={record.investigation_id} />
+          </div>
+        )}
         {units.length === 0 ? (
           <EmptyState title="No detections in this log source">
             <p>
@@ -342,11 +348,12 @@ export function InvestigationDetailPage({ id, tab }: { id: string; tab?: string 
             {record.evidence_outside_units > 0 && (
               <p className="max-w-4xl text-body-md text-on-surface-variant">
                 <span className="text-on-surface">{integer(record.evidence_outside_units)} low-level Evidence items are in no unit.</span>{" "}
-                They come from enrich-tier rules (common administrative behaviour) and have no structural link to core
-                Evidence, so they neither form a unit nor add a technique to any comparison (ADR-0003 Amendment H). Units below
-                account for the other {integer(record.evidence_in_units)}.
+                They come from low-level rules and have no link to a cluster&apos;s process chain, so they neither form
+                a unit nor add a technique to any comparison. They are listed below as context; the units account for
+                the other {integer(record.evidence_in_units)}.
               </p>
             )}
+            {record.evidence_outside_units > 0 && <ContextPanel id={record.investigation_id} />}
             <Timeline units={filtered} onOpen={(unitId) => navigate(links.unit(unitId))} />
             <Card padded={false}>
               <CardHeader

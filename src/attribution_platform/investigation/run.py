@@ -467,6 +467,7 @@ def run_investigation(
         units=tuple(sorted(g.group_id for g in groups)),
         evidence_in_units=len(in_units),
         evidence_outside_units=evidence_count - len(in_units),
+        evidence_outside_unit_ids=tuple(sorted(set(members) - in_units)),
     )
     persist_investigation(client, record)
     if emulation is not None:

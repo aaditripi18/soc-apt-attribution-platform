@@ -324,3 +324,23 @@ logging from inside the implant), not a different reading of the events here.
 
 **Measurement after this step:** unchanged, 17 of 45. Steps 3 and 4 of the reviewer's plan are complete; step 4's
 repeat measurement records no change, and the reason.
+
+## Amendment H (2026-10-18) — correction to Amendment G: the attacker's discovery *was* recorded
+
+Amendment G said the authors' System Information Discovery ran inside the implant and left no process to detect.
+**That was wrong.** Its survey read only the Evidence inside activity clusters. The context view added in
+ADR-0026 Amendment B lists the Evidence outside them, and there it is: `systeminfo.exe`, detected by a low-level
+Sigma rule, in each tool run checked (four of four). Its ancestry in the uploaded recording:
+`systeminfo.exe` <- `cmd.exe` <- `winx64_payload.exe` (the implant) <- `happy_image.jpeg.exe` (the delivered
+file). It is the attacker's discovery.
+
+**Why it is not counted.** The rule is low-level (enrich): shown, never compared. And it is outside every cluster:
+the `cmd.exe` between it and the implant matched no rule, so no Evidence sits on it, and structural correlation
+links Evidence to Evidence. A chain through an undetected process is broken.
+
+**What the harness finding still holds.** The `set processor >> osinfo.txt` detections of Amendment G are the
+recording harness; that stands. What does not stand is "no process to detect".
+
+**Consequence.** The gap is in correlation, not telemetry: linking a low-level detection to a cluster through the
+process ancestry, across processes that matched no rule. Recorded as the next step (ADR-0003 is the decision to
+amend); the measured figure is unchanged until then.

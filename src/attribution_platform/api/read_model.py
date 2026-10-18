@@ -167,6 +167,58 @@ def _label(observation: Observation | None) -> str | None:
     return observation.raw_reference.source_type if observation.raw_reference else None
 
 
+def _endpoint(endpoint: Any) -> str | None:
+    if endpoint is None or not getattr(endpoint, "ip", None):
+        return None
+    return f"{endpoint.ip}:{endpoint.port}" if getattr(endpoint, "port", None) else str(endpoint.ip)
+
+
+def get_investigation_context(client: ElasticClient, investigation_id: str) -> dict[str, Any]:
+    """The low-level Evidence of an investigation that belongs to no unit
+    (ADR-0026 Amendment B): enrich-tier detections with no structural link to
+    core Evidence - network events among them, which carry no process identity.
+    Shown as context, in time order; nothing here is compared with group
+    profiles. Like the activity route, never a command line."""
+    record = get_investigation(client, investigation_id)
+    items: list[dict[str, Any]] = []
+    try:
+        for evidence_id in record.get("evidence_outside_unit_ids") or ():
+            evidence = load_evidence(client, str(evidence_id))
+            if evidence is None:
+                continue
+            observation = load_observation(client, evidence.provenance.source_observation_ids[0])
+            ref = evidence.attack_ref
+            when = evidence.time_span.start if evidence.time_span else None
+            if when is None and observation is not None:
+                when = observation.timestamp
+            host = observation.host if observation is not None else None
+            network = observation.network if observation is not None else None
+            zeek = observation.zeek if observation is not None else None
+            items.append(
+                {
+                    "time": when.isoformat() if when is not None else None,
+                    "evidence_id": evidence.evidence_id,
+                    "rule_source": ":".join(evidence.provenance.method.split(":")[:2]),
+                    "host": (host.name or host.id) if host is not None else None,
+                    "label": _label(observation),
+                    "attack_id": ref.external_id if ref is not None else None,
+                    "attack_object_type": ref.object_type if ref is not None else None,
+                    "from": _endpoint(network.source) if network is not None else None,
+                    "to": _endpoint(network.destination) if network is not None else None,
+                    "file_type": zeek.mime_type if zeek is not None else None,
+                }
+            )
+    except ElasticIntegrationError as exc:
+        raise BackendError(f"could not load the context of {investigation_id!r}: {exc}") from exc
+    items.sort(key=lambda i: (i["time"] is None, i["time"] or "", i["evidence_id"]))
+    return {
+        "investigation_id": investigation_id,
+        "evidence_outside_units": record.get("evidence_outside_units"),
+        "listed": len(items),
+        "items": items,
+    }
+
+
 def get_investigation_activity(client: ElasticClient, investigation_id: str) -> dict[str, Any]:
     """Every Evidence item of an investigation's units as one time-ordered list
     (ADR-0019): when, on which host, in which unit, mapped to what, and whether

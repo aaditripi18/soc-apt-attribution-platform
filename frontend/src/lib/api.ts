@@ -583,6 +583,27 @@ export interface ActivityEvent {
   declared_only: boolean;
 }
 
+/** ADR-0026 Amendment B: low-level Evidence that belongs to no unit. */
+export interface ContextItem {
+  time: string | null;
+  evidence_id: string;
+  rule_source: string;
+  host: string | null;
+  label: string | null;
+  attack_id: string | null;
+  attack_object_type: string | null;
+  from: string | null;
+  to: string | null;
+  file_type: string | null;
+}
+
+export interface ContextEvidence {
+  investigation_id: string;
+  evidence_outside_units: number | null;
+  listed: number;
+  items: ContextItem[];
+}
+
 export interface Activity {
   investigation_id: string;
   evidence_in_units: number;
@@ -849,6 +870,7 @@ export const paths = {
   observables: (id: string) => `/investigations/${encodeURIComponent(id)}/observables`,
   assistant: () => "/assistant",
   activity: (id: string) => `/investigations/${encodeURIComponent(id)}/activity`,
+  context: (id: string) => `/investigations/${encodeURIComponent(id)}/context`,
   emulation: (id: string) => `/investigations/${encodeURIComponent(id)}/emulation`,
   unit: (id: string) => `/units/${encodeURIComponent(id)}`,
   unitEvidence: (id: string) => `/units/${encodeURIComponent(id)}/evidence`,

@@ -88,6 +88,7 @@ from attribution_platform.api.read_model import (
     get_health,
     get_investigation,
     get_investigation_activity,
+    get_investigation_context,
     get_investigation_observables,
     get_observation,
     get_profile_match,
@@ -137,6 +138,7 @@ _DOSSIER_SUFFIX = "/dossier"
 _INVESTIGATION_VIEWS: dict[str, Callable[[ElasticClient, str], Any]] = {
     "/assessment": get_assessment,
     "/activity": get_investigation_activity,
+    "/context": get_investigation_context,
     "/emulation": get_emulation_comparison,
     "/profile-match": get_profile_match,
     "/observables": get_investigation_observables,

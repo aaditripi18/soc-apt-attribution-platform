@@ -449,6 +449,14 @@ def main(argv: list[str]) -> int:
             == investigation["evidence"],
             f"{summary['source_id']}: {evidence_total} in units",
         )
+        # --- ADR-0026 Amendment B: the context lists every Evidence in no unit ---
+        context = audit.get(f"/investigations/{_quote(summary['investigation_id'])}/context")
+        audit.check(
+            "investigation.context_is_the_evidence_outside_units",
+            context["listed"] == investigation["evidence_outside_units"]
+            and not {i["evidence_id"] for i in context["items"]} & set(expected_activity),
+            f"{summary['source_id']}: {context['listed']} listed",
+        )
         # --- ADR-0019: the activity view is exactly the units' Evidence ----------
         activity = audit.get(f"/investigations/{_quote(summary['investigation_id'])}/activity")
         served_activity = {

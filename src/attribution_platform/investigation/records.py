@@ -28,8 +28,9 @@ from attribution_platform.dataplane import ElasticClient, ElasticIntegrationErro
 INVESTIGATIONS_INDEX = "attribution-platform-investigations-v1"
 ATTRIBUTION_ANALYSES_INDEX = "attribution-platform-attribution-analyses-v1"
 UNIT_SUMMARIES_INDEX = "attribution-platform-unit-summaries-v1"
-#: /2 adds ``evidence_in_units`` / ``evidence_outside_units`` (ADR-0009 Amendment D).
-INVESTIGATION_SCHEMA_VERSION = "investigation/2"
+#: /2 adds ``evidence_in_units`` / ``evidence_outside_units`` (ADR-0009 Amendment D);
+#: /3 adds ``evidence_outside_unit_ids`` (ADR-0026 Amendment B).
+INVESTIGATION_SCHEMA_VERSION = "investigation/3"
 UNIT_SUMMARY_SCHEMA_VERSION = "unit-summary/1"
 #: /2 adds ``collection_guidance`` (ADR-0005 Amendment E); /3 adds
 #: ``indicator_matches`` (ADR-0013, contextual only); /4 adds
@@ -230,6 +231,8 @@ class InvestigationRecord:
     #: to core Evidence: it never forms or joins a unit (ADR-0003 Amendment H).
     evidence_in_units: int = 0
     evidence_outside_units: int = 0
+    #: ADR-0026 Amendment B: which Evidence that is, so it can be shown as context.
+    evidence_outside_unit_ids: tuple[str, ...] = ()
     schema_version: str = field(default=INVESTIGATION_SCHEMA_VERSION)
 
 

@@ -102,3 +102,19 @@ clusters. The six detections are therefore stored and counted in "low-level item
 investigation page**. Making them visible needs either a place for Evidence outside clusters, or linking network
 and host events (by address and time), which ADR-0003 deliberately does not do on shared attributes alone. Not
 decided here.
+
+## Amendment B (2026-10-18) — context outside the activity clusters is shown
+
+**Decision.** The limit found in Amendment A is closed by display, not by linking. The investigation record now
+lists the Evidence that belongs to no unit (`evidence_outside_unit_ids`, schema `investigation/3`), and
+`GET /investigations/{id}/context` serves it in time order: when, which host, what was seen (process name or
+action, never a command line), the technique, network endpoints and file type where the event has them, and the
+rule. The investigation's overview shows it in a "Context outside the activity clusters" table, also when an
+investigation has no cluster at all. Nothing in it is compared with group profiles; the page says so.
+
+Network and host events are still **not** linked by address and time: sharing an address is a weak link, and
+ADR-0003 keeps correlation to structural links. The analyst sees both and can relate them.
+
+**Checks.** `tests/test_context_evidence.py` (a recording whose only Evidence is low-level: listed as context, not
+in the activity; an investigation with everything in clusters has no context); the served-model audit checks that
+the context lists exactly the Evidence outside units and none of the units' Evidence.
