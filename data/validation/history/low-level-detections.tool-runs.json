@@ -1,0 +1,498 @@
+{
+ "otrf-lsass-01-logonpasswords": [
+  {
+   "rule_source": "elastic:94a401ba-4fa2-455c-b7ae-b6e037afc0b7",
+   "technique": "T1615",
+   "in_authors_list": false,
+   "already_counted": true,
+   "evidence": 1,
+   "seen_in": {
+    "gpresult.exe": 1
+   }
+  },
+  {
+   "rule_source": "elastic:d68e95ad-1c82-4074-a12a-125fe10ac8ba",
+   "technique": "T1059",
+   "in_authors_list": false,
+   "already_counted": false,
+   "evidence": 2,
+   "seen_in": {
+    "cmd.exe": 2
+   }
+  },
+  {
+   "rule_source": "elastic:d68e95ad-1c82-4074-a12a-125fe10ac8ba",
+   "technique": "T1059.003",
+   "in_authors_list": false,
+   "already_counted": false,
+   "evidence": 2,
+   "seen_in": {
+    "cmd.exe": 2
+   }
+  },
+  {
+   "rule_source": "elastic:d68e95ad-1c82-4074-a12a-125fe10ac8ba",
+   "technique": "T1082",
+   "in_authors_list": true,
+   "already_counted": false,
+   "evidence": 2,
+   "seen_in": {
+    "cmd.exe": 2
+   }
+  },
+  {
+   "rule_source": "elastic:d68e95ad-1c82-4074-a12a-125fe10ac8ba",
+   "technique": "T1083",
+   "in_authors_list": false,
+   "already_counted": false,
+   "evidence": 2,
+   "seen_in": {
+    "cmd.exe": 2
+   }
+  },
+  {
+   "rule_source": "platform:browser-download-run",
+   "technique": "T1204.002",
+   "in_authors_list": true,
+   "already_counted": false,
+   "evidence": 1,
+   "seen_in": {
+    "winx64_payload.exe": 1
+   }
+  },
+  {
+   "rule_source": "sigma:3037d961-21e9-4732-b27a-637bcc7bf539",
+   "technique": "T1202",
+   "in_authors_list": false,
+   "already_counted": false,
+   "evidence": 3,
+   "seen_in": {
+    "conhost.exe": 3
+   }
+  },
+  {
+   "rule_source": "sigma:502b42de-4306-40b4-9596-6f590c81f073",
+   "technique": "T1033",
+   "in_authors_list": true,
+   "already_counted": true,
+   "evidence": 1,
+   "seen_in": {
+    "whoami.exe": 1
+   }
+  },
+  {
+   "rule_source": "sigma:502b42de-4306-40b4-9596-6f590c81f073",
+   "technique": "T1087.001",
+   "in_authors_list": false,
+   "already_counted": false,
+   "evidence": 1,
+   "seen_in": {
+    "whoami.exe": 1
+   }
+  }
+ ],
+ "otrf-lsass-02-procdump": [
+  {
+   "rule_source": "elastic:94a401ba-4fa2-455c-b7ae-b6e037afc0b7",
+   "technique": "T1615",
+   "in_authors_list": false,
+   "already_counted": true,
+   "evidence": 1,
+   "seen_in": {
+    "gpresult.exe": 1
+   }
+  },
+  {
+   "rule_source": "elastic:d68e95ad-1c82-4074-a12a-125fe10ac8ba",
+   "technique": "T1059",
+   "in_authors_list": false,
+   "already_counted": false,
+   "evidence": 2,
+   "seen_in": {
+    "cmd.exe": 2
+   }
+  },
+  {
+   "rule_source": "elastic:d68e95ad-1c82-4074-a12a-125fe10ac8ba",
+   "technique": "T1059.003",
+   "in_authors_list": false,
+   "already_counted": false,
+   "evidence": 2,
+   "seen_in": {
+    "cmd.exe": 2
+   }
+  },
+  {
+   "rule_source": "elastic:d68e95ad-1c82-4074-a12a-125fe10ac8ba",
+   "technique": "T1082",
+   "in_authors_list": true,
+   "already_counted": false,
+   "evidence": 2,
+   "seen_in": {
+    "cmd.exe": 2
+   }
+  },
+  {
+   "rule_source": "elastic:d68e95ad-1c82-4074-a12a-125fe10ac8ba",
+   "technique": "T1083",
+   "in_authors_list": false,
+   "already_counted": false,
+   "evidence": 2,
+   "seen_in": {
+    "cmd.exe": 2
+   }
+  },
+  {
+   "rule_source": "platform:browser-download-run",
+   "technique": "T1204.002",
+   "in_authors_list": true,
+   "already_counted": true,
+   "evidence": 1,
+   "seen_in": {
+    "happy_image.jpeg.exe": 1
+   }
+  },
+  {
+   "rule_source": "sigma:25ffa65d-76d8-4da5-a832-3f2b0136e133",
+   "technique": "T1588.002",
+   "in_authors_list": false,
+   "already_counted": true,
+   "evidence": 2,
+   "seen_in": {
+    "procdump.exe": 1,
+    "procdump64.exe": 1
+   }
+  },
+  {
+   "rule_source": "sigma:3037d961-21e9-4732-b27a-637bcc7bf539",
+   "technique": "T1202",
+   "in_authors_list": false,
+   "already_counted": false,
+   "evidence": 4,
+   "seen_in": {
+    "conhost.exe": 4
+   }
+  },
+  {
+   "rule_source": "sigma:502b42de-4306-40b4-9596-6f590c81f073",
+   "technique": "T1033",
+   "in_authors_list": true,
+   "already_counted": true,
+   "evidence": 1,
+   "seen_in": {
+    "whoami.exe": 1
+   }
+  },
+  {
+   "rule_source": "sigma:502b42de-4306-40b4-9596-6f590c81f073",
+   "technique": "T1087.001",
+   "in_authors_list": false,
+   "already_counted": false,
+   "evidence": 1,
+   "seen_in": {
+    "whoami.exe": 1
+   }
+  },
+  {
+   "rule_source": "sigma:7cccd811-7ae9-4ebe-9afd-cb5c406b824b",
+   "technique": "T1588.002",
+   "in_authors_list": false,
+   "already_counted": true,
+   "evidence": 2,
+   "seen_in": {
+    "procdump.exe": 1,
+    "procdump64.exe": 1
+   }
+  }
+ ],
+ "otrf-lsass-03-comsvcs": [
+  {
+   "rule_source": "elastic:94a401ba-4fa2-455c-b7ae-b6e037afc0b7",
+   "technique": "T1615",
+   "in_authors_list": false,
+   "already_counted": true,
+   "evidence": 1,
+   "seen_in": {
+    "gpresult.exe": 1
+   }
+  },
+  {
+   "rule_source": "elastic:d68e95ad-1c82-4074-a12a-125fe10ac8ba",
+   "technique": "T1059",
+   "in_authors_list": false,
+   "already_counted": false,
+   "evidence": 2,
+   "seen_in": {
+    "cmd.exe": 2
+   }
+  },
+  {
+   "rule_source": "elastic:d68e95ad-1c82-4074-a12a-125fe10ac8ba",
+   "technique": "T1059.003",
+   "in_authors_list": false,
+   "already_counted": false,
+   "evidence": 2,
+   "seen_in": {
+    "cmd.exe": 2
+   }
+  },
+  {
+   "rule_source": "elastic:d68e95ad-1c82-4074-a12a-125fe10ac8ba",
+   "technique": "T1082",
+   "in_authors_list": true,
+   "already_counted": false,
+   "evidence": 2,
+   "seen_in": {
+    "cmd.exe": 2
+   }
+  },
+  {
+   "rule_source": "elastic:d68e95ad-1c82-4074-a12a-125fe10ac8ba",
+   "technique": "T1083",
+   "in_authors_list": false,
+   "already_counted": false,
+   "evidence": 2,
+   "seen_in": {
+    "cmd.exe": 2
+   }
+  },
+  {
+   "rule_source": "platform:browser-download-run",
+   "technique": "T1204.002",
+   "in_authors_list": true,
+   "already_counted": false,
+   "evidence": 1,
+   "seen_in": {
+    "winx64_payload.exe": 1
+   }
+  },
+  {
+   "rule_source": "sigma:3037d961-21e9-4732-b27a-637bcc7bf539",
+   "technique": "T1202",
+   "in_authors_list": false,
+   "already_counted": false,
+   "evidence": 3,
+   "seen_in": {
+    "conhost.exe": 3
+   }
+  },
+  {
+   "rule_source": "sigma:502b42de-4306-40b4-9596-6f590c81f073",
+   "technique": "T1033",
+   "in_authors_list": true,
+   "already_counted": true,
+   "evidence": 1,
+   "seen_in": {
+    "whoami.exe": 1
+   }
+  },
+  {
+   "rule_source": "sigma:502b42de-4306-40b4-9596-6f590c81f073",
+   "technique": "T1087.001",
+   "in_authors_list": false,
+   "already_counted": false,
+   "evidence": 1,
+   "seen_in": {
+    "whoami.exe": 1
+   }
+  }
+ ],
+ "otrf-lsass-04-out-minidump": [
+  {
+   "rule_source": "platform:browser-download-run",
+   "technique": "T1204.002",
+   "in_authors_list": true,
+   "already_counted": false,
+   "evidence": 1,
+   "seen_in": {
+    "winx64_payload.exe": 1
+   }
+  },
+  {
+   "rule_source": "sigma:502b42de-4306-40b4-9596-6f590c81f073",
+   "technique": "T1033",
+   "in_authors_list": true,
+   "already_counted": true,
+   "evidence": 1,
+   "seen_in": {
+    "whoami.exe": 1
+   }
+  },
+  {
+   "rule_source": "sigma:502b42de-4306-40b4-9596-6f590c81f073",
+   "technique": "T1087.001",
+   "in_authors_list": false,
+   "already_counted": false,
+   "evidence": 1,
+   "seen_in": {
+    "whoami.exe": 1
+   }
+  },
+  {
+   "rule_source": "sigma:ac7102b4-9e1e-4802-9b4f-17c5524c015c",
+   "technique": "T1059.001",
+   "in_authors_list": false,
+   "already_counted": true,
+   "evidence": 1,
+   "seen_in": {
+    "winx64_payload.exe": 1
+   }
+  }
+ ],
+ "otrf-lsass-05-sharpdump": [
+  {
+   "rule_source": "elastic:94a401ba-4fa2-455c-b7ae-b6e037afc0b7",
+   "technique": "T1615",
+   "in_authors_list": false,
+   "already_counted": true,
+   "evidence": 1,
+   "seen_in": {
+    "gpresult.exe": 1
+   }
+  },
+  {
+   "rule_source": "elastic:d68e95ad-1c82-4074-a12a-125fe10ac8ba",
+   "technique": "T1059",
+   "in_authors_list": false,
+   "already_counted": false,
+   "evidence": 1,
+   "seen_in": {
+    "cmd.exe": 1
+   }
+  },
+  {
+   "rule_source": "elastic:d68e95ad-1c82-4074-a12a-125fe10ac8ba",
+   "technique": "T1059.003",
+   "in_authors_list": false,
+   "already_counted": false,
+   "evidence": 1,
+   "seen_in": {
+    "cmd.exe": 1
+   }
+  },
+  {
+   "rule_source": "elastic:d68e95ad-1c82-4074-a12a-125fe10ac8ba",
+   "technique": "T1082",
+   "in_authors_list": true,
+   "already_counted": false,
+   "evidence": 1,
+   "seen_in": {
+    "cmd.exe": 1
+   }
+  },
+  {
+   "rule_source": "elastic:d68e95ad-1c82-4074-a12a-125fe10ac8ba",
+   "technique": "T1083",
+   "in_authors_list": false,
+   "already_counted": false,
+   "evidence": 1,
+   "seen_in": {
+    "cmd.exe": 1
+   }
+  },
+  {
+   "rule_source": "sigma:3037d961-21e9-4732-b27a-637bcc7bf539",
+   "technique": "T1202",
+   "in_authors_list": false,
+   "already_counted": false,
+   "evidence": 3,
+   "seen_in": {
+    "conhost.exe": 3
+   }
+  },
+  {
+   "rule_source": "sigma:502b42de-4306-40b4-9596-6f590c81f073",
+   "technique": "T1033",
+   "in_authors_list": true,
+   "already_counted": true,
+   "evidence": 1,
+   "seen_in": {
+    "whoami.exe": 1
+   }
+  },
+  {
+   "rule_source": "sigma:502b42de-4306-40b4-9596-6f590c81f073",
+   "technique": "T1087.001",
+   "in_authors_list": false,
+   "already_counted": false,
+   "evidence": 1,
+   "seen_in": {
+    "whoami.exe": 1
+   }
+  }
+ ],
+ "otrf-lsass-06-outflank-dumpert": [
+  {
+   "rule_source": "sigma:3037d961-21e9-4732-b27a-637bcc7bf539",
+   "technique": "T1202",
+   "in_authors_list": false,
+   "already_counted": false,
+   "evidence": 1,
+   "seen_in": {
+    "conhost.exe": 1
+   }
+  },
+  {
+   "rule_source": "sigma:502b42de-4306-40b4-9596-6f590c81f073",
+   "technique": "T1033",
+   "in_authors_list": true,
+   "already_counted": true,
+   "evidence": 1,
+   "seen_in": {
+    "whoami.exe": 1
+   }
+  },
+  {
+   "rule_source": "sigma:502b42de-4306-40b4-9596-6f590c81f073",
+   "technique": "T1087.001",
+   "in_authors_list": false,
+   "already_counted": false,
+   "evidence": 1,
+   "seen_in": {
+    "whoami.exe": 1
+   }
+  }
+ ],
+ "otrf-lsass-07-nanodump": [
+  {
+   "rule_source": "platform:browser-download-run",
+   "technique": "T1204.002",
+   "in_authors_list": true,
+   "already_counted": false,
+   "evidence": 1,
+   "seen_in": {
+    "winx64_payload.exe": 1
+   }
+  },
+  {
+   "rule_source": "sigma:3037d961-21e9-4732-b27a-637bcc7bf539",
+   "technique": "T1202",
+   "in_authors_list": false,
+   "already_counted": false,
+   "evidence": 1,
+   "seen_in": {
+    "conhost.exe": 1
+   }
+  },
+  {
+   "rule_source": "sigma:502b42de-4306-40b4-9596-6f590c81f073",
+   "technique": "T1033",
+   "in_authors_list": true,
+   "already_counted": true,
+   "evidence": 1,
+   "seen_in": {
+    "whoami.exe": 1
+   }
+  },
+  {
+   "rule_source": "sigma:502b42de-4306-40b4-9596-6f590c81f073",
+   "technique": "T1087.001",
+   "in_authors_list": false,
+   "already_counted": false,
+   "evidence": 1,
+   "seen_in": {
+    "whoami.exe": 1
+   }
+  }
+ ]
+}

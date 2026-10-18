@@ -302,3 +302,25 @@ with the file-transfer log it is the direct evidence of an executable arriving o
 **Consequence for the plan.** Including network logs is necessary and not sufficient. The measured gaps are
 detection-engineering tasks: a transfer of an executable over HTTP (file-transfer and executable-file logs), then
 the delivered file being written and run (host logs), correlated — not more telemetry and not more rule imports.
+
+## Amendment G (2026-10-18) — low-level discovery detections: inspected, nothing promoted
+
+**Question.** Amendment E found System Information Discovery, listed by the authors in every tool run, detected
+only by low-level (enrich) rules, which are shown and never compared. Should those detections be promoted?
+
+**Survey** (`data/validation/history/low-level-detections.tool-runs.json`): every low-level detection in the seven
+tool runs, by rule and technique. Of all of them, one rule bears on a technique the authors list and the platform
+does not count: Elastic's command-shell discovery rule, System Information Discovery, in four recordings.
+
+**The events.** Every one is `cmd.exe /c set processor >> config\osinfo.txt` (or `set u`), started by `cscript.exe`
+— the built-in network-diagnostics script that `netsh trace stop` runs (Amendment A): a side effect of how the
+recordings were made, not the attacker's discovery. Promoting this rule would have raised the measured figure by
+counting the recording harness. **Nothing was promoted.**
+
+**What the authors' discovery was.** Their simulation ran discovery from inside the delivered payload (a
+command-and-control implant). Such discovery is API calls inside one process, with no child process and no
+command line, so process-creation logs do not show it. Detecting it needs other telemetry (API or script-content
+logging from inside the implant), not a different reading of the events here.
+
+**Measurement after this step:** unchanged, 17 of 45. Steps 3 and 4 of the reviewer's plan are complete; step 4's
+repeat measurement records no change, and the reason.
