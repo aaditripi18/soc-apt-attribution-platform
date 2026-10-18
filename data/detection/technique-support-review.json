@@ -379,6 +379,18 @@
     "T1204.002"
    ],
    "reason": "Written here, so its logic is known in full. A match requires two linked events on one host: a web browser saving a file, and that same file starting as a process within a day; and the file's name must end in a document, image, archive or media extension followed by .exe. The name is the double extension; the start of a browser-saved file is the user running a delivered file. Both hold for every match. It does not establish that the file is malicious."
+  },
+  {
+   "rule_source": "sigma:0ef56343-059e-4cb6-adc1-4c3c967c5e46",
+   "rule_name": "Suspicious Execution of Systeminfo",
+   "declares": [
+    "T1082"
+   ],
+   "establishes": [
+    "T1082"
+   ],
+   "counts_when_linked": true,
+   "reason": "Low-level (enrich) rule: the system-information utility starting, by image name or original file name. Every match is System Information Discovery. It is low-level because administrators run it routinely, so it never forms a cluster; it counts only once its process is linked into an existing cluster - in the inspected recordings, started by a shell that the delivered implant started."
   }
  ],
  "left_ambiguous_after_reading": [

@@ -193,7 +193,9 @@ def main(argv: list[str]) -> int:
             core = {
                 e["attack_ref"]["stix_id"]
                 for e in technique_evidence
-                if e["quality"] != "low" and not e.get("technique_ambiguous", False)
+                # ADR-0025 Amendment I: a reviewed low-level rule counts once linked
+                if (e["quality"] != "low" or e.get("counted_when_linked", False))
+                and not e.get("technique_ambiguous", False)
             }
             # --- ADR-0018: actor-specific Evidence is listed, and is no technique ---
             actor_evidence = {

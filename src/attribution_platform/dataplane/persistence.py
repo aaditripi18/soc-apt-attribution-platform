@@ -308,6 +308,7 @@ def _evidence_from_document(doc: Mapping[str, Any]) -> Evidence:
             host=_host_ref_from_dict(doc.get("host")),
             user=_user_ref_from_dict(doc.get("user")),
             technique_ambiguous=bool(doc.get("technique_ambiguous", False)),
+            counted_when_linked=bool(doc.get("counted_when_linked", False)),
             schema_version=schema_version,
         )
     except ElasticIntegrationError:

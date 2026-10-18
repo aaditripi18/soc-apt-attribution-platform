@@ -31,7 +31,7 @@ from __future__ import annotations
 from attribution_platform.attack_knowledge.loader import AttackKnowledge
 from attribution_platform.detection.contracts import DetectionResult, MatchedField
 from attribution_platform.detection.errors import DetectionError
-from attribution_platform.domain import Evidence, Observation
+from attribution_platform.domain import Evidence, EvidenceQuality, Observation
 from attribution_platform.extraction import derive_evidence
 
 
@@ -116,6 +116,7 @@ def derive_evidence_from_detection(
     *,
     knowledge: AttackKnowledge,
     reviewed: frozenset[str] | None = None,
+    counts_when_linked: bool = False,
 ) -> tuple[Evidence, ...]:
     """Derive one Evidence per technique mapping on ``detection`` (or one,
     unmapped, if it has none), grounded in ``observation``.
@@ -188,6 +189,10 @@ def derive_evidence_from_detection(
             method_content_hash=detection.rule_pack_content_hash,
             quality=detection.evidence_quality,
             technique_ambiguous=mapping.attack_ref.stix_id in alternatives,
+            # a reviewed low-level rule: its technique counts inside a cluster
+            counted_when_linked=counts_when_linked
+            and detection.evidence_quality is EvidenceQuality.LOW
+            and mapping.attack_ref.stix_id not in alternatives,
         )
         evidences.append(evidence)
     return tuple(evidences)

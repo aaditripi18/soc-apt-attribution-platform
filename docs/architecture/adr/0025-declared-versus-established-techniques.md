@@ -344,3 +344,31 @@ recording harness; that stands. What does not stand is "no process to detect".
 **Consequence.** The gap is in correlation, not telemetry: linking a low-level detection to a cluster through the
 process ancestry, across processes that matched no rule. Recorded as the next step (ADR-0003 is the decision to
 amend); the measured figure is unchanged until then.
+
+## Amendment I (2026-10-18) — a reviewed low-level rule may count once linked into a cluster
+
+**Decision.** A review may mark a low-level rule `"counts_when_linked": true`. Its Evidence stays low-level (it
+never forms a unit, ADR-0003 Amendment H), but once it is in a unit its technique is a feature of that unit
+(`Evidence.counted_when_linked`). Joining a unit requires a structural link to core Evidence — with ADR-0003
+Amendment I, through the process ancestry. So the technique counts only where the detection sits in an attack's
+process chain, never where the same command was run anywhere else.
+
+**First decision:** "Suspicious Execution of Systeminfo" (Sigma, low): every match is System Information
+Discovery; low-level because administrators run it routinely.
+
+**Measured** (seven tool runs; snapshot `data/validation/history/investigations.tool-runs-with-ancestry.json`;
+audit 14,205 checks, all passing after its feature check learnt this rule):
+
+| Tool run | Counted before -> after | Authors' techniques counted |
+|---|---|---|
+| 01 | 8 -> 9 (+ System Information Discovery) | 3 -> 4 of 7 |
+| 02 | 9 -> 10 (+ the same) | 3 -> 4 of 6 |
+| 03 | 9 -> 10 (+ the same) | 3 -> 4 of 8 |
+| 04 | 4 -> 4 | 2 of 5 |
+| 05 | 6 -> 7 (+ the same) | 2 -> 3 of 7 |
+| 06 | 3 -> 4 (+ the same) | 2 -> 3 of 6 |
+| 07 | 3 -> 3 | 2 of 6 |
+
+**17 -> 22 of 45.** No verdict changed. In tool runs 04 and 07 `systeminfo` was also started by a shell, but no
+ancestor within three steps has Evidence of its own (the delivery there matched no rule), so it stays context — the
+bound doing its job, reported rather than relaxed.

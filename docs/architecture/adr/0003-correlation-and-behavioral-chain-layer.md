@@ -954,3 +954,27 @@ sequence engine now refuses two steps on one Observation outright (deterministic
 order-dependent output), and the real day-1 inputs replay to **byte-identical sequences under 8 hash seeds**.
 Regression test: `test_enrich_evidence_on_an_observation_with_two_core_evidence_is_one_step`. Structural method
 1.6 → 1.7.
+
+## Amendment I (2026-10-18) — a low-level detection reaches its ancestor through processes that matched no rule
+
+**Problem (measured).** Structural links join Evidence to Evidence. A low-level detection whose parent process
+matched no rule had no parent Evidence to link to, so it formed nothing and joined nothing. In the lab tool runs
+the attacker's `systeminfo.exe` was started by a shell that the implant started: the shell matched no rule, and
+the discovery was left outside the implant's cluster (ADR-0025 Amendment H).
+
+**Decision.** For **low-level (enrich) Evidence only**, the `PROCESS_LINEAGE` link may pass through up to
+`MAX_UNDETECTED_ANCESTORS` = 3 processes that have no Evidence, to the nearest ancestor that has some. Each step is
+a stated fact: the intermediate process's own start record (Evidence or context Observation) names its parent;
+those records are the link's witnesses (in its provenance). Same host scope throughout. No step is inferred from
+names, users or time.
+
+**Why only low-level Evidence.** By Amendment H2 low-level Evidence joins a unit only if it touches exactly one, and
+never forms or merges units. So this changes which context a unit carries, never which core Evidence belongs
+together: two core detections separated by an undetected process remain two units (tested). Extending the walk to
+core Evidence would merge units and is not decided here.
+
+**Version.** `structural-correlation` 1.8.
+
+**Checks.** `tests/test_ancestry_links.py`: a grandchild joins through an undetected shell, and only when the
+shell's start record is present; the walk stops after the bound; core units never merge this way; end to end on
+Sysmon records.

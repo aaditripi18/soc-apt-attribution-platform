@@ -99,7 +99,7 @@ alone — only a genuine telemetry-derived structural relationship links them.
 
 from __future__ import annotations
 
-from collections.abc import Sequence
+from collections.abc import Mapping, Sequence
 from dataclasses import dataclass
 from itertools import combinations
 
@@ -130,9 +130,13 @@ STRUCTURAL_CORRELATION_METHOD = "structural-correlation"
 #: 1.1: + PROCESS_INTERACTION; 1.2: resolved pid-only identities (Amendment B)
 #: and chain materialization of equivalence links (Amendment C).
 STRUCTURAL_CORRELATION_METHOD_VERSION = (
-    "1.7"  # 1.6: enrich Evidence never changes unit boundaries (H); 1.7: core-core links
-    # only from the core computation (H2 revision 3)
+    "1.8"  # 1.6: enrich Evidence never changes unit boundaries (H); 1.7: core-core links
+    # only from the core computation (H2 revision 3); 1.8: an enrich detection reaches its
+    # ancestor's Evidence through processes that matched no rule (Amendment I)
 )
+#: Amendment I: how many processes with no Evidence of their own a low-level
+#: detection's lineage may pass through to reach an ancestor with Evidence.
+MAX_UNDETECTED_ANCESTORS = 3
 
 #: The (host-scope, entity-id) key process-entity dimensions are compared
 #: on. ``host_scope`` is itself ``(kind, value)`` where ``kind`` is
@@ -435,9 +439,24 @@ def _same_process_entity_links(
     return links
 
 
+def _ancestry(
+    observations: Sequence[Observation],
+) -> dict[_ProcessEntityKey, tuple[_ProcessEntityKey, str]]:
+    """Each process instance's parent instance, and the Observation that states
+    it (the first, by id), from every Observation that names both - Evidence and
+    context alike."""
+    parents: dict[_ProcessEntityKey, tuple[_ProcessEntityKey, str]] = {}
+    for observation in sorted(observations, key=lambda o: o.observation_id):
+        child, parent = _process_entity_key(observation), _process_parent_key(observation)
+        if child is not None and parent is not None and child != parent:
+            parents.setdefault(child, (parent, observation.observation_id))
+    return parents
+
+
 def _process_lineage_links(
     nodes: Sequence[_Node],
     index: _EntityIndex,
+    ancestry: Mapping[_ProcessEntityKey, tuple[_ProcessEntityKey, str]] | None = None,
     *,
     method: str,
     method_version: str,
@@ -456,6 +475,21 @@ def _process_lineage_links(
         if parent_key is None:
             continue
         parent = index.representative(parent_key)
+        through: list[str] = []
+        if parent is None and ancestry and child.evidence.quality is EvidenceQuality.LOW:
+            # Amendment I: a low-level detection whose parent matched no rule
+            # reaches the nearest ancestor that did, through processes witnessed
+            # by their own process-start records. Only low-level Evidence: it can
+            # join a unit this way but never form or merge one (H2).
+            key = parent_key
+            while parent is None and len(through) < MAX_UNDETECTED_ANCESTORS:
+                step = ancestry.get(key)
+                if step is None:
+                    break
+                key, witness = step
+                through.append(witness)
+                parent = index.representative(key)
+            parent_key = key
         if parent is None or parent.evidence.evidence_id == child.evidence.evidence_id:
             continue  # no parent evidence, or a process as its own parent (data anomaly)
         link = _make_link(
@@ -466,11 +500,16 @@ def _process_lineage_links(
             observed_value=parent_key[1],
             observation_id_a=parent.observation.observation_id,
             observation_id_b=child.observation.observation_id,
+            # a stated fact at every hop: each intermediate process's own start
+            # record names its parent; those records are the link's witnesses
             uncertainty_note=None,
             method=method,
             method_version=method_version,
             method_content_hash=method_content_hash,
-            witness_observation_ids=index.resolved_proof.get(parent.observation.observation_id, ()),
+            witness_observation_ids=(
+                *index.resolved_proof.get(parent.observation.observation_id, ()),
+                *through,
+            ),
         )
         links[link.link_id] = link
     return links
@@ -686,6 +725,7 @@ def _structural_links(
         _process_lineage_links(
             nodes,
             index,
+            _ancestry((*(node.observation for node in nodes), *context)),
             method=method,
             method_version=method_version,
             method_content_hash=method_content_hash,

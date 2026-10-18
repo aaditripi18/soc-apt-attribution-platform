@@ -105,7 +105,7 @@ from attribution_platform.replay.recording_pipeline import RecordingSource, anal
 #: 1.5: the baseline search is kept apart from the per-candidate one; 1.6: an
 #: investigation-level attribution assessment is stored (ADR-0017); 1.7:
 #: actor-specific Evidence (ADR-0018); 1.8: behavioural profile match (ADR-0021).
-INVESTIGATION_METHOD_VERSION = "1.9"
+INVESTIGATION_METHOD_VERSION = "1.10"
 #: ADR-0005 §D16 structural lower bound; the fitted floor needs a calibration_version.
 STRUCTURAL_MIN_PROFILE_FLOOR = 1
 

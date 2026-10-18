@@ -380,7 +380,11 @@ def _build_steps(
                     evidence.attack_ref.stix_id
                     for evidence in step_evidences
                     if evidence.attack_ref is not None
-                    and evidence.quality is not EvidenceQuality.LOW
+                    # Amendment H: low-level Evidence adds no technique - unless its
+                    # rule's review says it counts once linked into the unit
+                    and (
+                        evidence.quality is not EvidenceQuality.LOW or evidence.counted_when_linked
+                    )
                     # ADR-0025: a technique its rule declares but the match does
                     # not establish is shown, not compared
                     and not evidence.technique_ambiguous

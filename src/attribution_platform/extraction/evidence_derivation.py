@@ -82,6 +82,7 @@ def derive_evidence(
     quality: EvidenceQuality | None = None,
     time_span: TimeSpan | None = None,
     technique_ambiguous: bool = False,
+    counted_when_linked: bool = False,
     host: HostRef | None = None,
     user: UserRef | None = None,
     derived_at: datetime | None = None,
@@ -151,6 +152,7 @@ def derive_evidence(
             host=host,
             user=user,
             technique_ambiguous=technique_ambiguous,
+            counted_when_linked=counted_when_linked,
         )
     except DomainContractError as exc:
         raise EvidenceDerivationError(

@@ -387,6 +387,7 @@ def analyze_recording(
                 observation,
                 knowledge=knowledge,
                 reviewed=technique_support.for_source(detection.detection_source),
+                counts_when_linked=technique_support.counts_when_linked(detection.detection_source),
             )
         ]
         if evidences:

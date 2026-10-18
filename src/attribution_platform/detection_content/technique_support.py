@@ -31,9 +31,14 @@ class TechniqueSupportReview:
     #: ``DetectionResult.detection_source`` (e.g. ``sigma:<id>``) -> ATT&CK ids
     supported: Mapping[str, frozenset[str]]
     sha256: str
+    #: low-level rules whose technique counts once linked into a cluster
+    linked: frozenset[str] = frozenset()
 
     def for_source(self, detection_source: str) -> frozenset[str] | None:
         return self.supported.get(detection_source)
+
+    def counts_when_linked(self, detection_source: str) -> bool:
+        return detection_source in self.linked
 
 
 EMPTY_REVIEW = TechniqueSupportReview(MappingProxyType({}), hashlib.sha256(b"").hexdigest())
@@ -45,6 +50,7 @@ def load_technique_support_review(path: Path) -> TechniqueSupportReview:
     if data.get("version") != REVIEW_VERSION:
         raise TechniqueSupportError(f"{path}: version must be {REVIEW_VERSION}")
     supported: dict[str, frozenset[str]] = {}
+    linked: set[str] = set()
     for entry in data.get("decisions", []):
         source = str(entry.get("rule_source", ""))
         ids = entry.get("establishes")
@@ -57,7 +63,16 @@ def load_technique_support_review(path: Path) -> TechniqueSupportReview:
         if not str(entry.get("reason", "")).strip() or not str(entry.get("rule_name", "")).strip():
             raise TechniqueSupportError(f"{path}: {source}: a rule_name and a reason are required")
         supported[source] = frozenset(ids)
-    return TechniqueSupportReview(MappingProxyType(supported), hashlib.sha256(raw).hexdigest())
+        flag = entry.get("counts_when_linked", False)
+        if not isinstance(flag, bool) or (flag and not ids):
+            raise TechniqueSupportError(
+                f"{path}: {source}: 'counts_when_linked' must be a boolean, and needs a technique"
+            )
+        if flag:
+            linked.add(source)
+    return TechniqueSupportReview(
+        MappingProxyType(supported), hashlib.sha256(raw).hexdigest(), frozenset(linked)
+    )
 
 
 def established_ids(declared: frozenset[str], reviewed: frozenset[str] | None) -> frozenset[str]:

@@ -79,6 +79,9 @@ class Evidence:
     #: ADR-0025: the technique in ``attack_ref`` is one of several its rule declares
     #: and the match does not say which. Declared, shown, never compared.
     technique_ambiguous: bool = False
+    #: ADR-0025 Amendment I: low-level Evidence of a rule whose review says its
+    #: technique counts once the detection is part of an activity cluster.
+    counted_when_linked: bool = False
     schema_version: str = field(default=EVIDENCE_SCHEMA_VERSION)
 
     def __post_init__(self) -> None:
