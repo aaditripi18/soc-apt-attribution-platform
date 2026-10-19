@@ -95,7 +95,11 @@ from attribution_platform.replay import (
     DetectionReplayFixture,
     replay_fixture_through_behavioral_sequences,
 )
-from attribution_platform.replay.recording_pipeline import RecordingSource, analyze_recording
+from attribution_platform.replay.recording_pipeline import (
+    DetectionMemo,
+    RecordingSource,
+    analyze_recording,
+)
 
 #: 1.1: unit summaries (ADR-0009 Amendment A); 1.2: evidence-collection guidance
 #: per unit (ADR-0005 Amendment E); 1.3: advisory indicator matches (ADR-0013);
@@ -353,8 +357,11 @@ def run_investigation(
     indicators: IndicatorSet | None = None,
     emulation: EmulationRun | None = None,
     technique_support: TechniqueSupportReview = EMPTY_REVIEW,
+    detection_memo: DetectionMemo | None = None,
 ) -> InvestigationRecord:
-    """Run ``source`` end to end and persist every read-model object."""
+    """Run ``source`` end to end and persist every read-model object.
+    ``detection_memo`` (live mode) reuses identical per-Observation detections
+    between overlapping windows; the result is the same without it."""
     versions = {
         **_method_versions(),
         # ADR-0025: which declared techniques a reviewed rule establishes
@@ -370,7 +377,11 @@ def run_investigation(
 
     if isinstance(source, RecordingSource):
         analysis = analyze_recording(
-            source, engine=engine, knowledge=knowledge, technique_support=technique_support
+            source,
+            engine=engine,
+            knowledge=knowledge,
+            technique_support=technique_support,
+            detection_memo=detection_memo,
         )
         observations = {o.observation_id: o for _, o in analysis.items.values()}
         for observation in observations.values():

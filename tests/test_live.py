@@ -30,7 +30,7 @@ from attribution_platform.live.session import (
     changes_between,
 )
 from attribution_platform.replay.recording_check import check_recording
-from attribution_platform.replay.recording_pipeline import RecordingSource
+from attribution_platform.replay.recording_pipeline import DetectionMemo, RecordingSource
 
 REPO = Path(__file__).resolve().parents[1]
 RECORDING = REPO / "data" / "telemetry-samples" / "otrf" / "psh_lsass_memory_dump_comsvcs.zip"
@@ -106,12 +106,13 @@ def test_each_cycle_is_the_investigation_of_its_snapshot(tmp_path: Path, workben
     clock = iter(
         [T0, T0 + timedelta(minutes=1), T0 + timedelta(minutes=2), T0 + timedelta(minutes=3)]
     )
+    memo = DetectionMemo()
     session = LiveSession(
         name="t",
         followers=[FileFollower(followed)],
         store=CaptureStore(tmp_path / "live", "t"),
         check=check_recording,
-        run=investigation_runner(client, workbench),
+        run=investigation_runner(client, workbench, detection_memo=memo),
         summarise=lambda investigation_id: read_model_summary(client, investigation_id),
         clock=lambda: next(clock),
     )
@@ -119,6 +120,7 @@ def test_each_cycle_is_the_investigation_of_its_snapshot(tmp_path: Path, workben
 
     followed.write_text("\n".join(lines[:half]) + "\n", encoding="utf-8", newline="\n")
     first = session.cycle()
+    evaluated_first = memo.evaluated
     with followed.open("a", encoding="utf-8", newline="\n") as handle:
         handle.write("\n".join(lines[half:]) + "\n")
     second = session.cycle()
@@ -136,6 +138,9 @@ def test_each_cycle_is_the_investigation_of_its_snapshot(tmp_path: Path, workben
         RecordingSource("batch", batch, report.sha256, report.declared_sources)
     )
     assert second.snapshot_sha256 == report.sha256
+    # the second cycle evaluated only what arrived; the first half was reused, unchanged
+    assert memo.reused == evaluated_first > 0
+    assert 0 < memo.evaluated - evaluated_first < memo.evaluated
     assert second.evidence and "T1003.001" in second.summary["counted_techniques"]  # type: ignore[index]
     assert (second.evidence, second.units) == (reference.evidence, reference.units)
     assert second.summary is not None

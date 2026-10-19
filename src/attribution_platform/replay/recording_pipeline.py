@@ -322,6 +322,39 @@ def channel_of(record: Mapping[str, Any] | str) -> str:
     return str(value).casefold()
 
 
+class DetectionMemo:
+    """Per-Observation detection results kept between analyses of overlapping
+    windows (live mode, ADR-0028 D4): single-event detection is a function of
+    the Observation and the engine alone, so it need not be repeated for records
+    a previous cycle already evaluated. A result is reused only for an
+    Observation *equal* to the one it was computed for, by the same engine;
+    anything else is evaluated afresh - the outcome is identical to evaluating
+    every Observation. Multi-event rules are still counted over the whole window
+    each time."""
+
+    def __init__(self) -> None:
+        self._engine: DetectionEngine | None = None
+        self._entries: dict[str, tuple[Observation, Any]] = {}
+        self.reused = 0
+        self.evaluated = 0
+
+    def evaluate(self, engine: DetectionEngine, observation: Observation) -> Any:
+        if self._engine is not engine:
+            self._engine, self._entries = engine, {}
+        cached = self._entries.get(observation.observation_id)
+        if cached is not None and cached[0] == observation:
+            self.reused += 1
+            return cached[1]
+        result = engine.evaluate_split(observation)
+        self._entries[observation.observation_id] = (observation, result)
+        self.evaluated += 1
+        return result
+
+    def retain(self, observation_ids: set[str]) -> None:
+        """Forget what left the window (bounded memory)."""
+        self._entries = {k: v for k, v in self._entries.items() if k in observation_ids}
+
+
 def analyze_recording(
     source: RecordingSource,
     *,
@@ -329,6 +362,7 @@ def analyze_recording(
     knowledge: AttackKnowledge,
     adapters: Mapping[str, Any] = DEFAULT_CHANNEL_ADAPTERS,
     technique_support: TechniqueSupportReview = EMPTY_REVIEW,
+    detection_memo: DetectionMemo | None = None,
 ) -> RecordingAnalysis:
     """Run ``source`` through the full pipeline (module docstring)."""
     _verify(source)
@@ -359,9 +393,15 @@ def analyze_recording(
     detections: dict[str, list[DetectionResult]] = {}
     pending: list[AggregatedMatch] = []
     for observation in precedence.kept:
-        fired, matched = engine.evaluate_split(observation)
+        fired, matched = (
+            detection_memo.evaluate(engine, observation)
+            if detection_memo is not None
+            else engine.evaluate_split(observation)
+        )
         detections[observation.observation_id] = list(fired)
         pending.extend(AggregatedMatch(rule, result, observation) for rule, result in matched)
+    if detection_memo is not None:
+        detection_memo.retain({o.observation_id for o in precedence.kept})
     # Multi-event rules (ADR-0015 Amendment C): counted over the whole recording,
     # each detection anchored on the Observation that completed it.
     for detection, anchor in evaluate_aggregations(
@@ -386,7 +426,7 @@ def analyze_recording(
                 detection,
                 observation,
                 knowledge=knowledge,
-                reviewed=technique_support.for_source(detection.detection_source),
+                reviewed=technique_support.for_match(detection.detection_source, observation),
                 counts_when_linked=technique_support.counts_when_linked(detection.detection_source),
             )
         ]

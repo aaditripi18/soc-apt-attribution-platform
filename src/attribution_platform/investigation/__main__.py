@@ -88,6 +88,7 @@ from attribution_platform.investigation.records import (
 from attribution_platform.investigation.run import run_investigation
 from attribution_platform.replay.recording_check import check_recording
 from attribution_platform.replay.recording_pipeline import (
+    DetectionMemo,
     RecordingSource,
     load_recording_sources,
 )
@@ -194,7 +195,7 @@ UPLOADS = REPO_ROOT / "data" / "cache" / "uploads"
 
 
 def investigation_runner(
-    client: ElasticClient, workbench: Workbench
+    client: ElasticClient, workbench: Workbench, *, detection_memo: DetectionMemo | None = None
 ) -> Callable[[RecordingSource], RunResult]:
     """Investigate one recording exactly as the command line does, for a
     serving session (uploads, ADR-0020; live cycles, ADR-0028). With the
@@ -213,6 +214,7 @@ def investigation_runner(
             detectability=workbench.detectability,
             indicators=workbench.indicators,
             technique_support=workbench.technique_support,
+            detection_memo=detection_memo,
         )
         if shared is not None and isinstance(target, FakeElasticClient):
             shared.absorb(target)

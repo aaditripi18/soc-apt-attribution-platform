@@ -103,5 +103,24 @@ live mode stops capture; nothing it stored is changed afterwards.
   read once; `search_hits` request shape and refusal of malformed hits. `tests/test_live_elasticsearch_poll.py`
   (opt-in) against the project's Elasticsearch 8.15.3: the recording indexed in two parts, every document polled
   once and unchanged, and a live cycle over them equal to the recording run.
-- **Not yet:** analysis cost on a realistic 24 h window (D4) is to be measured before the default window is
-  relied on; the console view (step 3) waits for the frontend phase.
+- **Not yet:** the console view (step 3) waits for the frontend phase.
+
+## Amendment A (2026-10-19) — D4 measured: per-record detection is reused between cycles
+
+**Measured.** Analysis cost on real recordings (one process, while other investigations were loading, so upper
+bounds): the lab credential-dumping recording, 42,482 records, 270 s; LSASS tool run 01, 53,698 records, 356 s;
+APT3 Empire, 121,659 records, 629 s - about 6 ms a record. Profiled on the first: **877.9 s of 878.0 s** is
+single-event detection (`DetectionEngine.evaluate_split`, about 560 candidate rules a record); correlation,
+sequences and attribution are negligible. A 60 s cycle re-analysing a full day of a busy host could not keep up.
+
+**Decision.** Single-event detection is a function of the Observation and the engine alone, so a live session
+keeps each Observation's result (`DetectionMemo`) and reuses it in later cycles **only for an Observation equal to
+the one it was computed for, by the same engine**; anything else is evaluated afresh, so a cycle's result is
+identical to evaluating everything. Multi-event rules, correlation and attribution still run over the whole
+window every cycle. Entries that leave the window are dropped. The memo is not part of any result or version: an
+investigation with it equals one without it (tested).
+
+**Result.** The same 42,482-record recording analysed twice with the memo: 278.2 s, then **5.4 s**, with the same
+112 Evidence and 7 units (35,559 Observations reused). A steady-state cycle costs roughly that fixed part plus
+about 7 ms for each new record, so the 60 s default keeps up with several thousand new records a minute; above
+that, D4 applies - the interval grows, the analysis is never cut.

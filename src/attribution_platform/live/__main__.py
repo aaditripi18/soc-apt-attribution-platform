@@ -44,6 +44,7 @@ from attribution_platform.live.capture import CaptureStore, FileFollower
 from attribution_platform.live.elastic_source import ElasticsearchSource
 from attribution_platform.live.session import LiveSession, LiveSource
 from attribution_platform.replay.recording_check import check_recording
+from attribution_platform.replay.recording_pipeline import DetectionMemo
 
 REPO_ROOT = Path(__file__).resolve().parents[3]
 LIVE_ROOT = REPO_ROOT / "data" / "cache" / "live"
@@ -97,7 +98,7 @@ def main(argv: Sequence[str] | None = None) -> int:
         followers=sources,
         store=CaptureStore(directory, name),
         check=check_recording,
-        run=investigation_runner(client, workbench),
+        run=investigation_runner(client, workbench, detection_memo=DetectionMemo()),
         summarise=lambda investigation_id: read_model_summary(client, investigation_id),
         window_hours=window_hours,
     )

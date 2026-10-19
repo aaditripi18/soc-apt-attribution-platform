@@ -216,6 +216,16 @@ step by step (a MITRE CALDERA operation report; its command text is never read):
 python -m attribution_platform.investigation my-run.zip --emulation-report my-run-report.json --serve
 ```
 
+**Live mode** ([ADR-0028](docs/architecture/adr/0028-live-mode.md)) follows log files as they grow, or polls
+Elasticsearch data streams, and every cycle investigates a frozen, hashed snapshot of the recent window with the
+same pipeline, so each live result can be re-run byte-for-byte. `GET /api/live` shows the sources, each cycle and
+what changed since the previous one (techniques newly counted, verdict, named actors).
+
+```bash
+python -m attribution_platform.live --name lab --follow sysmon.jsonl --serve
+python -m attribution_platform.live --name lab --elasticsearch-index "logs-windows.sysmon_operational-*" --serve
+```
+
 For frontend work, run the API as above and `npm run dev` in `frontend/` (http://localhost:5173, `/api` proxied
 to port 8000; set `VITE_API_TARGET` for another address). `npm run typecheck`, `npm test`, `npm run build`.
 
