@@ -114,6 +114,13 @@ def test_host_with_neither_sysmon_nor_security_blocks(tmp_path: Path) -> None:
     assert any("neither Sysmon nor Security" in p for p in report.problems)
 
 
+def test_a_host_named_only_by_unread_channels_declares_nothing(tmp_path: Path) -> None:
+    legacy = {"winlog": {"channel": "Windows PowerShell", "event_id": 400, "computer_name": "WS6"}}
+    report = check_recording(_archive(tmp_path, _json([_sysmon(1), legacy])))
+    assert report.accepted and "WS6" not in report.declared_sources
+    assert any("only records of channels that are not read" in w for w in report.warnings)
+
+
 def test_macos_archive_metadata_is_skipped_not_read(tmp_path: Path) -> None:
     path = tmp_path / "with-metadata.zip"
     with zipfile.ZipFile(path, "w") as archive:

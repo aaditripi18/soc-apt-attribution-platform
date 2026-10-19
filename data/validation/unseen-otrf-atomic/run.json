@@ -1,8 +1,8 @@
 {
  "version": "unseen-run/1",
- "build_commit": "9733a749f31ecd9758f694feedb25e57e6c71ac5",
- "working_tree_clean": true,
- "run_at_utc": "2026-10-19T16:59:40Z",
+ "build_commit": "131910988e65a464eab383e80ba4fa2e06158661",
+ "working_tree_clean": false,
+ "run_at_utc": "2026-10-19T19:05:22Z",
  "recordings": [
   {
    "recording": "msf_record_mic.zip",
@@ -41,10 +41,10 @@
   },
   {
    "recording": "empire_dcsync_dcerpc_drsuapi_DsGetNCChanges.zip",
-   "state": "refused by intake",
-   "problems": [
-    "host 'MORDORDC.theshire.local' has no Sysmon records"
-   ]
+   "state": "investigated",
+   "investigation_id": "investigation::c6cce2ae333b080bbb7bf5f1312f5c22781fb880f6775424f120a5feaadb3dd5",
+   "evidence": 8,
+   "units": 3
   },
   {
    "recording": "empire_mimikatz_backupkeys_dcerpc_smb_lsarpc.zip",
@@ -55,10 +55,10 @@
   },
   {
    "recording": "empire_mimikatz_extract_keys.zip",
-   "state": "refused by intake",
-   "problems": [
-    "host 'MORDORDC.theshire.local' has no Sysmon records"
-   ]
+   "state": "investigated",
+   "investigation_id": "investigation::f65ef8c78395ef19c3d0e6db7e2bc826570d7373367e99767240b733f4d45ea5",
+   "evidence": 5,
+   "units": 1
   },
   {
    "recording": "empire_mimikatz_lsadump_patch.zip",
@@ -69,10 +69,10 @@
   },
   {
    "recording": "empire_mimikatz_sam_access.zip",
-   "state": "refused by intake",
-   "problems": [
-    "host 'MORDORDC.theshire.local' has no Sysmon records"
-   ]
+   "state": "investigated",
+   "investigation_id": "investigation::282fbd45d6a3a67f85ce7191516828cfe556aa2498ce10c23376a9280efabccb",
+   "evidence": 14,
+   "units": 8
   },
   {
    "recording": "empire_ninjacopy_dumping_ntds_dit_file.zip",
@@ -83,41 +83,38 @@
   },
   {
    "recording": "empire_over_pth_patch_lsass.zip",
-   "state": "refused by intake",
-   "problems": [
-    "host 'MORDORDC.theshire.local' has no Sysmon records",
-    "host 'WORKSTATION6' has no Sysmon records"
-   ]
+   "state": "investigated",
+   "investigation_id": "investigation::3066f55543c10aaa48c07fd976dfe28f02f8bf25854c0444e0abdf1a4352f260",
+   "evidence": 176,
+   "units": 165
   },
   {
    "recording": "empire_powerdump_sam_access.zip",
-   "state": "refused by intake",
-   "problems": [
-    "host 'MORDORDC.theshire.local' has no Sysmon records"
-   ]
+   "state": "investigated",
+   "investigation_id": "investigation::143b94931c4e3041b8d3d16b23d431572e8caccdb02bbe917e863c6acc544acb",
+   "evidence": 16,
+   "units": 9
   },
   {
    "recording": "empire_shell_reg_dump_sam.zip",
-   "state": "refused by intake",
-   "problems": [
-    "host 'MORDORDC.theshire.local' has no Sysmon records"
-   ]
+   "state": "investigated",
+   "investigation_id": "investigation::3a210cf4636c34e9225f012e56244626d5a26a8085a7bc996b92b8911ca69d88",
+   "evidence": 3,
+   "units": 1
   },
   {
    "recording": "empire_shell_rubeus_asktgt_createnetonly.zip",
-   "state": "refused by intake",
-   "problems": [
-    "host 'MORDORDC.theshire.local' has no Sysmon records",
-    "host 'WORKSTATION6' has no Sysmon records"
-   ]
+   "state": "investigated",
+   "investigation_id": "investigation::fd5f10a82e1037b0784c4261f2f9d5f133063f084b3eefc46ca8d6fe40a90b64",
+   "evidence": 8,
+   "units": 3
   },
   {
    "recording": "empire_shell_rubeus_asktgt_ptt.zip",
-   "state": "refused by intake",
-   "problems": [
-    "host 'MORDORDC.theshire.local' has no Sysmon records",
-    "host 'WORKSTATION6' has no Sysmon records"
-   ]
+   "state": "investigated",
+   "investigation_id": "investigation::881f12a1fdb09e8ac5386604f2a8c59e4024035ff83bf78398f416d0ddcf5654",
+   "evidence": 3,
+   "units": 1
   },
   {
    "recording": "psh_input_capture_promptforcreds.zip",
@@ -135,10 +132,10 @@
   },
   {
    "recording": "rdp_interactive_taskmanager_lsass_dump.zip",
-   "state": "refused by intake",
-   "problems": [
-    "host 'MORDORDC.theshire.local' has no Sysmon records"
-   ]
+   "state": "investigated",
+   "investigation_id": "investigation::5a45a46c16d7fc78bb1bd0429a32720470d8913d12de582f5931498438f4d2ce",
+   "evidence": 13,
+   "units": 1
   },
   {
    "recording": "auditpol_system_user_auditpolicy_modification.zip",
@@ -156,10 +153,10 @@
   },
   {
    "recording": "cmd_disable_eventlog_service_startuptype_modification_via_registry.zip",
-   "state": "refused by intake",
-   "problems": [
-    "1 line(s) are not JSON objects"
-   ]
+   "state": "investigated",
+   "investigation_id": "investigation::e24e8fca1816864fc7d016701b1afe846c0ef18a6e1cdb5bc5dd36c71341e241",
+   "evidence": 2,
+   "units": 0
   },
   {
    "recording": "cmd_mshta_javascript_getobject_sct.zip",
@@ -191,45 +188,45 @@
   },
   {
    "recording": "cmd_psh_stop_netprofm_eventlog_after_reboot.zip",
-   "state": "refused by intake",
-   "problems": [
-    "1 line(s) are not JSON objects"
-   ]
+   "state": "investigated",
+   "investigation_id": "investigation::00901fd40d4306f3963342d85c1d9a206685b28044af68bd931fbcc30288c9b7",
+   "evidence": 3,
+   "units": 0
   },
   {
    "recording": "cmd_psh_stop_netprofm_eventlog_before_reboot.zip",
-   "state": "refused by intake",
-   "problems": [
-    "1 line(s) are not JSON objects"
-   ]
+   "state": "investigated",
+   "investigation_id": "investigation::e0ce97da6addad4c602d17dc953e036c362d9208c3062148aaa2904156d2351f",
+   "evidence": 4,
+   "units": 0
   },
   {
    "recording": "cmd_stop_event_logging_controlset001_minint_key.zip",
-   "state": "refused by intake",
-   "problems": [
-    "1 line(s) are not JSON objects"
-   ]
+   "state": "investigated",
+   "investigation_id": "investigation::cc29097e66f5c2da46bc2a1e4a9c605279d7cce94e52bae5a4cef71f9a63753e",
+   "evidence": 6,
+   "units": 1
   },
   {
    "recording": "cmd_stop_event_logging_controlset_minint_key.zip",
-   "state": "refused by intake",
-   "problems": [
-    "1 line(s) are not JSON objects"
-   ]
+   "state": "investigated",
+   "investigation_id": "investigation::6d583d5e311fa7eeecf7dc8cca962d43bea7af8a210e7d752f4fb12a7da32490",
+   "evidence": 8,
+   "units": 1
   },
   {
    "recording": "cmd_wevtutil_modify_security_eventlog_path.zip",
-   "state": "refused by intake",
-   "problems": [
-    "1 line(s) are not JSON objects"
-   ]
+   "state": "investigated",
+   "investigation_id": "investigation::de8c638d88e3b5f93bf9ee835043d7a3f4fd38f823c1404cc7e3a551bd67f10a",
+   "evidence": 6,
+   "units": 2
   },
   {
    "recording": "covenant_installutil.zip",
-   "state": "refused by intake",
-   "problems": [
-    "host 'MORDORDC.theshire.local' has no Sysmon records"
-   ]
+   "state": "investigated",
+   "investigation_id": "investigation::909cad893b144717fc68e75f08da1ab64bb8dd6f5606712f38aa4d984ba0e1ea",
+   "evidence": 4,
+   "units": 1
   },
   {
    "recording": "covenant_lolbin_wuauclt_createremotethread.zip",
@@ -268,10 +265,10 @@
   },
   {
    "recording": "empire_powerview_ldap_ntsecuritydescriptor.zip",
-   "state": "refused by intake",
-   "problems": [
-    "host 'MORDORDC.theshire.local' has no Sysmon records"
-   ]
+   "state": "investigated",
+   "investigation_id": "investigation::e05b366d4e375448bcc37627165c7c60f8f0b889524696713eb9163c9c8eb082",
+   "evidence": 2,
+   "units": 2
   },
   {
    "recording": "empire_psinject_PEinjection.zip",
@@ -303,10 +300,10 @@
   },
   {
    "recording": "psh_disable_eventlog_service_startuptype_modification.zip",
-   "state": "refused by intake",
-   "problems": [
-    "1 line(s) are not JSON objects"
-   ]
+   "state": "investigated",
+   "investigation_id": "investigation::f3ba08257f788ec4e4b36b18fbdd4338db1cce77be00ba12c64d18b4196c68e7",
+   "evidence": 3,
+   "units": 1
   },
   {
    "recording": "psh_hh_local_html_payload.zip",
@@ -317,18 +314,17 @@
   },
   {
    "recording": "psh_metasploit_stop_netprofm_eventlog_after_reboot.zip",
-   "state": "refused by intake",
-   "problems": [
-    "1 line(s) are not JSON objects",
-    "host 'PEDRO01' has no Sysmon records"
-   ]
+   "state": "investigated",
+   "investigation_id": "investigation::77ff295d6eecadcb8a41104b4d251ecd271229e3e1e560d31682e04487c74eba",
+   "evidence": 2,
+   "units": 1
   },
   {
    "recording": "psh_metasploit_stop_netprofm_eventlog_before_reboot.zip",
-   "state": "refused by intake",
-   "problems": [
-    "1 line(s) are not JSON objects"
-   ]
+   "state": "investigated",
+   "investigation_id": "investigation::f0df9adad98275f77a6cb937395c4b148bb56364da65977ae0df125405d1cd97",
+   "evidence": 3,
+   "units": 1
   },
   {
    "recording": "psh_mshta_html_application_execution.zip",
@@ -346,17 +342,17 @@
   },
   {
    "recording": "psh_stop_event_logging_controlset001_minint_key.zip",
-   "state": "refused by intake",
-   "problems": [
-    "1 line(s) are not JSON objects"
-   ]
+   "state": "investigated",
+   "investigation_id": "investigation::6ddc61b27a3241e2cf7a486458c8c774c6800034c14ad62c0df02087edc9300a",
+   "evidence": 5,
+   "units": 1
   },
   {
    "recording": "psh_stop_event_logging_controlset_minint_key.zip",
-   "state": "refused by intake",
-   "problems": [
-    "1 line(s) are not JSON objects"
-   ]
+   "state": "investigated",
+   "investigation_id": "investigation::35a97843da3526ae2122a980f20a231b90e333d46d76ecf4a6fba9876cb6c7bf",
+   "evidence": 5,
+   "units": 1
   },
   {
    "recording": "purplesharp_pe_injection_createremotethread.zip",
@@ -374,10 +370,10 @@
   },
   {
    "recording": "reg_disable_eventlog_service_startuptype_modification_via_registry.zip",
-   "state": "refused by intake",
-   "problems": [
-    "1 line(s) are not JSON objects"
-   ]
+   "state": "investigated",
+   "investigation_id": "investigation::21b8c32dc852634715d7683f011570ea5dca597986d7b54c21742576f18cc7be",
+   "evidence": 1,
+   "units": 0
   },
   {
    "recording": "reg_meterpreter_process_commandline_logging_disabled.zip",
@@ -388,17 +384,17 @@
   },
   {
    "recording": "reg_stop_event_logging_controlset001_minint_key.zip",
-   "state": "refused by intake",
-   "problems": [
-    "1 line(s) are not JSON objects"
-   ]
+   "state": "investigated",
+   "investigation_id": "investigation::accdb0e8e48564efe99c9bdd637a40e332a629ca229e52d9f1aa39fabea6d401",
+   "evidence": 3,
+   "units": 1
   },
   {
    "recording": "reg_stop_event_logging_controlset_minint_key.zip",
-   "state": "refused by intake",
-   "problems": [
-    "1 line(s) are not JSON objects"
-   ]
+   "state": "investigated",
+   "investigation_id": "investigation::66303f14693ebef650acba4be56662db0dead667fd53592db6481bf8a7e01a47",
+   "evidence": 3,
+   "units": 1
   },
   {
    "recording": "wmic_remote_xsl_jscript.zip",
@@ -423,53 +419,52 @@
   },
   {
    "recording": "covenant_getdomaingroup_ldap_searchrequest_domain_admins.zip",
-   "state": "refused by intake",
-   "problems": [
-    "host 'MORDORDC.theshire.local' has no Sysmon records"
-   ]
+   "state": "investigated",
+   "investigation_id": "investigation::6506d5531f7228f3eea106442923b2b54fafa7a4c53f8fc460b0e56af6fb50e6",
+   "evidence": 1,
+   "units": 1
   },
   {
    "recording": "empire_find_localadmin_smb_svcctl_OpenSCManager.zip",
-   "state": "refused by intake",
-   "problems": [
-    "host 'MORDORDC.theshire.local' has no Sysmon records"
-   ]
+   "state": "investigated",
+   "investigation_id": "investigation::098718b5d0cf7a0cca731d1eac33e44c3b0be559c4ab11265c892d9da538f1c4",
+   "evidence": 3,
+   "units": 3
   },
   {
    "recording": "empire_getsession_dcerpc_smb_srvsvc_NetSessEnum.zip",
-   "state": "refused by intake",
-   "problems": [
-    "host 'MORDORDC.theshire.local' has no Sysmon records"
-   ]
+   "state": "investigated",
+   "investigation_id": "investigation::7917c8ec34635cb1e03c5c0eb37958074970126193287106ea7fe4c564cd9a8f",
+   "evidence": 280,
+   "units": 273
   },
   {
    "recording": "empire_shell_net_local_users.zip",
-   "state": "refused by intake",
-   "problems": [
-    "host 'MORDORDC.theshire.local' has no Sysmon records"
-   ]
+   "state": "investigated",
+   "investigation_id": "investigation::d038892e87666e58cfe5de8ec8f22bb64e2fbbc61220919e0a75c70cb279e95b",
+   "evidence": 4,
+   "units": 0
   },
   {
    "recording": "empire_shell_net_localgroup_administrators.zip",
-   "state": "refused by intake",
-   "problems": [
-    "host 'MORDORDC.theshire.local' has no Sysmon records"
-   ]
+   "state": "investigated",
+   "investigation_id": "investigation::b8f8d937924b5eb3c44ee8f6410f3cd08ddf6a3c3c4fcf8e0aabdcd66efb78c8",
+   "evidence": 0,
+   "units": 0
   },
   {
    "recording": "empire_shell_rpc_samr_smb_group_domain_admins_standard_user.zip",
-   "state": "refused by intake",
-   "problems": [
-    "host 'MORDORDC.theshire.local' has no Sysmon records",
-    "host 'WORKSTATION6' has no Sysmon records"
-   ]
+   "state": "investigated",
+   "investigation_id": "investigation::439b175e5aafd33a3b4782480d9ce4123de89595c5cce742c65724170b293bad",
+   "evidence": 6,
+   "units": 2
   },
   {
    "recording": "empire_shell_samr_EnumDomainUsers.zip",
-   "state": "refused by intake",
-   "problems": [
-    "host 'MORDORDC.theshire.local' has no Sysmon records"
-   ]
+   "state": "investigated",
+   "investigation_id": "investigation::cdc4431613285533d7ad3054e680ee0c50bd4e7664e4f4d8fed612d61dda56e6",
+   "evidence": 1,
+   "units": 1
   },
   {
    "recording": "empire_shell_samr_EnumDomainUsers.zip",
@@ -509,10 +504,10 @@
   },
   {
    "recording": "covenant_copy_smb_CreateRequest.zip",
-   "state": "refused by intake",
-   "problems": [
-    "host 'MORDORDC.theshire.local' has no Sysmon records"
-   ]
+   "state": "investigated",
+   "investigation_id": "investigation::ee9f89213f383032b602b6aea6bb2a79ec1eced38bbdf34e97f4e1e72cee82fa",
+   "evidence": 1,
+   "units": 1
   },
   {
    "recording": "covenant_dcom_executeexcel4macro_allowed.zip",
@@ -530,10 +525,10 @@
   },
   {
    "recording": "covenant_dcom_registerxll.zip",
-   "state": "refused by intake",
-   "problems": [
-    "host 'MORDORDC.theshire.local' has no Sysmon records"
-   ]
+   "state": "investigated",
+   "investigation_id": "investigation::ec8e0dadfdee23d1d5d3c28f6e703566d4ac069a2871d974546731ebcfc63a77",
+   "evidence": 174,
+   "units": 169
   },
   {
    "recording": "covenant_psremoting_command.zip",
@@ -600,50 +595,45 @@
   },
   {
    "recording": "empire_dcom_shellwindows_stager.zip",
-   "state": "refused by intake",
-   "problems": [
-    "host 'MORDORDC.theshire.local' has no Sysmon records",
-    "host 'WORKSTATION6' has no Sysmon records"
-   ]
+   "state": "investigated",
+   "investigation_id": "investigation::17d63e0edd7d2bd08d6dfa12e56df7f2463b1a916f6f10348469e11ddad6e0c8",
+   "evidence": 25,
+   "units": 4
   },
   {
    "recording": "empire_msbuild_dcerpc_wmi_smb.zip",
-   "state": "refused by intake",
-   "problems": [
-    "host 'MORDORDC.theshire.local' has no Sysmon records",
-    "host 'WORKSTATION6' has no Sysmon records"
-   ]
+   "state": "investigated",
+   "investigation_id": "investigation::64c2ca32bef6b226cf670258056ec610e8816fb4c3120bda6591c8327368734f",
+   "evidence": 39,
+   "units": 4
   },
   {
    "recording": "empire_psexec_dcerpc_tcp_svcctl.zip",
-   "state": "refused by intake",
-   "problems": [
-    "host 'MORDORDC.theshire.local' has no Sysmon records",
-    "host 'WORKSTATION6' has no Sysmon records"
-   ]
+   "state": "investigated",
+   "investigation_id": "investigation::e921093305d5ef89094172e82d7c3fc579a3dd02f82190e03e597158043c4cb7",
+   "evidence": 47,
+   "units": 5
   },
   {
    "recording": "empire_psremoting_stager.zip",
-   "state": "refused by intake",
-   "problems": [
-    "host 'MORDORDC.theshire.local' has no Sysmon records",
-    "host 'WORKSTATION6' has no Sysmon records"
-   ]
+   "state": "investigated",
+   "investigation_id": "investigation::dc1ed41694bac5e27fc8bc5db56e0bb95123d77813ad5d1f45fdc77a19cbf529",
+   "evidence": 26,
+   "units": 2
   },
   {
    "recording": "empire_shell_dcerpc_smb_service_dll_hijack.zip",
-   "state": "refused by intake",
-   "problems": [
-    "host 'MORDORDC.theshire.local' has no Sysmon records"
-   ]
+   "state": "investigated",
+   "investigation_id": "investigation::3e38cd5cc62fbeb25a27d8d6b7c765cd692aeb8a2a287c614856cfd55b9c57e5",
+   "evidence": 183,
+   "units": 173
   },
   {
    "recording": "empire_wmi_dcerpc_wmi_IWbemServices_ExecMethod.zip",
-   "state": "refused by intake",
-   "problems": [
-    "host 'MORDORDC.theshire.local' has no Sysmon records",
-    "host 'WORKSTATION6' has no Sysmon records"
-   ]
+   "state": "investigated",
+   "investigation_id": "investigation::5a3e5d41acdc50344d8d850f9052130645920ccf3741a53e16f7d0361a2474d1",
+   "evidence": 298,
+   "units": 275
   },
   {
    "recording": "empire_wmic_add_user_backdoor.zip",
@@ -718,17 +708,17 @@
   },
   {
    "recording": "empire_schtasks_creation_execution_elevated_user.zip",
-   "state": "refused by intake",
-   "problems": [
-    "host 'MORDORDC.theshire.local' has no Sysmon records"
-   ]
+   "state": "investigated",
+   "investigation_id": "investigation::5510f808fd21a66945bf921c91fd116cf81121a8567617aa2fec14c13c0de712",
+   "evidence": 202,
+   "units": 178
   },
   {
    "recording": "empire_schtasks_creation_standard_user.zip",
-   "state": "refused by intake",
-   "problems": [
-    "host 'MORDORDC.theshire.local' has no Sysmon records"
-   ]
+   "state": "investigated",
+   "investigation_id": "investigation::b22fb4855f65deae6af7ffa1c3c918fd185a00910772d6a0bc0f9d03447192c7",
+   "evidence": 4,
+   "units": 1
   },
   {
    "recording": "proxylogon_ssrf_rce_poc.zip",

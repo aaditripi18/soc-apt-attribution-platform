@@ -227,6 +227,14 @@ def check_recording(path: Path) -> RecordingCheckReport:
         if host in ("None", ""):
             problems.append(f"{sum(counts.values())} record(s) carry no host name")
             continue
+        if not any(channel in DEFAULT_CHANNEL_ADAPTERS for channel in counts):
+            # e.g. a host named only by the legacy "Windows PowerShell" log, which is
+            # not read: none of its records enter the analysis, so it declares nothing
+            warnings.append(
+                f"host {host!r} has only records of channels that are not read "
+                f"({', '.join(sorted(counts))})"
+            )
+            continue
         if counts.get(SYSMON, 0) == 0 and counts.get(SECURITY, 0) == 0:
             problems.append(f"host {host!r} has neither Sysmon nor Security records")
         elif counts.get(SYSMON, 0) == 0:

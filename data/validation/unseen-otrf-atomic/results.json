@@ -2,25 +2,24 @@
  "version": "unseen-results/1",
  "selection": "data/validation/unseen-otrf-atomic/selection.json",
  "recordings_selected": 105,
- "recordings_investigated": 61,
+ "recordings_investigated": 103,
  "recordings_not_investigated": {
-  "refused by intake": 44
+  "refused by intake": 2
  },
  "refusal_reasons": {
-  "host \u2026 has no Sysmon records": 38,
-  "\u2026 line(s) are not JSON objects": 16,
-  "the archive contains no JSON records": 2
+  "the archive contains no JSON records": 2,
+  "\u2026 line(s) are not JSON objects": 2
  },
- "authors_techniques_in_refused_recordings": 44,
+ "authors_techniques_in_refused_recordings": 2,
  "summary": {
-  "authors_techniques": 65,
-  "found_exactly": 26,
-  "found_as_parent_or_sub": 4,
-  "missed": 35,
-  "missed_but_shown": 7,
-  "counted_but_not_listed_by_authors": 74,
-  "recordings_with_an_authors_technique_counted": 28,
-  "recordings_with_no_evidence": 10,
+  "authors_techniques": 107,
+  "found_exactly": 35,
+  "found_as_parent_or_sub": 6,
+  "missed": 66,
+  "missed_but_shown": 13,
+  "counted_but_not_listed_by_authors": 128,
+  "recordings_with_an_authors_technique_counted": 39,
+  "recordings_with_no_evidence": 11,
   "recordings_naming_an_actor": 0
  },
  "by_tactic_folder": {
@@ -31,22 +30,22 @@
    "missed_but_shown": 0
   },
   "credential_access": {
-   "recordings": 9,
-   "authors_techniques": 9,
-   "found": 5,
-   "missed_but_shown": 0
+   "recordings": 18,
+   "authors_techniques": 18,
+   "found": 10,
+   "missed_but_shown": 3
   },
   "defense_evasion": {
-   "recordings": 22,
-   "authors_techniques": 22,
+   "recordings": 38,
+   "authors_techniques": 38,
    "found": 9,
    "missed_but_shown": 5
   },
   "discovery": {
-   "recordings": 2,
-   "authors_techniques": 2,
+   "recordings": 9,
+   "authors_techniques": 9,
    "found": 1,
-   "missed_but_shown": 0
+   "missed_but_shown": 2
   },
   "execution": {
    "recordings": 3,
@@ -55,10 +54,10 @@
    "missed_but_shown": 0
   },
   "lateral_movement": {
-   "recordings": 17,
-   "authors_techniques": 20,
-   "found": 7,
-   "missed_but_shown": 1
+   "recordings": 25,
+   "authors_techniques": 28,
+   "found": 11,
+   "missed_but_shown": 2
   },
   "other": {
    "recordings": 1,
@@ -67,9 +66,9 @@
    "missed_but_shown": 0
   },
   "persistence": {
-   "recordings": 4,
-   "authors_techniques": 4,
-   "found": 1,
+   "recordings": 6,
+   "authors_techniques": 6,
+   "found": 3,
    "missed_but_shown": 1
   },
   "privilege_escalation": {
@@ -181,14 +180,22 @@
   },
   {
    "recording": "datasets/atomic/windows/credential_access/host/empire_dcsync_dcerpc_drsuapi_DsGetNCChanges.zip",
-   "investigated": false,
-   "state": "refused by intake",
-   "problems": [
-    "host 'MORDORDC.theshire.local' has no Sysmon records"
-   ],
+   "metadata_id": "SDWIN-190301174830",
+   "tactic_folder": "credential_access",
+   "investigated": true,
+   "evidence": 8,
    "authors_techniques": [
     "T1003.006"
-   ]
+   ],
+   "found_exactly": [
+    "T1003.006"
+   ],
+   "found_as_parent_or_sub": [],
+   "missed": [],
+   "missed_but_shown": [],
+   "counted_but_not_listed_by_authors": [],
+   "verdict": "not_distinguishable",
+   "named_actors": []
   },
   {
    "recording": "datasets/atomic/windows/credential_access/host/empire_mimikatz_backupkeys_dcerpc_smb_lsarpc.zip",
@@ -211,14 +218,26 @@
   },
   {
    "recording": "datasets/atomic/windows/credential_access/host/empire_mimikatz_extract_keys.zip",
-   "investigated": false,
-   "state": "refused by intake",
-   "problems": [
-    "host 'MORDORDC.theshire.local' has no Sysmon records"
-   ],
+   "metadata_id": "SDWIN-190518230752",
+   "tactic_folder": "credential_access",
+   "investigated": true,
+   "evidence": 5,
    "authors_techniques": [
     "T1003.004"
-   ]
+   ],
+   "found_exactly": [],
+   "found_as_parent_or_sub": [],
+   "missed": [
+    "T1003.004"
+   ],
+   "missed_but_shown": [
+    "T1003.004"
+   ],
+   "counted_but_not_listed_by_authors": [
+    "T1558"
+   ],
+   "verdict": "not_distinguishable",
+   "named_actors": []
   },
   {
    "recording": "datasets/atomic/windows/credential_access/host/empire_mimikatz_lsadump_patch.zip",
@@ -241,14 +260,24 @@
   },
   {
    "recording": "datasets/atomic/windows/credential_access/host/empire_mimikatz_sam_access.zip",
-   "investigated": false,
-   "state": "refused by intake",
-   "problems": [
-    "host 'MORDORDC.theshire.local' has no Sysmon records"
-   ],
+   "metadata_id": "SDWIN-190625103712",
+   "tactic_folder": "credential_access",
+   "investigated": true,
+   "evidence": 14,
    "authors_techniques": [
     "T1003.002"
-   ]
+   ],
+   "found_exactly": [],
+   "found_as_parent_or_sub": [],
+   "missed": [
+    "T1003.002"
+   ],
+   "missed_but_shown": [],
+   "counted_but_not_listed_by_authors": [
+    "T1012"
+   ],
+   "verdict": "not_distinguishable",
+   "named_actors": []
   },
   {
    "recording": "datasets/atomic/windows/credential_access/host/empire_ninjacopy_dumping_ntds_dit_file.zip",
@@ -275,61 +304,113 @@
   },
   {
    "recording": "datasets/atomic/windows/credential_access/host/empire_over_pth_patch_lsass.zip",
-   "investigated": false,
-   "state": "refused by intake",
-   "problems": [
-    "host 'MORDORDC.theshire.local' has no Sysmon records",
-    "host 'WORKSTATION6' has no Sysmon records"
-   ],
+   "metadata_id": "SDWIN-190319131123",
+   "tactic_folder": "credential_access",
+   "investigated": true,
+   "evidence": 176,
    "authors_techniques": [
     "T1550.002"
-   ]
+   ],
+   "found_exactly": [
+    "T1550.002"
+   ],
+   "found_as_parent_or_sub": [],
+   "missed": [],
+   "missed_but_shown": [],
+   "counted_but_not_listed_by_authors": [
+    "T1003",
+    "T1003.001",
+    "T1059.001"
+   ],
+   "verdict": "not_distinguishable",
+   "named_actors": []
   },
   {
    "recording": "datasets/atomic/windows/credential_access/host/empire_powerdump_sam_access.zip",
-   "investigated": false,
-   "state": "refused by intake",
-   "problems": [
-    "host 'MORDORDC.theshire.local' has no Sysmon records"
-   ],
+   "metadata_id": "SDWIN-200922042230",
+   "tactic_folder": "credential_access",
+   "investigated": true,
+   "evidence": 16,
    "authors_techniques": [
     "T1003.002"
-   ]
+   ],
+   "found_exactly": [],
+   "found_as_parent_or_sub": [
+    "T1003.002"
+   ],
+   "missed": [],
+   "missed_but_shown": [],
+   "counted_but_not_listed_by_authors": [
+    "T1003.001",
+    "T1012",
+    "T1027.004"
+   ],
+   "verdict": "not_distinguishable",
+   "named_actors": []
   },
   {
    "recording": "datasets/atomic/windows/credential_access/host/empire_shell_reg_dump_sam.zip",
-   "investigated": false,
-   "state": "refused by intake",
-   "problems": [
-    "host 'MORDORDC.theshire.local' has no Sysmon records"
-   ],
+   "metadata_id": "SDWIN-190625133822",
+   "tactic_folder": "credential_access",
+   "investigated": true,
+   "evidence": 3,
    "authors_techniques": [
     "T1003.002"
-   ]
+   ],
+   "found_exactly": [],
+   "found_as_parent_or_sub": [
+    "T1003.002"
+   ],
+   "missed": [],
+   "missed_but_shown": [],
+   "counted_but_not_listed_by_authors": [],
+   "verdict": "not_distinguishable",
+   "named_actors": []
   },
   {
    "recording": "datasets/atomic/windows/credential_access/host/empire_shell_rubeus_asktgt_createnetonly.zip",
-   "investigated": false,
-   "state": "refused by intake",
-   "problems": [
-    "host 'MORDORDC.theshire.local' has no Sysmon records",
-    "host 'WORKSTATION6' has no Sysmon records"
-   ],
+   "metadata_id": "SDWIN-200921230246",
+   "tactic_folder": "credential_access",
+   "investigated": true,
+   "evidence": 8,
    "authors_techniques": [
     "T1003.003"
-   ]
+   ],
+   "found_exactly": [],
+   "found_as_parent_or_sub": [],
+   "missed": [
+    "T1003.003"
+   ],
+   "missed_but_shown": [
+    "T1003.003"
+   ],
+   "counted_but_not_listed_by_authors": [
+    "T1550.002",
+    "T1558.003"
+   ],
+   "verdict": "not_distinguishable",
+   "named_actors": []
   },
   {
    "recording": "datasets/atomic/windows/credential_access/host/empire_shell_rubeus_asktgt_ptt.zip",
-   "investigated": false,
-   "state": "refused by intake",
-   "problems": [
-    "host 'MORDORDC.theshire.local' has no Sysmon records",
-    "host 'WORKSTATION6' has no Sysmon records"
-   ],
+   "metadata_id": "SDWIN-190319145126",
+   "tactic_folder": "credential_access",
+   "investigated": true,
+   "evidence": 3,
    "authors_techniques": [
     "T1003.003"
-   ]
+   ],
+   "found_exactly": [],
+   "found_as_parent_or_sub": [],
+   "missed": [
+    "T1003.003"
+   ],
+   "missed_but_shown": [
+    "T1003.003"
+   ],
+   "counted_but_not_listed_by_authors": [],
+   "verdict": "no_decision_features",
+   "named_actors": []
   },
   {
    "recording": "datasets/atomic/windows/credential_access/host/psh_input_capture_promptforcreds.zip",
@@ -371,14 +452,22 @@
   },
   {
    "recording": "datasets/atomic/windows/credential_access/host/rdp_interactive_taskmanager_lsass_dump.zip",
-   "investigated": false,
-   "state": "refused by intake",
-   "problems": [
-    "host 'MORDORDC.theshire.local' has no Sysmon records"
-   ],
+   "metadata_id": "SDWIN-191027055035",
+   "tactic_folder": "credential_access",
+   "investigated": true,
+   "evidence": 13,
    "authors_techniques": [
     "T1003.001"
-   ]
+   ],
+   "found_exactly": [
+    "T1003.001"
+   ],
+   "found_as_parent_or_sub": [],
+   "missed": [],
+   "missed_but_shown": [],
+   "counted_but_not_listed_by_authors": [],
+   "verdict": "not_distinguishable",
+   "named_actors": []
   },
   {
    "recording": "datasets/atomic/windows/defense_evasion/host/auditpol_system_user_auditpolicy_modification.zip",
@@ -424,14 +513,22 @@
   },
   {
    "recording": "datasets/atomic/windows/defense_evasion/host/cmd_disable_eventlog_service_startuptype_modification_via_registry.zip",
-   "investigated": false,
-   "state": "refused by intake",
-   "problems": [
-    "1 line(s) are not JSON objects"
-   ],
+   "metadata_id": "SDWIN-220708104215",
+   "tactic_folder": "defense_evasion",
+   "investigated": true,
+   "evidence": 2,
    "authors_techniques": [
     "T1562.002"
-   ]
+   ],
+   "found_exactly": [],
+   "found_as_parent_or_sub": [],
+   "missed": [
+    "T1562.002"
+   ],
+   "missed_but_shown": [],
+   "counted_but_not_listed_by_authors": [],
+   "verdict": "no_decision_features",
+   "named_actors": []
   },
   {
    "recording": "datasets/atomic/windows/defense_evasion/host/cmd_mshta_javascript_getobject_sct.zip",
@@ -518,69 +615,119 @@
   },
   {
    "recording": "datasets/atomic/windows/defense_evasion/host/cmd_psh_stop_netprofm_eventlog_after_reboot.zip",
-   "investigated": false,
-   "state": "refused by intake",
-   "problems": [
-    "1 line(s) are not JSON objects"
-   ],
+   "metadata_id": "SDWIN-220708104300",
+   "tactic_folder": "defense_evasion",
+   "investigated": true,
+   "evidence": 3,
    "authors_techniques": [
     "T1562.002"
-   ]
+   ],
+   "found_exactly": [],
+   "found_as_parent_or_sub": [],
+   "missed": [
+    "T1562.002"
+   ],
+   "missed_but_shown": [],
+   "counted_but_not_listed_by_authors": [],
+   "verdict": "no_decision_features",
+   "named_actors": []
   },
   {
    "recording": "datasets/atomic/windows/defense_evasion/host/cmd_psh_stop_netprofm_eventlog_before_reboot.zip",
-   "investigated": false,
-   "state": "refused by intake",
-   "problems": [
-    "1 line(s) are not JSON objects"
-   ],
+   "metadata_id": "SDWIN-220708104300",
+   "tactic_folder": "defense_evasion",
+   "investigated": true,
+   "evidence": 4,
    "authors_techniques": [
     "T1562.002"
-   ]
+   ],
+   "found_exactly": [],
+   "found_as_parent_or_sub": [],
+   "missed": [
+    "T1562.002"
+   ],
+   "missed_but_shown": [],
+   "counted_but_not_listed_by_authors": [],
+   "verdict": "no_decision_features",
+   "named_actors": []
   },
   {
    "recording": "datasets/atomic/windows/defense_evasion/host/cmd_stop_event_logging_controlset001_minint_key.zip",
-   "investigated": false,
-   "state": "refused by intake",
-   "problems": [
-    "1 line(s) are not JSON objects"
-   ],
+   "metadata_id": "SDWIN-220803205800",
+   "tactic_folder": "defense_evasion",
+   "investigated": true,
+   "evidence": 6,
    "authors_techniques": [
     "T1562.002"
-   ]
+   ],
+   "found_exactly": [],
+   "found_as_parent_or_sub": [],
+   "missed": [
+    "T1562.002"
+   ],
+   "missed_but_shown": [],
+   "counted_but_not_listed_by_authors": [],
+   "verdict": "no_decision_features",
+   "named_actors": []
   },
   {
    "recording": "datasets/atomic/windows/defense_evasion/host/cmd_stop_event_logging_controlset_minint_key.zip",
-   "investigated": false,
-   "state": "refused by intake",
-   "problems": [
-    "1 line(s) are not JSON objects"
-   ],
+   "metadata_id": "SDWIN-220803205800",
+   "tactic_folder": "defense_evasion",
+   "investigated": true,
+   "evidence": 8,
    "authors_techniques": [
     "T1562.002"
-   ]
+   ],
+   "found_exactly": [],
+   "found_as_parent_or_sub": [],
+   "missed": [
+    "T1562.002"
+   ],
+   "missed_but_shown": [],
+   "counted_but_not_listed_by_authors": [],
+   "verdict": "no_decision_features",
+   "named_actors": []
   },
   {
    "recording": "datasets/atomic/windows/defense_evasion/host/cmd_wevtutil_modify_security_eventlog_path.zip",
-   "investigated": false,
-   "state": "refused by intake",
-   "problems": [
-    "1 line(s) are not JSON objects"
-   ],
+   "metadata_id": "SDWIN-220705170038",
+   "tactic_folder": "defense_evasion",
+   "investigated": true,
+   "evidence": 6,
    "authors_techniques": [
     "T1562.002"
-   ]
+   ],
+   "found_exactly": [],
+   "found_as_parent_or_sub": [],
+   "missed": [
+    "T1562.002"
+   ],
+   "missed_but_shown": [],
+   "counted_but_not_listed_by_authors": [
+    "T1685.001"
+   ],
+   "verdict": "not_distinguishable",
+   "named_actors": []
   },
   {
    "recording": "datasets/atomic/windows/defense_evasion/host/covenant_installutil.zip",
-   "investigated": false,
-   "state": "refused by intake",
-   "problems": [
-    "host 'MORDORDC.theshire.local' has no Sysmon records"
-   ],
+   "metadata_id": "SDWIN-191027223020",
+   "tactic_folder": "defense_evasion",
+   "investigated": true,
+   "evidence": 4,
    "authors_techniques": [
     "T1218.004"
-   ]
+   ],
+   "found_exactly": [],
+   "found_as_parent_or_sub": [],
+   "missed": [
+    "T1218.004"
+   ],
+   "missed_but_shown": [],
+   "counted_but_not_listed_by_authors": [],
+   "verdict": "no_decision_features",
+   "named_actors": []
   },
   {
    "recording": "datasets/atomic/windows/defense_evasion/host/covenant_lolbin_wuauclt_createremotethread.zip",
@@ -694,14 +841,24 @@
   },
   {
    "recording": "datasets/atomic/windows/defense_evasion/host/empire_powerview_ldap_ntsecuritydescriptor.zip",
-   "investigated": false,
-   "state": "refused by intake",
-   "problems": [
-    "host 'MORDORDC.theshire.local' has no Sysmon records"
-   ],
+   "metadata_id": "SDWIN-190301125905",
+   "tactic_folder": "defense_evasion",
+   "investigated": true,
+   "evidence": 2,
    "authors_techniques": [
     "T1222.001"
-   ]
+   ],
+   "found_exactly": [],
+   "found_as_parent_or_sub": [],
+   "missed": [
+    "T1222.001"
+   ],
+   "missed_but_shown": [],
+   "counted_but_not_listed_by_authors": [
+    "T1201"
+   ],
+   "verdict": "not_distinguishable",
+   "named_actors": []
   },
   {
    "recording": "datasets/atomic/windows/defense_evasion/host/empire_psinject_PEinjection.zip",
@@ -794,14 +951,24 @@
   },
   {
    "recording": "datasets/atomic/windows/defense_evasion/host/psh_disable_eventlog_service_startuptype_modification.zip",
-   "investigated": false,
-   "state": "refused by intake",
-   "problems": [
-    "1 line(s) are not JSON objects"
-   ],
+   "metadata_id": "SDWIN-220708104215",
+   "tactic_folder": "defense_evasion",
+   "investigated": true,
+   "evidence": 3,
    "authors_techniques": [
     "T1562.002"
-   ]
+   ],
+   "found_exactly": [],
+   "found_as_parent_or_sub": [],
+   "missed": [
+    "T1562.002"
+   ],
+   "missed_but_shown": [],
+   "counted_but_not_listed_by_authors": [
+    "T1059.001"
+   ],
+   "verdict": "not_distinguishable",
+   "named_actors": []
   },
   {
    "recording": "datasets/atomic/windows/defense_evasion/host/psh_hh_local_html_payload.zip",
@@ -826,26 +993,45 @@
   },
   {
    "recording": "datasets/atomic/windows/defense_evasion/host/psh_metasploit_stop_netprofm_eventlog_after_reboot.zip",
-   "investigated": false,
-   "state": "refused by intake",
-   "problems": [
-    "1 line(s) are not JSON objects",
-    "host 'PEDRO01' has no Sysmon records"
-   ],
+   "metadata_id": "SDWIN-220708104300",
+   "tactic_folder": "defense_evasion",
+   "investigated": true,
+   "evidence": 2,
    "authors_techniques": [
     "T1562.002"
-   ]
+   ],
+   "found_exactly": [],
+   "found_as_parent_or_sub": [],
+   "missed": [
+    "T1562.002"
+   ],
+   "missed_but_shown": [],
+   "counted_but_not_listed_by_authors": [
+    "T1059.001"
+   ],
+   "verdict": "not_distinguishable",
+   "named_actors": []
   },
   {
    "recording": "datasets/atomic/windows/defense_evasion/host/psh_metasploit_stop_netprofm_eventlog_before_reboot.zip",
-   "investigated": false,
-   "state": "refused by intake",
-   "problems": [
-    "1 line(s) are not JSON objects"
-   ],
+   "metadata_id": "SDWIN-220708104300",
+   "tactic_folder": "defense_evasion",
+   "investigated": true,
+   "evidence": 3,
    "authors_techniques": [
     "T1562.002"
-   ]
+   ],
+   "found_exactly": [],
+   "found_as_parent_or_sub": [],
+   "missed": [
+    "T1562.002"
+   ],
+   "missed_but_shown": [],
+   "counted_but_not_listed_by_authors": [
+    "T1059.001"
+   ],
+   "verdict": "not_distinguishable",
+   "named_actors": []
   },
   {
    "recording": "datasets/atomic/windows/defense_evasion/host/psh_mshta_html_application_execution.zip",
@@ -893,25 +1079,45 @@
   },
   {
    "recording": "datasets/atomic/windows/defense_evasion/host/psh_stop_event_logging_controlset001_minint_key.zip",
-   "investigated": false,
-   "state": "refused by intake",
-   "problems": [
-    "1 line(s) are not JSON objects"
-   ],
+   "metadata_id": "SDWIN-220803205800",
+   "tactic_folder": "defense_evasion",
+   "investigated": true,
+   "evidence": 5,
    "authors_techniques": [
     "T1562.002"
-   ]
+   ],
+   "found_exactly": [],
+   "found_as_parent_or_sub": [],
+   "missed": [
+    "T1562.002"
+   ],
+   "missed_but_shown": [],
+   "counted_but_not_listed_by_authors": [
+    "T1059.001"
+   ],
+   "verdict": "not_distinguishable",
+   "named_actors": []
   },
   {
    "recording": "datasets/atomic/windows/defense_evasion/host/psh_stop_event_logging_controlset_minint_key.zip",
-   "investigated": false,
-   "state": "refused by intake",
-   "problems": [
-    "1 line(s) are not JSON objects"
-   ],
+   "metadata_id": "SDWIN-220803205800",
+   "tactic_folder": "defense_evasion",
+   "investigated": true,
+   "evidence": 5,
    "authors_techniques": [
     "T1562.002"
-   ]
+   ],
+   "found_exactly": [],
+   "found_as_parent_or_sub": [],
+   "missed": [
+    "T1562.002"
+   ],
+   "missed_but_shown": [],
+   "counted_but_not_listed_by_authors": [
+    "T1059.001"
+   ],
+   "verdict": "not_distinguishable",
+   "named_actors": []
   },
   {
    "recording": "datasets/atomic/windows/defense_evasion/host/purplesharp_pe_injection_createremotethread.zip",
@@ -956,14 +1162,22 @@
   },
   {
    "recording": "datasets/atomic/windows/defense_evasion/host/reg_disable_eventlog_service_startuptype_modification_via_registry.zip",
-   "investigated": false,
-   "state": "refused by intake",
-   "problems": [
-    "1 line(s) are not JSON objects"
-   ],
+   "metadata_id": "SDWIN-220708104215",
+   "tactic_folder": "defense_evasion",
+   "investigated": true,
+   "evidence": 1,
    "authors_techniques": [
     "T1562.002"
-   ]
+   ],
+   "found_exactly": [],
+   "found_as_parent_or_sub": [],
+   "missed": [
+    "T1562.002"
+   ],
+   "missed_but_shown": [],
+   "counted_but_not_listed_by_authors": [],
+   "verdict": "no_decision_features",
+   "named_actors": []
   },
   {
    "recording": "datasets/atomic/windows/defense_evasion/host/reg_meterpreter_process_commandline_logging_disabled.zip",
@@ -986,25 +1200,41 @@
   },
   {
    "recording": "datasets/atomic/windows/defense_evasion/host/reg_stop_event_logging_controlset001_minint_key.zip",
-   "investigated": false,
-   "state": "refused by intake",
-   "problems": [
-    "1 line(s) are not JSON objects"
-   ],
+   "metadata_id": "SDWIN-220803205800",
+   "tactic_folder": "defense_evasion",
+   "investigated": true,
+   "evidence": 3,
    "authors_techniques": [
     "T1562.002"
-   ]
+   ],
+   "found_exactly": [],
+   "found_as_parent_or_sub": [],
+   "missed": [
+    "T1562.002"
+   ],
+   "missed_but_shown": [],
+   "counted_but_not_listed_by_authors": [],
+   "verdict": "no_decision_features",
+   "named_actors": []
   },
   {
    "recording": "datasets/atomic/windows/defense_evasion/host/reg_stop_event_logging_controlset_minint_key.zip",
-   "investigated": false,
-   "state": "refused by intake",
-   "problems": [
-    "1 line(s) are not JSON objects"
-   ],
+   "metadata_id": "SDWIN-220803205800",
+   "tactic_folder": "defense_evasion",
+   "investigated": true,
+   "evidence": 3,
    "authors_techniques": [
     "T1562.002"
-   ]
+   ],
+   "found_exactly": [],
+   "found_as_parent_or_sub": [],
+   "missed": [
+    "T1562.002"
+   ],
+   "missed_but_shown": [],
+   "counted_but_not_listed_by_authors": [],
+   "verdict": "no_decision_features",
+   "named_actors": []
   },
   {
    "recording": "datasets/atomic/windows/defense_evasion/host/wmic_remote_xsl_jscript.zip",
@@ -1065,81 +1295,151 @@
   },
   {
    "recording": "datasets/atomic/windows/discovery/host/covenant_getdomaingroup_ldap_searchrequest_domain_admins.zip",
-   "investigated": false,
-   "state": "refused by intake",
-   "problems": [
-    "host 'MORDORDC.theshire.local' has no Sysmon records"
-   ],
+   "metadata_id": "SDWIN-200806130039",
+   "tactic_folder": "discovery",
+   "investigated": true,
+   "evidence": 1,
    "authors_techniques": [
     "T1069.002"
-   ]
+   ],
+   "found_exactly": [],
+   "found_as_parent_or_sub": [],
+   "missed": [
+    "T1069.002"
+   ],
+   "missed_but_shown": [],
+   "counted_but_not_listed_by_authors": [
+    "T1001.003"
+   ],
+   "verdict": "not_distinguishable",
+   "named_actors": []
   },
   {
    "recording": "datasets/atomic/windows/discovery/host/empire_find_localadmin_smb_svcctl_OpenSCManager.zip",
-   "investigated": false,
-   "state": "refused by intake",
-   "problems": [
-    "host 'MORDORDC.theshire.local' has no Sysmon records"
-   ],
+   "metadata_id": "SDWIN-190518224039",
+   "tactic_folder": "discovery",
+   "investigated": true,
+   "evidence": 3,
    "authors_techniques": [
     "T1069.001"
-   ]
+   ],
+   "found_exactly": [],
+   "found_as_parent_or_sub": [],
+   "missed": [
+    "T1069.001"
+   ],
+   "missed_but_shown": [],
+   "counted_but_not_listed_by_authors": [
+    "T1010",
+    "T1548"
+   ],
+   "verdict": "not_distinguishable",
+   "named_actors": []
   },
   {
    "recording": "datasets/atomic/windows/discovery/host/empire_getsession_dcerpc_smb_srvsvc_NetSessEnum.zip",
-   "investigated": false,
-   "state": "refused by intake",
-   "problems": [
-    "host 'MORDORDC.theshire.local' has no Sysmon records"
-   ],
+   "metadata_id": "SDWIN-190519005224",
+   "tactic_folder": "discovery",
+   "investigated": true,
+   "evidence": 280,
    "authors_techniques": [
     "T1049"
-   ]
+   ],
+   "found_exactly": [],
+   "found_as_parent_or_sub": [],
+   "missed": [
+    "T1049"
+   ],
+   "missed_but_shown": [],
+   "counted_but_not_listed_by_authors": [
+    "T1059.001"
+   ],
+   "verdict": "not_distinguishable",
+   "named_actors": []
   },
   {
    "recording": "datasets/atomic/windows/discovery/host/empire_shell_net_local_users.zip",
-   "investigated": false,
-   "state": "refused by intake",
-   "problems": [
-    "host 'MORDORDC.theshire.local' has no Sysmon records"
-   ],
+   "metadata_id": "SDWIN-190319020729",
+   "tactic_folder": "discovery",
+   "investigated": true,
+   "evidence": 4,
    "authors_techniques": [
     "T1087.001"
-   ]
+   ],
+   "found_exactly": [],
+   "found_as_parent_or_sub": [],
+   "missed": [
+    "T1087.001"
+   ],
+   "missed_but_shown": [
+    "T1087.001"
+   ],
+   "counted_but_not_listed_by_authors": [],
+   "verdict": "no_decision_features",
+   "named_actors": []
   },
   {
    "recording": "datasets/atomic/windows/discovery/host/empire_shell_net_localgroup_administrators.zip",
-   "investigated": false,
-   "state": "refused by intake",
-   "problems": [
-    "host 'MORDORDC.theshire.local' has no Sysmon records"
-   ],
+   "metadata_id": "SDWIN-190319020147",
+   "tactic_folder": "discovery",
+   "investigated": true,
+   "evidence": 0,
    "authors_techniques": [
     "T1069.001"
-   ]
+   ],
+   "found_exactly": [],
+   "found_as_parent_or_sub": [],
+   "missed": [
+    "T1069.001"
+   ],
+   "missed_but_shown": [],
+   "counted_but_not_listed_by_authors": [],
+   "verdict": "no_decision_features",
+   "named_actors": []
   },
   {
    "recording": "datasets/atomic/windows/discovery/host/empire_shell_rpc_samr_smb_group_domain_admins_standard_user.zip",
-   "investigated": false,
-   "state": "refused by intake",
-   "problems": [
-    "host 'MORDORDC.theshire.local' has no Sysmon records",
-    "host 'WORKSTATION6' has no Sysmon records"
-   ],
+   "metadata_id": "SDWIN-190518201207",
+   "tactic_folder": "discovery",
+   "investigated": true,
+   "evidence": 6,
    "authors_techniques": [
     "T1069.002"
-   ]
+   ],
+   "found_exactly": [],
+   "found_as_parent_or_sub": [],
+   "missed": [
+    "T1069.002"
+   ],
+   "missed_but_shown": [
+    "T1069.002"
+   ],
+   "counted_but_not_listed_by_authors": [
+    "T1087.002"
+   ],
+   "verdict": "not_distinguishable",
+   "named_actors": []
   },
   {
    "recording": "datasets/atomic/windows/discovery/host/empire_shell_samr_EnumDomainUsers.zip",
-   "investigated": false,
-   "state": "refused by intake",
-   "problems": [
-    "host 'MORDORDC.theshire.local' has no Sysmon records"
-   ],
+   "metadata_id": "SDWIN-190319021158",
+   "tactic_folder": "discovery",
+   "investigated": true,
+   "evidence": 1,
    "authors_techniques": [
     "T1087.002"
-   ]
+   ],
+   "found_exactly": [],
+   "found_as_parent_or_sub": [],
+   "missed": [
+    "T1087.002"
+   ],
+   "missed_but_shown": [],
+   "counted_but_not_listed_by_authors": [
+    "T1201"
+   ],
+   "verdict": "not_distinguishable",
+   "named_actors": []
   },
   {
    "recording": "datasets/atomic/windows/discovery/network/empire_shell_samr_EnumDomainUsers.zip",
@@ -1236,14 +1536,22 @@
   },
   {
    "recording": "datasets/atomic/windows/lateral_movement/host/covenant_copy_smb_CreateRequest.zip",
-   "investigated": false,
-   "state": "refused by intake",
-   "problems": [
-    "host 'MORDORDC.theshire.local' has no Sysmon records"
-   ],
+   "metadata_id": "SDWIN-200806015757",
+   "tactic_folder": "lateral_movement",
+   "investigated": true,
+   "evidence": 1,
    "authors_techniques": [
     "T1021.002"
-   ]
+   ],
+   "found_exactly": [
+    "T1021.002"
+   ],
+   "found_as_parent_or_sub": [],
+   "missed": [],
+   "missed_but_shown": [],
+   "counted_but_not_listed_by_authors": [],
+   "verdict": "not_distinguishable",
+   "named_actors": []
   },
   {
    "recording": "datasets/atomic/windows/lateral_movement/host/covenant_dcom_executeexcel4macro_allowed.zip",
@@ -1292,14 +1600,24 @@
   },
   {
    "recording": "datasets/atomic/windows/lateral_movement/host/covenant_dcom_registerxll.zip",
-   "investigated": false,
-   "state": "refused by intake",
-   "problems": [
-    "host 'MORDORDC.theshire.local' has no Sysmon records"
-   ],
+   "metadata_id": "SDWIN-200918145959",
+   "tactic_folder": "lateral_movement",
+   "investigated": true,
+   "evidence": 174,
    "authors_techniques": [
     "T1021.003"
-   ]
+   ],
+   "found_exactly": [],
+   "found_as_parent_or_sub": [],
+   "missed": [
+    "T1021.003"
+   ],
+   "missed_but_shown": [],
+   "counted_but_not_listed_by_authors": [
+    "T1059.001"
+   ],
+   "verdict": "not_distinguishable",
+   "named_actors": []
   },
   {
    "recording": "datasets/atomic/windows/lateral_movement/host/covenant_psremoting_command.zip",
@@ -1492,74 +1810,150 @@
   },
   {
    "recording": "datasets/atomic/windows/lateral_movement/host/empire_dcom_shellwindows_stager.zip",
-   "investigated": false,
-   "state": "refused by intake",
-   "problems": [
-    "host 'MORDORDC.theshire.local' has no Sysmon records",
-    "host 'WORKSTATION6' has no Sysmon records"
-   ],
+   "metadata_id": "SDWIN-190518211052",
+   "tactic_folder": "lateral_movement",
+   "investigated": true,
+   "evidence": 25,
    "authors_techniques": [
     "T1021.003"
-   ]
+   ],
+   "found_exactly": [],
+   "found_as_parent_or_sub": [],
+   "missed": [
+    "T1021.003"
+   ],
+   "missed_but_shown": [],
+   "counted_but_not_listed_by_authors": [
+    "T1003",
+    "T1003.001",
+    "T1059",
+    "T1059.001",
+    "T1685"
+   ],
+   "verdict": "not_distinguishable",
+   "named_actors": []
   },
   {
    "recording": "datasets/atomic/windows/lateral_movement/host/empire_msbuild_dcerpc_wmi_smb.zip",
-   "investigated": false,
-   "state": "refused by intake",
-   "problems": [
-    "host 'MORDORDC.theshire.local' has no Sysmon records",
-    "host 'WORKSTATION6' has no Sysmon records"
-   ],
+   "metadata_id": "SDWIN-190518213907",
+   "tactic_folder": "lateral_movement",
+   "investigated": true,
+   "evidence": 39,
    "authors_techniques": [
     "T1047"
-   ]
+   ],
+   "found_exactly": [],
+   "found_as_parent_or_sub": [],
+   "missed": [
+    "T1047"
+   ],
+   "missed_but_shown": [],
+   "counted_but_not_listed_by_authors": [
+    "T1021.002",
+    "T1027.004",
+    "T1059",
+    "T1059.001",
+    "T1685"
+   ],
+   "verdict": "not_distinguishable",
+   "named_actors": []
   },
   {
    "recording": "datasets/atomic/windows/lateral_movement/host/empire_psexec_dcerpc_tcp_svcctl.zip",
-   "investigated": false,
-   "state": "refused by intake",
-   "problems": [
-    "host 'MORDORDC.theshire.local' has no Sysmon records",
-    "host 'WORKSTATION6' has no Sysmon records"
-   ],
+   "metadata_id": "SDWIN-190518210652",
+   "tactic_folder": "lateral_movement",
+   "investigated": true,
+   "evidence": 47,
    "authors_techniques": [
     "T1021"
-   ]
+   ],
+   "found_exactly": [],
+   "found_as_parent_or_sub": [],
+   "missed": [
+    "T1021"
+   ],
+   "missed_but_shown": [
+    "T1021"
+   ],
+   "counted_but_not_listed_by_authors": [
+    "T1010",
+    "T1059",
+    "T1059.001",
+    "T1543.003",
+    "T1569.002",
+    "T1685"
+   ],
+   "verdict": "not_distinguishable",
+   "named_actors": []
   },
   {
    "recording": "datasets/atomic/windows/lateral_movement/host/empire_psremoting_stager.zip",
-   "investigated": false,
-   "state": "refused by intake",
-   "problems": [
-    "host 'MORDORDC.theshire.local' has no Sysmon records",
-    "host 'WORKSTATION6' has no Sysmon records"
-   ],
+   "metadata_id": "SDWIN-190518211456",
+   "tactic_folder": "lateral_movement",
+   "investigated": true,
+   "evidence": 26,
    "authors_techniques": [
     "T1021.006"
-   ]
+   ],
+   "found_exactly": [
+    "T1021.006"
+   ],
+   "found_as_parent_or_sub": [],
+   "missed": [],
+   "missed_but_shown": [],
+   "counted_but_not_listed_by_authors": [
+    "T1059",
+    "T1059.001",
+    "T1190",
+    "T1685"
+   ],
+   "verdict": "not_distinguishable",
+   "named_actors": []
   },
   {
    "recording": "datasets/atomic/windows/lateral_movement/host/empire_shell_dcerpc_smb_service_dll_hijack.zip",
-   "investigated": false,
-   "state": "refused by intake",
-   "problems": [
-    "host 'MORDORDC.theshire.local' has no Sysmon records"
-   ],
+   "metadata_id": "SDWIN-190403133337",
+   "tactic_folder": "lateral_movement",
+   "investigated": true,
+   "evidence": 183,
    "authors_techniques": [
     "T1574.001"
-   ]
+   ],
+   "found_exactly": [
+    "T1574.001"
+   ],
+   "found_as_parent_or_sub": [],
+   "missed": [],
+   "missed_but_shown": [],
+   "counted_but_not_listed_by_authors": [
+    "T1021.002",
+    "T1059.001"
+   ],
+   "verdict": "not_distinguishable",
+   "named_actors": []
   },
   {
    "recording": "datasets/atomic/windows/lateral_movement/host/empire_wmi_dcerpc_wmi_IWbemServices_ExecMethod.zip",
-   "investigated": false,
-   "state": "refused by intake",
-   "problems": [
-    "host 'MORDORDC.theshire.local' has no Sysmon records",
-    "host 'WORKSTATION6' has no Sysmon records"
-   ],
+   "metadata_id": "SDWIN-200921001437",
+   "tactic_folder": "lateral_movement",
+   "investigated": true,
+   "evidence": 298,
    "authors_techniques": [
     "T1047"
-   ]
+   ],
+   "found_exactly": [
+    "T1047"
+   ],
+   "found_as_parent_or_sub": [],
+   "missed": [],
+   "missed_but_shown": [],
+   "counted_but_not_listed_by_authors": [
+    "T1059",
+    "T1059.001",
+    "T1685"
+   ],
+   "verdict": "not_distinguishable",
+   "named_actors": []
   },
   {
    "recording": "datasets/atomic/windows/lateral_movement/host/empire_wmic_add_user_backdoor.zip",
@@ -1778,25 +2172,47 @@
   },
   {
    "recording": "datasets/atomic/windows/persistence/host/empire_schtasks_creation_execution_elevated_user.zip",
-   "investigated": false,
-   "state": "refused by intake",
-   "problems": [
-    "host 'MORDORDC.theshire.local' has no Sysmon records"
-   ],
+   "metadata_id": "SDWIN-200921175806",
+   "tactic_folder": "persistence",
+   "investigated": true,
+   "evidence": 202,
    "authors_techniques": [
     "T1053.005"
-   ]
+   ],
+   "found_exactly": [
+    "T1053.005"
+   ],
+   "found_as_parent_or_sub": [],
+   "missed": [],
+   "missed_but_shown": [],
+   "counted_but_not_listed_by_authors": [
+    "T1040",
+    "T1059",
+    "T1059.001",
+    "T1201",
+    "T1685"
+   ],
+   "verdict": "not_distinguishable",
+   "named_actors": []
   },
   {
    "recording": "datasets/atomic/windows/persistence/host/empire_schtasks_creation_standard_user.zip",
-   "investigated": false,
-   "state": "refused by intake",
-   "problems": [
-    "host 'MORDORDC.theshire.local' has no Sysmon records"
-   ],
+   "metadata_id": "SDWIN-190319024742",
+   "tactic_folder": "persistence",
+   "investigated": true,
+   "evidence": 4,
    "authors_techniques": [
     "T1053.005"
-   ]
+   ],
+   "found_exactly": [
+    "T1053.005"
+   ],
+   "found_as_parent_or_sub": [],
+   "missed": [],
+   "missed_but_shown": [],
+   "counted_but_not_listed_by_authors": [],
+   "verdict": "not_distinguishable",
+   "named_actors": []
   },
   {
    "recording": "datasets/atomic/windows/persistence/host/proxylogon_ssrf_rce_poc.zip",

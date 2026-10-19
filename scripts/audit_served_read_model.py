@@ -111,11 +111,23 @@ def main(argv: list[str]) -> int:
         )
 
     investigations = audit.get("/investigations")
-    all_units = audit.get("/units?limit=1000")["units"]
+    # Every unit, from each investigation's own listing: one search returns at most
+    # 1,000 units, and a store can hold more (ADR-0027 re-run: 1,240).
+    all_units = [
+        unit
+        for summary in investigations
+        for unit in audit.get(
+            f"/investigations/{_quote(summary['investigation_id'])}/units?limit=1000"
+        )["units"]
+    ]
+    total_units = sum(i["units"] for i in investigations)
+    audit.check("search.all_units", len(all_units) == total_units, f"{len(all_units)} units listed")
+    first_page = audit.get("/units?limit=1000")
     audit.check(
-        "search.all_units",
-        len(all_units) == sum(i["units"] for i in investigations),
-        f"{len(all_units)} units listed",
+        "search.all_units_page",
+        len(first_page["units"]) == min(total_units, 1000)
+        and first_page["truncated"] == (total_units >= 1000),
+        f"{len(first_page['units'])} of {total_units}, truncated={first_page['truncated']}",
     )
 
     for summary in investigations:
@@ -425,7 +437,8 @@ def main(argv: list[str]) -> int:
                 ("candidate", unit_summary["candidate_ids"][:1]),
             ):
                 for value in values:
-                    hits = audit.get(f"/units?{name}={_quote(value)}&limit=1000")["units"]
+                    found = audit.get(f"/units?{name}={_quote(value)}&limit=1000")
+                    hits = found["units"]
                     expected_hits = sorted(
                         u["group_id"]
                         for u in all_units
@@ -438,9 +451,16 @@ def main(argv: list[str]) -> int:
                             }[name]
                         ]
                     )
+                    got = sorted(h["group_id"] for h in hits)
                     audit.check(
                         f"search.{name}_filter_is_exact",
-                        sorted(h["group_id"] for h in hits) == expected_hits,
+                        got == expected_hits
+                        # past one page: a full, flagged page of true matches
+                        or (
+                            found["truncated"]
+                            and len(got) == 1000
+                            and set(got) <= set(expected_hits)
+                        ),
                         f"{name}={value}",
                     )
 

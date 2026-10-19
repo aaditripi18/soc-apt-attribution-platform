@@ -43,6 +43,31 @@ def _check_properties(index: str, properties: Mapping[str, Any], path: str = "")
             _check_properties(index, nested, f"{where}.")
 
 
+def _term_filters(query: Mapping[str, Any]) -> list[tuple[str, Any]]:
+    """The ``(field, value)`` pairs of a ``match_all`` or ``bool.filter`` of
+    ``term`` clauses; any other query is refused (fail closed)."""
+    if dict(query) in ({}, {"match_all": {}}):  # an empty query matches all, as before
+        return []
+    clauses = query.get("bool", {}).get("filter") if set(query) == {"bool"} else None
+    if set(query.get("bool", {})) == {"filter"} and isinstance(clauses, list):
+        pairs = []
+        for clause in clauses:
+            if not (
+                isinstance(clause, Mapping) and set(clause) == {"term"} and len(clause["term"]) == 1
+            ):
+                break
+            ((field, value),) = clause["term"].items()
+            pairs.append((field, value))
+        else:
+            return pairs
+    raise ElasticIntegrationError(f"the in-memory store does not evaluate this query: {query!r}")
+
+
+def _term_matches(document: Mapping[str, Any], field: str, value: Any) -> bool:
+    stored = document.get(field)
+    return value in stored if isinstance(stored, list | tuple) else stored == value
+
+
 class FakeElasticClient:
     """In-memory stand-in for a real Elasticsearch client. Not thread-safe."""
 
@@ -83,20 +108,24 @@ class FakeElasticClient:
         size: int,
         sort: Sequence[str] = (),
     ) -> tuple[Mapping[str, Any], ...]:
-        """Bounded, read-only search (gate G1.1). This fake does **not**
-        implement Elasticsearch's Query DSL -- ``query`` is accepted (to
-        satisfy the Protocol) but ignored; it returns up to ``size`` of the
-        documents already stored in ``index`` via ``index_document``, in
-        insertion order. Real query matching is exactly the kind of
-        Elasticsearch behavior this fake deliberately does not model (see
-        the module docstring) -- a test needing to verify actual query
-        construction should patch ``urllib.request.urlopen`` against
-        ``ElasticsearchHttpClient`` instead. ``sort`` is honoured (ascending
-        string order of each named top-level field, before the ``size``
-        cap), as the cap's meaning depends on it."""
+        """Bounded, read-only search (gate G1.1) over the documents stored in
+        ``index``. The fake evaluates the one query language subset the read
+        model sends - ``match_all``, and ``bool.filter`` of ``term`` clauses
+        (a keyword equal to the value, or a keyword array containing it) - and
+        refuses any other shape rather than ignore it: an ignored filter
+        applied after the ``size`` cap silently dropped matches once a store
+        held more than ``size`` documents (found by the ADR-0027 re-run: 1,240
+        units, an investigation listed with none). ``sort`` is honoured
+        (ascending string order of each named top-level field), then the
+        filter, then the cap - Elasticsearch's order."""
         if size <= 0:
             raise ElasticIntegrationError(f"search size must be positive, got {size}")
-        documents = list(self._documents.get(index, {}).values())
+        terms = _term_filters(query)
+        documents = [
+            doc
+            for doc in self._documents.get(index, {}).values()
+            if all(_term_matches(doc, field, value) for field, value in terms)
+        ]
         if sort:
             documents.sort(key=lambda doc: tuple(str(doc.get(name, "")) for name in sort))
         return tuple(dict(doc) for doc in documents[:size])

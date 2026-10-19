@@ -425,3 +425,29 @@ def test_domain_package_never_imports_from_dataplane() -> None:
                         offending.append(f"{path.name}: import {alias.name}")
 
     assert not offending, f"domain/ must not import from dataplane/: {offending}"
+
+
+def test_the_in_memory_store_filters_before_it_caps() -> None:
+    """ADR-0027 re-run: with more documents than ``size``, a filter applied
+    after the cap dropped matches - an investigation was listed with no units."""
+    from attribution_platform.dataplane.fake_client import FakeElasticClient
+
+    store = FakeElasticClient()
+    store.ensure_index("u", {})
+    for n in range(30):
+        store.index_document("u", f"d{n:02d}", {"k": f"{n:02d}", "inv": "a" if n < 25 else "b"})
+    store.index_document("u", "tagged", {"k": "99", "inv": "b", "tags": ["x", "y"]})
+    only_b = {"bool": {"filter": [{"term": {"inv": "b"}}]}}
+    assert [d["k"] for d in store.search("u", only_b, size=10, sort=("k",))] == [
+        "25",
+        "26",
+        "27",
+        "28",
+        "29",
+        "99",
+    ]
+    in_array = {"bool": {"filter": [{"term": {"inv": "b"}}, {"term": {"tags": "y"}}]}}
+    assert [d["k"] for d in store.search("u", in_array, size=10)] == ["99"]
+    assert len(store.search("u", {"match_all": {}}, size=10)) == 10
+    with pytest.raises(ElasticIntegrationError):
+        store.search("u", {"range": {"k": {"gte": "10"}}}, size=10)

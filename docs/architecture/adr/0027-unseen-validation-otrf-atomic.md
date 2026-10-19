@@ -85,3 +85,40 @@ procedures. Across all 105 recordings the figure is 30 of 109 (28%), because of 
 **What happens next is development.** Relaxing the intake (a host with only Security logs; a recording with one
 unreadable line) is a change made *after* seeing these results; once it is made and these recordings are re-run,
 they are development data, and that will be recorded here.
+
+## Development after the test (2026-10-20) — the recordings are development data from here
+
+Three faults the test exposed were fixed, each with a regression test (first-run files kept in `first-run/`):
+
+1. **Intake** (ADR-0008 amendment): a Windows host with Security logs but no Sysmon is accepted with a warning;
+   macOS archive-metadata members are skipped; a "host" named only by records of channels that are not read (the
+   legacy *Windows PowerShell* log names a computer by its short name — `WORKSTATION6` beside
+   `WORKSTATION6.theshire.local`) declares nothing and is reported, not refused.
+2. **In-memory store** (`FakeElasticClient` / `SharedMemoryClient`, the default store of the console, uploads and
+   live mode): it ignored the query and capped first, so once it held more than 1,000 unit summaries, units fell
+   out of their investigation's listing (found when the re-run's audit failed with 1,240 units). It now evaluates
+   the query subset the read model sends (`match_all`, `term` filters) before the cap and refuses any other query.
+   The investigation list's cap rose from 100 to 10,000 (a live session adds one investigation per cycle).
+3. **The audit** builds its unit list from each investigation's own listing, and accepts a global search past one
+   page only as a full, flagged page of true matches.
+
+**Re-run** (build `1319109` plus these fixes; served audit 904,111 checks over 103 investigations and 1,702 units,
+all passing):
+
+| | First run | Re-run |
+|---|---|---|
+| recordings read | 61 of 105 | **103 of 105** (the two refused are network captures) |
+| authors' techniques counted | 30 of 65 (46%) | **41 of 107 (38%)** — exactly 35, as parent / sub 6 |
+| the same 61 recordings | 30 | 30 (unchanged) |
+| the 42 newly read | — | 11 of 42 |
+| missed but shown (declared only or context) | 7 | 13 |
+| recordings naming an actor | 0 | **0** (72 not distinguishable, 31 no decision features) |
+
+By tactic (re-run): credential access 10 of 18, lateral movement 11 of 28, defense evasion 9 of 38, discovery 1 of 9,
+persistence 3 of 6.
+
+**What the re-run shows.** The newly read recordings are mostly domain controllers with Security logs only, where
+detection is weaker (no process GUIDs, fewer rules apply): 11 of 42. The largest single gap is **Disable Windows
+Event Logging (T1562.002), missed in 17 recordings** — the event-log tampering family (service start type, the
+MiniNT key, the log path, stopping the service). That is the clearest next detection work, measured, on what are
+now development recordings.

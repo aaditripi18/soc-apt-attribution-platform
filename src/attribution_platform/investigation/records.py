@@ -344,8 +344,16 @@ def load_attribution_analysis(client: ElasticClient, group_id: str) -> Mapping[s
     return _load(client, ATTRIBUTION_ANALYSES_INDEX, group_id)
 
 
-def list_investigations(client: ElasticClient, *, size: int = 100) -> tuple[Mapping[str, Any], ...]:
-    """Stored Investigation records (up to ``size``), sorted by id."""
+#: Elasticsearch's default ``index.max_result_window``: the most one search returns.
+MAX_LISTED_INVESTIGATIONS = 10_000
+
+
+def list_investigations(
+    client: ElasticClient, *, size: int = MAX_LISTED_INVESTIGATIONS
+) -> tuple[Mapping[str, Any], ...]:
+    """Stored Investigation records (up to ``size``), sorted by id. The default
+    was 100, which a live session (one investigation per cycle, ADR-0028) passes
+    within hours."""
     try:
         client.ensure_index(INVESTIGATIONS_INDEX, INVESTIGATIONS_MAPPING)
         return client.search(
