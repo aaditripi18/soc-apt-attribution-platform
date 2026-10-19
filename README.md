@@ -120,6 +120,12 @@ reports, not a different way of counting.
   through processes that matched no rule (ADR-0003 Amendment I); [ADR-0026](docs/architecture/adr/0026-platform-rules-and-two-stage-sequences.md)).
   The core technique is found every time; execution of the delivered file, network behaviour and enrich-only
   discovery are not ([ADR-0025](docs/architecture/adr/0025-declared-versus-established-techniques.md), Amendments D and E).
+- **An unseen test, pre-registered** ([ADR-0027](docs/architecture/adr/0027-unseen-validation-otrf-atomic.md)): 105
+  public single-procedure recordings never used before, run once on a frozen build. First result: the intake refused
+  44 of them (Security-only domain controllers, archive metadata), and on the 61 read 32 of 65 of the authors'
+  techniques were counted (49%), no actor named. After fixing the intake and an in-memory store fault the test
+  exposed, then reading the rules it showed (these recordings are development data from then on): 103 read, 54 of
+  107 counted (50%), still no actor named on any.
 - **The known-answer check is a demonstration, not an accuracy figure.** Four public lab recordings, all used
   throughout development (none held out): two emulations (APT29, APT3) — not real intrusions — and two single tool
   runs with no actor. "Correct" means the verdict names the known actor and no other. Result: APT29 named, from one
