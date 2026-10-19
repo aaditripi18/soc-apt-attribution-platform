@@ -6,6 +6,13 @@ alternatives (:func:`attribution_platform.detection.evidence.ambiguous_technique
 A reviewer who has read the rule can record, with a reason, the techniques
 every match of it establishes. The file is tracked, so each decision is
 versioned and its hash can be cited.
+
+A decision may add techniques **conditioned on the matched event**
+(ADR-0025 Amendment K): each ``when`` clause is one detection-engine field
+condition, evaluated on the Observation the rule matched with the engine's
+own semantics, and the techniques it names are established only for matches
+that satisfy it. Conditions may not read PowerShell script-block text: a block
+holds code that was compiled, not code shown to run (Amendment J).
 """
 
 from __future__ import annotations
@@ -18,12 +25,26 @@ from dataclasses import dataclass
 from pathlib import Path
 from types import MappingProxyType
 
+from attribution_platform.detection.errors import DetectionError
+from attribution_platform.detection.rules import FieldCondition
+from attribution_platform.domain import Observation
+
 _ATTACK_ID = re.compile(r"\AT\d{4}(?:\.\d{3})?\Z")
-REVIEW_VERSION = "technique-support-review/1"
+REVIEW_VERSION = "technique-support-review/2"
+#: Text a condition may not read (ADR-0025 Amendment K).
+_UNCONDITIONABLE = ("script_block",)
 
 
 class TechniqueSupportError(ValueError):
     """The review file is malformed (fail closed)."""
+
+
+@dataclass(frozen=True)
+class ConditionalSupport:
+    """Techniques established by the matches whose event satisfies ``condition``."""
+
+    condition: FieldCondition
+    establishes: frozenset[str]
 
 
 @dataclass(frozen=True)
@@ -33,9 +54,25 @@ class TechniqueSupportReview:
     sha256: str
     #: low-level rules whose technique counts once linked into a cluster
     linked: frozenset[str] = frozenset()
+    #: rule source -> techniques established only when the matched event satisfies a condition
+    conditional: Mapping[str, tuple[ConditionalSupport, ...]] = MappingProxyType({})
 
     def for_source(self, detection_source: str) -> frozenset[str] | None:
+        """What every match establishes (``None``: not reviewed)."""
         return self.supported.get(detection_source)
+
+    def for_match(self, detection_source: str, observation: Observation) -> frozenset[str] | None:
+        """What this match establishes: every match's techniques plus those of
+        each ``when`` clause the matched event satisfies (``None``: not reviewed)."""
+        base = self.supported.get(detection_source)
+        if base is None:
+            return None
+        added = (
+            clause.establishes
+            for clause in self.conditional.get(detection_source, ())
+            if clause.condition.matches(observation)
+        )
+        return base.union(*added)
 
     def counts_when_linked(self, detection_source: str) -> bool:
         return detection_source in self.linked
@@ -51,6 +88,7 @@ def load_technique_support_review(path: Path) -> TechniqueSupportReview:
         raise TechniqueSupportError(f"{path}: version must be {REVIEW_VERSION}")
     supported: dict[str, frozenset[str]] = {}
     linked: set[str] = set()
+    conditional: dict[str, tuple[ConditionalSupport, ...]] = {}
     for entry in data.get("decisions", []):
         source = str(entry.get("rule_source", ""))
         ids = entry.get("establishes")
@@ -70,9 +108,62 @@ def load_technique_support_review(path: Path) -> TechniqueSupportReview:
             )
         if flag:
             linked.add(source)
+        clauses = _clauses(path, source, entry.get("when", []))
+        if clauses:
+            conditional[source] = clauses
     return TechniqueSupportReview(
-        MappingProxyType(supported), hashlib.sha256(raw).hexdigest(), frozenset(linked)
+        MappingProxyType(supported),
+        hashlib.sha256(raw).hexdigest(),
+        frozenset(linked),
+        MappingProxyType(conditional),
     )
+
+
+def _clauses(path: Path, source: str, raw: object) -> tuple[ConditionalSupport, ...]:
+    if not isinstance(raw, list):
+        raise TechniqueSupportError(f"{path}: {source}: 'when' must be a list")
+    clauses = []
+    for clause in raw:
+        if not isinstance(clause, dict) or set(clause) != {
+            "field",
+            "operator",
+            "value",
+            "establishes",
+            "reason",
+        }:
+            raise TechniqueSupportError(
+                f"{path}: {source}: a 'when' clause has exactly field, operator, value, "
+                "establishes and reason"
+            )
+        field = str(clause["field"])
+        if any(word in field for word in _UNCONDITIONABLE):
+            raise TechniqueSupportError(
+                f"{path}: {source}: a condition may not read {field!r} "
+                "(code that was compiled, not shown to run)"
+            )
+        ids = clause["establishes"]
+        if (
+            not isinstance(ids, list)
+            or not ids
+            or not all(isinstance(i, str) and _ATTACK_ID.match(i) for i in ids)
+        ):
+            raise TechniqueSupportError(
+                f"{path}: {source}: a 'when' clause must establish ATT&CK ids"
+            )
+        if not str(clause["reason"]).strip():
+            raise TechniqueSupportError(f"{path}: {source}: a 'when' clause needs a reason")
+        value = clause["value"]
+        try:
+            condition = FieldCondition(
+                field_path=field,
+                operator=str(clause["operator"]),
+                value=tuple(value) if isinstance(value, list) else value,
+                case_insensitive=True,
+            )
+        except DetectionError as error:
+            raise TechniqueSupportError(f"{path}: {source}: {error}") from error
+        clauses.append(ConditionalSupport(condition, frozenset(ids)))
+    return tuple(clauses)
 
 
 def established_ids(declared: frozenset[str], reviewed: frozenset[str] | None) -> frozenset[str]:
@@ -91,6 +182,7 @@ def established_ids(declared: frozenset[str], reviewed: frozenset[str] | None) -
 
 
 __all__ = [
+    "ConditionalSupport",
     "established_ids",
     "EMPTY_REVIEW",
     "REVIEW_VERSION",

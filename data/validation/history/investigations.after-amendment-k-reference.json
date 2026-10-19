@@ -1,0 +1,176 @@
+{
+ "otrf-lsass-03-comsvcs": {
+  "verdict": "not_distinguishable",
+  "named": [],
+  "counted_techniques": [
+   "T1003",
+   "T1003.001",
+   "T1033",
+   "T1055",
+   "T1055.012",
+   "T1059.005",
+   "T1082",
+   "T1112",
+   "T1134.001",
+   "T1218",
+   "T1218.011",
+   "T1615"
+  ],
+  "groups_matching": 146,
+  "top": [
+   "Kimsuky 62% (8 of 12)",
+   "APT32 62% (8 of 12)",
+   "APT41 46% (6 of 12)"
+  ],
+  "known": {
+   "APT3": "29% (4 of 12)"
+  }
+ },
+ "otrf-apt29-day1": {
+  "verdict": "actor_specific_evidence",
+  "named": [
+   "APT29"
+  ],
+  "counted_techniques": [
+   "T1003",
+   "T1003.001",
+   "T1021.002",
+   "T1021.006",
+   "T1027.004",
+   "T1040",
+   "T1048.003",
+   "T1056",
+   "T1056.001",
+   "T1059",
+   "T1059.001",
+   "T1070.004",
+   "T1113",
+   "T1115",
+   "T1132.001",
+   "T1140",
+   "T1201",
+   "T1485",
+   "T1490",
+   "T1547.001",
+   "T1548",
+   "T1548.002",
+   "T1552.004",
+   "T1560",
+   "T1560.001",
+   "T1564.003",
+   "T1569.002",
+   "T1587.001",
+   "T1588.002",
+   "T1620",
+   "T1685",
+   "T1685.001"
+  ],
+  "groups_matching": 195,
+  "top": [
+   "Kimsuky 46% (16 of 32)",
+   "APT39 43% (15 of 32)",
+   "Lazarus Group 40% (14 of 32)"
+  ],
+  "known": {
+   "APT3": "22% (8 of 32)",
+   "APT29": "15% (6 of 32)"
+  }
+ },
+ "sample-windows-credential-dumping.zip": {
+  "verdict": "not_distinguishable",
+  "named": [],
+  "counted_techniques": [
+   "T1003",
+   "T1003.001",
+   "T1033",
+   "T1036.007",
+   "T1059.005",
+   "T1082",
+   "T1112",
+   "T1204.002",
+   "T1588.002",
+   "T1615"
+  ],
+  "groups_matching": 185,
+  "top": [
+   "Kimsuky 75% (8 of 10)",
+   "APT32 74% (8 of 10)",
+   "Mustang Panda 66% (7 of 10)"
+  ],
+  "known": {
+   "APT3": "28% (3 of 10)",
+   "APT29": "14% (2 of 10)"
+  }
+ },
+ "otrf-lsass-01-logonpasswords": {
+  "verdict": "not_distinguishable",
+  "named": [],
+  "counted_techniques": [
+   "T1003",
+   "T1003.001",
+   "T1033",
+   "T1059.005",
+   "T1082",
+   "T1112",
+   "T1134.001",
+   "T1615",
+   "T1685.001"
+  ],
+  "groups_matching": 136,
+  "top": [
+   "Magic Hound 62% (6 of 9)",
+   "APT32 61% (6 of 9)",
+   "FIN8 52% (5 of 9)"
+  ],
+  "known": {
+   "APT3": "29% (3 of 9)"
+  }
+ },
+ "otrf-apt3-empire": {
+  "verdict": "not_distinguishable",
+  "named": [],
+  "counted_techniques": [
+   "T1021.002",
+   "T1033",
+   "T1059",
+   "T1059.001",
+   "T1087.002",
+   "T1115",
+   "T1201",
+   "T1543.003",
+   "T1550.002",
+   "T1569.002",
+   "T1685"
+  ],
+  "groups_matching": 143,
+  "top": [
+   "APT41 69% (8 of 11)",
+   "Wizard Spider 69% (8 of 11)",
+   "OilRig 62% (7 of 11)"
+  ],
+  "known": {
+   "APT3": "32% (4 of 11)",
+   "APT29": "6% (1 of 11)"
+  }
+ },
+ "lsass-04-with-network.zip": {
+  "verdict": "not_distinguishable",
+  "named": [],
+  "counted_techniques": [
+   "T1003",
+   "T1003.001",
+   "T1033",
+   "T1059.001"
+  ],
+  "groups_matching": 125,
+  "top": [
+   "APT32 100% (4 of 4)",
+   "APT39 100% (4 of 4)",
+   "APT28 74% (3 of 4)"
+  ],
+  "known": {
+   "APT3": "69% (3 of 4)",
+   "APT29": "17% (1 of 4)"
+  }
+ }
+}

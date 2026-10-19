@@ -29,7 +29,7 @@
   {
    "source_id": "otrf-apt29-day1",
    "source_sha256": "98a073140860560d70080ace9142961be4f64b4862bae892d62d0f254d0fdbe5",
-   "investigation_id": "investigation::fd8d78701899863d0fe94c4091c4f7f9eddf55c0f5c11cdbe171fcb107704cc5",
+   "investigation_id": "investigation::93853cb68ccb762fb95c4fa8465ac24f8baaaaa04b467004e9cba6483eea0c1e",
    "kind": "emulation",
    "known_actor": {
     "attack_id": "G0016",
@@ -116,7 +116,7 @@
   {
    "source_id": "otrf-apt3-empire",
    "source_sha256": "ab4d1ec4e44102c87946a974f93aa248e49e5001e01fac3f137ec7e61bbc18ed",
-   "investigation_id": "investigation::e9c059bcdaad46c12022c6c05e7beedd06e394a139369be45715b062e2f66a50",
+   "investigation_id": "investigation::eca1e84a644213a5e2c60c7ffd3af14c1340633cbacffefb666781d272183984",
    "kind": "emulation",
    "known_actor": {
     "attack_id": "G0022",
@@ -201,7 +201,7 @@
   {
    "source_id": "otrf-lsass-01-logonpasswords",
    "source_sha256": "79045fcc5a8689efed8db4911cadc11b554ef8b0bed1428ee490bb8c3f2578e6",
-   "investigation_id": "investigation::56182633b58f2aa17e5523939985afcde375857850e4425eee5c160a694f4706",
+   "investigation_id": "investigation::e537b87d9659784f50a55f81252a62d7fb89569a215c7573568ba0b26d27d231",
    "kind": "tool_test",
    "known_actor": null,
    "known_basis": "OTRF Security Datasets: one credential-dumping tool run; no actor",
@@ -277,7 +277,7 @@
   {
    "source_id": "otrf-lsass-03-comsvcs",
    "source_sha256": "97a834cd72b0803d544c62cc45a41b18a4cc04a605735096be4bc5dad5e9fe7b",
-   "investigation_id": "investigation::c6c29815b4d84ca5dde4345888d0bce2a42b6039bc5b6646aee9463442f98922",
+   "investigation_id": "investigation::509fef14b00f650a98a21ba6fb6b48282705251d16efd8d55547a6a5acdf23ee",
    "kind": "tool_test",
    "known_actor": null,
    "known_basis": "OTRF Security Datasets: one credential-dumping tool run; no actor",
@@ -285,8 +285,8 @@
    "named_actors": [],
    "statement": "No actor can be singled out from this evidence. Many Groups are consistent with it, and nothing observed is specific to one of them.",
    "units": 9,
-   "observed_techniques": 10,
-   "candidates": 140,
+   "observed_techniques": 12,
+   "candidates": 146,
    "known_actor_profile_techniques": null,
    "known_actor_techniques_observed": null,
    "units_with_known_actor_as_candidate": null,
@@ -295,56 +295,56 @@
     {
      "ordering": "observed techniques in profile (count)",
      "level": "technique",
-     "groups_ordered": 107,
+     "groups_ordered": 110,
      "would_name": "Kimsuky",
      "known_actor_position": null
     },
     {
      "ordering": "rarity-weighted overlap (sum of -ln g)",
      "level": "technique",
-     "groups_ordered": 107,
+     "groups_ordered": 110,
      "would_name": "Kimsuky",
      "known_actor_position": null
     },
     {
      "ordering": "overlap / profile size (breadth-normalised)",
      "level": "technique",
-     "groups_ordered": 107,
+     "groups_ordered": 110,
      "would_name": "Sowbug",
      "known_actor_position": null
     },
     {
      "ordering": "F1 of overlap/profile and overlap/observed",
      "level": "technique",
-     "groups_ordered": 107,
-     "would_name": "Gorgon Group",
+     "groups_ordered": 110,
+     "would_name": "APT19",
      "known_actor_position": null
     },
     {
      "ordering": "observed techniques in profile (count)",
      "level": "parent technique",
-     "groups_ordered": 135,
-     "would_name": "FIN8",
+     "groups_ordered": 136,
+     "would_name": "Wizard Spider",
      "known_actor_position": null
     },
     {
      "ordering": "rarity-weighted overlap (sum of -ln g)",
      "level": "parent technique",
-     "groups_ordered": 135,
+     "groups_ordered": 136,
      "would_name": "Turla",
      "known_actor_position": null
     },
     {
      "ordering": "overlap / profile size (breadth-normalised)",
      "level": "parent technique",
-     "groups_ordered": 135,
+     "groups_ordered": 136,
      "would_name": "Suckfly",
      "known_actor_position": null
     },
     {
      "ordering": "F1 of overlap/profile and overlap/observed",
      "level": "parent technique",
-     "groups_ordered": 135,
+     "groups_ordered": 136,
      "would_name": "Blue Mockingbird",
      "known_actor_position": null
     }

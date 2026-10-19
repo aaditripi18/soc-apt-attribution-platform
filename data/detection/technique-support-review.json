@@ -1,5 +1,5 @@
 {
- "version": "technique-support-review/1",
+ "version": "technique-support-review/2",
  "description": "ADR-0025. A rule that declares alternative ATT&CK techniques establishes none of the alternatives by default. Each decision below records, for one source rule that was read, exactly the techniques every match of it establishes, and why. A decision can only name techniques the rule declares; an empty list says the rule's logic cannot establish its technique (its detections are still shown, as declared only).",
  "decisions": [
   {
@@ -527,14 +527,209 @@
     "T1059.001"
    ],
    "reason": "A script block is logged when PowerShell compiles code to run it, so every match is PowerShell execution. The rule requires a content-writing cmdlet and the text '-stream' anywhere in the block, not together. Inspected matches (APT29 day 2) were PowerShell's own module code testing whether a drive supports streams, so writing to an alternate data stream is not established."
-  }
- ],
- "left_ambiguous_after_reading": [
+  },
+  {
+   "rule_source": "elastic:fd70c98a-c410-42dc-a2e3-761c71848acf",
+   "rule_name": "Suspicious CertUtil Commands",
+   "declares": [
+    "T1105",
+    "T1140",
+    "T1552",
+    "T1552.004"
+   ],
+   "establishes": [],
+   "reason": "Read in full: certutil started with one of several verbs (download cache, decode, encode, verify, export). The verbs are alternatives, so no technique holds for every match; which one ran is on the command line.",
+   "when": [
+    {
+     "field": "process.command_line",
+     "operator": "wildcard",
+     "value": "*urlcache*://*",
+     "establishes": [
+      "T1105"
+     ],
+     "reason": "the URL-cache verb given a URL fetches a remote file: Ingress Tool Transfer"
+    },
+    {
+     "field": "process.command_line",
+     "operator": "contains",
+     "value": [
+      "-decode",
+      "/decode"
+     ],
+     "establishes": [
+      "T1140"
+     ],
+     "reason": "the decode verbs (plain or hex) turn an encoded file back into its content"
+    },
+    {
+     "field": "process.command_line",
+     "operator": "contains",
+     "value": [
+      "-exportpfx",
+      "/exportpfx"
+     ],
+     "establishes": [
+      "T1552",
+      "T1552.004"
+     ],
+     "reason": "exporting a certificate with its private key: Private Keys"
+    }
+   ]
+  },
+  {
+   "rule_source": "sigma:a642964e-bead-4bed-8910-1bb4d63e3b4d",
+   "rule_name": "HackTool - Mimikatz Execution",
+   "declares": [
+    "T1003.001",
+    "T1003.002",
+    "T1003.004",
+    "T1003.005",
+    "T1003.006"
+   ],
+   "establishes": [],
+   "reason": "Read in full: the tool's name or any of its module prefixes on a command line; several prefixes (token, crypto, rpc, privilege) are not credential dumping, so no technique holds for every match. Which credential command ran is on the command line. A command line that only mentions a command (for example printing it) would be over-claimed; that is the same limit as every command-line decision.",
+   "when": [
+    {
+     "field": "process.command_line",
+     "operator": "contains",
+     "value": [
+      "sekurlsa::logonpasswords",
+      "sekurlsa::ekeys",
+      "sekurlsa::wdigest",
+      "sekurlsa::msv"
+     ],
+     "establishes": [
+      "T1003.001"
+     ],
+     "reason": "extracting credentials held by LSASS (live or from a dump of it): LSASS Memory"
+    },
+    {
+     "field": "process.command_line",
+     "operator": "contains",
+     "value": [
+      "lsadump::sam"
+     ],
+     "establishes": [
+      "T1003.002"
+     ],
+     "reason": "reading the SAM database: Security Account Manager"
+    },
+    {
+     "field": "process.command_line",
+     "operator": "contains",
+     "value": [
+      "lsadump::secrets"
+     ],
+     "establishes": [
+      "T1003.004"
+     ],
+     "reason": "reading LSA secrets"
+    },
+    {
+     "field": "process.command_line",
+     "operator": "contains",
+     "value": [
+      "lsadump::cache"
+     ],
+     "establishes": [
+      "T1003.005"
+     ],
+     "reason": "reading cached domain credentials"
+    },
+    {
+     "field": "process.command_line",
+     "operator": "contains",
+     "value": [
+      "lsadump::dcsync"
+     ],
+     "establishes": [
+      "T1003.006"
+     ],
+     "reason": "requesting credentials by directory replication: DCSync"
+    }
+   ]
+  },
+  {
+   "rule_source": "sigma:69bd9b97-2be2-41b6-9816-fb08757a4d1a",
+   "rule_name": "Potentially Suspicious Execution From Parent Process In Public Folder",
+   "declares": [
+    "T1059",
+    "T1564"
+   ],
+   "establishes": [],
+   "reason": "Read in full: a child of a program in the Public folder that is an interpreter or a utility (bitsadmin, certutil, regsvr32, rundll32), by image or command line. Running from that folder is not hiding an artefact, so Hide Artifacts is never established; an interpreter is established when the child is one.",
+   "when": [
+    {
+     "field": "process.executable",
+     "operator": "endswith",
+     "value": [
+      "\\cmd.exe",
+      "\\powershell.exe",
+      "\\pwsh.exe",
+      "\\cscript.exe",
+      "\\wscript.exe"
+     ],
+     "establishes": [
+      "T1059"
+     ],
+     "reason": "the child is a command or script interpreter"
+    }
+   ]
+  },
   {
    "rule_source": "elastic:00140285-b827-4aee-aa09-8113f58a08f3",
    "rule_name": "Potential Credential Access via Windows Utilities",
-   "why": "Several dump utilities; the procdump branch does not test which process is dumped."
-  },
+   "declares": [
+    "T1003",
+    "T1003.001",
+    "T1003.003",
+    "T1218",
+    "T1218.011"
+   ],
+   "establishes": [],
+   "reason": "Read in full: one of several utilities that write a process memory dump (procdump, comsvcs through rundll32, and others) or ntdsutil creating a full install-from-media copy. The procdump and rundll32 branches do not test which process is dumped, so no technique holds for every match; the event shows which.",
+   "when": [
+    {
+     "field": "process.command_line",
+     "operator": "contains",
+     "value": [
+      "-ma lsass",
+      "/ma lsass"
+     ],
+     "establishes": [
+      "T1003",
+      "T1003.001"
+     ],
+     "reason": "procdump's full-memory dump given LSASS as its target (a dump file merely named after LSASS does not count): LSASS Memory"
+    },
+    {
+     "field": "process.executable",
+     "operator": "endswith",
+     "value": [
+      "\\ntdsutil.exe"
+     ],
+     "establishes": [
+      "T1003",
+      "T1003.003"
+     ],
+     "reason": "only the ntdsutil branch admits ntdsutil, and it requires a full install-from-media copy: NTDS"
+    },
+    {
+     "field": "process.executable",
+     "operator": "endswith",
+     "value": [
+      "\\rundll32.exe"
+     ],
+     "establishes": [
+      "T1218",
+      "T1218.011"
+     ],
+     "reason": "only the rundll32 branch admits rundll32, running a DLL export to dump: Rundll32"
+    }
+   ]
+  }
+ ],
+ "left_ambiguous_after_reading": [
   {
    "rule_source": "sigma:730fc21b-eaff-474b-ad23-90fd265d4988",
    "rule_name": "Psexec Execution",
@@ -554,21 +749,6 @@
    "rule_source": "elastic:ac96ceb8-4399-4191-af1d-4feeac1f1f46",
    "rule_name": "Potential Invoke-Mimikatz PowerShell Script",
    "why": "Alternative credential techniques by branch (LSASS, SAM, secrets, DCSync, vaults, DPAPI, pass-the-hash, tickets, certificates); inspected matches include the module's own help text. PowerShell is not declared."
-  },
-  {
-   "rule_source": "sigma:a642964e-bead-4bed-8910-1bb4d63e3b4d",
-   "rule_name": "HackTool - Mimikatz Execution",
-   "why": "Matches the tool's name or any of its module prefixes, several of which (token, crypto, rpc, privilege) are not credential dumping; inspected matches were the word 'mimikatz' on a command line."
-  },
-  {
-   "rule_source": "elastic:fd70c98a-c410-42dc-a2e3-761c71848acf",
-   "rule_name": "Suspicious CertUtil Commands",
-   "why": "Alternative certutil verbs: download, decode, encode or certificate export - one technique each."
-  },
-  {
-   "rule_source": "sigma:69bd9b97-2be2-41b6-9816-fb08757a4d1a",
-   "rule_name": "Potentially Suspicious Execution From Parent Process In Public Folder",
-   "why": "A child of a program in the Public folder; the child may be an interpreter or a utility (bitsadmin, certutil, regsvr32, rundll32). Running from there is not hiding an artefact."
   }
  ]
 }

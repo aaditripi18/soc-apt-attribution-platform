@@ -430,3 +430,57 @@ large function-name rules (HackTool function names, Invoke-Mimikatz) whose branc
 rules will not recover them; a rule whose match names one function — a decision per branch, conditioned on the
 matched event — would, and is not decided here (it is the "event-conditioned decision" left open above). Neither
 emulation is identified; adjudication adds established techniques but no group-specific evidence.
+
+## Amendment K (2026-10-19) — decisions conditioned on the matched event
+
+**Problem.** A decision said what *every* match of a rule establishes. For a rule whose branches are
+alternatives, that is often nothing — although each individual match shows which branch ran: certutil was given
+`-decode` or a URL, a credential tool was given `lsadump::sam` or `sekurlsa::logonpasswords`. Four rules were left
+ambiguous for exactly that reason.
+
+**Decision.** A decision may carry `when` clauses (review file `technique-support-review/2`). Each clause is one
+detection-engine field condition — the engine's own `FieldCondition`, case-insensitive, with its exact semantics —
+evaluated on the Observation the rule matched; the techniques it names are established for the matches that
+satisfy it, in addition to what every match establishes. Clauses name only techniques the rule declares (tested
+against the packs), each with a reason. A clause **may not read PowerShell script-block text** (refused by the
+loader): Amendment J found script blocks are mostly tool code being loaded, so text in a block is code that was
+compiled, not code shown to run. Clauses therefore apply to process starts, where the command line is what ran.
+
+| Rule | Clause → establishes |
+|---|---|
+| Suspicious CertUtil Commands | URL-cache verb with a URL → T1105; decode verbs → T1140; PFX export → T1552, T1552.004 |
+| HackTool - Mimikatz Execution | `sekurlsa::` credential commands → T1003.001; `lsadump::sam` → .002; `::secrets` → .004; `::cache` → .005; `::dcsync` → .006 |
+| Potential Credential Access via Windows Utilities | procdump `-ma lsass` → T1003, T1003.001; ntdsutil → T1003, T1003.003; rundll32 → T1218, T1218.011 |
+| Potentially Suspicious Execution From Parent Process In Public Folder | child is cmd / PowerShell / cscript / wscript → T1059 |
+
+Found while predicting: a first draft of the LSASS clause read "command line contains lsass", which a dump *file*
+named after LSASS also satisfies. It was narrowed to procdump's target argument before any result was read.
+
+Limit: a command line that only mentions a command (for example printing it) would be over-claimed; the same limit
+applies to every command-line decision since Amendment B. 40 decisions; 4 rules remain read and left ambiguous
+(the two PowerShell script-block rules, Invoke-Mimikatz and HackTool function names, among them — correctly).
+
+**Predicted before the re-run** (recorded 2026-10-19T15:13Z): CALDERA 17 → 18 (+T1003.002, the SAM dump in the
+command PowerShell ran); APT29 day 2 unchanged (its certutil decode and credential commands are already counted
+by other evidence); LSASS run 03 + T1218, T1218.011 (comsvcs through rundll32); others unchanged; no verdict
+change.
+
+**Measured — as predicted** (snapshots `investigations.after-amendment-k.json` and
+`investigations.after-amendment-k-reference.json`, compared with the Amendment J snapshots):
+
+| Recording | Counted | Added | Verdict |
+|---|---|---|---|
+| APT3 emulation (CALDERA) | 17 -> 18 | T1003.002 (Security Account Manager) | not distinguishable |
+| LSASS tool run 03 | 10 -> 12 | T1218, T1218.011 (Rundll32) | not distinguishable |
+| APT29 day 2, APT29 day 1, APT3 Empire, LSASS 01 and 04, lab recording | unchanged | — | unchanged; APT29 day 1 still identified |
+
+Served audit: 157,129 checks (the two emulations) and 49,143 (the six reference investigations), all passing.
+`known-answer-checks.json` regenerated against the served reference investigations: summary and every known-actor
+position unchanged (best 14, worst 124; no wrong name).
+
+**Correction to Amendment J.** Its statement that `known-answer-checks.json` was regenerated and unchanged rested
+on a command that was given without the server address: the script printed its usage and wrote nothing, so the
+file compared equal because it was not rewritten. The conclusion held for another reason — the six reference
+investigations counted exactly the same techniques before and after Amendment J (snapshot), and the orderings are
+computed from those — but the file was not regenerated then. It is regenerated here against the served
+investigations.

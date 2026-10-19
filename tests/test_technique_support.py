@@ -146,6 +146,9 @@ def test_the_tracked_review_is_sound(knowledge: AttackKnowledge) -> None:
         # establishes only some of that - never a technique the rule does not name
         assert set(entry["declares"]) == declared[source], source
         assert review.for_source(source) <= declared[source], source  # all, some or none
+        for clause in entry.get("when", []):
+            # a conditional decision, too, names only techniques the rule declares
+            assert set(clause["establishes"]) <= declared[source], source
 
 
 @pytest.mark.parametrize(
@@ -193,7 +196,7 @@ def test_the_tracked_review_is_sound(knowledge: AttackKnowledge) -> None:
 def test_a_malformed_review_is_refused(tmp_path: Path, change: dict[str, Any]) -> None:
     path = tmp_path / "review.json"
     path.write_text(
-        json.dumps({"version": "technique-support-review/1", "decisions": [], **change}),
+        json.dumps({"version": "technique-support-review/2", "decisions": [], **change}),
         encoding="utf-8",
     )
     with pytest.raises(TechniqueSupportError):
@@ -224,3 +227,62 @@ def test_ambiguous_tags_cannot_inflate_the_comparison_and_supported_evidence_is_
     counted = {e["attack_id"] for e in dumped if e["decision_feature"]}
     assert LSASS in counted
     assert MASQUERADING not in counted and MASQUERADING in {e["attack_id"] for e in dumped}
+
+
+def _review(tmp_path: Path, clause: dict[str, Any]) -> Path:
+    path = tmp_path / "review.json"
+    decision = {"rule_source": "test:rule", "rule_name": "n", "reason": "r", "establishes": []}
+    path.write_text(
+        json.dumps(
+            {"version": "technique-support-review/2", "decisions": [{**decision, "when": [clause]}]}
+        ),
+        encoding="utf-8",
+    )
+    return path
+
+
+_LSASS_CLAUSE = {
+    "field": "process.command_line",
+    "operator": "contains",
+    "value": ["lsass"],
+    "establishes": [LSASS],
+    "reason": "the dump names its target",
+}
+
+
+def _observation(command_line: str) -> Any:
+    record = _sysmon_1()
+    _event_data(record).update(CommandLine=command_line)
+    module = __import__("attribution_platform.sources.sysmon", fromlist=["SysmonSourceAdapter"])
+    (observation,) = module.SysmonSourceAdapter().to_observations(record)
+    return observation
+
+
+def test_a_condition_establishes_only_for_the_events_that_satisfy_it(tmp_path: Path) -> None:
+    review = load_technique_support_review(_review(tmp_path, _LSASS_CLAUSE))
+    # every match establishes nothing; a match whose command line names LSASS establishes the dump
+    assert review.for_source("test:rule") == frozenset()
+    assert review.for_match("test:rule", _observation("procdump -ma 4242 d.dmp")) == frozenset()
+    dumped = _observation("procdump -ma LSASS.exe d.dmp")
+    assert review.for_match("test:rule", dumped) == frozenset({LSASS})
+    # an unreviewed rule stays unreviewed, whatever its event
+    assert review.for_match("test:other", _observation("procdump -ma lsass.exe d.dmp")) is None
+
+
+@pytest.mark.parametrize(
+    "change",
+    [
+        # script-block text holds code that was compiled, not code shown to run
+        {"field": "powershell.file.script_block_text"},
+        {"reason": " "},
+        {"establishes": []},
+        {"establishes": ["x"]},
+        {"operator": "resembles"},
+    ],
+)
+def test_a_malformed_condition_is_refused(tmp_path: Path, change: dict[str, Any]) -> None:
+    with pytest.raises(TechniqueSupportError):
+        load_technique_support_review(_review(tmp_path, {**_LSASS_CLAUSE, **change}))
+    extra = {**_LSASS_CLAUSE, "note": "x"}
+    with pytest.raises(TechniqueSupportError):
+        load_technique_support_review(_review(tmp_path, extra))
