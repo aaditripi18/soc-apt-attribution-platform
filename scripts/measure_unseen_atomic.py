@@ -16,6 +16,7 @@ from __future__ import annotations
 
 import collections
 import json
+import re
 import sys
 import urllib.parse
 import urllib.request
@@ -25,6 +26,7 @@ from typing import Any
 REPO = Path(__file__).resolve().parents[1]
 SELECTION = REPO / "data" / "validation" / "unseen-otrf-atomic" / "selection.json"
 OUT = REPO / "data" / "validation" / "unseen-otrf-atomic" / "results.json"
+RUN = REPO / "data" / "validation" / "unseen-otrf-atomic" / "run.json"
 
 
 def related(a: str, b: str) -> bool:
@@ -42,16 +44,30 @@ def _matches(technique: str, found: set[str]) -> bool:
 
 
 def build(base: str) -> dict[str, Any]:
-    selection = json.loads(SELECTION.read_text(encoding="utf-8"))
-    by_name = {PurePath(entry["path"]).name: entry for entry in selection["selected"]}
-    served = {inv["source_id"]: inv for inv in _get(base, "/investigations")}
+    selection = json.loads(SELECTION.read_text(encoding="utf-8"))["selected"]
+    # run.json lists the recordings in manifest order, which is selection order;
+    # joined by position (two selected files share a name), checked by name.
+    outcomes = json.loads(RUN.read_text(encoding="utf-8"))["recordings"]
+    if len(outcomes) != len(selection):
+        raise SystemExit("run.json does not cover the selection")
     cases = []
-    for name, entry in sorted(by_name.items()):
-        inv = served.get(name)
+    for entry, outcome in zip(selection, outcomes, strict=True):
+        name = PurePath(entry["path"]).name
+        if outcome["recording"] != name:
+            raise SystemExit(f"run.json order differs at {name}")
         authors = entry["authors_techniques"]
-        if inv is None:
-            cases.append({"recording": name, "investigated": False, "authors_techniques": authors})
+        if outcome["state"] != "investigated":
+            cases.append(
+                {
+                    "recording": entry["path"],
+                    "investigated": False,
+                    "state": outcome["state"],
+                    "problems": outcome.get("problems", []),
+                    "authors_techniques": authors,
+                }
+            )
             continue
+        inv = {"investigation_id": outcome["investigation_id"], "evidence": outcome["evidence"]}
         q = urllib.parse.quote(inv["investigation_id"], safe="")
         assessment = _get(base, f"/investigations/{q}/assessment")
         counted = {
@@ -73,7 +89,7 @@ def build(base: str) -> dict[str, Any]:
         missed = sorted(t for t in authors if t not in exact and t not in by_relation)
         cases.append(
             {
-                "recording": name,
+                "recording": entry["path"],
                 "metadata_id": entry["metadata_id"],
                 "tactic_folder": entry["path"].split("/")[3],
                 "investigated": True,
@@ -110,6 +126,21 @@ def build(base: str) -> dict[str, Any]:
         "selection": SELECTION.relative_to(REPO).as_posix(),
         "recordings_selected": len(cases),
         "recordings_investigated": len(run),
+        "recordings_not_investigated": {
+            state: sum(1 for c in cases if c.get("state") == state)
+            for state in sorted({c["state"] for c in cases if not c["investigated"]})
+        },
+        "refusal_reasons": dict(
+            collections.Counter(
+                re.sub(r"'[^']*'|\d+", "…", problem)
+                for c in cases
+                if not c["investigated"]
+                for problem in c["problems"]
+            ).most_common()
+        ),
+        "authors_techniques_in_refused_recordings": sum(
+            len(c["authors_techniques"]) for c in cases if not c["investigated"]
+        ),
         "summary": {
             "authors_techniques": total("authors_techniques"),
             "found_exactly": total("found_exactly"),
