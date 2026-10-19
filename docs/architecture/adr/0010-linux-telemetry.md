@@ -184,3 +184,29 @@ may label a Sandworm family is a labelling-rule decision for ADR-0006 / doc 15, 
   where one host records both — not in the available data), Sigma wiring ✓, evidence type ✓. D5 (Sysmon-over-
   auditd precedence) is not needed: auditd records are not classified as process starts, so no observation kind
   is double-counted; it will be revisited if a process-start mapping is added.
+
+## Amendment A (2026-10-19) — the remaining Linux audit work, measured: nothing to build on the available data
+
+The roadmap listed "a Linux audit reader". The reader exists (implementation record above); two extensions were
+open. Both were measured before building anything.
+
+**1. Recovering the refused `ausearch -i` records (6,348 of 7,187).** Their time has no zone. A zone could be
+*established* (not assumed) only where the same audit event appears both raw (UTC epoch) and interpreted (local
+time), matched by event serial. Measured over the 48 datasets that hold interpreted records: serials are shared
+in two datasets only, and the implied offsets are about 196 days — serial reuse across different sessions, not
+the same events. No dataset establishes a zone, so the records stay refused. Assuming UTC would put a wrong
+time on evidence that correlation and sequences depend on.
+
+**2. Elastic's Linux rules on raw audit records.** 172 production Elastic rules name `logs-auditd_manager.auditd-*`
+or `auditbeat-*`. They read Auditbeat's *normalised* event (one event per kernel event, with derived
+`event.action` values such as `executed`, and `process.args` reassembled from `EXECVE`), not raw records.
+Running them exactly would need Auditbeat's normalisation (go-libaudit's coalescing and its normalisation table)
+ported and verified. Of the 172, 132 also read fields Auditbeat cannot supply from raw audit
+(`process.parent.name` / `.executable` / `.args`, `process.command_line`) and would stay undetermined; about 40 could
+apply at most. The available data to validate against is 837 raw records. A large exact-translation subsystem
+validated on that little data is not justified now.
+
+**Decision.** Linux audit reading is complete for the data available. The extension in (2) is deferred until
+real Linux recordings exist (the owner's lab, or Elastic Agent output, which would carry the normalised shape
+directly and need no port). The Linux detection gap remains the content gap measured above (Sysmon for Linux 5 of
+45, auditd 5 of 48 labelled datasets), documented rather than hidden.
