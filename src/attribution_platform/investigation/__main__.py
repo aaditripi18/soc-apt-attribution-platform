@@ -39,7 +39,7 @@ from __future__ import annotations
 import json
 import os
 import sys
-from collections.abc import Mapping, Sequence
+from collections.abc import Callable, Mapping, Sequence
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -193,13 +193,13 @@ def investigate(
 UPLOADS = REPO_ROOT / "data" / "cache" / "uploads"
 
 
-def upload_service(
-    client: ElasticClient, workbench: Workbench, *, directory: Path = UPLOADS
-) -> UploadService:
-    """The upload service of a serving session (ADR-0020): the same intake
-    check and the same investigation as the command line. With the in-memory
-    store, a run is prepared apart and published in one step, so a reader never
-    sees half an investigation."""
+def investigation_runner(
+    client: ElasticClient, workbench: Workbench
+) -> Callable[[RecordingSource], RunResult]:
+    """Investigate one recording exactly as the command line does, for a
+    serving session (uploads, ADR-0020; live cycles, ADR-0028). With the
+    in-memory store, a run is prepared apart and published in one step, so a
+    reader never sees half an investigation."""
 
     def run(source: RecordingSource) -> RunResult:
         shared = client if isinstance(client, SharedMemoryClient) else None
@@ -222,7 +222,32 @@ def upload_service(
             units=len(record.units),
         )
 
-    return UploadService(directory=directory, check=check_recording, run=run)
+    return run
+
+
+def serving_context(workbench: Workbench) -> ApiContext:
+    """The reference context a serving session hands the API (ADR-0016)."""
+    return load_api_context(
+        workbench.knowledge,
+        coverage_report=COVERAGE_REPORT,
+        sigma_import_report=IMPORT_REPORT,
+        elastic_import_report=ELASTIC_IMPORT_REPORT,
+        static_dir=FRONTEND_DIST,
+        known_answer_checks=KNOWN_ANSWER_CHECKS,
+        actor_import_report=SIGMA_ACTOR_IMPORT_REPORT,
+        advisory_attributions=ADVISORY_ATTRIBUTIONS,
+        platform_pack=PLATFORM_PACK,
+    )
+
+
+def upload_service(
+    client: ElasticClient, workbench: Workbench, *, directory: Path = UPLOADS
+) -> UploadService:
+    """The upload service of a serving session (ADR-0020): the same intake
+    check and the same investigation as the command line."""
+    return UploadService(
+        directory=directory, check=check_recording, run=investigation_runner(client, workbench)
+    )
 
 
 def summary(session: Session) -> dict[str, object]:
@@ -335,17 +360,7 @@ def main(argv: Sequence[str] | None = None, env: dict[str, str] | None = None) -
 
     if "--serve" in args:
         port = int(args[args.index("--port") + 1]) if "--port" in args else 8000
-        context = load_api_context(
-            workbench.knowledge,
-            coverage_report=COVERAGE_REPORT,
-            sigma_import_report=IMPORT_REPORT,
-            elastic_import_report=ELASTIC_IMPORT_REPORT,
-            static_dir=FRONTEND_DIST,
-            known_answer_checks=KNOWN_ANSWER_CHECKS,
-            actor_import_report=SIGMA_ACTOR_IMPORT_REPORT,
-            advisory_attributions=ADVISORY_ATTRIBUTIONS,
-            platform_pack=PLATFORM_PACK,
-        )
+        context = serving_context(workbench)
         uploads = None if "--no-upload" in args else upload_service(client, workbench)
         assistant = None if "--no-assistant" in args else service_from_env(env)
         server = create_server(

@@ -207,3 +207,44 @@ class ElasticsearchHttpClient:
                 )
             sources.append(hit["_source"])
         return tuple(sources)
+
+    def search_hits(
+        self,
+        index: str,
+        query: Mapping[str, Any],
+        *,
+        size: int,
+        sort: Sequence[str],
+    ) -> tuple[tuple[str, Mapping[str, Any]], ...]:
+        """Like :meth:`search`, read-only and bounded, but each hit with its
+        document id: ``(_id, _source)``. Live polling (ADR-0028 D1) needs the
+        id to tell a document already read from a new one at the same time."""
+        if size <= 0:
+            raise ElasticIntegrationError(f"search size must be positive, got {size}")
+        body = {
+            "query": dict(query),
+            "size": size,
+            "sort": [{name: {"order": "asc"}} for name in sort],
+        }
+        status, parsed = self._request("POST", f"/{_segment(index)}/_search", body)
+        if status != 200:
+            raise ElasticIntegrationError(
+                f"search on {index!r} failed (status {status}): {parsed!r}"
+            )
+        hits = parsed.get("hits", {}).get("hits") if isinstance(parsed, dict) else None
+        if not isinstance(hits, list):
+            raise ElasticIntegrationError(
+                f"unexpected search response shape from {index!r}: {parsed!r}"
+            )
+        found: list[tuple[str, Mapping[str, Any]]] = []
+        for hit in hits:
+            if (
+                not isinstance(hit, dict)
+                or not isinstance(hit.get("_id"), str)
+                or not isinstance(hit.get("_source"), dict)
+            ):
+                raise ElasticIntegrationError(
+                    f"a search hit from {index!r} had an unexpected shape: {hit!r}"
+                )
+            found.append((hit["_id"], hit["_source"]))
+        return tuple(found)

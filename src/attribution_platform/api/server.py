@@ -68,7 +68,7 @@ from collections.abc import Callable, Mapping
 from http import HTTPStatus
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
-from typing import Any
+from typing import Any, Protocol
 from urllib.parse import parse_qs, unquote, urlsplit
 
 from attribution_platform.api.assistant import AssistantDisabledError, AssistantService
@@ -156,6 +156,8 @@ _API_PREFIX = "/api"
 _UPLOADS = "/uploads"
 #: ADR-0022: the analyst assistant (a question in, a generated answer out).
 _ASSISTANT = "/assistant"
+#: ADR-0028: the status of a live session (sources, window, recent cycles).
+_LIVE = "/live"
 #: Largest assistant request body read.
 _MAX_ASSISTANT_BODY = 256 * 1024
 #: Built-frontend paths served from ``static_dir`` (everything else is JSON).
@@ -257,11 +259,18 @@ def _dispatch(
     return read_model_fn(client, unquote(raw_identifier))
 
 
+class LiveStatus(Protocol):
+    """A live session as the server sees it: something that describes itself."""
+
+    def describe(self) -> dict[str, Any]: ...
+
+
 def make_handler(
     client: ElasticClient,
     context: ApiContext | None = None,
     uploads: UploadService | None = None,
     assistant: AssistantService | None = None,
+    live: LiveStatus | None = None,
 ) -> type[BaseHTTPRequestHandler]:
     """Build a ``BaseHTTPRequestHandler`` subclass bound to ``client``.
 
@@ -290,6 +299,10 @@ def make_handler(
                     return
                 if path == _UPLOADS or path.startswith(_UPLOADS + "/"):
                     self._write_json(HTTPStatus.OK, _serialize(self._uploads(path)))
+                    return
+                if path == _LIVE:
+                    status = live.describe() if live is not None else {"enabled": False}
+                    self._write_json(HTTPStatus.OK, _serialize(status))
                     return
                 self._write_json(HTTPStatus.OK, _serialize(_dispatch(path, client, query, context)))
             except ApiError as exc:
@@ -450,6 +463,7 @@ def create_server(
     context: ApiContext | None = None,
     uploads: UploadService | None = None,
     assistant: AssistantService | None = None,
+    live: LiveStatus | None = None,
 ) -> ThreadingHTTPServer:
     """Build (but do not start) a server bound to ``client``.
 
@@ -461,5 +475,5 @@ def create_server(
     ``server.serve_forever()`` to actually accept connections;
     ``server.server_address`` gives the bound ``(host, port)`` once created.
     """
-    handler_cls = make_handler(client, context, uploads, assistant)
+    handler_cls = make_handler(client, context, uploads, assistant, live)
     return ThreadingHTTPServer((host, port), handler_cls)
