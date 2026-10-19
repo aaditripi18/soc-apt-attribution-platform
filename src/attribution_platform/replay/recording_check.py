@@ -23,9 +23,12 @@ extracting or executing anything) and reports:
   event-log channels, every other host (Linux, macOS) by the source types its
   records were read by.
 
-A **problem** blocks corpus use (e.g. unreadable lines, a host with no Sysmon,
-nothing converted); a **warning** is recorded for review. Nothing is fixed or
-guessed here.
+A **problem** blocks use (e.g. unreadable lines, a Windows host with neither
+Sysmon nor Security records, nothing converted); a **warning** is recorded for
+review - including a host without Sysmon (its process activity then comes from
+Security 4688, without Sysmon's process GUIDs; the lab recording guide still
+asks for Sysmon) and archive metadata members that are skipped. Nothing is fixed
+or guessed here.
 """
 
 from __future__ import annotations
@@ -42,6 +45,7 @@ from attribution_platform.domain import Observation
 from attribution_platform.replay.recording_pipeline import (
     AUDIT_CHANNEL,
     DEFAULT_CHANNEL_ADAPTERS,
+    archive_metadata_members,
     channel_of,
     iter_recording_records,
 )
@@ -223,9 +227,14 @@ def check_recording(path: Path) -> RecordingCheckReport:
         if host in ("None", ""):
             problems.append(f"{sum(counts.values())} record(s) carry no host name")
             continue
-        if counts.get(SYSMON, 0) == 0:
-            problems.append(f"host {host!r} has no Sysmon records")
-        if counts.get(SECURITY, 0) == 0:
+        if counts.get(SYSMON, 0) == 0 and counts.get(SECURITY, 0) == 0:
+            problems.append(f"host {host!r} has neither Sysmon nor Security records")
+        elif counts.get(SYSMON, 0) == 0:
+            warnings.append(
+                f"host {host!r} has no Sysmon records: its process activity comes from "
+                "Security 4688, without process GUIDs"
+            )
+        elif counts.get(SECURITY, 0) == 0:
             warnings.append(f"host {host!r} has no Security-channel records")
         if counts.get(POWERSHELL, 0) == 0:
             warnings.append(f"host {host!r} has no PowerShell/Operational records")
@@ -250,6 +259,9 @@ def check_recording(path: Path) -> RecordingCheckReport:
             f"{host_less_audit} auditd record(s) name no host (no node=): the recording's source "
             "declaration must state the logging host (ADR-0010 D4)"
         )
+    skipped = archive_metadata_members(path)
+    if skipped:
+        warnings.append(f"{len(skipped)} archive metadata member(s) skipped (e.g. {skipped[0]!r})")
     unrouted = sum(n for c, n in routed.items() if c not in DEFAULT_CHANNEL_ADAPTERS)
     if unrouted:
         warnings.append(f"{unrouted} record(s) match no supported source and are not read")

@@ -505,3 +505,19 @@ SID alone. Winlogbeat keeps the two apart and both are read.
 
 **Not done.** Other System events; the Windows Application log; Elastic's prebuilt rules for the System data
 stream.
+
+## Amendment (2026-10-19) — intake for ordinary SOC recordings (found by the unseen test, ADR-0027)
+
+The intake check (`replay/recording_check.py`) was written for the calibration corpus and refused, on the unseen
+OTRF atomic recordings, 44 of 105 before detection: 38 refusals because a host (typically a domain controller)
+had Security logs but no Sysmon, and 16 because a macOS archive-metadata member (`__MACOSX/._…`) was read as a
+log line. Neither is a problem with the telemetry.
+
+- A Windows host **without Sysmon but with Security records** is accepted with a warning: its process activity
+  comes from Security 4688 under the D3 precedence policy (declared `windows_security`), without process GUIDs.
+  A host with neither is still refused. The lab recording guide still asks for Sysmon on every host.
+- Archive members that are macOS metadata (`__MACOSX/` or an AppleDouble `._` name) are never read, by the
+  pipeline or the check; the check reports how many were skipped.
+
+Tests: `tests/test_recording_check.py` (Security-only host accepted with its declaration; neither source refused;
+a metadata member skipped, not counted as an unreadable line).

@@ -94,9 +94,34 @@ def test_unparseable_lines_block(tmp_path: Path) -> None:
     assert any("2 line(s) are not JSON objects" in p for p in report.problems)
 
 
-def test_host_without_sysmon_blocks(tmp_path: Path) -> None:
+def test_host_with_security_but_no_sysmon_is_accepted_with_a_warning(tmp_path: Path) -> None:
+    # a domain controller that ships only Security logs is ordinary (ADR-0027 finding)
     report = check_recording(_archive(tmp_path, _json([_security(2)])))
-    assert any("has no Sysmon records" in p for p in report.problems)
+    assert report.accepted
+    assert any("has no Sysmon records" in w for w in report.warnings)
+    assert report.declared_sources == {HOST: ("windows_security",)}
+
+
+def test_host_with_neither_sysmon_nor_security_blocks(tmp_path: Path) -> None:
+    powershell = {
+        "winlog": {
+            "channel": "Microsoft-Windows-PowerShell/Operational",
+            "event_id": 4104,
+            "computer_name": HOST,
+        }
+    }
+    report = check_recording(_archive(tmp_path, _json([powershell])))
+    assert any("neither Sysmon nor Security" in p for p in report.problems)
+
+
+def test_macos_archive_metadata_is_skipped_not_read(tmp_path: Path) -> None:
+    path = tmp_path / "with-metadata.zip"
+    with zipfile.ZipFile(path, "w") as archive:
+        archive.writestr("run.json", "".join(line + "\n" for line in _json([_sysmon(1)])))
+        archive.writestr("__MACOSX/._run.json", bytes([0, 5, 22, 7]) + b" resource fork")
+    report = check_recording(path)
+    assert report.accepted and report.unparseable_lines == 0
+    assert any("archive metadata member(s) skipped" in w for w in report.warnings)
 
 
 def test_record_without_host_blocks(tmp_path: Path) -> None:

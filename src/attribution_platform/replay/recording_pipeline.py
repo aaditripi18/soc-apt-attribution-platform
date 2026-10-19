@@ -196,16 +196,40 @@ def _verify(source: RecordingSource) -> None:
         )
 
 
+def is_archive_metadata(name: str) -> bool:
+    """A member macOS adds when it makes an archive (``__MACOSX/`` and AppleDouble
+    ``._`` files): resource-fork metadata, never telemetry (found in the unseen
+    OTRF recordings, ADR-0027)."""
+    normalized = name.replace("\\", "/")
+    return normalized.startswith("__MACOSX/") or normalized.rsplit("/", 1)[-1].startswith("._")
+
+
+def archive_metadata_members(path: Path) -> list[str]:
+    """The members :func:`is_archive_metadata` skips, for the intake report."""
+    if path.suffix == ".zip":
+        with zipfile.ZipFile(path) as archive:
+            return sorted(n for n in archive.namelist() if is_archive_metadata(n))
+    if path.name.endswith(".tar.gz"):
+        with tarfile.open(path, "r:gz") as archive:
+            return sorted(m.name for m in archive.getmembers() if is_archive_metadata(m.name))
+    return []
+
+
 def _iter_raw_lines(path: Path) -> Iterator[str]:
-    """Every line of a recording, line ending kept (blank lines included)."""
+    """Every line of a recording, line ending kept (blank lines included).
+    Archive metadata members (:func:`is_archive_metadata`) are not read."""
     if path.suffix == ".zip":
         with zipfile.ZipFile(path) as archive:
             for name in sorted(archive.namelist()):
+                if is_archive_metadata(name):
+                    continue
                 with archive.open(name) as handle:
                     yield from io.TextIOWrapper(handle, encoding="utf-8", errors="replace")
     elif path.name.endswith(".tar.gz"):
         with tarfile.open(path, "r:gz") as archive:
             for member in sorted(archive.getmembers(), key=lambda m: m.name):
+                if is_archive_metadata(member.name):
+                    continue
                 extracted = archive.extractfile(member) if member.isfile() else None
                 if extracted is not None:
                     yield from io.TextIOWrapper(extracted, encoding="utf-8", errors="replace")
