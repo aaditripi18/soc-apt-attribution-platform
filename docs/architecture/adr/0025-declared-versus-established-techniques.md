@@ -484,3 +484,52 @@ file compared equal because it was not rewritten. The conclusion held for anothe
 investigations counted exactly the same techniques before and after Amendment J (snapshot), and the orderings are
 computed from those — but the file was not regenerated then. It is regenerated here against the served
 investigations.
+
+## Amendment L (2026-10-20) — review batch 4: the rules that showed what the unseen recordings' authors performed
+
+**Selection.** After the ADR-0027 re-run (now development data), 19 of the authors' techniques were *shown* but
+not counted. The 24 unreviewed rules that showed them were read, with their matched events where the logic left a
+question. Ranking by contribution, as in Amendment B.
+
+**Decisions** (64 decisions, 4 rules left ambiguous; reasons in the review file):
+
+| Rule(s) | Establishes |
+|---|---|
+| Three MiniNt rules (key created, default value set, the command that adds it) | T1112, T1685.001 — the key makes Windows stop writing the Security log |
+| NetNTLM downgrade (event 4657, registry form); WDigest UseLogonCredential | T1112 only — the new value is not tested, or the dump that follows is not observed |
+| Rubeus | nothing for every match; by command verb: kerberoast → T1558.003, ptt → T1550.003, ticket dump → T1003 |
+| Kirbi file creation | nothing (a file name, as for dropped credential-tool files) |
+| File Download via Bitsadmin; Bitsadmin Activity | T1197 — direction of transfer not tested |
+| Control Panel Items | by command line ending in `.cpl` → T1218.002 |
+| Shell started by rundll32 | T1059, T1218, T1218.011; the shell by its program |
+| hh.exe child process (Sigma, Elastic) | T1218, T1218.001; the shell by its program |
+| HH.EXE execution (low-level) | T1218.001, counted once linked into a cluster |
+| Local Accounts Discovery (low-level) | by program: whoami / quser / qwinsta → T1033; net / wmic → T1087.001; counted once linked |
+| Remote System Discovery Commands | by program: net → T1069.002; nltest → T1018 |
+| iertutil.dll written by the SMB server; event 5145 on it | T1021.002 |
+| iexplore loading iertutil.dll | nothing (DLL hijacking is not declared) |
+| Cobalt Strike service installation (7045, 4697, registry) | T1543.003 |
+| Exchange worker spawning a shell | T1059; web shell versus exploit is not distinguished |
+
+A `counts_when_linked` decision may now carry its techniques in `when` clauses only (loader change, tested).
+
+**Predicted** (2026-10-19T19:17Z): unseen 44 → about 54–59 of 107; no actor named; reference set possibly gains
+from low-level discovery and the help-file rule; no verdict change.
+
+**Measured.**
+
+| | Before | After |
+|---|---|---|
+| unseen set (103 read): authors' techniques counted | 44 of 107 | **54 of 107 (50%)** — gained Disable Windows Event Logging ×6, Modify Registry ×2, BITS Jobs, Compiled HTML File; none lost |
+| unseen set: counted, not listed by the authors | 125 | 146 — mostly System Owner/User Discovery (×12, `whoami` run by the tooling and linked into its cluster) and Modify Registry beside the event-log tampering |
+| unseen set: recordings naming an actor | 0 | 0 |
+| APT3 Empire | 11 | 12 (+ Local Account) |
+| APT29 day 2 | 29 | 30 (+ Local Account) |
+| APT3 CALDERA | 18 | 19 (+ System Owner/User Discovery) |
+| other reference recordings | — | unchanged |
+
+At the low end of the prediction. No verdict changed; APT29 day 1 still identified. Known-answer checks
+regenerated: summary unchanged (best 14, worst 124, no wrong name); APT3's position in the Empire orderings improved
+in four of eight (17→15, 23→17, 46→37, 33→21). Served audits: unseen 910,311 checks, reference 49,124, held-out
+157,131 — all passing; 2,943 tests passing. Snapshots: `investigations.after-review-batch-4{,-reference}.json`;
+`data/validation/unseen-otrf-atomic/results.json`.

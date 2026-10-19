@@ -29,7 +29,7 @@
   {
    "source_id": "otrf-apt29-day1",
    "source_sha256": "98a073140860560d70080ace9142961be4f64b4862bae892d62d0f254d0fdbe5",
-   "investigation_id": "investigation::93853cb68ccb762fb95c4fa8465ac24f8baaaaa04b467004e9cba6483eea0c1e",
+   "investigation_id": "investigation::6374e8b069ec7086528c26bdf7060faa2fa2dc908a5149e09164ac76f26a4c95",
    "kind": "emulation",
    "known_actor": {
     "attack_id": "G0016",
@@ -116,7 +116,7 @@
   {
    "source_id": "otrf-apt3-empire",
    "source_sha256": "ab4d1ec4e44102c87946a974f93aa248e49e5001e01fac3f137ec7e61bbc18ed",
-   "investigation_id": "investigation::eca1e84a644213a5e2c60c7ffd3af14c1340633cbacffefb666781d272183984",
+   "investigation_id": "investigation::ed72a06c502fc0ec3c79d5134b69acf1a1774c8cb41400a1ff47ceb253f3f414",
    "kind": "emulation",
    "known_actor": {
     "attack_id": "G0022",
@@ -127,10 +127,10 @@
    "named_actors": [],
    "statement": "No actor can be singled out from this evidence. Many Groups are consistent with it, and nothing observed is specific to one of them.",
    "units": 68,
-   "observed_techniques": 11,
-   "candidates": 143,
+   "observed_techniques": 12,
+   "candidates": 144,
    "known_actor_profile_techniques": 44,
-   "known_actor_techniques_observed": 4,
+   "known_actor_techniques_observed": 5,
    "units_with_known_actor_as_candidate": 6,
    "unit_level": {
     "units_compared": 6,
@@ -143,30 +143,30 @@
     {
      "ordering": "observed techniques in profile (count)",
      "level": "technique",
-     "groups_ordered": 110,
-     "would_name": "Wizard Spider",
-     "known_actor_position": 17
+     "groups_ordered": 111,
+     "would_name": "APT41",
+     "known_actor_position": 15
     },
     {
      "ordering": "rarity-weighted overlap (sum of -ln g)",
      "level": "technique",
-     "groups_ordered": 110,
+     "groups_ordered": 111,
      "would_name": "OilRig",
-     "known_actor_position": 23
+     "known_actor_position": 17
     },
     {
      "ordering": "overlap / profile size (breadth-normalised)",
      "level": "technique",
-     "groups_ordered": 110,
+     "groups_ordered": 111,
      "would_name": "Orangeworm",
-     "known_actor_position": 46
+     "known_actor_position": 37
     },
     {
      "ordering": "F1 of overlap/profile and overlap/observed",
      "level": "technique",
-     "groups_ordered": 110,
-     "would_name": "Aquatic Panda",
-     "known_actor_position": 33
+     "groups_ordered": 111,
+     "would_name": "Poseidon Group",
+     "known_actor_position": 21
     },
     {
      "ordering": "observed techniques in profile (count)",
@@ -201,7 +201,7 @@
   {
    "source_id": "otrf-lsass-01-logonpasswords",
    "source_sha256": "79045fcc5a8689efed8db4911cadc11b554ef8b0bed1428ee490bb8c3f2578e6",
-   "investigation_id": "investigation::e537b87d9659784f50a55f81252a62d7fb89569a215c7573568ba0b26d27d231",
+   "investigation_id": "investigation::c05a5fc221f282d2c789b5de5a67b62b9739387d5bde261ca6864850ffe7110c",
    "kind": "tool_test",
    "known_actor": null,
    "known_basis": "OTRF Security Datasets: one credential-dumping tool run; no actor",
@@ -277,7 +277,7 @@
   {
    "source_id": "otrf-lsass-03-comsvcs",
    "source_sha256": "97a834cd72b0803d544c62cc45a41b18a4cc04a605735096be4bc5dad5e9fe7b",
-   "investigation_id": "investigation::509fef14b00f650a98a21ba6fb6b48282705251d16efd8d55547a6a5acdf23ee",
+   "investigation_id": "investigation::e93d39e00dd48cde0a546e6c82e02e2dbd534f75993e201bf763f6a014e024d6",
    "kind": "tool_test",
    "known_actor": null,
    "known_basis": "OTRF Security Datasets: one credential-dumping tool run; no actor",

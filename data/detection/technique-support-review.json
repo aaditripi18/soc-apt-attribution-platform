@@ -727,6 +727,535 @@
      "reason": "only the rundll32 branch admits rundll32, running a DLL export to dump: Rundll32"
     }
    ]
+  },
+  {
+   "rule_source": "sigma:919f2ef0-be2d-4a7a-b635-eb2b41fde044",
+   "rule_name": "Disable Security Events Logging Adding Reg Key MiniNt",
+   "declares": [
+    "T1112",
+    "T1685.001"
+   ],
+   "establishes": [
+    "T1112",
+    "T1685.001"
+   ],
+   "reason": "Every match creates the MiniNt key under the current control set (by the registry event, or by the command that adds it). With that key present Windows treats the system as Windows PE and stops writing the Security event log: Disable Windows Event Logging, done by modifying the registry. Read on the unseen recordings: the key creation event of each MiniNt procedure."
+  },
+  {
+   "rule_source": "sigma:8839e550-52d7-4958-9f2f-e13c1e736838",
+   "rule_name": "Security Event Logging Disabled via MiniNt Registry Key - Registry Set",
+   "declares": [
+    "T1112",
+    "T1685.001"
+   ],
+   "establishes": [
+    "T1112",
+    "T1685.001"
+   ],
+   "reason": "Every match creates the MiniNt key under the current control set (by the registry event, or by the command that adds it). With that key present Windows treats the system as Windows PE and stops writing the Security event log: Disable Windows Event Logging, done by modifying the registry. This form matches the key's default value being set."
+  },
+  {
+   "rule_source": "sigma:1a4bd6af-99ac-4466-b5b2-7b72b4a05462",
+   "rule_name": "Security Event Logging Disabled via MiniNt Registry Key - Process",
+   "declares": [
+    "T1112",
+    "T1685.001"
+   ],
+   "establishes": [
+    "T1112",
+    "T1685.001"
+   ],
+   "reason": "Every match creates the MiniNt key under the current control set (by the registry event, or by the command that adds it). With that key present Windows treats the system as Windows PE and stops writing the Security event log: Disable Windows Event Logging, done by modifying the registry. This form matches the reg.exe or PowerShell command that adds it (the limit of every command-line decision applies)."
+  },
+  {
+   "rule_source": "sigma:d3abac66-f11c-4ed0-8acb-50cc29c97eed",
+   "rule_name": "NetNTLM Downgrade Attack",
+   "declares": [
+    "T1112",
+    "T1685"
+   ],
+   "establishes": [
+    "T1112"
+   ],
+   "reason": "Every match is Security event 4657 - a registry value was modified - on an LSA NTLM setting: Modify Registry. The rule does not test the new value, so a weakening (Impair Defenses) is not established."
+  },
+  {
+   "rule_source": "sigma:d67572a0-e2ec-45d6-b8db-c100d14b8ef2",
+   "rule_name": "NetNTLM Downgrade Attack - Registry",
+   "declares": [
+    "T1112",
+    "T1685"
+   ],
+   "establishes": [
+    "T1112"
+   ],
+   "reason": "Every match sets an LSA NTLM value: Modify Registry. The RestrictSendingNTLMTraffic branch matches every value, secure ones included (the rule's own note), so a weakening is not established by every match."
+  },
+  {
+   "rule_source": "elastic:d703a5af-d5b0-43bd-8ddb-7a5d500b7da5",
+   "rule_name": "Modification of WDigest Security Provider",
+   "declares": [
+    "T1003",
+    "T1003.001",
+    "T1112"
+   ],
+   "establishes": [
+    "T1112"
+   ],
+   "reason": "Every match sets WDigest UseLogonCredential to 1: Modify Registry. That makes LSASS keep plain-text credentials for a later dump; the dump itself is not observed."
+  },
+  {
+   "rule_source": "sigma:7ec2c172-dceb-4c10-92c9-87c1881b7e18",
+   "rule_name": "HackTool - Rubeus Execution",
+   "declares": [
+    "T1003",
+    "T1550.003",
+    "T1558.003"
+   ],
+   "establishes": [],
+   "reason": "Read in full: the Rubeus tool by image, original name or description, or one of its command verbs. The tool's name alone establishes nothing; the verb on the command line says which technique ran.",
+   "when": [
+    {
+     "field": "process.command_line",
+     "operator": "contains",
+     "value": [
+      "kerberoast "
+     ],
+     "establishes": [
+      "T1558.003"
+     ],
+     "reason": "requesting service tickets to crack: Kerberoasting"
+    },
+    {
+     "field": "process.command_line",
+     "operator": "contains",
+     "value": [
+      "ptt /ticket:"
+     ],
+     "establishes": [
+      "T1550.003"
+     ],
+     "reason": "injecting a ticket into the session: Pass the Ticket"
+    },
+    {
+     "field": "process.command_line",
+     "operator": "contains",
+     "value": [
+      "dump /service:krbtgt ",
+      "dump /luid:0x"
+     ],
+     "establishes": [
+      "T1003"
+     ],
+     "reason": "extracting Kerberos tickets held in LSASS memory"
+    }
+   ]
+  },
+  {
+   "rule_source": "elastic:b8f8da2d-a9dc-48c0-90e4-955c0aa1259a",
+   "rule_name": "Kirbi File Creation",
+   "declares": [
+    "T1003",
+    "T1558"
+   ],
+   "establishes": [],
+   "reason": "The rule matches a file written with the .kirbi extension. As for dropped credential-tool files, a file name shows neither which credential store was read nor whether a ticket was stolen or legitimately requested."
+  },
+  {
+   "rule_source": "sigma:d059842b-6b9d-4ed1-b5c3-5b89143c6ede",
+   "rule_name": "File Download Via Bitsadmin",
+   "declares": [
+    "S0190",
+    "T1036.003",
+    "T1105",
+    "T1197"
+   ],
+   "establishes": [
+    "T1197"
+   ],
+   "reason": "Every match is bitsadmin creating or running a BITS transfer job: BITS Jobs. The transfer may be an upload (/upload) as well as a download, so Ingress Tool Transfer is not established by every match; a renamed binary is not tested."
+  },
+  {
+   "rule_source": "elastic:8eec4df1-4b4b-4502-b6c3-c788714604c9",
+   "rule_name": "Bitsadmin Activity",
+   "declares": [
+    "T1105",
+    "T1197"
+   ],
+   "establishes": [
+    "T1197"
+   ],
+   "reason": "Every branch creates, configures or resumes a BITS job (bitsadmin verbs or the PowerShell BITS cmdlets): BITS Jobs. The direction of the transfer is not tested."
+  },
+  {
+   "rule_source": "sigma:0ba863e6-def5-4e50-9cea-4dd8c7dc46a4",
+   "rule_name": "Control Panel Items",
+   "declares": [
+    "T1218.002",
+    "T1546"
+   ],
+   "establishes": [],
+   "reason": "Read in full: a CPL registered under the Control Panel key, or a command line ending in a .cpl outside the system directory. The branches differ; the second is a control panel item being run.",
+   "when": [
+    {
+     "field": "process.command_line",
+     "operator": "endswith",
+     "value": [
+      ".cpl"
+     ],
+     "establishes": [
+      "T1218.002"
+     ],
+     "reason": "a control panel item run from its own path: Control Panel"
+    }
+   ]
+  },
+  {
+   "rule_source": "elastic:9ccf3ce0-0057-440a-91f5-870c6ad39093",
+   "rule_name": "Command Shell Activity Started via RunDLL32",
+   "declares": [
+    "T1059",
+    "T1059.001",
+    "T1059.003",
+    "T1218",
+    "T1218.011",
+    "T1552"
+   ],
+   "establishes": [
+    "T1059",
+    "T1218",
+    "T1218.011"
+   ],
+   "reason": "Every match is cmd or PowerShell started by rundll32 with a command line: code run through rundll32 started a shell - Rundll32 proxy execution and a command interpreter. Unsecured credentials are not observed.",
+   "when": [
+    {
+     "field": "process.executable",
+     "operator": "endswith",
+     "value": [
+      "\\cmd.exe"
+     ],
+     "establishes": [
+      "T1059",
+      "T1059.003"
+     ],
+     "reason": "the child is cmd: Windows Command Shell"
+    },
+    {
+     "field": "process.executable",
+     "operator": "endswith",
+     "value": [
+      "\\powershell.exe",
+      "\\pwsh.exe",
+      "\\powershell_ise.exe"
+     ],
+     "establishes": [
+      "T1059",
+      "T1059.001"
+     ],
+     "reason": "the child is PowerShell"
+    }
+   ]
+  },
+  {
+   "rule_source": "sigma:52cad028-0ff0-4854-8f67-d25dfcbc78b4",
+   "rule_name": "HTML Help HH.EXE Suspicious Child Process",
+   "declares": [
+    "T1047",
+    "T1059.001",
+    "T1059.003",
+    "T1059.005",
+    "T1059.007",
+    "T1218",
+    "T1218.001",
+    "T1218.010",
+    "T1218.011",
+    "T1566",
+    "T1566.001"
+   ],
+   "establishes": [
+    "T1218",
+    "T1218.001"
+   ],
+   "reason": "Every match is one of a list of interpreters and utilities started by hh.exe: content of a compiled HTML file ran a program - Compiled HTML File proxy execution. Which child differs by match; phishing delivery is not observed.",
+   "when": [
+    {
+     "field": "process.executable",
+     "operator": "endswith",
+     "value": [
+      "\\cmd.exe"
+     ],
+     "establishes": [
+      "T1059.003"
+     ],
+     "reason": "the child is cmd: Windows Command Shell"
+    },
+    {
+     "field": "process.executable",
+     "operator": "endswith",
+     "value": [
+      "\\powershell.exe",
+      "\\pwsh.exe",
+      "\\powershell_ise.exe"
+     ],
+     "establishes": [
+      "T1059.001"
+     ],
+     "reason": "the child is PowerShell"
+    }
+   ]
+  },
+  {
+   "rule_source": "elastic:e3343ab9-4245-4715-b344-e11c56b0a47f",
+   "rule_name": "Process Activity via Compiled HTML File",
+   "declares": [
+    "T1059",
+    "T1059.001",
+    "T1059.003",
+    "T1204",
+    "T1204.002",
+    "T1218",
+    "T1218.001",
+    "T1218.005"
+   ],
+   "establishes": [
+    "T1218",
+    "T1218.001"
+   ],
+   "reason": "Every match is a script host, shell or mshta started by hh.exe: Compiled HTML File proxy execution. Which child differs by match; that a user opened a delivered file is not observed.",
+   "when": [
+    {
+     "field": "process.executable",
+     "operator": "endswith",
+     "value": [
+      "\\cmd.exe"
+     ],
+     "establishes": [
+      "T1059",
+      "T1059.003"
+     ],
+     "reason": "the child is cmd: Windows Command Shell"
+    },
+    {
+     "field": "process.executable",
+     "operator": "endswith",
+     "value": [
+      "\\powershell.exe",
+      "\\pwsh.exe",
+      "\\powershell_ise.exe"
+     ],
+     "establishes": [
+      "T1059",
+      "T1059.001"
+     ],
+     "reason": "the child is PowerShell"
+    }
+   ]
+  },
+  {
+   "rule_source": "sigma:68c8acb4-1b60-4890-8e82-3ddf7a6dba84",
+   "rule_name": "HH.EXE Execution",
+   "declares": [
+    "T1218.001"
+   ],
+   "establishes": [
+    "T1218.001"
+   ],
+   "reason": "Low-level rule: hh.exe opening a .chm file - compiled HTML content being run. Low-level because users open help files routinely; it counts only once linked into a cluster (Amendment I).",
+   "counts_when_linked": true
+  },
+  {
+   "rule_source": "sigma:502b42de-4306-40b4-9596-6f590c81f073",
+   "rule_name": "Local Accounts Discovery",
+   "declares": [
+    "T1033",
+    "T1087.001"
+   ],
+   "establishes": [],
+   "reason": "Low-level rule with alternative branches: user-session utilities (whoami, quser, qwinsta), or local account listing (net user, wmic useraccount, cmd dir of the profiles directory, cmdkey /l). Each branch's program says which; counted only once linked into a cluster (Amendment I).",
+   "when": [
+    {
+     "field": "process.executable",
+     "operator": "endswith",
+     "value": [
+      "\\whoami.exe",
+      "\\quser.exe",
+      "\\qwinsta.exe"
+     ],
+     "establishes": [
+      "T1033"
+     ],
+     "reason": "the program reports the current or logged-on users: System Owner/User Discovery"
+    },
+    {
+     "field": "process.executable",
+     "operator": "endswith",
+     "value": [
+      "\\net.exe",
+      "\\net1.exe",
+      "\\wmic.exe"
+     ],
+     "establishes": [
+      "T1087.001"
+     ],
+     "reason": "the net user and wmic useraccount branches list local accounts: Local Account"
+    }
+   ],
+   "counts_when_linked": true
+  },
+  {
+   "rule_source": "elastic:0635c542-1b96-4335-9b47-126582d2c19a",
+   "rule_name": "Remote System Discovery Commands",
+   "declares": [
+    "T1016",
+    "T1018",
+    "T1069",
+    "T1069.002"
+   ],
+   "establishes": [],
+   "reason": "Read in full: alternative discovery commands (nbtstat, arp, nltest, nslookup for domain controllers, dsquery subnet, net group /domain). The program says which.",
+   "when": [
+    {
+     "field": "process.executable",
+     "operator": "endswith",
+     "value": [
+      "\\net.exe",
+      "\\net1.exe"
+     ],
+     "establishes": [
+      "T1069",
+      "T1069.002"
+     ],
+     "reason": "only the net group /domain branch admits net: Domain Groups"
+    },
+    {
+     "field": "process.executable",
+     "operator": "endswith",
+     "value": [
+      "\\nltest.exe"
+     ],
+     "establishes": [
+      "T1018"
+     ],
+     "reason": "nltest listing or locating domain controllers: Remote System Discovery"
+    }
+   ]
+  },
+  {
+   "rule_source": "sigma:2f7979ae-f82b-45af-ac1d-2b10e93b0baa",
+   "rule_name": "Potential DCOM InternetExplorer.Application DLL Hijack",
+   "declares": [
+    "T1021.002",
+    "T1021.003"
+   ],
+   "establishes": [
+    "T1021.002"
+   ],
+   "reason": "Every match is the System process (the SMB server) writing iertutil.dll into the Internet Explorer directory: a file placed in a system directory over an administrative share. The DCOM execution that would follow is not observed."
+  },
+  {
+   "rule_source": "sigma:c39f0c81-7348-4965-ab27-2fde35a1b641",
+   "rule_name": "DCOM InternetExplorer.Application Iertutil DLL Hijack - Security",
+   "declares": [
+    "T1021.002",
+    "T1021.003"
+   ],
+   "establishes": [
+    "T1021.002"
+   ],
+   "reason": "Every match is Security event 5145 (a network share object was accessed) for iertutil.dll in the Internet Explorer directory by a user account: SMB/Windows Admin Shares. The DCOM execution is not observed."
+  },
+  {
+   "rule_source": "sigma:f354eba5-623b-450f-b073-0b5b2773b6aa",
+   "rule_name": "Potential DCOM InternetExplorer.Application DLL Hijack - Image Load",
+   "declares": [
+    "T1021.002",
+    "T1021.003"
+   ],
+   "establishes": [],
+   "reason": "The rule matches iexplore loading iertutil.dll from its own directory: a planted DLL being loaded (DLL hijacking, not declared). Neither SMB shares nor DCOM are observed by this event."
+  },
+  {
+   "rule_source": "sigma:5a105d34-05fc-401e-8553-272b45c1522d",
+   "rule_name": "CobaltStrike Service Installations - System",
+   "declares": [
+    "T1021.002",
+    "T1543.003",
+    "T1569.002"
+   ],
+   "establishes": [
+    "T1543.003"
+   ],
+   "reason": "Every match is System event 7045 - a service was installed - with a command or admin-share binary as its image: a Windows service was created. That it ran, or how the binary arrived, differs by branch."
+  },
+  {
+   "rule_source": "sigma:61a7697c-cb79-42a8-a2ff-5f0cdfae0130",
+   "rule_name": "Potential CobaltStrike Service Installations - Registry",
+   "declares": [
+    "T1021.002",
+    "T1543.003",
+    "T1569.002"
+   ],
+   "establishes": [
+    "T1543.003"
+   ],
+   "reason": "Every match writes a service's configuration under the Services key with a command or admin-share binary: a Windows service was created or modified. That it ran is not observed."
+  },
+  {
+   "rule_source": "sigma:d7a95147-145f-4678-b85d-d1ff4a3bb3f6",
+   "rule_name": "CobaltStrike Service Installations - Security",
+   "declares": [
+    "T1021.002",
+    "T1543.003",
+    "T1569.002"
+   ],
+   "establishes": [
+    "T1543.003"
+   ],
+   "reason": "Every match is Security event 4697 - a service was installed - with a command or admin-share binary: a Windows service was created. That it ran is not observed."
+  },
+  {
+   "rule_source": "elastic:f81ee52c-297e-46d9-9205-07e66931df26",
+   "rule_name": "Microsoft Exchange Worker Spawning Suspicious Processes",
+   "declares": [
+    "T1059",
+    "T1059.001",
+    "T1059.003",
+    "T1190",
+    "T1505",
+    "T1505.003"
+   ],
+   "establishes": [
+    "T1059"
+   ],
+   "reason": "Every match is a shell started by an Exchange application-pool worker: code running inside Exchange's web server started a command interpreter. Whether through a web shell or an exploited flaw differs, so neither is established.",
+   "when": [
+    {
+     "field": "process.executable",
+     "operator": "endswith",
+     "value": [
+      "\\cmd.exe"
+     ],
+     "establishes": [
+      "T1059",
+      "T1059.003"
+     ],
+     "reason": "the child is cmd: Windows Command Shell"
+    },
+    {
+     "field": "process.executable",
+     "operator": "endswith",
+     "value": [
+      "\\powershell.exe",
+      "\\pwsh.exe",
+      "\\powershell_ise.exe"
+     ],
+     "establishes": [
+      "T1059",
+      "T1059.001"
+     ],
+     "reason": "the child is PowerShell"
+    }
+   ]
   }
  ],
  "left_ambiguous_after_reading": [

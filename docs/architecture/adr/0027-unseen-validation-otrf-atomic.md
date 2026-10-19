@@ -140,3 +140,6 @@ records each recording's counted ids). The first run is rescored from its stored
 Most of the remaining event-log-tampering "misses" are now *shown but not counted*: the rules that fire declare
 both Disable Windows Event Logging and Modify Registry, which ADR-0025 treats as alternatives until the rule is read.
 Reading those rules is the next step.
+
+**After review batch 4** (ADR-0025 Amendment L, on these recordings as development data): 54 of 107 (50%),
+no actor named.

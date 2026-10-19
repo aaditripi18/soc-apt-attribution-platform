@@ -101,16 +101,17 @@ def load_technique_support_review(path: Path) -> TechniqueSupportReview:
         if not str(entry.get("reason", "")).strip() or not str(entry.get("rule_name", "")).strip():
             raise TechniqueSupportError(f"{path}: {source}: a rule_name and a reason are required")
         supported[source] = frozenset(ids)
-        flag = entry.get("counts_when_linked", False)
-        if not isinstance(flag, bool) or (flag and not ids):
-            raise TechniqueSupportError(
-                f"{path}: {source}: 'counts_when_linked' must be a boolean, and needs a technique"
-            )
-        if flag:
-            linked.add(source)
         clauses = _clauses(path, source, entry.get("when", []))
         if clauses:
             conditional[source] = clauses
+        flag = entry.get("counts_when_linked", False)
+        if not isinstance(flag, bool) or (flag and not ids and not clauses):
+            raise TechniqueSupportError(
+                f"{path}: {source}: 'counts_when_linked' must be a boolean, and needs a technique "
+                "(for every match or in a 'when' clause)"
+            )
+        if flag:
+            linked.add(source)
     return TechniqueSupportReview(
         MappingProxyType(supported),
         hashlib.sha256(raw).hexdigest(),

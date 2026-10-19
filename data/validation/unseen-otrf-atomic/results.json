@@ -13,12 +13,12 @@
  "authors_techniques_in_refused_recordings": 2,
  "summary": {
   "authors_techniques": 107,
-  "found_exactly": 37,
+  "found_exactly": 47,
   "found_as_parent_or_sub": 7,
-  "missed": 63,
-  "missed_but_shown": 19,
-  "counted_but_not_listed_by_authors": 125,
-  "recordings_with_an_authors_technique_counted": 42,
+  "missed": 53,
+  "missed_but_shown": 9,
+  "counted_but_not_listed_by_authors": 146,
+  "recordings_with_an_authors_technique_counted": 52,
   "recordings_with_no_evidence": 11,
   "recordings_naming_an_actor": 0
  },
@@ -38,8 +38,8 @@
   "defense_evasion": {
    "recordings": 38,
    "authors_techniques": 38,
-   "found": 12,
-   "missed_but_shown": 11
+   "found": 22,
+   "missed_but_shown": 1
   },
   "discovery": {
    "recordings": 9,
@@ -249,7 +249,8 @@
     "T1003"
    ],
    "counted": [
-    "T1003.004"
+    "T1003.004",
+    "T1033"
    ],
    "found_exactly": [],
    "found_as_parent_or_sub": [
@@ -257,7 +258,9 @@
    ],
    "missed": [],
    "missed_but_shown": [],
-   "counted_but_not_listed_by_authors": [],
+   "counted_but_not_listed_by_authors": [
+    "T1033"
+   ],
    "verdict": "not_distinguishable",
    "named_actors": []
   },
@@ -274,6 +277,7 @@
     "T1003.004"
    ],
    "counted": [
+    "T1033",
     "T1558"
    ],
    "found_exactly": [],
@@ -285,6 +289,7 @@
     "T1003.004"
    ],
    "counted_but_not_listed_by_authors": [
+    "T1033",
     "T1558"
    ],
    "verdict": "not_distinguishable",
@@ -304,7 +309,8 @@
    ],
    "counted": [
     "T1003",
-    "T1003.001"
+    "T1003.001",
+    "T1033"
    ],
    "found_exactly": [
     "T1003.001"
@@ -312,7 +318,9 @@
    "found_as_parent_or_sub": [],
    "missed": [],
    "missed_but_shown": [],
-   "counted_but_not_listed_by_authors": [],
+   "counted_but_not_listed_by_authors": [
+    "T1033"
+   ],
    "verdict": "not_distinguishable",
    "named_actors": []
   },
@@ -389,6 +397,7 @@
    "counted": [
     "T1003",
     "T1003.001",
+    "T1033",
     "T1059.001",
     "T1550.002"
    ],
@@ -401,6 +410,7 @@
    "counted_but_not_listed_by_authors": [
     "T1003",
     "T1003.001",
+    "T1033",
     "T1059.001"
    ],
    "verdict": "not_distinguishable",
@@ -628,17 +638,17 @@
    "authors_techniques": [
     "T1197"
    ],
-   "counted": [],
-   "found_exactly": [],
+   "counted": [
+    "T1197"
+   ],
+   "found_exactly": [
+    "T1197"
+   ],
    "found_as_parent_or_sub": [],
-   "missed": [
-    "T1197"
-   ],
-   "missed_but_shown": [
-    "T1197"
-   ],
+   "missed": [],
+   "missed_but_shown": [],
    "counted_but_not_listed_by_authors": [],
-   "verdict": "no_decision_features",
+   "verdict": "not_distinguishable",
    "named_actors": []
   },
   {
@@ -828,17 +838,20 @@
    "authors_techniques": [
     "T1685.001"
    ],
-   "counted": [],
-   "found_exactly": [],
+   "counted": [
+    "T1112",
+    "T1685.001"
+   ],
+   "found_exactly": [
+    "T1685.001"
+   ],
    "found_as_parent_or_sub": [],
-   "missed": [
-    "T1685.001"
+   "missed": [],
+   "missed_but_shown": [],
+   "counted_but_not_listed_by_authors": [
+    "T1112"
    ],
-   "missed_but_shown": [
-    "T1685.001"
-   ],
-   "counted_but_not_listed_by_authors": [],
-   "verdict": "no_decision_features",
+   "verdict": "not_distinguishable",
    "named_actors": []
   },
   {
@@ -853,17 +866,20 @@
    "authors_techniques": [
     "T1685.001"
    ],
-   "counted": [],
-   "found_exactly": [],
+   "counted": [
+    "T1112",
+    "T1685.001"
+   ],
+   "found_exactly": [
+    "T1685.001"
+   ],
    "found_as_parent_or_sub": [],
-   "missed": [
-    "T1685.001"
+   "missed": [],
+   "missed_but_shown": [],
+   "counted_but_not_listed_by_authors": [
+    "T1112"
    ],
-   "missed_but_shown": [
-    "T1685.001"
-   ],
-   "counted_but_not_listed_by_authors": [],
-   "verdict": "no_decision_features",
+   "verdict": "not_distinguishable",
    "named_actors": []
   },
   {
@@ -1044,16 +1060,15 @@
     "T1112"
    ],
    "counted": [
+    "T1112",
     "T1685.001"
    ],
-   "found_exactly": [],
+   "found_exactly": [
+    "T1112"
+   ],
    "found_as_parent_or_sub": [],
-   "missed": [
-    "T1112"
-   ],
-   "missed_but_shown": [
-    "T1112"
-   ],
+   "missed": [],
+   "missed_but_shown": [],
    "counted_but_not_listed_by_authors": [
     "T1685.001"
    ],
@@ -1132,16 +1147,15 @@
     "T1112"
    ],
    "counted": [
-    "T1055"
+    "T1055",
+    "T1112"
    ],
-   "found_exactly": [],
+   "found_exactly": [
+    "T1112"
+   ],
    "found_as_parent_or_sub": [],
-   "missed": [
-    "T1112"
-   ],
-   "missed_but_shown": [
-    "T1112"
-   ],
+   "missed": [],
+   "missed_but_shown": [],
    "counted_but_not_listed_by_authors": [
     "T1055"
    ],
@@ -1161,6 +1175,7 @@
     "T1218.003"
    ],
    "counted": [
+    "T1033",
     "T1059",
     "T1218.003",
     "T1548.002"
@@ -1172,6 +1187,7 @@
    "missed": [],
    "missed_but_shown": [],
    "counted_but_not_listed_by_authors": [
+    "T1033",
     "T1059",
     "T1548.002"
    ],
@@ -1242,17 +1258,23 @@
    "authors_techniques": [
     "T1218.001"
    ],
-   "counted": [],
-   "found_exactly": [],
+   "counted": [
+    "T1059",
+    "T1059.003",
+    "T1218",
+    "T1218.001"
+   ],
+   "found_exactly": [
+    "T1218.001"
+   ],
    "found_as_parent_or_sub": [],
-   "missed": [
-    "T1218.001"
+   "missed": [],
+   "missed_but_shown": [],
+   "counted_but_not_listed_by_authors": [
+    "T1059",
+    "T1059.003"
    ],
-   "missed_but_shown": [
-    "T1218.001"
-   ],
-   "counted_but_not_listed_by_authors": [],
-   "verdict": "no_decision_features",
+   "verdict": "not_distinguishable",
    "named_actors": []
   },
   {
@@ -1381,18 +1403,19 @@
     "T1685.001"
    ],
    "counted": [
-    "T1059.001"
+    "T1059.001",
+    "T1112",
+    "T1685.001"
    ],
-   "found_exactly": [],
+   "found_exactly": [
+    "T1685.001"
+   ],
    "found_as_parent_or_sub": [],
-   "missed": [
-    "T1685.001"
-   ],
-   "missed_but_shown": [
-    "T1685.001"
-   ],
+   "missed": [],
+   "missed_but_shown": [],
    "counted_but_not_listed_by_authors": [
-    "T1059.001"
+    "T1059.001",
+    "T1112"
    ],
    "verdict": "not_distinguishable",
    "named_actors": []
@@ -1410,18 +1433,19 @@
     "T1685.001"
    ],
    "counted": [
-    "T1059.001"
+    "T1059.001",
+    "T1112",
+    "T1685.001"
    ],
-   "found_exactly": [],
+   "found_exactly": [
+    "T1685.001"
+   ],
    "found_as_parent_or_sub": [],
-   "missed": [
-    "T1685.001"
-   ],
-   "missed_but_shown": [
-    "T1685.001"
-   ],
+   "missed": [],
+   "missed_but_shown": [],
    "counted_but_not_listed_by_authors": [
-    "T1059.001"
+    "T1059.001",
+    "T1112"
    ],
    "verdict": "not_distinguishable",
    "named_actors": []
@@ -1536,17 +1560,20 @@
    "authors_techniques": [
     "T1685.001"
    ],
-   "counted": [],
-   "found_exactly": [],
+   "counted": [
+    "T1112",
+    "T1685.001"
+   ],
+   "found_exactly": [
+    "T1685.001"
+   ],
    "found_as_parent_or_sub": [],
-   "missed": [
-    "T1685.001"
+   "missed": [],
+   "missed_but_shown": [],
+   "counted_but_not_listed_by_authors": [
+    "T1112"
    ],
-   "missed_but_shown": [
-    "T1685.001"
-   ],
-   "counted_but_not_listed_by_authors": [],
-   "verdict": "no_decision_features",
+   "verdict": "not_distinguishable",
    "named_actors": []
   },
   {
@@ -1561,17 +1588,20 @@
    "authors_techniques": [
     "T1685.001"
    ],
-   "counted": [],
-   "found_exactly": [],
+   "counted": [
+    "T1112",
+    "T1685.001"
+   ],
+   "found_exactly": [
+    "T1685.001"
+   ],
    "found_as_parent_or_sub": [],
-   "missed": [
-    "T1685.001"
+   "missed": [],
+   "missed_but_shown": [],
+   "counted_but_not_listed_by_authors": [
+    "T1112"
    ],
-   "missed_but_shown": [
-    "T1685.001"
-   ],
-   "counted_but_not_listed_by_authors": [],
-   "verdict": "no_decision_features",
+   "verdict": "not_distinguishable",
    "named_actors": []
   },
   {
@@ -1887,6 +1917,7 @@
     "T1059.005"
    ],
    "counted": [
+    "T1033",
     "T1059",
     "T1059.001",
     "T1685"
@@ -1898,6 +1929,7 @@
    "missed": [],
    "missed_but_shown": [],
    "counted_but_not_listed_by_authors": [
+    "T1033",
     "T1059.001",
     "T1685"
    ],
@@ -2321,6 +2353,7 @@
    "counted": [
     "T1003",
     "T1003.001",
+    "T1033",
     "T1059",
     "T1059.001",
     "T1685"
@@ -2334,6 +2367,7 @@
    "counted_but_not_listed_by_authors": [
     "T1003",
     "T1003.001",
+    "T1033",
     "T1059",
     "T1059.001",
     "T1685"
@@ -2356,6 +2390,7 @@
    "counted": [
     "T1021.002",
     "T1027.004",
+    "T1033",
     "T1059",
     "T1059.001",
     "T1685"
@@ -2369,6 +2404,7 @@
    "counted_but_not_listed_by_authors": [
     "T1021.002",
     "T1027.004",
+    "T1033",
     "T1059",
     "T1059.001",
     "T1685"
@@ -2390,6 +2426,7 @@
    ],
    "counted": [
     "T1010",
+    "T1033",
     "T1059",
     "T1059.001",
     "T1543.003",
@@ -2406,6 +2443,7 @@
    ],
    "counted_but_not_listed_by_authors": [
     "T1010",
+    "T1033",
     "T1059",
     "T1059.001",
     "T1543.003",
@@ -2429,6 +2467,7 @@
    ],
    "counted": [
     "T1021.006",
+    "T1033",
     "T1059",
     "T1059.001",
     "T1190",
@@ -2441,6 +2480,7 @@
    "missed": [],
    "missed_but_shown": [],
    "counted_but_not_listed_by_authors": [
+    "T1033",
     "T1059",
     "T1059.001",
     "T1190",
@@ -2492,6 +2532,7 @@
     "T1047"
    ],
    "counted": [
+    "T1033",
     "T1047",
     "T1059",
     "T1059.001",
@@ -2504,6 +2545,7 @@
    "missed": [],
    "missed_but_shown": [],
    "counted_but_not_listed_by_authors": [
+    "T1033",
     "T1059",
     "T1059.001",
     "T1685"
@@ -2870,7 +2912,9 @@
     "T1505.003"
    ],
    "counted": [
-    "T1059"
+    "T1033",
+    "T1059",
+    "T1059.003"
    ],
    "found_exactly": [],
    "found_as_parent_or_sub": [],
@@ -2881,7 +2925,9 @@
     "T1505.003"
    ],
    "counted_but_not_listed_by_authors": [
-    "T1059"
+    "T1033",
+    "T1059",
+    "T1059.003"
    ],
    "verdict": "not_distinguishable",
    "named_actors": []
