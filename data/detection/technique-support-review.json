@@ -391,6 +391,142 @@
    ],
    "counts_when_linked": true,
    "reason": "Low-level (enrich) rule: the system-information utility starting, by image name or original file name. Every match is System Information Discovery. It is low-level because administrators run it routinely, so it never forms a cluster; it counts only once its process is linked into an existing cluster - in the inspected recordings, started by a shell that the delivered implant started."
+  },
+  {
+   "rule_source": "elastic:11dd9713-0ec6-4110-9707-32daae1ee68c",
+   "rule_name": "PowerShell Script with Token Impersonation Capabilities",
+   "declares": [
+    "T1059",
+    "T1059.001",
+    "T1106",
+    "T1134",
+    "T1134.001",
+    "T1134.002"
+   ],
+   "establishes": [
+    "T1059",
+    "T1059.001"
+   ],
+   "reason": "A script block is logged when PowerShell compiles code to run it, so every match is PowerShell execution. The branches are alternatives - named-pipe or thread impersonation, parent-process spoofing, token duplication, or enabling SeDebugPrivilege - and the last only enables a privilege on the script's own token. Inspected matches (APT3 CALDERA emulation): fragments of a reflective loader enabling its own debug privilege, and one token-stealing function. Access Token Manipulation is therefore not established by every match; Native API names the mechanism."
+  },
+  {
+   "rule_source": "elastic:e26f042e-c590-4e82-8e05-41e81bd822ad",
+   "rule_name": "Suspicious .NET Reflection via PowerShell",
+   "declares": [
+    "T1055",
+    "T1055.001",
+    "T1055.002",
+    "T1059",
+    "T1059.001",
+    "T1140",
+    "T1620"
+   ],
+   "establishes": [
+    "T1059",
+    "T1059.001"
+   ],
+   "reason": "A script block is logged when PowerShell compiles code to run it, so every match is PowerShell execution. The rule requires an assembly-load call and, anywhere in the block, a byte or stream source. Assembly.Load also loads an assembly by name, so loading code from memory (Reflective Code Loading) is not established by every match, though the inspected match (APT29 day 2) was exactly that. Injection and deobfuscation are not observed."
+  },
+  {
+   "rule_source": "elastic:ad84d445-b1ce-4377-82d9-7c633f28bf9a",
+   "rule_name": "Suspicious Portable Executable Encoded in Powershell Script",
+   "declares": [
+    "T1027",
+    "T1027.013",
+    "T1055",
+    "T1059",
+    "T1059.001"
+   ],
+   "establishes": [
+    "T1027",
+    "T1027.013",
+    "T1059",
+    "T1059.001"
+   ],
+   "reason": "A script block is logged when PowerShell compiles code to run it, so every match is PowerShell execution. Every match contains 'TVqQAAMAAAAEAAAA', the base64 encoding of an executable's header: an executable carried encoded inside the script (Encrypted/Encoded File). Inspected matches (APT3 CALDERA): the encoded executables embedded in a credential-dumping module and a reflective loader. Whether it was injected is not observed."
+  },
+  {
+   "rule_source": "elastic:4c59cff1-b78a-41b8-a9f1-4231984d1fb6",
+   "rule_name": "PowerShell Share Enumeration Script",
+   "declares": [
+    "T1039",
+    "T1059",
+    "T1059.001",
+    "T1106",
+    "T1135"
+   ],
+   "establishes": [
+    "T1059",
+    "T1059.001"
+   ],
+   "reason": "A script block is logged when PowerShell compiles code to run it, so every match is PowerShell execution. One branch is only the name of a share-finding function. The inspected match (APT29 day 2) was that name in the alias list of an offensive module being loaded - defining the function, not enumerating shares - so Network Share Discovery is not established by every match."
+  },
+  {
+   "rule_source": "sigma:03d83090-8cba-44a0-b02f-0b756a050306",
+   "rule_name": "Potential WinAPI Calls Via PowerShell Scripts",
+   "declares": [
+    "T1059.001",
+    "T1106",
+    "T1620"
+   ],
+   "establishes": [
+    "T1059.001"
+   ],
+   "reason": "A script block is logged when PowerShell compiles code to run it, so every match is PowerShell execution. Each branch is a set of native function names appearing together (injection, token or memory functions). Inspected matches (APT3 CALDERA) were fragments of a reflective loader's definitions; that a function was called, or code loaded, is not observed (as for PSReflect)."
+  },
+  {
+   "rule_source": "elastic:a2d04374-187c-4fd9-b513-3ad4e7fdd67a",
+   "rule_name": "PowerShell Mailbox Collection Script",
+   "declares": [
+    "T1059",
+    "T1059.001",
+    "T1114",
+    "T1114.001",
+    "T1114.002"
+   ],
+   "establishes": [
+    "T1059",
+    "T1059.001",
+    "T1114"
+   ],
+   "reason": "A script block is logged when PowerShell compiles code to run it, so every match is PowerShell execution. Every branch requires creating an Outlook or Exchange Web Services object together with a mailbox or folder call: Email Collection. Which (local Outlook or remote Exchange) differs by branch, so no sub-technique. Inspected matches (APT29 day 2): an inbox-reading function from the emulation's email collection step."
+  },
+  {
+   "rule_source": "elastic:1d9aeb0b-9549-46f6-a32d-05e2a001b7fd",
+   "rule_name": "PowerShell Script with Encryption/Decryption Capabilities",
+   "declares": [
+    "T1027",
+    "T1027.013",
+    "T1140",
+    "T1486"
+   ],
+   "establishes": [],
+   "reason": "The rule matches code that builds a symmetric cipher with an encryptor or decryptor. That is a capability, and none of the declared techniques follows from it: the inspected matches (APT29 day 2) were the implant's own command-channel encryption functions, which is neither an obfuscated file, decoding of a file, nor data encrypted for impact."
+  },
+  {
+   "rule_source": "sigma:692f0bec-83ba-4d04-af7e-e884a96059b6",
+   "rule_name": "Potential WMI Lateral Movement WmiPrvSE Spawned PowerShell",
+   "declares": [
+    "T1047",
+    "T1059.001"
+   ],
+   "establishes": [
+    "T1047",
+    "T1059.001"
+   ],
+   "reason": "Every match is PowerShell (by image or original file name) started by the WMI provider host: a process created through Windows Management Instrumentation. Whether it was remote (lateral movement) is not observed. Inspected matches: APT29 day 2."
+  },
+  {
+   "rule_source": "sigma:8c521530-5169-495d-a199-0a3a881ad24e",
+   "rule_name": "NTFS Alternate Data Stream",
+   "declares": [
+    "T1059.001",
+    "T1564.004"
+   ],
+   "establishes": [
+    "T1059.001"
+   ],
+   "reason": "A script block is logged when PowerShell compiles code to run it, so every match is PowerShell execution. The rule requires a content-writing cmdlet and the text '-stream' anywhere in the block, not together. Inspected matches (APT29 day 2) were PowerShell's own module code testing whether a drive supports streams, so writing to an alternate data stream is not established."
   }
  ],
  "left_ambiguous_after_reading": [
@@ -413,6 +549,26 @@
    "rule_source": "sigma:646ea171-dded-4578-8a4d-65e9822892e3",
    "rule_name": "Process Memory Dump Via Comsvcs.DLL",
    "why": "A memory dump through comsvcs.dll; the rule does not test which process is dumped."
+  },
+  {
+   "rule_source": "elastic:ac96ceb8-4399-4191-af1d-4feeac1f1f46",
+   "rule_name": "Potential Invoke-Mimikatz PowerShell Script",
+   "why": "Alternative credential techniques by branch (LSASS, SAM, secrets, DCSync, vaults, DPAPI, pass-the-hash, tickets, certificates); inspected matches include the module's own help text. PowerShell is not declared."
+  },
+  {
+   "rule_source": "sigma:a642964e-bead-4bed-8910-1bb4d63e3b4d",
+   "rule_name": "HackTool - Mimikatz Execution",
+   "why": "Matches the tool's name or any of its module prefixes, several of which (token, crypto, rpc, privilege) are not credential dumping; inspected matches were the word 'mimikatz' on a command line."
+  },
+  {
+   "rule_source": "elastic:fd70c98a-c410-42dc-a2e3-761c71848acf",
+   "rule_name": "Suspicious CertUtil Commands",
+   "why": "Alternative certutil verbs: download, decode, encode or certificate export - one technique each."
+  },
+  {
+   "rule_source": "sigma:69bd9b97-2be2-41b6-9816-fb08757a4d1a",
+   "rule_name": "Potentially Suspicious Execution From Parent Process In Public Folder",
+   "why": "A child of a program in the Public folder; the child may be an interpreter or a utility (bitsadmin, certutil, regsvr32, rundll32). Running from there is not hiding an artefact."
   }
  ]
 }

@@ -380,3 +380,53 @@ recording (8 -> 9, 9 -> 10, 9 -> 10 techniques). Verdicts unchanged everywhere; 
 unchanged; known-actor positions in `data/validation/known-answer-checks.json` unchanged (best 14, worst 124; no
 wrong name). The orderings on tool tests now name different groups at the top (e.g. Sowbug), as expected when a
 broadly used technique is added: they remain orderings, not verdicts.
+
+## Amendment J (2026-10-19) — the rules the held-out emulations exposed, read with their events
+
+**What this uses up.** Amendment D left 14 rules with declared-only evidence on the two held-out emulations
+(APT3 CALDERA, APT29 day 2) unread; one (Defender tampering) was decided since. The other 13 are decided here, so
+those two recordings are now development data for the review, not held-out data.
+
+**Method.** As before: a rule establishes a technique only if every match of its logic does. New in this batch,
+each rule's matched events were read in the recordings before deciding (script blocks and process starts), and what
+they showed is in each reason. That reading changed the picture for PowerShell script-block rules: most matches
+were **fragments of attack-tool modules being loaded** (a credential-dumping module, a reflective loader, a
+reconnaissance module) — the code was present and compiled, but the specific function was not shown to run. A
+rule whose branch is satisfied by a function name or a definition therefore establishes PowerShell, not the
+function's technique.
+
+| Rule | Establishes | Why, in short |
+|---|---|---|
+| PowerShell Script with Token Impersonation Capabilities | T1059, T1059.001 | one branch only enables a privilege on the script's own token; matches were a loader doing that |
+| Suspicious .NET Reflection via PowerShell | T1059, T1059.001 | assembly-load also loads by name; reflective loading not shown by every match |
+| Suspicious Portable Executable Encoded in PowerShell Script | T1027, T1027.013, T1059, T1059.001 | every match carries a base64-encoded executable |
+| PowerShell Share Enumeration Script | T1059, T1059.001 | matched a function name in a module's alias list |
+| Potential WinAPI Calls Via PowerShell Scripts (Sigma) | T1059.001 | function names together; calls not observed (as PSReflect) |
+| PowerShell Mailbox Collection Script | T1059, T1059.001, T1114 | every branch builds a mail client object and reads a folder; local or remote differs |
+| PowerShell Script with Encryption/Decryption Capabilities | nothing | matches were the implant's channel encryption; no declared technique follows |
+| Potential WMI Lateral Movement WmiPrvSE Spawned PowerShell (Sigma) | T1047, T1059.001 | PowerShell started by the WMI provider host; remote use not observed |
+| NTFS Alternate Data Stream (Sigma) | T1059.001 | the two strings need not be together; matches were PowerShell's own module code |
+
+Left ambiguous after reading (alternatives by branch): Potential Invoke-Mimikatz PowerShell Script, HackTool -
+Mimikatz Execution, Suspicious CertUtil Commands, Potentially Suspicious Execution From Parent Process In Public
+Folder. 36 decisions, 8 rules read and left ambiguous.
+
+**Predicted before the re-run:** CALDERA +2 (T1027, T1027.013), day 2 +2 (T1047, T1114), no verdict change.
+
+**Measured** (snapshots `investigations.before-review-batch-3.json` / `.after-review-batch-3.json`; audit 157,123
+checks over the two, all passing; 2,915 tests passing):
+
+| Recording | Counted | Added | Verdict | Known actor by overlap |
+|---|---|---|---|---|
+| APT3 emulation (CALDERA) | 15 -> 17 | T1027, T1027.013 | not distinguishable | APT3 4 -> 5 of 17 |
+| APT29 emulation, day 2 | 27 -> 29 | T1047, T1114 | not distinguishable | APT29 6 -> 7 of 29 |
+
+As predicted. The six reference investigations are identical (snapshot
+`investigations.after-review-batch-3-reference.json`; audit 49,079 checks; `known-answer-checks.json` summary and
+every known-actor position unchanged).
+
+**What this does not fix.** 38 (CALDERA) and 46 (day 2) techniques remain declared only, mostly from the two
+large function-name rules (HackTool function names, Invoke-Mimikatz) whose branches are alternatives. Reading more
+rules will not recover them; a rule whose match names one function — a decision per branch, conditioned on the
+matched event — would, and is not decided here (it is the "event-conditioned decision" left open above). Neither
+emulation is identified; adjudication adds established techniques but no group-specific evidence.
