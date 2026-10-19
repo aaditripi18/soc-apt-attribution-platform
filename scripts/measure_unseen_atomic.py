@@ -9,7 +9,14 @@ ADR-0025 Amendment E (``measure_technique_ground_truth.py``), plus *shown*: the
 authors' technique is among the recording's technique detections at all
 (counted, declared only, or low-level context). Read-only: GET requests.
 
-    python -I scripts/measure_unseen_atomic.py http://127.0.0.1:8004
+The authors' labels predate ATT&CK v19's renumbering (e.g. Disable Windows Event
+Logging, T1562.002, is T1685.001 in the pinned v19.2): each label is resolved
+through the pinned knowledge base's ``revoked-by`` relationships
+(``ExternalIdResolver``, as the Linux report does) and compared as resolved; the
+label as written is kept beside it. ``--rescore-first-run`` recomputes the
+first run's figures from its stored per-recording sets the same way.
+
+    python scripts/measure_unseen_atomic.py http://127.0.0.1:8004
 """
 
 from __future__ import annotations
@@ -23,10 +30,29 @@ import urllib.request
 from pathlib import Path, PurePath
 from typing import Any
 
+from attribution_platform.attack_knowledge.external_ids import ExternalIdResolver
+from attribution_platform.attack_knowledge.loader import load_attack_knowledge
+
 REPO = Path(__file__).resolve().parents[1]
 SELECTION = REPO / "data" / "validation" / "unseen-otrf-atomic" / "selection.json"
 OUT = REPO / "data" / "validation" / "unseen-otrf-atomic" / "results.json"
 RUN = REPO / "data" / "validation" / "unseen-otrf-atomic" / "run.json"
+
+
+def resolver() -> Any:
+    """Authors' label -> current ATT&CK id in the pinned knowledge base."""
+    resolve = ExternalIdResolver(load_attack_knowledge(), ("attack-pattern",))
+
+    def current(label: str) -> str:
+        found = resolve.resolve(label)
+        if found is None:
+            return label
+        for ref in found[0].get("external_references", ()):
+            if ref.get("source_name") == "mitre-attack":
+                return str(ref["external_id"])
+        return label
+
+    return current
 
 
 def related(a: str, b: str) -> bool:
@@ -44,6 +70,7 @@ def _matches(technique: str, found: set[str]) -> bool:
 
 
 def build(base: str) -> dict[str, Any]:
+    current = resolver()
     selection = json.loads(SELECTION.read_text(encoding="utf-8"))["selected"]
     # run.json lists the recordings in manifest order, which is selection order;
     # joined by position (two selected files share a name), checked by name.
@@ -55,7 +82,8 @@ def build(base: str) -> dict[str, Any]:
         name = PurePath(entry["path"]).name
         if outcome["recording"] != name:
             raise SystemExit(f"run.json order differs at {name}")
-        authors = entry["authors_techniques"]
+        labelled = entry["authors_techniques"]
+        authors = sorted({current(t) for t in labelled})
         if outcome["state"] != "investigated":
             cases.append(
                 {
@@ -94,7 +122,9 @@ def build(base: str) -> dict[str, Any]:
                 "tactic_folder": entry["path"].split("/")[3],
                 "investigated": True,
                 "evidence": inv.get("evidence"),
+                "authors_techniques_as_labelled": labelled,
                 "authors_techniques": authors,
+                "counted": sorted(counted),
                 "found_exactly": exact,
                 "found_as_parent_or_sub": by_relation,
                 "missed": missed,
@@ -122,7 +152,7 @@ def build(base: str) -> dict[str, Any]:
         row["found"] += len(c["found_exactly"]) + len(c["found_as_parent_or_sub"])
         row["missed_but_shown"] += len(c["missed_but_shown"])
     return {
-        "version": "unseen-results/1",
+        "version": "unseen-results/2",
         "selection": SELECTION.relative_to(REPO).as_posix(),
         "recordings_selected": len(cases),
         "recordings_investigated": len(run),
@@ -159,7 +189,32 @@ def build(base: str) -> dict[str, Any]:
     }
 
 
+def rescore_first_run() -> dict[str, int]:
+    """The first run's figures with the authors' labels resolved. Its stored
+    cases predate ``counted``; the counted ids recoverable from them (found
+    exactly, and counted but not listed) are the ones a renamed label can match,
+    because a renamed technique's id differs from its old one in its parent."""
+    current = resolver()
+    first = json.loads((OUT.parent / "first-run" / "results.json").read_text(encoding="utf-8"))
+    found = missed = total = 0
+    for case in first["cases"]:
+        if not case["investigated"]:
+            continue
+        counted = set(case["found_exactly"]) | set(case["counted_but_not_listed_by_authors"])
+        for label in case["authors_techniques"]:
+            total += 1
+            hit = label in case["found_exactly"] or label in case["found_as_parent_or_sub"]
+            if hit or _matches(current(label), counted):
+                found += 1
+            else:
+                missed += 1
+    return {"authors_techniques": total, "found": found, "missed": missed}
+
+
 def main(argv: list[str]) -> int:
+    if argv and argv[0] == "--rescore-first-run":
+        print(json.dumps(rescore_first_run(), indent=1))
+        return 0
     base = argv[0].rstrip("/") if argv else "http://127.0.0.1:8000"
     report = build(base)
     OUT.write_text(json.dumps(report, indent=1) + "\n", encoding="utf-8", newline="\n")

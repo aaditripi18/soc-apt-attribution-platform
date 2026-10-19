@@ -122,3 +122,21 @@ detection is weaker (no process GUIDs, fewer rules apply): 11 of 42. The largest
 Event Logging (T1562.002), missed in 17 recordings** — the event-log tampering family (service start type, the
 MiniNT key, the log path, stopping the service). That is the clearest next detection work, measured, on what are
 now development recordings.
+
+### Correction (2026-10-20) — the authors' labels are resolved through the pinned ATT&CK version
+
+The figures above compared the authors' labels as written. Several predate ATT&CK v19's renumbering — Disable
+Windows Event Logging, T1562.002, is **T1685.001** in the pinned v19.2 — so a correct detection could count as a
+miss. `measure_unseen_atomic.py` now resolves each label through the knowledge base's `revoked-by` relationships
+(as the Linux report always did) and keeps the label as written beside it (`results.json` version 2, which also
+records each recording's counted ids). The first run is rescored from its stored sets
+(`--rescore-first-run`). The LSASS ground truth of ADR-0025 Amendment E has no renumbered label (checked).
+
+| | As first reported | Labels resolved |
+|---|---|---|
+| first run (61 read) | 30 of 65 (46%) | **32 of 65 (49%)** |
+| re-run (103 read) | 41 of 107 (38%) | **44 of 107 (41%)**; missed but shown 19 |
+
+Most of the remaining event-log-tampering "misses" are now *shown but not counted*: the rules that fire declare
+both Disable Windows Event Logging and Modify Registry, which ADR-0025 treats as alternatives until the rule is read.
+Reading those rules is the next step.

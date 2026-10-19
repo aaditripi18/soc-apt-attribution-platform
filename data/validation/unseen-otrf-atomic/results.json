@@ -1,5 +1,5 @@
 {
- "version": "unseen-results/1",
+ "version": "unseen-results/2",
  "selection": "data/validation/unseen-otrf-atomic/selection.json",
  "recordings_selected": 105,
  "recordings_investigated": 103,
@@ -13,12 +13,12 @@
  "authors_techniques_in_refused_recordings": 2,
  "summary": {
   "authors_techniques": 107,
-  "found_exactly": 35,
-  "found_as_parent_or_sub": 6,
-  "missed": 66,
-  "missed_but_shown": 13,
-  "counted_but_not_listed_by_authors": 128,
-  "recordings_with_an_authors_technique_counted": 39,
+  "found_exactly": 37,
+  "found_as_parent_or_sub": 7,
+  "missed": 63,
+  "missed_but_shown": 19,
+  "counted_but_not_listed_by_authors": 125,
+  "recordings_with_an_authors_technique_counted": 42,
   "recordings_with_no_evidence": 11,
   "recordings_naming_an_actor": 0
  },
@@ -38,8 +38,8 @@
   "defense_evasion": {
    "recordings": 38,
    "authors_techniques": 38,
-   "found": 9,
-   "missed_but_shown": 5
+   "found": 12,
+   "missed_but_shown": 11
   },
   "discovery": {
    "recordings": 9,
@@ -85,8 +85,15 @@
    "tactic_folder": "collection",
    "investigated": true,
    "evidence": 17,
+   "authors_techniques_as_labelled": [
+    "T1123"
+   ],
    "authors_techniques": [
     "T1123"
+   ],
+   "counted": [
+    "T1123",
+    "T1201"
    ],
    "found_exactly": [
     "T1123"
@@ -106,7 +113,14 @@
    "tactic_folder": "credential_access",
    "investigated": true,
    "evidence": 10,
+   "authors_techniques_as_labelled": [
+    "T1003.003"
+   ],
    "authors_techniques": [
+    "T1003.003"
+   ],
+   "counted": [
+    "T1003",
     "T1003.003"
    ],
    "found_exactly": [
@@ -125,8 +139,14 @@
    "tactic_folder": "credential_access",
    "investigated": true,
    "evidence": 7,
+   "authors_techniques_as_labelled": [
+    "T1003.004"
+   ],
    "authors_techniques": [
     "T1003.004"
+   ],
+   "counted": [
+    "T1588.002"
    ],
    "found_exactly": [],
    "found_as_parent_or_sub": [],
@@ -146,7 +166,14 @@
    "tactic_folder": "credential_access",
    "investigated": true,
    "evidence": 43,
+   "authors_techniques_as_labelled": [
+    "T1003.002"
+   ],
    "authors_techniques": [
+    "T1003.002"
+   ],
+   "counted": [
+    "T1003",
     "T1003.002"
    ],
    "found_exactly": [
@@ -165,7 +192,13 @@
    "tactic_folder": "credential_access",
    "investigated": true,
    "evidence": 6,
+   "authors_techniques_as_labelled": [
+    "T1003.006"
+   ],
    "authors_techniques": [
+    "T1003.006"
+   ],
+   "counted": [
     "T1003.006"
    ],
    "found_exactly": [
@@ -184,7 +217,13 @@
    "tactic_folder": "credential_access",
    "investigated": true,
    "evidence": 8,
+   "authors_techniques_as_labelled": [
+    "T1003.006"
+   ],
    "authors_techniques": [
+    "T1003.006"
+   ],
+   "counted": [
     "T1003.006"
    ],
    "found_exactly": [
@@ -203,8 +242,14 @@
    "tactic_folder": "credential_access",
    "investigated": true,
    "evidence": 22,
+   "authors_techniques_as_labelled": [
+    "T1003"
+   ],
    "authors_techniques": [
     "T1003"
+   ],
+   "counted": [
+    "T1003.004"
    ],
    "found_exactly": [],
    "found_as_parent_or_sub": [
@@ -222,8 +267,14 @@
    "tactic_folder": "credential_access",
    "investigated": true,
    "evidence": 5,
+   "authors_techniques_as_labelled": [
+    "T1003.004"
+   ],
    "authors_techniques": [
     "T1003.004"
+   ],
+   "counted": [
+    "T1558"
    ],
    "found_exactly": [],
    "found_as_parent_or_sub": [],
@@ -245,7 +296,14 @@
    "tactic_folder": "credential_access",
    "investigated": true,
    "evidence": 7,
+   "authors_techniques_as_labelled": [
+    "T1003.001"
+   ],
    "authors_techniques": [
+    "T1003.001"
+   ],
+   "counted": [
+    "T1003",
     "T1003.001"
    ],
    "found_exactly": [
@@ -264,8 +322,14 @@
    "tactic_folder": "credential_access",
    "investigated": true,
    "evidence": 14,
+   "authors_techniques_as_labelled": [
+    "T1003.002"
+   ],
    "authors_techniques": [
     "T1003.002"
+   ],
+   "counted": [
+    "T1012"
    ],
    "found_exactly": [],
    "found_as_parent_or_sub": [],
@@ -285,8 +349,16 @@
    "tactic_folder": "credential_access",
    "investigated": true,
    "evidence": 14,
+   "authors_techniques_as_labelled": [
+    "T1003.003"
+   ],
    "authors_techniques": [
     "T1003.003"
+   ],
+   "counted": [
+    "T1059",
+    "T1059.001",
+    "T1140"
    ],
    "found_exactly": [],
    "found_as_parent_or_sub": [],
@@ -308,7 +380,16 @@
    "tactic_folder": "credential_access",
    "investigated": true,
    "evidence": 176,
+   "authors_techniques_as_labelled": [
+    "T1550.002"
+   ],
    "authors_techniques": [
+    "T1550.002"
+   ],
+   "counted": [
+    "T1003",
+    "T1003.001",
+    "T1059.001",
     "T1550.002"
    ],
    "found_exactly": [
@@ -331,8 +412,17 @@
    "tactic_folder": "credential_access",
    "investigated": true,
    "evidence": 16,
+   "authors_techniques_as_labelled": [
+    "T1003.002"
+   ],
    "authors_techniques": [
     "T1003.002"
+   ],
+   "counted": [
+    "T1003",
+    "T1003.001",
+    "T1012",
+    "T1027.004"
    ],
    "found_exactly": [],
    "found_as_parent_or_sub": [
@@ -354,8 +444,14 @@
    "tactic_folder": "credential_access",
    "investigated": true,
    "evidence": 3,
+   "authors_techniques_as_labelled": [
+    "T1003.002"
+   ],
    "authors_techniques": [
     "T1003.002"
+   ],
+   "counted": [
+    "T1003"
    ],
    "found_exactly": [],
    "found_as_parent_or_sub": [
@@ -373,8 +469,15 @@
    "tactic_folder": "credential_access",
    "investigated": true,
    "evidence": 8,
+   "authors_techniques_as_labelled": [
+    "T1003.003"
+   ],
    "authors_techniques": [
     "T1003.003"
+   ],
+   "counted": [
+    "T1550.002",
+    "T1558.003"
    ],
    "found_exactly": [],
    "found_as_parent_or_sub": [],
@@ -397,9 +500,13 @@
    "tactic_folder": "credential_access",
    "investigated": true,
    "evidence": 3,
+   "authors_techniques_as_labelled": [
+    "T1003.003"
+   ],
    "authors_techniques": [
     "T1003.003"
    ],
+   "counted": [],
    "found_exactly": [],
    "found_as_parent_or_sub": [],
    "missed": [
@@ -418,9 +525,13 @@
    "tactic_folder": "credential_access",
    "investigated": true,
    "evidence": 0,
+   "authors_techniques_as_labelled": [
+    "T1056.002"
+   ],
    "authors_techniques": [
     "T1056.002"
    ],
+   "counted": [],
    "found_exactly": [],
    "found_as_parent_or_sub": [],
    "missed": [
@@ -437,9 +548,13 @@
    "tactic_folder": "credential_access",
    "investigated": true,
    "evidence": 0,
+   "authors_techniques_as_labelled": [
+    "T1055"
+   ],
    "authors_techniques": [
     "T1055"
    ],
+   "counted": [],
    "found_exactly": [],
    "found_as_parent_or_sub": [],
    "missed": [
@@ -456,7 +571,14 @@
    "tactic_folder": "credential_access",
    "investigated": true,
    "evidence": 13,
+   "authors_techniques_as_labelled": [
+    "T1003.001"
+   ],
    "authors_techniques": [
+    "T1003.001"
+   ],
+   "counted": [
+    "T1003",
     "T1003.001"
    ],
    "found_exactly": [
@@ -475,18 +597,22 @@
    "tactic_folder": "defense_evasion",
    "investigated": true,
    "evidence": 20,
+   "authors_techniques_as_labelled": [
+    "T1562.002"
+   ],
    "authors_techniques": [
-    "T1562.002"
-   ],
-   "found_exactly": [],
-   "found_as_parent_or_sub": [],
-   "missed": [
-    "T1562.002"
-   ],
-   "missed_but_shown": [],
-   "counted_but_not_listed_by_authors": [
     "T1685.001"
    ],
+   "counted": [
+    "T1685.001"
+   ],
+   "found_exactly": [
+    "T1685.001"
+   ],
+   "found_as_parent_or_sub": [],
+   "missed": [],
+   "missed_but_shown": [],
+   "counted_but_not_listed_by_authors": [],
    "verdict": "not_distinguishable",
    "named_actors": []
   },
@@ -496,9 +622,13 @@
    "tactic_folder": "defense_evasion",
    "investigated": true,
    "evidence": 6,
+   "authors_techniques_as_labelled": [
+    "T1197"
+   ],
    "authors_techniques": [
     "T1197"
    ],
+   "counted": [],
    "found_exactly": [],
    "found_as_parent_or_sub": [],
    "missed": [
@@ -517,13 +647,17 @@
    "tactic_folder": "defense_evasion",
    "investigated": true,
    "evidence": 2,
-   "authors_techniques": [
+   "authors_techniques_as_labelled": [
     "T1562.002"
    ],
+   "authors_techniques": [
+    "T1685.001"
+   ],
+   "counted": [],
    "found_exactly": [],
    "found_as_parent_or_sub": [],
    "missed": [
-    "T1562.002"
+    "T1685.001"
    ],
    "missed_but_shown": [],
    "counted_but_not_listed_by_authors": [],
@@ -536,7 +670,14 @@
    "tactic_folder": "defense_evasion",
    "investigated": true,
    "evidence": 26,
+   "authors_techniques_as_labelled": [
+    "T1218.005"
+   ],
    "authors_techniques": [
+    "T1218.005"
+   ],
+   "counted": [
+    "T1112",
     "T1218.005"
    ],
    "found_exactly": [
@@ -557,7 +698,15 @@
    "tactic_folder": "defense_evasion",
    "investigated": true,
    "evidence": 41,
+   "authors_techniques_as_labelled": [
+    "T1218.005"
+   ],
    "authors_techniques": [
+    "T1218.005"
+   ],
+   "counted": [
+    "T1059",
+    "T1112",
     "T1218.005"
    ],
    "found_exactly": [
@@ -579,18 +728,22 @@
    "tactic_folder": "defense_evasion",
    "investigated": true,
    "evidence": 1,
+   "authors_techniques_as_labelled": [
+    "T1562.004"
+   ],
    "authors_techniques": [
-    "T1562.004"
+    "T1686"
    ],
-   "found_exactly": [],
-   "found_as_parent_or_sub": [],
-   "missed": [
-    "T1562.004"
-   ],
-   "missed_but_shown": [],
-   "counted_but_not_listed_by_authors": [
+   "counted": [
     "T1686.003"
    ],
+   "found_exactly": [],
+   "found_as_parent_or_sub": [
+    "T1686"
+   ],
+   "missed": [],
+   "missed_but_shown": [],
+   "counted_but_not_listed_by_authors": [],
    "verdict": "not_distinguishable",
    "named_actors": []
   },
@@ -600,9 +753,13 @@
    "tactic_folder": "defense_evasion",
    "investigated": true,
    "evidence": 6,
+   "authors_techniques_as_labelled": [
+    "T1055"
+   ],
    "authors_techniques": [
     "T1055"
    ],
+   "counted": [],
    "found_exactly": [],
    "found_as_parent_or_sub": [],
    "missed": [
@@ -619,13 +776,17 @@
    "tactic_folder": "defense_evasion",
    "investigated": true,
    "evidence": 3,
-   "authors_techniques": [
+   "authors_techniques_as_labelled": [
     "T1562.002"
    ],
+   "authors_techniques": [
+    "T1685.001"
+   ],
+   "counted": [],
    "found_exactly": [],
    "found_as_parent_or_sub": [],
    "missed": [
-    "T1562.002"
+    "T1685.001"
    ],
    "missed_but_shown": [],
    "counted_but_not_listed_by_authors": [],
@@ -638,13 +799,17 @@
    "tactic_folder": "defense_evasion",
    "investigated": true,
    "evidence": 4,
-   "authors_techniques": [
+   "authors_techniques_as_labelled": [
     "T1562.002"
    ],
+   "authors_techniques": [
+    "T1685.001"
+   ],
+   "counted": [],
    "found_exactly": [],
    "found_as_parent_or_sub": [],
    "missed": [
-    "T1562.002"
+    "T1685.001"
    ],
    "missed_but_shown": [],
    "counted_but_not_listed_by_authors": [],
@@ -657,15 +822,21 @@
    "tactic_folder": "defense_evasion",
    "investigated": true,
    "evidence": 6,
-   "authors_techniques": [
+   "authors_techniques_as_labelled": [
     "T1562.002"
    ],
+   "authors_techniques": [
+    "T1685.001"
+   ],
+   "counted": [],
    "found_exactly": [],
    "found_as_parent_or_sub": [],
    "missed": [
-    "T1562.002"
+    "T1685.001"
    ],
-   "missed_but_shown": [],
+   "missed_but_shown": [
+    "T1685.001"
+   ],
    "counted_but_not_listed_by_authors": [],
    "verdict": "no_decision_features",
    "named_actors": []
@@ -676,15 +847,21 @@
    "tactic_folder": "defense_evasion",
    "investigated": true,
    "evidence": 8,
-   "authors_techniques": [
+   "authors_techniques_as_labelled": [
     "T1562.002"
    ],
+   "authors_techniques": [
+    "T1685.001"
+   ],
+   "counted": [],
    "found_exactly": [],
    "found_as_parent_or_sub": [],
    "missed": [
-    "T1562.002"
+    "T1685.001"
    ],
-   "missed_but_shown": [],
+   "missed_but_shown": [
+    "T1685.001"
+   ],
    "counted_but_not_listed_by_authors": [],
    "verdict": "no_decision_features",
    "named_actors": []
@@ -695,18 +872,22 @@
    "tactic_folder": "defense_evasion",
    "investigated": true,
    "evidence": 6,
+   "authors_techniques_as_labelled": [
+    "T1562.002"
+   ],
    "authors_techniques": [
-    "T1562.002"
-   ],
-   "found_exactly": [],
-   "found_as_parent_or_sub": [],
-   "missed": [
-    "T1562.002"
-   ],
-   "missed_but_shown": [],
-   "counted_but_not_listed_by_authors": [
     "T1685.001"
    ],
+   "counted": [
+    "T1685.001"
+   ],
+   "found_exactly": [
+    "T1685.001"
+   ],
+   "found_as_parent_or_sub": [],
+   "missed": [],
+   "missed_but_shown": [],
+   "counted_but_not_listed_by_authors": [],
    "verdict": "not_distinguishable",
    "named_actors": []
   },
@@ -716,9 +897,13 @@
    "tactic_folder": "defense_evasion",
    "investigated": true,
    "evidence": 4,
+   "authors_techniques_as_labelled": [
+    "T1218.004"
+   ],
    "authors_techniques": [
     "T1218.004"
    ],
+   "counted": [],
    "found_exactly": [],
    "found_as_parent_or_sub": [],
    "missed": [
@@ -735,7 +920,14 @@
    "tactic_folder": "defense_evasion",
    "investigated": true,
    "evidence": 8,
+   "authors_techniques_as_labelled": [
+    "T1218"
+   ],
    "authors_techniques": [
+    "T1218"
+   ],
+   "counted": [
+    "T1055",
     "T1218"
    ],
    "found_exactly": [
@@ -756,8 +948,15 @@
    "tactic_folder": "defense_evasion",
    "investigated": true,
    "evidence": 432,
+   "authors_techniques_as_labelled": [
+    "T1055.001"
+   ],
    "authors_techniques": [
     "T1055.001"
+   ],
+   "counted": [
+    "T1059.001",
+    "T1201"
    ],
    "found_exactly": [],
    "found_as_parent_or_sub": [],
@@ -778,7 +977,14 @@
    "tactic_folder": "defense_evasion",
    "investigated": true,
    "evidence": 27,
+   "authors_techniques_as_labelled": [
+    "T1112"
+   ],
    "authors_techniques": [
+    "T1112"
+   ],
+   "counted": [
+    "T1055",
     "T1112"
    ],
    "found_exactly": [
@@ -799,8 +1005,17 @@
    "tactic_folder": "defense_evasion",
    "investigated": true,
    "evidence": 24,
+   "authors_techniques_as_labelled": [
+    "T1218.010"
+   ],
    "authors_techniques": [
     "T1218.010"
+   ],
+   "counted": [
+    "T1059",
+    "T1059.001",
+    "T1218.010",
+    "T1685"
    ],
    "found_exactly": [
     "T1218.010"
@@ -822,8 +1037,14 @@
    "tactic_folder": "defense_evasion",
    "investigated": true,
    "evidence": 92,
+   "authors_techniques_as_labelled": [
+    "T1112"
+   ],
    "authors_techniques": [
     "T1112"
+   ],
+   "counted": [
+    "T1685.001"
    ],
    "found_exactly": [],
    "found_as_parent_or_sub": [],
@@ -845,8 +1066,14 @@
    "tactic_folder": "defense_evasion",
    "investigated": true,
    "evidence": 2,
+   "authors_techniques_as_labelled": [
+    "T1222.001"
+   ],
    "authors_techniques": [
     "T1222.001"
+   ],
+   "counted": [
+    "T1201"
    ],
    "found_exactly": [],
    "found_as_parent_or_sub": [],
@@ -866,8 +1093,17 @@
    "tactic_folder": "defense_evasion",
    "investigated": true,
    "evidence": 106,
+   "authors_techniques_as_labelled": [
+    "T1055.003"
+   ],
    "authors_techniques": [
     "T1055.003"
+   ],
+   "counted": [
+    "T1055",
+    "T1059",
+    "T1059.001",
+    "T1685"
    ],
    "found_exactly": [],
    "found_as_parent_or_sub": [
@@ -889,8 +1125,14 @@
    "tactic_folder": "defense_evasion",
    "investigated": true,
    "evidence": 20,
+   "authors_techniques_as_labelled": [
+    "T1112"
+   ],
    "authors_techniques": [
     "T1112"
+   ],
+   "counted": [
+    "T1055"
    ],
    "found_exactly": [],
    "found_as_parent_or_sub": [],
@@ -912,8 +1154,16 @@
    "tactic_folder": "defense_evasion",
    "investigated": true,
    "evidence": 20,
+   "authors_techniques_as_labelled": [
+    "T1218.003"
+   ],
    "authors_techniques": [
     "T1218.003"
+   ],
+   "counted": [
+    "T1059",
+    "T1218.003",
+    "T1548.002"
    ],
    "found_exactly": [
     "T1218.003"
@@ -934,9 +1184,13 @@
    "tactic_folder": "defense_evasion",
    "investigated": true,
    "evidence": 11,
+   "authors_techniques_as_labelled": [
+    "T1218.002"
+   ],
    "authors_techniques": [
     "T1218.002"
    ],
+   "counted": [],
    "found_exactly": [],
    "found_as_parent_or_sub": [],
    "missed": [
@@ -955,13 +1209,19 @@
    "tactic_folder": "defense_evasion",
    "investigated": true,
    "evidence": 3,
-   "authors_techniques": [
+   "authors_techniques_as_labelled": [
     "T1562.002"
+   ],
+   "authors_techniques": [
+    "T1685.001"
+   ],
+   "counted": [
+    "T1059.001"
    ],
    "found_exactly": [],
    "found_as_parent_or_sub": [],
    "missed": [
-    "T1562.002"
+    "T1685.001"
    ],
    "missed_but_shown": [],
    "counted_but_not_listed_by_authors": [
@@ -976,9 +1236,13 @@
    "tactic_folder": "defense_evasion",
    "investigated": true,
    "evidence": 23,
+   "authors_techniques_as_labelled": [
+    "T1218.001"
+   ],
    "authors_techniques": [
     "T1218.001"
    ],
+   "counted": [],
    "found_exactly": [],
    "found_as_parent_or_sub": [],
    "missed": [
@@ -997,13 +1261,19 @@
    "tactic_folder": "defense_evasion",
    "investigated": true,
    "evidence": 2,
-   "authors_techniques": [
+   "authors_techniques_as_labelled": [
     "T1562.002"
+   ],
+   "authors_techniques": [
+    "T1685.001"
+   ],
+   "counted": [
+    "T1059.001"
    ],
    "found_exactly": [],
    "found_as_parent_or_sub": [],
    "missed": [
-    "T1562.002"
+    "T1685.001"
    ],
    "missed_but_shown": [],
    "counted_but_not_listed_by_authors": [
@@ -1018,13 +1288,19 @@
    "tactic_folder": "defense_evasion",
    "investigated": true,
    "evidence": 3,
-   "authors_techniques": [
+   "authors_techniques_as_labelled": [
     "T1562.002"
+   ],
+   "authors_techniques": [
+    "T1685.001"
+   ],
+   "counted": [
+    "T1059.001"
    ],
    "found_exactly": [],
    "found_as_parent_or_sub": [],
    "missed": [
-    "T1562.002"
+    "T1685.001"
    ],
    "missed_but_shown": [],
    "counted_but_not_listed_by_authors": [
@@ -1039,8 +1315,17 @@
    "tactic_folder": "defense_evasion",
    "investigated": true,
    "evidence": 33,
+   "authors_techniques_as_labelled": [
+    "T1218.005"
+   ],
    "authors_techniques": [
     "T1218.005"
+   ],
+   "counted": [
+    "T1059",
+    "T1112",
+    "T1218.005",
+    "T1547.001"
    ],
    "found_exactly": [
     "T1218.005"
@@ -1062,8 +1347,14 @@
    "tactic_folder": "defense_evasion",
    "investigated": true,
    "evidence": 5,
+   "authors_techniques_as_labelled": [
+    "T1218"
+   ],
    "authors_techniques": [
     "T1218"
+   ],
+   "counted": [
+    "T1574"
    ],
    "found_exactly": [],
    "found_as_parent_or_sub": [],
@@ -1083,15 +1374,23 @@
    "tactic_folder": "defense_evasion",
    "investigated": true,
    "evidence": 5,
-   "authors_techniques": [
+   "authors_techniques_as_labelled": [
     "T1562.002"
+   ],
+   "authors_techniques": [
+    "T1685.001"
+   ],
+   "counted": [
+    "T1059.001"
    ],
    "found_exactly": [],
    "found_as_parent_or_sub": [],
    "missed": [
-    "T1562.002"
+    "T1685.001"
    ],
-   "missed_but_shown": [],
+   "missed_but_shown": [
+    "T1685.001"
+   ],
    "counted_but_not_listed_by_authors": [
     "T1059.001"
    ],
@@ -1104,15 +1403,23 @@
    "tactic_folder": "defense_evasion",
    "investigated": true,
    "evidence": 5,
-   "authors_techniques": [
+   "authors_techniques_as_labelled": [
     "T1562.002"
+   ],
+   "authors_techniques": [
+    "T1685.001"
+   ],
+   "counted": [
+    "T1059.001"
    ],
    "found_exactly": [],
    "found_as_parent_or_sub": [],
    "missed": [
-    "T1562.002"
+    "T1685.001"
    ],
-   "missed_but_shown": [],
+   "missed_but_shown": [
+    "T1685.001"
+   ],
    "counted_but_not_listed_by_authors": [
     "T1059.001"
    ],
@@ -1125,8 +1432,15 @@
    "tactic_folder": "defense_evasion",
    "investigated": true,
    "evidence": 8,
+   "authors_techniques_as_labelled": [
+    "T1055.002"
+   ],
    "authors_techniques": [
     "T1055.002"
+   ],
+   "counted": [
+    "T1036",
+    "T1587"
    ],
    "found_exactly": [],
    "found_as_parent_or_sub": [],
@@ -1147,13 +1461,17 @@
    "tactic_folder": "defense_evasion",
    "investigated": true,
    "evidence": 1,
-   "authors_techniques": [
+   "authors_techniques_as_labelled": [
     "T1562.002"
    ],
+   "authors_techniques": [
+    "T1685.001"
+   ],
+   "counted": [],
    "found_exactly": [],
    "found_as_parent_or_sub": [],
    "missed": [
-    "T1562.002"
+    "T1685.001"
    ],
    "missed_but_shown": [],
    "counted_but_not_listed_by_authors": [],
@@ -1166,13 +1484,17 @@
    "tactic_folder": "defense_evasion",
    "investigated": true,
    "evidence": 1,
-   "authors_techniques": [
+   "authors_techniques_as_labelled": [
     "T1562.002"
    ],
+   "authors_techniques": [
+    "T1685.001"
+   ],
+   "counted": [],
    "found_exactly": [],
    "found_as_parent_or_sub": [],
    "missed": [
-    "T1562.002"
+    "T1685.001"
    ],
    "missed_but_shown": [],
    "counted_but_not_listed_by_authors": [],
@@ -1185,13 +1507,17 @@
    "tactic_folder": "defense_evasion",
    "investigated": true,
    "evidence": 0,
-   "authors_techniques": [
+   "authors_techniques_as_labelled": [
     "T1562.002"
    ],
+   "authors_techniques": [
+    "T1685.001"
+   ],
+   "counted": [],
    "found_exactly": [],
    "found_as_parent_or_sub": [],
    "missed": [
-    "T1562.002"
+    "T1685.001"
    ],
    "missed_but_shown": [],
    "counted_but_not_listed_by_authors": [],
@@ -1204,15 +1530,21 @@
    "tactic_folder": "defense_evasion",
    "investigated": true,
    "evidence": 3,
-   "authors_techniques": [
+   "authors_techniques_as_labelled": [
     "T1562.002"
    ],
+   "authors_techniques": [
+    "T1685.001"
+   ],
+   "counted": [],
    "found_exactly": [],
    "found_as_parent_or_sub": [],
    "missed": [
-    "T1562.002"
+    "T1685.001"
    ],
-   "missed_but_shown": [],
+   "missed_but_shown": [
+    "T1685.001"
+   ],
    "counted_but_not_listed_by_authors": [],
    "verdict": "no_decision_features",
    "named_actors": []
@@ -1223,15 +1555,21 @@
    "tactic_folder": "defense_evasion",
    "investigated": true,
    "evidence": 3,
-   "authors_techniques": [
+   "authors_techniques_as_labelled": [
     "T1562.002"
    ],
+   "authors_techniques": [
+    "T1685.001"
+   ],
+   "counted": [],
    "found_exactly": [],
    "found_as_parent_or_sub": [],
    "missed": [
-    "T1562.002"
+    "T1685.001"
    ],
-   "missed_but_shown": [],
+   "missed_but_shown": [
+    "T1685.001"
+   ],
    "counted_but_not_listed_by_authors": [],
    "verdict": "no_decision_features",
    "named_actors": []
@@ -1242,7 +1580,13 @@
    "tactic_folder": "defense_evasion",
    "investigated": true,
    "evidence": 5,
+   "authors_techniques_as_labelled": [
+    "T1220"
+   ],
    "authors_techniques": [
+    "T1220"
+   ],
+   "counted": [
     "T1220"
    ],
    "found_exactly": [
@@ -1261,7 +1605,13 @@
    "tactic_folder": "discovery",
    "investigated": true,
    "evidence": 1,
+   "authors_techniques_as_labelled": [
+    "T1518"
+   ],
    "authors_techniques": [
+    "T1518"
+   ],
+   "counted": [
     "T1518"
    ],
    "found_exactly": [
@@ -1280,9 +1630,13 @@
    "tactic_folder": "discovery",
    "investigated": true,
    "evidence": 3,
+   "authors_techniques_as_labelled": [
+    "T1012"
+   ],
    "authors_techniques": [
     "T1012"
    ],
+   "counted": [],
    "found_exactly": [],
    "found_as_parent_or_sub": [],
    "missed": [
@@ -1299,8 +1653,14 @@
    "tactic_folder": "discovery",
    "investigated": true,
    "evidence": 1,
+   "authors_techniques_as_labelled": [
+    "T1069.002"
+   ],
    "authors_techniques": [
     "T1069.002"
+   ],
+   "counted": [
+    "T1001.003"
    ],
    "found_exactly": [],
    "found_as_parent_or_sub": [],
@@ -1320,8 +1680,15 @@
    "tactic_folder": "discovery",
    "investigated": true,
    "evidence": 3,
+   "authors_techniques_as_labelled": [
+    "T1069.001"
+   ],
    "authors_techniques": [
     "T1069.001"
+   ],
+   "counted": [
+    "T1010",
+    "T1548"
    ],
    "found_exactly": [],
    "found_as_parent_or_sub": [],
@@ -1342,8 +1709,14 @@
    "tactic_folder": "discovery",
    "investigated": true,
    "evidence": 280,
+   "authors_techniques_as_labelled": [
+    "T1049"
+   ],
    "authors_techniques": [
     "T1049"
+   ],
+   "counted": [
+    "T1059.001"
    ],
    "found_exactly": [],
    "found_as_parent_or_sub": [],
@@ -1363,9 +1736,13 @@
    "tactic_folder": "discovery",
    "investigated": true,
    "evidence": 4,
+   "authors_techniques_as_labelled": [
+    "T1087.001"
+   ],
    "authors_techniques": [
     "T1087.001"
    ],
+   "counted": [],
    "found_exactly": [],
    "found_as_parent_or_sub": [],
    "missed": [
@@ -1384,9 +1761,13 @@
    "tactic_folder": "discovery",
    "investigated": true,
    "evidence": 0,
+   "authors_techniques_as_labelled": [
+    "T1069.001"
+   ],
    "authors_techniques": [
     "T1069.001"
    ],
+   "counted": [],
    "found_exactly": [],
    "found_as_parent_or_sub": [],
    "missed": [
@@ -1403,8 +1784,14 @@
    "tactic_folder": "discovery",
    "investigated": true,
    "evidence": 6,
+   "authors_techniques_as_labelled": [
+    "T1069.002"
+   ],
    "authors_techniques": [
     "T1069.002"
+   ],
+   "counted": [
+    "T1087.002"
    ],
    "found_exactly": [],
    "found_as_parent_or_sub": [],
@@ -1426,8 +1813,14 @@
    "tactic_folder": "discovery",
    "investigated": true,
    "evidence": 1,
+   "authors_techniques_as_labelled": [
+    "T1087.002"
+   ],
    "authors_techniques": [
     "T1087.002"
+   ],
+   "counted": [
+    "T1201"
    ],
    "found_exactly": [],
    "found_as_parent_or_sub": [],
@@ -1459,7 +1852,14 @@
    "tactic_folder": "execution",
    "investigated": true,
    "evidence": 6,
+   "authors_techniques_as_labelled": [
+    "T1059"
+   ],
    "authors_techniques": [
+    "T1059"
+   ],
+   "counted": [
+    "T1001.003",
     "T1059"
    ],
    "found_exactly": [
@@ -1480,8 +1880,16 @@
    "tactic_folder": "execution",
    "investigated": true,
    "evidence": 33,
+   "authors_techniques_as_labelled": [
+    "T1059.005"
+   ],
    "authors_techniques": [
     "T1059.005"
+   ],
+   "counted": [
+    "T1059",
+    "T1059.001",
+    "T1685"
    ],
    "found_exactly": [],
    "found_as_parent_or_sub": [
@@ -1502,9 +1910,13 @@
    "tactic_folder": "execution",
    "investigated": true,
    "evidence": 0,
+   "authors_techniques_as_labelled": [
+    "T1059"
+   ],
    "authors_techniques": [
     "T1059"
    ],
+   "counted": [],
    "found_exactly": [],
    "found_as_parent_or_sub": [],
    "missed": [
@@ -1521,9 +1933,13 @@
    "tactic_folder": "lateral_movement",
    "investigated": true,
    "evidence": 0,
+   "authors_techniques_as_labelled": [
+    "T0000"
+   ],
    "authors_techniques": [
     "T0000"
    ],
+   "counted": [],
    "found_exactly": [],
    "found_as_parent_or_sub": [],
    "missed": [
@@ -1540,7 +1956,13 @@
    "tactic_folder": "lateral_movement",
    "investigated": true,
    "evidence": 1,
+   "authors_techniques_as_labelled": [
+    "T1021.002"
+   ],
    "authors_techniques": [
+    "T1021.002"
+   ],
+   "counted": [
     "T1021.002"
    ],
    "found_exactly": [
@@ -1559,9 +1981,13 @@
    "tactic_folder": "lateral_movement",
    "investigated": true,
    "evidence": 3,
+   "authors_techniques_as_labelled": [
+    "T1021.003"
+   ],
    "authors_techniques": [
     "T1021.003"
    ],
+   "counted": [],
    "found_exactly": [],
    "found_as_parent_or_sub": [],
    "missed": [
@@ -1578,8 +2004,17 @@
    "tactic_folder": "lateral_movement",
    "investigated": true,
    "evidence": 32,
+   "authors_techniques_as_labelled": [
+    "T1021.003"
+   ],
    "authors_techniques": [
     "T1021.003"
+   ],
+   "counted": [
+    "T1021.002",
+    "T1055",
+    "T1201",
+    "T1490"
    ],
    "found_exactly": [],
    "found_as_parent_or_sub": [],
@@ -1604,8 +2039,14 @@
    "tactic_folder": "lateral_movement",
    "investigated": true,
    "evidence": 174,
+   "authors_techniques_as_labelled": [
+    "T1021.003"
+   ],
    "authors_techniques": [
     "T1021.003"
+   ],
+   "counted": [
+    "T1059.001"
    ],
    "found_exactly": [],
    "found_as_parent_or_sub": [],
@@ -1625,8 +2066,19 @@
    "tactic_folder": "lateral_movement",
    "investigated": true,
    "evidence": 139,
+   "authors_techniques_as_labelled": [
+    "T1021.006"
+   ],
    "authors_techniques": [
     "T1021.006"
+   ],
+   "counted": [
+    "T1003",
+    "T1003.001",
+    "T1010",
+    "T1021.006",
+    "T1059.001",
+    "T1685.001"
    ],
    "found_exactly": [
     "T1021.006"
@@ -1650,9 +2102,13 @@
    "tactic_folder": "lateral_movement",
    "investigated": true,
    "evidence": 0,
+   "authors_techniques_as_labelled": [
+    "T1021.002"
+   ],
    "authors_techniques": [
     "T1021.002"
    ],
+   "counted": [],
    "found_exactly": [],
    "found_as_parent_or_sub": [],
    "missed": [
@@ -1669,9 +2125,13 @@
    "tactic_folder": "lateral_movement",
    "investigated": true,
    "evidence": 0,
+   "authors_techniques_as_labelled": [
+    "T1021.002"
+   ],
    "authors_techniques": [
     "T1021.002"
    ],
+   "counted": [],
    "found_exactly": [],
    "found_as_parent_or_sub": [],
    "missed": [
@@ -1688,9 +2148,13 @@
    "tactic_folder": "lateral_movement",
    "investigated": true,
    "evidence": 0,
+   "authors_techniques_as_labelled": [
+    "T1021.002"
+   ],
    "authors_techniques": [
     "T1021.002"
    ],
+   "counted": [],
    "found_exactly": [],
    "found_as_parent_or_sub": [],
    "missed": [
@@ -1707,8 +2171,14 @@
    "tactic_folder": "lateral_movement",
    "investigated": true,
    "evidence": 172,
+   "authors_techniques_as_labelled": [
+    "T1021.002"
+   ],
    "authors_techniques": [
     "T1021.002"
+   ],
+   "counted": [
+    "T1059.001"
    ],
    "found_exactly": [],
    "found_as_parent_or_sub": [],
@@ -1728,9 +2198,13 @@
    "tactic_folder": "lateral_movement",
    "investigated": true,
    "evidence": 0,
+   "authors_techniques_as_labelled": [
+    "T1021.002"
+   ],
    "authors_techniques": [
     "T1021.002"
    ],
+   "counted": [],
    "found_exactly": [],
    "found_as_parent_or_sub": [],
    "missed": [
@@ -1747,9 +2221,13 @@
    "tactic_folder": "lateral_movement",
    "investigated": true,
    "evidence": 3,
+   "authors_techniques_as_labelled": [
+    "T1047"
+   ],
    "authors_techniques": [
     "T1047"
    ],
+   "counted": [],
    "found_exactly": [],
    "found_as_parent_or_sub": [],
    "missed": [
@@ -1766,8 +2244,15 @@
    "tactic_folder": "lateral_movement",
    "investigated": true,
    "evidence": 6,
+   "authors_techniques_as_labelled": [
+    "T1047"
+   ],
    "authors_techniques": [
     "T1047"
+   ],
+   "counted": [
+    "T1047",
+    "T1546.003"
    ],
    "found_exactly": [
     "T1047"
@@ -1787,8 +2272,21 @@
    "tactic_folder": "lateral_movement",
    "investigated": true,
    "evidence": 195,
+   "authors_techniques_as_labelled": [
+    "T1047"
+   ],
    "authors_techniques": [
     "T1047"
+   ],
+   "counted": [
+    "T1003",
+    "T1003.001",
+    "T1021.002",
+    "T1047",
+    "T1055",
+    "T1059.001",
+    "T1220",
+    "T1574.001"
    ],
    "found_exactly": [
     "T1047"
@@ -1814,8 +2312,18 @@
    "tactic_folder": "lateral_movement",
    "investigated": true,
    "evidence": 25,
+   "authors_techniques_as_labelled": [
+    "T1021.003"
+   ],
    "authors_techniques": [
     "T1021.003"
+   ],
+   "counted": [
+    "T1003",
+    "T1003.001",
+    "T1059",
+    "T1059.001",
+    "T1685"
    ],
    "found_exactly": [],
    "found_as_parent_or_sub": [],
@@ -1839,8 +2347,18 @@
    "tactic_folder": "lateral_movement",
    "investigated": true,
    "evidence": 39,
+   "authors_techniques_as_labelled": [
+    "T1047"
+   ],
    "authors_techniques": [
     "T1047"
+   ],
+   "counted": [
+    "T1021.002",
+    "T1027.004",
+    "T1059",
+    "T1059.001",
+    "T1685"
    ],
    "found_exactly": [],
    "found_as_parent_or_sub": [],
@@ -1864,8 +2382,19 @@
    "tactic_folder": "lateral_movement",
    "investigated": true,
    "evidence": 47,
+   "authors_techniques_as_labelled": [
+    "T1021"
+   ],
    "authors_techniques": [
     "T1021"
+   ],
+   "counted": [
+    "T1010",
+    "T1059",
+    "T1059.001",
+    "T1543.003",
+    "T1569.002",
+    "T1685"
    ],
    "found_exactly": [],
    "found_as_parent_or_sub": [],
@@ -1892,8 +2421,18 @@
    "tactic_folder": "lateral_movement",
    "investigated": true,
    "evidence": 26,
+   "authors_techniques_as_labelled": [
+    "T1021.006"
+   ],
    "authors_techniques": [
     "T1021.006"
+   ],
+   "counted": [
+    "T1021.006",
+    "T1059",
+    "T1059.001",
+    "T1190",
+    "T1685"
    ],
    "found_exactly": [
     "T1021.006"
@@ -1916,7 +2455,15 @@
    "tactic_folder": "lateral_movement",
    "investigated": true,
    "evidence": 183,
+   "authors_techniques_as_labelled": [
+    "T1574.001"
+   ],
    "authors_techniques": [
+    "T1574.001"
+   ],
+   "counted": [
+    "T1021.002",
+    "T1059.001",
     "T1574.001"
    ],
    "found_exactly": [
@@ -1938,8 +2485,17 @@
    "tactic_folder": "lateral_movement",
    "investigated": true,
    "evidence": 298,
+   "authors_techniques_as_labelled": [
+    "T1047"
+   ],
    "authors_techniques": [
     "T1047"
+   ],
+   "counted": [
+    "T1047",
+    "T1059",
+    "T1059.001",
+    "T1685"
    ],
    "found_exactly": [
     "T1047"
@@ -1961,8 +2517,15 @@
    "tactic_folder": "lateral_movement",
    "investigated": true,
    "evidence": 27,
+   "authors_techniques_as_labelled": [
+    "T1047"
+   ],
    "authors_techniques": [
     "T1047"
+   ],
+   "counted": [
+    "T1047",
+    "T1136.001"
    ],
    "found_exactly": [
     "T1047"
@@ -1982,8 +2545,14 @@
    "tactic_folder": "lateral_movement",
    "investigated": true,
    "evidence": 11,
+   "authors_techniques_as_labelled": [
+    "T1210"
+   ],
    "authors_techniques": [
     "T1210"
+   ],
+   "counted": [
+    "T1059.003"
    ],
    "found_exactly": [],
    "found_as_parent_or_sub": [],
@@ -2003,11 +2572,26 @@
    "tactic_folder": "lateral_movement",
    "investigated": true,
    "evidence": 487,
+   "authors_techniques_as_labelled": [
+    "T1021.006",
+    "T1110.003",
+    "T1135",
+    "T1558.003"
+   ],
    "authors_techniques": [
     "T1021.006",
     "T1110.003",
     "T1135",
     "T1558.003"
+   ],
+   "counted": [
+    "T1001.003",
+    "T1021.006",
+    "T1059.001",
+    "T1190",
+    "T1201",
+    "T1558.003",
+    "T1587"
    ],
    "found_exactly": [
     "T1021.006",
@@ -2035,7 +2619,13 @@
    "tactic_folder": "lateral_movement",
    "investigated": true,
    "evidence": 3,
+   "authors_techniques_as_labelled": [
+    "T1053.005"
+   ],
    "authors_techniques": [
+    "T1053.005"
+   ],
+   "counted": [
     "T1053.005"
    ],
    "found_exactly": [
@@ -2054,9 +2644,13 @@
    "tactic_folder": "lateral_movement",
    "investigated": true,
    "evidence": 2,
+   "authors_techniques_as_labelled": [
+    "T1053.005"
+   ],
    "authors_techniques": [
     "T1053.005"
    ],
+   "counted": [],
    "found_exactly": [],
    "found_as_parent_or_sub": [],
    "missed": [
@@ -2085,9 +2679,21 @@
    "tactic_folder": "other",
    "investigated": true,
    "evidence": 35,
+   "authors_techniques_as_labelled": [
+    "T1134.001",
+    "T1134.002"
+   ],
    "authors_techniques": [
     "T1134.001",
     "T1134.002"
+   ],
+   "counted": [
+    "T1021",
+    "T1055",
+    "T1059",
+    "T1134",
+    "T1134.001",
+    "T1569.002"
    ],
    "found_exactly": [
     "T1134.001"
@@ -2112,8 +2718,15 @@
    "tactic_folder": "persistence",
    "investigated": true,
    "evidence": 3,
+   "authors_techniques_as_labelled": [
+    "T1037.001"
+   ],
    "authors_techniques": [
     "T1037.001"
+   ],
+   "counted": [
+    "T1037.001",
+    "T1547.001"
    ],
    "found_exactly": [
     "T1037.001"
@@ -2133,9 +2746,13 @@
    "tactic_folder": "persistence",
    "investigated": true,
    "evidence": 0,
+   "authors_techniques_as_labelled": [
+    "T1547.001"
+   ],
    "authors_techniques": [
     "T1547.001"
    ],
+   "counted": [],
    "found_exactly": [],
    "found_as_parent_or_sub": [],
    "missed": [
@@ -2152,8 +2769,17 @@
    "tactic_folder": "persistence",
    "investigated": true,
    "evidence": 182,
+   "authors_techniques_as_labelled": [
+    "T1547.001"
+   ],
    "authors_techniques": [
     "T1547.001"
+   ],
+   "counted": [
+    "T1040",
+    "T1059",
+    "T1059.001",
+    "T1685"
    ],
    "found_exactly": [],
    "found_as_parent_or_sub": [],
@@ -2176,8 +2802,19 @@
    "tactic_folder": "persistence",
    "investigated": true,
    "evidence": 202,
+   "authors_techniques_as_labelled": [
+    "T1053.005"
+   ],
    "authors_techniques": [
     "T1053.005"
+   ],
+   "counted": [
+    "T1040",
+    "T1053.005",
+    "T1059",
+    "T1059.001",
+    "T1201",
+    "T1685"
    ],
    "found_exactly": [
     "T1053.005"
@@ -2201,7 +2838,13 @@
    "tactic_folder": "persistence",
    "investigated": true,
    "evidence": 4,
+   "authors_techniques_as_labelled": [
+    "T1053.005"
+   ],
    "authors_techniques": [
+    "T1053.005"
+   ],
+   "counted": [
     "T1053.005"
    ],
    "found_exactly": [
@@ -2220,8 +2863,14 @@
    "tactic_folder": "persistence",
    "investigated": true,
    "evidence": 30,
+   "authors_techniques_as_labelled": [
+    "T1505.003"
+   ],
    "authors_techniques": [
     "T1505.003"
+   ],
+   "counted": [
+    "T1059"
    ],
    "found_exactly": [],
    "found_as_parent_or_sub": [],
@@ -2243,8 +2892,16 @@
    "tactic_folder": "privilege_escalation",
    "investigated": true,
    "evidence": 20,
+   "authors_techniques_as_labelled": [
+    "T1543.003"
+   ],
    "authors_techniques": [
     "T1543.003"
+   ],
+   "counted": [
+    "T1059",
+    "T1543.003",
+    "T1569.002"
    ],
    "found_exactly": [
     "T1543.003"
@@ -2265,8 +2922,18 @@
    "tactic_folder": "privilege_escalation",
    "investigated": true,
    "evidence": 140,
+   "authors_techniques_as_labelled": [
+    "T1548.002"
+   ],
    "authors_techniques": [
     "T1548.002"
+   ],
+   "counted": [
+    "T1033",
+    "T1059",
+    "T1059.001",
+    "T1548.002",
+    "T1685"
    ],
    "found_exactly": [
     "T1548.002"
