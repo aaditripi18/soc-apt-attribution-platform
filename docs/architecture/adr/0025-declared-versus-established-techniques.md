@@ -372,3 +372,11 @@ audit 14,205 checks, all passing after its feature check learnt this rule):
 **17 -> 22 of 45.** No verdict changed. In tool runs 04 and 07 `systeminfo` was also started by a shell, but no
 ancestor within three steps has Evidence of its own (the delivery there matched no rule), so it stays context — the
 bound doing its job, reported rather than relaxed.
+
+**Reference investigations** (main site, snapshot `data/validation/history/investigations.after-ancestry.json`,
+compared with `investigations.after-platform-rules.json`; served audit 49,079 checks over 6 investigations, all
+passing): System Information Discovery is now counted in lsass-01, lsass-03 and the lab credential-dumping
+recording (8 -> 9, 9 -> 10, 9 -> 10 techniques). Verdicts unchanged everywhere; APT29 day 1 and APT3 Empire
+unchanged; known-actor positions in `data/validation/known-answer-checks.json` unchanged (best 14, worst 124; no
+wrong name). The orderings on tool tests now name different groups at the top (e.g. Sowbug), as expected when a
+broadly used technique is added: they remain orderings, not verdicts.
