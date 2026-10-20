@@ -17,6 +17,7 @@ import {
 import {
   ApiFailure,
   invalidate,
+  SNAPSHOT,
   paths,
   request,
   uploadRecording,
@@ -216,7 +217,14 @@ export function UploadPage() {
 
       {!uploads.enabled ? (
         <EmptyState title="Log upload is unavailable">
-          <p>Log upload is not enabled on this deployment.</p>
+          {SNAPSHOT ? (
+            <p>
+              This is a read-only snapshot. Uploading runs the full investigation on your own machine: start the
+              platform locally (see the README) and use this page there.
+            </p>
+          ) : (
+            <p>Log upload is not enabled on this deployment.</p>
+          )}
         </EmptyState>
       ) : (
         <div className="space-y-6">

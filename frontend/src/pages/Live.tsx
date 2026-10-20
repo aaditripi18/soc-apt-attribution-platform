@@ -14,7 +14,7 @@ import {
   Td,
   Th,
 } from "../components/ui";
-import { ApiFailure, paths, request, type LiveCycle, type LiveStatus } from "../lib/api";
+import { ApiFailure, SNAPSHOT, paths, request, type LiveCycle, type LiveStatus } from "../lib/api";
 import { integer, shortHash, utcDateTime } from "../lib/format";
 import { links } from "../lib/router";
 
@@ -169,8 +169,12 @@ export function LivePage() {
     return (
       <>
         {header}
-        <EmptyState title="This server is not running a live session">
-          <p>Start one from the command line; the console then shows its cycles here.</p>
+        <EmptyState title={SNAPSHOT ? "Live mode runs on your own machine" : "This server is not running a live session"}>
+          <p>
+            {SNAPSHOT
+              ? "This hosted page is a read-only snapshot. Run the platform locally with live mode and this page shows each cycle as telemetry arrives:"
+              : "Start one from the command line; the console then shows its cycles here."}
+          </p>
           <pre className="mt-2 overflow-x-auto rounded-sm bg-surface-lowest p-2 text-left font-mono text-code-sm">
             {"python -m attribution_platform.live --name lab --follow sysmon.jsonl --serve\n"}
             {'python -m attribution_platform.live --name lab --elasticsearch-index "logs-windows.sysmon_operational-*" --serve'}

@@ -142,6 +142,12 @@ export function AssistantPanel({ investigationId, source }: { investigationId: s
                   </p>
                 )}
                 {status.data.reason === "off" && <p className="mt-2">It was turned off when the platform was started.</p>}
+                {status.data.reason === "snapshot" && (
+                  <p className="mt-2">
+                    This is a read-only snapshot of the platform. The analyst runs with the platform on your own
+                    machine, next to a local Ollama model.
+                  </p>
+                )}
                 <button
                   type="button"
                   onClick={status.reload}

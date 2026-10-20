@@ -17,7 +17,7 @@ import {
   Th,
   cx,
 } from "../components/ui";
-import { paths, useApi, type InvestigationSummary, type UnitSearch, type UnitSummary } from "../lib/api";
+import { SNAPSHOT, paths, useApi, type InvestigationSummary, type UnitSearch, type UnitSummary } from "../lib/api";
 import { duration, integer, plural, shortId, utcClock, utcDate, utcDateTime } from "../lib/format";
 import { links, navigate } from "../lib/router";
 import { TechniqueChips } from "./InvestigationDetail";
@@ -133,7 +133,7 @@ export function UnitsSearchPage({ query }: { query: URLSearchParams }) {
     <>
       <PageHeader
         title="Units search"
-        description="Find attribution units across every investigation by exact technique, host or candidate. Filters combine with AND and are answered by the API, not in the browser."
+        description={SNAPSHOT ? "Find attribution units across every investigation by exact technique, host or candidate. Filters combine with AND; in this read-only snapshot they are applied in the browser, with the API’s exact-match rules, to the exported unit list." : "Find attribution units across every investigation by exact technique, host or candidate. Filters combine with AND and are answered by the API, not in the browser."}
       />
       <Card className="mb-6">
         <form onSubmit={submit} className="grid grid-cols-1 items-end gap-4 md:grid-cols-2 xl:grid-cols-[1.4fr_1fr_1fr_1fr_auto]">

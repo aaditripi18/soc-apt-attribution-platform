@@ -871,7 +871,7 @@ export interface AssistantStatus {
   model: string | null;
   version: string;
   /** Why it cannot answer now; null when the local model is ready. */
-  reason: "not_running" | "model_missing" | "off" | null;
+  reason: "not_running" | "model_missing" | "off" | "snapshot" | null;
 }
 
 export interface ChatMessage {
@@ -930,7 +930,64 @@ function kindOf(status: number): ApiFailureKind {
   return "server";
 }
 
+/** The hosted demo (`VITE_SNAPSHOT=1`): the console reads a read-only export of
+ * the API's own answers (`scripts/export_snapshot.py`) instead of calling a server. */
+export const SNAPSHOT = import.meta.env.VITE_SNAPSHOT === "1";
+
+/** FNV-1a 32 of the request path: the exported file's name (same function as the exporter). */
+export function fnv1a32(text: string): string {
+  let value = 0x811c9dc5;
+  for (const byte of new TextEncoder().encode(text)) {
+    value = Math.imul(value ^ byte, 0x01000193) >>> 0;
+  }
+  return value.toString(16).padStart(8, "0");
+}
+
+const UNIT_FILTER_FIELDS: Record<string, keyof UnitSummary> = {
+  investigation: "investigation_id",
+  technique: "technique_ids",
+  host: "host_names",
+  candidate: "candidate_ids",
+};
+
+async function snapshotRequest<T>(path: string, signal?: AbortSignal): Promise<T> {
+  if (path.startsWith("/units?") && path !== "/units?limit=1000") {
+    // A filtered unit search: the API's exact-match filters, applied to every unit.
+    const params = new URLSearchParams(path.slice("/units?".length));
+    const limit = Number(params.get("limit") ?? "100");
+    const filters: Record<string, string> = {};
+    for (const [name, value] of params) if (name !== "limit") filters[name] = value;
+    const all = await snapshotRequest<UnitSearch>("/units?limit=1000", signal);
+    const matching = all.units.filter((unit) =>
+      Object.entries(filters).every(([name, value]) => {
+        const field = UNIT_FILTER_FIELDS[name];
+        if (field === undefined) return false;
+        const stored = unit[field] as unknown;
+        return Array.isArray(stored) ? stored.includes(value) : stored === value;
+      }),
+    );
+    return { filters, limit, truncated: matching.length >= limit, units: matching.slice(0, limit) } as T;
+  }
+  let response: Response;
+  try {
+    response = await fetch(`/snapshot/${fnv1a32(path)}.json`, { signal });
+  } catch (cause) {
+    if (cause instanceof DOMException && cause.name === "AbortError") throw cause;
+    throw new ApiFailure("unreachable", "The snapshot file could not be loaded.", path, null);
+  }
+  if (response.status === 404) {
+    throw new ApiFailure("not_found", "Not part of this read-only snapshot.", path, 404);
+  }
+  const stored = (await response.json()) as { status: number; body: unknown };
+  if (stored.status >= 400) {
+    const body = stored.body as { error?: unknown } | null;
+    throw new ApiFailure(kindOf(stored.status), String(body?.error ?? `HTTP ${stored.status}`), path, stored.status);
+  }
+  return stored.body as T;
+}
+
 export async function request<T>(path: string, signal?: AbortSignal): Promise<T> {
+  if (SNAPSHOT) return snapshotRequest<T>(path, signal);
   let response: Response;
   try {
     response = await fetch(BASE + path, { headers: { Accept: "application/json" }, signal });

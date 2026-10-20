@@ -17,6 +17,7 @@ import {
 } from "lucide-react";
 import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import {
+  SNAPSHOT,
   paths,
   useApi,
   type InvestigationSummary,
@@ -389,6 +390,23 @@ export function Shell({
         </button>
       </header>
       <main className="print-root px-3 pb-16 pt-20 lg:ml-64 lg:px-6">
+        {SNAPSHOT && (
+          <div className="no-print mx-auto mb-4 max-w-[1500px] rounded-md border border-tertiary/40 bg-tertiary/5 px-4 py-2.5 text-body-sm text-on-surface-variant">
+            <span className="font-semibold text-on-surface">Read-only snapshot.</span> These are six real
+            investigations, exported unchanged from the platform's own API (public lab recordings: an APT29 and an
+            APT3 emulation, credential-dumping tool runs). Uploading logs, live monitoring and the AI analyst run
+            with the platform on your own machine —{" "}
+            <a
+              className="text-primary hover:underline"
+              href="https://github.com/aaditripi18/soc-apt-attribution-platform"
+              target="_blank"
+              rel="noreferrer"
+            >
+              source and instructions on GitHub
+            </a>
+            .
+          </div>
+        )}
         <div className="mx-auto max-w-[1500px]">{children}</div>
       </main>
       <Palette open={searching} onClose={() => setSearching(false)} />
