@@ -3,23 +3,23 @@
  "ground_truth": "OTRF Security-Datasets metadata, attack_mappings (the dataset authors' own)",
  "all": {
   "authors_techniques_in_recordings": 45,
-  "found_exactly": 15,
+  "found_exactly": 21,
   "found_as_parent_or_sub": 1,
-  "missed": 29,
-  "counted_but_not_listed_by_authors": 17
+  "missed": 23,
+  "counted_but_not_listed_by_authors": 20
  },
  "used_in_development": {
   "authors_techniques_in_recordings": 21,
-  "found_exactly": 7,
+  "found_exactly": 11,
   "found_as_parent_or_sub": 1,
-  "missed": 13,
-  "counted_but_not_listed_by_authors": 13
+  "missed": 9,
+  "counted_but_not_listed_by_authors": 16
  },
  "held_out_from_adr_0025": {
   "authors_techniques_in_recordings": 24,
-  "found_exactly": 8,
+  "found_exactly": 10,
   "found_as_parent_or_sub": 0,
-  "missed": 16,
+  "missed": 14,
   "counted_but_not_listed_by_authors": 4
  },
  "cases": [
@@ -45,13 +45,13 @@
    "found_exactly": [
     "T1003.001",
     "T1033",
+    "T1082",
     "T1134.001"
    ],
    "found_as_parent_or_sub": [],
    "missed": [
     "T1055.002",
     "T1057",
-    "T1082",
     "T1204.002"
    ],
    "counted_but_not_listed_by_authors": [
@@ -63,7 +63,7 @@
   },
   {
    "campaign": "LSASS_campaign_02",
-   "recording": "sample-windows-credential-dumping.zip",
+   "recording": "otrf-lsass-02-procdump",
    "results_informed_development": true,
    "authors_techniques": [
     "T1003.001",
@@ -81,16 +81,17 @@
    ],
    "found_exactly": [
     "T1003.001",
-    "T1033"
+    "T1033",
+    "T1082",
+    "T1204.002"
    ],
    "found_as_parent_or_sub": [],
    "missed": [
     "T1041",
-    "T1082",
-    "T1105",
-    "T1204.002"
+    "T1105"
    ],
    "counted_but_not_listed_by_authors": [
+    "T1036.007",
     "T1059.005",
     "T1112",
     "T1588.002",
@@ -119,7 +120,8 @@
    ],
    "found_exactly": [
     "T1003.001",
-    "T1033"
+    "T1033",
+    "T1082"
    ],
    "found_as_parent_or_sub": [
     "T1055.002"
@@ -127,7 +129,6 @@
    "missed": [
     "T1041",
     "T1057",
-    "T1082",
     "T1204.002",
     "T1543.003"
    ],
@@ -136,6 +137,8 @@
     "T1059.005",
     "T1112",
     "T1134.001",
+    "T1218",
+    "T1218.011",
     "T1615"
    ]
   },
@@ -191,13 +194,13 @@
    ],
    "found_exactly": [
     "T1003.001",
-    "T1033"
+    "T1033",
+    "T1082"
    ],
    "found_as_parent_or_sub": [],
    "missed": [
     "T1012",
     "T1041",
-    "T1082",
     "T1105",
     "T1204.002"
    ],
@@ -227,12 +230,12 @@
    ],
    "found_exactly": [
     "T1003.001",
-    "T1033"
+    "T1033",
+    "T1082"
    ],
    "found_as_parent_or_sub": [],
    "missed": [
     "T1041",
-    "T1082",
     "T1105",
     "T1204.002"
    ],
@@ -269,5 +272,6 @@
    ],
    "counted_but_not_listed_by_authors": []
   }
- ]
+ ],
+ "snapshot": "investigations.tool-runs-after-review-batch-4.json"
 }
