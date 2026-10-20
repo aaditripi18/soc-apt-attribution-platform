@@ -8,7 +8,7 @@ version = "0.0.0"
 description = "SOC APT Attribution Platform — explainable, evidence-based APT attribution engine."
 readme = "README.md"
 requires-python = ">=3.12,<3.13"
-license = { text = "Proprietary" }
+license = { text = "Apache-2.0" }
 authors = [{ name = "aaditripi" }]
 
 # G0.0 introduces no runtime dependencies: no domain logic, no Elastic client, no

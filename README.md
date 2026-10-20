@@ -325,3 +325,10 @@ Elastic detection rules, KQL grammar, ingest pipelines and their test fixtures (
 [NOTICE](data/detection/elastic/NOTICE.md)).
 Telemetry: OTRF Security-Datasets (MIT), Splunk `attack_data` (Apache-2.0). Indicators: CISA (public
 domain, TLP:CLEAR). Each data directory carries its own NOTICE.
+
+## Licence
+
+The project's own code, tests, scripts and documentation are licensed under the
+[Apache License 2.0](LICENSE). Third-party data and detection content keep their own licences (above, and in
+[NOTICE](NOTICE)); in particular the Elastic content is under the Elastic License 2.0, which the Apache licence
+does not replace.

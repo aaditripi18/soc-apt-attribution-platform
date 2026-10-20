@@ -1,0 +1,17 @@
+SOC APT Attribution Platform
+Copyright 2026 Aaditya Tripathi
+
+The source code, tests, scripts and documentation of this project are licensed under the Apache License,
+Version 2.0 (see LICENSE).
+
+This repository also contains, or downloads into a git-ignored cache, third-party content that is NOT covered by
+the Apache License; each keeps its own licence, stated in the NOTICE.md beside it:
+
+- MITRE ATT(R)CK data (data/attack/) - MITRE ATT&CK Terms of Use.
+- Elastic detection rules and the EQL/KQL grammar derived from elastic/detection-rules
+  (data/detection/elastic/, src/attribution_platform/detection_content/grammars/) - Elastic License 2.0.
+- SigmaHQ detection rules (data/detection/sigma/) - Detection Rule License 1.1.
+- MITRE Engenuity CTID adversary emulation plans and procedures (data/emulation-plans/) - Apache License 2.0.
+- OTRF Security-Datasets recordings (data/telemetry-samples/otrf*) - MIT License.
+- splunk/attack_data recordings (data/telemetry-samples/splunk-attack-data*) - Apache License 2.0.
+- Government advisory indicators (data/intel/) - see data/intel/NOTICE.md.
