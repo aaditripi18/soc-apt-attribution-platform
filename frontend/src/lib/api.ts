@@ -256,7 +256,32 @@ export interface Evidence {
     derived_at: string | null;
   };
   schema_version: string;
+  /** ADR-0025: the rule declares this technique among alternatives and this
+   * match does not establish it - shown, never counted. */
+  technique_ambiguous?: boolean;
+  /** ADR-0025 Amendment I: a reviewed low-level match that counts once linked into a unit. */
+  counted_when_linked?: boolean;
 }
+
+/** One per-match clause of a review decision (ADR-0025 Amendment K). */
+export interface ReviewClause {
+  field: string;
+  operator: string;
+  value: string | string[];
+  establishes: string[];
+  reason: string;
+}
+
+/** What a recorded review found a rule's matches to establish, and why. */
+export type RuleReview =
+  | {
+      establishes: string[];
+      declares: string[];
+      reason: string;
+      when: ReviewClause[];
+      counts_when_linked: boolean;
+    }
+  | { left_ambiguous: string };
 
 /** An Observation: ECS-aligned facets, most of them null for any one event. */
 export interface Observation {
@@ -305,6 +330,8 @@ export interface RuleInfo {
   logsources: string[];
   translation: "imported" | "partial" | string;
   actor_tags?: ActorTag[];
+  /** ADR-0025: present when the rule's technique tags were reviewed. */
+  review?: RuleReview;
 }
 
 export interface ActorTag {
@@ -557,6 +584,89 @@ export interface Validation {
   };
   cases: KnownAnswerCase[];
 }
+
+/** Counted techniques against the dataset authors' own technique lists (the LSASS tool runs). */
+export interface GroundTruthSummary {
+  authors_techniques_in_recordings: number;
+  found_exactly: number;
+  found_as_parent_or_sub: number;
+  missed: number;
+  counted_but_not_listed_by_authors: number;
+}
+
+export interface GroundTruthReport {
+  version: string;
+  ground_truth: string;
+  snapshot?: string;
+  all: GroundTruthSummary;
+  used_in_development: GroundTruthSummary;
+  held_out_from_adr_0025: GroundTruthSummary;
+}
+
+/** The pre-registered unseen test (ADR-0027), one run of it. */
+export interface UnseenReport {
+  version: string;
+  recordings_selected: number;
+  recordings_investigated: number;
+  recordings_not_investigated: Record<string, number>;
+  refusal_reasons: Record<string, number>;
+  summary: {
+    authors_techniques: number;
+    found_exactly: number;
+    found_as_parent_or_sub: number;
+    missed: number;
+    missed_but_shown: number;
+    counted_but_not_listed_by_authors: number;
+    recordings_with_an_authors_technique_counted: number;
+    recordings_with_no_evidence: number;
+    recordings_naming_an_actor: number;
+  };
+  by_tactic_folder: Record<string, { recordings: number; authors_techniques: number; found: number; missed_but_shown: number }>;
+}
+
+/** `GET /validation/measurements`: each stored report without its per-recording rows. */
+export interface Measurements {
+  technique_ground_truth?: GroundTruthReport;
+  unseen?: UnseenReport;
+  unseen_first_run?: UnseenReport;
+}
+
+/** One cycle of a live session (ADR-0028). */
+export interface LiveCycle {
+  cycle: number;
+  at: string;
+  state: "analysed" | "unchanged" | "empty" | "refused" | "failed";
+  seconds: number;
+  snapshot_sha256?: string;
+  snapshot_lines?: number;
+  window_start?: string;
+  investigation_id?: string;
+  evidence?: number;
+  units?: number;
+  summary?: { counted_techniques: string[]; verdict: string; named_actors: string[]; units: number };
+  changes?: {
+    first_cycle?: boolean;
+    techniques_newly_counted?: string[];
+    techniques_no_longer_in_window?: string[];
+    units?: [number, number];
+    named_actors_added?: string[];
+    named_actors_removed?: string[];
+    verdict?: [string, string];
+  };
+  problems?: string[];
+}
+
+/** `GET /live`: the live session served by this process, if any. */
+export type LiveStatus =
+  | { enabled: false }
+  | {
+      enabled: true;
+      name: string;
+      window_hours: number;
+      investigations_retained: number;
+      sources: { source: string; read_so_far: number; dropped_partial_lines: number; undecodable_lines: number }[];
+      cycles: LiveCycle[];
+    };
 
 // ---------------------------------------------------------------------------
 // Transport
@@ -864,6 +974,8 @@ export const paths = {
   dossier: (id: string) => `/investigations/${encodeURIComponent(id)}/dossier`,
   assessment: (id: string) => `/investigations/${encodeURIComponent(id)}/assessment`,
   validation: () => "/validation",
+  measurements: () => "/validation/measurements",
+  live: () => "/live",
   uploads: () => "/uploads",
   profileMatch: (id: string) => `/investigations/${encodeURIComponent(id)}/profile-match`,
   groups: () => "/attack/groups",

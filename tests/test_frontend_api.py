@@ -596,3 +596,38 @@ def test_actor_specific_content_is_described_and_labels_its_evidence(
         elastic_import_report=ELASTIC_IMPORT_REPORT,
     )
     assert (bare.coverage or {})["actor_specific"] is None
+
+
+def test_rules_carry_their_review_and_measurements_are_served_as_stored(
+    knowledge: AttackKnowledge,
+) -> None:
+    """ADR-0025: a reviewed rule shows what its matches establish and why (or why
+    it was left ambiguous); the technique measurements are the stored reports."""
+    from attribution_platform.detection_content.pinned import (
+        TECHNIQUE_GROUND_TRUTH,
+        TECHNIQUE_SUPPORT_REVIEW,
+        UNSEEN_RESULTS,
+    )
+
+    context = load_api_context(
+        knowledge,
+        coverage_report=COVERAGE_REPORT,
+        sigma_import_report=SIGMA_IMPORT_REPORT,
+        elastic_import_report=ELASTIC_IMPORT_REPORT,
+        technique_support_review=TECHNIQUE_SUPPORT_REVIEW,
+        measurements={"technique_ground_truth": TECHNIQUE_GROUND_TRUTH, "unseen": UNSEEN_RESULTS},
+    )
+    review = json.loads(TECHNIQUE_SUPPORT_REVIEW.read_text(encoding="utf-8"))
+    decided = next(d for d in review["decisions"] if d.get("when"))
+    served = context.rules[decided["rule_source"]]["review"]
+    assert served["establishes"] == decided["establishes"] and served["reason"] == decided["reason"]
+    assert [c["establishes"] for c in served["when"]] == [c["establishes"] for c in decided["when"]]
+    ambiguous = review["left_ambiguous_after_reading"][0]
+    if ambiguous["rule_source"] in context.rules:
+        assert context.rules[ambiguous["rule_source"]]["review"] == {
+            "left_ambiguous": ambiguous["why"]
+        }
+    assert context.measurements is not None
+    unseen = json.loads(UNSEEN_RESULTS.read_text(encoding="utf-8"))
+    assert context.measurements["unseen"]["summary"] == unseen["summary"]
+    assert "cases" not in context.measurements["unseen"]

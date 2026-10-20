@@ -90,6 +90,7 @@ from attribution_platform.api.read_model import (
     get_investigation_activity,
     get_investigation_context,
     get_investigation_observables,
+    get_measurements,
     get_observation,
     get_profile_match,
     get_unit,
@@ -150,6 +151,7 @@ _REFERENCE: dict[str, Callable[[ApiContext], Any]] = {
     "attack/techniques": get_attack_techniques,
     "attack/groups": get_attack_groups,
     "validation": get_validation,
+    "validation/measurements": get_measurements,
 }
 _API_PREFIX = "/api"
 #: ADR-0020: the one route that accepts input.

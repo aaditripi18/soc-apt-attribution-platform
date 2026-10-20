@@ -6,7 +6,9 @@ import {
   useApi,
   type Coverage,
   type KnownAnswerCase,
+  type Measurements,
   type TechniqueCatalogue,
+  type UnseenReport,
   type Validation,
 } from "../lib/api";
 import { integer } from "../lib/format";
@@ -120,10 +122,97 @@ function KnownAnswerChecks({ validation }: { validation: Validation }) {
   );
 }
 
+function percent(part: number, whole: number): string {
+  return whole ? `${Math.round((100 * part) / whole)}%` : "—";
+}
+
+function UnseenRow({ label, report, note }: { label: string; report: UnseenReport; note: string }) {
+  const s = report.summary;
+  const found = s.found_exactly + s.found_as_parent_or_sub;
+  return (
+    <tr className="align-top">
+      <Td>
+        <div className="text-on-surface">{label}</div>
+        <div className="mt-0.5 max-w-sm text-body-sm text-on-surface-variant">{note}</div>
+      </Td>
+      <Td className="font-mono text-code-md">
+        {integer(report.recordings_investigated)} of {integer(report.recordings_selected)}
+      </Td>
+      <Td className="font-mono text-code-md">
+        {integer(found)} of {integer(s.authors_techniques)} ({percent(found, s.authors_techniques)})
+        <div className="text-code-sm text-outline">{integer(s.missed_but_shown)} more shown, not counted</div>
+      </Td>
+      <Td className="font-mono text-code-md">{integer(s.counted_but_not_listed_by_authors)}</Td>
+      <Td className="font-mono text-code-md">{integer(s.recordings_naming_an_actor)}</Td>
+    </tr>
+  );
+}
+
+/** ADR-0025 Amendment E and ADR-0027: counted techniques against what the dataset
+ * authors themselves list as performed - the platform's recall, as measured. */
+function TechniqueMeasurements({ measurements }: { measurements: Measurements }) {
+  const truth = measurements.technique_ground_truth;
+  const first = measurements.unseen_first_run;
+  const unseen = measurements.unseen;
+  return (
+    <Card padded={false}>
+      <CardHeader
+        title="Measured against the dataset authors’ own technique lists"
+        hint="What the platform counted, compared with what the people who recorded the data say they performed. “Found” includes a parent or sub-technique of the listed one; techniques counted but not listed are not errors by that fact — the authors list the procedure, not everything on the host."
+      />
+      <table className="w-full">
+        <thead>
+          <tr>
+            <Th>Test</Th>
+            <Th>Recordings read</Th>
+            <Th>Authors’ techniques counted</Th>
+            <Th>Counted, not listed</Th>
+            <Th>Naming an actor</Th>
+          </tr>
+        </thead>
+        <tbody>
+          {truth && (
+            <tr className="align-top">
+              <Td>
+                <div className="text-on-surface">LSASS credential-dumping tool runs</div>
+                <div className="mt-0.5 max-w-sm text-body-sm text-on-surface-variant">
+                  Seven single-tool recordings, all used during development{truth.snapshot ? ` · ${truth.snapshot}` : ""}.
+                </div>
+              </Td>
+              <Td className="font-mono text-code-md">7</Td>
+              <Td className="font-mono text-code-md">
+                {integer(truth.all.found_exactly + truth.all.found_as_parent_or_sub)} of {integer(truth.all.authors_techniques_in_recordings)} (
+                {percent(truth.all.found_exactly + truth.all.found_as_parent_or_sub, truth.all.authors_techniques_in_recordings)})
+              </Td>
+              <Td className="font-mono text-code-md">{integer(truth.all.counted_but_not_listed_by_authors)}</Td>
+              <Td className="font-mono text-code-md">—</Td>
+            </tr>
+          )}
+          {first && (
+            <UnseenRow
+              label="Unseen test — first run, as pre-registered"
+              report={first}
+              note="105 recordings never used before, run once on a frozen build. The intake refused 44 (Security-only domain controllers, archive metadata) — reported, then fixed. Figures as first measured, with the authors’ pre-v19 technique ids unresolved; resolved through the pinned ATT&CK version they are 32 of 65 (ADR-0027)."
+            />
+          )}
+          {unseen && (
+            <UnseenRow
+              label="Unseen test — after the fixes it exposed"
+              report={unseen}
+              note="The same recordings, now development data: intake and store faults fixed, and the rules they showed reviewed."
+            />
+          )}
+        </tbody>
+      </table>
+    </Card>
+  );
+}
+
 export function AboutPage() {
   const coverage = useApi<Coverage>(paths.coverage());
   const catalogue = useApi<TechniqueCatalogue>(paths.techniques());
   const validation = useApi<Validation>(paths.validation());
+  const measurements = useApi<Measurements>(paths.measurements());
 
   if (coverage.state === "error") return <ErrorState failure={coverage.error} onRetry={coverage.reload} />;
   if (catalogue.state === "error") return <ErrorState failure={catalogue.error} onRetry={catalogue.reload} />;
@@ -180,6 +269,7 @@ export function AboutPage() {
         </Card>
 
         {validation.state === "ready" && <KnownAnswerChecks validation={validation.data} />}
+        {measurements.state === "ready" && <TechniqueMeasurements measurements={measurements.data} />}
 
         <Card padded={false}>
           <CardHeader title="From logs to attribution" hint="Each stage is deterministic and keeps what it produced." />

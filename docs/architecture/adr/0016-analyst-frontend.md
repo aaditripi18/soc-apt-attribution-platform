@@ -147,3 +147,26 @@ One session serving four pinned recordings (`otrf-lsass-01-logonpasswords`, `otr
 Known limits, stated in the UI where they apply: two Empire units (21 and 13 decision features) have no
 per-candidate quantities (ADR-0009 D1); low-level Evidence outside units is counted but not listed; in-memory
 sessions end with the server.
+
+## Amendment (2026-10-20) — every backend capability is reachable, and nothing on screen is unbacked
+
+The owner's direction for the frontend phase: the console must connect to and match everything the backend does.
+An inventory of the API routes against the console's calls found three gaps, now closed:
+
+- **Live mode** (ADR-0028) had no page. *Live Monitoring* reads `GET /api/live` every 5 s: the session's sources
+  (bytes or documents read, partial and undecodable lines), the latest analysed window (verdict, counted
+  techniques, link to its investigation) and every cycle (state and its meaning, snapshot lines and hash, time,
+  what changed — techniques newly counted or gone from the window, verdict, named actors). Cycles where nothing
+  new arrived are collapsed behind a count. Without a live session it says so and shows how to start one.
+- **Declared versus established** (ADR-0025) was shown in the activity views but not in a unit's Evidence tab,
+  where an uncounted technique looked like a counted one. Each Evidence row now marks *Declared only* or *Counts
+  once linked*, and the rule detail shows the recorded review — what every match establishes and why, each
+  per-match clause, and which clause this match satisfied — or why the rule was left ambiguous. The rule index
+  served beside Evidence now carries each rule's review (`review`).
+- **The measurements** were in the repository but not served. `GET /api/validation/measurements` serves the stored
+  reports (authors'-technique comparison on the LSASS tool runs; the unseen test's first run and its re-run)
+  without their per-recording rows, and *Methodology* shows them, with the first run's figures marked as first
+  measured.
+
+The shell is also usable on a phone now: below desktop width the sidebar is a slide-in menu, content uses the
+full width and wide tables scroll inside their card, never the page (checked at 375 px; desktop unchanged).

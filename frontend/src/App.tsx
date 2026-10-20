@@ -12,6 +12,7 @@ import { DashboardPage } from "./pages/Dashboard";
 import { DossierPage } from "./pages/Dossier";
 import { InvestigationDetailPage } from "./pages/InvestigationDetail";
 import { InvestigationsPage } from "./pages/Investigations";
+import { LivePage } from "./pages/Live";
 import { UnitPage } from "./pages/Unit";
 import { UploadPage } from "./pages/Upload";
 import { UnitsSearchPage } from "./pages/UnitsSearch";
@@ -87,6 +88,13 @@ function Page({ route }: { route: Route }) {
     return (
       <Titled crumbs={[{ label: "Analyze Logs" }]}>
         <UploadPage />
+      </Titled>
+    );
+  }
+  if (head === "live" && second === undefined) {
+    return (
+      <Titled crumbs={[{ label: "Live Monitoring" }]}>
+        <LivePage />
       </Titled>
     );
   }

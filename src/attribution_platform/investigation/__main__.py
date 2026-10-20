@@ -68,6 +68,10 @@ from attribution_platform.detection_content.pinned import (
     SIGMA_ACTOR_IMPORT_REPORT,
     SIGMA_ACTOR_PACK,
     SIGMA_PACK,
+    TECHNIQUE_GROUND_TRUTH,
+    TECHNIQUE_SUPPORT_REVIEW,
+    UNSEEN_FIRST_RUN,
+    UNSEEN_RESULTS,
 )
 from attribution_platform.detection_content.pinned import SIGMA_IMPORT_REPORT as IMPORT_REPORT
 from attribution_platform.detection_content.technique_support import (
@@ -97,7 +101,6 @@ REPO_ROOT = Path(__file__).resolve().parents[3]
 RECORDINGS = REPO_ROOT / "data" / "calibration" / "corpus" / "v2" / "recordings.json"
 ADVISORIES = REPO_ROOT / "data" / "intel" / "advisories"
 ADVISORY_ATTRIBUTIONS = REPO_ROOT / "data" / "intel" / "advisory-attributions.json"
-TECHNIQUE_SUPPORT_REVIEW = REPO_ROOT / "data" / "detection" / "technique-support-review.json"
 
 
 class CliError(Exception):
@@ -239,6 +242,12 @@ def serving_context(workbench: Workbench) -> ApiContext:
         actor_import_report=SIGMA_ACTOR_IMPORT_REPORT,
         advisory_attributions=ADVISORY_ATTRIBUTIONS,
         platform_pack=PLATFORM_PACK,
+        technique_support_review=TECHNIQUE_SUPPORT_REVIEW,
+        measurements={
+            "technique_ground_truth": TECHNIQUE_GROUND_TRUTH,
+            "unseen": UNSEEN_RESULTS,
+            "unseen_first_run": UNSEEN_FIRST_RUN,
+        },
     )
 
 

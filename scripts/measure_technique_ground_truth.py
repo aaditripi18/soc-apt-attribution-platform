@@ -130,8 +130,28 @@ def build() -> dict[str, object]:
     }
 
 
+#: ``--snapshot FILE``: the seven tool runs as investigated together on one build.
+CURRENT_KEYS = {
+    1: "otrf-lsass-01-logonpasswords",
+    2: "otrf-lsass-02-procdump",
+    3: "otrf-lsass-03-comsvcs",
+    4: "otrf-lsass-04-out-minidump",
+    5: "otrf-lsass-05-sharpdump",
+    6: "otrf-lsass-06-outflank-dumpert",
+    7: "otrf-lsass-07-nanodump",
+}
+
+
 def main() -> int:
+    if "--snapshot" in sys.argv:
+        # One snapshot of all seven on the current build; "used in development"
+        # keeps its Amendment E meaning (whose results informed development).
+        snapshot = sys.argv[sys.argv.index("--snapshot") + 1]
+        for number, key in CURRENT_KEYS.items():
+            RECORDINGS[number] = (snapshot, key, RECORDINGS[number][2])
     report = build()
+    if "--snapshot" in sys.argv:
+        report["snapshot"] = sys.argv[sys.argv.index("--snapshot") + 1]
     OUT.write_text(json.dumps(report, indent=1) + "\n", encoding="utf-8", newline="\n")
     for name in ("all", "used_in_development", "held_out_from_adr_0025"):
         print(name, report[name])

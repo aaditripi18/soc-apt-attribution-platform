@@ -157,7 +157,7 @@ export function Card({
     <section
       className={cx(
         "rounded-md border border-outline-variant/70 bg-surface-low",
-        padded && "p-4",
+        padded ? "p-4" : "overflow-x-auto",
         className,
       )}
     >

@@ -60,6 +60,9 @@ class ApiContext:
     validation: Mapping[str, Any] | None = None
     #: the ``GET /attack/groups`` body (ADR-0021): every active Group's profile
     groups: Mapping[str, Any] | None = None
+    #: the ``GET /validation/measurements`` body: counted techniques against the
+    #: dataset authors' own mappings (ADR-0025 Amendment E, ADR-0027), as stored
+    measurements: Mapping[str, Any] | None = None
 
 
 def _external_id(obj: Mapping[str, Any]) -> str | None:
@@ -167,6 +170,42 @@ def _platform_rule_index(pack: Mapping[str, Any]) -> dict[str, Any]:
         }
         for source, tier in tiers.items()
     }
+
+
+_CLAUSE_KEYS = ("field", "operator", "value", "establishes", "reason")
+
+
+def _attach_reviews(rules: dict[str, Any], review: Mapping[str, Any]) -> None:
+    """ADR-0025: each reviewed rule carries its decision - what every match
+    establishes, the per-match clauses, whether a low-level match counts once
+    linked, and the reason - or, when read and left ambiguous, why."""
+    for entry in review.get("decisions") or ():
+        rule = rules.get(str(entry["rule_source"]))
+        if rule is None:
+            continue
+        rule["review"] = {
+            "establishes": list(entry["establishes"]),
+            "declares": list(entry.get("declares") or ()),
+            "reason": entry["reason"],
+            "when": [
+                {
+                    key: clause[key]
+                    for key in ("field", "operator", "value", "establishes", "reason")
+                }
+                for clause in entry.get("when") or ()
+            ],
+            "counts_when_linked": bool(entry.get("counts_when_linked", False)),
+        }
+    for entry in review.get("left_ambiguous_after_reading") or ():
+        rule = rules.get(str(entry["rule_source"]))
+        if rule is not None:
+            rule["review"] = {"left_ambiguous": entry["why"]}
+
+
+def _measurement_summary(name: str, report: Mapping[str, Any]) -> dict[str, Any]:
+    """The stored measurement without its per-recording rows (served whole would
+    be large); the summary figures exactly as the report states them."""
+    return {key: value for key, value in report.items() if key != "cases"} | {"source": name}
 
 
 def _actor_rule_index(actor_report: Mapping[str, Any]) -> dict[str, Any]:
@@ -384,6 +423,8 @@ def load_api_context(
     actor_import_report: Path | None = None,
     advisory_attributions: Path | None = None,
     platform_pack: Path | None = None,
+    technique_support_review: Path | None = None,
+    measurements: Mapping[str, Path] | None = None,
 ) -> ApiContext:
     """Read the pinned artefacts once and shape them for the API. The built
     frontend is served only when ``static_dir`` holds an ``index.html``."""
@@ -398,6 +439,13 @@ def load_api_context(
         rules.update(_actor_rule_index(actor))
     if platform_pack is not None and platform_pack.is_file():
         rules.update(_platform_rule_index(_read(platform_pack)))
+    if technique_support_review is not None and technique_support_review.is_file():
+        _attach_reviews(rules, _read(technique_support_review))
+    measured = {
+        name: _measurement_summary(name, _read(path))
+        for name, path in (measurements or {}).items()
+        if path.is_file()
+    }
     served = (
         static_dir if static_dir is not None and (static_dir / "index.html").is_file() else None
     )
@@ -412,6 +460,7 @@ def load_api_context(
             if known_answer_checks is not None and known_answer_checks.is_file()
             else None
         ),
+        measurements=measured or None,
         groups=build_group_catalogue(
             knowledge,
             actor,

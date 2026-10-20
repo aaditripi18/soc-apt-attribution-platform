@@ -50,6 +50,66 @@ export function TierBadge({ evidence }: { evidence: Evidence }) {
   );
 }
 
+/** ADR-0025: whether this match establishes its technique. A technique the rule
+ * declares among alternatives is shown but never counted. */
+export function TechniqueSupportBadge({ evidence }: { evidence: Evidence }) {
+  if (!isTechniqueEvidence(evidence) || isActorEvidence(evidence)) return null;
+  if (evidence.technique_ambiguous) {
+    return (
+      <Badge tone="muted" title="The rule declares this technique among alternatives; this match does not establish it. Shown, not counted.">
+        Declared only
+      </Badge>
+    );
+  }
+  if (isContextEvidence(evidence) && evidence.counted_when_linked) {
+    return (
+      <Badge tone="neutral" title="A reviewed low-level rule: its technique counts because this match is linked into the unit's process chain.">
+        Counts once linked
+      </Badge>
+    );
+  }
+  return null;
+}
+
+/** The recorded review of the rule (ADR-0025): what its matches establish and why. */
+function ReviewNote({ rule, evidence }: { rule: RuleInfo; evidence: Evidence }) {
+  const review = rule.review;
+  if (!review) return null;
+  if ("left_ambiguous" in review) {
+    return (
+      <p className="rounded-sm border border-outline-variant/60 bg-surface-low p-2 text-body-sm text-on-surface-variant">
+        <span className="font-semibold text-on-surface">Read and left ambiguous:</span> {review.left_ambiguous}
+      </p>
+    );
+  }
+  const technique = evidence.attack_ref?.external_id ?? "";
+  const byClause = review.when.filter((clause) => clause.establishes.includes(technique));
+  return (
+    <div className="space-y-1.5 rounded-sm border border-outline-variant/60 bg-surface-low p-2 text-body-sm text-on-surface-variant">
+      <p>
+        <span className="font-semibold text-on-surface">Reviewed — every match establishes</span>{" "}
+        {review.establishes.length ? review.establishes.join(", ") : "none of the declared techniques"}
+        {review.counts_when_linked && " (counted once linked into a unit)"}. {review.reason}
+      </p>
+      {review.when.length > 0 && (
+        <ul className="space-y-1 border-t border-outline-variant/40 pt-1.5">
+          {review.when.map((clause, index) => (
+            <li key={index} className={cx(byClause.includes(clause) && !evidence.technique_ambiguous && "text-on-surface")}>
+              <span className="font-mono text-code-sm">
+                {clause.field} {clause.operator} {Array.isArray(clause.value) ? clause.value.join(" | ") : clause.value}
+              </span>{" "}
+              → {clause.establishes.join(", ")}: {clause.reason}
+              {byClause.includes(clause) && !evidence.technique_ambiguous && (
+                <span className="ml-1 font-semibold"> (this match)</span>
+              )}
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
+  );
+}
+
 export function OriginBadge({ origin }: { origin: string }) {
   return (
     <Badge
@@ -130,6 +190,7 @@ function Detail({
                     {tag.reason}
                   </p>
                 ))}
+                <ReviewNote rule={rule} evidence={evidence} />
               </>
             ) : (
               <p className="text-on-surface-variant">This rule is not listed in the pinned import reports.</p>
@@ -344,7 +405,10 @@ export function EvidenceTab({ data, query }: { data: UnitData; query: URLSearchP
                     )}
                   </Td>
                   <Td>
-                    <TierBadge evidence={item} />
+                    <span className="flex flex-wrap items-center gap-1">
+                      <TierBadge evidence={item} />
+                      <TechniqueSupportBadge evidence={item} />
+                    </span>
                   </Td>
                   <Td>
                     <span className="flex min-w-0 items-center gap-2">

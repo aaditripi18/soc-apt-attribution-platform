@@ -1,4 +1,5 @@
 import {
+  Activity,
   BookOpenText,
   ChevronRight,
   CornerDownLeft,
@@ -6,6 +7,7 @@ import {
   FolderSearch,
   BookOpen,
   LayoutDashboard,
+  Menu,
   Users,
   Radar,
   Search,
@@ -33,6 +35,7 @@ const NAV = [
   { key: "overview", label: "Overview", href: links.home(), icon: LayoutDashboard, group: "Operations" },
   { key: "investigations", label: "Investigations", href: links.investigations(), icon: FolderSearch, group: "Operations" },
   { key: "upload", label: "Analyze Logs", href: links.upload(), icon: UploadCloud, group: "Operations" },
+  { key: "live", label: "Live Monitoring", href: links.live(), icon: Activity, group: "Operations" },
   { key: "units", label: "Activity Search", href: links.units(), icon: Target, group: "Operations" },
   { key: "actors", label: "Threat Actors", href: links.actors(), icon: Users, group: "Intelligence" },
   { key: "coverage", label: "Technique Coverage", href: links.coverage(), icon: Radar, group: "Intelligence" },
@@ -48,6 +51,7 @@ export function sectionOf(route: Route): Section {
   if (head === "units") return route.segments.length > 1 ? "investigations" : "units";
   if (head === undefined) return "overview";
   if (head === "upload") return "upload";
+  if (head === "live") return "live";
   if (head === "actors") return "actors";
   if (head === "coverage") return "coverage";
   if (head === "dossier") return "dossier";
@@ -55,10 +59,15 @@ export function sectionOf(route: Route): Section {
   return "investigations";
 }
 
-function Sidebar({ section }: { section: Section }) {
+function Sidebar({ section, open }: { section: Section; open: boolean }) {
   const catalogue = useApi<TechniqueCatalogue>(paths.techniques());
   return (
-    <aside className="no-print fixed inset-y-0 left-0 z-30 flex w-64 flex-col border-r border-outline-variant/70 bg-surface-lowest">
+    <aside
+      className={cx(
+        "no-print fixed inset-y-0 left-0 z-40 flex w-64 flex-col border-r border-outline-variant/70 bg-surface-lowest transition-transform lg:z-30 lg:translate-x-0",
+        open ? "translate-x-0" : "-translate-x-full",
+      )}
+    >
       <a href={links.home()} className="flex h-14 items-center gap-2.5 border-b border-outline-variant/70 px-4">
         <span className="flex h-8 w-8 items-center justify-center rounded-md border border-primary/40 bg-primary/10 text-primary">
           <ShieldCheck size={17} strokeWidth={2} />
@@ -311,6 +320,9 @@ export function Shell({
   children: ReactNode;
 }) {
   const [searching, setSearching] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const path = route.segments.join("/");
+  useEffect(() => setMenuOpen(false), [path]);
   useEffect(() => {
     const onKey = (event: KeyboardEvent) => {
       if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === "k") {
@@ -324,8 +336,25 @@ export function Shell({
 
   return (
     <div className="min-h-screen">
-      <Sidebar section={sectionOf(route)} />
-      <header className="no-print fixed left-64 right-0 top-0 z-20 flex h-14 items-center gap-4 border-b border-outline-variant/70 bg-background/90 px-6 backdrop-blur">
+      <Sidebar section={sectionOf(route)} open={menuOpen} />
+      {menuOpen && (
+        <button
+          type="button"
+          aria-label="Close the menu"
+          onClick={() => setMenuOpen(false)}
+          className="no-print fixed inset-0 z-30 bg-background/60 lg:hidden"
+        />
+      )}
+      <header className="no-print fixed left-0 right-0 top-0 z-20 flex h-14 items-center gap-3 border-b border-outline-variant/70 bg-background/90 px-3 backdrop-blur lg:left-64 lg:gap-4 lg:px-6">
+        <button
+          type="button"
+          aria-label="Open the menu"
+          aria-expanded={menuOpen}
+          onClick={() => setMenuOpen(true)}
+          className="flex h-8 w-8 shrink-0 items-center justify-center rounded-sm border border-outline-variant/70 text-on-surface-variant lg:hidden"
+        >
+          <Menu size={16} />
+        </button>
         <nav aria-label="Breadcrumb" className="flex min-w-0 flex-1 items-center gap-1.5 text-body-md">
           {crumbs.map((crumb, index) => {
             const last = index === crumbs.length - 1;
@@ -351,14 +380,15 @@ export function Shell({
         <button
           type="button"
           onClick={() => setSearching(true)}
-          className="flex h-8 w-72 items-center gap-2 rounded-sm border border-outline-variant/70 bg-surface-lowest px-2.5 text-body-md text-outline hover:border-outline"
+          aria-label="Search units, techniques, recordings"
+          className="flex h-8 shrink-0 items-center gap-2 rounded-sm border border-outline-variant/70 bg-surface-lowest px-2.5 text-body-md text-outline hover:border-outline md:w-72"
         >
           <Search size={14} />
-          <span className="flex-1 truncate text-left">Search units, techniques, recordings…</span>
-          <kbd className="rounded-sm border border-outline-variant px-1 font-mono text-code-sm">Ctrl K</kbd>
+          <span className="hidden flex-1 truncate text-left md:block">Search units, techniques, recordings…</span>
+          <kbd className="hidden rounded-sm border border-outline-variant px-1 font-mono text-code-sm md:block">Ctrl K</kbd>
         </button>
       </header>
-      <main className="print-root ml-64 px-6 pb-16 pt-20">
+      <main className="print-root px-3 pb-16 pt-20 lg:ml-64 lg:px-6">
         <div className="mx-auto max-w-[1500px]">{children}</div>
       </main>
       <Palette open={searching} onClose={() => setSearching(false)} />

@@ -517,6 +517,12 @@ def get_validation(context: ApiContext) -> Mapping[str, Any]:
     return _reference(context.validation, "the known-answer checks")  # type: ignore[no-any-return]
 
 
+def get_measurements(context: ApiContext) -> Mapping[str, Any]:
+    """Counted techniques against dataset authors' own technique lists
+    (ADR-0025 Amendment E; the pre-registered unseen test, ADR-0027), as stored."""
+    return _reference(context.measurements, "the technique measurements")  # type: ignore[no-any-return]
+
+
 def get_coverage(context: ApiContext) -> Mapping[str, Any]:
     """The committed detection coverage report and content-source summaries."""
     return _reference(context.coverage, "the detection coverage report")  # type: ignore[no-any-return]
