@@ -112,7 +112,8 @@ def main(argv: list[str]) -> int:
             units += 1
     size = sum(p.stat().st_size for p in out.glob("*.json"))
     print(
-        f"{len(written)} responses, {len(investigations)} investigations, {units} units, {size / 1e6:.1f} MB"
+        f"{len(written)} responses, {len(investigations)} investigations, "
+        f"{units} units, {size / 1e6:.1f} MB"
     )
     return 0
 
