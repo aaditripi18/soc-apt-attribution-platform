@@ -124,3 +124,21 @@ investigation with it equals one without it (tested).
 112 Evidence and 7 units (35,559 Observations reused). A steady-state cycle costs roughly that fixed part plus
 about 7 ms for each new record, so the 60 s default keeps up with several thousand new records a minute; above
 that, D4 applies - the interval grows, the analysis is never cut.
+
+## Amendment B (2026-10-20) — a live session's memory is bounded
+
+**Problem.** Every analysed cycle publishes an investigation into the in-memory store, and nothing was ever
+withdrawn: a session left running grew without bound, and its investigation list with it.
+
+**Decision.** A live session serves the investigations of its newest `keep_snapshots` analysed cycles (default
+48, the same bound as its snapshots, so every served live result can still be re-run from its snapshot); the
+oldest is released when a new one is published. The in-memory store counts, for each document, the retained
+publications that wrote it (`SharedMemoryClient.absorb(..., owner=)` / `release(owner)`): consecutive cycles share
+most of their Observations and Evidence, so a released cycle removes only what no retained cycle holds, and a
+document written directly (a command-line investigation) is never removed. The read API still cannot change or
+delete anything; withdrawal is the live session's own bound on its own publications. The status view reports how
+many investigations are retained.
+
+**Checks.** `tests/test_dataplane.py` (a shared document survives the release of one of its publications; a direct
+write is never removed); `tests/test_live.py` (with a retention of one, the first cycle is released when the
+second is published, and only the second is served).

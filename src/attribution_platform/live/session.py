@@ -101,6 +101,7 @@ class LiveSession:
         summarise: Callable[[str], Mapping[str, Any]],
         window_hours: int = 24,
         keep_snapshots: int = 48,
+        release: Callable[[str], int] | None = None,
         clock: Callable[[], datetime] = lambda: datetime.now(UTC),
     ) -> None:
         self.name = name
@@ -112,6 +113,10 @@ class LiveSession:
         self._cycles: list[CycleOutcome] = []
         self._last_sha: str | None = None
         self._last_summary: Mapping[str, Any] | None = None
+        #: ADR-0028 Amendment B: the investigations of the newest ``keep_snapshots``
+        #: analysed cycles stay served; older ones are released with their snapshots.
+        self._release = release
+        self._retained: list[str] = []
         self._lock = threading.Lock()
 
     def cycle(self) -> CycleOutcome:
@@ -163,6 +168,11 @@ class LiveSession:
         changes = changes_between(self._last_summary, summary)
         self._last_sha, self._last_summary = snapshot.sha256, summary
         self.store.prune_snapshots(self.keep_snapshots)
+        self._retained.append(result.investigation_id)
+        while len(self._retained) > self.keep_snapshots:
+            oldest = self._retained.pop(0)
+            if self._release is not None:
+                self._release(oldest)
         return done(
             ANALYSED,
             investigation_id=result.investigation_id,
@@ -186,6 +196,7 @@ class LiveSession:
             "enabled": True,
             "name": self.name,
             "window_hours": self.window_hours,
+            "investigations_retained": len(self._retained),
             "sources": [
                 {
                     "source": str(f.path),

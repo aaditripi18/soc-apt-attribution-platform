@@ -217,7 +217,7 @@ def investigation_runner(
             detection_memo=detection_memo,
         )
         if shared is not None and isinstance(target, FakeElasticClient):
-            shared.absorb(target)
+            shared.absorb(target, owner=record.investigation_id)
         return RunResult(
             investigation_id=record.investigation_id,
             evidence=record.evidence,

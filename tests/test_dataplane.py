@@ -451,3 +451,26 @@ def test_the_in_memory_store_filters_before_it_caps() -> None:
     assert len(store.search("u", {"match_all": {}}, size=10)) == 10
     with pytest.raises(ElasticIntegrationError):
         store.search("u", {"range": {"k": {"gte": "10"}}}, size=10)
+
+
+def test_a_released_publication_keeps_what_others_still_use() -> None:
+    """ADR-0028 Amendment B: a live session withdraws its oldest cycles; documents
+    that a retained cycle (or a direct write) also holds stay."""
+    from attribution_platform.dataplane.fake_client import FakeElasticClient, SharedMemoryClient
+
+    def publication(*ids: str) -> FakeElasticClient:
+        part = FakeElasticClient()
+        part.ensure_index("e", {})
+        for i in ids:
+            part.index_document("e", i, {"id": i})
+        return part
+
+    store = SharedMemoryClient()
+    store.ensure_index("e", {})
+    store.index_document("e", "direct", {"id": "direct"})
+    store.absorb(publication("shared", "only-1", "direct"), owner="cycle-1")
+    store.absorb(publication("shared", "only-2"), owner="cycle-2")
+    assert store.release("cycle-1") == 1  # only-1; 'shared' is still cycle-2's, 'direct' is pinned
+    assert {d["id"] for d in store.search("e", {}, size=10)} == {"direct", "shared", "only-2"}
+    assert store.release("cycle-2") == 2 and store.release("cycle-2") == 0
+    assert {d["id"] for d in store.search("e", {}, size=10)} == {"direct"}

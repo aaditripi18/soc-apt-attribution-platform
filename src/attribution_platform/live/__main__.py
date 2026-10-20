@@ -101,6 +101,7 @@ def main(argv: Sequence[str] | None = None) -> int:
         run=investigation_runner(client, workbench, detection_memo=DetectionMemo()),
         summarise=lambda investigation_id: read_model_summary(client, investigation_id),
         window_hours=window_hours,
+        release=client.release,
     )
 
     if "--serve" not in args:

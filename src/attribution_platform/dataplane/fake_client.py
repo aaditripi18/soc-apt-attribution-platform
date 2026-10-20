@@ -150,6 +150,12 @@ class SharedMemoryClient(FakeElasticClient):
     def __init__(self) -> None:
         super().__init__()
         self._lock = threading.RLock()
+        #: (index, document id) -> how many retained publications wrote it
+        self._references: dict[tuple[str, str], int] = {}
+        #: publication owner -> the documents of each of its publications
+        self._owned: dict[str, list[list[tuple[str, str]]]] = {}
+        #: documents written directly (not by an owned publication): never released
+        self._pinned: set[tuple[str, str]] = set()
 
     def ensure_index(self, index: str, mappings: Mapping[str, Any]) -> None:
         with self._lock:
@@ -158,6 +164,7 @@ class SharedMemoryClient(FakeElasticClient):
     def index_document(self, index: str, document_id: str, document: Mapping[str, Any]) -> None:
         with self._lock:
             super().index_document(index, document_id, document)
+            self._pinned.add((index, document_id))
 
     def get_document(self, index: str, document_id: str) -> Mapping[str, Any] | None:
         with self._lock:
@@ -174,11 +181,47 @@ class SharedMemoryClient(FakeElasticClient):
         with self._lock:
             return super().search(index, query, size=size, sort=sort)
 
-    def absorb(self, other: FakeElasticClient) -> None:
-        """Copy every index and document of ``other`` into this store at once."""
+    def absorb(self, other: FakeElasticClient, *, owner: str | None = None) -> None:
+        """Copy every index and document of ``other`` into this store at once.
+        With an ``owner`` (an investigation id), the publication can later be
+        :meth:`release`-d; documents another retained publication also wrote
+        stay (ADR-0028 Amendment B)."""
         with self._lock:
+            written: list[tuple[str, str]] = []
             for index, mappings in other._mappings.items():
                 super().ensure_index(index, mappings)
                 self._documents[index].update(
                     {key: dict(document) for key, document in other._documents[index].items()}
                 )
+                written.extend((index, key) for key in other._documents[index])
+            if owner is None:
+                self._pinned.update(written)
+            else:
+                for key in written:
+                    self._references[key] = self._references.get(key, 0) + 1
+                self._owned.setdefault(owner, []).append(written)
+
+    def release(self, owner: str) -> int:
+        """Withdraw one publication of ``owner``: every document it wrote that no
+        other retained publication wrote is removed. Returns how many were
+        removed. Publications absorbed without an owner are never released."""
+        with self._lock:
+            publications = self._owned.get(owner)
+            if not publications:
+                return 0
+            written = publications.pop(0)
+            if not publications:
+                del self._owned[owner]
+            removed = 0
+            for key in written:
+                left = self._references.get(key, 0) - 1
+                if left > 0:
+                    self._references[key] = left
+                    continue
+                self._references.pop(key, None)
+                if key in self._pinned:
+                    continue
+                index, document_id = key
+                if self._documents.get(index, {}).pop(document_id, None) is not None:
+                    removed += 1
+            return removed

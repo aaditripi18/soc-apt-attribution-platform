@@ -20,6 +20,7 @@ import pytest
 from attribution_platform.api.server import create_server
 from attribution_platform.dataplane import SharedMemoryClient
 from attribution_platform.investigation.__main__ import investigation_runner, load_workbench
+from attribution_platform.investigation.records import INVESTIGATIONS_INDEX
 from attribution_platform.live.__main__ import read_model_summary
 from attribution_platform.live.capture import CaptureStore, FileFollower
 from attribution_platform.live.session import (
@@ -251,3 +252,36 @@ def test_search_hits_is_a_bounded_read_only_search() -> None:
     client._request = lambda *_: (200, {"hits": {"hits": [{"_source": {}}]}})  # type: ignore[method-assign]
     with pytest.raises(ElasticIntegrationError):
         client.search_hits("logs-*", {}, size=1, sort=("t",))
+
+
+def test_old_cycles_are_released_beyond_retention(tmp_path: Path, workbench: Any) -> None:
+    lines = _lines()
+    followed = tmp_path / "followed.log"
+    client = SharedMemoryClient()
+    clock = iter([T0 + timedelta(minutes=m) for m in range(5)])
+    released: list[str] = []
+
+    def release(investigation_id: str) -> int:
+        released.append(investigation_id)
+        return client.release(investigation_id)
+
+    session = LiveSession(
+        name="r",
+        followers=[FileFollower(followed)],
+        store=CaptureStore(tmp_path / "live", "r"),
+        check=check_recording,
+        run=investigation_runner(client, workbench),
+        summarise=lambda investigation_id: read_model_summary(client, investigation_id),
+        keep_snapshots=1,
+        release=release,
+        clock=lambda: next(clock),
+    )
+    followed.write_text("\n".join(lines[:100]) + "\n", encoding="utf-8", newline="\n")
+    first = session.cycle()
+    with followed.open("a", encoding="utf-8", newline="\n") as handle:
+        handle.write("\n".join(lines[100:]) + "\n")
+    second = session.cycle()
+    assert released == [first.investigation_id]
+    served = {r["investigation_id"] for r in client.search(INVESTIGATIONS_INDEX, {}, size=10)}
+    assert served == {second.investigation_id}
+    assert session.describe()["investigations_retained"] == 1
