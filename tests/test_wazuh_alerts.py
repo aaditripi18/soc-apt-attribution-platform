@@ -129,17 +129,19 @@ def test_the_rules_own_attack_ids_become_evidence(knowledge: AttackKnowledge) ->
     assert detection.rule_ref.rule_version == "as-alerted"
     assert detection.evidence_quality is None  # level 10: core tier
     (evidence,) = derive_evidence_from_detection(detection, observation, knowledge=knowledge)
-    assert evidence.attack_ref.external_id == "T1543.003"
+    assert evidence.attack_ref is not None and evidence.attack_ref.external_id == "T1543.003"
     assert (
         "Wazuh rule 110011" in evidence.claim and "(level 10) declares T1543.003" in evidence.claim
     )
     # a low level is the enrich tier
     low = detector.detect(_observe(_alert(level=3)))
     assert low is not None and low.evidence_quality is EvidenceQuality.LOW
-    assert detector.detect(_observe(_alert(level=7))).evidence_quality is None
+    level_seven = detector.detect(_observe(_alert(level=7)))
+    assert level_seven is not None and level_seven.evidence_quality is None
     # an id the knowledge base lacks is not mapped, and the Evidence says so
     mixed = _observe(_alert(mitre={"id": ["T1543.003", "T9999", "T1543.003"]}))
     detection = detector.detect(mixed)
+    assert detection is not None
     assert [m.attack_ref.external_id for m in detection.technique_mappings] == ["T1543.003"]
     (evidence,) = derive_evidence_from_detection(detection, mixed, knowledge=knowledge)
     assert "not mapped: T9999" in evidence.claim

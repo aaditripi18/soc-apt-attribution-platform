@@ -67,7 +67,7 @@ def _process(record: int, at: timedelta, parent: str = SVCHOST, image: str = CMD
 def _detect(
     engine: DetectionEngine, observations: list[Observation]
 ) -> list[tuple[str, tuple[str, ...], str]]:
-    pending = []
+    pending: list[Any] = []
     for observation in observations:
         fired, matched = engine.evaluate_split(observation)
         assert fired == ()  # a multi-event rule never detects on one event

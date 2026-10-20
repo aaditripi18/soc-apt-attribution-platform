@@ -75,7 +75,7 @@ def _run(record: int, at: float, path: str, host: str = "host") -> Observation:
 
 
 def _detect(engine: DetectionEngine, observations: list[Observation]) -> list[Any]:
-    pending = []
+    pending: list[Any] = []
     for observation in observations:
         fired, matched = engine.evaluate_split(observation)
         assert fired == ()  # neither event detects on its own
@@ -239,6 +239,7 @@ def test_an_executable_received_over_http_is_context(
     from attribution_platform.sources.zeek import ZeekSourceAdapter
 
     (observation,) = ZeekSourceAdapter().to_observations(_file_record(**changes))
+    assert observation.zeek is not None
     assert observation.zeek.file_is_orig == changes.get("is_orig", "F")
     detections = engine.evaluate([observation])
     assert bool(detections) is fires

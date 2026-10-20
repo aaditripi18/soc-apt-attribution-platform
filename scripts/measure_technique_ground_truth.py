@@ -28,6 +28,7 @@ import json
 import re
 import sys
 from pathlib import Path
+from typing import Any, cast
 
 REPO = Path(__file__).resolve().parents[1]
 METADATA = REPO / "data" / "cache" / "otrf-compound" / "_metadata"
@@ -102,11 +103,11 @@ def build() -> dict[str, object]:
         )
 
     def total(key: str, used: bool | None = None) -> int:
-        return sum(
-            len(c[key])  # type: ignore[arg-type]
-            for c in cases
-            if used is None or c["results_informed_development"] is used
-        )
+        found = 0
+        for c in cases:
+            if used is None or c["results_informed_development"] is used:
+                found += len(cast(list[str], c[key]))
+        return found
 
     def summary(used: bool | None) -> dict[str, int]:
         return {
@@ -155,7 +156,7 @@ def main() -> int:
     OUT.write_text(json.dumps(report, indent=1) + "\n", encoding="utf-8", newline="\n")
     for name in ("all", "used_in_development", "held_out_from_adr_0025"):
         print(name, report[name])
-    for case in report["cases"]:  # type: ignore[union-attr]
+    for case in cast(list[dict[str, Any]], report["cases"]):
         print(
             case["campaign"][-2:],
             "| found",

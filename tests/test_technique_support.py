@@ -112,7 +112,8 @@ def test_what_one_match_establishes(knowledge: AttackKnowledge) -> None:
 def test_declared_techniques_are_kept_and_marked(knowledge: AttackKnowledge) -> None:
     detection, observation = _detection(knowledge, LSASS, MASQUERADING)
     evidence = derive_evidence_from_detection(detection, observation, knowledge=knowledge)
-    assert [e.attack_ref.external_id for e in evidence] == [LSASS, MASQUERADING]  # both kept
+    kept = [e.attack_ref.external_id if e.attack_ref else None for e in evidence]
+    assert kept == [LSASS, MASQUERADING]  # both kept
     assert all(e.technique_ambiguous for e in evidence)
     assert all("one of 2 techniques this rule declares" in e.claim for e in evidence)
     reviewed = derive_evidence_from_detection(
@@ -145,7 +146,8 @@ def test_the_tracked_review_is_sound(knowledge: AttackKnowledge) -> None:
         # a decision is about a rule that exists, restates what it declares, and
         # establishes only some of that - never a technique the rule does not name
         assert set(entry["declares"]) == declared[source], source
-        assert review.for_source(source) <= declared[source], source  # all, some or none
+        supported = review.for_source(source)
+        assert supported is not None and supported <= declared[source], source  # all, some or none
         for clause in entry.get("when", []):
             # a conditional decision, too, names only techniques the rule declares
             assert set(clause["establishes"]) <= declared[source], source

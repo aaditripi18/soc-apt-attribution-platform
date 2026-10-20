@@ -7,6 +7,7 @@ from __future__ import annotations
 import json
 import sys
 from pathlib import Path
+from typing import Any
 
 from attribution_platform.api.context import ApiContext, build_technique_catalogue
 from attribution_platform.api.kibana_export import (
@@ -73,7 +74,7 @@ def test_the_export_is_the_read_model_flattened(tmp_path: Path) -> None:
 def test_the_tracked_dashboard_is_what_the_builder_writes() -> None:
     assert builder.OUT.read_text(encoding="utf-8") == builder.render()
     objects = [json.loads(line) for line in builder.render().splitlines()]
-    by_type: dict[str, list[dict]] = {}
+    by_type: dict[str, list[dict[str, Any]]] = {}
     for obj in objects:
         by_type.setdefault(obj["type"], []).append(obj)
     assert {v["attributes"]["title"] for v in by_type["index-pattern"]} == {
