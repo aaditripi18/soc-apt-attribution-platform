@@ -1,13 +1,83 @@
 # SOC APT Attribution Platform
 
-An end-to-end system that turns raw security telemetry into **explainable, evidence-based APT
-attribution**: telemetry from Windows, Linux, macOS, cloud / SaaS and network sensors is normalised,
-matched against pinned detection content, mapped to MITRE ATT&CK®, correlated into units of related
-behaviour, reconstructed into attack sequences, and compared against every active ATT&CK Group and
-Campaign — with every conclusion traceable back to the raw record that supports it.
+**Live demo — a read-only snapshot of six real investigations: https://soc-apt-attribution.vercel.app**
 
-It is a personal research and portfolio project, governed by [CLAUDE.md](CLAUDE.md): never fabricate
-functionality, never hard-code an attribution, explain every conclusion, measure instead of assuming.
+"This looks like APT29" is usually said on technique overlap: the attack used credential dumping and
+PowerShell, and so do dozens of groups. Overlap is not identification — on the recordings measured here, a
+group known to be behind an emulation ranked between **14th and 124th** of the groups sharing its techniques.
+
+This platform reads security telemetry (Sysmon, Windows Security, PowerShell, Linux audit, Zeek, cloud audit
+logs, Wazuh alerts — from files, uploads, live followed logs or Elasticsearch), detects MITRE ATT&CK®
+techniques with pinned Sigma and Elastic rules, joins the evidence into attack chains by structural facts
+only, and **names a group only on evidence specific to that group's own tooling**. Everything else is
+reported as what it is: behavioural overlap, with the count it rests on. Every counted technique says why it
+was counted — down to which branch of which rule matched which event — and every verdict traces to the raw
+record behind it.
+
+> Status: complete — detection, correlation, attribution, live mode, analyst console and Kibana dashboard,
+> 2,946 tests, a served-model audit on every result set, and a pre-registered test on 105 recordings the
+> project had never seen. A personal research and portfolio project, governed by [CLAUDE.md](CLAUDE.md):
+> never fabricate functionality, never hard-code an attribution, explain every conclusion, measure instead
+> of assuming. Decisions are recorded in 28 ADRs under [docs/architecture/adr](docs/architecture/adr).
+
+## Results
+
+Every figure below is generated from stored, versioned results under [data/validation](data/validation);
+the method and its corrections are in the ADRs cited.
+
+**On 105 public attack recordings it had never seen, it counted about half of what the authors performed and
+named no group on any of them** ([ADR-0027](docs/architecture/adr/0027-unseen-validation-otrf-atomic.md)).
+The test was written down, recordings selected and the build frozen before anything was run:
+
+| Unseen test (OTRF atomic recordings) | Recordings read | Authors' techniques counted | Groups named |
+|---|--:|--:|--:|
+| First run, as pre-registered | 61 of 105 | 32 of 65 (49%) | 0 |
+| After fixing what it exposed (now development data) | 103 of 105 | 54 of 107 (50%) | 0 |
+
+**Group identification is rare by design, and right when it happens.** On the known-answer recordings:
+
+| Recording | Known actor | Verdict | Basis |
+|---|---|---|---|
+| APT29 evaluation, day 1 | APT29 | **APT29 identified** | one match of a rule written from reporting on APT29's own tooling |
+| APT3 emulation (Empire) | APT3 | not distinguishable | no group-specific artefact in the logs; APT3 ranks 14th–54th by overlap |
+| Seven LSASS credential-dumping tool runs | none | no group named | correct |
+
+What the numbers say:
+
+- **The first unseen run failed for a reason worth knowing.** 44 of 105 recordings were refused before
+  detection: domain controllers that ship only Security logs, and a macOS archive artefact. Both were the
+  platform's own intake rules, written for a lab corpus. Fixed, then re-run — the first-run figures stay
+  published beside the second.
+- **The unseen test also exposed a real store fault**: the console's in-memory store dropped units once it held
+  more than 1,000, found because the served-model audit failed. Fixed and regression-tested.
+- **A rule's ATT&CK tags are not what a match proves.** 404 techniques are declared by imported rules, but a
+  rule tagging alternatives (say, LSASS dumping *or* masquerading) establishes neither until someone reads it.
+  64 rules have recorded decisions, some per matched event: certutil with a URL proves a download, with
+  `-decode` a decode. The console shows, for each detection, whether it counts and why.
+- **About half the techniques are still missed**, mostly lateral movement on Security-only hosts and behaviour
+  no rule targets; the gaps are listed by technique in the ADRs, not hidden.
+
+## How it relates to existing tools
+
+| | Elastic Security, Wazuh, Sigma | ATT&CK Navigator-style overlap | This platform |
+|---|---|---|---|
+| Detect techniques in logs | yes — their core job | no | uses their rules, translated exactly, plus its own reviewed decisions |
+| Say whether a match proves the tagged technique | no (tags are per rule) | no | yes, per rule and per matched event, with the reason |
+| Join detections into attack chains | partly (by host / time windows) | no | by structural facts only: process lineage, injection, same audit event |
+| Compare with threat-group profiles | no | yes, manually | every active ATT&CK Group and Campaign, with the count it rests on |
+| Name a group | no | implied by the ranking | only on group-specific evidence; otherwise "not distinguishable" |
+| Validated on unseen recordings | — | — | yes, pre-registered, including the failed first run |
+
+It is not a SIEM and replaces none of them: it reads their output (Elasticsearch data streams, Wazuh alerts)
+and adds the explanation and the attribution discipline.
+
+## Try it
+
+- **Hosted, read-only:** https://soc-apt-attribution.vercel.app — the six investigations above, exported
+  unchanged from the platform's API (`scripts/export_snapshot.py`). Uploading, live monitoring and the AI
+  analyst need the local platform.
+- **Local:** see [Running it](#running-it) below — investigate the public recordings, upload your own logs,
+  or follow logs live (`python -m attribution_platform.live --follow <file> --serve`).
 
 ## What makes it different
 
