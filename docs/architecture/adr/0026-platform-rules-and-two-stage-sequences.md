@@ -118,3 +118,39 @@ ADR-0003 keeps correlation to structural links. The analyst sees both and can re
 **Checks.** `tests/test_context_evidence.py` (a recording whose only Evidence is low-level: listed as context, not
 in the activity; an investigation with everything in clusters has no context); the served-model audit checks that
 the context lists exactly the Evidence outside units and none of the units' Evidence.
+
+## Amendment C (2026-10-23) — the Windows Event Log disabled or stopped
+
+**Why.** The largest single gap in the OTRF recordings (ADR-0027, development data since): *Disable or Modify
+Windows Event Log* (T1685.001; T1562.002 before ATT&CK v19) was missed in all nine recordings that perform it.
+The events are there — Sysmon logged `reg.exe` setting `Services\EventLog\Start` to 4 — but no pinned rule matches
+them. Sigma's "Security Service Disabled Via Reg.EXE" lists Defender and update services, not the Event Log;
+Elastic's "Service Disabled via Registry Modification" reads only Elastic Defend's own registry stream (rejected,
+telemetry gap); Elastic's "Disable Windows Event and Security Logs Using Built-in Tools" covers `logman`,
+`auditpol` and `Set-Service` on a PowerShell *command line*, not these procedures.
+
+**Rules** (`scripts/build_platform_rules.py`, core tier, one technique each — every match establishes it,
+ADR-0025 D1). Each is a procedure ATT&CK's own description of T1685.001 names, so the content comes from the
+authoritative source, not from the recordings:
+
+| Rule | Matches |
+|---|---|
+| `platform:eventlog-service-disabled-registry` | a registry write of `…\Services\EventLog\Start` = `DWORD (0x00000004)` (disabled) |
+| `platform:eventlog-service-stopped-powershell` | a script block containing `Stop-Service [-Name] EventLog`, or `Set-Service [-Name] EventLog` with `Disabled` or `Stopped` |
+| `platform:eventlog-service-disabled-sc` | `sc.exe` with `eventlog` and ` config ` … `disabled`, or ` stop ` |
+| `platform:command-line-auditing-disabled` | a registry write of `…\Policies\System\Audit\ProcessCreationIncludeCmdLine_Enabled` = 0 (command lines dropped from process-creation auditing; ATT&CK's description covers changing what the audit policy records) |
+
+Reading or restoring the service (`Get-Service`, `Start-Service`, `Start` = 2, `sc query`) matches nothing, and
+neither does disabling another service (tested).
+
+**Measured on the nine development recordings: T1685.001 counted in 5 (was 0).** The other four, by cause:
+
+- two disable the Network List service (`Set-Service -Name netprofm -StartupType Disabled`) before a reboot. That
+  does not by itself say the Event Log was targeted, so it is not counted;
+- two ran `Stop-Service -Name EventLog -Force`, but their PowerShell events never reach detection. This 2022
+  export carries no `EventTime`/`EventReceivedTime`, so the adapter cannot recover the event's UTC time exactly
+  (ADR-0008); the export's `TimeCreated` differs from Sysmon's own `UtcTime` by seven hours on the same host, so it
+  cannot be used either. The adapter refuses those records rather than guess, a recorded limit.
+
+**Checks.** `tests/test_platform_rules.py` (each procedure detected and established; the negatives above; the
+tracked pack equals the builder's output).

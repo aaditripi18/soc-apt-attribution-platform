@@ -5,7 +5,11 @@
  "titles": {
   "platform:deceptive-download-run": "Deceptively named download run by the user",
   "platform:browser-download-run": "File saved by a browser, then run",
-  "platform:executable-received-over-http": "Executable received over HTTP"
+  "platform:executable-received-over-http": "Executable received over HTTP",
+  "platform:eventlog-service-disabled-registry": "Event Log service disabled in the registry",
+  "platform:eventlog-service-stopped-powershell": "Event Log service stopped or disabled with PowerShell",
+  "platform:eventlog-service-disabled-sc": "Event Log service stopped or disabled with sc.exe",
+  "platform:command-line-auditing-disabled": "Command lines removed from process-creation auditing"
  },
  "rules": [
   {
@@ -1468,6 +1472,442 @@
    "rule_source": "platform:executable-received-over-http",
    "rule_family": "platform:executable-received-over-http",
    "evidence_quality": "low"
+  },
+  {
+   "rule_id": "platform:eventlog-service-disabled-registry:start-disabled",
+   "rule_version": "1.0",
+   "conditions": [
+    {
+     "field_path": "event.category",
+     "operator": "has_element",
+     "value": "registry",
+     "case_insensitive": true
+    },
+    {
+     "field_path": "event.type",
+     "operator": "has_element",
+     "value": "change",
+     "case_insensitive": true
+    },
+    {
+     "field_path": "registry.path",
+     "operator": "endswith",
+     "value": "\\Services\\EventLog\\Start",
+     "case_insensitive": true
+    },
+    {
+     "field_path": "registry.data",
+     "operator": "equals",
+     "value": "DWORD (0x00000004)",
+     "case_insensitive": true
+    }
+   ],
+   "technique_mappings": [
+    {
+     "stix_id": "attack-pattern--1411e6b8-80a6-4465-9909-54eaa9c67ce0",
+     "object_type": "attack-pattern",
+     "attack_kb_version": "enterprise-attack-19.2",
+     "external_id": "T1685.001",
+     "mapping_basis": "the Event Log service's Start value was set to 4 (disabled)",
+     "mapping_source": "platform-rules"
+    }
+   ],
+   "evidence_type": "behavioral",
+   "rule_source": "platform:eventlog-service-disabled-registry",
+   "rule_family": "platform:eventlog-service-disabled-registry"
+  },
+  {
+   "rule_id": "platform:command-line-auditing-disabled:include-cmdline-off",
+   "rule_version": "1.0",
+   "conditions": [
+    {
+     "field_path": "event.category",
+     "operator": "has_element",
+     "value": "registry",
+     "case_insensitive": true
+    },
+    {
+     "field_path": "event.type",
+     "operator": "has_element",
+     "value": "change",
+     "case_insensitive": true
+    },
+    {
+     "field_path": "registry.path",
+     "operator": "endswith",
+     "value": "\\Policies\\System\\Audit\\ProcessCreationIncludeCmdLine_Enabled",
+     "case_insensitive": true
+    },
+    {
+     "field_path": "registry.data",
+     "operator": "equals",
+     "value": "DWORD (0x00000000)",
+     "case_insensitive": true
+    }
+   ],
+   "technique_mappings": [
+    {
+     "stix_id": "attack-pattern--1411e6b8-80a6-4465-9909-54eaa9c67ce0",
+     "object_type": "attack-pattern",
+     "attack_kb_version": "enterprise-attack-19.2",
+     "external_id": "T1685.001",
+     "mapping_basis": "the audit policy that writes command lines into process-creation events was turned off",
+     "mapping_source": "platform-rules"
+    }
+   ],
+   "evidence_type": "behavioral",
+   "rule_source": "platform:command-line-auditing-disabled",
+   "rule_family": "platform:command-line-auditing-disabled"
+  },
+  {
+   "rule_id": "platform:eventlog-service-stopped-powershell:000",
+   "rule_version": "1.0",
+   "conditions": [
+    {
+     "field_path": "event.category",
+     "operator": "has_element",
+     "value": "process",
+     "case_insensitive": true
+    },
+    {
+     "field_path": "event.action",
+     "operator": "equals",
+     "value": "powershell_script_block",
+     "case_insensitive": true
+    },
+    {
+     "field_path": "powershell.script_block_text",
+     "operator": "contains",
+     "value": "Stop-Service -Name EventLog",
+     "case_insensitive": true
+    }
+   ],
+   "technique_mappings": [
+    {
+     "stix_id": "attack-pattern--1411e6b8-80a6-4465-9909-54eaa9c67ce0",
+     "object_type": "attack-pattern",
+     "attack_kb_version": "enterprise-attack-19.2",
+     "external_id": "T1685.001",
+     "mapping_basis": "a PowerShell script block stopped the Event Log service or set it disabled or stopped",
+     "mapping_source": "platform-rules"
+    }
+   ],
+   "evidence_type": "behavioral",
+   "rule_source": "platform:eventlog-service-stopped-powershell",
+   "rule_family": "platform:eventlog-service-stopped-powershell"
+  },
+  {
+   "rule_id": "platform:eventlog-service-stopped-powershell:001",
+   "rule_version": "1.0",
+   "conditions": [
+    {
+     "field_path": "event.category",
+     "operator": "has_element",
+     "value": "process",
+     "case_insensitive": true
+    },
+    {
+     "field_path": "event.action",
+     "operator": "equals",
+     "value": "powershell_script_block",
+     "case_insensitive": true
+    },
+    {
+     "field_path": "powershell.script_block_text",
+     "operator": "contains",
+     "value": "Stop-Service EventLog",
+     "case_insensitive": true
+    }
+   ],
+   "technique_mappings": [
+    {
+     "stix_id": "attack-pattern--1411e6b8-80a6-4465-9909-54eaa9c67ce0",
+     "object_type": "attack-pattern",
+     "attack_kb_version": "enterprise-attack-19.2",
+     "external_id": "T1685.001",
+     "mapping_basis": "a PowerShell script block stopped the Event Log service or set it disabled or stopped",
+     "mapping_source": "platform-rules"
+    }
+   ],
+   "evidence_type": "behavioral",
+   "rule_source": "platform:eventlog-service-stopped-powershell",
+   "rule_family": "platform:eventlog-service-stopped-powershell"
+  },
+  {
+   "rule_id": "platform:eventlog-service-stopped-powershell:002",
+   "rule_version": "1.0",
+   "conditions": [
+    {
+     "field_path": "event.category",
+     "operator": "has_element",
+     "value": "process",
+     "case_insensitive": true
+    },
+    {
+     "field_path": "event.action",
+     "operator": "equals",
+     "value": "powershell_script_block",
+     "case_insensitive": true
+    },
+    {
+     "field_path": "powershell.script_block_text",
+     "operator": "contains",
+     "value": "Set-Service -Name EventLog",
+     "case_insensitive": true
+    },
+    {
+     "field_path": "powershell.script_block_text",
+     "operator": "contains",
+     "value": "Disabled",
+     "case_insensitive": true
+    }
+   ],
+   "technique_mappings": [
+    {
+     "stix_id": "attack-pattern--1411e6b8-80a6-4465-9909-54eaa9c67ce0",
+     "object_type": "attack-pattern",
+     "attack_kb_version": "enterprise-attack-19.2",
+     "external_id": "T1685.001",
+     "mapping_basis": "a PowerShell script block stopped the Event Log service or set it disabled or stopped",
+     "mapping_source": "platform-rules"
+    }
+   ],
+   "evidence_type": "behavioral",
+   "rule_source": "platform:eventlog-service-stopped-powershell",
+   "rule_family": "platform:eventlog-service-stopped-powershell"
+  },
+  {
+   "rule_id": "platform:eventlog-service-stopped-powershell:003",
+   "rule_version": "1.0",
+   "conditions": [
+    {
+     "field_path": "event.category",
+     "operator": "has_element",
+     "value": "process",
+     "case_insensitive": true
+    },
+    {
+     "field_path": "event.action",
+     "operator": "equals",
+     "value": "powershell_script_block",
+     "case_insensitive": true
+    },
+    {
+     "field_path": "powershell.script_block_text",
+     "operator": "contains",
+     "value": "Set-Service -Name EventLog",
+     "case_insensitive": true
+    },
+    {
+     "field_path": "powershell.script_block_text",
+     "operator": "contains",
+     "value": "Stopped",
+     "case_insensitive": true
+    }
+   ],
+   "technique_mappings": [
+    {
+     "stix_id": "attack-pattern--1411e6b8-80a6-4465-9909-54eaa9c67ce0",
+     "object_type": "attack-pattern",
+     "attack_kb_version": "enterprise-attack-19.2",
+     "external_id": "T1685.001",
+     "mapping_basis": "a PowerShell script block stopped the Event Log service or set it disabled or stopped",
+     "mapping_source": "platform-rules"
+    }
+   ],
+   "evidence_type": "behavioral",
+   "rule_source": "platform:eventlog-service-stopped-powershell",
+   "rule_family": "platform:eventlog-service-stopped-powershell"
+  },
+  {
+   "rule_id": "platform:eventlog-service-stopped-powershell:004",
+   "rule_version": "1.0",
+   "conditions": [
+    {
+     "field_path": "event.category",
+     "operator": "has_element",
+     "value": "process",
+     "case_insensitive": true
+    },
+    {
+     "field_path": "event.action",
+     "operator": "equals",
+     "value": "powershell_script_block",
+     "case_insensitive": true
+    },
+    {
+     "field_path": "powershell.script_block_text",
+     "operator": "contains",
+     "value": "Set-Service EventLog",
+     "case_insensitive": true
+    },
+    {
+     "field_path": "powershell.script_block_text",
+     "operator": "contains",
+     "value": "Disabled",
+     "case_insensitive": true
+    }
+   ],
+   "technique_mappings": [
+    {
+     "stix_id": "attack-pattern--1411e6b8-80a6-4465-9909-54eaa9c67ce0",
+     "object_type": "attack-pattern",
+     "attack_kb_version": "enterprise-attack-19.2",
+     "external_id": "T1685.001",
+     "mapping_basis": "a PowerShell script block stopped the Event Log service or set it disabled or stopped",
+     "mapping_source": "platform-rules"
+    }
+   ],
+   "evidence_type": "behavioral",
+   "rule_source": "platform:eventlog-service-stopped-powershell",
+   "rule_family": "platform:eventlog-service-stopped-powershell"
+  },
+  {
+   "rule_id": "platform:eventlog-service-stopped-powershell:005",
+   "rule_version": "1.0",
+   "conditions": [
+    {
+     "field_path": "event.category",
+     "operator": "has_element",
+     "value": "process",
+     "case_insensitive": true
+    },
+    {
+     "field_path": "event.action",
+     "operator": "equals",
+     "value": "powershell_script_block",
+     "case_insensitive": true
+    },
+    {
+     "field_path": "powershell.script_block_text",
+     "operator": "contains",
+     "value": "Set-Service EventLog",
+     "case_insensitive": true
+    },
+    {
+     "field_path": "powershell.script_block_text",
+     "operator": "contains",
+     "value": "Stopped",
+     "case_insensitive": true
+    }
+   ],
+   "technique_mappings": [
+    {
+     "stix_id": "attack-pattern--1411e6b8-80a6-4465-9909-54eaa9c67ce0",
+     "object_type": "attack-pattern",
+     "attack_kb_version": "enterprise-attack-19.2",
+     "external_id": "T1685.001",
+     "mapping_basis": "a PowerShell script block stopped the Event Log service or set it disabled or stopped",
+     "mapping_source": "platform-rules"
+    }
+   ],
+   "evidence_type": "behavioral",
+   "rule_source": "platform:eventlog-service-stopped-powershell",
+   "rule_family": "platform:eventlog-service-stopped-powershell"
+  },
+  {
+   "rule_id": "platform:eventlog-service-disabled-sc:config-disabled",
+   "rule_version": "1.0",
+   "conditions": [
+    {
+     "field_path": "event.category",
+     "operator": "has_element",
+     "value": "process",
+     "case_insensitive": true
+    },
+    {
+     "field_path": "event.type",
+     "operator": "has_element",
+     "value": "start",
+     "case_insensitive": true
+    },
+    {
+     "field_path": "process.executable",
+     "operator": "endswith",
+     "value": "\\sc.exe",
+     "case_insensitive": true
+    },
+    {
+     "field_path": "process.command_line",
+     "operator": "contains",
+     "value": "eventlog",
+     "case_insensitive": true
+    },
+    {
+     "field_path": "process.command_line",
+     "operator": "contains",
+     "value": " config ",
+     "case_insensitive": true
+    },
+    {
+     "field_path": "process.command_line",
+     "operator": "contains",
+     "value": "disabled",
+     "case_insensitive": true
+    }
+   ],
+   "technique_mappings": [
+    {
+     "stix_id": "attack-pattern--1411e6b8-80a6-4465-9909-54eaa9c67ce0",
+     "object_type": "attack-pattern",
+     "attack_kb_version": "enterprise-attack-19.2",
+     "external_id": "T1685.001",
+     "mapping_basis": "sc.exe set the Event Log service's start type to disabled",
+     "mapping_source": "platform-rules"
+    }
+   ],
+   "evidence_type": "behavioral",
+   "rule_source": "platform:eventlog-service-disabled-sc",
+   "rule_family": "platform:eventlog-service-disabled-sc"
+  },
+  {
+   "rule_id": "platform:eventlog-service-disabled-sc:stop",
+   "rule_version": "1.0",
+   "conditions": [
+    {
+     "field_path": "event.category",
+     "operator": "has_element",
+     "value": "process",
+     "case_insensitive": true
+    },
+    {
+     "field_path": "event.type",
+     "operator": "has_element",
+     "value": "start",
+     "case_insensitive": true
+    },
+    {
+     "field_path": "process.executable",
+     "operator": "endswith",
+     "value": "\\sc.exe",
+     "case_insensitive": true
+    },
+    {
+     "field_path": "process.command_line",
+     "operator": "contains",
+     "value": "eventlog",
+     "case_insensitive": true
+    },
+    {
+     "field_path": "process.command_line",
+     "operator": "contains",
+     "value": " stop ",
+     "case_insensitive": true
+    }
+   ],
+   "technique_mappings": [
+    {
+     "stix_id": "attack-pattern--1411e6b8-80a6-4465-9909-54eaa9c67ce0",
+     "object_type": "attack-pattern",
+     "attack_kb_version": "enterprise-attack-19.2",
+     "external_id": "T1685.001",
+     "mapping_basis": "sc.exe stopped the Event Log service",
+     "mapping_source": "platform-rules"
+    }
+   ],
+   "evidence_type": "behavioral",
+   "rule_source": "platform:eventlog-service-disabled-sc",
+   "rule_family": "platform:eventlog-service-disabled-sc"
   }
  ]
 }

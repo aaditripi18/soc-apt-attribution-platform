@@ -2,8 +2,9 @@
 
 The platform's detection content is translated from published rules (Sigma,
 Elastic). This pack holds the few rules written here, for behaviour measured as
-undetected on recordings of known content and not expressible as a single-event
-rule. Every rule is listed below with what it matches; the pack is generated
+undetected on recordings of known content that no pinned rule expresses: two-stage
+sequences (ADR-0026), and single events ATT&CK's own description of a technique names
+(Amendment C). Every rule is listed below with what it matches; the pack is generated
 deterministically so the tracked file can be reproduced byte for byte:
 
     python scripts/build_platform_rules.py
@@ -38,6 +39,21 @@ DOWNLOADED = "platform:browser-download-run"
 NETWORK_EXECUTABLE = "platform:executable-received-over-http"
 #: Zeek's MIME types for Windows executables (its own file-type signatures).
 EXECUTABLE_MIME_TYPES = ("application/x-dosexec",)
+#: Disabling or stopping the Windows Event Log (ADR-0026 Amendment C), each by a procedure
+#: ATT&CK's own description of T1685.001 names.
+EVENTLOG_REGISTRY = "platform:eventlog-service-disabled-registry"
+EVENTLOG_POWERSHELL = "platform:eventlog-service-stopped-powershell"
+EVENTLOG_SC = "platform:eventlog-service-disabled-sc"
+CMDLINE_AUDIT = "platform:command-line-auditing-disabled"
+#: Script text that stops the service or sets it disabled or stopped; matched without case.
+EVENTLOG_SCRIPT_BRANCHES = (
+    ("Stop-Service -Name EventLog",),
+    ("Stop-Service EventLog",),
+    ("Set-Service -Name EventLog", "Disabled"),
+    ("Set-Service -Name EventLog", "Stopped"),
+    ("Set-Service EventLog", "Disabled"),
+    ("Set-Service EventLog", "Stopped"),
+)
 
 
 def _sequence(stage: int, name: str, field_path: str) -> dict[str, object]:
@@ -172,6 +188,86 @@ def build() -> dict[str, object]:
             "evidence_quality": "low",
         }
     )
+
+    # 4. The Windows Event Log disabled or stopped, and process command lines dropped from
+    #    the Security log. Core tier: one technique each, so every match establishes it.
+    def single(family: str, suffix: str, conditions: list[dict[str, object]], basis: str) -> None:
+        rules.append(
+            {
+                "rule_id": f"{family}:{suffix}",
+                "rule_version": VERSION,
+                "conditions": conditions,
+                "technique_mappings": [mapping("T1685.001", basis)],
+                "evidence_type": "behavioral",
+                "rule_source": family,
+                "rule_family": family,
+            }
+        )
+
+    registry_set = [
+        _condition("event.category", "has_element", "registry"),
+        _condition("event.type", "has_element", "change"),
+    ]
+    single(
+        EVENTLOG_REGISTRY,
+        "start-disabled",
+        [
+            *registry_set,
+            _condition("registry.path", "endswith", "\\Services\\EventLog\\Start"),
+            _condition("registry.data", "equals", "DWORD (0x00000004)"),
+        ],
+        "the Event Log service's Start value was set to 4 (disabled)",
+    )
+    single(
+        CMDLINE_AUDIT,
+        "include-cmdline-off",
+        [
+            *registry_set,
+            _condition(
+                "registry.path",
+                "endswith",
+                "\\Policies\\System\\Audit\\ProcessCreationIncludeCmdLine_Enabled",
+            ),
+            _condition("registry.data", "equals", "DWORD (0x00000000)"),
+        ],
+        "the audit policy that writes command lines into process-creation events was turned off",
+    )
+    script_block = [
+        _condition("event.category", "has_element", "process"),
+        _condition("event.action", "equals", "powershell_script_block"),
+    ]
+    for index, phrases in enumerate(EVENTLOG_SCRIPT_BRANCHES):
+        single(
+            EVENTLOG_POWERSHELL,
+            f"{index:03d}",
+            [
+                *script_block,
+                *(_condition("powershell.script_block_text", "contains", p) for p in phrases),
+            ],
+            "a PowerShell script block stopped the Event Log service or set it disabled or stopped",
+        )
+    process_start = [
+        _condition("event.category", "has_element", "process"),
+        _condition("event.type", "has_element", "start"),
+        _condition("process.executable", "endswith", "\\sc.exe"),
+        _condition("process.command_line", "contains", "eventlog"),
+    ]
+    single(
+        EVENTLOG_SC,
+        "config-disabled",
+        [
+            *process_start,
+            _condition("process.command_line", "contains", " config "),
+            _condition("process.command_line", "contains", "disabled"),
+        ],
+        "sc.exe set the Event Log service's start type to disabled",
+    )
+    single(
+        EVENTLOG_SC,
+        "stop",
+        [*process_start, _condition("process.command_line", "contains", " stop ")],
+        "sc.exe stopped the Event Log service",
+    )
     return {
         "pack_id": f"platform-rules-{VERSION}",
         "description": (
@@ -184,6 +280,10 @@ def build() -> dict[str, object]:
             DECEPTIVE: "Deceptively named download run by the user",
             DOWNLOADED: "File saved by a browser, then run",
             NETWORK_EXECUTABLE: "Executable received over HTTP",
+            EVENTLOG_REGISTRY: "Event Log service disabled in the registry",
+            EVENTLOG_POWERSHELL: "Event Log service stopped or disabled with PowerShell",
+            EVENTLOG_SC: "Event Log service stopped or disabled with sc.exe",
+            CMDLINE_AUDIT: "Command lines removed from process-creation auditing",
         },
         "rules": rules,
     }

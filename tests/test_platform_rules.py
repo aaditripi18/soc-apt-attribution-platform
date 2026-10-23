@@ -38,6 +38,12 @@ EDGE = "C:" + BS + "Program Files (x86)" + BS + "Microsoft" + BS + "Edge" + BS +
 EXPLORER = "C:" + BS + "Windows" + BS + "explorer.exe"
 DECOY = DOWNLOADS + "holiday.jpeg.exe"
 INSTALLER = DOWNLOADS + "setup.exe"
+EVENTLOG_FAMILIES = (
+    builder.EVENTLOG_REGISTRY,
+    builder.EVENTLOG_POWERSHELL,
+    builder.EVENTLOG_SC,
+    builder.CMDLINE_AUDIT,
+)
 
 
 @pytest.fixture(scope="module")
@@ -144,8 +150,9 @@ def test_the_tracked_pack_is_what_the_builder_writes(knowledge: AttackKnowledge)
         builder.DECEPTIVE,
         builder.DOWNLOADED,
         builder.NETWORK_EXECUTABLE,
+        *EVENTLOG_FAMILIES,
     }
-    sequences = [r for r in rules if r.rule_source != builder.NETWORK_EXECUTABLE]
+    sequences = [r for r in rules if r.rule_source in (builder.DECEPTIVE, builder.DOWNLOADED)]
     assert all(r.aggregation is not None and r.aggregation.kind == "sequence" for r in sequences)
     # only the detecting stage maps to techniques; the first stage is a precondition
     for rule in sequences:
@@ -153,6 +160,9 @@ def test_the_tracked_pack_is_what_the_builder_writes(knowledge: AttackKnowledge)
         assert bool(rule.technique_mappings) == (rule.aggregation.stage == 2)
     (network,) = [r for r in rules if r.rule_source == builder.NETWORK_EXECUTABLE]
     assert network.aggregation is None  # one event: Zeek's own file analysis
+    single = [r for r in rules if r.rule_source in EVENTLOG_FAMILIES]
+    assert all(r.aggregation is None for r in single)
+    assert {m.attack_ref.external_id for r in single for m in r.technique_mappings} == {"T1685.001"}
 
 
 @pytest.mark.parametrize(
@@ -195,6 +205,7 @@ def test_the_site_labels_each_rule_with_its_own_tier() -> None:
         builder.DECEPTIVE: ("platform", "core"),
         builder.DOWNLOADED: ("platform", "enrich"),  # from its detecting stage, not the first
         builder.NETWORK_EXECUTABLE: ("platform", "enrich"),
+        **{family: ("platform", "core") for family in EVENTLOG_FAMILIES},
     }
     assert all(v["title"] and v["url"] is None for v in labels.values())
 
@@ -247,3 +258,87 @@ def test_an_executable_received_over_http_is_context(
         assert detection.detection_source == builder.NETWORK_EXECUTABLE
         assert detection.evidence_quality is EvidenceQuality.LOW  # ordinary downloads too
         assert [m.attack_ref.external_id for m in detection.technique_mappings] == ["T1105"]
+
+
+# --- the Windows Event Log disabled or stopped (Amendment C) ---------------------
+
+HKLM_SERVICES = "HKLM" + BS + "System" + BS + "CurrentControlSet" + BS + "Services" + BS
+AUDIT_POLICY = (
+    "HKLM" + BS + "SOFTWARE" + BS + "Microsoft" + BS + "Windows" + BS + "CurrentVersion" + BS
+    + "Policies" + BS + "System" + BS + "Audit" + BS + "ProcessCreationIncludeCmdLine_Enabled"
+)  # fmt: skip
+SC = "C:" + BS + "Windows" + BS + "System32" + BS + "sc.exe"
+REG = "C:" + BS + "Windows" + BS + "system32" + BS + "reg.exe"
+
+
+def _registry_set(path: str, details: str) -> Observation:
+    return _event(1, 0, 13, EventType="SetValue", Image=REG, TargetObject=path, Details=details)
+
+
+def _script_block(text: str) -> Observation:
+    from attribution_platform.sources.powershell import PowerShellSourceAdapter
+
+    (observation,) = PowerShellSourceAdapter().to_observations(
+        {
+            "@timestamp": "2026-01-01T12:00:00Z",
+            "winlog": {
+                "channel": "Microsoft-Windows-PowerShell/Operational",
+                "event_id": 4104,
+                "record_id": 7,
+                "computer_name": "host",
+                "event_data": {"ScriptBlockText": text},
+                "process": {"pid": 1234},
+            },
+        }
+    )
+    return observation
+
+
+@pytest.mark.parametrize(
+    ("observation", "family"),
+    [
+        # the procedures ATT&CK's description of T1685.001 names, as the OTRF recordings logged them
+        (_registry_set(HKLM_SERVICES + "EventLog" + BS + "Start", "DWORD (0x00000004)"),
+         builder.EVENTLOG_REGISTRY),
+        (_registry_set(AUDIT_POLICY, "DWORD (0x00000000)"), builder.CMDLINE_AUDIT),
+        (_script_block("Stop-Service -Name EventLog -Force"), builder.EVENTLOG_POWERSHELL),
+        (_script_block("stop-service eventlog"), builder.EVENTLOG_POWERSHELL),
+        (_script_block("Set-Service -Name EventLog -StartUpType Disabled"),
+         builder.EVENTLOG_POWERSHELL),
+        (_script_block("Set-Service -Name EventLog -Status Stopped"), builder.EVENTLOG_POWERSHELL),
+        (_event(1, 0, 1, Image=SC, CommandLine="sc.exe config eventlog start= disabled"),
+         builder.EVENTLOG_SC),
+        (_event(1, 0, 1, Image=SC, CommandLine="sc stop EventLog"), builder.EVENTLOG_SC),
+    ],
+)  # fmt: skip
+def test_the_event_log_disabled_or_stopped_is_detected(
+    engine: DetectionEngine, knowledge: AttackKnowledge, observation: Observation, family: str
+) -> None:
+    (detection,) = engine.evaluate([observation])
+    assert detection.detection_source == family
+    assert detection.evidence_quality is None  # core tier: compared with group profiles
+    evidence = derive_evidence_from_detection(detection, observation, knowledge=knowledge)
+    assert [
+        (e.technique_ambiguous, e.attack_ref.external_id if e.attack_ref else None)
+        for e in evidence
+    ] == [(False, "T1685.001")]  # one technique: established by every match (ADR-0025 D1)
+
+
+@pytest.mark.parametrize(
+    "observation",
+    [
+        _registry_set(HKLM_SERVICES + "EventLog" + BS + "Start", "DWORD (0x00000002)"),  # automatic
+        _registry_set(HKLM_SERVICES + "Spooler" + BS + "Start", "DWORD (0x00000004)"),  # another
+        _registry_set(AUDIT_POLICY, "DWORD (0x00000001)"),  # turned on, not off
+        _script_block("Get-Service -Name EventLog"),
+        _script_block("Start-Service -Name EventLog"),
+        _script_block("Set-Service -Name netprofm -StartupType Disabled"),  # not the Event Log
+        _script_block("Set-Service -Name EventLog -StartupType Automatic"),
+        _event(1, 0, 1, Image=SC, CommandLine="sc query eventlog"),
+        _event(1, 0, 1, Image=SC, CommandLine="sc config spooler start= disabled"),
+    ],
+)
+def test_reading_or_restoring_the_event_log_detects_nothing(
+    engine: DetectionEngine, observation: Observation
+) -> None:
+    assert engine.evaluate([observation]) == ()
