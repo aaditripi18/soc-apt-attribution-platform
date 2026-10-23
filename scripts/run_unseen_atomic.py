@@ -1,14 +1,16 @@
 #!/usr/bin/env python3
 """Investigate every pre-registered unseen recording once, unchanged, and serve
-the results (ADR-0027 protocol step 3).
+the results (ADR-0027 protocol step 3; ADR-0029).
 
 Each recording goes through the same intake check and investigation as the
 command line and the upload route, one at a time in one process. A recording
 the intake refuses, or whose investigation fails, is recorded with its reason
-in ``data/validation/unseen-otrf-atomic/run.json`` and the others continue.
-Then the read-model API is served for ``measure_unseen_atomic.py``.
+in the set's ``run.json`` (``--run`` names another file in the same directory)
+and the others continue. Then the read-model API is served for
+``measure_unseen_atomic.py``.
 
     python scripts/run_unseen_atomic.py --port 8004
+    python scripts/run_unseen_atomic.py --set splunk-windows --run run-baseline.json --port 8005
 """
 
 from __future__ import annotations
@@ -30,12 +32,38 @@ from attribution_platform.replay.recording_check import check_recording
 from attribution_platform.replay.recording_pipeline import RecordingSource
 
 REPO = Path(__file__).resolve().parents[1]
-MANIFEST = REPO / "data" / "telemetry-samples" / "otrf-atomic-unseen" / "manifest.json"
-OUT = REPO / "data" / "validation" / "unseen-otrf-atomic" / "run.json"
+
+
+def file_name(path: str) -> str:
+    return PurePath(path).name
+
+
+def technique_path(path: str) -> str:
+    """Every Splunk file is called windows-sysmon.log: keep the technique and run directory."""
+    return path.removeprefix("datasets/attack_techniques/")
+
+
+#: --set NAME -> (download manifest, results directory, recording name from its source path).
+SETS = {
+    "otrf-atomic": (
+        REPO / "data" / "telemetry-samples" / "otrf-atomic-unseen" / "manifest.json",
+        REPO / "data" / "validation" / "unseen-otrf-atomic",
+        file_name,
+    ),
+    "splunk-windows": (
+        REPO / "data" / "telemetry-samples" / "splunk-attack-data-windows-unseen" / "manifest.json",
+        REPO / "data" / "validation" / "unseen-splunk-windows",
+        technique_path,
+    ),
+}
 
 
 def main(argv: list[str]) -> int:
     port = int(argv[argv.index("--port") + 1]) if "--port" in argv else 8004
+    manifest, results, recording_name = SETS[
+        argv[argv.index("--set") + 1] if "--set" in argv else "otrf-atomic"
+    ]
+    out = results / (argv[argv.index("--run") + 1] if "--run" in argv else "run.json")
     commit = subprocess.run(
         ["git", "rev-parse", "HEAD"], capture_output=True, text=True, check=True, cwd=REPO
     ).stdout.strip()
@@ -50,9 +78,11 @@ def main(argv: list[str]) -> int:
     workbench = load_workbench()
     run = investigation_runner(client, workbench)
     outcomes = []
-    for entry in json.loads(MANIFEST.read_text(encoding="utf-8"))["files"]:
+    for entry in json.loads(manifest.read_text(encoding="utf-8"))["files"]:
+        if not entry["source_path"].endswith((".log", ".zip", ".json", ".jsonl", ".tar.gz")):
+            continue  # a dataset descriptor, not a recording
         path = REPO / entry["cache_path"]
-        name = PurePath(entry["source_path"]).name
+        name = recording_name(entry["source_path"])
         outcome: dict[str, object] = {"recording": name}
         try:
             report = check_recording(path)
@@ -70,7 +100,7 @@ def main(argv: list[str]) -> int:
             outcome.update(state="failed", problems=[f"{type(exc).__name__}: {exc}"[:500]])
         outcomes.append(outcome)
         print(f"{outcome['state']:<18} {name}", flush=True)
-    OUT.write_text(
+    out.write_text(
         json.dumps(
             {
                 "version": "unseen-run/1",

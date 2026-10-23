@@ -1,0 +1,2247 @@
+{
+ "version": "unseen-selection/1",
+ "source_repository": "splunk/attack_data",
+ "source_commit": "a28608b53aa3d8222052e8f3ada59e2d9a4adfff",
+ "rule": "every datasets/attack_techniques/<technique>/[<dir>/]windows-sysmon.log at the commit, Git LFS pointer size <= 50,000,000 bytes, not already used by the project (ADR-0029)",
+ "selected": [
+  {
+   "path": "datasets/attack_techniques/T1003.001/atomic_red_team/windows-sysmon.log",
+   "git_blob_id": "2c2504549e9524f3d936f52f28680b67941f6d9a",
+   "lfs_sha256": "a1905850598f1e943708c3329190e29c6cb046389c1575cb2afd6369b5f269f1",
+   "size_bytes": 14235927,
+   "descriptors": [
+    "datasets/attack_techniques/T1003.001/atomic_red_team/atomic_red_team.yml"
+   ],
+   "authors_techniques": [
+    "T1003.001"
+   ],
+   "label_source": "descriptor"
+  },
+  {
+   "path": "datasets/attack_techniques/T1003.002/atomic_red_team/windows-sysmon.log",
+   "git_blob_id": "ed08db482d238810358ec30589a7fb309f9282a9",
+   "lfs_sha256": "ae66c083bde9f793ebaa7f15807a99645b15d6f958894349e5026ced597665ea",
+   "size_bytes": 12789744,
+   "descriptors": [
+    "datasets/attack_techniques/T1003.002/atomic_red_team/atomic_red_team.yml"
+   ],
+   "authors_techniques": [
+    "T1003.002"
+   ],
+   "label_source": "descriptor"
+  },
+  {
+   "path": "datasets/attack_techniques/T1003.003/atomic_red_team/windows-sysmon.log",
+   "git_blob_id": "0cf6c0ab5d3158b89a01158b5728c64cd9aacfce",
+   "lfs_sha256": "ee1c7cd9fa20013c82da17f8cb1998197c117ab4c209ab56203290bc90739fda",
+   "size_bytes": 12883992,
+   "descriptors": [
+    "datasets/attack_techniques/T1003.003/atomic_red_team/atomic_red_team.yml"
+   ],
+   "authors_techniques": [
+    "T1003.003"
+   ],
+   "label_source": "descriptor"
+  },
+  {
+   "path": "datasets/attack_techniques/T1014/windows-sysmon.log",
+   "git_blob_id": "297964e70a1ec8b76a5b457f5ab77710ab418310",
+   "lfs_sha256": "e44aca9a9cd11b241498ac117686e8b632a3387d11f664d769be918ab3a66bef",
+   "size_bytes": 204754,
+   "descriptors": [
+    "datasets/attack_techniques/T1014/T1014.yml"
+   ],
+   "authors_techniques": [
+    "T1014"
+   ],
+   "label_source": "descriptor"
+  },
+  {
+   "path": "datasets/attack_techniques/T1016/discovery_commands/windows-sysmon.log",
+   "git_blob_id": "44ebf2d51c9041f1e5a6babf112a5bd22c2295c6",
+   "lfs_sha256": "90330baf06554a542d188162782c68140d3aa250f1e50f38b925ba26094507db",
+   "size_bytes": 14564062,
+   "descriptors": [
+    "datasets/attack_techniques/T1016/discovery_commands/discovery_commands.yml"
+   ],
+   "authors_techniques": [
+    "T1016"
+   ],
+   "label_source": "descriptor"
+  },
+  {
+   "path": "datasets/attack_techniques/T1018/AD_discovery/windows-sysmon.log",
+   "git_blob_id": "1c92dd6b5fecf3c28d95a2e8183bf3112e798e71",
+   "lfs_sha256": "14e3617eac4e42926e56adcf5597fe3ca45f6a66e63facb5d408e9f718570e60",
+   "size_bytes": 4853376,
+   "descriptors": [
+    "datasets/attack_techniques/T1018/AD_discovery/AD_discovery.yml"
+   ],
+   "authors_techniques": [
+    "T1018"
+   ],
+   "label_source": "descriptor"
+  },
+  {
+   "path": "datasets/attack_techniques/T1020/windows-sysmon.log",
+   "git_blob_id": "b1e62e974f651350da97cab39e6ac9eef616a105",
+   "lfs_sha256": "51570af79600ebe51b015976d68ef63581e8c4916c24891c21ccca7ef3bef8f0",
+   "size_bytes": 9123060,
+   "descriptors": [
+    "datasets/attack_techniques/T1020/T1020.yml"
+   ],
+   "authors_techniques": [
+    "T1020"
+   ],
+   "label_source": "descriptor"
+  },
+  {
+   "path": "datasets/attack_techniques/T1021.002/atomic_red_team/windows-sysmon.log",
+   "git_blob_id": "347c4dadc043cce9f1469cba016de1b6be8dd4e3",
+   "lfs_sha256": "39685d672931f6da05918b8bbdd7f359c90feb73d6b02eb26a331aa60512f5d0",
+   "size_bytes": 21361,
+   "descriptors": [
+    "datasets/attack_techniques/T1021.002/atomic_red_team/atomic_red_team.yml"
+   ],
+   "authors_techniques": [
+    "T1021.002"
+   ],
+   "label_source": "descriptor"
+  },
+  {
+   "path": "datasets/attack_techniques/T1021.003/impacket/windows-sysmon.log",
+   "git_blob_id": "ba8efe8d8a7a57cccfdef1ec079d91e134b69964",
+   "lfs_sha256": "0a97b9195b8482c6d8da389fbe59c9afad269bced502abc8e2b6d3254505d344",
+   "size_bytes": 5525253,
+   "descriptors": [
+    "datasets/attack_techniques/T1021.003/impacket/impacket.yml"
+   ],
+   "authors_techniques": [
+    "T1021.003"
+   ],
+   "label_source": "descriptor"
+  },
+  {
+   "path": "datasets/attack_techniques/T1021.003/lateral_movement/windows-sysmon.log",
+   "git_blob_id": "32e8952fa6ff22ac59598d85a07745e09435b6b0",
+   "lfs_sha256": "f5708b28b511e3036774f04d754e7d0a38bf6391a8f6602a42fb65e4460536f5",
+   "size_bytes": 6710771,
+   "descriptors": [
+    "datasets/attack_techniques/T1021.003/lateral_movement/lateral_movement.yml"
+   ],
+   "authors_techniques": [
+    "T1021.003"
+   ],
+   "label_source": "descriptor"
+  },
+  {
+   "path": "datasets/attack_techniques/T1021.003/lateral_movement_lolbas/windows-sysmon.log",
+   "git_blob_id": "5f551b398c174f8a288d1789d4f455d49f261231",
+   "lfs_sha256": "da2b86cd70747a8be6befb0c7cc0206996d55f5c7adff411a6938378f211806a",
+   "size_bytes": 5487612,
+   "descriptors": [
+    "datasets/attack_techniques/T1021.003/lateral_movement_lolbas/lateral_movement_lolbas.yml"
+   ],
+   "authors_techniques": [
+    "T1021.003"
+   ],
+   "label_source": "descriptor"
+  },
+  {
+   "path": "datasets/attack_techniques/T1021.003/lateral_movement_speechruntime/windows-sysmon.log",
+   "git_blob_id": "09f6743081f4188868e7757834282d786c534de8",
+   "lfs_sha256": "cf3358ff725498d5371cc79967539a435aaf46b2c6fb4c944ebab61fccdf63ef",
+   "size_bytes": 6525,
+   "descriptors": [
+    "datasets/attack_techniques/T1021.003/lateral_movement_speechruntime/lateral_movement_speechruntime.yml"
+   ],
+   "authors_techniques": [
+    "T1021.003"
+   ],
+   "label_source": "descriptor"
+  },
+  {
+   "path": "datasets/attack_techniques/T1021.006/lateral_movement/windows-sysmon.log",
+   "git_blob_id": "92822d6bf55082fe08e1605a19a9e445e2a278b2",
+   "lfs_sha256": "6370f139b06c5de9e6b76ba81d9247c7c869879e74dfee1603f4d8b3682ab1c4",
+   "size_bytes": 5835542,
+   "descriptors": [
+    "datasets/attack_techniques/T1021.006/lateral_movement/lateral_movement.yml"
+   ],
+   "authors_techniques": [
+    "T1021.006"
+   ],
+   "label_source": "descriptor"
+  },
+  {
+   "path": "datasets/attack_techniques/T1021.006/lateral_movement_lolbas/windows-sysmon.log",
+   "git_blob_id": "ce010077e5872297ca2ea6eab95cbb9d584bf772",
+   "lfs_sha256": "9f1c677780ef9b423033b9c4b9d97a914c3bf1eada80a30c21834e8aba42ce81",
+   "size_bytes": 6564240,
+   "descriptors": [
+    "datasets/attack_techniques/T1021.006/lateral_movement_lolbas/lateral_movement_lolbas.yml"
+   ],
+   "authors_techniques": [
+    "T1021.006"
+   ],
+   "label_source": "descriptor"
+  },
+  {
+   "path": "datasets/attack_techniques/T1021.006/lateral_movement_psh/windows-sysmon.log",
+   "git_blob_id": "5704fe67f4ee0ad07ef918c0263c17b0c3bbfa53",
+   "lfs_sha256": "8746e04aa131b0eae39270a260808688b9ff69da25271022566972eea19f2227",
+   "size_bytes": 6143107,
+   "descriptors": [
+    "datasets/attack_techniques/T1021.006/lateral_movement_psh/lateral_movement_psh.yml"
+   ],
+   "authors_techniques": [
+    "T1021.006"
+   ],
+   "label_source": "descriptor"
+  },
+  {
+   "path": "datasets/attack_techniques/T1027/atomic_red_team/windows-sysmon.log",
+   "git_blob_id": "7ca9e95d26012daa2d7398cdbf99711b01dcbeec",
+   "lfs_sha256": "43562f5040d3c1ec604fe917d6aaec43c8a48c073a3c49e439326e28845e5c38",
+   "size_bytes": 11316256,
+   "descriptors": [
+    "datasets/attack_techniques/T1027/atomic_red_team/atomic_red_team.yml"
+   ],
+   "authors_techniques": [
+    "T1027"
+   ],
+   "label_source": "descriptor"
+  },
+  {
+   "path": "datasets/attack_techniques/T1027/trickbot_drop/windows-sysmon.log",
+   "git_blob_id": "621cbae582fac71ac8596f96c9fdbd9dfe8a085e",
+   "lfs_sha256": "e6cf261224169519393a250df2653454db54b3ee795b22b9d3da8da6526b7ce3",
+   "size_bytes": 2045,
+   "descriptors": [
+    "datasets/attack_techniques/T1027/trickbot_drop/data.yml"
+   ],
+   "authors_techniques": [
+    "T1027"
+   ],
+   "label_source": "descriptor"
+  },
+  {
+   "path": "datasets/attack_techniques/T1027/url_encoded_curl/windows-sysmon.log",
+   "git_blob_id": "14d80f8979a5fe7286d9e9ff84c43d99585a22eb",
+   "lfs_sha256": "e5ff5e20583627513c6fb99a5763e913fe5c6b6cbc983c13b0c236090968d26c",
+   "size_bytes": 6249,
+   "descriptors": [
+    "datasets/attack_techniques/T1027/url_encoded_curl/url_encoded_curl.yml"
+   ],
+   "authors_techniques": [
+    "T1027"
+   ],
+   "label_source": "descriptor"
+  },
+  {
+   "path": "datasets/attack_techniques/T1033/AD_discovery/windows-sysmon.log",
+   "git_blob_id": "9741bbdc5a561d2b0a2f0cf3dd9e4501e1de965c",
+   "lfs_sha256": "f978fbb3b83ae7af12808f2383423a00f252bc15adc85b5a835bbddda1505afb",
+   "size_bytes": 4627928,
+   "descriptors": [
+    "datasets/attack_techniques/T1033/AD_discovery/AD_discovery.yml"
+   ],
+   "authors_techniques": [
+    "T1033"
+   ],
+   "label_source": "descriptor"
+  },
+  {
+   "path": "datasets/attack_techniques/T1033/atomic_red_team/windows-sysmon.log",
+   "git_blob_id": "0caa50dac25adaaf6a408897814277e0969f7f7d",
+   "lfs_sha256": "7dc221cd808a62738dbe28d8eb1c3ba7d653d8098b82f745dfc18181148978b2",
+   "size_bytes": 11994992,
+   "descriptors": [
+    "datasets/attack_techniques/T1033/atomic_red_team/atomic_red_team.yml"
+   ],
+   "authors_techniques": [
+    "T1033"
+   ],
+   "label_source": "descriptor"
+  },
+  {
+   "path": "datasets/attack_techniques/T1036.003/atomic_red_team/windows-sysmon.log",
+   "git_blob_id": "e59d98984e6550ca60191bcaf1344358452bfbda",
+   "lfs_sha256": "c9e2c2d4c29fa0e6054617b0743cb2574b28aa03a6560d80e4a66a4ee607aa75",
+   "size_bytes": 12615448,
+   "descriptors": [
+    "datasets/attack_techniques/T1036.003/atomic_red_team/atomic_red_team.yml"
+   ],
+   "authors_techniques": [
+    "T1036.003"
+   ],
+   "label_source": "descriptor"
+  },
+  {
+   "path": "datasets/attack_techniques/T1036.003/samsam_extension/windows-sysmon.log",
+   "git_blob_id": "6c431105bd67e36ee88eb2710bb4a4ad7bb8bdfb",
+   "lfs_sha256": "d5e36c38774af61b12a073e0333d277161f63308045a9087c17b23b60d2025ef",
+   "size_bytes": 15926594,
+   "descriptors": [
+    "datasets/attack_techniques/T1036.003/samsam_extension/samsam_extension.yml"
+   ],
+   "authors_techniques": [
+    "T1036.003"
+   ],
+   "label_source": "descriptor"
+  },
+  {
+   "path": "datasets/attack_techniques/T1036/write_to_recycle_bin/windows-sysmon.log",
+   "git_blob_id": "da9f499b2c3fa25de56925774f780f09a60e4a72",
+   "lfs_sha256": "c7c968a58f0be7ca323530e296d3fea132fc203388026425ea5eaf4e7fc1a31b",
+   "size_bytes": 1506694,
+   "descriptors": [
+    "datasets/attack_techniques/T1036/write_to_recycle_bin/write_to_recycle_bin.yml"
+   ],
+   "authors_techniques": [
+    "T1036"
+   ],
+   "label_source": "descriptor"
+  },
+  {
+   "path": "datasets/attack_techniques/T1047/atomic_red_team/windows-sysmon.log",
+   "git_blob_id": "af31d9055080bcb0758cba36a23bcf6cd83278e0",
+   "lfs_sha256": "64651720e10813aa57d0f25ce149005ab06039b1974dbc09818b1fb45fbbc196",
+   "size_bytes": 11815541,
+   "descriptors": [
+    "datasets/attack_techniques/T1047/atomic_red_team/atomic_red_team.yml"
+   ],
+   "authors_techniques": [
+    "T1047"
+   ],
+   "label_source": "descriptor"
+  },
+  {
+   "path": "datasets/attack_techniques/T1047/execution_scrcons/windows-sysmon.log",
+   "git_blob_id": "8607a6382da8d5cd246f55591d14f1731257523e",
+   "lfs_sha256": "6181de032b63ca66cbbd61e43dffd9ea5acc41713b8ccb0a163dfb4afd1d86f9",
+   "size_bytes": 20686548,
+   "descriptors": [
+    "datasets/attack_techniques/T1047/execution_scrcons/execution_scrcons.yml"
+   ],
+   "authors_techniques": [
+    "T1047"
+   ],
+   "label_source": "descriptor"
+  },
+  {
+   "path": "datasets/attack_techniques/T1047/lateral_movement/windows-sysmon.log",
+   "git_blob_id": "3048394384c0b2e5178262e668f52e9110462710",
+   "lfs_sha256": "4ed13872c41a8db35cd5c910a125bbd22345c8f6104b3d361eb05e5db11a2ad4",
+   "size_bytes": 5437888,
+   "descriptors": [
+    "datasets/attack_techniques/T1047/lateral_movement/lateral_movement.yml"
+   ],
+   "authors_techniques": [
+    "T1047"
+   ],
+   "label_source": "descriptor"
+  },
+  {
+   "path": "datasets/attack_techniques/T1047/lateral_movement_lolbas/windows-sysmon.log",
+   "git_blob_id": "6393050865dd25260d1fccf1721ff997be4db4c6",
+   "lfs_sha256": "3498742b7cd8d802b9bf7fec402f20b12ba5de2a837538af457938f1b0e92caa",
+   "size_bytes": 5431535,
+   "descriptors": [
+    "datasets/attack_techniques/T1047/lateral_movement_lolbas/lateral_movement_lolbas.yml"
+   ],
+   "authors_techniques": [
+    "T1047"
+   ],
+   "label_source": "descriptor"
+  },
+  {
+   "path": "datasets/attack_techniques/T1048.003/long_dns_queries/windows-sysmon.log",
+   "git_blob_id": "2d0690c7e550d559898f448e6c77b2d81ce2640a",
+   "lfs_sha256": "3706a06e1a45cf029c42444f2e7252a9f086e5cfabde143fab4eadd7a9683593",
+   "size_bytes": 35488685,
+   "descriptors": [
+    "datasets/attack_techniques/T1048.003/long_dns_queries/long_dns_queries.yml"
+   ],
+   "authors_techniques": [
+    "T1048.003"
+   ],
+   "label_source": "descriptor"
+  },
+  {
+   "path": "datasets/attack_techniques/T1048.003/mass_file_creation/windows-sysmon.log",
+   "git_blob_id": "737184ca8356790d7c63d268a51b3df59ce6d326",
+   "lfs_sha256": "798c9b571ec53e2fb1da62a8bd5d3103ef8c71575f0096c72e2f92f051a20e7a",
+   "size_bytes": 105661,
+   "descriptors": [
+    "datasets/attack_techniques/T1048.003/mass_file_creation/mass_file_creation.yml"
+   ],
+   "authors_techniques": [
+    "T1048.003"
+   ],
+   "label_source": "descriptor"
+  },
+  {
+   "path": "datasets/attack_techniques/T1048.003/nslookup_exfil/windows-sysmon.log",
+   "git_blob_id": "3c6d10b816006dd961b957a1d69567edd071e08d",
+   "lfs_sha256": "5d7d8b9acd80ad09e962446a328901b29ba760e3b94aeb6b8ad41f0caddae27f",
+   "size_bytes": 5663783,
+   "descriptors": [
+    "datasets/attack_techniques/T1048.003/nslookup_exfil/nslookup_exfil.yml"
+   ],
+   "authors_techniques": [
+    "T1048.003"
+   ],
+   "label_source": "descriptor"
+  },
+  {
+   "path": "datasets/attack_techniques/T1049/AD_discovery/windows-sysmon.log",
+   "git_blob_id": "ce932f815a49d458b7064960ad4c50be169f5270",
+   "lfs_sha256": "c81ad8f1e304bc38d72ed5137e6d2aa4c1d8347bddd152906daff79c8d773d2f",
+   "size_bytes": 4640111,
+   "descriptors": [
+    "datasets/attack_techniques/T1049/AD_discovery/AD_discovery.yml"
+   ],
+   "authors_techniques": [
+    "T1049"
+   ],
+   "label_source": "descriptor"
+  },
+  {
+   "path": "datasets/attack_techniques/T1053.002/lateral_movement/windows-sysmon.log",
+   "git_blob_id": "b7e50491abb70cf19f1840400b0a0119a988af72",
+   "lfs_sha256": "58aecee33a94c56aa4617bcc4d0b60331207209dc3549b8e80a40fc5403ce408",
+   "size_bytes": 5502827,
+   "descriptors": [
+    "datasets/attack_techniques/T1053.002/lateral_movement/lateral_movement.yml"
+   ],
+   "authors_techniques": [
+    "T1053.002"
+   ],
+   "label_source": "descriptor"
+  },
+  {
+   "path": "datasets/attack_techniques/T1053.005/atomic_red_team/windows-sysmon.log",
+   "git_blob_id": "05cf8f14e4d20d071bd3a12a7d2d35bc6bf0f4f1",
+   "lfs_sha256": "d346ab6c75b3151217dfc2c4c166c951fc16d68c31b7d5a8f3e577d9545ff9f0",
+   "size_bytes": 11410982,
+   "descriptors": [
+    "datasets/attack_techniques/T1053.005/atomic_red_team/atomic_red_team.yml"
+   ],
+   "authors_techniques": [
+    "T1053.005"
+   ],
+   "label_source": "descriptor"
+  },
+  {
+   "path": "datasets/attack_techniques/T1053.005/lateral_movement/windows-sysmon.log",
+   "git_blob_id": "e1b65ee531bd4358c48b41ec3f31468941ab8384",
+   "lfs_sha256": "b2fba83212dba31492fe34b90786e9019437ab25da78e22bc9688021c5e36825",
+   "size_bytes": 6297522,
+   "descriptors": [
+    "datasets/attack_techniques/T1053.005/lateral_movement/lateral_movement.yml"
+   ],
+   "authors_techniques": [
+    "T1053.005"
+   ],
+   "label_source": "descriptor"
+  },
+  {
+   "path": "datasets/attack_techniques/T1053.005/lateral_movement_lolbas/windows-sysmon.log",
+   "git_blob_id": "39075b39b599c04c30d83e33b10d97368e718ab4",
+   "lfs_sha256": "722963980c277664e31993c1b4c4007906a014a9a718dd21cce04cf19e2ef799",
+   "size_bytes": 5583791,
+   "descriptors": [
+    "datasets/attack_techniques/T1053.005/lateral_movement_lolbas/lateral_movement_lolbas.yml"
+   ],
+   "authors_techniques": [
+    "T1053.005"
+   ],
+   "label_source": "descriptor"
+  },
+  {
+   "path": "datasets/attack_techniques/T1053.005/schtask_shutdown/windows-sysmon.log",
+   "git_blob_id": "46e5dcc3562976ae4fc6e7e8c984118b9163a326",
+   "lfs_sha256": "cafa411c6706fab418e8f26735a96298de18bc7d041d8702a8c2ad0c819eb98e",
+   "size_bytes": 15400399,
+   "descriptors": [
+    "datasets/attack_techniques/T1053.005/schtask_shutdown/schtask_shutdown.yml"
+   ],
+   "authors_techniques": [
+    "T1053.005"
+   ],
+   "label_source": "descriptor"
+  },
+  {
+   "path": "datasets/attack_techniques/T1053.005/schtask_system/windows-sysmon.log",
+   "git_blob_id": "8e9af8732dd8e0b99b5610ea088d41c1dbf2cdce",
+   "lfs_sha256": "598b761436a1a39b1561c3f0ce59cd8b0439601f4137c73aaf32a4f9bc35077e",
+   "size_bytes": 2142,
+   "descriptors": [
+    "datasets/attack_techniques/T1053.005/schtask_system/schtask_system.yml"
+   ],
+   "authors_techniques": [
+    "T1053.005"
+   ],
+   "label_source": "descriptor"
+  },
+  {
+   "path": "datasets/attack_techniques/T1053.005/schtasks/windows-sysmon.log",
+   "git_blob_id": "aac6209600a56ce1a0d5cdccb308f71af0519272",
+   "lfs_sha256": "2af70b9815a95c0be345a10e7c833cbcd5c4dd6919040d7652396b008475acba",
+   "size_bytes": 626881,
+   "descriptors": [
+    "datasets/attack_techniques/T1053.005/schtasks/schtasks.yml"
+   ],
+   "authors_techniques": [
+    "T1053.005"
+   ],
+   "label_source": "descriptor"
+  },
+  {
+   "path": "datasets/attack_techniques/T1055.001/rasautou/windows-sysmon.log",
+   "git_blob_id": "9529d7540518ad4b231f786bfb8a341d4352123a",
+   "lfs_sha256": "14017e4054137da4ab9a94f17ba71b5ac4a2750dfd0d56f24f269801747580e6",
+   "size_bytes": 118807,
+   "descriptors": [
+    "datasets/attack_techniques/T1055.001/rasautou/rasautou.yml"
+   ],
+   "authors_techniques": [
+    "T1055.001"
+   ],
+   "label_source": "descriptor"
+  },
+  {
+   "path": "datasets/attack_techniques/T1055/named_pipes/windows-sysmon.log",
+   "git_blob_id": "47d0ec980a670f3e47e5deaf4183dedd2a6af8d0",
+   "lfs_sha256": "9c0237a14a9ee61476a5eaca97c406b0c249698bfef2049234609559d02de8c1",
+   "size_bytes": 39508,
+   "descriptors": [
+    "datasets/attack_techniques/T1055/named_pipes/named_pipes.yml"
+   ],
+   "authors_techniques": [
+    "T1055"
+   ],
+   "label_source": "descriptor"
+  },
+  {
+   "path": "datasets/attack_techniques/T1055/trickbot_inf/windows-sysmon.log",
+   "git_blob_id": "00af8251e1a91f74bd32b4781d3c2135d1905484",
+   "lfs_sha256": "2de2f8e7685c98f215c90f137b7a8279ce50b986a5aedc654c88853ec4d17b12",
+   "size_bytes": 29704,
+   "descriptors": [
+    "datasets/attack_techniques/T1055/trickbot_inf/data.yml"
+   ],
+   "authors_techniques": [
+    "T1055"
+   ],
+   "label_source": "descriptor"
+  },
+  {
+   "path": "datasets/attack_techniques/T1059.001/atomic_red_team/windows-sysmon.log",
+   "git_blob_id": "f09f63cfbc6c3e0007b9993c728294d970a34385",
+   "lfs_sha256": "8f71b2a0ef81892551cd6a9ad115b8ec5c42d9f2071547b064c496511898c4e9",
+   "size_bytes": 38928903,
+   "descriptors": [
+    "datasets/attack_techniques/T1059.001/atomic_red_team/atomic_red_team.yml"
+   ],
+   "authors_techniques": [
+    "T1059.001"
+   ],
+   "label_source": "descriptor"
+  },
+  {
+   "path": "datasets/attack_techniques/T1059.001/encoded_powershell/windows-sysmon.log",
+   "git_blob_id": "23bf2fc6d34e9501cebe475180268b96096dc0d4",
+   "lfs_sha256": "b9c8438a0d8cd62714a38ed093fc583c3318d1cac768c6513ad40a3b8203fd05",
+   "size_bytes": 2012605,
+   "descriptors": [
+    "datasets/attack_techniques/T1059.001/encoded_powershell/encoded_powershell.yml"
+   ],
+   "authors_techniques": [
+    "T1059.001"
+   ],
+   "label_source": "descriptor"
+  },
+  {
+   "path": "datasets/attack_techniques/T1059.001/hidden_powershell/windows-sysmon.log",
+   "git_blob_id": "fca4e60663092dc49b749cbb3fcd0addf2fc5a21",
+   "lfs_sha256": "bac9c10fe7ae07c2ede09014c44f92df074055d9764a92cde4161c0c8e19ef96",
+   "size_bytes": 32626602,
+   "descriptors": [
+    "datasets/attack_techniques/T1059.001/hidden_powershell/hidden_powershell.yml"
+   ],
+   "authors_techniques": [
+    "T1059.001"
+   ],
+   "label_source": "descriptor"
+  },
+  {
+   "path": "datasets/attack_techniques/T1059.001/malicious_cmd_line_samples/windows-sysmon.log",
+   "git_blob_id": "14b7832c687c9577dc46ff8de6c3e2bb4575761d",
+   "lfs_sha256": "64ab32d34f2e6aef53f80ae092a6caf9e3f737e362c522b9c1791e91b7defab4",
+   "size_bytes": 32017,
+   "descriptors": [
+    "datasets/attack_techniques/T1059.001/malicious_cmd_line_samples/malicious_cmd_line_samples.yml"
+   ],
+   "authors_techniques": [
+    "T1059.001"
+   ],
+   "label_source": "descriptor"
+  },
+  {
+   "path": "datasets/attack_techniques/T1059.001/msix_powershell/windows-sysmon.log",
+   "git_blob_id": "f028589935e0269f5ec1cc2f92d184685f4b6e99",
+   "lfs_sha256": "3f349b90eead3e2eda89bcc776b5f250f1ece2bd1a2c9d128ca79ad087d72e93",
+   "size_bytes": 7346,
+   "descriptors": [
+    "datasets/attack_techniques/T1059.001/msix_powershell/msix_powershell.yml"
+   ],
+   "authors_techniques": [
+    "T1059.001"
+   ],
+   "label_source": "descriptor"
+  },
+  {
+   "path": "datasets/attack_techniques/T1059.001/powershell_execution_policy/windows-sysmon.log",
+   "git_blob_id": "b1335ec4ede93356acb544f43b1ccb969f79d109",
+   "lfs_sha256": "7854054b5fa788e7c430b7045ddbebb09be43300d2b0b2478cb893e70aaaca41",
+   "size_bytes": 14601853,
+   "descriptors": [
+    "datasets/attack_techniques/T1059.001/powershell_execution_policy/powershell_execution_policy.yml"
+   ],
+   "authors_techniques": [
+    "T1059.001"
+   ],
+   "label_source": "descriptor"
+  },
+  {
+   "path": "datasets/attack_techniques/T1059.001/powershell_script_block_logging/windows-sysmon.log",
+   "git_blob_id": "a5c78a2e611f6fdf4edf5f0259559ad5630e8faf",
+   "lfs_sha256": "04daf83b69e4b798e21f74fde0dc68d9de1732f139ce4a4463fcaa36d4995589",
+   "size_bytes": 18183460,
+   "descriptors": [
+    "datasets/attack_techniques/T1059.001/powershell_script_block_logging/powershell_script_block_logging.yml"
+   ],
+   "authors_techniques": [
+    "T1059.001"
+   ],
+   "label_source": "descriptor"
+  },
+  {
+   "path": "datasets/attack_techniques/T1059.001/powershell_testing/windows-sysmon.log",
+   "git_blob_id": "0fbf31b1cc0f9fd43f3bc15c0d9d10ecfda13357",
+   "lfs_sha256": "fa2961e63bef58669c7a634b1466bfa540fc836730cffb2959bf6fc56ad01eb4",
+   "size_bytes": 13630939,
+   "descriptors": [
+    "datasets/attack_techniques/T1059.001/powershell_testing/powershell_testing.yml"
+   ],
+   "authors_techniques": [
+    "T1059.001"
+   ],
+   "label_source": "descriptor"
+  },
+  {
+   "path": "datasets/attack_techniques/T1059.001/powershell_xml_requests/windows-sysmon.log",
+   "git_blob_id": "e7cbfa0021606e506298f39f275ff2125adc85b4",
+   "lfs_sha256": "c9c7f3a36611ed52e40b4f29440a45a07f1aac601a340f5ee4bf07fe5afa97b8",
+   "size_bytes": 10784074,
+   "descriptors": [
+    "datasets/attack_techniques/T1059.001/powershell_xml_requests/powershell_xml_requests.yml"
+   ],
+   "authors_techniques": [
+    "T1059.001"
+   ],
+   "label_source": "descriptor"
+  },
+  {
+   "path": "datasets/attack_techniques/T1059.001/sharphound/windows-sysmon.log",
+   "git_blob_id": "212a77b9db16f85cd7240cbca4176ba580bc4e7c",
+   "lfs_sha256": "29f4f1a561c219f2fe98db0e1269417a7632804c1431a9f1fadfccfba4f170c0",
+   "size_bytes": 14699348,
+   "descriptors": [
+    "datasets/attack_techniques/T1059.001/sharphound/sharphound.yml"
+   ],
+   "authors_techniques": [
+    "T1059.001"
+   ],
+   "label_source": "descriptor"
+  },
+  {
+   "path": "datasets/attack_techniques/T1059.001/trickbot_cmd_powershell/windows-sysmon.log",
+   "git_blob_id": "a7377537c48b2f6e235ca586073405fcbfbc3050",
+   "lfs_sha256": "7ba1d02c6b44d877cfef9f4c690515ae04edb2347581ea93bb9657cb864aeec7",
+   "size_bytes": 46116,
+   "descriptors": [
+    "datasets/attack_techniques/T1059.001/trickbot_cmd_powershell/data.yml"
+   ],
+   "authors_techniques": [
+    "T1059.001"
+   ],
+   "label_source": "descriptor"
+  },
+  {
+   "path": "datasets/attack_techniques/T1059.001/unmanaged_powershell_execution/windows-sysmon.log",
+   "git_blob_id": "5d2c87210cf76036b1410100ce52a4b2b776e9a7",
+   "lfs_sha256": "e7905b25fc39c794cf37e7c6ddfab273dc3f4ce61786556f9e61bd0bcc57300a",
+   "size_bytes": 89107,
+   "descriptors": [
+    "datasets/attack_techniques/T1059.001/unmanaged_powershell_execution/unmanaged_powershell_execution.yml"
+   ],
+   "authors_techniques": [
+    "T1059.001"
+   ],
+   "label_source": "descriptor"
+  },
+  {
+   "path": "datasets/attack_techniques/T1059.003/cmd_spawns_cscript/windows-sysmon.log",
+   "git_blob_id": "50db54e58cd1b1ff9a6cc5fc57591234547149aa",
+   "lfs_sha256": "8754cc0b57729054c87f9f5b2c79d648564f63dc91a23a73ba58ff410ca7f313",
+   "size_bytes": 1645203,
+   "descriptors": [
+    "datasets/attack_techniques/T1059.003/cmd_spawns_cscript/cmd_spawns_cscript.yml"
+   ],
+   "authors_techniques": [
+    "T1059.003"
+   ],
+   "label_source": "descriptor"
+  },
+  {
+   "path": "datasets/attack_techniques/T1059.003/powershell_spawn_cmd/windows-sysmon.log",
+   "git_blob_id": "f23d2297a7b7b4c523ba834351d9f93ed03ca3f3",
+   "lfs_sha256": "ee1f07df0c6c5b9f76cb139bdc5d575a4b50b7e832465b5c3ba9dd5ea5f32cec",
+   "size_bytes": 957202,
+   "descriptors": [
+    "datasets/attack_techniques/T1059.003/powershell_spawn_cmd/powershell_spawn_cmd.yml"
+   ],
+   "authors_techniques": [
+    "T1059.003"
+   ],
+   "label_source": "descriptor"
+  },
+  {
+   "path": "datasets/attack_techniques/T1059.003/ryuk/windows-sysmon.log",
+   "git_blob_id": "2661ed606558c8a66c1c390e9d1becab38b5b7c4",
+   "lfs_sha256": "62ab2627237caa7cac1ec4ed573618c459e8eb99edeb564f66023f6d8f065965",
+   "size_bytes": 3430858,
+   "descriptors": [
+    "datasets/attack_techniques/T1059.003/ryuk/ryuk.yml"
+   ],
+   "authors_techniques": [
+    "T1059.003"
+   ],
+   "label_source": "descriptor"
+  },
+  {
+   "path": "datasets/attack_techniques/T1059.005/lotus_blossom_chrysalis/windows-sysmon.log",
+   "git_blob_id": "702252bb9b2cb1fb1be91d88df6846df7abe3266",
+   "lfs_sha256": "cb5ea7112ec60ef8c6c4abfe3f2d5eccb0d7e8435e0da8ffdc7ff276878e7caf",
+   "size_bytes": 4713,
+   "descriptors": [
+    "datasets/attack_techniques/T1059.005/lotus_blossom_chrysalis/dataset.yml"
+   ],
+   "authors_techniques": [
+    "T1059.005"
+   ],
+   "label_source": "descriptor"
+  },
+  {
+   "path": "datasets/attack_techniques/T1059/suspiciously_named_executables/windows-sysmon.log",
+   "git_blob_id": "79cb1f0bf14b6d920bb743d73fb9d6b74b4d5ca1",
+   "lfs_sha256": "0d22f7f0a6b0a25598928070de1e8901d7f1f140d975787f912286448ad8bcff",
+   "size_bytes": 1772,
+   "descriptors": [
+    "datasets/attack_techniques/T1059/suspiciously_named_executables/suspiciously_named_executables.yml"
+   ],
+   "authors_techniques": [
+    "T1059"
+   ],
+   "label_source": "descriptor"
+  },
+  {
+   "path": "datasets/attack_techniques/T1068/bluehammer/windows-sysmon.log",
+   "git_blob_id": "27fd0a8e3b7f640746c2ca634f7ae0aa6a5e5c8b",
+   "lfs_sha256": "2a350bcb6ca3827f1deaf57e415a188807331e49af3a38c5335e58928afef19f",
+   "size_bytes": 6109,
+   "descriptors": [
+    "datasets/attack_techniques/T1068/bluehammer/bluehammer.yml"
+   ],
+   "authors_techniques": [
+    "T1068"
+   ],
+   "label_source": "descriptor"
+  },
+  {
+   "path": "datasets/attack_techniques/T1068/redsun/windows-sysmon.log",
+   "git_blob_id": "98c5699cd26d47376f5a22324a43258fddf7e163",
+   "lfs_sha256": "8d48ae7bd18afb4231d9bcc2f424b562c145d52cf62c61923d6c359462fbd72b",
+   "size_bytes": 9107,
+   "descriptors": [
+    "datasets/attack_techniques/T1068/redsun/redsun.yml"
+   ],
+   "authors_techniques": [
+    "T1068"
+   ],
+   "label_source": "descriptor"
+  },
+  {
+   "path": "datasets/attack_techniques/T1068/zoom_child_process/windows-sysmon.log",
+   "git_blob_id": "c51e4338ea7b0dfcd1c20a8c8ca4eaab427d1986",
+   "lfs_sha256": "0b9bc4c33b801b3289ecc2adfa94fbcbdadb81d56c228d394c2728dc0a0b3b42",
+   "size_bytes": 18140665,
+   "descriptors": [
+    "datasets/attack_techniques/T1068/zoom_child_process/zoom_child_process.yml"
+   ],
+   "authors_techniques": [
+    "T1068"
+   ],
+   "label_source": "descriptor"
+  },
+  {
+   "path": "datasets/attack_techniques/T1069.002/AD_discovery/windows-sysmon.log",
+   "git_blob_id": "712c436f2e1c2014aec3a2879abe22aa65b1f4cf",
+   "lfs_sha256": "4372514fa4f0ef23f31e22a050be452392756165077abad62297ad2475143146",
+   "size_bytes": 4933425,
+   "descriptors": [
+    "datasets/attack_techniques/T1069.002/AD_discovery/AD_discovery.yml"
+   ],
+   "authors_techniques": [
+    "T1069.002"
+   ],
+   "label_source": "descriptor"
+  },
+  {
+   "path": "datasets/attack_techniques/T1070.001/atomic_red_team/windows-sysmon.log",
+   "git_blob_id": "c59296f62dcee18f81a82f4be86077553234745e",
+   "lfs_sha256": "58a5e3465bdced284a1c0b625063c539be77beca8f9921e29238bbdc4d26de11",
+   "size_bytes": 11267266,
+   "descriptors": [
+    "datasets/attack_techniques/T1070.001/atomic_red_team/atomic_red_team.yml"
+   ],
+   "authors_techniques": [
+    "T1070.001"
+   ],
+   "label_source": "descriptor"
+  },
+  {
+   "path": "datasets/attack_techniques/T1070.005/atomic_red_team/windows-sysmon.log",
+   "git_blob_id": "bd83f87ce5985ed75e5bedf0767507de83505aa1",
+   "lfs_sha256": "db03626e00b334aef1c158779c0ea92d65923bb50a271a6f030fac09724fe291",
+   "size_bytes": 11774704,
+   "descriptors": [
+    "datasets/attack_techniques/T1070.005/atomic_red_team/atomic_red_team.yml"
+   ],
+   "authors_techniques": [
+    "T1070.005"
+   ],
+   "label_source": "descriptor"
+  },
+  {
+   "path": "datasets/attack_techniques/T1070/atomic_red_team/windows-sysmon.log",
+   "git_blob_id": "d10fbc98f6f686d2190c0da1a93f066f196612f8",
+   "lfs_sha256": "c14f25805f90221a54de05387fcddfe9a0eec3aa4a7fd6a8b0dd0be3ddc65453",
+   "size_bytes": 11072863,
+   "descriptors": [
+    "datasets/attack_techniques/T1070/atomic_red_team/atomic_red_team.yml"
+   ],
+   "authors_techniques": [
+    "T1070"
+   ],
+   "label_source": "descriptor"
+  },
+  {
+   "path": "datasets/attack_techniques/T1078.002/account_lockout/windows-sysmon.log",
+   "git_blob_id": "b540dfe3fffd4b529382e6acc049fd083520b4f7",
+   "lfs_sha256": "4e60dea37a82598423c609982f2f3ac12bca29d55dabb4a1c4c5714264754dfd",
+   "size_bytes": 18456820,
+   "descriptors": [
+    "datasets/attack_techniques/T1078.002/account_lockout/account_lockout.yml"
+   ],
+   "authors_techniques": [
+    "T1078.002"
+   ],
+   "label_source": "descriptor"
+  },
+  {
+   "path": "datasets/attack_techniques/T1078/defaultaccount/windows-sysmon.log",
+   "git_blob_id": "e6bf8bea8162e365a9c673445fefc4acc3710175",
+   "lfs_sha256": "410bda666eef3df47b3634b9dec8de4b861132bf00fe1aa7fc9f09681f20c09e",
+   "size_bytes": 23461,
+   "descriptors": [
+    "datasets/attack_techniques/T1078/defaultaccount/defaultaccount.yml"
+   ],
+   "authors_techniques": [
+    "T1078"
+   ],
+   "label_source": "descriptor"
+  },
+  {
+   "path": "datasets/attack_techniques/T1082/atomic_red_team/windows-sysmon.log",
+   "git_blob_id": "4a8174f3d8def8f92dd995becb8269a7595b819b",
+   "lfs_sha256": "5de7771a04caafaef69d6b98a4079681c54b34129007445efbf0a8d0efcf0dad",
+   "size_bytes": 11738807,
+   "descriptors": [
+    "datasets/attack_techniques/T1082/atomic_red_team/atomic_red_team.yml"
+   ],
+   "authors_techniques": [
+    "T1082"
+   ],
+   "label_source": "descriptor"
+  },
+  {
+   "path": "datasets/attack_techniques/T1087.001/AD_discovery/windows-sysmon.log",
+   "git_blob_id": "1c408edae151aa087daf9602bd2401a4061c1b86",
+   "lfs_sha256": "c244d0b1fbb70fe5e76181fa490c46d8dea3716996243b2209de496fb5111eb5",
+   "size_bytes": 17229273,
+   "descriptors": [
+    "datasets/attack_techniques/T1087.001/AD_discovery/AD_discovery.yml"
+   ],
+   "authors_techniques": [
+    "T1087.001"
+   ],
+   "label_source": "descriptor"
+  },
+  {
+   "path": "datasets/attack_techniques/T1087.002/AD_discovery/windows-sysmon.log",
+   "git_blob_id": "e12587c4bc1178a70125de7d8a31b12db05a7c49",
+   "lfs_sha256": "1b78f515120a7e5ac532444fd7fd322c8dc1abf8efebe0295abad3939972db0d",
+   "size_bytes": 10902926,
+   "descriptors": [
+    "datasets/attack_techniques/T1087.002/AD_discovery/AD_discovery.yml"
+   ],
+   "authors_techniques": [
+    "T1087.002"
+   ],
+   "label_source": "descriptor"
+  },
+  {
+   "path": "datasets/attack_techniques/T1090.003/windows_tor_client_execution/windows-sysmon.log",
+   "git_blob_id": "e65a35a252adf376e083dbbcd54837b02a5d7317",
+   "lfs_sha256": "714e898e11d48bd15038e49e1fdac54081ffab6447c19807a5126ac555c4f1b7",
+   "size_bytes": 1219840,
+   "descriptors": [
+    "datasets/attack_techniques/T1090.003/windows_tor_client_execution/windows_tor_client_execution.yml"
+   ],
+   "authors_techniques": [
+    "T1090.003"
+   ],
+   "label_source": "descriptor"
+  },
+  {
+   "path": "datasets/attack_techniques/T1098/dsrm_account/windows-sysmon.log",
+   "git_blob_id": "1c69aa6dc396452bd20b44cb97ccdb6810d396a7",
+   "lfs_sha256": "fd1b721d76d5a0d718f08554ccaa162a01acca882c30cef0bf60b1576dcf7378",
+   "size_bytes": 1055,
+   "descriptors": [
+    "datasets/attack_techniques/T1098/dsrm_account/dsrm_account.yml"
+   ],
+   "authors_techniques": [
+    "T1098"
+   ],
+   "label_source": "descriptor"
+  },
+  {
+   "path": "datasets/attack_techniques/T1105/atomic_red_team/windows-sysmon.log",
+   "git_blob_id": "21b1002205bad6fc849aaf1a4377a352ca7a4891",
+   "lfs_sha256": "bd6bbf7884f44274988d159bcb3249505dc53623e551892b54a3fc87db06e18c",
+   "size_bytes": 3625178,
+   "descriptors": [
+    "datasets/attack_techniques/T1105/atomic_red_team/atomic_red_team.yml"
+   ],
+   "authors_techniques": [
+    "T1105"
+   ],
+   "label_source": "descriptor"
+  },
+  {
+   "path": "datasets/attack_techniques/T1112/atomic_red_team/windows-sysmon.log",
+   "git_blob_id": "61e7d9beda6878fed6ea271b54d5f173f7f36c0d",
+   "lfs_sha256": "2a54ff252b3ca480f4c50bbc2708f63ceeaecfaaa3305bd53ff73b615fb23041",
+   "size_bytes": 11705774,
+   "descriptors": [
+    "datasets/attack_techniques/T1112/atomic_red_team/atomic_red_team.yml"
+   ],
+   "authors_techniques": [
+    "T1112"
+   ],
+   "label_source": "descriptor"
+  },
+  {
+   "path": "datasets/attack_techniques/T1127.001/windows-sysmon.log",
+   "git_blob_id": "b3c06b92f0ac9f4deaebb91a03454165162cd3c4",
+   "lfs_sha256": "45e730201de4fdc756aac6d9ecc682e0aed9c3486bb9e15ca403c6467bc674fc",
+   "size_bytes": 6149619,
+   "descriptors": [
+    "datasets/attack_techniques/T1127.001/T1127.001.yml"
+   ],
+   "authors_techniques": [
+    "T1127.001"
+   ],
+   "label_source": "descriptor"
+  },
+  {
+   "path": "datasets/attack_techniques/T1127/atomic_red_team/windows-sysmon.log",
+   "git_blob_id": "bd99150f6f483fc35cffd5a8d7eda2c7d6b59bfb",
+   "lfs_sha256": "489de09c57bf14e5ea903b96ce1d742fa538d3f9389cfc484fcf4b3612158c96",
+   "size_bytes": 25935032,
+   "descriptors": [
+    "datasets/attack_techniques/T1127/atomic_red_team/atomic_red_team.yml"
+   ],
+   "authors_techniques": [
+    "T1127"
+   ],
+   "label_source": "descriptor"
+  },
+  {
+   "path": "datasets/attack_techniques/T1135/net_share/windows-sysmon.log",
+   "git_blob_id": "211b6c78ff842a366e06245afbf59878c0a2524c",
+   "lfs_sha256": "ccee75e768298bfa648fc8a8ceb8614a47e0e1e2b2054a5c5f334f44efe0f5cb",
+   "size_bytes": 1955,
+   "descriptors": [
+    "datasets/attack_techniques/T1135/net_share/net_share.yml"
+   ],
+   "authors_techniques": [
+    "T1135"
+   ],
+   "label_source": "descriptor"
+  },
+  {
+   "path": "datasets/attack_techniques/T1136.001/atomic_red_team/windows-sysmon.log",
+   "git_blob_id": "0edba728878c108f9bd12a712429af77a0ff6874",
+   "lfs_sha256": "334fff113e8d15026a7a1a0d3343643ce7e8a73552b1f33ee476eaa7826cbe42",
+   "size_bytes": 11560462,
+   "descriptors": [
+    "datasets/attack_techniques/T1136.001/atomic_red_team/atomic_red_team.yml"
+   ],
+   "authors_techniques": [
+    "T1136.001"
+   ],
+   "label_source": "descriptor"
+  },
+  {
+   "path": "datasets/attack_techniques/T1140/atomic_red_team/windows-sysmon.log",
+   "git_blob_id": "f98132bf7415bf3aed0382d829965adcfde34fb5",
+   "lfs_sha256": "efe6db0ed29613b6374d3e57837c322d701290db3e29fd540e74dc7be3babb20",
+   "size_bytes": 2734664,
+   "descriptors": [
+    "datasets/attack_techniques/T1140/atomic_red_team/atomic_red_team.yml"
+   ],
+   "authors_techniques": [
+    "T1140"
+   ],
+   "label_source": "descriptor"
+  },
+  {
+   "path": "datasets/attack_techniques/T1189/dyn_dns_site/windows-sysmon.log",
+   "git_blob_id": "f77f678bd6b8c8766ff7cb35843f9f1160dd1d6e",
+   "lfs_sha256": "88001f008bc0df948c88dcf94ad4c8ee4378a5603b96fe77ffb09070fb468c55",
+   "size_bytes": 26449592,
+   "descriptors": [
+    "datasets/attack_techniques/T1189/dyn_dns_site/dyn_dns_site.yml"
+   ],
+   "authors_techniques": [
+    "T1189"
+   ],
+   "label_source": "descriptor"
+  },
+  {
+   "path": "datasets/attack_techniques/T1190/crushftp/windows-sysmon.log",
+   "git_blob_id": "d7d109c7f4618ceb72cf12460ad36d077b798baf",
+   "lfs_sha256": "2e9efea0d5421db1f9f2889ba418fc5f868fd38cb9654dc7312a9d31c0e28d0c",
+   "size_bytes": 1931,
+   "descriptors": [
+    "datasets/attack_techniques/T1190/crushftp/crushftp.yml"
+   ],
+   "authors_techniques": [
+    "T1190"
+   ],
+   "label_source": "descriptor"
+  },
+  {
+   "path": "datasets/attack_techniques/T1190/outbound_java/windows-sysmon.log",
+   "git_blob_id": "81b8665c337146004e71d9815f66c6c926a58109",
+   "lfs_sha256": "fb3444c80a907bf0301fb65979cd1d1a4e595f83e5bd0aa4d1eaabaf5d28c6bd",
+   "size_bytes": 7025034,
+   "descriptors": [
+    "datasets/attack_techniques/T1190/outbound_java/outbound_java.yml"
+   ],
+   "authors_techniques": [
+    "T1190"
+   ],
+   "label_source": "descriptor"
+  },
+  {
+   "path": "datasets/attack_techniques/T1190/sap/windows-sysmon.log",
+   "git_blob_id": "8cfb2ce8949c0f084bdbefcff89af72abbada966",
+   "lfs_sha256": "f8e0bfd644360e21f49b528561e48d5482fd85f9407dab77cf13bb2d5ea57387",
+   "size_bytes": 2267,
+   "descriptors": [
+    "datasets/attack_techniques/T1190/sap/sap.yml"
+   ],
+   "authors_techniques": [
+    "T1190"
+   ],
+   "label_source": "descriptor"
+  },
+  {
+   "path": "datasets/attack_techniques/T1197/atomic_red_team/windows-sysmon.log",
+   "git_blob_id": "01f9a982c6b9a7d8ad9d31941cef825fa78b9d60",
+   "lfs_sha256": "e1e8d4b4cbb87c0fbc37509e7d2330f59335fb3583009c03b2e5d8684581e05b",
+   "size_bytes": 4753601,
+   "descriptors": [
+    "datasets/attack_techniques/T1197/atomic_red_team/atomic_red_team.yml"
+   ],
+   "authors_techniques": [
+    "T1197"
+   ],
+   "label_source": "descriptor"
+  },
+  {
+   "path": "datasets/attack_techniques/T1201/pwd_policy_discovery/windows-sysmon.log",
+   "git_blob_id": "bed476c134db37814824aabd408198d236bfbc30",
+   "lfs_sha256": "4ea9da4b4b229b1d84cac23d7feffad45f58ae4adda44a943254c0ef3a38aa5a",
+   "size_bytes": 9435753,
+   "descriptors": [
+    "datasets/attack_techniques/T1201/pwd_policy_discovery/pwd_policy_discovery.yml"
+   ],
+   "authors_techniques": [
+    "T1201"
+   ],
+   "label_source": "descriptor"
+  },
+  {
+   "path": "datasets/attack_techniques/T1202/atomic_red_team/windows-sysmon.log",
+   "git_blob_id": "de8302eac8d7f01fca071301b1074d42fd777296",
+   "lfs_sha256": "9ed7202f32564e679dd6de5af8c8d34ec118abd1a29c5c0532edfa843bc2cb47",
+   "size_bytes": 45097,
+   "descriptors": [
+    "datasets/attack_techniques/T1202/atomic_red_team/atomic_red_team.yml"
+   ],
+   "authors_techniques": [
+    "T1202"
+   ],
+   "label_source": "descriptor"
+  },
+  {
+   "path": "datasets/attack_techniques/T1204.002/atomic_red_team/windows-sysmon.log",
+   "git_blob_id": "87fa2953979661c61bbf595f0779e8f89cd3c612",
+   "lfs_sha256": "d600880b46feede4788b7d1512d97e255a34f0a398af45975d51363627dcf5c5",
+   "size_bytes": 978377,
+   "descriptors": [
+    "datasets/attack_techniques/T1204.002/atomic_red_team/atomic_red_team.yml"
+   ],
+   "authors_techniques": [
+    "T1204.002"
+   ],
+   "label_source": "descriptor"
+  },
+  {
+   "path": "datasets/attack_techniques/T1204.002/batch_file_in_system32/windows-sysmon.log",
+   "git_blob_id": "87fa2953979661c61bbf595f0779e8f89cd3c612",
+   "lfs_sha256": "d600880b46feede4788b7d1512d97e255a34f0a398af45975d51363627dcf5c5",
+   "size_bytes": 978377,
+   "descriptors": [
+    "datasets/attack_techniques/T1204.002/batch_file_in_system32/batch_file_in_system32.yml"
+   ],
+   "authors_techniques": [
+    "T1204.002"
+   ],
+   "label_source": "descriptor"
+  },
+  {
+   "path": "datasets/attack_techniques/T1204.002/single_letter_exe/windows-sysmon.log",
+   "git_blob_id": "aa2bff8460775dd7618cd764ef772d468a7b74c6",
+   "lfs_sha256": "ac9411cc4c291c1b70925bf71633d2c4cdd6a51c1b5367c3a2ac12aab5642a76",
+   "size_bytes": 614098,
+   "descriptors": [
+    "datasets/attack_techniques/T1204.002/single_letter_exe/single_letter_exe.yml"
+   ],
+   "authors_techniques": [
+    "T1204.002"
+   ],
+   "label_source": "descriptor"
+  },
+  {
+   "path": "datasets/attack_techniques/T1204/rare_executables/windows-sysmon.log",
+   "git_blob_id": "2c1cf54d43af04290ee1af46b63ea4bbd4e26f15",
+   "lfs_sha256": "47ca47dca91fe047e979f5b3981caca4a5c735d1840de2f5b99dcf6c98e574ad",
+   "size_bytes": 19619024,
+   "descriptors": [
+    "datasets/attack_techniques/T1204/rare_executables/rare_executables.yml"
+   ],
+   "authors_techniques": [
+    "T1204"
+   ],
+   "label_source": "descriptor"
+  },
+  {
+   "path": "datasets/attack_techniques/T1216/atomic_red_team/windows-sysmon.log",
+   "git_blob_id": "71934246722ceda20bd4e7de99de5f68cd4218a1",
+   "lfs_sha256": "44e89e8167714629e3ce8fea9b27964f354a8bc095297884bcb4c6586640e5df",
+   "size_bytes": 74378,
+   "descriptors": [
+    "datasets/attack_techniques/T1216/atomic_red_team/atomic_red_team.yml"
+   ],
+   "authors_techniques": [
+    "T1216"
+   ],
+   "label_source": "descriptor"
+  },
+  {
+   "path": "datasets/attack_techniques/T1218.001/atomic_red_team/windows-sysmon.log",
+   "git_blob_id": "594c1e87c696eeb7f87d557583422a14de02c0b3",
+   "lfs_sha256": "d486e2796889ece91e3c97d34fd4b2a134c4ed808d5efbb03be30b8b424b808c",
+   "size_bytes": 13124256,
+   "descriptors": [
+    "datasets/attack_techniques/T1218.001/atomic_red_team/atomic_red_team.yml"
+   ],
+   "authors_techniques": [
+    "T1218.001"
+   ],
+   "label_source": "descriptor"
+  },
+  {
+   "path": "datasets/attack_techniques/T1218.002/atomic_red_team/windows-sysmon.log",
+   "git_blob_id": "9564f5d8f6df8dcbeb27e228c626dbc376576c83",
+   "lfs_sha256": "df86dc15aa6c046bd2ecc89163b2320655728054addd3050b989ea7cd5ab4f53",
+   "size_bytes": 18195076,
+   "descriptors": [
+    "datasets/attack_techniques/T1218.002/atomic_red_team/atomic_red_team.yml"
+   ],
+   "authors_techniques": [
+    "T1218.002"
+   ],
+   "label_source": "descriptor"
+  },
+  {
+   "path": "datasets/attack_techniques/T1218.004/atomic_red_team/windows-sysmon.log",
+   "git_blob_id": "55e6b9a9046e67379db6a41516bf66b91efbcdb2",
+   "lfs_sha256": "5f751c19cac61fa535293737e741d405f68cd650940e49913613f0b2e7e8e851",
+   "size_bytes": 2430831,
+   "descriptors": [
+    "datasets/attack_techniques/T1218.004/atomic_red_team/atomic_red_team.yml"
+   ],
+   "authors_techniques": [
+    "T1218.004"
+   ],
+   "label_source": "descriptor"
+  },
+  {
+   "path": "datasets/attack_techniques/T1218.005/atomic_red_team/windows-sysmon.log",
+   "git_blob_id": "447ccb2f8a8957be34766a2d2f66670c99428b92",
+   "lfs_sha256": "9cd448deed170bd087c9cf2ca7cd2e7d4bc9ce60b13b254b2d39e858e7b020b4",
+   "size_bytes": 33033884,
+   "descriptors": [
+    "datasets/attack_techniques/T1218.005/atomic_red_team/atomic_red_team.yml"
+   ],
+   "authors_techniques": [
+    "T1218.005"
+   ],
+   "label_source": "descriptor"
+  },
+  {
+   "path": "datasets/attack_techniques/T1218.007/atomic_red_team/windows-sysmon.log",
+   "git_blob_id": "669d8b720a01ba83346d8031b5f509d472362f1b",
+   "lfs_sha256": "deae351a3236ab7716b5ce154e282c2b2f984ac1a88b06e41814d3a466012e28",
+   "size_bytes": 2713565,
+   "descriptors": [
+    "datasets/attack_techniques/T1218.007/atomic_red_team/atomic_red_team.yml"
+   ],
+   "authors_techniques": [
+    "T1218.007"
+   ],
+   "label_source": "descriptor"
+  },
+  {
+   "path": "datasets/attack_techniques/T1218.009/atomic_red_team/windows-sysmon.log",
+   "git_blob_id": "b388eb555967696a6e07ec93c8d019c7ae7dca94",
+   "lfs_sha256": "6e30cfc58deee5ee2df382f790711b8e2e67410bcfbf0cf8cb9169a1760f7e43",
+   "size_bytes": 7189874,
+   "descriptors": [
+    "datasets/attack_techniques/T1218.009/atomic_red_team/atomic_red_team.yml"
+   ],
+   "authors_techniques": [
+    "T1218.009"
+   ],
+   "label_source": "descriptor"
+  },
+  {
+   "path": "datasets/attack_techniques/T1218.010/atomic_red_team/windows-sysmon.log",
+   "git_blob_id": "8880c98cc8d2692592797f320bc705d63e37c544",
+   "lfs_sha256": "b0d914a6318d8f6bb663430890ae71c1b3b462a5f698c0a3ff87552697dc40b7",
+   "size_bytes": 6329227,
+   "descriptors": [
+    "datasets/attack_techniques/T1218.010/atomic_red_team/atomic_red_team.yml"
+   ],
+   "authors_techniques": [
+    "T1218.010"
+   ],
+   "label_source": "descriptor"
+  },
+  {
+   "path": "datasets/attack_techniques/T1218.011/atomic_red_team/windows-sysmon.log",
+   "git_blob_id": "9336e0382c33b70769a10d20c0769651caa14cbd",
+   "lfs_sha256": "0805f7d8a89371dee4f75c001ef11574c2d759d91626c1625bca7c9174cfe29f",
+   "size_bytes": 23784139,
+   "descriptors": [
+    "datasets/attack_techniques/T1218.011/atomic_red_team/atomic_red_team.yml"
+   ],
+   "authors_techniques": [
+    "T1218.011"
+   ],
+   "label_source": "descriptor"
+  },
+  {
+   "path": "datasets/attack_techniques/T1218.013/atomic_red_team/windows-sysmon.log",
+   "git_blob_id": "705f6e0466920a256ecb4dc39c4dd6866c766c75",
+   "lfs_sha256": "9233f7aa77cd5cdd1488838260bc2b3ea260d5747b04f285dbe686fe34241cd0",
+   "size_bytes": 8370,
+   "descriptors": [
+    "datasets/attack_techniques/T1218.013/atomic_red_team/atomic_red_team.yml"
+   ],
+   "authors_techniques": [
+    "T1218.013"
+   ],
+   "label_source": "descriptor"
+  },
+  {
+   "path": "datasets/attack_techniques/T1218/diskshadow/windows-sysmon.log",
+   "git_blob_id": "fc9cda3944754741be26a5173810855d8da350c7",
+   "lfs_sha256": "ce01372dbaa1eb55bae18894dc89c43246ada98f860dddacbb7aa57121f3c961",
+   "size_bytes": 15897,
+   "descriptors": [
+    "datasets/attack_techniques/T1218/diskshadow/diskshadow.yml"
+   ],
+   "authors_techniques": [
+    "T1218"
+   ],
+   "label_source": "descriptor"
+  },
+  {
+   "path": "datasets/attack_techniques/T1218/eviltwin/windows-sysmon.log",
+   "git_blob_id": "24b5548c9a8b0041ef3e299c57fe80f5cab59911",
+   "lfs_sha256": "f8fb1dbecd032334fde0464bd96abb51ffb23968068ea29a88618567adeaafb1",
+   "size_bytes": 6147,
+   "descriptors": [
+    "datasets/attack_techniques/T1218/eviltwin/eviltwin.yml"
+   ],
+   "authors_techniques": [
+    "T1218"
+   ],
+   "label_source": "descriptor"
+  },
+  {
+   "path": "datasets/attack_techniques/T1219/atomic_red_team/windows-sysmon.log",
+   "git_blob_id": "1be907a3d1c7d98b7426f05aaa2c4643a85c31e8",
+   "lfs_sha256": "01703d7ffa04009b543c013e25d2591e0965aaf40002bf6cb2b882fe9caa814b",
+   "size_bytes": 64929,
+   "descriptors": [
+    "datasets/attack_techniques/T1219/atomic_red_team/atomic_red_team.yml"
+   ],
+   "authors_techniques": [
+    "T1219"
+   ],
+   "label_source": "descriptor"
+  },
+  {
+   "path": "datasets/attack_techniques/T1220/atomic_red_team/windows-sysmon.log",
+   "git_blob_id": "35eae550cdfd2c3b0b9163ca5c9c487468eeeedc",
+   "lfs_sha256": "3967fecd24928ec5f2ded2725b1088056a66060d1a6aa9ca93507c813ce63e90",
+   "size_bytes": 10259034,
+   "descriptors": [
+    "datasets/attack_techniques/T1220/atomic_red_team/atomic_red_team.yml"
+   ],
+   "authors_techniques": [
+    "T1220"
+   ],
+   "label_source": "descriptor"
+  },
+  {
+   "path": "datasets/attack_techniques/T1222.001/atomic_red_team/windows-sysmon.log",
+   "git_blob_id": "7df0bcb0ad81675882315ec0c3233e3c0375bfe1",
+   "lfs_sha256": "dc7c5de0eafe6620530e0746b37666cdac18ca2f4404b1611bc55f0340c20fe3",
+   "size_bytes": 12487008,
+   "descriptors": [
+    "datasets/attack_techniques/T1222.001/atomic_red_team/atomic_red_team.yml"
+   ],
+   "authors_techniques": [
+    "T1222.001"
+   ],
+   "label_source": "descriptor"
+  },
+  {
+   "path": "datasets/attack_techniques/T1482/atomic_red_team/windows-sysmon.log",
+   "git_blob_id": "1cd4935bca969d5114117c60d69bf1767572731c",
+   "lfs_sha256": "e84ac5f6c9b1798ae2df464b8238179736c70f42306b02863cf4d3d79cfc5e3f",
+   "size_bytes": 910222,
+   "descriptors": [
+    "datasets/attack_techniques/T1482/atomic_red_team/atomic_red_team.yml"
+   ],
+   "authors_techniques": [
+    "T1482"
+   ],
+   "label_source": "descriptor"
+  },
+  {
+   "path": "datasets/attack_techniques/T1482/discovery/windows-sysmon.log",
+   "git_blob_id": "ae7dec01da5dfee73822bbc729bbaf63cf966da1",
+   "lfs_sha256": "7625586dbaad2f4a2e4ca417cf9422dd757e174b8f0abd1c8d57a1335f0707a3",
+   "size_bytes": 22263883,
+   "descriptors": [
+    "datasets/attack_techniques/T1482/discovery/discovery.yml"
+   ],
+   "authors_techniques": [
+    "T1482"
+   ],
+   "label_source": "descriptor"
+  },
+  {
+   "path": "datasets/attack_techniques/T1485/atomic_red_team/windows-sysmon.log",
+   "git_blob_id": "26547bb9ff796f31b3ef91356fca033f2284ce0e",
+   "lfs_sha256": "341c57a42357b4e39cb4c3a1a990a598ef915ba0c53f10506d09aa25728a93a0",
+   "size_bytes": 18296236,
+   "descriptors": [
+    "datasets/attack_techniques/T1485/atomic_red_team/atomic_red_team.yml"
+   ],
+   "authors_techniques": [
+    "T1485"
+   ],
+   "label_source": "descriptor"
+  },
+  {
+   "path": "datasets/attack_techniques/T1485/excessive_file_deletions/windows-sysmon.log",
+   "git_blob_id": "3c6b66934b37689b29795c672def50bd5da76792",
+   "lfs_sha256": "8af819ac534f6137456756883f096acba4fe769249687e9f006115bdd255a501",
+   "size_bytes": 29949,
+   "descriptors": [
+    "datasets/attack_techniques/T1485/excessive_file_deletions/excessive_file_deletions.yml"
+   ],
+   "authors_techniques": [
+    "T1485"
+   ],
+   "label_source": "descriptor"
+  },
+  {
+   "path": "datasets/attack_techniques/T1485/ransomware_extensions/windows-sysmon.log",
+   "git_blob_id": "45ef9a0d9248a921ca71c5558a2cfb760f674e06",
+   "lfs_sha256": "1183c2dc15b80beb3b80d46f101da9537a9c30240fca3ca86208579865ecf72b",
+   "size_bytes": 381404,
+   "descriptors": [
+    "datasets/attack_techniques/T1485/ransomware_extensions/ransomware_extensions.yml"
+   ],
+   "authors_techniques": [
+    "T1485"
+   ],
+   "label_source": "descriptor"
+  },
+  {
+   "path": "datasets/attack_techniques/T1485/ransomware_notes/windows-sysmon.log",
+   "git_blob_id": "45ef9a0d9248a921ca71c5558a2cfb760f674e06",
+   "lfs_sha256": "1183c2dc15b80beb3b80d46f101da9537a9c30240fca3ca86208579865ecf72b",
+   "size_bytes": 381404,
+   "descriptors": [
+    "datasets/attack_techniques/T1485/ransomware_notes/ransomware_notes.yml"
+   ],
+   "authors_techniques": [
+    "T1485"
+   ],
+   "label_source": "descriptor"
+  },
+  {
+   "path": "datasets/attack_techniques/T1486/dcrypt/windows-sysmon.log",
+   "git_blob_id": "9702481bf45044fa21ac0cb237cabd8594c8de03",
+   "lfs_sha256": "c70b712dbfa68c6d1e982f032b386cf8dcaae031b34e380fdb875df4d9c838d3",
+   "size_bytes": 439561,
+   "descriptors": [
+    "datasets/attack_techniques/T1486/dcrypt/dcrypt.yml"
+   ],
+   "authors_techniques": [
+    "T1486"
+   ],
+   "label_source": "descriptor"
+  },
+  {
+   "path": "datasets/attack_techniques/T1486/sam_sam_note/windows-sysmon.log",
+   "git_blob_id": "c9ece9f73fa8b6d00c3928e10d64cf18f9beb703",
+   "lfs_sha256": "ffb8daf49a0cfbfe4514eba0f340580ac88e0055a313c4880e64b251bf6da208",
+   "size_bytes": 15592223,
+   "descriptors": [
+    "datasets/attack_techniques/T1486/sam_sam_note/sam_sam_note.yml"
+   ],
+   "authors_techniques": [
+    "T1486"
+   ],
+   "label_source": "descriptor"
+  },
+  {
+   "path": "datasets/attack_techniques/T1490/atomic_red_team/windows-sysmon.log",
+   "git_blob_id": "49ef048a293ad09aa5cded9cd4d72caeea6348d0",
+   "lfs_sha256": "b2d2d3e6a15185fa73e7ace39dd57a3d499f65a462f7101b215161e1ccbb8e96",
+   "size_bytes": 510708,
+   "descriptors": [
+    "datasets/attack_techniques/T1490/atomic_red_team/atomic_red_team.yml"
+   ],
+   "authors_techniques": [
+    "T1490"
+   ],
+   "label_source": "descriptor"
+  },
+  {
+   "path": "datasets/attack_techniques/T1490/ransomware_notes/windows-sysmon.log",
+   "git_blob_id": "0bb0368e09f5d6d0c783a3b7746dd03ad00d654c",
+   "lfs_sha256": "92e525d40727e179b1f5730ad1ad1025093e76431d63cf842710f388a21fb7a4",
+   "size_bytes": 13207163,
+   "descriptors": [
+    "datasets/attack_techniques/T1490/ransomware_notes/ransomware_notes.yml"
+   ],
+   "authors_techniques": [
+    "T1490"
+   ],
+   "label_source": "descriptor"
+  },
+  {
+   "path": "datasets/attack_techniques/T1543.003/atomic_red_team/windows-sysmon.log",
+   "git_blob_id": "392fc55f0ee521ae6213791c5d929d925add3437",
+   "lfs_sha256": "2e6ea9e053a84f4d32b37f462a40a39f1a90c2049adaf684b0660ee6e9f32d7a",
+   "size_bytes": 11281916,
+   "descriptors": [
+    "datasets/attack_techniques/T1543.003/atomic_red_team/atomic_red_team.yml"
+   ],
+   "authors_techniques": [
+    "T1543.003"
+   ],
+   "label_source": "descriptor"
+  },
+  {
+   "path": "datasets/attack_techniques/T1543.003/lateral_movement/windows-sysmon.log",
+   "git_blob_id": "ddb1656bd89ebb1ad44e4f99aeb8ec1021dfbf18",
+   "lfs_sha256": "8fbc5cc13241b190d25e9978d36be23b56a2e44fd8c6da0caf49546a1e32dd74",
+   "size_bytes": 5502210,
+   "descriptors": [
+    "datasets/attack_techniques/T1543.003/lateral_movement/lateral_movement.yml"
+   ],
+   "authors_techniques": [
+    "T1543.003"
+   ],
+   "label_source": "descriptor"
+  },
+  {
+   "path": "datasets/attack_techniques/T1543.003/lateral_movement_lolbas/windows-sysmon.log",
+   "git_blob_id": "5bc90ce586b06f7ed22b53bfcd60305e2bdcc46b",
+   "lfs_sha256": "559002df46a8ba3a5f5d7855a44a9414718b2465e0d7609a6f733fc317c74645",
+   "size_bytes": 6466903,
+   "descriptors": [
+    "datasets/attack_techniques/T1543.003/lateral_movement_lolbas/lateral_movement_lolbas.yml"
+   ],
+   "authors_techniques": [
+    "T1543.003"
+   ],
+   "label_source": "descriptor"
+  },
+  {
+   "path": "datasets/attack_techniques/T1543.003/lateral_movement_powershell/windows-sysmon.log",
+   "git_blob_id": "bd8bae1e0b07b1e454d445a630808e0ad7a3f776",
+   "lfs_sha256": "e500ce256523846fbe81bbc74e43214c14acdccbc51f89c162362aedf3b0a27f",
+   "size_bytes": 5304151,
+   "descriptors": [
+    "datasets/attack_techniques/T1543.003/lateral_movement_powershell/lateral_movement_powershell.yml"
+   ],
+   "authors_techniques": [
+    "T1543.003"
+   ],
+   "label_source": "descriptor"
+  },
+  {
+   "path": "datasets/attack_techniques/T1546.003/atomic_red_team/windows-sysmon.log",
+   "git_blob_id": "38bb66bfe1a55feb57faac49106ae05c2080cd27",
+   "lfs_sha256": "9e2ca4e98779bafcf3e1904052794250e912494ec4e41983aa0940aa2d683fc0",
+   "size_bytes": 21708778,
+   "descriptors": [
+    "datasets/attack_techniques/T1546.003/atomic_red_team/atomic_red_team.yml"
+   ],
+   "authors_techniques": [
+    "T1546.003"
+   ],
+   "label_source": "descriptor"
+  },
+  {
+   "path": "datasets/attack_techniques/T1546.003/wmi_event_subscription/windows-sysmon.log",
+   "git_blob_id": "1c6a0bba1a7ac476326bdde7e73493591e79b67e",
+   "lfs_sha256": "1ce6602b7639621a9c5f6ccc2d2ba679fb5d196c84129c13f533b40a7acfe4df",
+   "size_bytes": 33021,
+   "descriptors": [
+    "datasets/attack_techniques/T1546.003/wmi_event_subscription/wmi_event_subscription.yml"
+   ],
+   "authors_techniques": [
+    "T1546.003"
+   ],
+   "label_source": "descriptor"
+  },
+  {
+   "path": "datasets/attack_techniques/T1546.008/atomic_red_team/windows-sysmon.log",
+   "git_blob_id": "180acee58e5a75ba9724e8009eb89b475bb4295e",
+   "lfs_sha256": "6d60fc0ee30c2722588849952f594170747132ed6916f90514310ef3a0284c4f",
+   "size_bytes": 2943909,
+   "descriptors": [
+    "datasets/attack_techniques/T1546.008/atomic_red_team/atomic_red_team.yml"
+   ],
+   "authors_techniques": [
+    "T1546.008"
+   ],
+   "label_source": "descriptor"
+  },
+  {
+   "path": "datasets/attack_techniques/T1546.011/atomic_red_team/windows-sysmon.log",
+   "git_blob_id": "6f902c38993e4bb8f575472ee01e3f8a5224b11a",
+   "lfs_sha256": "f92328c6565a653b760542cd397c58b046e48c8494214e0faa15662a58c4e20f",
+   "size_bytes": 11325099,
+   "descriptors": [
+    "datasets/attack_techniques/T1546.011/atomic_red_team/atomic_red_team.yml"
+   ],
+   "authors_techniques": [
+    "T1546.011"
+   ],
+   "label_source": "descriptor"
+  },
+  {
+   "path": "datasets/attack_techniques/T1546.012/atomic_red_team/windows-sysmon.log",
+   "git_blob_id": "7b0e8441df60bae6016c0972e871d2e671e32693",
+   "lfs_sha256": "7d35dbd549a3b92a8d23cfc58569cdcd749840fedc0ea3b6759c8134d4bfbfa6",
+   "size_bytes": 11551638,
+   "descriptors": [
+    "datasets/attack_techniques/T1546.012/atomic_red_team/atomic_red_team.yml"
+   ],
+   "authors_techniques": [
+    "T1546.012"
+   ],
+   "label_source": "descriptor"
+  },
+  {
+   "path": "datasets/attack_techniques/T1546.015/atomic_red_team/windows-sysmon.log",
+   "git_blob_id": "4790128799cdf69a3e054f9ea71ed58596131c20",
+   "lfs_sha256": "7f05a6ee827e8fc7ff4130172feea93e29b342305d52cb2cace9f82daea621b0",
+   "size_bytes": 55158,
+   "descriptors": [
+    "datasets/attack_techniques/T1546.015/atomic_red_team/atomic_red_team.yml"
+   ],
+   "authors_techniques": [
+    "T1546.015"
+   ],
+   "label_source": "descriptor"
+  },
+  {
+   "path": "datasets/attack_techniques/T1546.015/uac_colorui/windows-sysmon.log",
+   "git_blob_id": "66186c6c6ff97e36a48262b3d2015213c902a18c",
+   "lfs_sha256": "39eb209747cc9cd395a1074815b3ed92232e885fcfe0f9e6ed91789358f39290",
+   "size_bytes": 9445434,
+   "descriptors": [
+    "datasets/attack_techniques/T1546.015/uac_colorui/uac_colorui.yml"
+   ],
+   "authors_techniques": [
+    "T1546.015"
+   ],
+   "label_source": "descriptor"
+  },
+  {
+   "path": "datasets/attack_techniques/T1547.001/atomic_red_team/windows-sysmon.log",
+   "git_blob_id": "2e41ec30ea3c08d2e775a8344cc015f1b9aa4cdb",
+   "lfs_sha256": "11d8c6f7ca60994936ae9332ea67e5c220027ae1addad48203df6bdde9d46f5d",
+   "size_bytes": 11357100,
+   "descriptors": [
+    "datasets/attack_techniques/T1547.001/atomic_red_team/atomic_red_team.yml"
+   ],
+   "authors_techniques": [
+    "T1547.001"
+   ],
+   "label_source": "descriptor"
+  },
+  {
+   "path": "datasets/attack_techniques/T1547.005/malicious_ssp/windows-sysmon.log",
+   "git_blob_id": "c4953dcfe5f5ccea1705cf8e61c63dd26f0e0ad7",
+   "lfs_sha256": "5468577ff1e3b78f65c18d2b4643d2700204049fd3150815439dfc337be963de",
+   "size_bytes": 1046,
+   "descriptors": [
+    "datasets/attack_techniques/T1547.005/malicious_ssp/malicious_ssp.yml"
+   ],
+   "authors_techniques": [
+    "T1547.005"
+   ],
+   "label_source": "descriptor"
+  },
+  {
+   "path": "datasets/attack_techniques/T1547.008/atomic_red_team/windows-sysmon.log",
+   "git_blob_id": "372b944681347701edfdec701be0c57a96ce2e28",
+   "lfs_sha256": "5ba1fd612063a04c6f91b5c32edc48a8472d335360c35f78210c36fee15b1527",
+   "size_bytes": 12006,
+   "descriptors": [
+    "datasets/attack_techniques/T1547.008/atomic_red_team/atomic_red_team.yml"
+   ],
+   "authors_techniques": [
+    "T1547.008"
+   ],
+   "label_source": "descriptor"
+  },
+  {
+   "path": "datasets/attack_techniques/T1547.010/atomic_red_team/windows-sysmon.log",
+   "git_blob_id": "ff525905dd15a83f4e81f1e8743c7102badbe1a6",
+   "lfs_sha256": "cb5ce3df232717ff0af910d8de6484d00005e52b94f310ddbeef0e9deb08bea4",
+   "size_bytes": 11360587,
+   "descriptors": [
+    "datasets/attack_techniques/T1547.010/atomic_red_team/atomic_red_team.yml"
+   ],
+   "authors_techniques": [
+    "T1547.010"
+   ],
+   "label_source": "descriptor"
+  },
+  {
+   "path": "datasets/attack_techniques/T1547.012/printnightmare/windows-sysmon.log",
+   "git_blob_id": "be11c6f24c47fd243967c38acb0cddde53d77407",
+   "lfs_sha256": "9e71f4c59caa60932c40fe56e8f1ea51c13baf113709775044ce5828a35ebd6f",
+   "size_bytes": 36652574,
+   "descriptors": [
+    "datasets/attack_techniques/T1547.012/printnightmare/printnightmare.yml"
+   ],
+   "authors_techniques": [
+    "T1547.012"
+   ],
+   "label_source": "descriptor"
+  },
+  {
+   "path": "datasets/attack_techniques/T1548.002/atomic_red_team/windows-sysmon.log",
+   "git_blob_id": "087b1bf1197051b9e1601def0d921a7fafadb5df",
+   "lfs_sha256": "9871d7c2b348af4d9af6cb48797509f6a9567b15ea6dbaf0b622c9ca0c9fac0a",
+   "size_bytes": 12143752,
+   "descriptors": [
+    "datasets/attack_techniques/T1548.002/atomic_red_team/atomic_red_team.yml"
+   ],
+   "authors_techniques": [
+    "T1548.002"
+   ],
+   "label_source": "descriptor"
+  },
+  {
+   "path": "datasets/attack_techniques/T1548.002/slui/windows-sysmon.log",
+   "git_blob_id": "c3197c6dc4dffaa9cd05a38e9dea71ef4be10b37",
+   "lfs_sha256": "9697172ab7fa88e3a80a661a926efaad2819793a540e495565f85a5b7333dd23",
+   "size_bytes": 22271474,
+   "descriptors": [
+    "datasets/attack_techniques/T1548.002/slui/slui.yml"
+   ],
+   "authors_techniques": [
+    "T1548.002"
+   ],
+   "label_source": "descriptor"
+  },
+  {
+   "path": "datasets/attack_techniques/T1548/uac_bypass/windows-sysmon.log",
+   "git_blob_id": "582484e46a06a4a2f03e7def77309a1ffb41681d",
+   "lfs_sha256": "19d0e4454e6aa9d98e162e6062eb008ef2f01abc43414e05a50e2cf5f4c194fe",
+   "size_bytes": 25603330,
+   "descriptors": [
+    "datasets/attack_techniques/T1548/uac_bypass/uac_bypass.yml"
+   ],
+   "authors_techniques": [
+    "T1548"
+   ],
+   "label_source": "descriptor"
+  },
+  {
+   "path": "datasets/attack_techniques/T1550.002/atomic_red_team/windows-sysmon.log",
+   "git_blob_id": "4b595f96be2cd91ca9f0b7c71337f18e7b4987c1",
+   "lfs_sha256": "ae7bfafcd94f2e02f00b5e32b7aca5a9bdbf289340115824e564fd43a679e5c4",
+   "size_bytes": 19796940,
+   "descriptors": [
+    "datasets/attack_techniques/T1550.002/atomic_red_team/atomic_red_team.yml"
+   ],
+   "authors_techniques": [
+    "T1550.002"
+   ],
+   "label_source": "descriptor"
+  },
+  {
+   "path": "datasets/attack_techniques/T1550.003/mimikatz/windows-sysmon.log",
+   "git_blob_id": "c01f32992dc43580649d63590875c3d78f44c6ff",
+   "lfs_sha256": "397ac60da09264e4f8c7c5c4c8518e1c0d0b525cb90a8aa21c2216443fcd0ac9",
+   "size_bytes": 7584913,
+   "descriptors": [
+    "datasets/attack_techniques/T1550.003/mimikatz/mimikatz.yml"
+   ],
+   "authors_techniques": [
+    "T1550.003"
+   ],
+   "label_source": "descriptor"
+  },
+  {
+   "path": "datasets/attack_techniques/T1550.003/rubeus/windows-sysmon.log",
+   "git_blob_id": "ec7360355953755e45377e5dce3c5060fbc43b52",
+   "lfs_sha256": "b5400fc0ea31ff26397efdd8760b264492e4d49854646b6a0ec173fa0f98a5d1",
+   "size_bytes": 6161426,
+   "descriptors": [
+    "datasets/attack_techniques/T1550.003/rubeus/rubeus.yml"
+   ],
+   "authors_techniques": [
+    "T1550.003"
+   ],
+   "label_source": "descriptor"
+  },
+  {
+   "path": "datasets/attack_techniques/T1550/rubeus/windows-sysmon.log",
+   "git_blob_id": "0e55941472e2ff55310c03eeb1d8268deb015af7",
+   "lfs_sha256": "b1003a978e3b60902f51e64d1a4559bb4375f93a0af336cde830e1980cc6e3dc",
+   "size_bytes": 7835369,
+   "descriptors": [
+    "datasets/attack_techniques/T1550/rubeus/rubeus.yml"
+   ],
+   "authors_techniques": [
+    "T1550"
+   ],
+   "label_source": "descriptor"
+  },
+  {
+   "path": "datasets/attack_techniques/T1552.002/autoadminlogon/windows-sysmon.log",
+   "git_blob_id": "8c281db9fae59ecec801868a5e0747db68d42d1c",
+   "lfs_sha256": "dbeffd8bf951771952046f3d81444f16e444a8470bab33d1442c20f69ab6bd19",
+   "size_bytes": 17497456,
+   "descriptors": [
+    "datasets/attack_techniques/T1552.002/autoadminlogon/autoadminlogon.yml"
+   ],
+   "authors_techniques": [
+    "T1552.002"
+   ],
+   "label_source": "descriptor"
+  },
+  {
+   "path": "datasets/attack_techniques/T1553.004/atomic_red_team/windows-sysmon.log",
+   "git_blob_id": "f4cf9b756765dfcddc5517a98bc3746546c4645f",
+   "lfs_sha256": "97f54c07c9acb630f9afee595d5cee889445ff66173c4a85e3fca128af688531",
+   "size_bytes": 11776841,
+   "descriptors": [
+    "datasets/attack_techniques/T1553.004/atomic_red_team/atomic_red_team.yml"
+   ],
+   "authors_techniques": [
+    "T1553.004"
+   ],
+   "label_source": "descriptor"
+  },
+  {
+   "path": "datasets/attack_techniques/T1556/disable_credential_guard/windows-sysmon.log",
+   "git_blob_id": "03d1642d497bc9d22b9507d990e07363ff7294d3",
+   "lfs_sha256": "a8879851980508e87ca0600bc269643b97ad1c653398b4e970de71da002e5241",
+   "size_bytes": 1004,
+   "descriptors": [
+    "datasets/attack_techniques/T1556/disable_credential_guard/disable_credential_guard.yml"
+   ],
+   "authors_techniques": [
+    "T1556"
+   ],
+   "label_source": "descriptor"
+  },
+  {
+   "path": "datasets/attack_techniques/T1556/disable_lsa_protection/windows-sysmon.log",
+   "git_blob_id": "28be4889dd1ac0b848658ae89d261c349febf0ff",
+   "lfs_sha256": "385eb30013b94a5946b4643cb8aece8ecfea9d5508ac23e6661409b57004f9af",
+   "size_bytes": 1001,
+   "descriptors": [
+    "datasets/attack_techniques/T1556/disable_lsa_protection/disable_lsa_protection.yml"
+   ],
+   "authors_techniques": [
+    "T1556"
+   ],
+   "label_source": "descriptor"
+  },
+  {
+   "path": "datasets/attack_techniques/T1558.003/atomic_red_team/windows-sysmon.log",
+   "git_blob_id": "d81af18185fa4e0c2f01752ff561e5b93954f01d",
+   "lfs_sha256": "e3a1a1d540d28e4e8d5e59d0e3c505d1904ec44067127fd6bcfa963d20fab704",
+   "size_bytes": 18090394,
+   "descriptors": [
+    "datasets/attack_techniques/T1558.003/atomic_red_team/atomic_red_team.yml"
+   ],
+   "authors_techniques": [
+    "T1558.003"
+   ],
+   "label_source": "descriptor"
+  },
+  {
+   "path": "datasets/attack_techniques/T1558.003/rubeus/windows-sysmon.log",
+   "git_blob_id": "70fc343ef305eb9759193f7d3d49e48d58bdecb2",
+   "lfs_sha256": "dcae856a516c000816cc825d35286105bd6b842df51eb87056c83a2abe76b811",
+   "size_bytes": 22377812,
+   "descriptors": [
+    "datasets/attack_techniques/T1558.003/rubeus/rubeus.yml"
+   ],
+   "authors_techniques": [
+    "T1558.003"
+   ],
+   "label_source": "descriptor"
+  },
+  {
+   "path": "datasets/attack_techniques/T1560.001/archive_utility/windows-sysmon.log",
+   "git_blob_id": "b2c92b014b481a0925d7aa6b85c873576d6e4941",
+   "lfs_sha256": "38048475c0ec9937dde51d05dda90005fa86616779acc966daaf932c2bbd181e",
+   "size_bytes": 24954216,
+   "descriptors": [
+    "datasets/attack_techniques/T1560.001/archive_utility/archive_utility.yml"
+   ],
+   "authors_techniques": [
+    "T1560.001"
+   ],
+   "label_source": "descriptor"
+  },
+  {
+   "path": "datasets/attack_techniques/T1562.001/atomic_red_team/windows-sysmon.log",
+   "git_blob_id": "1a35a23c3a8ae12314e2c6287e9fc7deaa6179a5",
+   "lfs_sha256": "696e1d2800d215e13c8f1ea5252cf2c2118e1018c1cacda82c041fdbeeac403d",
+   "size_bytes": 14504430,
+   "descriptors": [
+    "datasets/attack_techniques/T1562.001/atomic_red_team/atomic_red_team.yml"
+   ],
+   "authors_techniques": [
+    "T1562.001"
+   ],
+   "label_source": "descriptor"
+  },
+  {
+   "path": "datasets/attack_techniques/T1562.001/hotkey_disabled_hidden_user/windows-sysmon.log",
+   "git_blob_id": "b7b49505ea6307e4f646c85921c8982507fbb198",
+   "lfs_sha256": "28efd456106f6bd080835507f43d3808e045193d16992b19c22364b166fc69ff",
+   "size_bytes": 10576705,
+   "descriptors": [
+    "datasets/attack_techniques/T1562.001/hotkey_disabled_hidden_user/data.yml"
+   ],
+   "authors_techniques": [
+    "T1562.001"
+   ],
+   "label_source": "descriptor"
+  },
+  {
+   "path": "datasets/attack_techniques/T1562.001/pwh_defender_disabling/windows-sysmon.log",
+   "git_blob_id": "1ace8ac17314db7e381aba112cd557222d72c987",
+   "lfs_sha256": "8ab3d091f0a6fa2c6bff98af1ae1f6b523c9f450666a64bf0185c37d76480981",
+   "size_bytes": 42122,
+   "descriptors": [
+    "datasets/attack_techniques/T1562.001/pwh_defender_disabling/pwh_defender_disabling.yml"
+   ],
+   "authors_techniques": [
+    "T1562.001"
+   ],
+   "label_source": "descriptor"
+  },
+  {
+   "path": "datasets/attack_techniques/T1562.001/sc_service_start_disabled/windows-sysmon.log",
+   "git_blob_id": "d4d3a32eba762406c8f8e8c350999a4ca810c862",
+   "lfs_sha256": "83ae68da1c0adccd5f8b9e8170aef56c815e3a36747b583be13cb93b4f28a38e",
+   "size_bytes": 4982097,
+   "descriptors": [
+    "datasets/attack_techniques/T1562.001/sc_service_start_disabled/sc_service_start_disabled.yml"
+   ],
+   "authors_techniques": [
+    "T1562.001"
+   ],
+   "label_source": "descriptor"
+  },
+  {
+   "path": "datasets/attack_techniques/T1562.001/unload_sysmon/windows-sysmon.log",
+   "git_blob_id": "60ba292073bfc73547b453234d5b33aa55c68dd1",
+   "lfs_sha256": "99ebf6dab3ce8d632929c39b92758c97c279003dada3600769f6bfb2700ed64e",
+   "size_bytes": 4685,
+   "descriptors": [
+    "datasets/attack_techniques/T1562.001/unload_sysmon/unload_sysmon.yml"
+   ],
+   "authors_techniques": [
+    "T1562.001"
+   ],
+   "label_source": "descriptor"
+  },
+  {
+   "path": "datasets/attack_techniques/T1562.001/win_app_defender_disabling/windows-sysmon.log",
+   "git_blob_id": "b942d016ba38d0a7c4c03ac8c33cee34eeeb5e78",
+   "lfs_sha256": "8886e363b137555f5a0403783106e656b77e328fab2e503a645015f5e1cc3756",
+   "size_bytes": 20091826,
+   "descriptors": [
+    "datasets/attack_techniques/T1562.001/win_app_defender_disabling/data.yml"
+   ],
+   "authors_techniques": [
+    "T1562.001"
+   ],
+   "label_source": "descriptor"
+  },
+  {
+   "path": "datasets/attack_techniques/T1562.001/win_defend_service_stop/windows-sysmon.log",
+   "git_blob_id": "1962496f2c5f24590103f20ce4a192cebc854e3d",
+   "lfs_sha256": "f9dc84160d71a405117cbf792cb724bfe2779d1e0406e9be387ba591ceaacd71",
+   "size_bytes": 13833365,
+   "descriptors": [
+    "datasets/attack_techniques/T1562.001/win_defend_service_stop/win_defend_service_stop.yml"
+   ],
+   "authors_techniques": [
+    "T1562.001"
+   ],
+   "label_source": "descriptor"
+  },
+  {
+   "path": "datasets/attack_techniques/T1562.004/atomic_red_team/windows-sysmon.log",
+   "git_blob_id": "b0cfa9bca3d5b06f6b433eda617daf7a9d3880b0",
+   "lfs_sha256": "384bbe4f69b9b76b06f8263df1b8da76f9a2693cc73ba672051ddd89b6e451c0",
+   "size_bytes": 25558185,
+   "descriptors": [
+    "datasets/attack_techniques/T1562.004/atomic_red_team/atomic_red_team.yml"
+   ],
+   "authors_techniques": [
+    "T1562.004"
+   ],
+   "label_source": "descriptor"
+  },
+  {
+   "path": "datasets/attack_techniques/T1566.001/datasets2/windows-sysmon.log",
+   "git_blob_id": "04be6eefcb858dc3cb5cfbff9dc6ccfec63b7e59",
+   "lfs_sha256": "dc13da161669f422c879b9dced6bf58e7f77cd9f7a9c7d37d3d4f59593c78417",
+   "size_bytes": 32185000,
+   "descriptors": [
+    "datasets/attack_techniques/T1566.001/datasets2/data.yml"
+   ],
+   "authors_techniques": [
+    "T1566.001"
+   ],
+   "label_source": "descriptor"
+  },
+  {
+   "path": "datasets/attack_techniques/T1566.001/macro/windows-sysmon.log",
+   "git_blob_id": "3cbf09a642484b16afd1bd5153e9979188459443",
+   "lfs_sha256": "e0beda8b34a4a5fe0b6d2edd38a918a776a0dd0f15c9d7706f1dbfd2b0a4d591",
+   "size_bytes": 38942255,
+   "descriptors": [
+    "datasets/attack_techniques/T1566.001/macro/data.yml"
+   ],
+   "authors_techniques": [
+    "T1566.001"
+   ],
+   "label_source": "descriptor"
+  },
+  {
+   "path": "datasets/attack_techniques/T1566.002/atomic_red_team/windows-sysmon.log",
+   "git_blob_id": "e910a1954998aeb95cfd1d411e45855a523f5242",
+   "lfs_sha256": "5653eeecf818aa1143060b7eb30d0f08db78e57fba6b3e8ac6473d4762fe78ff",
+   "size_bytes": 25752,
+   "descriptors": [
+    "datasets/attack_techniques/T1566.002/atomic_red_team/atomic_red_team.yml"
+   ],
+   "authors_techniques": [
+    "T1566.002"
+   ],
+   "label_source": "descriptor"
+  },
+  {
+   "path": "datasets/attack_techniques/T1566.002/lnk_file_temp_folder/windows-sysmon.log",
+   "git_blob_id": "cd81ef8d7b30cf637663b4b8df113c94a6cc9231",
+   "lfs_sha256": "b48513d5cc0f5ee9edcf487f426fda6812e746b3d8250c8c90c02031f9e282d9",
+   "size_bytes": 16538713,
+   "descriptors": [
+    "datasets/attack_techniques/T1566.002/lnk_file_temp_folder/lnk_file_temp_folder.yml"
+   ],
+   "authors_techniques": [
+    "T1566.002"
+   ],
+   "label_source": "descriptor"
+  },
+  {
+   "path": "datasets/attack_techniques/T1569.002/atomic_red_team/windows-sysmon.log",
+   "git_blob_id": "21b3fd0719a538745fac7402174470fe75d47096",
+   "lfs_sha256": "6864968926d7ef6b7fb97d6a5d8ee3478ca4c880d3f048a919f5a16d9e5d4982",
+   "size_bytes": 13756037,
+   "descriptors": [
+    "datasets/attack_techniques/T1569.002/atomic_red_team/atomic_red_team.yml"
+   ],
+   "authors_techniques": [
+    "T1569.002"
+   ],
+   "label_source": "descriptor"
+  },
+  {
+   "path": "datasets/attack_techniques/T1572/ngrok/windows-sysmon.log",
+   "git_blob_id": "6d8d07004fd14abf1302c1c209e2746e602e3912",
+   "lfs_sha256": "8e53cdfacaae106a1012799db25b07d7b1945f325f5ca5e30a8e1421aa76b974",
+   "size_bytes": 71654,
+   "descriptors": [
+    "datasets/attack_techniques/T1572/ngrok/ngrok.yml"
+   ],
+   "authors_techniques": [
+    "T1572"
+   ],
+   "label_source": "descriptor"
+  },
+  {
+   "path": "datasets/attack_techniques/T1572/plink/windows-sysmon.log",
+   "git_blob_id": "9df663a77646e0a5576c1736db211a9f1d645316",
+   "lfs_sha256": "d3e8bbbd7581844a572627ba888b22aea1f2be121660a16e520ff27fddb40fb0",
+   "size_bytes": 228457,
+   "descriptors": [
+    "datasets/attack_techniques/T1572/plink/plink.yml"
+   ],
+   "authors_techniques": [
+    "T1572"
+   ],
+   "label_source": "descriptor"
+  },
+  {
+   "path": "datasets/attack_techniques/T1574.001/atomic_red_team/windows-sysmon.log",
+   "git_blob_id": "1b82d3685370888a223860d2e322d99a6fdc17e9",
+   "lfs_sha256": "40453c0adea0094eec5d7bcbc16c1218ce45e8a4fd0d596e9a8a7f9437b8750a",
+   "size_bytes": 124911,
+   "descriptors": [
+    "datasets/attack_techniques/T1574.001/atomic_red_team/atomic_red_team.yml"
+   ],
+   "authors_techniques": [
+    "T1574.001"
+   ],
+   "label_source": "descriptor"
+  },
+  {
+   "path": "datasets/attack_techniques/T1574.002/lotus_blossom_chrysalis/windows-sysmon.log",
+   "git_blob_id": "e00a305fc544dafab1e297e88e4e824b45d86b48",
+   "lfs_sha256": "66dad57f32a2178a924c5742ac7b68fa74d745d9efb8ac7796067e3464b9307c",
+   "size_bytes": 9226,
+   "descriptors": [
+    "datasets/attack_techniques/T1574.002/lotus_blossom_chrysalis/dataset.yml"
+   ],
+   "authors_techniques": [
+    "T1574.002"
+   ],
+   "label_source": "descriptor"
+  },
+  {
+   "path": "datasets/attack_techniques/T1574.002/msi_module_load/windows-sysmon.log",
+   "git_blob_id": "aac0e0ffcb570b321d93224ed08f63b8f48af26e",
+   "lfs_sha256": "97adffda36f082369003f4a3549704190fbe04de1cbb88d014bbac8f1975b6fa",
+   "size_bytes": 10353,
+   "descriptors": [
+    "datasets/attack_techniques/T1574.002/msi_module_load/msi_module_load.yml"
+   ],
+   "authors_techniques": [
+    "T1574.002"
+   ],
+   "label_source": "descriptor"
+  },
+  {
+   "path": "datasets/attack_techniques/T1574.009/atomic_red_team/windows-sysmon.log",
+   "git_blob_id": "d1fa1a6d2b2993d7ce56e914702a3bce493b2b74",
+   "lfs_sha256": "da9ae38593a369e2cfcab73b44a897fcd37ff1a066fe698987abd6854c80ec4f",
+   "size_bytes": 11304228,
+   "descriptors": [
+    "datasets/attack_techniques/T1574.009/atomic_red_team/atomic_red_team.yml"
+   ],
+   "authors_techniques": [
+    "T1574.009"
+   ],
+   "label_source": "descriptor"
+  },
+  {
+   "path": "datasets/attack_techniques/T1574.011/change_registry_path_service/windows-sysmon.log",
+   "git_blob_id": "f0fdab78f1d37f35064fcc408686ea152a30e2cc",
+   "lfs_sha256": "ecd26db02e3495c351ca81a839590947ec5ea8ce9edb847f69ae08c98f3ed5e2",
+   "size_bytes": 7096789,
+   "descriptors": [
+    "datasets/attack_techniques/T1574.011/change_registry_path_service/change_registry_path_service.yml"
+   ],
+   "authors_techniques": [
+    "T1574.011"
+   ],
+   "label_source": "descriptor"
+  },
+  {
+   "path": "datasets/attack_techniques/T1588.002/atomic_red_team/windows-sysmon.log",
+   "git_blob_id": "63fa1a20626d07ab48da82a413312a47c8dfc6a7",
+   "lfs_sha256": "ca8af2a92014ef1cbc606ac31144419ad948d575d65e3850ed279f5f50621e56",
+   "size_bytes": 12676536,
+   "descriptors": [
+    "datasets/attack_techniques/T1588.002/atomic_red_team/atomic_red_team.yml"
+   ],
+   "authors_techniques": [
+    "T1588.002"
+   ],
+   "label_source": "descriptor"
+  },
+  {
+   "path": "datasets/attack_techniques/T1590.005/windows-sysmon.log",
+   "git_blob_id": "90273d047b68e45929b29632f6fc912a27d49d27",
+   "lfs_sha256": "ce63c8c2162f3371fdd06508f319fec74c35745bd37f235c19ef615ad8f7ea0d",
+   "size_bytes": 16004,
+   "descriptors": [
+    "datasets/attack_techniques/T1590.005/data.yml"
+   ],
+   "authors_techniques": [
+    "T1590.005"
+   ],
+   "label_source": "descriptor"
+  },
+  {
+   "path": "datasets/attack_techniques/T1595/attacker_scan_tools/windows-sysmon.log",
+   "git_blob_id": "710570c1cd0f4c1e402d77e6a427a3a2ceac8b5f",
+   "lfs_sha256": "386a9a7feb3f23fdff761723606f403fed4f61534a19af8a7c19a7fbca033055",
+   "size_bytes": 12513323,
+   "descriptors": [
+    "datasets/attack_techniques/T1595/attacker_scan_tools/attacker_scan_tools.yml"
+   ],
+   "authors_techniques": [
+    "T1595"
+   ],
+   "label_source": "descriptor"
+  },
+  {
+   "path": "datasets/attack_techniques/T1620/common_language_runtim_loaded/windows-sysmon.log",
+   "git_blob_id": "b66495bf278d9706f68d6f8cb1221381184c0928",
+   "lfs_sha256": "787731ae03c41c253da26d69ef9b4ec61bfab213fe1b6bcfa4280eddf23a20e1",
+   "size_bytes": 29252,
+   "descriptors": [
+    "datasets/attack_techniques/T1620/common_language_runtim_loaded/common_language_runtim_loaded.yml"
+   ],
+   "authors_techniques": [
+    "T1620"
+   ],
+   "label_source": "descriptor"
+  }
+ ],
+ "excluded": [
+  {
+   "path": "datasets/attack_techniques/T1018/atomic_red_team/windows-sysmon.log",
+   "reason": "larger than 50 MB (51,733,783 bytes)"
+  },
+  {
+   "path": "datasets/attack_techniques/T1053.005/taskschedule/windows-sysmon.log",
+   "reason": "larger than 50 MB (278,424,782 bytes)"
+  },
+  {
+   "path": "datasets/attack_techniques/T1055/cobalt_strike/windows-sysmon.log",
+   "reason": "larger than 50 MB (156,544,278 bytes)"
+  },
+  {
+   "path": "datasets/attack_techniques/T1059.001/obfuscated_powershell/windows-sysmon.log",
+   "reason": "larger than 50 MB (54,722,634 bytes)"
+  },
+  {
+   "path": "datasets/attack_techniques/T1069.001/atomic_red_team/windows-sysmon.log",
+   "reason": "larger than 50 MB (85,029,761 bytes)"
+  },
+  {
+   "path": "datasets/attack_techniques/T1070/fsutil_file_zero/windows-sysmon.log",
+   "reason": "larger than 50 MB (56,528,080 bytes)"
+  },
+  {
+   "path": "datasets/attack_techniques/T1087.002/blackmatter_schcache/windows-sysmon.log",
+   "reason": "larger than 50 MB (52,562,846 bytes)"
+  },
+  {
+   "path": "datasets/attack_techniques/T1505.003/windows-sysmon.log",
+   "reason": "larger than 50 MB (99,525,045 bytes)"
+  },
+  {
+   "path": "datasets/attack_techniques/T1548/darkside_cmstp_com/windows-sysmon.log",
+   "reason": "larger than 50 MB (189,888,667 bytes)"
+  },
+  {
+   "path": "datasets/attack_techniques/T1566.001/datasets/windows-sysmon.log",
+   "reason": "larger than 50 MB (91,182,945 bytes)"
+  }
+ ]
+}

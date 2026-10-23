@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """Acquire pinned, real telemetry from ``splunk/attack_data`` (ADR-0010 D6, ADR-0011).
 
-``--set linux`` (default), ``--set cloud`` or ``--set macos`` selects an owner-approved file set,
-each with its own ``selection.txt`` and ``manifest.json``.
+``--set linux`` (default), ``--set cloud``, ``--set macos`` or ``--set windows-unseen`` selects an
+owner-approved file set, each with its own ``selection.txt`` and ``manifest.json``.
 
 Runs only when a human invokes it — never at application runtime. The owner
 approved this download on 2026-10-01: the reviewed file list is
@@ -27,9 +27,12 @@ from __future__ import annotations
 
 import datetime as dt
 import hashlib
+import http.client
 import json
 import re
 import sys
+import time
+import urllib.error
 import urllib.request
 from pathlib import Path, PurePosixPath
 
@@ -55,18 +58,38 @@ SETS = {
         "splunk/attack_data (macOS: osquery Endpoint Security process events)",
         "owner standing instruction, 2026-10-08 (ADR-0014; recommended path)",
     ),
+    "windows-unseen": (
+        REPO_ROOT / "data" / "telemetry-samples" / "splunk-attack-data-windows-unseen",
+        "splunk/attack_data (Windows Sysmon: the second unseen test set)",
+        "owner, 2026-10-23 (ADR-0029; selection by scripts/select_unseen_splunk_windows.py)",
+    ),
 }
 _POINTER = re.compile(
     r"\Aversion https://git-lfs\.github\.com/spec/v1\noid sha256:([0-9a-f]{64})\nsize (\d+)\n\Z"
 )
 
 
-def _get(url: str) -> bytes:
+def _get(url: str, attempts: int = 4) -> bytes:
+    """GET ``url``; a dropped or stalled connection is retried, an HTTP error is not."""
     req = urllib.request.Request(url, headers={"User-Agent": "soc-apt-attribution-platform/0.0.0"})
-    with urllib.request.urlopen(req, timeout=600) as resp:  # noqa: S310 - fixed https URL, GET only
-        if resp.status != 200:
-            raise RuntimeError(f"download failed: HTTP {resp.status} for {url}")
-        return bytes(resp.read())
+    for attempt in range(1, attempts + 1):
+        try:
+            with urllib.request.urlopen(req, timeout=120) as resp:  # noqa: S310 - fixed https URL
+                if resp.status != 200:
+                    raise RuntimeError(f"download failed: HTTP {resp.status} for {url}")
+                return bytes(resp.read())
+        except urllib.error.HTTPError:
+            raise
+        except (
+            http.client.IncompleteRead,
+            TimeoutError,
+            ConnectionError,
+            urllib.error.URLError,
+        ) as exc:
+            if attempt == attempts:
+                raise RuntimeError(f"download failed after {attempts} attempts: {url}") from exc
+            time.sleep(2 * attempt)
+    raise AssertionError("unreachable")
 
 
 def _safe(path: str) -> str:

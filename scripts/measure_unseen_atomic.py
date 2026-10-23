@@ -17,6 +17,12 @@ label as written is kept beside it. ``--rescore-first-run`` recomputes the
 first run's figures from its stored per-recording sets the same way.
 
     python scripts/measure_unseen_atomic.py http://127.0.0.1:8004
+
+The second unseen set (ADR-0029) is measured the same way; ``--run`` and ``--out`` name the
+run record and the results file in the set's directory:
+
+    python scripts/measure_unseen_atomic.py http://127.0.0.1:8005 --set splunk-windows \\
+        --run run-baseline.json --out results-baseline.json
 """
 
 from __future__ import annotations
@@ -34,6 +40,35 @@ from attribution_platform.attack_knowledge.external_ids import ExternalIdResolve
 from attribution_platform.attack_knowledge.loader import load_attack_knowledge
 
 REPO = Path(__file__).resolve().parents[1]
+
+
+def file_name(path: str) -> str:
+    return PurePath(path).name
+
+
+def technique_path(path: str) -> str:
+    """Every Splunk file is called windows-sysmon.log: keep the technique and run directory."""
+    return path.removeprefix("datasets/attack_techniques/")
+
+
+#: --set NAME -> (results directory, recording name from its path, the name results are grouped
+#: by and its segment of the path). The OTRF paths carry a tactic folder
+#: (datasets/atomic/windows/<tactic>/…); the Splunk paths a technique directory
+#: (datasets/attack_techniques/<technique>/…).
+SETS = {
+    "otrf-atomic": (
+        REPO / "data" / "validation" / "unseen-otrf-atomic",
+        file_name,
+        "tactic_folder",
+        3,
+    ),
+    "splunk-windows": (
+        REPO / "data" / "validation" / "unseen-splunk-windows",
+        technique_path,
+        "technique_directory",
+        2,
+    ),
+}
 SELECTION = REPO / "data" / "validation" / "unseen-otrf-atomic" / "selection.json"
 OUT = REPO / "data" / "validation" / "unseen-otrf-atomic" / "results.json"
 RUN = REPO / "data" / "validation" / "unseen-otrf-atomic" / "run.json"
@@ -69,17 +104,19 @@ def _matches(technique: str, found: set[str]) -> bool:
     return technique in found or any(related(technique, other) for other in found)
 
 
-def build(base: str) -> dict[str, Any]:
+def build(base: str, set_name: str = "otrf-atomic", run_file: str = "run.json") -> dict[str, Any]:
     current = resolver()
-    selection = json.loads(SELECTION.read_text(encoding="utf-8"))["selected"]
+    directory, recording_name, group_key, group_segment = SETS[set_name]
+    selection_path = directory / "selection.json"
+    selection = json.loads(selection_path.read_text(encoding="utf-8"))["selected"]
     # run.json lists the recordings in manifest order, which is selection order;
     # joined by position (two selected files share a name), checked by name.
-    outcomes = json.loads(RUN.read_text(encoding="utf-8"))["recordings"]
+    outcomes = json.loads((directory / run_file).read_text(encoding="utf-8"))["recordings"]
     if len(outcomes) != len(selection):
-        raise SystemExit("run.json does not cover the selection")
+        raise SystemExit(f"{run_file} does not cover the selection")
     cases = []
     for entry, outcome in zip(selection, outcomes, strict=True):
-        name = PurePath(entry["path"]).name
+        name = recording_name(entry["path"])
         if outcome["recording"] != name:
             raise SystemExit(f"run.json order differs at {name}")
         labelled = entry["authors_techniques"]
@@ -118,8 +155,8 @@ def build(base: str) -> dict[str, Any]:
         cases.append(
             {
                 "recording": entry["path"],
-                "metadata_id": entry["metadata_id"],
-                "tactic_folder": entry["path"].split("/")[3],
+                **({"metadata_id": entry["metadata_id"]} if "metadata_id" in entry else {}),
+                group_key: entry["path"].split("/")[group_segment],
                 "investigated": True,
                 "evidence": inv.get("evidence"),
                 "authors_techniques_as_labelled": labelled,
@@ -146,14 +183,15 @@ def build(base: str) -> dict[str, Any]:
 
     by_tactic: dict[str, dict[str, int]] = collections.defaultdict(lambda: collections.Counter())
     for c in run:
-        row = by_tactic[c["tactic_folder"]]
+        row = by_tactic[c[group_key]]
         row["recordings"] += 1
         row["authors_techniques"] += len(c["authors_techniques"])
         row["found"] += len(c["found_exactly"]) + len(c["found_as_parent_or_sub"])
         row["missed_but_shown"] += len(c["missed_but_shown"])
     return {
         "version": "unseen-results/2",
-        "selection": SELECTION.relative_to(REPO).as_posix(),
+        "selection": selection_path.relative_to(REPO).as_posix(),
+        "run": (directory / run_file).relative_to(REPO).as_posix(),
         "recordings_selected": len(cases),
         "recordings_investigated": len(run),
         "recordings_not_investigated": {
@@ -184,7 +222,7 @@ def build(base: str) -> dict[str, Any]:
             "recordings_with_no_evidence": sum(1 for c in run if not c["evidence"]),
             "recordings_naming_an_actor": sum(1 for c in run if c["named_actors"]),
         },
-        "by_tactic_folder": {k: dict(v) for k, v in sorted(by_tactic.items())},
+        f"by_{group_key}": {k: dict(v) for k, v in sorted(by_tactic.items())},
         "cases": cases,
     }
 
@@ -215,11 +253,17 @@ def main(argv: list[str]) -> int:
     if argv and argv[0] == "--rescore-first-run":
         print(json.dumps(rescore_first_run(), indent=1))
         return 0
-    base = argv[0].rstrip("/") if argv else "http://127.0.0.1:8000"
-    report = build(base)
-    OUT.write_text(json.dumps(report, indent=1) + "\n", encoding="utf-8", newline="\n")
+    base = argv[0].rstrip("/") if argv and not argv[0].startswith("--") else "http://127.0.0.1:8000"
+    set_name = argv[argv.index("--set") + 1] if "--set" in argv else "otrf-atomic"
+    run_file = argv[argv.index("--run") + 1] if "--run" in argv else "run.json"
+    out = SETS[set_name][0] / (argv[argv.index("--out") + 1] if "--out" in argv else "results.json")
+    report = build(base, set_name, run_file)
+    out.write_text(json.dumps(report, indent=1) + "\n", encoding="utf-8", newline="\n")
+    if "--quiet" in argv:  # ADR-0029: the baseline is stored, not read, until the build is frozen
+        print(f"wrote {out.relative_to(REPO).as_posix()}")
+        return 0
     print(json.dumps(report["summary"], indent=1))
-    print(json.dumps(report["by_tactic_folder"], indent=1))
+    print(json.dumps(report[f"by_{SETS[set_name][2]}"], indent=1))
     return 0
 
 
