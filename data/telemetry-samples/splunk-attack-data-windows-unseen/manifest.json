@@ -1,0 +1,1365 @@
+{
+  "source": "splunk/attack_data (Windows Sysmon: the second unseen test set)",
+  "license": "Apache-2.0",
+  "license_url": "https://github.com/splunk/attack_data/blob/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/LICENSE",
+  "source_repository": "splunk/attack_data",
+  "source_commit": "a28608b53aa3d8222052e8f3ada59e2d9a4adfff",
+  "retrieved_at_utc": "2026-10-23T18:51:54Z",
+  "method": "scripts/acquire_linux_telemetry.py (commit-pinned; LFS content verified against each pointer's SHA-256 and size)",
+  "approval": "owner, 2026-10-23 (ADR-0029; selection by scripts/select_unseen_splunk_windows.py)",
+  "cache": "data/cache/splunk-attack-data/ (git-ignored; rebuild with this script)",
+  "files": [
+    {
+      "source_path": "datasets/attack_techniques/T1003.001/atomic_red_team/windows-sysmon.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1003.001/atomic_red_team/windows-sysmon.log",
+      "size_bytes": 14235927,
+      "sha256": "a1905850598f1e943708c3329190e29c6cb046389c1575cb2afd6369b5f269f1",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1003.001/atomic_red_team/windows-sysmon.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1003.002/atomic_red_team/windows-sysmon.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1003.002/atomic_red_team/windows-sysmon.log",
+      "size_bytes": 12789744,
+      "sha256": "ae66c083bde9f793ebaa7f15807a99645b15d6f958894349e5026ced597665ea",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1003.002/atomic_red_team/windows-sysmon.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1003.003/atomic_red_team/windows-sysmon.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1003.003/atomic_red_team/windows-sysmon.log",
+      "size_bytes": 12883992,
+      "sha256": "ee1c7cd9fa20013c82da17f8cb1998197c117ab4c209ab56203290bc90739fda",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1003.003/atomic_red_team/windows-sysmon.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1014/windows-sysmon.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1014/windows-sysmon.log",
+      "size_bytes": 204754,
+      "sha256": "e44aca9a9cd11b241498ac117686e8b632a3387d11f664d769be918ab3a66bef",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1014/windows-sysmon.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1016/discovery_commands/windows-sysmon.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1016/discovery_commands/windows-sysmon.log",
+      "size_bytes": 14564062,
+      "sha256": "90330baf06554a542d188162782c68140d3aa250f1e50f38b925ba26094507db",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1016/discovery_commands/windows-sysmon.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1018/AD_discovery/windows-sysmon.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1018/AD_discovery/windows-sysmon.log",
+      "size_bytes": 4853376,
+      "sha256": "14e3617eac4e42926e56adcf5597fe3ca45f6a66e63facb5d408e9f718570e60",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1018/AD_discovery/windows-sysmon.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1020/windows-sysmon.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1020/windows-sysmon.log",
+      "size_bytes": 9123060,
+      "sha256": "51570af79600ebe51b015976d68ef63581e8c4916c24891c21ccca7ef3bef8f0",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1020/windows-sysmon.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1021.002/atomic_red_team/windows-sysmon.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1021.002/atomic_red_team/windows-sysmon.log",
+      "size_bytes": 21361,
+      "sha256": "39685d672931f6da05918b8bbdd7f359c90feb73d6b02eb26a331aa60512f5d0",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1021.002/atomic_red_team/windows-sysmon.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1021.003/impacket/windows-sysmon.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1021.003/impacket/windows-sysmon.log",
+      "size_bytes": 5525253,
+      "sha256": "0a97b9195b8482c6d8da389fbe59c9afad269bced502abc8e2b6d3254505d344",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1021.003/impacket/windows-sysmon.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1021.003/lateral_movement/windows-sysmon.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1021.003/lateral_movement/windows-sysmon.log",
+      "size_bytes": 6710771,
+      "sha256": "f5708b28b511e3036774f04d754e7d0a38bf6391a8f6602a42fb65e4460536f5",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1021.003/lateral_movement/windows-sysmon.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1021.003/lateral_movement_lolbas/windows-sysmon.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1021.003/lateral_movement_lolbas/windows-sysmon.log",
+      "size_bytes": 5487612,
+      "sha256": "da2b86cd70747a8be6befb0c7cc0206996d55f5c7adff411a6938378f211806a",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1021.003/lateral_movement_lolbas/windows-sysmon.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1021.003/lateral_movement_speechruntime/windows-sysmon.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1021.003/lateral_movement_speechruntime/windows-sysmon.log",
+      "size_bytes": 6525,
+      "sha256": "cf3358ff725498d5371cc79967539a435aaf46b2c6fb4c944ebab61fccdf63ef",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1021.003/lateral_movement_speechruntime/windows-sysmon.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1021.006/lateral_movement/windows-sysmon.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1021.006/lateral_movement/windows-sysmon.log",
+      "size_bytes": 5835542,
+      "sha256": "6370f139b06c5de9e6b76ba81d9247c7c869879e74dfee1603f4d8b3682ab1c4",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1021.006/lateral_movement/windows-sysmon.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1021.006/lateral_movement_lolbas/windows-sysmon.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1021.006/lateral_movement_lolbas/windows-sysmon.log",
+      "size_bytes": 6564240,
+      "sha256": "9f1c677780ef9b423033b9c4b9d97a914c3bf1eada80a30c21834e8aba42ce81",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1021.006/lateral_movement_lolbas/windows-sysmon.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1021.006/lateral_movement_psh/windows-sysmon.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1021.006/lateral_movement_psh/windows-sysmon.log",
+      "size_bytes": 6143107,
+      "sha256": "8746e04aa131b0eae39270a260808688b9ff69da25271022566972eea19f2227",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1021.006/lateral_movement_psh/windows-sysmon.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1027/atomic_red_team/windows-sysmon.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1027/atomic_red_team/windows-sysmon.log",
+      "size_bytes": 11316256,
+      "sha256": "43562f5040d3c1ec604fe917d6aaec43c8a48c073a3c49e439326e28845e5c38",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1027/atomic_red_team/windows-sysmon.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1027/trickbot_drop/windows-sysmon.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1027/trickbot_drop/windows-sysmon.log",
+      "size_bytes": 2045,
+      "sha256": "e6cf261224169519393a250df2653454db54b3ee795b22b9d3da8da6526b7ce3",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1027/trickbot_drop/windows-sysmon.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1027/url_encoded_curl/windows-sysmon.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1027/url_encoded_curl/windows-sysmon.log",
+      "size_bytes": 6249,
+      "sha256": "e5ff5e20583627513c6fb99a5763e913fe5c6b6cbc983c13b0c236090968d26c",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1027/url_encoded_curl/windows-sysmon.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1033/AD_discovery/windows-sysmon.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1033/AD_discovery/windows-sysmon.log",
+      "size_bytes": 4627928,
+      "sha256": "f978fbb3b83ae7af12808f2383423a00f252bc15adc85b5a835bbddda1505afb",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1033/AD_discovery/windows-sysmon.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1033/atomic_red_team/windows-sysmon.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1033/atomic_red_team/windows-sysmon.log",
+      "size_bytes": 11994992,
+      "sha256": "7dc221cd808a62738dbe28d8eb1c3ba7d653d8098b82f745dfc18181148978b2",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1033/atomic_red_team/windows-sysmon.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1036.003/atomic_red_team/windows-sysmon.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1036.003/atomic_red_team/windows-sysmon.log",
+      "size_bytes": 12615448,
+      "sha256": "c9e2c2d4c29fa0e6054617b0743cb2574b28aa03a6560d80e4a66a4ee607aa75",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1036.003/atomic_red_team/windows-sysmon.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1036.003/samsam_extension/windows-sysmon.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1036.003/samsam_extension/windows-sysmon.log",
+      "size_bytes": 15926594,
+      "sha256": "d5e36c38774af61b12a073e0333d277161f63308045a9087c17b23b60d2025ef",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1036.003/samsam_extension/windows-sysmon.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1036/write_to_recycle_bin/windows-sysmon.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1036/write_to_recycle_bin/windows-sysmon.log",
+      "size_bytes": 1506694,
+      "sha256": "c7c968a58f0be7ca323530e296d3fea132fc203388026425ea5eaf4e7fc1a31b",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1036/write_to_recycle_bin/windows-sysmon.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1047/atomic_red_team/windows-sysmon.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1047/atomic_red_team/windows-sysmon.log",
+      "size_bytes": 11815541,
+      "sha256": "64651720e10813aa57d0f25ce149005ab06039b1974dbc09818b1fb45fbbc196",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1047/atomic_red_team/windows-sysmon.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1047/execution_scrcons/windows-sysmon.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1047/execution_scrcons/windows-sysmon.log",
+      "size_bytes": 20686548,
+      "sha256": "6181de032b63ca66cbbd61e43dffd9ea5acc41713b8ccb0a163dfb4afd1d86f9",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1047/execution_scrcons/windows-sysmon.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1047/lateral_movement/windows-sysmon.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1047/lateral_movement/windows-sysmon.log",
+      "size_bytes": 5437888,
+      "sha256": "4ed13872c41a8db35cd5c910a125bbd22345c8f6104b3d361eb05e5db11a2ad4",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1047/lateral_movement/windows-sysmon.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1047/lateral_movement_lolbas/windows-sysmon.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1047/lateral_movement_lolbas/windows-sysmon.log",
+      "size_bytes": 5431535,
+      "sha256": "3498742b7cd8d802b9bf7fec402f20b12ba5de2a837538af457938f1b0e92caa",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1047/lateral_movement_lolbas/windows-sysmon.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1048.003/long_dns_queries/windows-sysmon.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1048.003/long_dns_queries/windows-sysmon.log",
+      "size_bytes": 35488685,
+      "sha256": "3706a06e1a45cf029c42444f2e7252a9f086e5cfabde143fab4eadd7a9683593",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1048.003/long_dns_queries/windows-sysmon.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1048.003/mass_file_creation/windows-sysmon.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1048.003/mass_file_creation/windows-sysmon.log",
+      "size_bytes": 105661,
+      "sha256": "798c9b571ec53e2fb1da62a8bd5d3103ef8c71575f0096c72e2f92f051a20e7a",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1048.003/mass_file_creation/windows-sysmon.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1048.003/nslookup_exfil/windows-sysmon.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1048.003/nslookup_exfil/windows-sysmon.log",
+      "size_bytes": 5663783,
+      "sha256": "5d7d8b9acd80ad09e962446a328901b29ba760e3b94aeb6b8ad41f0caddae27f",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1048.003/nslookup_exfil/windows-sysmon.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1049/AD_discovery/windows-sysmon.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1049/AD_discovery/windows-sysmon.log",
+      "size_bytes": 4640111,
+      "sha256": "c81ad8f1e304bc38d72ed5137e6d2aa4c1d8347bddd152906daff79c8d773d2f",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1049/AD_discovery/windows-sysmon.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1053.002/lateral_movement/windows-sysmon.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1053.002/lateral_movement/windows-sysmon.log",
+      "size_bytes": 5502827,
+      "sha256": "58aecee33a94c56aa4617bcc4d0b60331207209dc3549b8e80a40fc5403ce408",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1053.002/lateral_movement/windows-sysmon.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1053.005/atomic_red_team/windows-sysmon.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1053.005/atomic_red_team/windows-sysmon.log",
+      "size_bytes": 11410982,
+      "sha256": "d346ab6c75b3151217dfc2c4c166c951fc16d68c31b7d5a8f3e577d9545ff9f0",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1053.005/atomic_red_team/windows-sysmon.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1053.005/lateral_movement/windows-sysmon.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1053.005/lateral_movement/windows-sysmon.log",
+      "size_bytes": 6297522,
+      "sha256": "b2fba83212dba31492fe34b90786e9019437ab25da78e22bc9688021c5e36825",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1053.005/lateral_movement/windows-sysmon.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1053.005/lateral_movement_lolbas/windows-sysmon.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1053.005/lateral_movement_lolbas/windows-sysmon.log",
+      "size_bytes": 5583791,
+      "sha256": "722963980c277664e31993c1b4c4007906a014a9a718dd21cce04cf19e2ef799",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1053.005/lateral_movement_lolbas/windows-sysmon.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1053.005/schtask_shutdown/windows-sysmon.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1053.005/schtask_shutdown/windows-sysmon.log",
+      "size_bytes": 15400399,
+      "sha256": "cafa411c6706fab418e8f26735a96298de18bc7d041d8702a8c2ad0c819eb98e",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1053.005/schtask_shutdown/windows-sysmon.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1053.005/schtask_system/windows-sysmon.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1053.005/schtask_system/windows-sysmon.log",
+      "size_bytes": 2142,
+      "sha256": "598b761436a1a39b1561c3f0ce59cd8b0439601f4137c73aaf32a4f9bc35077e",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1053.005/schtask_system/windows-sysmon.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1053.005/schtasks/windows-sysmon.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1053.005/schtasks/windows-sysmon.log",
+      "size_bytes": 626881,
+      "sha256": "2af70b9815a95c0be345a10e7c833cbcd5c4dd6919040d7652396b008475acba",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1053.005/schtasks/windows-sysmon.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1055.001/rasautou/windows-sysmon.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1055.001/rasautou/windows-sysmon.log",
+      "size_bytes": 118807,
+      "sha256": "14017e4054137da4ab9a94f17ba71b5ac4a2750dfd0d56f24f269801747580e6",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1055.001/rasautou/windows-sysmon.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1055/named_pipes/windows-sysmon.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1055/named_pipes/windows-sysmon.log",
+      "size_bytes": 39508,
+      "sha256": "9c0237a14a9ee61476a5eaca97c406b0c249698bfef2049234609559d02de8c1",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1055/named_pipes/windows-sysmon.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1055/trickbot_inf/windows-sysmon.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1055/trickbot_inf/windows-sysmon.log",
+      "size_bytes": 29704,
+      "sha256": "2de2f8e7685c98f215c90f137b7a8279ce50b986a5aedc654c88853ec4d17b12",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1055/trickbot_inf/windows-sysmon.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1059.001/atomic_red_team/windows-sysmon.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1059.001/atomic_red_team/windows-sysmon.log",
+      "size_bytes": 38928903,
+      "sha256": "8f71b2a0ef81892551cd6a9ad115b8ec5c42d9f2071547b064c496511898c4e9",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1059.001/atomic_red_team/windows-sysmon.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1059.001/encoded_powershell/windows-sysmon.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1059.001/encoded_powershell/windows-sysmon.log",
+      "size_bytes": 2012605,
+      "sha256": "b9c8438a0d8cd62714a38ed093fc583c3318d1cac768c6513ad40a3b8203fd05",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1059.001/encoded_powershell/windows-sysmon.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1059.001/hidden_powershell/windows-sysmon.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1059.001/hidden_powershell/windows-sysmon.log",
+      "size_bytes": 32626602,
+      "sha256": "bac9c10fe7ae07c2ede09014c44f92df074055d9764a92cde4161c0c8e19ef96",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1059.001/hidden_powershell/windows-sysmon.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1059.001/malicious_cmd_line_samples/windows-sysmon.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1059.001/malicious_cmd_line_samples/windows-sysmon.log",
+      "size_bytes": 32017,
+      "sha256": "64ab32d34f2e6aef53f80ae092a6caf9e3f737e362c522b9c1791e91b7defab4",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1059.001/malicious_cmd_line_samples/windows-sysmon.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1059.001/msix_powershell/windows-sysmon.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1059.001/msix_powershell/windows-sysmon.log",
+      "size_bytes": 7346,
+      "sha256": "3f349b90eead3e2eda89bcc776b5f250f1ece2bd1a2c9d128ca79ad087d72e93",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1059.001/msix_powershell/windows-sysmon.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1059.001/powershell_execution_policy/windows-sysmon.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1059.001/powershell_execution_policy/windows-sysmon.log",
+      "size_bytes": 14601853,
+      "sha256": "7854054b5fa788e7c430b7045ddbebb09be43300d2b0b2478cb893e70aaaca41",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1059.001/powershell_execution_policy/windows-sysmon.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1059.001/powershell_script_block_logging/windows-sysmon.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1059.001/powershell_script_block_logging/windows-sysmon.log",
+      "size_bytes": 18183460,
+      "sha256": "04daf83b69e4b798e21f74fde0dc68d9de1732f139ce4a4463fcaa36d4995589",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1059.001/powershell_script_block_logging/windows-sysmon.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1059.001/powershell_testing/windows-sysmon.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1059.001/powershell_testing/windows-sysmon.log",
+      "size_bytes": 13630939,
+      "sha256": "fa2961e63bef58669c7a634b1466bfa540fc836730cffb2959bf6fc56ad01eb4",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1059.001/powershell_testing/windows-sysmon.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1059.001/powershell_xml_requests/windows-sysmon.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1059.001/powershell_xml_requests/windows-sysmon.log",
+      "size_bytes": 10784074,
+      "sha256": "c9c7f3a36611ed52e40b4f29440a45a07f1aac601a340f5ee4bf07fe5afa97b8",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1059.001/powershell_xml_requests/windows-sysmon.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1059.001/sharphound/windows-sysmon.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1059.001/sharphound/windows-sysmon.log",
+      "size_bytes": 14699348,
+      "sha256": "29f4f1a561c219f2fe98db0e1269417a7632804c1431a9f1fadfccfba4f170c0",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1059.001/sharphound/windows-sysmon.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1059.001/trickbot_cmd_powershell/windows-sysmon.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1059.001/trickbot_cmd_powershell/windows-sysmon.log",
+      "size_bytes": 46116,
+      "sha256": "7ba1d02c6b44d877cfef9f4c690515ae04edb2347581ea93bb9657cb864aeec7",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1059.001/trickbot_cmd_powershell/windows-sysmon.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1059.001/unmanaged_powershell_execution/windows-sysmon.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1059.001/unmanaged_powershell_execution/windows-sysmon.log",
+      "size_bytes": 89107,
+      "sha256": "e7905b25fc39c794cf37e7c6ddfab273dc3f4ce61786556f9e61bd0bcc57300a",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1059.001/unmanaged_powershell_execution/windows-sysmon.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1059.003/cmd_spawns_cscript/windows-sysmon.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1059.003/cmd_spawns_cscript/windows-sysmon.log",
+      "size_bytes": 1645203,
+      "sha256": "8754cc0b57729054c87f9f5b2c79d648564f63dc91a23a73ba58ff410ca7f313",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1059.003/cmd_spawns_cscript/windows-sysmon.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1059.003/powershell_spawn_cmd/windows-sysmon.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1059.003/powershell_spawn_cmd/windows-sysmon.log",
+      "size_bytes": 957202,
+      "sha256": "ee1f07df0c6c5b9f76cb139bdc5d575a4b50b7e832465b5c3ba9dd5ea5f32cec",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1059.003/powershell_spawn_cmd/windows-sysmon.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1059.003/ryuk/windows-sysmon.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1059.003/ryuk/windows-sysmon.log",
+      "size_bytes": 3430858,
+      "sha256": "62ab2627237caa7cac1ec4ed573618c459e8eb99edeb564f66023f6d8f065965",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1059.003/ryuk/windows-sysmon.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1059.005/lotus_blossom_chrysalis/windows-sysmon.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1059.005/lotus_blossom_chrysalis/windows-sysmon.log",
+      "size_bytes": 4713,
+      "sha256": "cb5ea7112ec60ef8c6c4abfe3f2d5eccb0d7e8435e0da8ffdc7ff276878e7caf",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1059.005/lotus_blossom_chrysalis/windows-sysmon.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1059/suspiciously_named_executables/windows-sysmon.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1059/suspiciously_named_executables/windows-sysmon.log",
+      "size_bytes": 1772,
+      "sha256": "0d22f7f0a6b0a25598928070de1e8901d7f1f140d975787f912286448ad8bcff",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1059/suspiciously_named_executables/windows-sysmon.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1068/bluehammer/windows-sysmon.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1068/bluehammer/windows-sysmon.log",
+      "size_bytes": 6109,
+      "sha256": "2a350bcb6ca3827f1deaf57e415a188807331e49af3a38c5335e58928afef19f",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1068/bluehammer/windows-sysmon.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1068/redsun/windows-sysmon.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1068/redsun/windows-sysmon.log",
+      "size_bytes": 9107,
+      "sha256": "8d48ae7bd18afb4231d9bcc2f424b562c145d52cf62c61923d6c359462fbd72b",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1068/redsun/windows-sysmon.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1068/zoom_child_process/windows-sysmon.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1068/zoom_child_process/windows-sysmon.log",
+      "size_bytes": 18140665,
+      "sha256": "0b9bc4c33b801b3289ecc2adfa94fbcbdadb81d56c228d394c2728dc0a0b3b42",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1068/zoom_child_process/windows-sysmon.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1069.002/AD_discovery/windows-sysmon.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1069.002/AD_discovery/windows-sysmon.log",
+      "size_bytes": 4933425,
+      "sha256": "4372514fa4f0ef23f31e22a050be452392756165077abad62297ad2475143146",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1069.002/AD_discovery/windows-sysmon.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1070.001/atomic_red_team/windows-sysmon.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1070.001/atomic_red_team/windows-sysmon.log",
+      "size_bytes": 11267266,
+      "sha256": "58a5e3465bdced284a1c0b625063c539be77beca8f9921e29238bbdc4d26de11",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1070.001/atomic_red_team/windows-sysmon.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1070.005/atomic_red_team/windows-sysmon.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1070.005/atomic_red_team/windows-sysmon.log",
+      "size_bytes": 11774704,
+      "sha256": "db03626e00b334aef1c158779c0ea92d65923bb50a271a6f030fac09724fe291",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1070.005/atomic_red_team/windows-sysmon.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1070/atomic_red_team/windows-sysmon.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1070/atomic_red_team/windows-sysmon.log",
+      "size_bytes": 11072863,
+      "sha256": "c14f25805f90221a54de05387fcddfe9a0eec3aa4a7fd6a8b0dd0be3ddc65453",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1070/atomic_red_team/windows-sysmon.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1078.002/account_lockout/windows-sysmon.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1078.002/account_lockout/windows-sysmon.log",
+      "size_bytes": 18456820,
+      "sha256": "4e60dea37a82598423c609982f2f3ac12bca29d55dabb4a1c4c5714264754dfd",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1078.002/account_lockout/windows-sysmon.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1078/defaultaccount/windows-sysmon.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1078/defaultaccount/windows-sysmon.log",
+      "size_bytes": 23461,
+      "sha256": "410bda666eef3df47b3634b9dec8de4b861132bf00fe1aa7fc9f09681f20c09e",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1078/defaultaccount/windows-sysmon.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1082/atomic_red_team/windows-sysmon.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1082/atomic_red_team/windows-sysmon.log",
+      "size_bytes": 11738807,
+      "sha256": "5de7771a04caafaef69d6b98a4079681c54b34129007445efbf0a8d0efcf0dad",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1082/atomic_red_team/windows-sysmon.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1087.001/AD_discovery/windows-sysmon.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1087.001/AD_discovery/windows-sysmon.log",
+      "size_bytes": 17229273,
+      "sha256": "c244d0b1fbb70fe5e76181fa490c46d8dea3716996243b2209de496fb5111eb5",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1087.001/AD_discovery/windows-sysmon.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1087.002/AD_discovery/windows-sysmon.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1087.002/AD_discovery/windows-sysmon.log",
+      "size_bytes": 10902926,
+      "sha256": "1b78f515120a7e5ac532444fd7fd322c8dc1abf8efebe0295abad3939972db0d",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1087.002/AD_discovery/windows-sysmon.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1090.003/windows_tor_client_execution/windows-sysmon.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1090.003/windows_tor_client_execution/windows-sysmon.log",
+      "size_bytes": 1219840,
+      "sha256": "714e898e11d48bd15038e49e1fdac54081ffab6447c19807a5126ac555c4f1b7",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1090.003/windows_tor_client_execution/windows-sysmon.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1098/dsrm_account/windows-sysmon.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1098/dsrm_account/windows-sysmon.log",
+      "size_bytes": 1055,
+      "sha256": "fd1b721d76d5a0d718f08554ccaa162a01acca882c30cef0bf60b1576dcf7378",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1098/dsrm_account/windows-sysmon.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1105/atomic_red_team/windows-sysmon.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1105/atomic_red_team/windows-sysmon.log",
+      "size_bytes": 3625178,
+      "sha256": "bd6bbf7884f44274988d159bcb3249505dc53623e551892b54a3fc87db06e18c",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1105/atomic_red_team/windows-sysmon.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1112/atomic_red_team/windows-sysmon.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1112/atomic_red_team/windows-sysmon.log",
+      "size_bytes": 11705774,
+      "sha256": "2a54ff252b3ca480f4c50bbc2708f63ceeaecfaaa3305bd53ff73b615fb23041",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1112/atomic_red_team/windows-sysmon.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1127.001/windows-sysmon.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1127.001/windows-sysmon.log",
+      "size_bytes": 6149619,
+      "sha256": "45e730201de4fdc756aac6d9ecc682e0aed9c3486bb9e15ca403c6467bc674fc",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1127.001/windows-sysmon.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1127/atomic_red_team/windows-sysmon.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1127/atomic_red_team/windows-sysmon.log",
+      "size_bytes": 25935032,
+      "sha256": "489de09c57bf14e5ea903b96ce1d742fa538d3f9389cfc484fcf4b3612158c96",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1127/atomic_red_team/windows-sysmon.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1135/net_share/windows-sysmon.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1135/net_share/windows-sysmon.log",
+      "size_bytes": 1955,
+      "sha256": "ccee75e768298bfa648fc8a8ceb8614a47e0e1e2b2054a5c5f334f44efe0f5cb",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1135/net_share/windows-sysmon.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1136.001/atomic_red_team/windows-sysmon.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1136.001/atomic_red_team/windows-sysmon.log",
+      "size_bytes": 11560462,
+      "sha256": "334fff113e8d15026a7a1a0d3343643ce7e8a73552b1f33ee476eaa7826cbe42",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1136.001/atomic_red_team/windows-sysmon.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1140/atomic_red_team/windows-sysmon.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1140/atomic_red_team/windows-sysmon.log",
+      "size_bytes": 2734664,
+      "sha256": "efe6db0ed29613b6374d3e57837c322d701290db3e29fd540e74dc7be3babb20",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1140/atomic_red_team/windows-sysmon.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1189/dyn_dns_site/windows-sysmon.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1189/dyn_dns_site/windows-sysmon.log",
+      "size_bytes": 26449592,
+      "sha256": "88001f008bc0df948c88dcf94ad4c8ee4378a5603b96fe77ffb09070fb468c55",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1189/dyn_dns_site/windows-sysmon.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1190/crushftp/windows-sysmon.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1190/crushftp/windows-sysmon.log",
+      "size_bytes": 1931,
+      "sha256": "2e9efea0d5421db1f9f2889ba418fc5f868fd38cb9654dc7312a9d31c0e28d0c",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1190/crushftp/windows-sysmon.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1190/outbound_java/windows-sysmon.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1190/outbound_java/windows-sysmon.log",
+      "size_bytes": 7025034,
+      "sha256": "fb3444c80a907bf0301fb65979cd1d1a4e595f83e5bd0aa4d1eaabaf5d28c6bd",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1190/outbound_java/windows-sysmon.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1190/sap/windows-sysmon.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1190/sap/windows-sysmon.log",
+      "size_bytes": 2267,
+      "sha256": "f8e0bfd644360e21f49b528561e48d5482fd85f9407dab77cf13bb2d5ea57387",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1190/sap/windows-sysmon.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1197/atomic_red_team/windows-sysmon.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1197/atomic_red_team/windows-sysmon.log",
+      "size_bytes": 4753601,
+      "sha256": "e1e8d4b4cbb87c0fbc37509e7d2330f59335fb3583009c03b2e5d8684581e05b",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1197/atomic_red_team/windows-sysmon.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1201/pwd_policy_discovery/windows-sysmon.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1201/pwd_policy_discovery/windows-sysmon.log",
+      "size_bytes": 9435753,
+      "sha256": "4ea9da4b4b229b1d84cac23d7feffad45f58ae4adda44a943254c0ef3a38aa5a",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1201/pwd_policy_discovery/windows-sysmon.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1202/atomic_red_team/windows-sysmon.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1202/atomic_red_team/windows-sysmon.log",
+      "size_bytes": 45097,
+      "sha256": "9ed7202f32564e679dd6de5af8c8d34ec118abd1a29c5c0532edfa843bc2cb47",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1202/atomic_red_team/windows-sysmon.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1204.002/atomic_red_team/windows-sysmon.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1204.002/atomic_red_team/windows-sysmon.log",
+      "size_bytes": 978377,
+      "sha256": "d600880b46feede4788b7d1512d97e255a34f0a398af45975d51363627dcf5c5",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1204.002/atomic_red_team/windows-sysmon.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1204.002/batch_file_in_system32/windows-sysmon.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1204.002/batch_file_in_system32/windows-sysmon.log",
+      "size_bytes": 978377,
+      "sha256": "d600880b46feede4788b7d1512d97e255a34f0a398af45975d51363627dcf5c5",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1204.002/batch_file_in_system32/windows-sysmon.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1204.002/single_letter_exe/windows-sysmon.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1204.002/single_letter_exe/windows-sysmon.log",
+      "size_bytes": 614098,
+      "sha256": "ac9411cc4c291c1b70925bf71633d2c4cdd6a51c1b5367c3a2ac12aab5642a76",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1204.002/single_letter_exe/windows-sysmon.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1204/rare_executables/windows-sysmon.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1204/rare_executables/windows-sysmon.log",
+      "size_bytes": 19619024,
+      "sha256": "47ca47dca91fe047e979f5b3981caca4a5c735d1840de2f5b99dcf6c98e574ad",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1204/rare_executables/windows-sysmon.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1216/atomic_red_team/windows-sysmon.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1216/atomic_red_team/windows-sysmon.log",
+      "size_bytes": 74378,
+      "sha256": "44e89e8167714629e3ce8fea9b27964f354a8bc095297884bcb4c6586640e5df",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1216/atomic_red_team/windows-sysmon.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1218.001/atomic_red_team/windows-sysmon.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1218.001/atomic_red_team/windows-sysmon.log",
+      "size_bytes": 13124256,
+      "sha256": "d486e2796889ece91e3c97d34fd4b2a134c4ed808d5efbb03be30b8b424b808c",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1218.001/atomic_red_team/windows-sysmon.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1218.002/atomic_red_team/windows-sysmon.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1218.002/atomic_red_team/windows-sysmon.log",
+      "size_bytes": 18195076,
+      "sha256": "df86dc15aa6c046bd2ecc89163b2320655728054addd3050b989ea7cd5ab4f53",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1218.002/atomic_red_team/windows-sysmon.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1218.004/atomic_red_team/windows-sysmon.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1218.004/atomic_red_team/windows-sysmon.log",
+      "size_bytes": 2430831,
+      "sha256": "5f751c19cac61fa535293737e741d405f68cd650940e49913613f0b2e7e8e851",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1218.004/atomic_red_team/windows-sysmon.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1218.005/atomic_red_team/windows-sysmon.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1218.005/atomic_red_team/windows-sysmon.log",
+      "size_bytes": 33033884,
+      "sha256": "9cd448deed170bd087c9cf2ca7cd2e7d4bc9ce60b13b254b2d39e858e7b020b4",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1218.005/atomic_red_team/windows-sysmon.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1218.007/atomic_red_team/windows-sysmon.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1218.007/atomic_red_team/windows-sysmon.log",
+      "size_bytes": 2713565,
+      "sha256": "deae351a3236ab7716b5ce154e282c2b2f984ac1a88b06e41814d3a466012e28",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1218.007/atomic_red_team/windows-sysmon.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1218.009/atomic_red_team/windows-sysmon.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1218.009/atomic_red_team/windows-sysmon.log",
+      "size_bytes": 7189874,
+      "sha256": "6e30cfc58deee5ee2df382f790711b8e2e67410bcfbf0cf8cb9169a1760f7e43",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1218.009/atomic_red_team/windows-sysmon.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1218.010/atomic_red_team/windows-sysmon.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1218.010/atomic_red_team/windows-sysmon.log",
+      "size_bytes": 6329227,
+      "sha256": "b0d914a6318d8f6bb663430890ae71c1b3b462a5f698c0a3ff87552697dc40b7",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1218.010/atomic_red_team/windows-sysmon.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1218.011/atomic_red_team/windows-sysmon.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1218.011/atomic_red_team/windows-sysmon.log",
+      "size_bytes": 23784139,
+      "sha256": "0805f7d8a89371dee4f75c001ef11574c2d759d91626c1625bca7c9174cfe29f",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1218.011/atomic_red_team/windows-sysmon.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1218.013/atomic_red_team/windows-sysmon.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1218.013/atomic_red_team/windows-sysmon.log",
+      "size_bytes": 8370,
+      "sha256": "9233f7aa77cd5cdd1488838260bc2b3ea260d5747b04f285dbe686fe34241cd0",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1218.013/atomic_red_team/windows-sysmon.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1218/diskshadow/windows-sysmon.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1218/diskshadow/windows-sysmon.log",
+      "size_bytes": 15897,
+      "sha256": "ce01372dbaa1eb55bae18894dc89c43246ada98f860dddacbb7aa57121f3c961",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1218/diskshadow/windows-sysmon.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1218/eviltwin/windows-sysmon.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1218/eviltwin/windows-sysmon.log",
+      "size_bytes": 6147,
+      "sha256": "f8fb1dbecd032334fde0464bd96abb51ffb23968068ea29a88618567adeaafb1",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1218/eviltwin/windows-sysmon.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1219/atomic_red_team/windows-sysmon.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1219/atomic_red_team/windows-sysmon.log",
+      "size_bytes": 64929,
+      "sha256": "01703d7ffa04009b543c013e25d2591e0965aaf40002bf6cb2b882fe9caa814b",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1219/atomic_red_team/windows-sysmon.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1220/atomic_red_team/windows-sysmon.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1220/atomic_red_team/windows-sysmon.log",
+      "size_bytes": 10259034,
+      "sha256": "3967fecd24928ec5f2ded2725b1088056a66060d1a6aa9ca93507c813ce63e90",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1220/atomic_red_team/windows-sysmon.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1222.001/atomic_red_team/windows-sysmon.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1222.001/atomic_red_team/windows-sysmon.log",
+      "size_bytes": 12487008,
+      "sha256": "dc7c5de0eafe6620530e0746b37666cdac18ca2f4404b1611bc55f0340c20fe3",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1222.001/atomic_red_team/windows-sysmon.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1482/atomic_red_team/windows-sysmon.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1482/atomic_red_team/windows-sysmon.log",
+      "size_bytes": 910222,
+      "sha256": "e84ac5f6c9b1798ae2df464b8238179736c70f42306b02863cf4d3d79cfc5e3f",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1482/atomic_red_team/windows-sysmon.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1482/discovery/windows-sysmon.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1482/discovery/windows-sysmon.log",
+      "size_bytes": 22263883,
+      "sha256": "7625586dbaad2f4a2e4ca417cf9422dd757e174b8f0abd1c8d57a1335f0707a3",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1482/discovery/windows-sysmon.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1485/atomic_red_team/windows-sysmon.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1485/atomic_red_team/windows-sysmon.log",
+      "size_bytes": 18296236,
+      "sha256": "341c57a42357b4e39cb4c3a1a990a598ef915ba0c53f10506d09aa25728a93a0",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1485/atomic_red_team/windows-sysmon.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1485/excessive_file_deletions/windows-sysmon.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1485/excessive_file_deletions/windows-sysmon.log",
+      "size_bytes": 29949,
+      "sha256": "8af819ac534f6137456756883f096acba4fe769249687e9f006115bdd255a501",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1485/excessive_file_deletions/windows-sysmon.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1485/ransomware_extensions/windows-sysmon.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1485/ransomware_extensions/windows-sysmon.log",
+      "size_bytes": 381404,
+      "sha256": "1183c2dc15b80beb3b80d46f101da9537a9c30240fca3ca86208579865ecf72b",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1485/ransomware_extensions/windows-sysmon.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1485/ransomware_notes/windows-sysmon.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1485/ransomware_notes/windows-sysmon.log",
+      "size_bytes": 381404,
+      "sha256": "1183c2dc15b80beb3b80d46f101da9537a9c30240fca3ca86208579865ecf72b",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1485/ransomware_notes/windows-sysmon.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1486/dcrypt/windows-sysmon.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1486/dcrypt/windows-sysmon.log",
+      "size_bytes": 439561,
+      "sha256": "c70b712dbfa68c6d1e982f032b386cf8dcaae031b34e380fdb875df4d9c838d3",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1486/dcrypt/windows-sysmon.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1486/sam_sam_note/windows-sysmon.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1486/sam_sam_note/windows-sysmon.log",
+      "size_bytes": 15592223,
+      "sha256": "ffb8daf49a0cfbfe4514eba0f340580ac88e0055a313c4880e64b251bf6da208",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1486/sam_sam_note/windows-sysmon.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1490/atomic_red_team/windows-sysmon.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1490/atomic_red_team/windows-sysmon.log",
+      "size_bytes": 510708,
+      "sha256": "b2d2d3e6a15185fa73e7ace39dd57a3d499f65a462f7101b215161e1ccbb8e96",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1490/atomic_red_team/windows-sysmon.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1490/ransomware_notes/windows-sysmon.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1490/ransomware_notes/windows-sysmon.log",
+      "size_bytes": 13207163,
+      "sha256": "92e525d40727e179b1f5730ad1ad1025093e76431d63cf842710f388a21fb7a4",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1490/ransomware_notes/windows-sysmon.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1543.003/atomic_red_team/windows-sysmon.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1543.003/atomic_red_team/windows-sysmon.log",
+      "size_bytes": 11281916,
+      "sha256": "2e6ea9e053a84f4d32b37f462a40a39f1a90c2049adaf684b0660ee6e9f32d7a",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1543.003/atomic_red_team/windows-sysmon.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1543.003/lateral_movement/windows-sysmon.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1543.003/lateral_movement/windows-sysmon.log",
+      "size_bytes": 5502210,
+      "sha256": "8fbc5cc13241b190d25e9978d36be23b56a2e44fd8c6da0caf49546a1e32dd74",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1543.003/lateral_movement/windows-sysmon.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1543.003/lateral_movement_lolbas/windows-sysmon.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1543.003/lateral_movement_lolbas/windows-sysmon.log",
+      "size_bytes": 6466903,
+      "sha256": "559002df46a8ba3a5f5d7855a44a9414718b2465e0d7609a6f733fc317c74645",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1543.003/lateral_movement_lolbas/windows-sysmon.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1543.003/lateral_movement_powershell/windows-sysmon.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1543.003/lateral_movement_powershell/windows-sysmon.log",
+      "size_bytes": 5304151,
+      "sha256": "e500ce256523846fbe81bbc74e43214c14acdccbc51f89c162362aedf3b0a27f",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1543.003/lateral_movement_powershell/windows-sysmon.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1546.003/atomic_red_team/windows-sysmon.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1546.003/atomic_red_team/windows-sysmon.log",
+      "size_bytes": 21708778,
+      "sha256": "9e2ca4e98779bafcf3e1904052794250e912494ec4e41983aa0940aa2d683fc0",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1546.003/atomic_red_team/windows-sysmon.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1546.003/wmi_event_subscription/windows-sysmon.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1546.003/wmi_event_subscription/windows-sysmon.log",
+      "size_bytes": 33021,
+      "sha256": "1ce6602b7639621a9c5f6ccc2d2ba679fb5d196c84129c13f533b40a7acfe4df",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1546.003/wmi_event_subscription/windows-sysmon.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1546.008/atomic_red_team/windows-sysmon.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1546.008/atomic_red_team/windows-sysmon.log",
+      "size_bytes": 2943909,
+      "sha256": "6d60fc0ee30c2722588849952f594170747132ed6916f90514310ef3a0284c4f",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1546.008/atomic_red_team/windows-sysmon.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1546.011/atomic_red_team/windows-sysmon.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1546.011/atomic_red_team/windows-sysmon.log",
+      "size_bytes": 11325099,
+      "sha256": "f92328c6565a653b760542cd397c58b046e48c8494214e0faa15662a58c4e20f",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1546.011/atomic_red_team/windows-sysmon.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1546.012/atomic_red_team/windows-sysmon.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1546.012/atomic_red_team/windows-sysmon.log",
+      "size_bytes": 11551638,
+      "sha256": "7d35dbd549a3b92a8d23cfc58569cdcd749840fedc0ea3b6759c8134d4bfbfa6",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1546.012/atomic_red_team/windows-sysmon.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1546.015/atomic_red_team/windows-sysmon.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1546.015/atomic_red_team/windows-sysmon.log",
+      "size_bytes": 55158,
+      "sha256": "7f05a6ee827e8fc7ff4130172feea93e29b342305d52cb2cace9f82daea621b0",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1546.015/atomic_red_team/windows-sysmon.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1546.015/uac_colorui/windows-sysmon.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1546.015/uac_colorui/windows-sysmon.log",
+      "size_bytes": 9445434,
+      "sha256": "39eb209747cc9cd395a1074815b3ed92232e885fcfe0f9e6ed91789358f39290",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1546.015/uac_colorui/windows-sysmon.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1547.001/atomic_red_team/windows-sysmon.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1547.001/atomic_red_team/windows-sysmon.log",
+      "size_bytes": 11357100,
+      "sha256": "11d8c6f7ca60994936ae9332ea67e5c220027ae1addad48203df6bdde9d46f5d",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1547.001/atomic_red_team/windows-sysmon.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1547.005/malicious_ssp/windows-sysmon.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1547.005/malicious_ssp/windows-sysmon.log",
+      "size_bytes": 1046,
+      "sha256": "5468577ff1e3b78f65c18d2b4643d2700204049fd3150815439dfc337be963de",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1547.005/malicious_ssp/windows-sysmon.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1547.008/atomic_red_team/windows-sysmon.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1547.008/atomic_red_team/windows-sysmon.log",
+      "size_bytes": 12006,
+      "sha256": "5ba1fd612063a04c6f91b5c32edc48a8472d335360c35f78210c36fee15b1527",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1547.008/atomic_red_team/windows-sysmon.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1547.010/atomic_red_team/windows-sysmon.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1547.010/atomic_red_team/windows-sysmon.log",
+      "size_bytes": 11360587,
+      "sha256": "cb5ce3df232717ff0af910d8de6484d00005e52b94f310ddbeef0e9deb08bea4",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1547.010/atomic_red_team/windows-sysmon.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1547.012/printnightmare/windows-sysmon.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1547.012/printnightmare/windows-sysmon.log",
+      "size_bytes": 36652574,
+      "sha256": "9e71f4c59caa60932c40fe56e8f1ea51c13baf113709775044ce5828a35ebd6f",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1547.012/printnightmare/windows-sysmon.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1548.002/atomic_red_team/windows-sysmon.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1548.002/atomic_red_team/windows-sysmon.log",
+      "size_bytes": 12143752,
+      "sha256": "9871d7c2b348af4d9af6cb48797509f6a9567b15ea6dbaf0b622c9ca0c9fac0a",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1548.002/atomic_red_team/windows-sysmon.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1548.002/slui/windows-sysmon.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1548.002/slui/windows-sysmon.log",
+      "size_bytes": 22271474,
+      "sha256": "9697172ab7fa88e3a80a661a926efaad2819793a540e495565f85a5b7333dd23",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1548.002/slui/windows-sysmon.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1548/uac_bypass/windows-sysmon.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1548/uac_bypass/windows-sysmon.log",
+      "size_bytes": 25603330,
+      "sha256": "19d0e4454e6aa9d98e162e6062eb008ef2f01abc43414e05a50e2cf5f4c194fe",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1548/uac_bypass/windows-sysmon.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1550.002/atomic_red_team/windows-sysmon.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1550.002/atomic_red_team/windows-sysmon.log",
+      "size_bytes": 19796940,
+      "sha256": "ae7bfafcd94f2e02f00b5e32b7aca5a9bdbf289340115824e564fd43a679e5c4",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1550.002/atomic_red_team/windows-sysmon.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1550.003/mimikatz/windows-sysmon.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1550.003/mimikatz/windows-sysmon.log",
+      "size_bytes": 7584913,
+      "sha256": "397ac60da09264e4f8c7c5c4c8518e1c0d0b525cb90a8aa21c2216443fcd0ac9",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1550.003/mimikatz/windows-sysmon.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1550.003/rubeus/windows-sysmon.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1550.003/rubeus/windows-sysmon.log",
+      "size_bytes": 6161426,
+      "sha256": "b5400fc0ea31ff26397efdd8760b264492e4d49854646b6a0ec173fa0f98a5d1",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1550.003/rubeus/windows-sysmon.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1550/rubeus/windows-sysmon.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1550/rubeus/windows-sysmon.log",
+      "size_bytes": 7835369,
+      "sha256": "b1003a978e3b60902f51e64d1a4559bb4375f93a0af336cde830e1980cc6e3dc",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1550/rubeus/windows-sysmon.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1552.002/autoadminlogon/windows-sysmon.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1552.002/autoadminlogon/windows-sysmon.log",
+      "size_bytes": 17497456,
+      "sha256": "dbeffd8bf951771952046f3d81444f16e444a8470bab33d1442c20f69ab6bd19",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1552.002/autoadminlogon/windows-sysmon.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1553.004/atomic_red_team/windows-sysmon.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1553.004/atomic_red_team/windows-sysmon.log",
+      "size_bytes": 11776841,
+      "sha256": "97f54c07c9acb630f9afee595d5cee889445ff66173c4a85e3fca128af688531",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1553.004/atomic_red_team/windows-sysmon.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1556/disable_credential_guard/windows-sysmon.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1556/disable_credential_guard/windows-sysmon.log",
+      "size_bytes": 1004,
+      "sha256": "a8879851980508e87ca0600bc269643b97ad1c653398b4e970de71da002e5241",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1556/disable_credential_guard/windows-sysmon.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1556/disable_lsa_protection/windows-sysmon.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1556/disable_lsa_protection/windows-sysmon.log",
+      "size_bytes": 1001,
+      "sha256": "385eb30013b94a5946b4643cb8aece8ecfea9d5508ac23e6661409b57004f9af",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1556/disable_lsa_protection/windows-sysmon.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1558.003/atomic_red_team/windows-sysmon.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1558.003/atomic_red_team/windows-sysmon.log",
+      "size_bytes": 18090394,
+      "sha256": "e3a1a1d540d28e4e8d5e59d0e3c505d1904ec44067127fd6bcfa963d20fab704",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1558.003/atomic_red_team/windows-sysmon.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1558.003/rubeus/windows-sysmon.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1558.003/rubeus/windows-sysmon.log",
+      "size_bytes": 22377812,
+      "sha256": "dcae856a516c000816cc825d35286105bd6b842df51eb87056c83a2abe76b811",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1558.003/rubeus/windows-sysmon.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1560.001/archive_utility/windows-sysmon.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1560.001/archive_utility/windows-sysmon.log",
+      "size_bytes": 24954216,
+      "sha256": "38048475c0ec9937dde51d05dda90005fa86616779acc966daaf932c2bbd181e",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1560.001/archive_utility/windows-sysmon.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1562.001/atomic_red_team/windows-sysmon.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1562.001/atomic_red_team/windows-sysmon.log",
+      "size_bytes": 14504430,
+      "sha256": "696e1d2800d215e13c8f1ea5252cf2c2118e1018c1cacda82c041fdbeeac403d",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1562.001/atomic_red_team/windows-sysmon.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1562.001/hotkey_disabled_hidden_user/windows-sysmon.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1562.001/hotkey_disabled_hidden_user/windows-sysmon.log",
+      "size_bytes": 10576705,
+      "sha256": "28efd456106f6bd080835507f43d3808e045193d16992b19c22364b166fc69ff",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1562.001/hotkey_disabled_hidden_user/windows-sysmon.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1562.001/pwh_defender_disabling/windows-sysmon.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1562.001/pwh_defender_disabling/windows-sysmon.log",
+      "size_bytes": 42122,
+      "sha256": "8ab3d091f0a6fa2c6bff98af1ae1f6b523c9f450666a64bf0185c37d76480981",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1562.001/pwh_defender_disabling/windows-sysmon.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1562.001/sc_service_start_disabled/windows-sysmon.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1562.001/sc_service_start_disabled/windows-sysmon.log",
+      "size_bytes": 4982097,
+      "sha256": "83ae68da1c0adccd5f8b9e8170aef56c815e3a36747b583be13cb93b4f28a38e",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1562.001/sc_service_start_disabled/windows-sysmon.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1562.001/unload_sysmon/windows-sysmon.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1562.001/unload_sysmon/windows-sysmon.log",
+      "size_bytes": 4685,
+      "sha256": "99ebf6dab3ce8d632929c39b92758c97c279003dada3600769f6bfb2700ed64e",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1562.001/unload_sysmon/windows-sysmon.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1562.001/win_app_defender_disabling/windows-sysmon.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1562.001/win_app_defender_disabling/windows-sysmon.log",
+      "size_bytes": 20091826,
+      "sha256": "8886e363b137555f5a0403783106e656b77e328fab2e503a645015f5e1cc3756",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1562.001/win_app_defender_disabling/windows-sysmon.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1562.001/win_defend_service_stop/windows-sysmon.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1562.001/win_defend_service_stop/windows-sysmon.log",
+      "size_bytes": 13833365,
+      "sha256": "f9dc84160d71a405117cbf792cb724bfe2779d1e0406e9be387ba591ceaacd71",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1562.001/win_defend_service_stop/windows-sysmon.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1562.004/atomic_red_team/windows-sysmon.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1562.004/atomic_red_team/windows-sysmon.log",
+      "size_bytes": 25558185,
+      "sha256": "384bbe4f69b9b76b06f8263df1b8da76f9a2693cc73ba672051ddd89b6e451c0",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1562.004/atomic_red_team/windows-sysmon.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1566.001/datasets2/windows-sysmon.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1566.001/datasets2/windows-sysmon.log",
+      "size_bytes": 32185000,
+      "sha256": "dc13da161669f422c879b9dced6bf58e7f77cd9f7a9c7d37d3d4f59593c78417",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1566.001/datasets2/windows-sysmon.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1566.001/macro/windows-sysmon.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1566.001/macro/windows-sysmon.log",
+      "size_bytes": 38942255,
+      "sha256": "e0beda8b34a4a5fe0b6d2edd38a918a776a0dd0f15c9d7706f1dbfd2b0a4d591",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1566.001/macro/windows-sysmon.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1566.002/atomic_red_team/windows-sysmon.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1566.002/atomic_red_team/windows-sysmon.log",
+      "size_bytes": 25752,
+      "sha256": "5653eeecf818aa1143060b7eb30d0f08db78e57fba6b3e8ac6473d4762fe78ff",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1566.002/atomic_red_team/windows-sysmon.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1566.002/lnk_file_temp_folder/windows-sysmon.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1566.002/lnk_file_temp_folder/windows-sysmon.log",
+      "size_bytes": 16538713,
+      "sha256": "b48513d5cc0f5ee9edcf487f426fda6812e746b3d8250c8c90c02031f9e282d9",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1566.002/lnk_file_temp_folder/windows-sysmon.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1569.002/atomic_red_team/windows-sysmon.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1569.002/atomic_red_team/windows-sysmon.log",
+      "size_bytes": 13756037,
+      "sha256": "6864968926d7ef6b7fb97d6a5d8ee3478ca4c880d3f048a919f5a16d9e5d4982",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1569.002/atomic_red_team/windows-sysmon.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1572/ngrok/windows-sysmon.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1572/ngrok/windows-sysmon.log",
+      "size_bytes": 71654,
+      "sha256": "8e53cdfacaae106a1012799db25b07d7b1945f325f5ca5e30a8e1421aa76b974",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1572/ngrok/windows-sysmon.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1572/plink/windows-sysmon.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1572/plink/windows-sysmon.log",
+      "size_bytes": 228457,
+      "sha256": "d3e8bbbd7581844a572627ba888b22aea1f2be121660a16e520ff27fddb40fb0",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1572/plink/windows-sysmon.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1574.001/atomic_red_team/windows-sysmon.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1574.001/atomic_red_team/windows-sysmon.log",
+      "size_bytes": 124911,
+      "sha256": "40453c0adea0094eec5d7bcbc16c1218ce45e8a4fd0d596e9a8a7f9437b8750a",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1574.001/atomic_red_team/windows-sysmon.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1574.002/lotus_blossom_chrysalis/windows-sysmon.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1574.002/lotus_blossom_chrysalis/windows-sysmon.log",
+      "size_bytes": 9226,
+      "sha256": "66dad57f32a2178a924c5742ac7b68fa74d745d9efb8ac7796067e3464b9307c",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1574.002/lotus_blossom_chrysalis/windows-sysmon.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1574.002/msi_module_load/windows-sysmon.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1574.002/msi_module_load/windows-sysmon.log",
+      "size_bytes": 10353,
+      "sha256": "97adffda36f082369003f4a3549704190fbe04de1cbb88d014bbac8f1975b6fa",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1574.002/msi_module_load/windows-sysmon.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1574.009/atomic_red_team/windows-sysmon.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1574.009/atomic_red_team/windows-sysmon.log",
+      "size_bytes": 11304228,
+      "sha256": "da9ae38593a369e2cfcab73b44a897fcd37ff1a066fe698987abd6854c80ec4f",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1574.009/atomic_red_team/windows-sysmon.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1574.011/change_registry_path_service/windows-sysmon.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1574.011/change_registry_path_service/windows-sysmon.log",
+      "size_bytes": 7096789,
+      "sha256": "ecd26db02e3495c351ca81a839590947ec5ea8ce9edb847f69ae08c98f3ed5e2",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1574.011/change_registry_path_service/windows-sysmon.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1588.002/atomic_red_team/windows-sysmon.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1588.002/atomic_red_team/windows-sysmon.log",
+      "size_bytes": 12676536,
+      "sha256": "ca8af2a92014ef1cbc606ac31144419ad948d575d65e3850ed279f5f50621e56",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1588.002/atomic_red_team/windows-sysmon.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1590.005/windows-sysmon.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1590.005/windows-sysmon.log",
+      "size_bytes": 16004,
+      "sha256": "ce63c8c2162f3371fdd06508f319fec74c35745bd37f235c19ef615ad8f7ea0d",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1590.005/windows-sysmon.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1595/attacker_scan_tools/windows-sysmon.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1595/attacker_scan_tools/windows-sysmon.log",
+      "size_bytes": 12513323,
+      "sha256": "386a9a7feb3f23fdff761723606f403fed4f61534a19af8a7c19a7fbca033055",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1595/attacker_scan_tools/windows-sysmon.log"
+    },
+    {
+      "source_path": "datasets/attack_techniques/T1620/common_language_runtim_loaded/windows-sysmon.log",
+      "cache_path": "data/cache/splunk-attack-data/attack_techniques/T1620/common_language_runtim_loaded/windows-sysmon.log",
+      "size_bytes": 29252,
+      "sha256": "787731ae03c41c253da26d69ef9b4ec61bfab213fe1b6bcfa4280eddf23a20e1",
+      "lfs": true,
+      "download_url": "https://media.githubusercontent.com/media/splunk/attack_data/a28608b53aa3d8222052e8f3ada59e2d9a4adfff/datasets/attack_techniques/T1620/common_language_runtim_loaded/windows-sysmon.log"
+    }
+  ]
+}
