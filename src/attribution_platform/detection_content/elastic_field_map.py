@@ -56,7 +56,7 @@ from attribution_platform.detection.derived_security import SECURITY_VIEWS
 from attribution_platform.detection.derived_views import ViewSet
 from attribution_platform.sources.windows_security import SUPPORTED_EVENT_IDS
 
-ELASTIC_FIELD_MAP_VERSION = "elastic-field-map/5"  # 2: several data streams; 3: PowerShell
+ELASTIC_FIELD_MAP_VERSION = "elastic-field-map/6"  # 2: several data streams; 3: PowerShell
 
 INTEGRATIONS_COMMIT = "ff5328128a30c75046130ae58ddba450caa1f2dc"
 ECS_VERSION = "8.17.0"

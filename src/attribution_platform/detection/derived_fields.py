@@ -24,6 +24,7 @@ checks every view against Elastic's own pipeline test fixtures.
 from __future__ import annotations
 
 import functools
+import ipaddress
 import re
 from collections.abc import Callable, Mapping
 from types import MappingProxyType
@@ -273,6 +274,17 @@ def _port(value: Any) -> str | None:
     return None if value is None else str(value)
 
 
+def _ip(value: Any) -> str | None:
+    """An ``ip`` field as Elasticsearch holds it: the address in canonical form (the
+    pipeline's ``convert … type: ip`` leaves a value that is not an address unset)."""
+    if value is None or _ed(value) is None:
+        return None
+    try:
+        return str(ipaddress.ip_address(str(value)))
+    except ValueError:
+        return None
+
+
 #: The pipeline-level derivations, before the index mapping is applied.
 _PIPELINE_FIELDS: Mapping[str, Callable[[Observation], Any]] = MappingProxyType(
     {
@@ -309,8 +321,14 @@ _PIPELINE_FIELDS: Mapping[str, Callable[[Observation], Any]] = MappingProxyType(
         "registry.data.type": _registry_data_type,
         "dns.question.name": lambda o: _ed(_attr(o, "dns", "question_name")),
         "network.transport": lambda o: _ed(_attr(o, "network", "transport")),
+        "network.direction": lambda o: _ed(_attr(o, "network", "direction")),
         "source.port": lambda o: _port(_attr(o, "network", "source", "port")),
         "destination.port": lambda o: _port(_attr(o, "network", "destination", "port")),
+        "source.ip": lambda o: _ip(_attr(o, "network", "source", "ip")),
+        "destination.ip": lambda o: _ip(_attr(o, "network", "destination", "ip")),
+        # sequence join keys (ADR-0015 Amendment E): the GUIDs as written
+        "process.entity_id": lambda o: _ed(_attr(o, "process", "entity_id")),
+        "process.parent.entity_id": lambda o: _ed(_attr(o, "process", "parent_entity_id")),
         # Event data the pipeline neither renames nor removes stays in the
         # document as winlog.event_data.<Name>, verbatim (after the "-" removal).
         "winlog.event_data.IntegrityLevel": lambda o: _ed(_attr(o, "process", "integrity_level")),
@@ -351,6 +369,8 @@ _NON_KEYWORD = {
     "registry.data.strings": "wildcard",
     "source.port": "long",
     "destination.port": "long",
+    "source.ip": "ip",
+    "destination.ip": "ip",
 }
 
 SYSMON_VIEWS: ViewSet = build_view_set(

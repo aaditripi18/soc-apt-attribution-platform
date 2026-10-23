@@ -6,7 +6,7 @@
   "rule_packs": [
    {
     "pack_id": "elastic-195f15c0bac8",
-    "content_hash": "6211b615c3a7cbffe11462376dfa9982ad2a2692aab3730fa3552eff34200543"
+    "content_hash": "12dbbb84ef62ee891dfd723cd5d969b3a86b5ab539492a45e9a1e1f2b9024fd2"
    },
    {
     "pack_id": "sigma-r2026-07-01-sigma_core++",
@@ -55,7 +55,7 @@
    "source_commit": "195f15c0bac84540bfe47abb8e26dbf8184eb69a",
    "manifest_sha256": "9031b14885213de2801db475aac1d28504c4aef8cb798d606c38313bf1578071",
    "lark_version": "1.3.1",
-   "field_map_version": "elastic-field-map/5",
+   "field_map_version": "elastic-field-map/6",
    "integrations_commit": "ff5328128a30c75046130ae58ddba450caa1f2dc",
    "ecs_version": "8.17.0",
    "data_streams": [
@@ -105,12 +105,12 @@
    "no_sigma_rule": 172
   },
   "covered_techniques_by_origin": {
-   "elastic": 303,
+   "elastic": 305,
    "sigma": 336
   },
   "covered_techniques_by_origin_only": {
    "elastic": 68,
-   "sigma": 101
+   "sigma": 99
   },
   "group_used_techniques_by_status": {
    "covered": 322,
@@ -6204,9 +6204,9 @@
    "attack_id": "T1021",
    "name": "Remote Services",
    "status": "covered",
-   "rule_sources": 23,
+   "rule_sources": 31,
    "rule_sources_by_origin": {
-    "elastic": 19,
+    "elastic": 27,
     "sigma": 4
    },
    "rejected_rules_blocked_by": [
@@ -6250,9 +6250,9 @@
    "attack_id": "T1021.002",
    "name": "SMB/Windows Admin Shares",
    "status": "covered",
-   "rule_sources": 33,
+   "rule_sources": 34,
    "rule_sources_by_origin": {
-    "elastic": 5,
+    "elastic": 6,
     "sigma": 28
    },
    "rejected_rules_blocked_by": [
@@ -6268,9 +6268,9 @@
    "attack_id": "T1021.003",
    "name": "Distributed Component Object Model",
    "status": "covered",
-   "rule_sources": 13,
+   "rule_sources": 17,
    "rule_sources_by_origin": {
-    "elastic": 3,
+    "elastic": 7,
     "sigma": 10
    },
    "rejected_rules_blocked_by": [
@@ -6322,9 +6322,9 @@
    "attack_id": "T1021.006",
    "name": "Windows Remote Management",
    "status": "covered",
-   "rule_sources": 11,
+   "rule_sources": 12,
    "rule_sources_by_origin": {
-    "elastic": 3,
+    "elastic": 4,
     "sigma": 8
    },
    "rejected_rules_blocked_by": [
@@ -7083,9 +7083,9 @@
    "attack_id": "T1047",
    "name": "Windows Management Instrumentation",
    "status": "covered",
-   "rule_sources": 54,
+   "rule_sources": 56,
    "rule_sources_by_origin": {
-    "elastic": 15,
+    "elastic": 17,
     "sigma": 39
    },
    "rejected_rules_blocked_by": [
@@ -7224,9 +7224,9 @@
    "attack_id": "T1053",
    "name": "Scheduled Task/Job",
    "status": "covered",
-   "rule_sources": 16,
+   "rule_sources": 19,
    "rule_sources_by_origin": {
-    "elastic": 11,
+    "elastic": 14,
     "sigma": 5
    },
    "rejected_rules_blocked_by": [
@@ -7282,9 +7282,9 @@
    "attack_id": "T1053.005",
    "name": "Scheduled Task",
    "status": "covered",
-   "rule_sources": 29,
+   "rule_sources": 32,
    "rule_sources_by_origin": {
-    "elastic": 9,
+    "elastic": 12,
     "sigma": 20
    },
    "rejected_rules_blocked_by": [
@@ -7600,9 +7600,9 @@
    "attack_id": "T1059",
    "name": "Command and Scripting Interpreter",
    "status": "covered",
-   "rule_sources": 140,
+   "rule_sources": 143,
    "rule_sources_by_origin": {
-    "elastic": 80,
+    "elastic": 83,
     "sigma": 60
    },
    "rejected_rules_blocked_by": [
@@ -7625,9 +7625,9 @@
    "attack_id": "T1059.001",
    "name": "PowerShell",
    "status": "covered",
-   "rule_sources": 188,
+   "rule_sources": 190,
    "rule_sources_by_origin": {
-    "elastic": 60,
+    "elastic": 62,
     "sigma": 128
    },
    "rejected_rules_blocked_by": [
@@ -7685,9 +7685,9 @@
    "attack_id": "T1059.004",
    "name": "Unix Shell",
    "status": "covered",
-   "rule_sources": 16,
+   "rule_sources": 17,
    "rule_sources_by_origin": {
-    "elastic": 5,
+    "elastic": 6,
     "sigma": 11
    },
    "rejected_rules_blocked_by": [
@@ -7703,9 +7703,9 @@
    "attack_id": "T1059.005",
    "name": "Visual Basic",
    "status": "covered",
-   "rule_sources": 26,
+   "rule_sources": 27,
    "rule_sources_by_origin": {
-    "elastic": 8,
+    "elastic": 9,
     "sigma": 18
    },
    "rejected_rules_blocked_by": [
@@ -7842,9 +7842,9 @@
    "attack_id": "T1068",
    "name": "Exploitation for Privilege Escalation",
    "status": "covered",
-   "rule_sources": 12,
+   "rule_sources": 13,
    "rule_sources_by_origin": {
-    "elastic": 5,
+    "elastic": 6,
     "sigma": 7
    },
    "rejected_rules_blocked_by": [
@@ -8263,9 +8263,9 @@
    "attack_id": "T1078",
    "name": "Valid Accounts",
    "status": "covered",
-   "rule_sources": 54,
+   "rule_sources": 55,
    "rule_sources_by_origin": {
-    "elastic": 33,
+    "elastic": 34,
     "sigma": 21
    },
    "rejected_rules_blocked_by": [
@@ -8355,9 +8355,9 @@
    "attack_id": "T1078.004",
    "name": "Cloud Accounts",
    "status": "covered",
-   "rule_sources": 39,
+   "rule_sources": 40,
    "rule_sources_by_origin": {
-    "elastic": 26,
+    "elastic": 27,
     "sigma": 13
    },
    "rejected_rules_blocked_by": [
@@ -8692,9 +8692,9 @@
    "attack_id": "T1098",
    "name": "Account Manipulation",
    "status": "covered",
-   "rule_sources": 64,
+   "rule_sources": 65,
    "rule_sources_by_origin": {
-    "elastic": 51,
+    "elastic": 52,
     "sigma": 13
    },
    "rejected_rules_blocked_by": [
@@ -8822,9 +8822,9 @@
    "attack_id": "T1098.006",
    "name": "Additional Container Cluster Roles",
    "status": "covered",
-   "rule_sources": 6,
+   "rule_sources": 7,
    "rule_sources_by_origin": {
-    "elastic": 6
+    "elastic": 7
    },
    "rejected_rules_blocked_by": [],
    "supported_platforms": [
@@ -9110,9 +9110,9 @@
    "attack_id": "T1112",
    "name": "Modify Registry",
    "status": "covered",
-   "rule_sources": 104,
+   "rule_sources": 105,
    "rule_sources_by_origin": {
-    "elastic": 34,
+    "elastic": 35,
     "sigma": 70
    },
    "rejected_rules_blocked_by": [
@@ -10050,9 +10050,9 @@
    "attack_id": "T1202",
    "name": "Indirect Command Execution",
    "status": "covered",
-   "rule_sources": 42,
+   "rule_sources": 43,
    "rule_sources_by_origin": {
-    "elastic": 8,
+    "elastic": 9,
     "sigma": 34
    },
    "rejected_rules_blocked_by": [
@@ -10481,9 +10481,9 @@
    "attack_id": "T1218",
    "name": "System Binary Proxy Execution",
    "status": "covered",
-   "rule_sources": 149,
+   "rule_sources": 153,
    "rule_sources_by_origin": {
-    "elastic": 37,
+    "elastic": 41,
     "sigma": 112
    },
    "rejected_rules_blocked_by": [
@@ -10563,9 +10563,9 @@
    "attack_id": "T1218.005",
    "name": "Mshta",
    "status": "covered",
-   "rule_sources": 22,
+   "rule_sources": 24,
    "rule_sources_by_origin": {
-    "elastic": 16,
+    "elastic": 18,
     "sigma": 6
    },
    "rejected_rules_blocked_by": [],
@@ -10683,9 +10683,9 @@
    "attack_id": "T1218.014",
    "name": "MMC",
    "status": "covered",
-   "rule_sources": 5,
+   "rule_sources": 6,
    "rule_sources_by_origin": {
-    "elastic": 3,
+    "elastic": 4,
     "sigma": 2
    },
    "rejected_rules_blocked_by": [],
@@ -10712,9 +10712,9 @@
    "attack_id": "T1219",
    "name": "Remote Access Tools",
    "status": "covered",
-   "rule_sources": 12,
+   "rule_sources": 13,
    "rule_sources_by_origin": {
-    "elastic": 6,
+    "elastic": 7,
     "sigma": 6
    },
    "rejected_rules_blocked_by": [],
@@ -10743,8 +10743,9 @@
    "attack_id": "T1219.002",
    "name": "Remote Desktop Software",
    "status": "covered",
-   "rule_sources": 34,
+   "rule_sources": 35,
    "rule_sources_by_origin": {
+    "elastic": 1,
     "sigma": 34
    },
    "rejected_rules_blocked_by": [
@@ -10779,8 +10780,9 @@
    "attack_id": "T1220",
    "name": "XSL Script Processing",
    "status": "covered",
-   "rule_sources": 4,
+   "rule_sources": 5,
    "rule_sources_by_origin": {
+    "elastic": 1,
     "sigma": 4
    },
    "rejected_rules_blocked_by": [],
@@ -11589,9 +11591,9 @@
    "attack_id": "T1526",
    "name": "Cloud Service Discovery",
    "status": "covered",
-   "rule_sources": 4,
+   "rule_sources": 5,
    "rule_sources_by_origin": {
-    "elastic": 2,
+    "elastic": 3,
     "sigma": 2
    },
    "rejected_rules_blocked_by": [],
@@ -11848,9 +11850,9 @@
    "attack_id": "T1543",
    "name": "Create or Modify System Process",
    "status": "covered",
-   "rule_sources": 16,
+   "rule_sources": 17,
    "rule_sources_by_origin": {
-    "elastic": 12,
+    "elastic": 13,
     "sigma": 4
    },
    "rejected_rules_blocked_by": [
@@ -11898,9 +11900,9 @@
    "attack_id": "T1543.003",
    "name": "Windows Service",
    "status": "covered",
-   "rule_sources": 40,
+   "rule_sources": 41,
    "rule_sources_by_origin": {
-    "elastic": 11,
+    "elastic": 12,
     "sigma": 29
    },
    "rejected_rules_blocked_by": [
@@ -13358,9 +13360,9 @@
    "attack_id": "T1559",
    "name": "Inter-Process Communication",
    "status": "covered",
-   "rule_sources": 6,
+   "rule_sources": 9,
    "rule_sources_by_origin": {
-    "elastic": 6
+    "elastic": 9
    },
    "rejected_rules_blocked_by": [],
    "supported_platforms": [
@@ -13374,9 +13376,9 @@
    "attack_id": "T1559.001",
    "name": "Component Object Model",
    "status": "covered",
-   "rule_sources": 8,
+   "rule_sources": 11,
    "rule_sources_by_origin": {
-    "elastic": 6,
+    "elastic": 9,
     "sigma": 2
    },
    "rejected_rules_blocked_by": [
@@ -14109,9 +14111,9 @@
    "attack_id": "T1569",
    "name": "System Services",
    "status": "covered",
-   "rule_sources": 6,
+   "rule_sources": 8,
    "rule_sources_by_origin": {
-    "elastic": 5,
+    "elastic": 7,
     "sigma": 1
    },
    "rejected_rules_blocked_by": [],
@@ -14140,9 +14142,9 @@
    "attack_id": "T1569.002",
    "name": "Service Execution",
    "status": "covered",
-   "rule_sources": 39,
+   "rule_sources": 41,
    "rule_sources_by_origin": {
-    "elastic": 5,
+    "elastic": 7,
     "sigma": 34
    },
    "rejected_rules_blocked_by": [
@@ -14273,9 +14275,9 @@
    "attack_id": "T1574",
    "name": "Hijack Execution Flow",
    "status": "covered",
-   "rule_sources": 16,
+   "rule_sources": 17,
    "rule_sources_by_origin": {
-    "elastic": 13,
+    "elastic": 14,
     "sigma": 3
    },
    "rejected_rules_blocked_by": [],

@@ -166,17 +166,20 @@ def _sequence(
 ) -> Iterable[tuple[AggregatedMatch, tuple[str, ...], str]]:
     """Stage 2 detects when a stage-1 event of the same family, on the same
     host and with the same key, came before it within the stage-2 rule's span.
-    The most recent such stage-1 event is the one named."""
-    earlier: dict[tuple[str, str], AggregatedMatch] = {}
+    The most recent such stage-1 event is the one named. The key is every key
+    field's value, in order (none: the same host is the whole key); an event
+    missing a key value, or with several, is not part of any sequence."""
+    earlier: dict[tuple[str, ...], AggregatedMatch] = {}
     for match in matches:
         spec = match.rule.aggregation
         assert spec is not None  # noqa: S101 - callers pass aggregated matches only
         observation = match.observation
         host = observation.host.name if observation.host is not None else None
-        values = _values(spec.fields[0], observation)
-        if not host or len(values) != 1:
+        per_field = [_values(f, observation) for f in spec.fields]
+        if not host or any(len(values) != 1 for values in per_field):
             continue
-        key = (str(host).casefold(), _normalised(values[0], spec.key_form))
+        values = [values[0] for values in per_field]
+        key = (str(host).casefold(), *(_normalised(v, spec.key_form) for v in values))
         if spec.stage == 1:
             earlier[key] = match
             continue
@@ -186,12 +189,20 @@ def _sequence(
         gap = (observation.timestamp - first.observation.timestamp).total_seconds()
         if not 0 <= gap <= spec.span_seconds:
             continue
-        writer = first.observation.process.executable if first.observation.process else None
-        note = (
-            f"sequence: {spec.fields[0].name}={values[0]!r} follows an event on the same host and "
-            f"path {gap:g}s earlier, at {_stamp(first.observation.timestamp)}"
-            + (f", by {writer!r}" if writer else "")
-        )
+        if spec.key_form == "windows_path":  # ADR-0026: one path, the file saved and run
+            writer = first.observation.process.executable if first.observation.process else None
+            note = (
+                f"sequence: {spec.fields[0].name}={values[0]!r} follows an event on the same "
+                f"host and path {gap:g}s earlier, at {_stamp(first.observation.timestamp)}"
+                + (f", by {writer!r}" if writer else "")
+            )
+        else:
+            joined = ", ".join(f"{f.name}={v!r}" for f, v in zip(spec.fields, values, strict=True))
+            note = (
+                "sequence: follows an event on the same host"
+                + (f" with the same {joined}" if joined else "")
+                + f" {gap:g}s earlier, at {_stamp(first.observation.timestamp)}"
+            )
         yield match, (first.observation.observation_id, observation.observation_id), note
 
 

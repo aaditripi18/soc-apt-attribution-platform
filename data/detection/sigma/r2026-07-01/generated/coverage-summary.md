@@ -16,7 +16,7 @@ Counts only — not detection-efficacy or attribution-accuracy claims.
 | `no_sigma_rule` | 172 | 93 |
 | **total** | **697** | **498** |
 
-Covered techniques by content source: elastic 303 (68 only by it), sigma 336 (101 only by it).
+Covered techniques by content source: elastic 305 (68 only by it), sigma 336 (99 only by it).
 
 ## Groups
 

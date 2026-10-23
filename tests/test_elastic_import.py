@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+from datetime import UTC, datetime, timedelta
 from pathlib import Path
 from typing import Any
 
@@ -16,6 +17,11 @@ import pytest
 
 from attribution_platform.attack_knowledge.loader import AttackKnowledge, load_attack_knowledge
 from attribution_platform.detection import DetectionEngine, load_rule_pack
+from attribution_platform.detection.stateful import (
+    AggregatedMatch,
+    evaluate_aggregations,
+    source_starts,
+)
 from attribution_platform.detection_content.elastic_field_map import (
     SYSMON_PROFILES,
     applies_to_sysmon,
@@ -225,7 +231,7 @@ def test_rule_types_and_indices_outside_scope_are_rejected(
         "nomap": _toml("nomap", 'process where process.name : "a"', technique="T9999"),
     }
     _, report, _ = _import(tmp_path, knowledge, rules)
-    assert report["seq"]["gap_reasons"] == {"rule_type:eql_sequence": 1}
+    assert report["seq"]["gap_reasons"] == {"eql_sequence:no_maxspan": 1}  # Amendment E
     assert report["nt"]["gap_reasons"] == {"rule_type:esql/esql": 1}
     assert report["endpoint"]["gap_reasons"] == {"index:no_supported_data_stream": 1}
     assert report["nomap"]["rejection"] == "no_attack_mapping"
@@ -513,3 +519,144 @@ def test_security_4688_rules_use_the_security_pipeline_semantics(
     assert _fired(engine, security('net "user" /add x')) == set()
     # The Sysmon pipeline strips them, so the same command line matches there.
     assert _fired(engine, _sysmon(1, Image=net, CommandLine='net "user" /add x')) == {"n"}
+
+
+# --- Amendment E: two-stage EQL sequences ------------------------------------------
+
+EXPLORER = "C:" + BS + "Windows" + BS + "explorer.exe"
+CMD = "C:" + BS + "Windows" + BS + "System32" + BS + "cmd.exe"
+#: Elastic's "Incoming DCOM Lateral Movement with ShellBrowserWindow or ShellWindows", trimmed
+DCOM_SEQUENCE = (
+    "sequence by host.id with maxspan=5s\n"
+    ' [network where process.name : "explorer.exe" and network.direction : ("incoming", "ingress")'
+    ' and source.port > 49151 and source.ip != "127.0.0.1"] by process.entity_id\n'
+    " /* the child the remote caller started */\n"
+    ' [process where event.type == "start" and process.parent.name : "explorer.exe"]'
+    " by process.parent.entity_id"
+)
+
+
+def _at(seconds: float, record: int, event_id: int, host: str = "host", **data: str) -> Observation:
+    stamp = datetime(2026, 1, 1, tzinfo=UTC) + timedelta(seconds=seconds)
+    (observation,) = SysmonSourceAdapter().to_observations(
+        {
+            "@timestamp": stamp.isoformat().replace("+00:00", "Z"),
+            "winlog": {
+                "channel": "Microsoft-Windows-Sysmon/Operational",
+                "event_id": event_id,
+                "record_id": record,
+                "computer_name": host,
+                "event_data": {"ProcessId": "10", **data},
+            },
+        }
+    )
+    return observation
+
+
+def _incoming(seconds: float, guid: str = "{A}", host: str = "host", **changes: str) -> Observation:
+    data = {
+        "Image": EXPLORER,
+        "ProcessGuid": guid,
+        "Protocol": "tcp",
+        "Initiated": "false",
+        "SourceIp": "10.0.0.9",
+        "SourcePort": "50123",
+        "DestinationIp": "10.0.0.5",
+        "DestinationPort": "50124",
+        **changes,
+    }
+    return _at(seconds, 1, 3, host, **data)
+
+
+def _child(seconds: float, parent: str = "{A}", host: str = "host") -> Observation:
+    return _at(
+        seconds, 2, 1, host, Image=CMD, ProcessGuid="{B}", ParentImage=EXPLORER,
+        ParentProcessGuid=parent, CommandLine="cmd.exe",
+    )  # fmt: skip
+
+
+def _sequence_detections(engine: DetectionEngine, observations: list[Observation]) -> list[Any]:
+    pending: list[Any] = []
+    for observation in observations:
+        fired, matched = engine.evaluate_split(observation)
+        assert fired == ()  # a sequence stage never detects on its own
+        pending.extend(AggregatedMatch(rule, result, observation) for rule, result in matched)
+    return list(evaluate_aggregations(pending, source_start=source_starts(observations)))
+
+
+def test_a_two_stage_sequence_imports_exactly(tmp_path: Path, knowledge: AttackKnowledge) -> None:
+    pack, report, engine = _import(tmp_path, knowledge, {"dcom": _toml("dcom", DCOM_SEQUENCE)})
+    assert report["dcom"]["status"] == "imported"
+    assert report["dcom"]["multi_event"] == "eql_sequence"
+    stages = {r["aggregation"]["stage"]: r for r in pack["rules"]}
+    first, second = stages[1], stages[2]
+    # host.id is the engine's own "same host"; the keys are the per-stage join fields
+    assert [f["name"] for f in first["aggregation"]["fields"]] == ["process.entity_id"]
+    assert [f["name"] for f in second["aggregation"]["fields"]] == ["process.parent.entity_id"]
+    assert first["aggregation"]["span_seconds"] == second["aggregation"]["span_seconds"] == 5
+    # only the detecting stage maps to techniques; the first is a precondition
+    assert first["technique_mappings"] == [] and second["technique_mappings"]
+    ((result, anchor),) = _sequence_detections(engine, [_incoming(0), _child(2)])
+    assert anchor.process is not None and anchor.process.executable == CMD
+    assert len(result.supporting_observation_ids) == 2
+    assert "process.parent.entity_id='{A}'" in str(result.aggregate_note)
+
+
+@pytest.mark.parametrize(
+    "observations",
+    [
+        [_incoming(0), _child(6)],  # outside maxspan
+        [_child(0), _incoming(1)],  # in the wrong order
+        [_incoming(0), _child(2, parent="{Z}")],  # another process's child
+        [_incoming(0, host="a"), _child(2, host="b")],  # another host
+        [_incoming(0, Initiated="true"), _child(2)],  # outgoing, not incoming (egress)
+        [_incoming(0, SourcePort="1050"), _child(2)],  # source.port not > 49151
+        [_incoming(0, SourceIp="127.0.0.1"), _child(2)],  # from this machine
+        [_child(2)],  # no first stage at all
+    ],
+)
+def test_a_sequence_detects_nothing_else(
+    tmp_path: Path, knowledge: AttackKnowledge, observations: list[Observation]
+) -> None:
+    _, _, engine = _import(tmp_path, knowledge, {"dcom": _toml("dcom", DCOM_SEQUENCE)})
+    assert _sequence_detections(engine, observations) == []
+
+
+@pytest.mark.parametrize(
+    ("query", "reason"),
+    [
+        ("sequence by host.id [process where true] [file where true]", "eql_sequence:no_maxspan"),
+        (
+            "sequence with maxspan=1m [process where true] [file where true] [file where true]",
+            "eql_sequence:stages:3",
+        ),
+        (
+            "sequence with maxspan=1m [process where true] [file where true] until [process where"
+            " true]",
+            "eql_sequence:until / runs / missing-event stage",
+        ),
+        (
+            "sequence with maxspan=1m [process where true] with runs=3 [file where true]",
+            "eql_sequence:until / runs / missing-event stage",
+        ),
+        (
+            "sequence with maxspan=1m [process where true] by process.entity_id [file where true]",
+            "eql_sequence:join_keys_unpaired",
+        ),
+    ],
+)
+def test_sequences_the_engine_cannot_evaluate_exactly_are_refused(
+    tmp_path: Path, knowledge: AttackKnowledge, query: str, reason: str
+) -> None:
+    _, report, _ = _import(tmp_path, knowledge, {"s": _toml("s", query)})
+    assert report["s"]["status"] == "rejected"
+    assert report["s"]["gap_reasons"] == {reason: 1}
+
+
+def test_a_negated_ordering_comparison_is_refused(
+    tmp_path: Path, knowledge: AttackKnowledge
+) -> None:
+    query = 'network where process.name : "a.exe" and not source.port > 1024'
+    _, report, _ = _import(tmp_path, knowledge, {"n": _toml("n", query)})
+    # EQL's comparison with an absent port is null, not true: not reproduced
+    assert "translation_gap:ordering:source.port:long:negate=True" in report["n"]["gap_reasons"]

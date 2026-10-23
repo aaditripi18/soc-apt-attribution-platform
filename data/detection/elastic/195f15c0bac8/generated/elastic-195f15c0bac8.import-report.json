@@ -5,7 +5,7 @@
   "source_commit": "195f15c0bac84540bfe47abb8e26dbf8184eb69a",
   "manifest_sha256": "9031b14885213de2801db475aac1d28504c4aef8cb798d606c38313bf1578071",
   "lark_version": "1.3.1",
-  "field_map_version": "elastic-field-map/5",
+  "field_map_version": "elastic-field-map/6",
   "integrations_commit": "ff5328128a30c75046130ae58ddba450caa1f2dc",
   "ecs_version": "8.17.0",
   "data_streams": [
@@ -28,32 +28,31 @@
  "summary": {
   "elastic_rules_total": 2215,
   "by_status": {
-   "imported": 488,
+   "imported": 505,
    "partial": 26,
-   "rejected": 1701
+   "rejected": 1684
   },
   "rejected_by_reason": {
    "no_attack_mapping": 88,
-   "telemetry_gap": 896,
-   "translation_gap": 717
+   "telemetry_gap": 1054,
+   "translation_gap": 542
   },
-  "generated_rules": 2794,
-  "attack_ids_with_imported_rule": 303
+  "generated_rules": 2914,
+  "attack_ids_with_imported_rule": 305
  },
  "gap_reasons": {
-  "index:no_supported_data_stream": 759,
-  "telemetry_gap:field:user.id": 271,
+  "index:no_supported_data_stream": 892,
+  "telemetry_gap:field:user.id": 274,
   "rule_type:esql/esql": 241,
-  "rule_type:eql_sequence": 206,
-  "translation_gap:eql:function_args:startswith": 177,
-  "translation_gap:eql:regex": 177,
+  "translation_gap:eql:regex": 185,
+  "translation_gap:eql:function_args:startswith": 181,
   "translation_gap:eql:compare_on_expression": 129,
-  "telemetry_gap:field:source.ip": 124,
+  "telemetry_gap:field:source.ip": 125,
   "new_terms:incomplete_query": 117,
   "rule_type:machine_learning/-": 106,
+  "telemetry_gap:field:user.name": 90,
   "no_attack_mapping": 88,
-  "telemetry_gap:field:user.name": 88,
-  "telemetry_gap:field:kubernetes.audit.user.groups": 78,
+  "telemetry_gap:field:kubernetes.audit.user.groups": 79,
   "telemetry_gap:field:kubernetes.audit.user.extra.authentication.kubernetes.io/pod-name": 60,
   "telemetry_gap:field:kubernetes.audit.requestObject.spec.containers.image": 59,
   "telemetry_gap:field:kubernetes.audit.requestObject.spec.volumes.hostPath.path": 48,
@@ -62,31 +61,39 @@
   "telemetry_gap:field:o365.audit.ParticipantInfo.HasGuestUsers": 37,
   "telemetry_gap:field:o365.audit.ParticipantInfo.HasOtherGuestUsers": 37,
   "telemetry_gap:field:event.provider": 34,
+  "event:no_supported_event_satisfies_scope": 32,
   "telemetry_gap:field:message": 32,
-  "event:no_supported_event_satisfies_scope": 31,
+  "telemetry_gap:field:user.domain": 28,
   "telemetry_gap:field:winlog.logon.type": 28,
   "telemetry_gap:field:user_agent.original": 27,
+  "telemetry_gap:field:process.args_count": 26,
+  "telemetry_gap:field:process.pid": 25,
   "telemetry_gap:field:azure.activitylogs.properties.requestbody.properties.roleDefinitionId": 24,
-  "telemetry_gap:field:user.domain": 24,
   "telemetry_gap:field:source.as.organization.name": 23,
   "translation_gap:eql:function_args:endswith": 21,
+  "telemetry_gap:field:winlog.computer_name": 19,
   "telemetry_gap:field:azure.activitylogs.identity.authorization.evidence.principal_type": 18,
   "telemetry_gap:field:winlog.event_data.IntegrityLevel": 18,
+  "telemetry_gap:field:event.category": 17,
   "telemetry_gap:field:host.id": 17,
   "telemetry_gap:field:o365.audit.Members": 17,
-  "telemetry_gap:field:event.category": 16,
   "telemetry_gap:field:azure.signinlogs.properties.resource_id": 14,
   "telemetry_gap:field:event.action": 14,
   "telemetry_gap:field:source.as.number": 14,
   "translation_gap:kql:field_name": 14,
   "telemetry_gap:field:aws.cloudtrail.additional_eventdata": 13,
-  "telemetry_gap:field:process.args_count": 13,
   "telemetry_gap:field:azure.resource.id": 12,
+  "translation_gap:value_semantics:destination.ip:equals": 12,
+  "translation_gap:value_semantics:source.ip:equals": 12,
   "telemetry_gap:field:azure.signinlogs.properties.user_principal_name": 11,
+  "translation_gap:eql:function:cidrmatch": 10,
   "telemetry_gap:field:o365.audit.ObjectId": 9,
   "telemetry_gap:field:user.email": 9,
   "telemetry_gap:field:winlog.event_data.AccessMask": 9,
   "translation_gap:undetermined:event.category": 9,
+  "eql_sequence:no_maxspan": 8,
+  "telemetry_gap:field:azure.activitylogs.identity.claims.appid": 8,
+  "telemetry_gap:field:network.protocol": 8,
   "telemetry_gap:field:o365.audit.ModifiedProperties.AllowFederatedUsers.NewValue": 8,
   "telemetry_gap:field:o365.audit.ModifiedProperties.AllowFederatedUsers.OldValue": 8,
   "telemetry_gap:field:o365.audit.ModifiedProperties.AllowGuestUser.NewValue": 8,
@@ -102,31 +109,35 @@
   "telemetry_gap:field:o365.audit.UserId": 8,
   "telemetry_gap:field:winlog.channel": 8,
   "telemetry_gap:field:winlog.event_data.TargetUserSid": 8,
-  "telemetry_gap:field:azure.activitylogs.identity.claims.appid": 7,
   "telemetry_gap:field:azure.activitylogs.identity.claims_initiated_by_user.name": 7,
   "telemetry_gap:field:dll.code_signature.status": 7,
   "telemetry_gap:field:group.id": 7,
-  "telemetry_gap:field:process.pid": 7,
   "dnf_bound_exceeded:sysmon:1:>64": 6,
   "dnf_bound_exceeded:sysmon:7:>64": 6,
+  "eql_sequence:until / runs / missing-event stage": 6,
   "telemetry_gap:field:azure.activitylogs.identity.authorization.evidence.role": 6,
   "telemetry_gap:field:azure.signinlogs.properties.authentication_protocol": 6,
   "telemetry_gap:field:dll.code_signature.trusted": 6,
+  "eql_sequence:stages:3": 5,
   "telemetry_gap:field:github.hashed_token": 5,
   "dnf_bound_exceeded:security:4688:>64": 4,
+  "eql_sequence:unreadable join fields": 4,
   "telemetry_gap:field:azure.activitylogs.identity.authorization.evidence.principal_id": 4,
   "telemetry_gap:field:azure.signinlogs.properties.risk_level_aggregated": 4,
   "telemetry_gap:field:file.size": 4,
   "telemetry_gap:field:group.name": 4,
   "telemetry_gap:field:kubernetes.audit.impersonatedUser.username": 4,
-  "telemetry_gap:field:network.protocol": 4,
+  "telemetry_gap:field:process.hash.sha256": 4,
   "telemetry_gap:field:source.domain": 4,
+  "telemetry_gap:field:source.port": 4,
   "telemetry_gap:field:winlog.event_data.ClientProcessId": 4,
   "translation_gap:boolean_value:aws.cloudtrail.flattened.request_parameters.activate": 4,
   "dnf_bound_exceeded:powershell:4104:>64": 3,
   "telemetry_gap:field:aws.cloudtrail.resources.arn": 3,
   "telemetry_gap:field:aws.cloudtrail.user_identity.session_context.session_issuer.arn": 3,
   "telemetry_gap:field:azure.auditlogs.properties.additional_details.key": 3,
+  "telemetry_gap:field:azure.auditlogs.properties.initiated_by.user.userPrincipalName": 3,
+  "telemetry_gap:field:azure.signinlogs.category": 3,
   "telemetry_gap:field:azure.signinlogs.properties.is_interactive": 3,
   "telemetry_gap:field:azure.signinlogs.properties.risk_level_during_signin": 3,
   "telemetry_gap:field:kubernetes.audit.requestObject.spec.hostIPC": 3,
@@ -140,7 +151,6 @@
   "telemetry_gap:field:winlog.event_data.ParentProcessId": 3,
   "telemetry_gap:field:winlog.event_data.ProcessName": 3,
   "translation_gap:eql:function_args:stringcontains": 3,
-  "translation_gap:eql:ordering_comparison": 3,
   "translation_gap:kql:range": 3,
   "dnf_bound_exceeded:kubernetes:>64": 2,
   "dnf_bound_exceeded:o365:>64": 2,
@@ -149,20 +159,20 @@
   "telemetry_gap:field:azure.activitylogs.properties.authentication_protocol": 2,
   "telemetry_gap:field:azure.auditlogs.identity": 2,
   "telemetry_gap:field:azure.auditlogs.properties.additional_details.value": 2,
-  "telemetry_gap:field:azure.auditlogs.properties.initiated_by.user.userPrincipalName": 2,
   "telemetry_gap:field:azure.auditlogs.properties.result_reason": 2,
   "telemetry_gap:field:azure.auditlogs.properties.target_resources.0.modified_properties.3.new_value": 2,
   "telemetry_gap:field:azure.auditlogs.properties.target_resources.0.modified_properties.4.new_value": 2,
   "telemetry_gap:field:azure.auditlogs.properties.userAgent": 2,
   "telemetry_gap:field:azure.resource.name": 2,
-  "telemetry_gap:field:azure.signinlogs.category": 2,
   "telemetry_gap:field:azure.signinlogs.properties.conditional_access_audiences.application_id": 2,
+  "telemetry_gap:field:azure.signinlogs.properties.status.error_code": 2,
   "telemetry_gap:field:azure.signinlogs.properties.token_issuer_type": 2,
-  "telemetry_gap:field:destination.ip": 2,
+  "telemetry_gap:field:azure.signinlogs.properties.user_id": 2,
   "telemetry_gap:field:dll.code_signature.exists": 2,
   "telemetry_gap:field:file.code_signature.status": 2,
   "telemetry_gap:field:github.permission": 2,
   "telemetry_gap:field:kubernetes.audit.requestObject.roleRef.name": 2,
+  "telemetry_gap:field:network.type": 2,
   "telemetry_gap:field:o365.audit.AzureActiveDirectoryEventType": 2,
   "telemetry_gap:field:o365.audit.ModifiedProperties.Role_DisplayName.NewValue": 2,
   "telemetry_gap:field:o365.audit.Parameters.AllowFederatedUsers": 2,
@@ -179,10 +189,11 @@
   "telemetry_gap:field:winlog.event_data.EnabledPrivilegeList": 2,
   "telemetry_gap:field:winlog.event_data.NewUACList": 2,
   "telemetry_gap:field:winlog.event_data.Status": 2,
+  "telemetry_gap:field:winlog.logon.id": 2,
   "translation_gap:empty_value": 2,
-  "translation_gap:eql:function:cidrmatch": 2,
   "dnf_bound_exceeded:cloudtrail:>64": 1,
   "dnf_bound_exceeded:entra_signin:>64": 1,
+  "eql_sequence:EQL does not parse: UnexpectedCharacters": 1,
   "parse_error:EQL does not parse: UnexpectedCharacters": 1,
   "telemetry_gap:field:aws.cloudtrail.console_login.additional_eventdata.mfa_used": 1,
   "telemetry_gap:field:aws.cloudtrail.resources.account_id": 1,
@@ -194,7 +205,6 @@
   "telemetry_gap:field:azure.signinlogs.properties.device_detail.device_id": 1,
   "telemetry_gap:field:azure.signinlogs.properties.incoming_token_type": 1,
   "telemetry_gap:field:azure.signinlogs.properties.service_principal_id": 1,
-  "telemetry_gap:field:azure.signinlogs.properties.status.error_code": 1,
   "telemetry_gap:field:azure.signinlogs.properties.tenant_id": 1,
   "telemetry_gap:field:azure.signinlogs.properties.user_type": 1,
   "telemetry_gap:field:azure.signinlogs.result_signature": 1,
@@ -202,6 +212,8 @@
   "telemetry_gap:field:client.user.name": 1,
   "telemetry_gap:field:cloud.account.id": 1,
   "telemetry_gap:field:file.hash.sha256": 1,
+  "telemetry_gap:field:file.pe.imphash": 1,
+  "telemetry_gap:field:file.pe.original_file_name": 1,
   "telemetry_gap:field:github.actor_ip": 1,
   "telemetry_gap:field:github.org_id": 1,
   "telemetry_gap:field:kubernetes.audit.requestObject.spec.containers.securityContext.privileged": 1,
@@ -228,10 +240,11 @@
   "telemetry_gap:field:okta.debug_context.debug_data.flattened.requestedScopes": 1,
   "telemetry_gap:field:okta.debug_context.debug_data.risk_behaviors": 1,
   "telemetry_gap:field:okta.target.alternate_id": 1,
-  "telemetry_gap:field:process.entity_id": 1,
   "telemetry_gap:field:winlog.event_data.AccessMaskDescription": 1,
   "telemetry_gap:field:winlog.event_data.AllowedToDelegateTo": 1,
   "telemetry_gap:field:winlog.event_data.RpcCallClientLocality": 1,
+  "telemetry_gap:field:winlog.event_data.TargetProcessGUID": 1,
+  "telemetry_gap:field:winlog.event_data.TargetProcessId": 1,
   "translation_gap:boolean_value:aws.cloudtrail.flattened.request_parameters.enable": 1,
   "translation_gap:boolean_value:aws.cloudtrail.flattened.request_parameters.omitted": 1
  },
@@ -402,6 +415,8 @@
   "T1218.011",
   "T1218.014",
   "T1219",
+  "T1219.002",
+  "T1220",
   "T1222",
   "T1222.001",
   "T1482",
@@ -746,13 +761,13 @@
    "rule_url": "https://github.com/elastic/detection-rules/blob/195f15c0bac84540bfe47abb8e26dbf8184eb69a/rules/integrations/google_workspace/persistence_google_workspace_device_registered_after_oauth_from_suspicious_asn.toml",
    "rule_type": "eql/eql",
    "status": "rejected",
-   "rejection": "translation_gap",
+   "rejection": "telemetry_gap",
    "profiles": [],
    "logsources": [],
    "conjuncts_total": 0,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "rule_type:eql_sequence": 1
+    "index:no_supported_data_stream": 1
    },
    "attack_ids": [
     "T1566.002",
@@ -760,7 +775,8 @@
     "T1098",
     "T1566"
    ],
-   "dropped_attack_ids": []
+   "dropped_attack_ids": [],
+   "multi_event": "eql_sequence"
   },
   {
    "rule_id": "0136b315-b566-482f-866c-1d8e2477ba16",
@@ -832,13 +848,13 @@
    "rule_url": "https://github.com/elastic/detection-rules/blob/195f15c0bac84540bfe47abb8e26dbf8184eb69a/rules/linux/command_and_control_netcon_file_creation.toml",
    "rule_type": "eql/eql",
    "status": "rejected",
-   "rejection": "translation_gap",
+   "rejection": "telemetry_gap",
    "profiles": [],
    "logsources": [],
    "conjuncts_total": 0,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "rule_type:eql_sequence": 1
+    "index:no_supported_data_stream": 1
    },
    "attack_ids": [
     "T1071",
@@ -846,7 +862,8 @@
     "T1059.004",
     "T1071.001"
    ],
-   "dropped_attack_ids": []
+   "dropped_attack_ids": [],
+   "multi_event": "eql_sequence"
   },
   {
    "content_tier": "enrich",
@@ -952,7 +969,7 @@
    "conjuncts_total": 0,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "rule_type:eql_sequence": 1
+    "eql_sequence:unreadable join fields": 1
    },
    "attack_ids": [
     "T1613",
@@ -963,7 +980,8 @@
     "T1609",
     "T1059.004"
    ],
-   "dropped_attack_ids": []
+   "dropped_attack_ids": [],
+   "multi_event": "eql_sequence"
   },
   {
    "rule_id": "022c37cd-5a4f-422b-8227-b136b7a23180",
@@ -1142,13 +1160,13 @@
    "rule_url": "https://github.com/elastic/detection-rules/blob/195f15c0bac84540bfe47abb8e26dbf8184eb69a/rules/windows/impact_ransomware_note_file_over_smb.toml",
    "rule_type": "eql/eql",
    "status": "rejected",
-   "rejection": "translation_gap",
+   "rejection": "telemetry_gap",
    "profiles": [],
    "logsources": [],
    "conjuncts_total": 0,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "rule_type:eql_sequence": 1
+    "index:no_supported_data_stream": 1
    },
    "attack_ids": [
     "T1021.002",
@@ -1157,7 +1175,8 @@
     "T1485",
     "T1490"
    ],
-   "dropped_attack_ids": []
+   "dropped_attack_ids": [],
+   "multi_event": "eql_sequence"
   },
   {
    "rule_id": "02ea4563-ec10-4974-b7de-12e65aa4f9b3",
@@ -1394,13 +1413,13 @@
    "rule_url": "https://github.com/elastic/detection-rules/blob/195f15c0bac84540bfe47abb8e26dbf8184eb69a/rules/linux/defense_evasion_multi_base64_decoding_attempt.toml",
    "rule_type": "eql/eql",
    "status": "rejected",
-   "rejection": "translation_gap",
+   "rejection": "telemetry_gap",
    "profiles": [],
    "logsources": [],
    "conjuncts_total": 0,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "rule_type:eql_sequence": 1
+    "index:no_supported_data_stream": 1
    },
    "attack_ids": [
     "T1204.002",
@@ -1411,7 +1430,8 @@
     "T1027",
     "T1027.010"
    ],
-   "dropped_attack_ids": []
+   "dropped_attack_ids": [],
+   "multi_event": "eql_sequence"
   },
   {
    "rule_id": "0415258b-a7b2-48a6-891a-3367cd9d4d31",
@@ -1539,18 +1559,19 @@
    "rule_url": "https://github.com/elastic/detection-rules/blob/195f15c0bac84540bfe47abb8e26dbf8184eb69a/rules/windows/credential_access_pkinit_same_principal_u2u.toml",
    "rule_type": "eql/eql",
    "status": "rejected",
-   "rejection": "translation_gap",
+   "rejection": "telemetry_gap",
    "profiles": [],
    "logsources": [],
-   "conjuncts_total": 0,
+   "conjuncts_total": 2,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "rule_type:eql_sequence": 1
+    "telemetry_gap:field:winlog.computer_name": 2
    },
    "attack_ids": [
     "T1558"
    ],
-   "dropped_attack_ids": []
+   "dropped_attack_ids": [],
+   "multi_event": "eql_sequence"
   },
   {
    "rule_id": "0471a12b-c740-4a72-91f0-12bf95014d3c",
@@ -1946,12 +1967,13 @@
    "conjuncts_total": 0,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "rule_type:eql_sequence": 1
+    "eql_sequence:stages:3": 1
    },
    "attack_ids": [
     "T1606"
    ],
-   "dropped_attack_ids": []
+   "dropped_attack_ids": [],
+   "multi_event": "eql_sequence"
   },
   {
    "content_tier": "enrich",
@@ -2277,13 +2299,13 @@
    "rule_url": "https://github.com/elastic/detection-rules/blob/195f15c0bac84540bfe47abb8e26dbf8184eb69a/rules/macos/persistence_creation_change_launch_agents_file.toml",
    "rule_type": "eql/eql",
    "status": "rejected",
-   "rejection": "translation_gap",
+   "rejection": "telemetry_gap",
    "profiles": [],
    "logsources": [],
    "conjuncts_total": 0,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "rule_type:eql_sequence": 1
+    "index:no_supported_data_stream": 1
    },
    "attack_ids": [
     "T1543",
@@ -2292,7 +2314,8 @@
     "T1543.001",
     "T1569"
    ],
-   "dropped_attack_ids": []
+   "dropped_attack_ids": [],
+   "multi_event": "eql_sequence"
   },
   {
    "rule_id": "083383af-b9a4-42b7-a463-29c40efe7797",
@@ -2377,13 +2400,13 @@
    "rule_url": "https://github.com/elastic/detection-rules/blob/195f15c0bac84540bfe47abb8e26dbf8184eb69a/rules/cross-platform/execution_nodejs_pre_or_post_install_script_execution.toml",
    "rule_type": "eql/eql",
    "status": "rejected",
-   "rejection": "translation_gap",
+   "rejection": "telemetry_gap",
    "profiles": [],
    "logsources": [],
    "conjuncts_total": 0,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "rule_type:eql_sequence": 1
+    "index:no_supported_data_stream": 1
    },
    "attack_ids": [
     "T1059.007",
@@ -2396,7 +2419,8 @@
     "T1059.004",
     "T1574"
    ],
-   "dropped_attack_ids": []
+   "dropped_attack_ids": [],
+   "multi_event": "eql_sequence"
   },
   {
    "rule_id": "08933236-b27a-49f6-b04a-a616983f04b9",
@@ -2589,13 +2613,13 @@
    "rule_url": "https://github.com/elastic/detection-rules/blob/195f15c0bac84540bfe47abb8e26dbf8184eb69a/rules/linux/execution_file_execution_followed_by_deletion.toml",
    "rule_type": "eql/eql",
    "status": "rejected",
-   "rejection": "translation_gap",
+   "rejection": "telemetry_gap",
    "profiles": [],
    "logsources": [],
    "conjuncts_total": 0,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "rule_type:eql_sequence": 1
+    "index:no_supported_data_stream": 1
    },
    "attack_ids": [
     "T1059",
@@ -2604,7 +2628,8 @@
     "T1070.004",
     "T1105"
    ],
-   "dropped_attack_ids": []
+   "dropped_attack_ids": [],
+   "multi_event": "eql_sequence"
   },
   {
    "content_tier": "enrich",
@@ -2846,13 +2871,13 @@
    "rule_url": "https://github.com/elastic/detection-rules/blob/195f15c0bac84540bfe47abb8e26dbf8184eb69a/rules/linux/privilege_escalation_potential_wildcard_shell_spawn.toml",
    "rule_type": "eql/eql",
    "status": "rejected",
-   "rejection": "translation_gap",
+   "rejection": "telemetry_gap",
    "profiles": [],
    "logsources": [],
    "conjuncts_total": 0,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "rule_type:eql_sequence": 1
+    "index:no_supported_data_stream": 1
    },
    "attack_ids": [
     "T1059",
@@ -2860,7 +2885,8 @@
     "T1068",
     "T1203"
    ],
-   "dropped_attack_ids": []
+   "dropped_attack_ids": [],
+   "multi_event": "eql_sequence"
   },
   {
    "rule_id": "0b96dfd8-5b8c-4485-9a1c-69ff7839786a",
@@ -3264,13 +3290,13 @@
    "rule_url": "https://github.com/elastic/detection-rules/blob/195f15c0bac84540bfe47abb8e26dbf8184eb69a/rules/windows/execution_ms_office_written_file.toml",
    "rule_type": "eql/eql",
    "status": "rejected",
-   "rejection": "translation_gap",
+   "rejection": "telemetry_gap",
    "profiles": [],
    "logsources": [],
    "conjuncts_total": 0,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "rule_type:eql_sequence": 1
+    "index:no_supported_data_stream": 1
    },
    "attack_ids": [
     "T1204.002",
@@ -3280,7 +3306,8 @@
     "T1566",
     "T1203"
    ],
-   "dropped_attack_ids": []
+   "dropped_attack_ids": [],
+   "multi_event": "eql_sequence"
   },
   {
    "rule_id": "0d92d30a-5f3e-4b71-bc3d-4a0c4914b7e0",
@@ -3310,18 +3337,19 @@
    "rule_url": "https://github.com/elastic/detection-rules/blob/195f15c0bac84540bfe47abb8e26dbf8184eb69a/rules/linux/privilege_escalation_unshare_to_root_process_auditd_sequence.toml",
    "rule_type": "eql/eql",
    "status": "rejected",
-   "rejection": "translation_gap",
+   "rejection": "telemetry_gap",
    "profiles": [],
    "logsources": [],
    "conjuncts_total": 0,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "rule_type:eql_sequence": 1
+    "index:no_supported_data_stream": 1
    },
    "attack_ids": [
     "T1068"
    ],
-   "dropped_attack_ids": []
+   "dropped_attack_ids": [],
+   "multi_event": "eql_sequence"
   },
   {
    "rule_id": "0e1af929-42ed-4262-a846-55a7c54e7c84",
@@ -3481,20 +3509,21 @@
    "rule_url": "https://github.com/elastic/detection-rules/blob/195f15c0bac84540bfe47abb8e26dbf8184eb69a/rules/windows/defense_evasion_msbuild_making_network_connections.toml",
    "rule_type": "eql/eql",
    "status": "rejected",
-   "rejection": "translation_gap",
+   "rejection": "telemetry_gap",
    "profiles": [],
    "logsources": [],
    "conjuncts_total": 0,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "rule_type:eql_sequence": 1
+    "index:no_supported_data_stream": 1
    },
    "attack_ids": [
     "T1071",
     "T1127.001",
     "T1127"
    ],
-   "dropped_attack_ids": []
+   "dropped_attack_ids": [],
+   "multi_event": "eql_sequence"
   },
   {
    "rule_id": "0e8c4128-43b9-53ee-804d-a98657a30964",
@@ -3702,7 +3731,7 @@
    "conjuncts_total": 1,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "telemetry_gap:field:process.entity_id": 1
+    "telemetry_gap:field:winlog.event_data.TargetProcessId": 1
    },
    "attack_ids": [
     "T1003",
@@ -3739,13 +3768,13 @@
    "rule_url": "https://github.com/elastic/detection-rules/blob/195f15c0bac84540bfe47abb8e26dbf8184eb69a/rules/integrations/cloud_defend/defense_evasion_decoded_payload_piped_to_interpreter.toml",
    "rule_type": "eql/eql",
    "status": "rejected",
-   "rejection": "translation_gap",
+   "rejection": "telemetry_gap",
    "profiles": [],
    "logsources": [],
    "conjuncts_total": 0,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "rule_type:eql_sequence": 1
+    "index:no_supported_data_stream": 1
    },
    "attack_ids": [
     "T1204.002",
@@ -3758,7 +3787,8 @@
     "T1059.006",
     "T1027.010"
    ],
-   "dropped_attack_ids": []
+   "dropped_attack_ids": [],
+   "multi_event": "eql_sequence"
   },
   {
    "rule_id": "0fc705f5-544e-4786-8acc-c73cd74e77cf",
@@ -4786,18 +4816,19 @@
    "rule_url": "https://github.com/elastic/detection-rules/blob/195f15c0bac84540bfe47abb8e26dbf8184eb69a/rules/windows/initial_access_execution_from_removable_media.toml",
    "rule_type": "eql/eql",
    "status": "rejected",
-   "rejection": "translation_gap",
+   "rejection": "telemetry_gap",
    "profiles": [],
    "logsources": [],
    "conjuncts_total": 0,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "rule_type:eql_sequence": 1
+    "index:no_supported_data_stream": 1
    },
    "attack_ids": [
     "T1091"
    ],
-   "dropped_attack_ids": []
+   "dropped_attack_ids": [],
+   "multi_event": "eql_sequence"
   },
   {
    "rule_id": "15606250-449d-46a8-aaff-4043e42aefb9",
@@ -4827,19 +4858,20 @@
    "rule_url": "https://github.com/elastic/detection-rules/blob/195f15c0bac84540bfe47abb8e26dbf8184eb69a/rules/linux/privilege_escalation_potential_privesc_via_general_sequence_child.toml",
    "rule_type": "eql/eql",
    "status": "rejected",
-   "rejection": "translation_gap",
+   "rejection": "telemetry_gap",
    "profiles": [],
    "logsources": [],
    "conjuncts_total": 0,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "rule_type:eql_sequence": 1
+    "index:no_supported_data_stream": 1
    },
    "attack_ids": [
     "T1548",
     "T1548.001"
    ],
-   "dropped_attack_ids": []
+   "dropped_attack_ids": [],
+   "multi_event": "eql_sequence"
   },
   {
    "rule_id": "15a8ba77-1c13-4274-88fe-6bd14133861e",
@@ -5570,7 +5602,7 @@
    "conjuncts_total": 15,
    "conjuncts_imported": 12,
    "gap_reasons": {
-    "translation_gap:eql:ordering_comparison": 3
+    "telemetry_gap:field:process.args_count": 3
    },
    "attack_ids": [
     "T1218.011",
@@ -5590,13 +5622,13 @@
    "rule_url": "https://github.com/elastic/detection-rules/blob/195f15c0bac84540bfe47abb8e26dbf8184eb69a/rules/linux/persistence_simple_web_server_connection_accepted.toml",
    "rule_type": "eql/eql",
    "status": "rejected",
-   "rejection": "translation_gap",
+   "rejection": "telemetry_gap",
    "profiles": [],
    "logsources": [],
    "conjuncts_total": 0,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "rule_type:eql_sequence": 1
+    "index:no_supported_data_stream": 1
    },
    "attack_ids": [
     "T1071",
@@ -5607,7 +5639,8 @@
     "T1505",
     "T1071.001"
    ],
-   "dropped_attack_ids": []
+   "dropped_attack_ids": [],
+   "multi_event": "eql_sequence"
   },
   {
    "content_tier": "enrich",
@@ -5775,20 +5808,21 @@
    "rule_url": "https://github.com/elastic/detection-rules/blob/195f15c0bac84540bfe47abb8e26dbf8184eb69a/rules/linux/privilege_escalation_uid_change_post_compilation.toml",
    "rule_type": "eql/eql",
    "status": "rejected",
-   "rejection": "translation_gap",
+   "rejection": "telemetry_gap",
    "profiles": [],
    "logsources": [],
    "conjuncts_total": 0,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "rule_type:eql_sequence": 1
+    "index:no_supported_data_stream": 1
    },
    "attack_ids": [
     "T1548",
     "T1548.001",
     "T1068"
    ],
-   "dropped_attack_ids": []
+   "dropped_attack_ids": [],
+   "multi_event": "eql_sequence"
   },
   {
    "rule_id": "1955e925-6679-4535-9c1b-28ebf369f35f",
@@ -5797,13 +5831,13 @@
    "rule_url": "https://github.com/elastic/detection-rules/blob/195f15c0bac84540bfe47abb8e26dbf8184eb69a/rules/macos/persistence_suspicious_file_creation_via_pkg_install_script.toml",
    "rule_type": "eql/eql",
    "status": "rejected",
-   "rejection": "translation_gap",
+   "rejection": "telemetry_gap",
    "profiles": [],
    "logsources": [],
    "conjuncts_total": 0,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "rule_type:eql_sequence": 1
+    "index:no_supported_data_stream": 1
    },
    "attack_ids": [
     "T1059",
@@ -5811,7 +5845,8 @@
     "T1546",
     "T1546.016"
    ],
-   "dropped_attack_ids": []
+   "dropped_attack_ids": [],
+   "multi_event": "eql_sequence"
   },
   {
    "content_tier": "enrich",
@@ -6245,18 +6280,19 @@
    "rule_url": "https://github.com/elastic/detection-rules/blob/195f15c0bac84540bfe47abb8e26dbf8184eb69a/rules/linux/lateral_movement_telnet_network_activity_internal.toml",
    "rule_type": "eql/eql",
    "status": "rejected",
-   "rejection": "translation_gap",
+   "rejection": "telemetry_gap",
    "profiles": [],
    "logsources": [],
    "conjuncts_total": 0,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "rule_type:eql_sequence": 1
+    "index:no_supported_data_stream": 1
    },
    "attack_ids": [
     "T1021"
    ],
-   "dropped_attack_ids": []
+   "dropped_attack_ids": [],
+   "multi_event": "eql_sequence"
   },
   {
    "rule_id": "1b5e9d4a-7c2f-4e8b-a3d6-0f9c8e2b1a4d",
@@ -6264,20 +6300,27 @@
    "path": "rules/windows/command_and_control_rmm_after_msi_install.toml",
    "rule_url": "https://github.com/elastic/detection-rules/blob/195f15c0bac84540bfe47abb8e26dbf8184eb69a/rules/windows/command_and_control_rmm_after_msi_install.toml",
    "rule_type": "eql/eql",
-   "status": "rejected",
-   "rejection": "translation_gap",
-   "profiles": [],
-   "logsources": [],
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "rule_type:eql_sequence": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "profiles": [
+    "sysmon:1",
+    "sysmon:7",
+    "security:4688"
+   ],
+   "logsources": [
+    "windows/image_load",
+    "windows/process_creation",
+    "windows/security"
+   ],
+   "conjuncts_total": 12,
+   "conjuncts_imported": 12,
+   "gap_reasons": {},
    "attack_ids": [
     "T1219",
     "T1219.002"
    ],
-   "dropped_attack_ids": []
+   "dropped_attack_ids": [],
+   "multi_event": "eql_sequence"
   },
   {
    "rule_id": "1b65429e-bd92-44c0-aff8-e8065869d860",
@@ -6325,13 +6368,13 @@
    "rule_url": "https://github.com/elastic/detection-rules/blob/195f15c0bac84540bfe47abb8e26dbf8184eb69a/rules/linux/credential_access_potential_linux_ssh_bruteforce_internal.toml",
    "rule_type": "eql/eql",
    "status": "rejected",
-   "rejection": "translation_gap",
+   "rejection": "telemetry_gap",
    "profiles": [],
    "logsources": [],
    "conjuncts_total": 0,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "rule_type:eql_sequence": 1
+    "index:no_supported_data_stream": 1
    },
    "attack_ids": [
     "T1110.001",
@@ -6340,7 +6383,8 @@
     "T1110.003",
     "T1110"
    ],
-   "dropped_attack_ids": []
+   "dropped_attack_ids": [],
+   "multi_event": "eql_sequence"
   },
   {
    "rule_id": "1c28becc-ec0b-4e6d-81a5-899d00348089",
@@ -6349,20 +6393,21 @@
    "rule_url": "https://github.com/elastic/detection-rules/blob/195f15c0bac84540bfe47abb8e26dbf8184eb69a/rules/linux/privilege_escalation_potential_copy_fail_cve_2026_31431_exploitation_via_af_alg_socket.toml",
    "rule_type": "eql/eql",
    "status": "rejected",
-   "rejection": "translation_gap",
+   "rejection": "telemetry_gap",
    "profiles": [],
    "logsources": [],
    "conjuncts_total": 0,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "rule_type:eql_sequence": 1
+    "index:no_supported_data_stream": 1
    },
    "attack_ids": [
     "T1548",
     "T1548.001",
     "T1068"
    ],
-   "dropped_attack_ids": []
+   "dropped_attack_ids": [],
+   "multi_event": "eql_sequence"
   },
   {
    "rule_id": "1c3d9346-4591-4894-935c-dad2824850f2",
@@ -6512,19 +6557,20 @@
    "rule_url": "https://github.com/elastic/detection-rules/blob/195f15c0bac84540bfe47abb8e26dbf8184eb69a/rules/windows/lateral_movement_incoming_winrm_shell_execution.toml",
    "rule_type": "eql/eql",
    "status": "rejected",
-   "rejection": "translation_gap",
+   "rejection": "telemetry_gap",
    "profiles": [],
    "logsources": [],
-   "conjuncts_total": 0,
+   "conjuncts_total": 4,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "rule_type:eql_sequence": 1
+    "telemetry_gap:field:process.pid": 2
    },
    "attack_ids": [
     "T1021",
     "T1021.006"
    ],
-   "dropped_attack_ids": []
+   "dropped_attack_ids": [],
+   "multi_event": "eql_sequence"
   },
   {
    "rule_id": "1ceb05c4-7d25-11ee-9562-f661ea17fbcd",
@@ -6640,13 +6686,14 @@
    "rule_url": "https://github.com/elastic/detection-rules/blob/195f15c0bac84540bfe47abb8e26dbf8184eb69a/rules/windows/command_and_control_remote_file_copy_scripts.toml",
    "rule_type": "eql/eql",
    "status": "rejected",
-   "rejection": "translation_gap",
+   "rejection": "telemetry_gap",
    "profiles": [],
    "logsources": [],
-   "conjuncts_total": 0,
+   "conjuncts_total": 4,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "rule_type:eql_sequence": 1
+    "telemetry_gap:field:network.protocol": 2,
+    "telemetry_gap:field:network.type": 2
    },
    "attack_ids": [
     "T1059.007",
@@ -6654,7 +6701,8 @@
     "T1059.005",
     "T1105"
    ],
-   "dropped_attack_ids": []
+   "dropped_attack_ids": [],
+   "multi_event": "eql_sequence"
   },
   {
    "rule_id": "1d306bf0-7bcf-4acd-83fd-042f5711acc9",
@@ -6663,13 +6711,13 @@
    "rule_url": "https://github.com/elastic/detection-rules/blob/195f15c0bac84540bfe47abb8e26dbf8184eb69a/rules/cross-platform/initial_access_file_upload_followed_by_get_request.toml",
    "rule_type": "eql/eql",
    "status": "rejected",
-   "rejection": "translation_gap",
+   "rejection": "telemetry_gap",
    "profiles": [],
    "logsources": [],
    "conjuncts_total": 0,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "rule_type:eql_sequence": 1
+    "index:no_supported_data_stream": 1
    },
    "attack_ids": [
     "T1190",
@@ -6677,7 +6725,8 @@
     "T1505",
     "T1105"
    ],
-   "dropped_attack_ids": []
+   "dropped_attack_ids": [],
+   "multi_event": "eql_sequence"
   },
   {
    "rule_id": "1d485649-c486-4f1d-a99c-8d64795795ad",
@@ -6779,13 +6828,13 @@
    "rule_url": "https://github.com/elastic/detection-rules/blob/195f15c0bac84540bfe47abb8e26dbf8184eb69a/rules/integrations/cloud_defend/defense_evasion_file_creation_execution_deletion_cradle.toml",
    "rule_type": "eql/eql",
    "status": "rejected",
-   "rejection": "translation_gap",
+   "rejection": "telemetry_gap",
    "profiles": [],
    "logsources": [],
    "conjuncts_total": 0,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "rule_type:eql_sequence": 1
+    "index:no_supported_data_stream": 1
    },
    "attack_ids": [
     "T1204.002",
@@ -6796,7 +6845,8 @@
     "T1070.004",
     "T1105"
    ],
-   "dropped_attack_ids": []
+   "dropped_attack_ids": [],
+   "multi_event": "eql_sequence"
   },
   {
    "rule_id": "1dcc51f6-ba26-49e7-9ef4-2655abb2361e",
@@ -6852,13 +6902,13 @@
    "rule_url": "https://github.com/elastic/detection-rules/blob/195f15c0bac84540bfe47abb8e26dbf8184eb69a/rules/windows/collection_email_outlook_mailbox_via_com.toml",
    "rule_type": "eql/eql",
    "status": "rejected",
-   "rejection": "translation_gap",
+   "rejection": "telemetry_gap",
    "profiles": [],
    "logsources": [],
    "conjuncts_total": 0,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "rule_type:eql_sequence": 1
+    "index:no_supported_data_stream": 1
    },
    "attack_ids": [
     "T1114",
@@ -6866,7 +6916,8 @@
     "T1559.001",
     "T1559"
    ],
-   "dropped_attack_ids": []
+   "dropped_attack_ids": [],
+   "multi_event": "eql_sequence"
   },
   {
    "rule_id": "1df1152b-610a-4f48-9d7a-504f6ee5d9da",
@@ -7257,20 +7308,21 @@
    "rule_url": "https://github.com/elastic/detection-rules/blob/195f15c0bac84540bfe47abb8e26dbf8184eb69a/rules/linux/execution_zimbra_swatchdog_snmp_command_injection.toml",
    "rule_type": "eql/eql",
    "status": "rejected",
-   "rejection": "translation_gap",
+   "rejection": "telemetry_gap",
    "profiles": [],
    "logsources": [],
    "conjuncts_total": 0,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "rule_type:eql_sequence": 1
+    "index:no_supported_data_stream": 1
    },
    "attack_ids": [
     "T1190",
     "T1059",
     "T1059.004"
    ],
-   "dropped_attack_ids": []
+   "dropped_attack_ids": [],
+   "multi_event": "eql_sequence"
   },
   {
    "rule_id": "1fa350e0-0aa2-4055-bf8f-ab8b59233e59",
@@ -7326,10 +7378,10 @@
    "rejection": "translation_gap",
    "profiles": [],
    "logsources": [],
-   "conjuncts_total": 0,
+   "conjuncts_total": 88,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "rule_type:eql_sequence": 1
+    "translation_gap:eql:function_args:startswith": 4
    },
    "attack_ids": [
     "T1036.005",
@@ -7345,7 +7397,8 @@
     "T1127.001",
     "T1127"
    ],
-   "dropped_attack_ids": []
+   "dropped_attack_ids": [],
+   "multi_event": "eql_sequence"
   },
   {
    "rule_id": "2003cdc8-8d83-4aa5-b132-1f9a8eb48514",
@@ -7651,13 +7704,13 @@
    "rule_url": "https://github.com/elastic/detection-rules/blob/195f15c0bac84540bfe47abb8e26dbf8184eb69a/rules/linux/execution_shell_via_child_tcp_utility_linux.toml",
    "rule_type": "eql/eql",
    "status": "rejected",
-   "rejection": "translation_gap",
+   "rejection": "telemetry_gap",
    "profiles": [],
    "logsources": [],
    "conjuncts_total": 0,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "rule_type:eql_sequence": 1
+    "index:no_supported_data_stream": 1
    },
    "attack_ids": [
     "T1071",
@@ -7665,7 +7718,8 @@
     "T1059.004",
     "T1095"
    ],
-   "dropped_attack_ids": []
+   "dropped_attack_ids": [],
+   "multi_event": "eql_sequence"
   },
   {
    "content_tier": "enrich",
@@ -8067,20 +8121,21 @@
    "rule_url": "https://github.com/elastic/detection-rules/blob/195f15c0bac84540bfe47abb8e26dbf8184eb69a/rules/windows/credential_access_dollar_account_relay_ntlm.toml",
    "rule_type": "eql/eql",
    "status": "rejected",
-   "rejection": "translation_gap",
+   "rejection": "telemetry_gap",
    "profiles": [],
    "logsources": [],
-   "conjuncts_total": 0,
+   "conjuncts_total": 3,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "rule_type:eql_sequence": 1
+    "telemetry_gap:field:winlog.computer_name": 3
    },
    "attack_ids": [
     "T1557",
     "T1557.001",
     "T1187"
    ],
-   "dropped_attack_ids": []
+   "dropped_attack_ids": [],
+   "multi_event": "eql_sequence"
   },
   {
    "content_tier": "enrich",
@@ -8812,22 +8867,31 @@
    "path": "rules/windows/lateral_movement_powershell_remoting_target.toml",
    "rule_url": "https://github.com/elastic/detection-rules/blob/195f15c0bac84540bfe47abb8e26dbf8184eb69a/rules/windows/lateral_movement_powershell_remoting_target.toml",
    "rule_type": "eql/eql",
-   "status": "rejected",
-   "rejection": "translation_gap",
-   "profiles": [],
-   "logsources": [],
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "rule_type:eql_sequence": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "profiles": [
+    "sysmon:3",
+    "sysmon:22",
+    "sysmon:1",
+    "sysmon:7"
+   ],
+   "logsources": [
+    "windows/dns_query",
+    "windows/image_load",
+    "windows/network_connection",
+    "windows/process_creation"
+   ],
+   "conjuncts_total": 4,
+   "conjuncts_imported": 4,
+   "gap_reasons": {},
    "attack_ids": [
     "T1021",
     "T1021.006",
     "T1059",
     "T1059.001"
    ],
-   "dropped_attack_ids": []
+   "dropped_attack_ids": [],
+   "multi_event": "eql_sequence"
   },
   {
    "rule_id": "2783d84f-5091-4d7d-9319-9fceda8fa71b",
@@ -8903,19 +8967,20 @@
    "rule_url": "https://github.com/elastic/detection-rules/blob/195f15c0bac84540bfe47abb8e26dbf8184eb69a/rules/windows/persistence_remote_password_reset.toml",
    "rule_type": "eql/eql",
    "status": "rejected",
-   "rejection": "translation_gap",
+   "rejection": "telemetry_gap",
    "profiles": [],
    "logsources": [],
-   "conjuncts_total": 0,
+   "conjuncts_total": 2,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "rule_type:eql_sequence": 1
+    "telemetry_gap:field:winlog.computer_name": 2
    },
    "attack_ids": [
     "T1098",
     "T1531"
    ],
-   "dropped_attack_ids": []
+   "dropped_attack_ids": [],
+   "multi_event": "eql_sequence"
   },
   {
    "rule_id": "283683eb-f2ce-40a5-be16-fa931cb5f504",
@@ -9103,13 +9168,13 @@
    "rule_url": "https://github.com/elastic/detection-rules/blob/195f15c0bac84540bfe47abb8e26dbf8184eb69a/rules/linux/privilege_escalation_gdb_sys_ptrace_netcon.toml",
    "rule_type": "eql/eql",
    "status": "rejected",
-   "rejection": "translation_gap",
+   "rejection": "telemetry_gap",
    "profiles": [],
    "logsources": [],
    "conjuncts_total": 0,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "rule_type:eql_sequence": 1
+    "index:no_supported_data_stream": 1
    },
    "attack_ids": [
     "T1071",
@@ -9119,7 +9184,8 @@
     "T1068",
     "T1055.008"
    ],
-   "dropped_attack_ids": []
+   "dropped_attack_ids": [],
+   "multi_event": "eql_sequence"
   },
   {
    "content_tier": "enrich",
@@ -9590,20 +9656,23 @@
    "path": "rules/integrations/aws/persistence_eks_access_entry_granted_then_deleted.toml",
    "rule_url": "https://github.com/elastic/detection-rules/blob/195f15c0bac84540bfe47abb8e26dbf8184eb69a/rules/integrations/aws/persistence_eks_access_entry_granted_then_deleted.toml",
    "rule_type": "eql/eql",
-   "status": "rejected",
-   "rejection": "translation_gap",
-   "profiles": [],
-   "logsources": [],
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "rule_type:eql_sequence": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "profiles": [
+    "cloudtrail"
+   ],
+   "logsources": [
+    "aws/cloudtrail"
+   ],
+   "conjuncts_total": 2,
+   "conjuncts_imported": 2,
+   "gap_reasons": {},
    "attack_ids": [
     "T1098.006",
     "T1098"
    ],
-   "dropped_attack_ids": []
+   "dropped_attack_ids": [],
+   "multi_event": "eql_sequence"
   },
   {
    "rule_id": "2b662e21-dc6e-461e-b5cf-a6eb9b235ec4",
@@ -9865,13 +9934,13 @@
    "rule_url": "https://github.com/elastic/detection-rules/blob/195f15c0bac84540bfe47abb8e26dbf8184eb69a/rules/windows/credential_access_dollar_account_relay_kerberos.toml",
    "rule_type": "eql/eql",
    "status": "rejected",
-   "rejection": "translation_gap",
+   "rejection": "telemetry_gap",
    "profiles": [],
    "logsources": [],
-   "conjuncts_total": 0,
+   "conjuncts_total": 3,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "rule_type:eql_sequence": 1
+    "telemetry_gap:field:winlog.computer_name": 3
    },
    "attack_ids": [
     "T1557",
@@ -9879,7 +9948,8 @@
     "T1557.001",
     "T1187"
    ],
-   "dropped_attack_ids": []
+   "dropped_attack_ids": [],
+   "multi_event": "eql_sequence"
   },
   {
    "rule_id": "2d62889e-e758-4c5e-b57e-c735914ee32a",
@@ -9891,13 +9961,11 @@
    "rejection": null,
    "profiles": [
     "sysmon:1",
-    "sysmon:7",
-    "security:4688"
+    "sysmon:7"
    ],
    "logsources": [
     "windows/image_load",
-    "windows/process_creation",
-    "windows/security"
+    "windows/process_creation"
    ],
    "conjuncts_total": 10,
    "conjuncts_imported": 8,
@@ -10168,13 +10236,11 @@
    "rejection": null,
    "profiles": [
     "sysmon:1",
-    "sysmon:7",
-    "security:4688"
+    "sysmon:7"
    ],
    "logsources": [
     "windows/image_load",
-    "windows/process_creation",
-    "windows/security"
+    "windows/process_creation"
    ],
    "conjuncts_total": 3,
    "conjuncts_imported": 2,
@@ -10531,13 +10597,13 @@
    "rule_url": "https://github.com/elastic/detection-rules/blob/195f15c0bac84540bfe47abb8e26dbf8184eb69a/rules/windows/persistence_startup_folder_file_written_by_unsigned_process.toml",
    "rule_type": "eql/eql",
    "status": "rejected",
-   "rejection": "translation_gap",
+   "rejection": "telemetry_gap",
    "profiles": [],
    "logsources": [],
    "conjuncts_total": 0,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "rule_type:eql_sequence": 1
+    "index:no_supported_data_stream": 1
    },
    "attack_ids": [
     "T1547",
@@ -10545,7 +10611,8 @@
     "T1547.001",
     "T1036.001"
    ],
-   "dropped_attack_ids": []
+   "dropped_attack_ids": [],
+   "multi_event": "eql_sequence"
   },
   {
    "rule_id": "2fc14da3-03d1-4d8e-b42b-942566bf69b4",
@@ -10933,13 +11000,13 @@
    "rule_url": "https://github.com/elastic/detection-rules/blob/195f15c0bac84540bfe47abb8e26dbf8184eb69a/rules/linux/execution_netcon_from_rwx_mem_region_binary.toml",
    "rule_type": "eql/eql",
    "status": "rejected",
-   "rejection": "translation_gap",
+   "rejection": "telemetry_gap",
    "profiles": [],
    "logsources": [],
    "conjuncts_total": 0,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "rule_type:eql_sequence": 1
+    "index:no_supported_data_stream": 1
    },
    "attack_ids": [
     "T1071",
@@ -10948,7 +11015,8 @@
     "T1059",
     "T1059.004"
    ],
-   "dropped_attack_ids": []
+   "dropped_attack_ids": [],
+   "multi_event": "eql_sequence"
   },
   {
    "rule_id": "323cb487-279d-4218-bcbd-a568efe930c6",
@@ -11254,20 +11322,21 @@
    "rule_url": "https://github.com/elastic/detection-rules/blob/195f15c0bac84540bfe47abb8e26dbf8184eb69a/rules/windows/command_and_control_remote_file_copy_powershell.toml",
    "rule_type": "eql/eql",
    "status": "rejected",
-   "rejection": "translation_gap",
+   "rejection": "telemetry_gap",
    "profiles": [],
    "logsources": [],
    "conjuncts_total": 0,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "rule_type:eql_sequence": 1
+    "index:no_supported_data_stream": 1
    },
    "attack_ids": [
     "T1059",
     "T1059.001",
     "T1105"
    ],
-   "dropped_attack_ids": []
+   "dropped_attack_ids": [],
+   "multi_event": "eql_sequence"
   },
   {
    "content_tier": "enrich",
@@ -11669,20 +11738,21 @@
    "rule_url": "https://github.com/elastic/detection-rules/blob/195f15c0bac84540bfe47abb8e26dbf8184eb69a/rules/macos/command_and_control_executable_download_via_wget.toml",
    "rule_type": "eql/eql",
    "status": "rejected",
-   "rejection": "translation_gap",
+   "rejection": "telemetry_gap",
    "profiles": [],
    "logsources": [],
    "conjuncts_total": 0,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "rule_type:eql_sequence": 1
+    "index:no_supported_data_stream": 1
    },
    "attack_ids": [
     "T1204.002",
     "T1204",
     "T1105"
    ],
-   "dropped_attack_ids": []
+   "dropped_attack_ids": [],
+   "multi_event": "eql_sequence"
   },
   {
    "rule_id": "3688577a-d196-11ec-90b0-f661ea17fbce",
@@ -12314,14 +12384,15 @@
    "conjuncts_total": 0,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "rule_type:eql_sequence": 1
+    "eql_sequence:until / runs / missing-event stage": 1
    },
    "attack_ids": [
     "T1071.004",
     "T1071",
     "T1572"
    ],
-   "dropped_attack_ids": []
+   "dropped_attack_ids": [],
+   "multi_event": "eql_sequence"
   },
   {
    "rule_id": "3a6001a0-0939-4bbe-86f4-47d8faeb7b97",
@@ -12778,19 +12849,20 @@
    "rule_url": "https://github.com/elastic/detection-rules/blob/195f15c0bac84540bfe47abb8e26dbf8184eb69a/rules/integrations/kubernetes/privilege_escalation_sensitive_rbac_change_followed_by_workload_modification.toml",
    "rule_type": "eql/eql",
    "status": "rejected",
-   "rejection": "translation_gap",
+   "rejection": "telemetry_gap",
    "profiles": [],
    "logsources": [],
-   "conjuncts_total": 0,
+   "conjuncts_total": 2,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "rule_type:eql_sequence": 1
+    "telemetry_gap:field:kubernetes.audit.user.groups": 1
    },
    "attack_ids": [
     "T1098.006",
     "T1098"
    ],
-   "dropped_attack_ids": []
+   "dropped_attack_ids": [],
+   "multi_event": "eql_sequence"
   },
   {
    "rule_id": "3c99579e-6491-4562-87f4-4d10f0a822b4",
@@ -13231,13 +13303,13 @@
    "rule_url": "https://github.com/elastic/detection-rules/blob/195f15c0bac84540bfe47abb8e26dbf8184eb69a/rules/windows/initial_access_execution_remote_via_msiexec.toml",
    "rule_type": "eql/eql",
    "status": "rejected",
-   "rejection": "translation_gap",
+   "rejection": "telemetry_gap",
    "profiles": [],
    "logsources": [],
    "conjuncts_total": 0,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "rule_type:eql_sequence": 1
+    "index:no_supported_data_stream": 1
    },
    "attack_ids": [
     "T1566.002",
@@ -13246,7 +13318,8 @@
     "T1566",
     "T1105"
    ],
-   "dropped_attack_ids": []
+   "dropped_attack_ids": [],
+   "multi_event": "eql_sequence"
   },
   {
    "rule_id": "3e528511-7316-4a6e-83da-61b5f1c07fd4",
@@ -13325,20 +13398,21 @@
    "rule_url": "https://github.com/elastic/detection-rules/blob/195f15c0bac84540bfe47abb8e26dbf8184eb69a/rules/linux/execution_payload_downloaded_by_curl_wget_and_piped_to_interpreter.toml",
    "rule_type": "eql/eql",
    "status": "rejected",
-   "rejection": "translation_gap",
+   "rejection": "telemetry_gap",
    "profiles": [],
    "logsources": [],
    "conjuncts_total": 0,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "rule_type:eql_sequence": 1
+    "index:no_supported_data_stream": 1
    },
    "attack_ids": [
     "T1071",
     "T1059",
     "T1059.004"
    ],
-   "dropped_attack_ids": []
+   "dropped_attack_ids": [],
+   "multi_event": "eql_sequence"
   },
   {
    "rule_id": "3ec2175d-8f34-4be9-b3be-c5821538760e",
@@ -13395,19 +13469,20 @@
    "rule_url": "https://github.com/elastic/detection-rules/blob/195f15c0bac84540bfe47abb8e26dbf8184eb69a/rules/windows/defense_evasion_suspicious_process_creation_calltrace.toml",
    "rule_type": "eql/eql",
    "status": "rejected",
-   "rejection": "translation_gap",
+   "rejection": "telemetry_gap",
    "profiles": [],
    "logsources": [],
-   "conjuncts_total": 0,
+   "conjuncts_total": 49,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "rule_type:eql_sequence": 1
+    "telemetry_gap:field:winlog.event_data.TargetProcessGUID": 1
    },
    "attack_ids": [
     "T1055",
     "T1055.012"
    ],
-   "dropped_attack_ids": []
+   "dropped_attack_ids": [],
+   "multi_event": "eql_sequence"
   },
   {
    "content_tier": "enrich",
@@ -13458,19 +13533,20 @@
    "rule_url": "https://github.com/elastic/detection-rules/blob/195f15c0bac84540bfe47abb8e26dbf8184eb69a/rules/linux/command_and_control_linux_chisel_client_activity.toml",
    "rule_type": "eql/eql",
    "status": "rejected",
-   "rejection": "translation_gap",
+   "rejection": "telemetry_gap",
    "profiles": [],
    "logsources": [],
    "conjuncts_total": 0,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "rule_type:eql_sequence": 1
+    "index:no_supported_data_stream": 1
    },
    "attack_ids": [
     "T1572",
     "T1090"
    ],
-   "dropped_attack_ids": []
+   "dropped_attack_ids": [],
+   "multi_event": "eql_sequence"
   },
   {
    "rule_id": "3f3f9fe2-d095-11ec-95dc-f661ea17fbce",
@@ -13871,13 +13947,13 @@
    "rule_url": "https://github.com/elastic/detection-rules/blob/195f15c0bac84540bfe47abb8e26dbf8184eb69a/rules/integrations/azure/persistence_entra_id_rt_to_prt_transition_from_user_device.toml",
    "rule_type": "eql/eql",
    "status": "rejected",
-   "rejection": "translation_gap",
+   "rejection": "telemetry_gap",
    "profiles": [],
    "logsources": [],
-   "conjuncts_total": 0,
+   "conjuncts_total": 2,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "rule_type:eql_sequence": 1
+    "telemetry_gap:field:azure.signinlogs.properties.user_id": 2
    },
    "attack_ids": [
     "T1550",
@@ -13888,7 +13964,8 @@
     "T1550.001",
     "T1078.004"
    ],
-   "dropped_attack_ids": []
+   "dropped_attack_ids": [],
+   "multi_event": "eql_sequence"
   },
   {
    "rule_id": "40fe11c2-376e-11f0-9a82-f661ea17fbcd",
@@ -14335,20 +14412,21 @@
    "rule_url": "https://github.com/elastic/detection-rules/blob/195f15c0bac84540bfe47abb8e26dbf8184eb69a/rules/windows/privilege_escalation_create_process_as_different_user.toml",
    "rule_type": "eql/eql",
    "status": "rejected",
-   "rejection": "translation_gap",
+   "rejection": "telemetry_gap",
    "profiles": [],
    "logsources": [],
-   "conjuncts_total": 0,
+   "conjuncts_total": 2,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "rule_type:eql_sequence": 1
+    "telemetry_gap:field:winlog.computer_name": 2
    },
    "attack_ids": [
     "T1134.002",
     "T1134.003",
     "T1134"
    ],
-   "dropped_attack_ids": []
+   "dropped_attack_ids": [],
+   "multi_event": "eql_sequence"
   },
   {
    "content_tier": "enrich",
@@ -14613,20 +14691,21 @@
    "rule_url": "https://github.com/elastic/detection-rules/blob/195f15c0bac84540bfe47abb8e26dbf8184eb69a/rules/windows/credential_access_saved_creds_vault_winlog.toml",
    "rule_type": "eql/eql",
    "status": "rejected",
-   "rejection": "translation_gap",
+   "rejection": "telemetry_gap",
    "profiles": [],
    "logsources": [],
    "conjuncts_total": 0,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "rule_type:eql_sequence": 1
+    "event:no_supported_event_satisfies_scope": 1
    },
    "attack_ids": [
     "T1003",
     "T1555",
     "T1555.004"
    ],
-   "dropped_attack_ids": []
+   "dropped_attack_ids": [],
+   "multi_event": "eql_sequence"
   },
   {
    "rule_id": "453183fa-f903-11ee-8e88-f661ea17fbce",
@@ -15091,13 +15170,13 @@
    "rule_url": "https://github.com/elastic/detection-rules/blob/195f15c0bac84540bfe47abb8e26dbf8184eb69a/rules/windows/credential_access_suspicious_winreg_access_via_sebackup_priv.toml",
    "rule_type": "eql/eql",
    "status": "rejected",
-   "rejection": "translation_gap",
+   "rejection": "telemetry_gap",
    "profiles": [],
    "logsources": [],
-   "conjuncts_total": 0,
+   "conjuncts_total": 2,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "rule_type:eql_sequence": 1
+    "telemetry_gap:field:winlog.computer_name": 2
    },
    "attack_ids": [
     "T1003",
@@ -15106,7 +15185,8 @@
     "T1021.002",
     "T1021"
    ],
-   "dropped_attack_ids": []
+   "dropped_attack_ids": [],
+   "multi_event": "eql_sequence"
   },
   {
    "rule_id": "47e46d85-3963-44a0-b856-bccff48f8676",
@@ -15158,13 +15238,13 @@
    "rule_url": "https://github.com/elastic/detection-rules/blob/195f15c0bac84540bfe47abb8e26dbf8184eb69a/rules/macos/execution_scripting_osascript_exec_followed_by_netcon.toml",
    "rule_type": "eql/eql",
    "status": "rejected",
-   "rejection": "translation_gap",
+   "rejection": "telemetry_gap",
    "profiles": [],
    "logsources": [],
    "conjuncts_total": 0,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "rule_type:eql_sequence": 1
+    "index:no_supported_data_stream": 1
    },
    "attack_ids": [
     "T1071",
@@ -15172,7 +15252,8 @@
     "T1059",
     "T1105"
    ],
-   "dropped_attack_ids": []
+   "dropped_attack_ids": [],
+   "multi_event": "eql_sequence"
   },
   {
    "content_tier": "enrich",
@@ -15392,13 +15473,13 @@
    "rule_url": "https://github.com/elastic/detection-rules/blob/195f15c0bac84540bfe47abb8e26dbf8184eb69a/rules/linux/execution_shell_via_tcp_cli_utility_linux.toml",
    "rule_type": "eql/eql",
    "status": "rejected",
-   "rejection": "translation_gap",
+   "rejection": "telemetry_gap",
    "profiles": [],
    "logsources": [],
    "conjuncts_total": 0,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "rule_type:eql_sequence": 1
+    "index:no_supported_data_stream": 1
    },
    "attack_ids": [
     "T1071",
@@ -15406,7 +15487,8 @@
     "T1059.004",
     "T1095"
    ],
-   "dropped_attack_ids": []
+   "dropped_attack_ids": [],
+   "multi_event": "eql_sequence"
   },
   {
    "rule_id": "48b6edfc-079d-4907-b43c-baffa243270d",
@@ -15513,13 +15595,13 @@
    "rule_url": "https://github.com/elastic/detection-rules/blob/195f15c0bac84540bfe47abb8e26dbf8184eb69a/rules/windows/initial_access_xsl_script_execution_via_com.toml",
    "rule_type": "eql/eql",
    "status": "rejected",
-   "rejection": "translation_gap",
+   "rejection": "telemetry_gap",
    "profiles": [],
    "logsources": [],
    "conjuncts_total": 0,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "rule_type:eql_sequence": 1
+    "index:no_supported_data_stream": 1
    },
    "attack_ids": [
     "T1059.007",
@@ -15531,7 +15613,8 @@
     "T1059.005",
     "T1220"
    ],
-   "dropped_attack_ids": []
+   "dropped_attack_ids": [],
+   "multi_event": "eql_sequence"
   },
   {
    "rule_id": "49002bbe-7aea-4146-91eb-b2b683bf5ed5",
@@ -16077,7 +16160,7 @@
    "conjuncts_total": 0,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "rule_type:eql_sequence": 1
+    "eql_sequence:unreadable join fields": 1
    },
    "attack_ids": [
     "T1613",
@@ -16089,7 +16172,8 @@
     "T1059.004",
     "T1550.001"
    ],
-   "dropped_attack_ids": []
+   "dropped_attack_ids": [],
+   "multi_event": "eql_sequence"
   },
   {
    "rule_id": "4bfd7545-987a-5a19-a3c9-c3fba2858f29",
@@ -16442,14 +16526,15 @@
    "conjuncts_total": 0,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "rule_type:eql_sequence": 1
+    "eql_sequence:until / runs / missing-event stage": 1
    },
    "attack_ids": [
     "T1110.001",
     "T1110.003",
     "T1110"
    ],
-   "dropped_attack_ids": []
+   "dropped_attack_ids": [],
+   "multi_event": "eql_sequence"
   },
   {
    "rule_id": "4eaf5dd4-c511-4d0e-b66d-e218e6e3da76",
@@ -16814,20 +16899,21 @@
    "rule_url": "https://github.com/elastic/detection-rules/blob/195f15c0bac84540bfe47abb8e26dbf8184eb69a/rules/linux/privilege_escalation_suspicious_suid_binary_execution_auditd_sequence.toml",
    "rule_type": "eql/eql",
    "status": "rejected",
-   "rejection": "translation_gap",
+   "rejection": "telemetry_gap",
    "profiles": [],
    "logsources": [],
    "conjuncts_total": 0,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "rule_type:eql_sequence": 1
+    "index:no_supported_data_stream": 1
    },
    "attack_ids": [
     "T1548.003",
     "T1548",
     "T1548.001"
    ],
-   "dropped_attack_ids": []
+   "dropped_attack_ids": [],
+   "multi_event": "eql_sequence"
   },
   {
    "content_tier": "enrich",
@@ -17041,15 +17127,21 @@
    "path": "rules/windows/lateral_movement_dcom_mmc20.toml",
    "rule_url": "https://github.com/elastic/detection-rules/blob/195f15c0bac84540bfe47abb8e26dbf8184eb69a/rules/windows/lateral_movement_dcom_mmc20.toml",
    "rule_type": "eql/eql",
-   "status": "rejected",
-   "rejection": "translation_gap",
-   "profiles": [],
-   "logsources": [],
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "rule_type:eql_sequence": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "profiles": [
+    "sysmon:3",
+    "sysmon:1",
+    "sysmon:7"
+   ],
+   "logsources": [
+    "windows/image_load",
+    "windows/network_connection",
+    "windows/process_creation"
+   ],
+   "conjuncts_total": 3,
+   "conjuncts_imported": 3,
+   "gap_reasons": {},
    "attack_ids": [
     "T1559.001",
     "T1218",
@@ -17058,7 +17150,8 @@
     "T1559",
     "T1218.014"
    ],
-   "dropped_attack_ids": []
+   "dropped_attack_ids": [],
+   "multi_event": "eql_sequence"
   },
   {
    "rule_id": "51d50385-aa3d-448c-bc48-7d6bc39108a3",
@@ -17155,13 +17248,13 @@
    "rule_url": "https://github.com/elastic/detection-rules/blob/195f15c0bac84540bfe47abb8e26dbf8184eb69a/rules_building_block/defense_evasion_dotnet_clickonce_dfsvc_netcon.toml",
    "rule_type": "eql/eql",
    "status": "rejected",
-   "rejection": "translation_gap",
+   "rejection": "telemetry_gap",
    "profiles": [],
    "logsources": [],
    "conjuncts_total": 0,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "rule_type:eql_sequence": 1
+    "index:no_supported_data_stream": 1
    },
    "attack_ids": [
     "T1218.011",
@@ -17169,7 +17262,8 @@
     "T1127.002",
     "T1127"
    ],
-   "dropped_attack_ids": []
+   "dropped_attack_ids": [],
+   "multi_event": "eql_sequence"
   },
   {
    "rule_id": "52aaab7b-b51c-441a-89ce-4387b3aea886",
@@ -17181,10 +17275,12 @@
    "rejection": "translation_gap",
    "profiles": [],
    "logsources": [],
-   "conjuncts_total": 0,
+   "conjuncts_total": 4,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "rule_type:eql_sequence": 1
+    "telemetry_gap:field:process.args_count": 2,
+    "translation_gap:eql:function:cidrmatch": 2,
+    "translation_gap:eql:regex": 2
    },
    "attack_ids": [
     "T1218.011",
@@ -17192,7 +17288,8 @@
     "T1218",
     "T1071.001"
    ],
-   "dropped_attack_ids": []
+   "dropped_attack_ids": [],
+   "multi_event": "eql_sequence"
   },
   {
    "content_tier": "enrich",
@@ -17503,13 +17600,13 @@
    "rule_url": "https://github.com/elastic/detection-rules/blob/195f15c0bac84540bfe47abb8e26dbf8184eb69a/rules/cross-platform/command_and_control_network_connection_to_oast_domain.toml",
    "rule_type": "eql/eql",
    "status": "rejected",
-   "rejection": "translation_gap",
+   "rejection": "telemetry_gap",
    "profiles": [],
    "logsources": [],
    "conjuncts_total": 0,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "rule_type:eql_sequence": 1
+    "index:no_supported_data_stream": 1
    },
    "attack_ids": [
     "T1195.001",
@@ -17518,7 +17615,8 @@
     "T1059",
     "T1102"
    ],
-   "dropped_attack_ids": []
+   "dropped_attack_ids": [],
+   "multi_event": "eql_sequence"
   },
   {
    "rule_id": "54285d96-2b7c-4345-890e-3c40e173f099",
@@ -17730,7 +17828,7 @@
    "conjuncts_total": 0,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "rule_type:eql_sequence": 1
+    "eql_sequence:no_maxspan": 1
    },
    "attack_ids": [
     "T1021.002",
@@ -17739,7 +17837,8 @@
     "T1569",
     "T1569.002"
    ],
-   "dropped_attack_ids": []
+   "dropped_attack_ids": [],
+   "multi_event": "eql_sequence"
   },
   {
    "content_tier": "enrich",
@@ -17749,19 +17848,20 @@
    "rule_url": "https://github.com/elastic/detection-rules/blob/195f15c0bac84540bfe47abb8e26dbf8184eb69a/rules_building_block/defense_evasion_msiexec_installsource_archive_file.toml",
    "rule_type": "eql/eql",
    "status": "rejected",
-   "rejection": "translation_gap",
+   "rejection": "telemetry_gap",
    "profiles": [],
    "logsources": [],
    "conjuncts_total": 0,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "rule_type:eql_sequence": 1
+    "index:no_supported_data_stream": 1
    },
    "attack_ids": [
     "T1218.007",
     "T1218"
    ],
-   "dropped_attack_ids": []
+   "dropped_attack_ids": [],
+   "multi_event": "eql_sequence"
   },
   {
    "rule_id": "55f711c1-6b4d-4787-930d-c9317a885adf",
@@ -17859,13 +17959,14 @@
    "conjuncts_total": 0,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "rule_type:eql_sequence": 1
+    "eql_sequence:stages:3": 1
    },
    "attack_ids": [
     "T1556.006",
     "T1556"
    ],
-   "dropped_attack_ids": []
+   "dropped_attack_ids": [],
+   "multi_event": "eql_sequence"
   },
   {
    "content_tier": "enrich",
@@ -18568,20 +18669,21 @@
    "rule_url": "https://github.com/elastic/detection-rules/blob/195f15c0bac84540bfe47abb8e26dbf8184eb69a/rules/windows/lateral_movement_executable_tool_transfer_smb.toml",
    "rule_type": "eql/eql",
    "status": "rejected",
-   "rejection": "translation_gap",
+   "rejection": "telemetry_gap",
    "profiles": [],
    "logsources": [],
    "conjuncts_total": 0,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "rule_type:eql_sequence": 1
+    "index:no_supported_data_stream": 1
    },
    "attack_ids": [
     "T1021.002",
     "T1021",
     "T1570"
    ],
-   "dropped_attack_ids": []
+   "dropped_attack_ids": [],
+   "multi_event": "eql_sequence"
   },
   {
    "rule_id": "58c6d58b-a0d3-412d-b3b8-0981a9400607",
@@ -18818,20 +18920,21 @@
    "rule_url": "https://github.com/elastic/detection-rules/blob/195f15c0bac84540bfe47abb8e26dbf8184eb69a/rules/linux/execution_shell_via_java_revshell_linux.toml",
    "rule_type": "eql/eql",
    "status": "rejected",
-   "rejection": "translation_gap",
+   "rejection": "telemetry_gap",
    "profiles": [],
    "logsources": [],
    "conjuncts_total": 0,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "rule_type:eql_sequence": 1
+    "index:no_supported_data_stream": 1
    },
    "attack_ids": [
     "T1071",
     "T1059",
     "T1059.004"
    ],
-   "dropped_attack_ids": []
+   "dropped_attack_ids": [],
+   "multi_event": "eql_sequence"
   },
   {
    "rule_id": "5a876e0d-d39a-49b9-8ad8-19c9b622203b",
@@ -18864,13 +18967,13 @@
    "rule_url": "https://github.com/elastic/detection-rules/blob/195f15c0bac84540bfe47abb8e26dbf8184eb69a/rules/cross-platform/defense_evasion_encoding_rot13_python_script.toml",
    "rule_type": "eql/eql",
    "status": "rejected",
-   "rejection": "translation_gap",
+   "rejection": "telemetry_gap",
    "profiles": [],
    "logsources": [],
    "conjuncts_total": 0,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "rule_type:eql_sequence": 1
+    "index:no_supported_data_stream": 1
    },
    "attack_ids": [
     "T1027.013",
@@ -18879,7 +18982,8 @@
     "T1027",
     "T1059.006"
    ],
-   "dropped_attack_ids": []
+   "dropped_attack_ids": [],
+   "multi_event": "eql_sequence"
   },
   {
    "rule_id": "5ae02ebc-a5de-4eac-afe6-c88de696477d",
@@ -18888,18 +18992,19 @@
    "rule_url": "https://github.com/elastic/detection-rules/blob/195f15c0bac84540bfe47abb8e26dbf8184eb69a/rules/linux/privilege_escalation_docker_mount_chroot_container_escape.toml",
    "rule_type": "eql/eql",
    "status": "rejected",
-   "rejection": "translation_gap",
+   "rejection": "telemetry_gap",
    "profiles": [],
    "logsources": [],
    "conjuncts_total": 0,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "rule_type:eql_sequence": 1
+    "index:no_supported_data_stream": 1
    },
    "attack_ids": [
     "T1611"
    ],
-   "dropped_attack_ids": []
+   "dropped_attack_ids": [],
+   "multi_event": "eql_sequence"
   },
   {
    "rule_id": "5ae4e6f8-d1bf-40fa-96ba-e29645e1e4dc",
@@ -19116,13 +19221,13 @@
    "rule_url": "https://github.com/elastic/detection-rules/blob/195f15c0bac84540bfe47abb8e26dbf8184eb69a/rules/linux/defense_evasion_interpreter_launched_from_decoded_payload.toml",
    "rule_type": "eql/eql",
    "status": "rejected",
-   "rejection": "translation_gap",
+   "rejection": "telemetry_gap",
    "profiles": [],
    "logsources": [],
    "conjuncts_total": 0,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "rule_type:eql_sequence": 1
+    "index:no_supported_data_stream": 1
    },
    "attack_ids": [
     "T1204.002",
@@ -19134,7 +19239,8 @@
     "T1027",
     "T1059.006"
    ],
-   "dropped_attack_ids": []
+   "dropped_attack_ids": [],
+   "multi_event": "eql_sequence"
   },
   {
    "rule_id": "5beaebc1-cc13-4bfc-9949-776f9e0dc318",
@@ -19307,13 +19413,13 @@
    "rule_url": "https://github.com/elastic/detection-rules/blob/195f15c0bac84540bfe47abb8e26dbf8184eb69a/rules/linux/execution_shell_via_meterpreter_linux.toml",
    "rule_type": "eql/eql",
    "status": "rejected",
-   "rejection": "translation_gap",
+   "rejection": "telemetry_gap",
    "profiles": [],
    "logsources": [],
    "conjuncts_total": 0,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "rule_type:eql_sequence": 1
+    "index:no_supported_data_stream": 1
    },
    "attack_ids": [
     "T1087.001",
@@ -19324,7 +19430,8 @@
     "T1059",
     "T1059.004"
    ],
-   "dropped_attack_ids": []
+   "dropped_attack_ids": [],
+   "multi_event": "eql_sequence"
   },
   {
    "content_tier": "enrich",
@@ -19377,10 +19484,10 @@
    "rejection": "translation_gap",
    "profiles": [],
    "logsources": [],
-   "conjuncts_total": 0,
+   "conjuncts_total": 4,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "rule_type:eql_sequence": 1
+    "translation_gap:eql:function:cidrmatch": 2
    },
    "attack_ids": [
     "T1053.005",
@@ -19390,7 +19497,8 @@
     "T1059",
     "T1059.001"
    ],
-   "dropped_attack_ids": []
+   "dropped_attack_ids": [],
+   "multi_event": "eql_sequence"
   },
   {
    "rule_id": "5cd8e1f7-0050-4afc-b2df-904e40b2f5ae",
@@ -19477,7 +19585,7 @@
    "conjuncts_total": 0,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "rule_type:eql_sequence": 1
+    "eql_sequence:unreadable join fields": 1
    },
    "attack_ids": [
     "T1613",
@@ -19485,7 +19593,8 @@
     "T1609",
     "T1059.004"
    ],
-   "dropped_attack_ids": []
+   "dropped_attack_ids": [],
+   "multi_event": "eql_sequence"
   },
   {
    "rule_id": "5d1d6907-0747-4d5d-9b24-e4a18853dc0a",
@@ -19568,19 +19677,20 @@
    "rule_url": "https://github.com/elastic/detection-rules/blob/195f15c0bac84540bfe47abb8e26dbf8184eb69a/rules/macos/execution_script_via_automator_workflows.toml",
    "rule_type": "eql/eql",
    "status": "rejected",
-   "rejection": "translation_gap",
+   "rejection": "telemetry_gap",
    "profiles": [],
    "logsources": [],
    "conjuncts_total": 0,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "rule_type:eql_sequence": 1
+    "index:no_supported_data_stream": 1
    },
    "attack_ids": [
     "T1059.007",
     "T1059"
    ],
-   "dropped_attack_ids": []
+   "dropped_attack_ids": [],
+   "multi_event": "eql_sequence"
   },
   {
    "rule_id": "5dc3519c-1f56-42fc-9a70-7e6b705c2781",
@@ -19589,20 +19699,21 @@
    "rule_url": "https://github.com/elastic/detection-rules/blob/195f15c0bac84540bfe47abb8e26dbf8184eb69a/rules/linux/execution_payload_downloaded_by_interpreter_and_piped_to_interpreter.toml",
    "rule_type": "eql/eql",
    "status": "rejected",
-   "rejection": "translation_gap",
+   "rejection": "telemetry_gap",
    "profiles": [],
    "logsources": [],
    "conjuncts_total": 0,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "rule_type:eql_sequence": 1
+    "index:no_supported_data_stream": 1
    },
    "attack_ids": [
     "T1071",
     "T1059",
     "T1059.004"
    ],
-   "dropped_attack_ids": []
+   "dropped_attack_ids": [],
+   "multi_event": "eql_sequence"
   },
   {
    "rule_id": "5e161522-2545-11ed-ac47-f661ea17fbce",
@@ -19983,13 +20094,13 @@
    "rule_url": "https://github.com/elastic/detection-rules/blob/195f15c0bac84540bfe47abb8e26dbf8184eb69a/rules/macos/collection_discovery_output_written_to_suspicious_file.toml",
    "rule_type": "eql/eql",
    "status": "rejected",
-   "rejection": "translation_gap",
+   "rejection": "telemetry_gap",
    "profiles": [],
    "logsources": [],
    "conjuncts_total": 0,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "rule_type:eql_sequence": 1
+    "index:no_supported_data_stream": 1
    },
    "attack_ids": [
     "T1033",
@@ -19998,7 +20109,8 @@
     "T1016",
     "T1074"
    ],
-   "dropped_attack_ids": []
+   "dropped_attack_ids": [],
+   "multi_event": "eql_sequence"
   },
   {
    "rule_id": "60f3adec-1df9-4104-9c75-b97d9f078b25",
@@ -20057,7 +20169,7 @@
    "conjuncts_total": 0,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "rule_type:eql_sequence": 1
+    "eql_sequence:no_maxspan": 1
    },
    "attack_ids": [
     "T1218",
@@ -20065,7 +20177,8 @@
     "T1218.008",
     "T1127"
    ],
-   "dropped_attack_ids": []
+   "dropped_attack_ids": [],
+   "multi_event": "eql_sequence"
   },
   {
    "content_tier": "enrich",
@@ -20304,15 +20417,21 @@
    "path": "rules/windows/lateral_movement_dcom_hta.toml",
    "rule_url": "https://github.com/elastic/detection-rules/blob/195f15c0bac84540bfe47abb8e26dbf8184eb69a/rules/windows/lateral_movement_dcom_hta.toml",
    "rule_type": "eql/eql",
-   "status": "rejected",
-   "rejection": "translation_gap",
-   "profiles": [],
-   "logsources": [],
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "rule_type:eql_sequence": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "profiles": [
+    "sysmon:1",
+    "sysmon:7",
+    "sysmon:3"
+   ],
+   "logsources": [
+    "windows/image_load",
+    "windows/network_connection",
+    "windows/process_creation"
+   ],
+   "conjuncts_total": 3,
+   "conjuncts_imported": 3,
+   "gap_reasons": {},
    "attack_ids": [
     "T1559.001",
     "T1218",
@@ -20321,7 +20440,8 @@
     "T1218.005",
     "T1559"
    ],
-   "dropped_attack_ids": []
+   "dropped_attack_ids": [],
+   "multi_event": "eql_sequence"
   },
   {
    "rule_id": "627374ab-7080-4e4d-8316-bef1122444af",
@@ -20498,13 +20618,13 @@
    "rule_url": "https://github.com/elastic/detection-rules/blob/195f15c0bac84540bfe47abb8e26dbf8184eb69a/rules/linux/persistence_ssh_netcon.toml",
    "rule_type": "eql/eql",
    "status": "rejected",
-   "rejection": "translation_gap",
+   "rejection": "telemetry_gap",
    "profiles": [],
    "logsources": [],
    "conjuncts_total": 0,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "rule_type:eql_sequence": 1
+    "index:no_supported_data_stream": 1
    },
    "attack_ids": [
     "T1021.004",
@@ -20515,7 +20635,8 @@
     "T1546.004",
     "T1095"
    ],
-   "dropped_attack_ids": []
+   "dropped_attack_ids": [],
+   "multi_event": "eql_sequence"
   },
   {
    "rule_id": "63c05204-339a-11ed-a261-0242ac120002",
@@ -20622,12 +20743,13 @@
    "conjuncts_total": 0,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "rule_type:eql_sequence": 1
+    "eql_sequence:no_maxspan": 1
    },
    "attack_ids": [
     "T1218"
    ],
-   "dropped_attack_ids": []
+   "dropped_attack_ids": [],
+   "multi_event": "eql_sequence"
   },
   {
    "rule_id": "64037f09-7bf0-4051-ab51-b6daa1d853c6",
@@ -20659,13 +20781,13 @@
    "rule_url": "https://github.com/elastic/detection-rules/blob/195f15c0bac84540bfe47abb8e26dbf8184eb69a/rules/cross-platform/execution_git_exploit_cve_2025_48384.toml",
    "rule_type": "eql/eql",
    "status": "rejected",
-   "rejection": "translation_gap",
+   "rejection": "telemetry_gap",
    "profiles": [],
    "logsources": [],
    "conjuncts_total": 0,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "rule_type:eql_sequence": 1
+    "index:no_supported_data_stream": 1
    },
    "attack_ids": [
     "T1059",
@@ -20673,7 +20795,8 @@
     "T1203",
     "T1105"
    ],
-   "dropped_attack_ids": []
+   "dropped_attack_ids": [],
+   "multi_event": "eql_sequence"
   },
   {
    "rule_id": "640f79d1-571d-4f96-a9af-1194fc8cf763",
@@ -20816,13 +20939,13 @@
    "rule_url": "https://github.com/elastic/detection-rules/blob/195f15c0bac84540bfe47abb8e26dbf8184eb69a/rules/linux/execution_network_event_post_compilation.toml",
    "rule_type": "eql/eql",
    "status": "rejected",
-   "rejection": "translation_gap",
+   "rejection": "telemetry_gap",
    "profiles": [],
    "logsources": [],
    "conjuncts_total": 0,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "rule_type:eql_sequence": 1
+    "index:no_supported_data_stream": 1
    },
    "attack_ids": [
     "T1071",
@@ -20830,7 +20953,8 @@
     "T1059.004",
     "T1095"
    ],
-   "dropped_attack_ids": []
+   "dropped_attack_ids": [],
+   "multi_event": "eql_sequence"
   },
   {
    "rule_id": "64f17c52-6c6e-479e-ba72-236f3df18f3d",
@@ -20886,19 +21010,20 @@
    "rule_url": "https://github.com/elastic/detection-rules/blob/195f15c0bac84540bfe47abb8e26dbf8184eb69a/rules/windows/defense_evasion_msiexec_child_proc_netcon.toml",
    "rule_type": "eql/eql",
    "status": "rejected",
-   "rejection": "translation_gap",
+   "rejection": "telemetry_gap",
    "profiles": [],
    "logsources": [],
-   "conjuncts_total": 0,
+   "conjuncts_total": 6,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "rule_type:eql_sequence": 1
+    "telemetry_gap:field:process.hash.sha256": 4
    },
    "attack_ids": [
     "T1218.007",
     "T1218"
    ],
-   "dropped_attack_ids": []
+   "dropped_attack_ids": [],
+   "multi_event": "eql_sequence"
   },
   {
    "rule_id": "65613f5e-0d48-4b55-ad61-2fb9567cb1ad",
@@ -21535,15 +21660,21 @@
    "path": "rules/windows/persistence_local_scheduled_task_scripting.toml",
    "rule_url": "https://github.com/elastic/detection-rules/blob/195f15c0bac84540bfe47abb8e26dbf8184eb69a/rules/windows/persistence_local_scheduled_task_scripting.toml",
    "rule_type": "eql/eql",
-   "status": "rejected",
-   "rejection": "translation_gap",
-   "profiles": [],
-   "logsources": [],
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "rule_type:eql_sequence": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "profiles": [
+    "sysmon:7",
+    "sysmon:12",
+    "sysmon:13"
+   ],
+   "logsources": [
+    "windows/image_load",
+    "windows/registry_add_delete",
+    "windows/registry_set"
+   ],
+   "conjuncts_total": 4,
+   "conjuncts_imported": 4,
+   "gap_reasons": {},
    "attack_ids": [
     "T1053.005",
     "T1053",
@@ -21551,7 +21682,8 @@
     "T1059.001",
     "T1059.005"
    ],
-   "dropped_attack_ids": []
+   "dropped_attack_ids": [],
+   "multi_event": "eql_sequence"
   },
   {
    "rule_id": "68a7a5a5-a2fc-4a76-ba9f-26849de881b4",
@@ -21679,18 +21811,19 @@
    "rule_url": "https://github.com/elastic/detection-rules/blob/195f15c0bac84540bfe47abb8e26dbf8184eb69a/rules/cross-platform/command_and_control_socks_fortigate_endpoint.toml",
    "rule_type": "eql/eql",
    "status": "rejected",
-   "rejection": "translation_gap",
+   "rejection": "telemetry_gap",
    "profiles": [],
    "logsources": [],
    "conjuncts_total": 0,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "rule_type:eql_sequence": 1
+    "index:no_supported_data_stream": 1
    },
    "attack_ids": [
     "T1090"
    ],
-   "dropped_attack_ids": []
+   "dropped_attack_ids": [],
+   "multi_event": "eql_sequence"
   },
   {
    "rule_id": "6951f15e-533c-4a60-8014-a3c3ab851a1b",
@@ -22067,13 +22200,13 @@
    "rule_url": "https://github.com/elastic/detection-rules/blob/195f15c0bac84540bfe47abb8e26dbf8184eb69a/rules/macos/command_and_control_suspicious_curl_to_google_app_script.toml",
    "rule_type": "eql/eql",
    "status": "rejected",
-   "rejection": "translation_gap",
+   "rejection": "telemetry_gap",
    "profiles": [],
    "logsources": [],
    "conjuncts_total": 0,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "rule_type:eql_sequence": 1
+    "index:no_supported_data_stream": 1
    },
    "attack_ids": [
     "T1071",
@@ -22082,7 +22215,8 @@
     "T1071.001",
     "T1105"
    ],
-   "dropped_attack_ids": []
+   "dropped_attack_ids": [],
+   "multi_event": "eql_sequence"
   },
   {
    "rule_id": "6b84d470-9036-4cc0-a27c-6d90bbfe81ab",
@@ -22262,20 +22396,21 @@
    "rule_url": "https://github.com/elastic/detection-rules/blob/195f15c0bac84540bfe47abb8e26dbf8184eb69a/rules/linux/privilege_escalation_looney_tunables_cve_2023_4911.toml",
    "rule_type": "eql/eql",
    "status": "rejected",
-   "rejection": "translation_gap",
+   "rejection": "telemetry_gap",
    "profiles": [],
    "logsources": [],
    "conjuncts_total": 0,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "rule_type:eql_sequence": 1
+    "index:no_supported_data_stream": 1
    },
    "attack_ids": [
     "T1548",
     "T1548.001",
     "T1068"
    ],
-   "dropped_attack_ids": []
+   "dropped_attack_ids": [],
+   "multi_event": "eql_sequence"
   },
   {
    "rule_id": "6da6f80f-fe41-4814-8010-453e6164bd40",
@@ -22557,16 +22692,19 @@
    "rejection": "translation_gap",
    "profiles": [],
    "logsources": [],
-   "conjuncts_total": 0,
+   "conjuncts_total": 4,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "rule_type:eql_sequence": 1
+    "telemetry_gap:field:network.protocol": 2,
+    "telemetry_gap:field:process.args_count": 2,
+    "translation_gap:eql:regex": 2
    },
    "attack_ids": [
     "T1036.005",
     "T1036"
    ],
-   "dropped_attack_ids": []
+   "dropped_attack_ids": [],
+   "multi_event": "eql_sequence"
   },
   {
    "content_tier": "enrich",
@@ -22821,20 +22959,21 @@
    "rule_url": "https://github.com/elastic/detection-rules/blob/195f15c0bac84540bfe47abb8e26dbf8184eb69a/rules/linux/command_and_control_git_repo_or_file_download_to_sus_dir.toml",
    "rule_type": "eql/eql",
    "status": "rejected",
-   "rejection": "translation_gap",
+   "rejection": "telemetry_gap",
    "profiles": [],
    "logsources": [],
    "conjuncts_total": 0,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "rule_type:eql_sequence": 1
+    "index:no_supported_data_stream": 1
    },
    "attack_ids": [
     "T1071",
     "T1071.001",
     "T1105"
    ],
-   "dropped_attack_ids": []
+   "dropped_attack_ids": [],
+   "multi_event": "eql_sequence"
   },
   {
    "rule_id": "7020ff25-76d7-4a7d-b95b-266cf27d70e8",
@@ -22911,19 +23050,20 @@
    "rule_url": "https://github.com/elastic/detection-rules/blob/195f15c0bac84540bfe47abb8e26dbf8184eb69a/rules/linux/defense_evasion_execution_followed_by_self_deletion.toml",
    "rule_type": "eql/eql",
    "status": "rejected",
-   "rejection": "translation_gap",
+   "rejection": "telemetry_gap",
    "profiles": [],
    "logsources": [],
    "conjuncts_total": 0,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "rule_type:eql_sequence": 1
+    "index:no_supported_data_stream": 1
    },
    "attack_ids": [
     "T1070",
     "T1070.004"
    ],
-   "dropped_attack_ids": []
+   "dropped_attack_ids": [],
+   "multi_event": "eql_sequence"
   },
   {
    "rule_id": "70558fd5-6448-4c65-804a-8567ce02c3a2",
@@ -23156,20 +23296,21 @@
    "rule_url": "https://github.com/elastic/detection-rules/blob/195f15c0bac84540bfe47abb8e26dbf8184eb69a/rules/linux/privilege_escalation_suspicious_passwd_file_write.toml",
    "rule_type": "eql/eql",
    "status": "rejected",
-   "rejection": "translation_gap",
+   "rejection": "telemetry_gap",
    "profiles": [],
    "logsources": [],
    "conjuncts_total": 0,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "rule_type:eql_sequence": 1
+    "index:no_supported_data_stream": 1
    },
    "attack_ids": [
     "T1136.001",
     "T1068",
     "T1136"
    ],
-   "dropped_attack_ids": []
+   "dropped_attack_ids": [],
+   "multi_event": "eql_sequence"
   },
   {
    "rule_id": "71de53ea-ff3b-11ee-b572-f661ea17fbce",
@@ -24135,13 +24276,13 @@
    "rule_url": "https://github.com/elastic/detection-rules/blob/195f15c0bac84540bfe47abb8e26dbf8184eb69a/rules/linux/execution_shell_via_lolbin_interpreter_linux.toml",
    "rule_type": "eql/eql",
    "status": "rejected",
-   "rejection": "translation_gap",
+   "rejection": "telemetry_gap",
    "profiles": [],
    "logsources": [],
    "conjuncts_total": 0,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "rule_type:eql_sequence": 1
+    "index:no_supported_data_stream": 1
    },
    "attack_ids": [
     "T1071",
@@ -24150,7 +24291,8 @@
     "T1095",
     "T1059.006"
    ],
-   "dropped_attack_ids": []
+   "dropped_attack_ids": [],
+   "multi_event": "eql_sequence"
   },
   {
    "rule_id": "76fd43b7-3480-4dd9-8ad7-8bd36bfad92f",
@@ -24545,13 +24687,13 @@
    "rule_url": "https://github.com/elastic/detection-rules/blob/195f15c0bac84540bfe47abb8e26dbf8184eb69a/rules/windows/impact_ransomware_file_rename_smb.toml",
    "rule_type": "eql/eql",
    "status": "rejected",
-   "rejection": "translation_gap",
+   "rejection": "telemetry_gap",
    "profiles": [],
    "logsources": [],
    "conjuncts_total": 0,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "rule_type:eql_sequence": 1
+    "index:no_supported_data_stream": 1
    },
    "attack_ids": [
     "T1021.002",
@@ -24560,7 +24702,8 @@
     "T1485",
     "T1490"
    ],
-   "dropped_attack_ids": []
+   "dropped_attack_ids": [],
+   "multi_event": "eql_sequence"
   },
   {
    "rule_id": "78ef0c95-9dc2-40ac-a8da-5deb6293a14e",
@@ -24671,13 +24814,13 @@
    "rule_url": "https://github.com/elastic/detection-rules/blob/195f15c0bac84540bfe47abb8e26dbf8184eb69a/rules/windows/execution_windows_script_from_internet.toml",
    "rule_type": "eql/eql",
    "status": "rejected",
-   "rejection": "translation_gap",
+   "rejection": "telemetry_gap",
    "profiles": [],
    "logsources": [],
    "conjuncts_total": 0,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "rule_type:eql_sequence": 1
+    "index:no_supported_data_stream": 1
    },
    "attack_ids": [
     "T1059.007",
@@ -24691,7 +24834,8 @@
     "T1059.003",
     "T1059.005"
    ],
-   "dropped_attack_ids": []
+   "dropped_attack_ids": [],
+   "multi_event": "eql_sequence"
   },
   {
    "content_tier": "enrich",
@@ -24916,13 +25060,13 @@
    "rule_url": "https://github.com/elastic/detection-rules/blob/195f15c0bac84540bfe47abb8e26dbf8184eb69a/rules/linux/persistence_suspicious_ssh_execution_xzbackdoor.toml",
    "rule_type": "eql/eql",
    "status": "rejected",
-   "rejection": "translation_gap",
+   "rejection": "telemetry_gap",
    "profiles": [],
    "logsources": [],
    "conjuncts_total": 0,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "rule_type:eql_sequence": 1
+    "index:no_supported_data_stream": 1
    },
    "attack_ids": [
     "T1543",
@@ -24934,7 +25078,8 @@
     "T1059.004",
     "T1556"
    ],
-   "dropped_attack_ids": []
+   "dropped_attack_ids": [],
+   "multi_event": "eql_sequence"
   },
   {
    "rule_id": "7b75c162-d439-472d-b39f-2eb0d4d2d318",
@@ -25647,21 +25792,26 @@
    "path": "rules/windows/defense_evasion_suspicious_wmi_script.toml",
    "rule_url": "https://github.com/elastic/detection-rules/blob/195f15c0bac84540bfe47abb8e26dbf8184eb69a/rules/windows/defense_evasion_suspicious_wmi_script.toml",
    "rule_type": "eql/eql",
-   "status": "rejected",
-   "rejection": "translation_gap",
-   "profiles": [],
-   "logsources": [],
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "rule_type:eql_sequence": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "profiles": [
+    "sysmon:1",
+    "sysmon:7"
+   ],
+   "logsources": [
+    "windows/image_load",
+    "windows/process_creation"
+   ],
+   "conjuncts_total": 6,
+   "conjuncts_imported": 6,
+   "gap_reasons": {},
    "attack_ids": [
     "T1047",
     "T1218",
     "T1220"
    ],
-   "dropped_attack_ids": []
+   "dropped_attack_ids": [],
+   "multi_event": "eql_sequence"
   },
   {
    "rule_id": "7f3a9c2e-1d4b-5e6f-8a9b-0c1d2e3f4a5b",
@@ -25691,13 +25841,13 @@
    "rule_url": "https://github.com/elastic/detection-rules/blob/195f15c0bac84540bfe47abb8e26dbf8184eb69a/rules/linux/initial_access_apache_struts_cve_2023_50164_exploitation_to_webshell.toml",
    "rule_type": "eql/eql",
    "status": "rejected",
-   "rejection": "translation_gap",
+   "rejection": "telemetry_gap",
    "profiles": [],
    "logsources": [],
    "conjuncts_total": 0,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "rule_type:eql_sequence": 1
+    "index:no_supported_data_stream": 1
    },
    "attack_ids": [
     "T1190",
@@ -25705,7 +25855,8 @@
     "T1505",
     "T1105"
    ],
-   "dropped_attack_ids": []
+   "dropped_attack_ids": [],
+   "multi_event": "eql_sequence"
   },
   {
    "content_tier": "enrich",
@@ -26067,13 +26218,13 @@
    "rule_url": "https://github.com/elastic/detection-rules/blob/195f15c0bac84540bfe47abb8e26dbf8184eb69a/rules/windows/execution_java_dropped_jar_immediate_dns_lookup.toml",
    "rule_type": "eql/eql",
    "status": "rejected",
-   "rejection": "translation_gap",
+   "rejection": "telemetry_gap",
    "profiles": [],
    "logsources": [],
    "conjuncts_total": 0,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "rule_type:eql_sequence": 1
+    "index:no_supported_data_stream": 1
    },
    "attack_ids": [
     "T1204.002",
@@ -26081,7 +26232,8 @@
     "T1204",
     "T1105"
    ],
-   "dropped_attack_ids": []
+   "dropped_attack_ids": [],
+   "multi_event": "eql_sequence"
   },
   {
    "content_tier": "enrich",
@@ -26257,19 +26409,20 @@
    "rule_url": "https://github.com/elastic/detection-rules/blob/195f15c0bac84540bfe47abb8e26dbf8184eb69a/rules/windows/persistence_temp_scheduled_task.toml",
    "rule_type": "eql/eql",
    "status": "rejected",
-   "rejection": "translation_gap",
+   "rejection": "telemetry_gap",
    "profiles": [],
    "logsources": [],
-   "conjuncts_total": 0,
+   "conjuncts_total": 1,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "rule_type:eql_sequence": 1
+    "telemetry_gap:field:winlog.computer_name": 1
    },
    "attack_ids": [
     "T1053.005",
     "T1053"
    ],
-   "dropped_attack_ids": []
+   "dropped_attack_ids": [],
+   "multi_event": "eql_sequence"
   },
   {
    "content_tier": "enrich",
@@ -26537,13 +26690,11 @@
    "rejection": null,
    "profiles": [
     "sysmon:1",
-    "sysmon:7",
-    "security:4688"
+    "sysmon:7"
    ],
    "logsources": [
     "windows/image_load",
-    "windows/process_creation",
-    "windows/security"
+    "windows/process_creation"
    ],
    "conjuncts_total": 33,
    "conjuncts_imported": 22,
@@ -26710,13 +26861,11 @@
    "rejection": null,
    "profiles": [
     "sysmon:1",
-    "sysmon:7",
-    "security:4688"
+    "sysmon:7"
    ],
    "logsources": [
     "windows/image_load",
-    "windows/process_creation",
-    "windows/security"
+    "windows/process_creation"
    ],
    "conjuncts_total": 6,
    "conjuncts_imported": 4,
@@ -27543,10 +27692,10 @@
    "rejection": "translation_gap",
    "profiles": [],
    "logsources": [],
-   "conjuncts_total": 0,
+   "conjuncts_total": 8,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "rule_type:eql_sequence": 1
+    "translation_gap:eql:function:cidrmatch": 2
    },
    "attack_ids": [
     "T1071",
@@ -27554,7 +27703,8 @@
     "T1059.003",
     "T1105"
    ],
-   "dropped_attack_ids": []
+   "dropped_attack_ids": [],
+   "multi_event": "eql_sequence"
   },
   {
    "rule_id": "89fa6cb7-6b53-4de2-b604-648488841ab8",
@@ -27614,14 +27764,15 @@
    "conjuncts_total": 0,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "rule_type:eql_sequence": 1
+    "eql_sequence:until / runs / missing-event stage": 1
    },
    "attack_ids": [
     "T1621",
     "T1078",
     "T1078.004"
    ],
-   "dropped_attack_ids": []
+   "dropped_attack_ids": [],
+   "multi_event": "eql_sequence"
   },
   {
    "content_tier": "enrich",
@@ -28040,13 +28191,13 @@
    "rule_url": "https://github.com/elastic/detection-rules/blob/195f15c0bac84540bfe47abb8e26dbf8184eb69a/rules/windows/lateral_movement_rdp_sharprdp_target.toml",
    "rule_type": "eql/eql",
    "status": "rejected",
-   "rejection": "translation_gap",
+   "rejection": "telemetry_gap",
    "profiles": [],
    "logsources": [],
    "conjuncts_total": 0,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "rule_type:eql_sequence": 1
+    "index:no_supported_data_stream": 1
    },
    "attack_ids": [
     "T1021",
@@ -28055,7 +28206,8 @@
     "T1059.003",
     "T1021.001"
    ],
-   "dropped_attack_ids": []
+   "dropped_attack_ids": [],
+   "multi_event": "eql_sequence"
   },
   {
    "rule_id": "8c8df61f-ed2a-4832-87b8-ee30812606e0",
@@ -28125,13 +28277,13 @@
    "rule_url": "https://github.com/elastic/detection-rules/blob/195f15c0bac84540bfe47abb8e26dbf8184eb69a/rules/linux/credential_access_potential_successful_linux_ssh_bruteforce.toml",
    "rule_type": "eql/eql",
    "status": "rejected",
-   "rejection": "translation_gap",
+   "rejection": "telemetry_gap",
    "profiles": [],
    "logsources": [],
    "conjuncts_total": 0,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "rule_type:eql_sequence": 1
+    "index:no_supported_data_stream": 1
    },
    "attack_ids": [
     "T1110.001",
@@ -28139,7 +28291,8 @@
     "T1110",
     "T1078"
    ],
-   "dropped_attack_ids": []
+   "dropped_attack_ids": [],
+   "multi_event": "eql_sequence"
   },
   {
    "rule_id": "8cbc7793-9ce4-4b7d-9c20-a30afbde2a05",
@@ -28759,22 +28912,29 @@
    "path": "rules/windows/lateral_movement_dcom_shellwindow_shellbrowserwindow.toml",
    "rule_url": "https://github.com/elastic/detection-rules/blob/195f15c0bac84540bfe47abb8e26dbf8184eb69a/rules/windows/lateral_movement_dcom_shellwindow_shellbrowserwindow.toml",
    "rule_type": "eql/eql",
-   "status": "rejected",
-   "rejection": "translation_gap",
-   "profiles": [],
-   "logsources": [],
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "rule_type:eql_sequence": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "profiles": [
+    "sysmon:3",
+    "sysmon:1",
+    "sysmon:7"
+   ],
+   "logsources": [
+    "windows/image_load",
+    "windows/network_connection",
+    "windows/process_creation"
+   ],
+   "conjuncts_total": 3,
+   "conjuncts_imported": 3,
+   "gap_reasons": {},
    "attack_ids": [
     "T1559.001",
     "T1021",
     "T1021.003",
     "T1559"
    ],
-   "dropped_attack_ids": []
+   "dropped_attack_ids": [],
+   "multi_event": "eql_sequence"
   },
   {
    "rule_id": "8f985da6-66e8-4838-a63e-21636eb9adc5",
@@ -29103,13 +29263,14 @@
    "conjuncts_total": 0,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "rule_type:eql_sequence": 1
+    "eql_sequence:stages:3": 1
    },
    "attack_ids": [
     "T1098.005",
     "T1098"
    ],
-   "dropped_attack_ids": []
+   "dropped_attack_ids": [],
+   "multi_event": "eql_sequence"
   },
   {
    "content_tier": "enrich",
@@ -29418,13 +29579,14 @@
    "conjuncts_total": 0,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "rule_type:eql_sequence": 1
+    "eql_sequence:until / runs / missing-event stage": 1
    },
    "attack_ids": [
     "T1685",
     "T1686"
    ],
-   "dropped_attack_ids": []
+   "dropped_attack_ids": [],
+   "multi_event": "eql_sequence"
   },
   {
    "content_tier": "enrich",
@@ -29826,21 +29988,30 @@
    "path": "rules/windows/lateral_movement_scheduled_task_target.toml",
    "rule_url": "https://github.com/elastic/detection-rules/blob/195f15c0bac84540bfe47abb8e26dbf8184eb69a/rules/windows/lateral_movement_scheduled_task_target.toml",
    "rule_type": "eql/eql",
-   "status": "rejected",
-   "rejection": "translation_gap",
-   "profiles": [],
-   "logsources": [],
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "rule_type:eql_sequence": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "profiles": [
+    "sysmon:3",
+    "sysmon:22",
+    "sysmon:12",
+    "sysmon:13"
+   ],
+   "logsources": [
+    "windows/dns_query",
+    "windows/network_connection",
+    "windows/registry_add_delete",
+    "windows/registry_set"
+   ],
+   "conjuncts_total": 4,
+   "conjuncts_imported": 4,
+   "gap_reasons": {},
    "attack_ids": [
     "T1053.005",
     "T1053",
     "T1021"
    ],
-   "dropped_attack_ids": []
+   "dropped_attack_ids": [],
+   "multi_event": "eql_sequence"
   },
   {
    "rule_id": "9550ec87-e73c-4baa-ad44-e448a33fbc3d",
@@ -30040,19 +30211,20 @@
    "rule_url": "https://github.com/elastic/detection-rules/blob/195f15c0bac84540bfe47abb8e26dbf8184eb69a/rules/linux/privilege_escalation_potential_privesc_via_general_sequence_parent_child.toml",
    "rule_type": "eql/eql",
    "status": "rejected",
-   "rejection": "translation_gap",
+   "rejection": "telemetry_gap",
    "profiles": [],
    "logsources": [],
    "conjuncts_total": 0,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "rule_type:eql_sequence": 1
+    "index:no_supported_data_stream": 1
    },
    "attack_ids": [
     "T1548",
     "T1548.001"
    ],
-   "dropped_attack_ids": []
+   "dropped_attack_ids": [],
+   "multi_event": "eql_sequence"
   },
   {
    "rule_id": "968ccab9-da51-4a87-9ce2-d3c9782fd759",
@@ -30194,13 +30366,13 @@
    "rule_url": "https://github.com/elastic/detection-rules/blob/195f15c0bac84540bfe47abb8e26dbf8184eb69a/rules/linux/persistence_pluggable_authentication_module_pam_exec_backdoor_exec.toml",
    "rule_type": "eql/eql",
    "status": "rejected",
-   "rejection": "translation_gap",
+   "rejection": "telemetry_gap",
    "profiles": [],
    "logsources": [],
    "conjuncts_total": 0,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "rule_type:eql_sequence": 1
+    "index:no_supported_data_stream": 1
    },
    "attack_ids": [
     "T1556.003",
@@ -30208,7 +30380,8 @@
     "T1059",
     "T1556"
    ],
-   "dropped_attack_ids": []
+   "dropped_attack_ids": [],
+   "multi_event": "eql_sequence"
   },
   {
    "rule_id": "97020e61-e591-4191-8a3b-2861a2b887cd",
@@ -30405,14 +30578,15 @@
    "conjuncts_total": 0,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "rule_type:eql_sequence": 1
+    "eql_sequence:until / runs / missing-event stage": 1
    },
    "attack_ids": [
     "T1621",
     "T1078",
     "T1078.004"
    ],
-   "dropped_attack_ids": []
+   "dropped_attack_ids": [],
+   "multi_event": "eql_sequence"
   },
   {
    "rule_id": "97aba1ef-6034-4bd3-8c1a-1e0996b27afa",
@@ -30519,13 +30693,13 @@
    "rule_url": "https://github.com/elastic/detection-rules/blob/195f15c0bac84540bfe47abb8e26dbf8184eb69a/rules/linux/persistence_git_hook_netcon.toml",
    "rule_type": "eql/eql",
    "status": "rejected",
-   "rejection": "translation_gap",
+   "rejection": "telemetry_gap",
    "profiles": [],
    "logsources": [],
    "conjuncts_total": 0,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "rule_type:eql_sequence": 1
+    "index:no_supported_data_stream": 1
    },
    "attack_ids": [
     "T1543",
@@ -30535,7 +30709,8 @@
     "T1574",
     "T1546"
    ],
-   "dropped_attack_ids": []
+   "dropped_attack_ids": [],
+   "multi_event": "eql_sequence"
   },
   {
    "rule_id": "986361cd-3dac-47fe-afa1-5c5dd89f2fb4",
@@ -30729,13 +30904,13 @@
    "rule_url": "https://github.com/elastic/detection-rules/blob/195f15c0bac84540bfe47abb8e26dbf8184eb69a/rules/macos/execution_installer_package_spawned_network_event.toml",
    "rule_type": "eql/eql",
    "status": "rejected",
-   "rejection": "translation_gap",
+   "rejection": "telemetry_gap",
    "profiles": [],
    "logsources": [],
    "conjuncts_total": 0,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "rule_type:eql_sequence": 1
+    "index:no_supported_data_stream": 1
    },
    "attack_ids": [
     "T1059.007",
@@ -30747,7 +30922,8 @@
     "T1071.001",
     "T1105"
    ],
-   "dropped_attack_ids": []
+   "dropped_attack_ids": [],
+   "multi_event": "eql_sequence"
   },
   {
    "rule_id": "994e40aa-8c85-43de-825e-15f665375ee8",
@@ -31274,20 +31450,21 @@
    "rule_url": "https://github.com/elastic/detection-rules/blob/195f15c0bac84540bfe47abb8e26dbf8184eb69a/rules/linux/privilege_escalation_suspicious_uid_guid_elevation.toml",
    "rule_type": "eql/eql",
    "status": "rejected",
-   "rejection": "translation_gap",
+   "rejection": "telemetry_gap",
    "profiles": [],
    "logsources": [],
    "conjuncts_total": 0,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "rule_type:eql_sequence": 1
+    "index:no_supported_data_stream": 1
    },
    "attack_ids": [
     "T1548",
     "T1548.001",
     "T1068"
    ],
-   "dropped_attack_ids": []
+   "dropped_attack_ids": [],
+   "multi_event": "eql_sequence"
   },
   {
    "rule_id": "9bc14983-fabc-4a3e-896d-3632a902f17c",
@@ -31526,13 +31703,13 @@
    "rule_url": "https://github.com/elastic/detection-rules/blob/195f15c0bac84540bfe47abb8e26dbf8184eb69a/rules/windows/discovery_active_directory_webservice.toml",
    "rule_type": "eql/eql",
    "status": "rejected",
-   "rejection": "translation_gap",
+   "rejection": "telemetry_gap",
    "profiles": [],
    "logsources": [],
    "conjuncts_total": 0,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "rule_type:eql_sequence": 1
+    "index:no_supported_data_stream": 1
    },
    "attack_ids": [
     "T1069",
@@ -31541,7 +31718,8 @@
     "T1087",
     "T1018"
    ],
-   "dropped_attack_ids": []
+   "dropped_attack_ids": [],
+   "multi_event": "eql_sequence"
   },
   {
    "content_tier": "enrich",
@@ -31672,7 +31850,7 @@
    "conjuncts_total": 0,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "rule_type:eql_sequence": 1
+    "eql_sequence:no_maxspan": 1
    },
    "attack_ids": [
     "T1003",
@@ -31682,7 +31860,8 @@
     "T1555.004",
     "T1127"
    ],
-   "dropped_attack_ids": []
+   "dropped_attack_ids": [],
+   "multi_event": "eql_sequence"
   },
   {
    "content_tier": "enrich",
@@ -31772,7 +31951,7 @@
    "conjuncts_total": 0,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "rule_type:eql_sequence": 1
+    "eql_sequence:unreadable join fields": 1
    },
    "attack_ids": [
     "T1613",
@@ -31780,7 +31959,8 @@
     "T1609",
     "T1059.004"
    ],
-   "dropped_attack_ids": []
+   "dropped_attack_ids": [],
+   "multi_event": "eql_sequence"
   },
   {
    "rule_id": "9d94d61b-9476-41ff-a8d3-3d24b4bb8158",
@@ -31954,20 +32134,21 @@
    "rule_url": "https://github.com/elastic/detection-rules/blob/195f15c0bac84540bfe47abb8e26dbf8184eb69a/rules/linux/credential_access_ssh_password_grabbing_via_strace.toml",
    "rule_type": "eql/eql",
    "status": "rejected",
-   "rejection": "translation_gap",
+   "rejection": "telemetry_gap",
    "profiles": [],
    "logsources": [],
    "conjuncts_total": 0,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "rule_type:eql_sequence": 1
+    "index:no_supported_data_stream": 1
    },
    "attack_ids": [
     "T1554",
     "T1056",
     "T1556"
    ],
-   "dropped_attack_ids": []
+   "dropped_attack_ids": [],
+   "multi_event": "eql_sequence"
   },
   {
    "rule_id": "9ebd48ac-a0e2-430a-a219-fe072a50146b",
@@ -32019,20 +32200,21 @@
    "rule_url": "https://github.com/elastic/detection-rules/blob/195f15c0bac84540bfe47abb8e26dbf8184eb69a/rules/cross-platform/command_and_control_suricata_elastic_defend_c2.toml",
    "rule_type": "eql/eql",
    "status": "rejected",
-   "rejection": "translation_gap",
+   "rejection": "telemetry_gap",
    "profiles": [],
    "logsources": [],
    "conjuncts_total": 0,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "rule_type:eql_sequence": 1
+    "index:no_supported_data_stream": 1
    },
    "attack_ids": [
     "T1071",
     "T1571",
     "T1046"
    ],
-   "dropped_attack_ids": []
+   "dropped_attack_ids": [],
+   "multi_event": "eql_sequence"
   },
   {
    "content_tier": "enrich",
@@ -32296,13 +32478,13 @@
    "rule_url": "https://github.com/elastic/detection-rules/blob/195f15c0bac84540bfe47abb8e26dbf8184eb69a/rules/linux/privilege_escalation_suspicious_cap_setuid_python_execution.toml",
    "rule_type": "eql/eql",
    "status": "rejected",
-   "rejection": "translation_gap",
+   "rejection": "telemetry_gap",
    "profiles": [],
    "logsources": [],
    "conjuncts_total": 0,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "rule_type:eql_sequence": 1
+    "index:no_supported_data_stream": 1
    },
    "attack_ids": [
     "T1548",
@@ -32311,7 +32493,8 @@
     "T1068",
     "T1059.006"
    ],
-   "dropped_attack_ids": []
+   "dropped_attack_ids": [],
+   "multi_event": "eql_sequence"
   },
   {
    "rule_id": "a0fbd7a9-1923-4e05-92df-b484168f17bc",
@@ -32320,13 +32503,13 @@
    "rule_url": "https://github.com/elastic/detection-rules/blob/195f15c0bac84540bfe47abb8e26dbf8184eb69a/rules/macos/collection_sensitive_file_access_followed_by_compression.toml",
    "rule_type": "eql/eql",
    "status": "rejected",
-   "rejection": "translation_gap",
+   "rejection": "telemetry_gap",
    "profiles": [],
    "logsources": [],
    "conjuncts_total": 0,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "rule_type:eql_sequence": 1
+    "index:no_supported_data_stream": 1
    },
    "attack_ids": [
     "T1074.001",
@@ -32334,7 +32517,8 @@
     "T1560",
     "T1074"
    ],
-   "dropped_attack_ids": []
+   "dropped_attack_ids": [],
+   "multi_event": "eql_sequence"
   },
   {
    "content_tier": "enrich",
@@ -32371,13 +32555,14 @@
    "conjuncts_total": 0,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "rule_type:eql_sequence": 1
+    "eql_sequence:no_maxspan": 1
    },
    "attack_ids": [
     "T1218.004",
     "T1218"
    ],
-   "dropped_attack_ids": []
+   "dropped_attack_ids": [],
+   "multi_event": "eql_sequence"
   },
   {
    "rule_id": "a1329140-8de3-4445-9f87-908fb6d824f4",
@@ -32480,21 +32665,24 @@
    "path": "rules/integrations/aws/discovery_bedrock_model_recon_and_invocation_via_long_term_key.toml",
    "rule_url": "https://github.com/elastic/detection-rules/blob/195f15c0bac84540bfe47abb8e26dbf8184eb69a/rules/integrations/aws/discovery_bedrock_model_recon_and_invocation_via_long_term_key.toml",
    "rule_type": "eql/eql",
-   "status": "rejected",
-   "rejection": "translation_gap",
-   "profiles": [],
-   "logsources": [],
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "rule_type:eql_sequence": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "profiles": [
+    "cloudtrail"
+   ],
+   "logsources": [
+    "aws/cloudtrail"
+   ],
+   "conjuncts_total": 2,
+   "conjuncts_imported": 2,
+   "gap_reasons": {},
    "attack_ids": [
     "T1078",
     "T1526",
     "T1078.004"
    ],
-   "dropped_attack_ids": []
+   "dropped_attack_ids": [],
+   "multi_event": "eql_sequence"
   },
   {
    "content_tier": "enrich",
@@ -33279,13 +33467,13 @@
    "rule_url": "https://github.com/elastic/detection-rules/blob/195f15c0bac84540bfe47abb8e26dbf8184eb69a/rules/linux/execution_shell_via_udp_cli_utility_linux.toml",
    "rule_type": "eql/eql",
    "status": "rejected",
-   "rejection": "translation_gap",
+   "rejection": "telemetry_gap",
    "profiles": [],
    "logsources": [],
    "conjuncts_total": 0,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "rule_type:eql_sequence": 1
+    "index:no_supported_data_stream": 1
    },
    "attack_ids": [
     "T1071",
@@ -33295,7 +33483,8 @@
     "T1095",
     "T1059.006"
    ],
-   "dropped_attack_ids": []
+   "dropped_attack_ids": [],
+   "multi_event": "eql_sequence"
   },
   {
    "content_tier": "enrich",
@@ -33581,13 +33770,13 @@
    "rule_url": "https://github.com/elastic/detection-rules/blob/195f15c0bac84540bfe47abb8e26dbf8184eb69a/rules/integrations/azure/persistence_identity_protect_alert_followed_by_device_reg.toml",
    "rule_type": "eql/eql",
    "status": "rejected",
-   "rejection": "translation_gap",
+   "rejection": "telemetry_gap",
    "profiles": [],
    "logsources": [],
-   "conjuncts_total": 0,
+   "conjuncts_total": 1,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "rule_type:eql_sequence": 1
+    "telemetry_gap:field:azure.auditlogs.properties.initiated_by.user.userPrincipalName": 1
    },
    "attack_ids": [
     "T1098.005",
@@ -33595,7 +33784,8 @@
     "T1078",
     "T1078.004"
    ],
-   "dropped_attack_ids": []
+   "dropped_attack_ids": [],
+   "multi_event": "eql_sequence"
   },
   {
    "content_tier": "enrich",
@@ -33627,13 +33817,13 @@
    "rule_url": "https://github.com/elastic/detection-rules/blob/195f15c0bac84540bfe47abb8e26dbf8184eb69a/rules/integrations/cloud_defend/execution_payload_downloaded_and_piped_to_shell.toml",
    "rule_type": "eql/eql",
    "status": "rejected",
-   "rejection": "translation_gap",
+   "rejection": "telemetry_gap",
    "profiles": [],
    "logsources": [],
    "conjuncts_total": 0,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "rule_type:eql_sequence": 1
+    "index:no_supported_data_stream": 1
    },
    "attack_ids": [
     "T1071",
@@ -33642,7 +33832,8 @@
     "T1059.006",
     "T1105"
    ],
-   "dropped_attack_ids": []
+   "dropped_attack_ids": [],
+   "multi_event": "eql_sequence"
   },
   {
    "content_tier": "enrich",
@@ -33836,18 +34027,19 @@
    "rule_url": "https://github.com/elastic/detection-rules/blob/195f15c0bac84540bfe47abb8e26dbf8184eb69a/rules/cross-platform/initial_access_fortigate_ssl_vpn_login_followed_by_siem_alert.toml",
    "rule_type": "eql/eql",
    "status": "rejected",
-   "rejection": "translation_gap",
+   "rejection": "telemetry_gap",
    "profiles": [],
    "logsources": [],
    "conjuncts_total": 0,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "rule_type:eql_sequence": 1
+    "index:no_supported_data_stream": 1
    },
    "attack_ids": [
     "T1078"
    ],
-   "dropped_attack_ids": []
+   "dropped_attack_ids": [],
+   "multi_event": "eql_sequence"
   },
   {
    "content_tier": "enrich",
@@ -34446,13 +34638,13 @@
    "rule_url": "https://github.com/elastic/detection-rules/blob/195f15c0bac84540bfe47abb8e26dbf8184eb69a/rules/integrations/azure/credential_access_device_code_signin_aad_graph_enum.toml",
    "rule_type": "eql/eql",
    "status": "rejected",
-   "rejection": "translation_gap",
+   "rejection": "telemetry_gap",
    "profiles": [],
    "logsources": [],
-   "conjuncts_total": 0,
+   "conjuncts_total": 1,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "rule_type:eql_sequence": 1
+    "telemetry_gap:field:user.id": 1
    },
    "attack_ids": [
     "T1069",
@@ -34464,7 +34656,8 @@
     "T1526",
     "T1078.004"
    ],
-   "dropped_attack_ids": []
+   "dropped_attack_ids": [],
+   "multi_event": "eql_sequence"
   },
   {
    "rule_id": "aa1e007a-2997-4247-b048-dd9344742560",
@@ -34473,13 +34666,13 @@
    "rule_url": "https://github.com/elastic/detection-rules/blob/195f15c0bac84540bfe47abb8e26dbf8184eb69a/rules/macos/command_and_control_script_interpreter_connection_to_non_standard_port.toml",
    "rule_type": "eql/eql",
    "status": "rejected",
-   "rejection": "translation_gap",
+   "rejection": "telemetry_gap",
    "profiles": [],
    "logsources": [],
    "conjuncts_total": 0,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "rule_type:eql_sequence": 1
+    "index:no_supported_data_stream": 1
    },
    "attack_ids": [
     "T1059.007",
@@ -34488,7 +34681,8 @@
     "T1059.006",
     "T1059.005"
    ],
-   "dropped_attack_ids": []
+   "dropped_attack_ids": [],
+   "multi_event": "eql_sequence"
   },
   {
    "content_tier": "enrich",
@@ -34564,21 +34758,30 @@
    "path": "rules/windows/lateral_movement_remote_services.toml",
    "rule_url": "https://github.com/elastic/detection-rules/blob/195f15c0bac84540bfe47abb8e26dbf8184eb69a/rules/windows/lateral_movement_remote_services.toml",
    "rule_type": "eql/eql",
-   "status": "rejected",
-   "rejection": "translation_gap",
-   "profiles": [],
-   "logsources": [],
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "rule_type:eql_sequence": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "profiles": [
+    "sysmon:3",
+    "sysmon:22",
+    "sysmon:1",
+    "sysmon:7"
+   ],
+   "logsources": [
+    "windows/dns_query",
+    "windows/image_load",
+    "windows/network_connection",
+    "windows/process_creation"
+   ],
+   "conjuncts_total": 6,
+   "conjuncts_imported": 6,
+   "gap_reasons": {},
    "attack_ids": [
     "T1021",
     "T1569",
     "T1569.002"
    ],
-   "dropped_attack_ids": []
+   "dropped_attack_ids": [],
+   "multi_event": "eql_sequence"
   },
   {
    "rule_id": "aaab30ec-b004-4191-95e1-4a14387ef6a6",
@@ -34587,13 +34790,13 @@
    "rule_url": "https://github.com/elastic/detection-rules/blob/195f15c0bac84540bfe47abb8e26dbf8184eb69a/rules/windows/credential_access_veeam_backup_dll_imageload.toml",
    "rule_type": "eql/eql",
    "status": "rejected",
-   "rejection": "translation_gap",
+   "rejection": "telemetry_gap",
    "profiles": [],
    "logsources": [],
    "conjuncts_total": 0,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "rule_type:eql_sequence": 1
+    "index:no_supported_data_stream": 1
    },
    "attack_ids": [
     "T1003",
@@ -34601,7 +34804,8 @@
     "T1059",
     "T1059.001"
    ],
-   "dropped_attack_ids": []
+   "dropped_attack_ids": [],
+   "multi_event": "eql_sequence"
   },
   {
    "rule_id": "aab184d3-72b3-4639-b242-6597c99d8bca",
@@ -34693,20 +34897,21 @@
    "rule_url": "https://github.com/elastic/detection-rules/blob/195f15c0bac84540bfe47abb8e26dbf8184eb69a/rules/windows/lateral_movement_execution_via_file_shares_sequence.toml",
    "rule_type": "eql/eql",
    "status": "rejected",
-   "rejection": "translation_gap",
+   "rejection": "telemetry_gap",
    "profiles": [],
    "logsources": [],
    "conjuncts_total": 0,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "rule_type:eql_sequence": 1
+    "index:no_supported_data_stream": 1
    },
    "attack_ids": [
     "T1021.002",
     "T1021",
     "T1570"
    ],
-   "dropped_attack_ids": []
+   "dropped_attack_ids": [],
+   "multi_event": "eql_sequence"
   },
   {
    "rule_id": "ab7795cc-0e0b-4f9d-a934-1f17a58f869a",
@@ -34779,13 +34984,13 @@
    "rule_url": "https://github.com/elastic/detection-rules/blob/195f15c0bac84540bfe47abb8e26dbf8184eb69a/rules/macos/command_and_control_perl_outbound_network_connection.toml",
    "rule_type": "eql/eql",
    "status": "rejected",
-   "rejection": "translation_gap",
+   "rejection": "telemetry_gap",
    "profiles": [],
    "logsources": [],
    "conjuncts_total": 0,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "rule_type:eql_sequence": 1
+    "index:no_supported_data_stream": 1
    },
    "attack_ids": [
     "T1071",
@@ -34793,7 +34998,8 @@
     "T1059.006",
     "T1071.001"
    ],
-   "dropped_attack_ids": []
+   "dropped_attack_ids": [],
+   "multi_event": "eql_sequence"
   },
   {
    "content_tier": "enrich",
@@ -34845,13 +35051,13 @@
    "rule_url": "https://github.com/elastic/detection-rules/blob/195f15c0bac84540bfe47abb8e26dbf8184eb69a/rules/macos/command_and_control_google_calendar_c2_via_script.toml",
    "rule_type": "eql/eql",
    "status": "rejected",
-   "rejection": "translation_gap",
+   "rejection": "telemetry_gap",
    "profiles": [],
    "logsources": [],
    "conjuncts_total": 0,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "rule_type:eql_sequence": 1
+    "index:no_supported_data_stream": 1
    },
    "attack_ids": [
     "T1059.007",
@@ -34862,7 +35068,8 @@
     "T1059.006",
     "T1102.001"
    ],
-   "dropped_attack_ids": []
+   "dropped_attack_ids": [],
+   "multi_event": "eql_sequence"
   },
   {
    "rule_id": "ac412404-57a5-476f-858f-4e8fbb4f48d8",
@@ -35078,13 +35285,13 @@
    "rule_url": "https://github.com/elastic/detection-rules/blob/195f15c0bac84540bfe47abb8e26dbf8184eb69a/rules/windows/command_and_control_iexplore_via_com.toml",
    "rule_type": "eql/eql",
    "status": "rejected",
-   "rejection": "translation_gap",
+   "rejection": "telemetry_gap",
    "profiles": [],
    "logsources": [],
    "conjuncts_total": 0,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "rule_type:eql_sequence": 1
+    "index:no_supported_data_stream": 1
    },
    "attack_ids": [
     "T1218.011",
@@ -35095,7 +35302,8 @@
     "T1559",
     "T1218.010"
    ],
-   "dropped_attack_ids": []
+   "dropped_attack_ids": [],
+   "multi_event": "eql_sequence"
   },
   {
    "rule_id": "ace1e989-a541-44df-93a8-a8b0591b63c0",
@@ -35357,13 +35565,13 @@
    "rule_url": "https://github.com/elastic/detection-rules/blob/195f15c0bac84540bfe47abb8e26dbf8184eb69a/rules/linux/persistence_apt_package_manager_execution.toml",
    "rule_type": "eql/eql",
    "status": "rejected",
-   "rejection": "translation_gap",
+   "rejection": "telemetry_gap",
    "profiles": [],
    "logsources": [],
    "conjuncts_total": 0,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "rule_type:eql_sequence": 1
+    "index:no_supported_data_stream": 1
    },
    "attack_ids": [
     "T1543",
@@ -35374,7 +35582,8 @@
     "T1059.006",
     "T1546.016"
    ],
-   "dropped_attack_ids": []
+   "dropped_attack_ids": [],
+   "multi_event": "eql_sequence"
   },
   {
    "rule_id": "adb961e0-cb74-42a0-af9e-29fc41f88f5f",
@@ -35666,19 +35875,20 @@
    "rule_url": "https://github.com/elastic/detection-rules/blob/195f15c0bac84540bfe47abb8e26dbf8184eb69a/rules/integrations/okta/initial_access_okta_suspicious_activity_after_proxy_authentication.toml",
    "rule_type": "eql/eql",
    "status": "rejected",
-   "rejection": "translation_gap",
+   "rejection": "telemetry_gap",
    "profiles": [],
    "logsources": [],
    "conjuncts_total": 0,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "rule_type:eql_sequence": 1
+    "index:no_supported_data_stream": 1
    },
    "attack_ids": [
     "T1078",
     "T1078.004"
    ],
-   "dropped_attack_ids": []
+   "dropped_attack_ids": [],
+   "multi_event": "eql_sequence"
   },
   {
    "rule_id": "afa135c0-a365-43ab-aa35-fd86df314a47",
@@ -35687,13 +35897,13 @@
    "rule_url": "https://github.com/elastic/detection-rules/blob/195f15c0bac84540bfe47abb8e26dbf8184eb69a/rules/linux/discovery_unusual_user_enumeration_via_id.toml",
    "rule_type": "eql/eql",
    "status": "rejected",
-   "rejection": "translation_gap",
+   "rejection": "telemetry_gap",
    "profiles": [],
    "logsources": [],
    "conjuncts_total": 0,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "rule_type:eql_sequence": 1
+    "index:no_supported_data_stream": 1
    },
    "attack_ids": [
     "T1033",
@@ -35702,7 +35912,8 @@
     "T1087",
     "T1069.001"
    ],
-   "dropped_attack_ids": []
+   "dropped_attack_ids": [],
+   "multi_event": "eql_sequence"
   },
   {
    "rule_id": "afaece21-6631-440b-87d3-1d0a2013576e",
@@ -35733,20 +35944,25 @@
    "path": "rules/windows/persistence_local_scheduled_task_creation.toml",
    "rule_url": "https://github.com/elastic/detection-rules/blob/195f15c0bac84540bfe47abb8e26dbf8184eb69a/rules/windows/persistence_local_scheduled_task_creation.toml",
    "rule_type": "eql/eql",
-   "status": "rejected",
-   "rejection": "translation_gap",
-   "profiles": [],
-   "logsources": [],
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "rule_type:eql_sequence": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "profiles": [
+    "sysmon:1",
+    "sysmon:7"
+   ],
+   "logsources": [
+    "windows/image_load",
+    "windows/process_creation"
+   ],
+   "conjuncts_total": 40,
+   "conjuncts_imported": 40,
+   "gap_reasons": {},
    "attack_ids": [
     "T1053.005",
     "T1053"
    ],
-   "dropped_attack_ids": []
+   "dropped_attack_ids": [],
+   "multi_event": "eql_sequence"
   },
   {
    "rule_id": "afd04601-12fc-4149-9b78-9c3f8fe45d39",
@@ -35755,19 +35971,20 @@
    "rule_url": "https://github.com/elastic/detection-rules/blob/195f15c0bac84540bfe47abb8e26dbf8184eb69a/rules/linux/command_and_control_cat_network_activity.toml",
    "rule_type": "eql/eql",
    "status": "rejected",
-   "rejection": "translation_gap",
+   "rejection": "telemetry_gap",
    "profiles": [],
    "logsources": [],
    "conjuncts_total": 0,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "rule_type:eql_sequence": 1
+    "index:no_supported_data_stream": 1
    },
    "attack_ids": [
     "T1048",
     "T1095"
    ],
-   "dropped_attack_ids": []
+   "dropped_attack_ids": [],
+   "multi_event": "eql_sequence"
   },
   {
    "rule_id": "afdca1e0-0f8a-4fcf-9e1e-95e09791e3cd",
@@ -35776,13 +35993,13 @@
    "rule_url": "https://github.com/elastic/detection-rules/blob/195f15c0bac84540bfe47abb8e26dbf8184eb69a/rules/macos/persistence_curl_execution_via_shell_profile.toml",
    "rule_type": "eql/eql",
    "status": "rejected",
-   "rejection": "translation_gap",
+   "rejection": "telemetry_gap",
    "profiles": [],
    "logsources": [],
    "conjuncts_total": 0,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "rule_type:eql_sequence": 1
+    "index:no_supported_data_stream": 1
    },
    "attack_ids": [
     "T1059",
@@ -35791,7 +36008,8 @@
     "T1546.004",
     "T1105"
    ],
-   "dropped_attack_ids": []
+   "dropped_attack_ids": [],
+   "multi_event": "eql_sequence"
   },
   {
    "rule_id": "afe6b0eb-dd9d-4922-b08a-1910124d524d",
@@ -36066,13 +36284,13 @@
    "rule_url": "https://github.com/elastic/detection-rules/blob/195f15c0bac84540bfe47abb8e26dbf8184eb69a/rules_building_block/discovery_net_share_discovery_winlog.toml",
    "rule_type": "eql/eql",
    "status": "rejected",
-   "rejection": "translation_gap",
+   "rejection": "telemetry_gap",
    "profiles": [],
    "logsources": [],
-   "conjuncts_total": 0,
+   "conjuncts_total": 2,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "rule_type:eql_sequence": 1
+    "telemetry_gap:field:user.name": 2
    },
    "attack_ids": [
     "T1135",
@@ -36080,7 +36298,8 @@
     "T1021",
     "T1039"
    ],
-   "dropped_attack_ids": []
+   "dropped_attack_ids": [],
+   "multi_event": "eql_sequence"
   },
   {
    "content_tier": "enrich",
@@ -36191,7 +36410,7 @@
    "conjuncts_total": 0,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "rule_type:eql_sequence": 1
+    "eql_sequence:no_maxspan": 1
    },
    "attack_ids": [
     "T1204.002",
@@ -36200,7 +36419,8 @@
     "T1204",
     "T1218.001"
    ],
-   "dropped_attack_ids": []
+   "dropped_attack_ids": [],
+   "multi_event": "eql_sequence"
   },
   {
    "rule_id": "b29f8041-5da1-40e4-aeee-607422074b29",
@@ -36768,13 +36988,13 @@
    "rule_url": "https://github.com/elastic/detection-rules/blob/195f15c0bac84540bfe47abb8e26dbf8184eb69a/rules/windows/execution_azure_customscript_extension_suspicious_descendant.toml",
    "rule_type": "eql/eql",
    "status": "rejected",
-   "rejection": "translation_gap",
+   "rejection": "telemetry_gap",
    "profiles": [],
    "logsources": [],
    "conjuncts_total": 0,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "rule_type:eql_sequence": 1
+    "index:no_supported_data_stream": 1
    },
    "attack_ids": [
     "T1218",
@@ -36783,7 +37003,8 @@
     "T1059.003",
     "T1651"
    ],
-   "dropped_attack_ids": []
+   "dropped_attack_ids": [],
+   "multi_event": "eql_sequence"
   },
   {
    "rule_id": "b51dbc92-84e2-4af1-ba47-65183fcd0c57",
@@ -36792,19 +37013,20 @@
    "rule_url": "https://github.com/elastic/detection-rules/blob/195f15c0bac84540bfe47abb8e26dbf8184eb69a/rules/linux/privilege_escalation_overlayfs_local_privesc.toml",
    "rule_type": "eql/eql",
    "status": "rejected",
-   "rejection": "translation_gap",
+   "rejection": "telemetry_gap",
    "profiles": [],
    "logsources": [],
    "conjuncts_total": 0,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "rule_type:eql_sequence": 1
+    "index:no_supported_data_stream": 1
    },
    "attack_ids": [
     "T1548",
     "T1068"
    ],
-   "dropped_attack_ids": []
+   "dropped_attack_ids": [],
+   "multi_event": "eql_sequence"
   },
   {
    "rule_id": "b53f1d73-150d-484d-8f02-222abeb5d5fa",
@@ -37007,13 +37229,13 @@
    "rule_url": "https://github.com/elastic/detection-rules/blob/195f15c0bac84540bfe47abb8e26dbf8184eb69a/rules/windows/initial_access_scripts_process_started_via_wmi.toml",
    "rule_type": "eql/eql",
    "status": "rejected",
-   "rejection": "translation_gap",
+   "rejection": "telemetry_gap",
    "profiles": [],
    "logsources": [],
-   "conjuncts_total": 0,
+   "conjuncts_total": 6,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "rule_type:eql_sequence": 1
+    "telemetry_gap:field:user.domain": 4
    },
    "attack_ids": [
     "T1047",
@@ -37023,7 +37245,8 @@
     "T1566",
     "T1059.005"
    ],
-   "dropped_attack_ids": []
+   "dropped_attack_ids": [],
+   "multi_event": "eql_sequence"
   },
   {
    "rule_id": "b661f86d-1c23-4ce7-a59e-2edbdba28247",
@@ -37186,20 +37409,21 @@
    "rule_url": "https://github.com/elastic/detection-rules/blob/195f15c0bac84540bfe47abb8e26dbf8184eb69a/rules/integrations/cloud_defend/execution_interactive_file_creation_followed_by_execution.toml",
    "rule_type": "eql/eql",
    "status": "rejected",
-   "rejection": "translation_gap",
+   "rejection": "telemetry_gap",
    "profiles": [],
    "logsources": [],
    "conjuncts_total": 0,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "rule_type:eql_sequence": 1
+    "index:no_supported_data_stream": 1
    },
    "attack_ids": [
     "T1071",
     "T1059",
     "T1059.004"
    ],
-   "dropped_attack_ids": []
+   "dropped_attack_ids": [],
+   "multi_event": "eql_sequence"
   },
   {
    "content_tier": "enrich",
@@ -37429,13 +37653,14 @@
    "conjuncts_total": 0,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "rule_type:eql_sequence": 1
+    "eql_sequence:no_maxspan": 1
    },
    "attack_ids": [
     "T1105",
     "T1220"
    ],
-   "dropped_attack_ids": []
+   "dropped_attack_ids": [],
+   "multi_event": "eql_sequence"
   },
   {
    "content_tier": "enrich",
@@ -37725,20 +37950,21 @@
    "rule_url": "https://github.com/elastic/detection-rules/blob/195f15c0bac84540bfe47abb8e26dbf8184eb69a/rules/linux/execution_cupsd_foomatic_rip_file_creation.toml",
    "rule_type": "eql/eql",
    "status": "rejected",
-   "rejection": "translation_gap",
+   "rejection": "telemetry_gap",
    "profiles": [],
    "logsources": [],
    "conjuncts_total": 0,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "rule_type:eql_sequence": 1
+    "index:no_supported_data_stream": 1
    },
    "attack_ids": [
     "T1059",
     "T1059.004",
     "T1203"
    ],
-   "dropped_attack_ids": []
+   "dropped_attack_ids": [],
+   "multi_event": "eql_sequence"
   },
   {
    "content_tier": "enrich",
@@ -38034,13 +38260,13 @@
    "rule_url": "https://github.com/elastic/detection-rules/blob/195f15c0bac84540bfe47abb8e26dbf8184eb69a/rules/macos/command_and_control_potential_etherhiding_c2.toml",
    "rule_type": "eql/eql",
    "status": "rejected",
-   "rejection": "translation_gap",
+   "rejection": "telemetry_gap",
    "profiles": [],
    "logsources": [],
    "conjuncts_total": 0,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "rule_type:eql_sequence": 1
+    "index:no_supported_data_stream": 1
    },
    "attack_ids": [
     "T1059.007",
@@ -38052,7 +38278,8 @@
     "T1059.006",
     "T1102.001"
    ],
-   "dropped_attack_ids": []
+   "dropped_attack_ids": [],
+   "multi_event": "eql_sequence"
   },
   {
    "content_tier": "enrich",
@@ -38127,20 +38354,21 @@
    "rule_url": "https://github.com/elastic/detection-rules/blob/195f15c0bac84540bfe47abb8e26dbf8184eb69a/rules/linux/privilege_escalation_enlightenment_window_manager.toml",
    "rule_type": "eql/eql",
    "status": "rejected",
-   "rejection": "translation_gap",
+   "rejection": "telemetry_gap",
    "profiles": [],
    "logsources": [],
    "conjuncts_total": 0,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "rule_type:eql_sequence": 1
+    "index:no_supported_data_stream": 1
    },
    "attack_ids": [
     "T1548",
     "T1548.001",
     "T1068"
    ],
-   "dropped_attack_ids": []
+   "dropped_attack_ids": [],
+   "multi_event": "eql_sequence"
   },
   {
    "rule_id": "bc1eeacf-2972-434f-b782-3a532b100d67",
@@ -38281,19 +38509,20 @@
    "rule_url": "https://github.com/elastic/detection-rules/blob/195f15c0bac84540bfe47abb8e26dbf8184eb69a/rules/integrations/azure/initial_access_entra_id_protection_alerts_for_user.toml",
    "rule_type": "eql/eql",
    "status": "rejected",
-   "rejection": "translation_gap",
+   "rejection": "telemetry_gap",
    "profiles": [],
    "logsources": [],
    "conjuncts_total": 0,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "rule_type:eql_sequence": 1
+    "index:no_supported_data_stream": 1
    },
    "attack_ids": [
     "T1078",
     "T1078.004"
    ],
-   "dropped_attack_ids": []
+   "dropped_attack_ids": [],
+   "multi_event": "eql_sequence"
   },
   {
    "rule_id": "bd18f4a3-c4c6-43b9-a1e4-b05e09998110",
@@ -38420,21 +38649,26 @@
    "path": "rules/windows/privilege_escalation_printspooler_registry_copyfiles.toml",
    "rule_url": "https://github.com/elastic/detection-rules/blob/195f15c0bac84540bfe47abb8e26dbf8184eb69a/rules/windows/privilege_escalation_printspooler_registry_copyfiles.toml",
    "rule_type": "eql/eql",
-   "status": "rejected",
-   "rejection": "translation_gap",
-   "profiles": [],
-   "logsources": [],
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "rule_type:eql_sequence": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "profiles": [
+    "sysmon:12",
+    "sysmon:13"
+   ],
+   "logsources": [
+    "windows/registry_add_delete",
+    "windows/registry_set"
+   ],
+   "conjuncts_total": 4,
+   "conjuncts_imported": 4,
+   "gap_reasons": {},
    "attack_ids": [
     "T1112",
     "T1574",
     "T1068"
    ],
-   "dropped_attack_ids": []
+   "dropped_attack_ids": [],
+   "multi_event": "eql_sequence"
   },
   {
    "rule_id": "bdcf646b-08d4-492c-870a-6c04e3700034",
@@ -39159,18 +39393,19 @@
    "rule_url": "https://github.com/elastic/detection-rules/blob/195f15c0bac84540bfe47abb8e26dbf8184eb69a/rules/cross-platform/credential_access_forced_authentication_pipes.toml",
    "rule_type": "eql/eql",
    "status": "rejected",
-   "rejection": "translation_gap",
+   "rejection": "telemetry_gap",
    "profiles": [],
    "logsources": [],
-   "conjuncts_total": 0,
+   "conjuncts_total": 1,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "rule_type:eql_sequence": 1
+    "telemetry_gap:field:source.ip": 1
    },
    "attack_ids": [
     "T1187"
    ],
-   "dropped_attack_ids": []
+   "dropped_attack_ids": [],
+   "multi_event": "eql_sequence"
   },
   {
    "rule_id": "c25e9c87-95e1-4368-bfab-9fd34cf867ec",
@@ -39278,13 +39513,13 @@
    "rule_url": "https://github.com/elastic/detection-rules/blob/195f15c0bac84540bfe47abb8e26dbf8184eb69a/rules/linux/privilege_escalation_gdb_sys_ptrace_elevation.toml",
    "rule_type": "eql/eql",
    "status": "rejected",
-   "rejection": "translation_gap",
+   "rejection": "telemetry_gap",
    "profiles": [],
    "logsources": [],
    "conjuncts_total": 0,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "rule_type:eql_sequence": 1
+    "index:no_supported_data_stream": 1
    },
    "attack_ids": [
     "T1055",
@@ -39292,7 +39527,8 @@
     "T1068",
     "T1055.008"
    ],
-   "dropped_attack_ids": []
+   "dropped_attack_ids": [],
+   "multi_event": "eql_sequence"
   },
   {
    "rule_id": "c2a0e42b-ac3d-468f-82a5-0082066e1b59",
@@ -39338,20 +39574,29 @@
    "path": "rules/windows/defense_evasion_mshta_beacon.toml",
    "rule_url": "https://github.com/elastic/detection-rules/blob/195f15c0bac84540bfe47abb8e26dbf8184eb69a/rules/windows/defense_evasion_mshta_beacon.toml",
    "rule_type": "eql/eql",
-   "status": "rejected",
-   "rejection": "translation_gap",
-   "profiles": [],
-   "logsources": [],
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "rule_type:eql_sequence": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "profiles": [
+    "sysmon:1",
+    "sysmon:7",
+    "sysmon:3",
+    "sysmon:22"
+   ],
+   "logsources": [
+    "windows/dns_query",
+    "windows/image_load",
+    "windows/network_connection",
+    "windows/process_creation"
+   ],
+   "conjuncts_total": 4,
+   "conjuncts_imported": 4,
+   "gap_reasons": {},
    "attack_ids": [
     "T1218",
     "T1218.005"
    ],
-   "dropped_attack_ids": []
+   "dropped_attack_ids": [],
+   "multi_event": "eql_sequence"
   },
   {
    "rule_id": "c3167e1b-f73c-41be-b60b-87f4df707fe3",
@@ -39528,14 +39773,12 @@
    "rule_url": "https://github.com/elastic/detection-rules/blob/195f15c0bac84540bfe47abb8e26dbf8184eb69a/rules/cross-platform/defense_evasion_genai_process_encoding_prior_to_network_activity.toml",
    "rule_type": "eql/eql",
    "status": "rejected",
-   "rejection": "translation_gap",
+   "rejection": "telemetry_gap",
    "profiles": [],
    "logsources": [],
-   "conjuncts_total": 0,
+   "conjuncts_total": 24,
    "conjuncts_imported": 0,
-   "gap_reasons": {
-    "rule_type:eql_sequence": 1
-   },
+   "gap_reasons": {},
    "attack_ids": [
     "T1560.001",
     "T1560.002",
@@ -39543,7 +39786,8 @@
     "T1027",
     "T1030"
    ],
-   "dropped_attack_ids": []
+   "dropped_attack_ids": [],
+   "multi_event": "eql_sequence"
   },
   {
    "rule_id": "c3da1952-bae4-4672-aa57-2be7e6805381",
@@ -39574,13 +39818,13 @@
    "rule_url": "https://github.com/elastic/detection-rules/blob/195f15c0bac84540bfe47abb8e26dbf8184eb69a/rules/cross-platform/execution_suspicious_java_netcon_childproc.toml",
    "rule_type": "eql/eql",
    "status": "rejected",
-   "rejection": "translation_gap",
+   "rejection": "telemetry_gap",
    "profiles": [],
    "logsources": [],
    "conjuncts_total": 0,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "rule_type:eql_sequence": 1
+    "index:no_supported_data_stream": 1
    },
    "attack_ids": [
     "T1059.007",
@@ -39590,7 +39834,8 @@
     "T1203",
     "T1059.006"
    ],
-   "dropped_attack_ids": []
+   "dropped_attack_ids": [],
+   "multi_event": "eql_sequence"
   },
   {
    "rule_id": "c3f8a1d2-4b5e-4c6f-9a8b-1e2d3f4a5b6c",
@@ -40047,13 +40292,14 @@
    "rule_url": "https://github.com/elastic/detection-rules/blob/195f15c0bac84540bfe47abb8e26dbf8184eb69a/rules/windows/credential_access_suspicious_comsvcs_imageload.toml",
    "rule_type": "eql/eql",
    "status": "rejected",
-   "rejection": "translation_gap",
+   "rejection": "telemetry_gap",
    "profiles": [],
    "logsources": [],
-   "conjuncts_total": 0,
+   "conjuncts_total": 4,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "rule_type:eql_sequence": 1
+    "telemetry_gap:field:file.pe.imphash": 1,
+    "telemetry_gap:field:file.pe.original_file_name": 1
    },
    "attack_ids": [
     "T1218.011",
@@ -40063,7 +40309,8 @@
     "T1003.001",
     "T1036.003"
    ],
-   "dropped_attack_ids": []
+   "dropped_attack_ids": [],
+   "multi_event": "eql_sequence"
   },
   {
    "rule_id": "c5ce48a6-7f57-4ee8-9313-3d0024caee10",
@@ -40247,13 +40494,15 @@
    "rule_url": "https://github.com/elastic/detection-rules/blob/195f15c0bac84540bfe47abb8e26dbf8184eb69a/rules/windows/lateral_movement_credential_access_kerberos_correlation.toml",
    "rule_type": "eql/eql",
    "status": "rejected",
-   "rejection": "translation_gap",
+   "rejection": "telemetry_gap",
    "profiles": [],
    "logsources": [],
-   "conjuncts_total": 0,
+   "conjuncts_total": 8,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "rule_type:eql_sequence": 1
+    "telemetry_gap:field:process.pid": 4,
+    "telemetry_gap:field:source.port": 4,
+    "telemetry_gap:field:user.id": 2
    },
    "attack_ids": [
     "T1558.004",
@@ -40262,7 +40511,8 @@
     "T1550.003",
     "T1558.003"
    ],
-   "dropped_attack_ids": []
+   "dropped_attack_ids": [],
+   "multi_event": "eql_sequence"
   },
   {
    "rule_id": "c70d9f0d-8cb6-4cfc-85df-a95c1ccf4eab",
@@ -40380,13 +40630,13 @@
    "rule_url": "https://github.com/elastic/detection-rules/blob/195f15c0bac84540bfe47abb8e26dbf8184eb69a/rules/linux/execution_egress_connection_from_entrypoint_in_container.toml",
    "rule_type": "eql/eql",
    "status": "rejected",
-   "rejection": "translation_gap",
+   "rejection": "telemetry_gap",
    "profiles": [],
    "logsources": [],
    "conjuncts_total": 0,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "rule_type:eql_sequence": 1
+    "index:no_supported_data_stream": 1
    },
    "attack_ids": [
     "T1071",
@@ -40394,7 +40644,8 @@
     "T1059",
     "T1059.004"
    ],
-   "dropped_attack_ids": []
+   "dropped_attack_ids": [],
+   "multi_event": "eql_sequence"
   },
   {
    "rule_id": "c766bc56-fdca-11ef-b194-f661ea17fbcd",
@@ -40432,16 +40683,18 @@
    "rejection": "translation_gap",
    "profiles": [],
    "logsources": [],
-   "conjuncts_total": 0,
+   "conjuncts_total": 4,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "rule_type:eql_sequence": 1
+    "telemetry_gap:field:process.args_count": 2,
+    "translation_gap:eql:function:cidrmatch": 2
    },
    "attack_ids": [
     "T1071",
     "T1218"
    ],
-   "dropped_attack_ids": []
+   "dropped_attack_ids": [],
+   "multi_event": "eql_sequence"
   },
   {
    "rule_id": "c7908cac-337a-4f38-b50d-5eeb78bdb531",
@@ -40585,19 +40838,20 @@
    "rule_url": "https://github.com/elastic/detection-rules/blob/195f15c0bac84540bfe47abb8e26dbf8184eb69a/rules/windows/lateral_movement_direct_outbound_smb_connection.toml",
    "rule_type": "eql/eql",
    "status": "rejected",
-   "rejection": "translation_gap",
+   "rejection": "telemetry_gap",
    "profiles": [],
    "logsources": [],
    "conjuncts_total": 0,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "rule_type:eql_sequence": 1
+    "index:no_supported_data_stream": 1
    },
    "attack_ids": [
     "T1021.002",
     "T1021"
    ],
-   "dropped_attack_ids": []
+   "dropped_attack_ids": [],
+   "multi_event": "eql_sequence"
   },
   {
    "rule_id": "c85eb82c-d2c8-485c-a36f-534f914b7663",
@@ -40628,19 +40882,20 @@
    "rule_url": "https://github.com/elastic/detection-rules/blob/195f15c0bac84540bfe47abb8e26dbf8184eb69a/rules/windows/defense_evasion_parent_process_pid_spoofing.toml",
    "rule_type": "eql/eql",
    "status": "rejected",
-   "rejection": "translation_gap",
+   "rejection": "telemetry_gap",
    "profiles": [],
    "logsources": [],
    "conjuncts_total": 0,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "rule_type:eql_sequence": 1
+    "index:no_supported_data_stream": 1
    },
    "attack_ids": [
     "T1134.004",
     "T1134"
    ],
-   "dropped_attack_ids": []
+   "dropped_attack_ids": [],
+   "multi_event": "eql_sequence"
   },
   {
    "rule_id": "c8935a8b-634a-4449-98f7-bb24d3b2c0af",
@@ -40649,18 +40904,19 @@
    "rule_url": "https://github.com/elastic/detection-rules/blob/195f15c0bac84540bfe47abb8e26dbf8184eb69a/rules/linux/impact_potential_linux_ransomware_note_detected.toml",
    "rule_type": "eql/eql",
    "status": "rejected",
-   "rejection": "translation_gap",
+   "rejection": "telemetry_gap",
    "profiles": [],
    "logsources": [],
    "conjuncts_total": 0,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "rule_type:eql_sequence": 1
+    "index:no_supported_data_stream": 1
    },
    "attack_ids": [
     "T1486"
    ],
-   "dropped_attack_ids": []
+   "dropped_attack_ids": [],
+   "multi_event": "eql_sequence"
   },
   {
    "rule_id": "c8a2d4f6-1b3e-4a7c-9d5f-8e0b2c6a4d1e",
@@ -41581,13 +41837,14 @@
    "conjuncts_total": 0,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "rule_type:eql_sequence": 1
+    "eql_sequence:until / runs / missing-event stage": 1
    },
    "attack_ids": [
     "T1556.006",
     "T1556"
    ],
-   "dropped_attack_ids": []
+   "dropped_attack_ids": [],
+   "multi_event": "eql_sequence"
   },
   {
    "rule_id": "cdbebdc1-dc97-43c6-a538-f26a20c0a911",
@@ -42342,13 +42599,13 @@
    "rule_url": "https://github.com/elastic/detection-rules/blob/195f15c0bac84540bfe47abb8e26dbf8184eb69a/rules/linux/defense_evasion_curl_or_wget_executed_via_lolbin.toml",
    "rule_type": "eql/eql",
    "status": "rejected",
-   "rejection": "translation_gap",
+   "rejection": "telemetry_gap",
    "profiles": [],
    "logsources": [],
    "conjuncts_total": 0,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "rule_type:eql_sequence": 1
+    "index:no_supported_data_stream": 1
    },
    "attack_ids": [
     "T1202",
@@ -42357,7 +42614,8 @@
     "T1059.004",
     "T1105"
    ],
-   "dropped_attack_ids": []
+   "dropped_attack_ids": [],
+   "multi_event": "eql_sequence"
   },
   {
    "rule_id": "d1f310cb-5921-4d37-bbdf-cfdab7a6df9c",
@@ -42481,7 +42739,7 @@
    "conjuncts_total": 0,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "rule_type:eql_sequence": 1
+    "eql_sequence:EQL does not parse: UnexpectedCharacters": 1
    },
    "attack_ids": [
     "T1550",
@@ -42492,7 +42750,8 @@
     "T1550.001",
     "T1078.004"
    ],
-   "dropped_attack_ids": []
+   "dropped_attack_ids": [],
+   "multi_event": "eql_sequence"
   },
   {
    "rule_id": "d2e3f4a5-b6c7-8901-bcde-f23456789012",
@@ -42604,13 +42863,13 @@
    "rule_url": "https://github.com/elastic/detection-rules/blob/195f15c0bac84540bfe47abb8e26dbf8184eb69a/rules/windows/lateral_movement_remote_service_installed_winlog.toml",
    "rule_type": "eql/eql",
    "status": "rejected",
-   "rejection": "translation_gap",
+   "rejection": "telemetry_gap",
    "profiles": [],
    "logsources": [],
-   "conjuncts_total": 0,
+   "conjuncts_total": 2,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "rule_type:eql_sequence": 1
+    "telemetry_gap:field:winlog.logon.id": 2
    },
    "attack_ids": [
     "T1543",
@@ -42620,7 +42879,8 @@
     "T1569",
     "T1569.002"
    ],
-   "dropped_attack_ids": []
+   "dropped_attack_ids": [],
+   "multi_event": "eql_sequence"
   },
   {
    "content_tier": "enrich",
@@ -42761,20 +43021,21 @@
    "rule_url": "https://github.com/elastic/detection-rules/blob/195f15c0bac84540bfe47abb8e26dbf8184eb69a/rules/macos/execution_shell_execution_via_apple_scripting.toml",
    "rule_type": "eql/eql",
    "status": "rejected",
-   "rejection": "translation_gap",
+   "rejection": "telemetry_gap",
    "profiles": [],
    "logsources": [],
    "conjuncts_total": 0,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "rule_type:eql_sequence": 1
+    "index:no_supported_data_stream": 1
    },
    "attack_ids": [
     "T1059.002",
     "T1059",
     "T1059.004"
    ],
-   "dropped_attack_ids": []
+   "dropped_attack_ids": [],
+   "multi_event": "eql_sequence"
   },
   {
    "rule_id": "d4695889-0410-4e7b-a4aa-59be525a11a6",
@@ -43043,13 +43304,13 @@
    "rule_url": "https://github.com/elastic/detection-rules/blob/195f15c0bac84540bfe47abb8e26dbf8184eb69a/rules/linux/privilege_escalation_suspicious_chown_fowner_elevation.toml",
    "rule_type": "eql/eql",
    "status": "rejected",
-   "rejection": "translation_gap",
+   "rejection": "telemetry_gap",
    "profiles": [],
    "logsources": [],
    "conjuncts_total": 0,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "rule_type:eql_sequence": 1
+    "index:no_supported_data_stream": 1
    },
    "attack_ids": [
     "T1222.002",
@@ -43057,7 +43318,8 @@
     "T1548",
     "T1068"
    ],
-   "dropped_attack_ids": []
+   "dropped_attack_ids": [],
+   "multi_event": "eql_sequence"
   },
   {
    "rule_id": "d563aaba-2e72-462b-8658-3e5ea22db3a6",
@@ -43135,15 +43397,23 @@
    "path": "rules/windows/lateral_movement_cmd_service.toml",
    "rule_url": "https://github.com/elastic/detection-rules/blob/195f15c0bac84540bfe47abb8e26dbf8184eb69a/rules/windows/lateral_movement_cmd_service.toml",
    "rule_type": "eql/eql",
-   "status": "rejected",
-   "rejection": "translation_gap",
-   "profiles": [],
-   "logsources": [],
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "rule_type:eql_sequence": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "profiles": [
+    "sysmon:1",
+    "sysmon:7",
+    "sysmon:3",
+    "sysmon:22"
+   ],
+   "logsources": [
+    "windows/dns_query",
+    "windows/image_load",
+    "windows/network_connection",
+    "windows/process_creation"
+   ],
+   "conjuncts_total": 6,
+   "conjuncts_imported": 6,
+   "gap_reasons": {},
    "attack_ids": [
     "T1543",
     "T1543.003",
@@ -43152,7 +43422,8 @@
     "T1569",
     "T1569.002"
    ],
-   "dropped_attack_ids": []
+   "dropped_attack_ids": [],
+   "multi_event": "eql_sequence"
   },
   {
    "rule_id": "d6241c90-99f2-44db-b50f-299b6ebd7ee9",
@@ -44037,18 +44308,19 @@
    "rule_url": "https://github.com/elastic/detection-rules/blob/195f15c0bac84540bfe47abb8e26dbf8184eb69a/rules/cross-platform/command_and_control_pan_elastic_defend_c2.toml",
    "rule_type": "eql/eql",
    "status": "rejected",
-   "rejection": "translation_gap",
+   "rejection": "telemetry_gap",
    "profiles": [],
    "logsources": [],
    "conjuncts_total": 0,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "rule_type:eql_sequence": 1
+    "index:no_supported_data_stream": 1
    },
    "attack_ids": [
     "T1071"
    ],
-   "dropped_attack_ids": []
+   "dropped_attack_ids": [],
+   "multi_event": "eql_sequence"
   },
   {
    "rule_id": "da7733b1-fe08-487e-b536-0a04c6d8b0cd",
@@ -44175,13 +44447,16 @@
    "rule_url": "https://github.com/elastic/detection-rules/blob/195f15c0bac84540bfe47abb8e26dbf8184eb69a/rules/integrations/azure/credential_access_azure_service_principal_signin_then_arc_credential_listing.toml",
    "rule_type": "eql/eql",
    "status": "rejected",
-   "rejection": "translation_gap",
+   "rejection": "telemetry_gap",
    "profiles": [],
    "logsources": [],
-   "conjuncts_total": 0,
+   "conjuncts_total": 2,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "rule_type:eql_sequence": 1
+    "telemetry_gap:field:azure.activitylogs.identity.claims.appid": 1,
+    "telemetry_gap:field:azure.signinlogs.category": 1,
+    "telemetry_gap:field:azure.signinlogs.properties.status.error_code": 1,
+    "telemetry_gap:field:event.category": 1
    },
    "attack_ids": [
     "T1552",
@@ -44190,7 +44465,8 @@
     "T1078.004",
     "T1552.007"
    ],
-   "dropped_attack_ids": []
+   "dropped_attack_ids": [],
+   "multi_event": "eql_sequence"
   },
   {
    "content_tier": "enrich",
@@ -44401,13 +44677,13 @@
    "rule_url": "https://github.com/elastic/detection-rules/blob/195f15c0bac84540bfe47abb8e26dbf8184eb69a/rules/linux/persistence_git_hook_execution.toml",
    "rule_type": "eql/eql",
    "status": "rejected",
-   "rejection": "translation_gap",
+   "rejection": "telemetry_gap",
    "profiles": [],
    "logsources": [],
    "conjuncts_total": 0,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "rule_type:eql_sequence": 1
+    "index:no_supported_data_stream": 1
    },
    "attack_ids": [
     "T1543",
@@ -44416,7 +44692,8 @@
     "T1574",
     "T1546"
    ],
-   "dropped_attack_ids": []
+   "dropped_attack_ids": [],
+   "multi_event": "eql_sequence"
   },
   {
    "rule_id": "dc71c186-9fe4-4437-a4d0-85ebb32b8204",
@@ -44621,13 +44898,13 @@
    "rule_url": "https://github.com/elastic/detection-rules/blob/195f15c0bac84540bfe47abb8e26dbf8184eb69a/rules/linux/persistence_xdg_autostart_netcon.toml",
    "rule_type": "eql/eql",
    "status": "rejected",
-   "rejection": "translation_gap",
+   "rejection": "telemetry_gap",
    "profiles": [],
    "logsources": [],
    "conjuncts_total": 0,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "rule_type:eql_sequence": 1
+    "index:no_supported_data_stream": 1
    },
    "attack_ids": [
     "T1547",
@@ -44635,7 +44912,8 @@
     "T1059.004",
     "T1547.013"
    ],
-   "dropped_attack_ids": []
+   "dropped_attack_ids": [],
+   "multi_event": "eql_sequence"
   },
   {
    "rule_id": "dd983e79-22e8-44d1-9173-d57dba514cac",
@@ -44804,13 +45082,13 @@
    "rule_url": "https://github.com/elastic/detection-rules/blob/195f15c0bac84540bfe47abb8e26dbf8184eb69a/rules/cross-platform/command_and_control_aws_iot_secure_tunneling_localproxy.toml",
    "rule_type": "eql/eql",
    "status": "rejected",
-   "rejection": "translation_gap",
+   "rejection": "telemetry_gap",
    "profiles": [],
    "logsources": [],
    "conjuncts_total": 0,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "rule_type:eql_sequence": 1
+    "index:no_supported_data_stream": 1
    },
    "attack_ids": [
     "T1071",
@@ -44819,7 +45097,8 @@
     "T1090",
     "T1071.001"
    ],
-   "dropped_attack_ids": []
+   "dropped_attack_ids": [],
+   "multi_event": "eql_sequence"
   },
   {
    "rule_id": "debff20a-46bc-4a4d-bae5-5cdd14222795",
@@ -44994,19 +45273,20 @@
    "rule_url": "https://github.com/elastic/detection-rules/blob/195f15c0bac84540bfe47abb8e26dbf8184eb69a/rules/linux/persistence_dynamic_linker_backup.toml",
    "rule_type": "eql/eql",
    "status": "rejected",
-   "rejection": "translation_gap",
+   "rejection": "telemetry_gap",
    "profiles": [],
    "logsources": [],
    "conjuncts_total": 0,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "rule_type:eql_sequence": 1
+    "index:no_supported_data_stream": 1
    },
    "attack_ids": [
     "T1574.006",
     "T1574"
    ],
-   "dropped_attack_ids": []
+   "dropped_attack_ids": [],
+   "multi_event": "eql_sequence"
   },
   {
    "rule_id": "df7fda76-c92b-4943-bc68-04460a5ea5ba",
@@ -45171,13 +45451,13 @@
    "rule_url": "https://github.com/elastic/detection-rules/blob/195f15c0bac84540bfe47abb8e26dbf8184eb69a/rules/windows/execution_delayed_via_ping_lolbas_unsigned.toml",
    "rule_type": "eql/eql",
    "status": "rejected",
-   "rejection": "translation_gap",
+   "rejection": "telemetry_gap",
    "profiles": [],
    "logsources": [],
    "conjuncts_total": 0,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "rule_type:eql_sequence": 1
+    "index:no_supported_data_stream": 1
    },
    "attack_ids": [
     "T1047",
@@ -45199,7 +45479,8 @@
     "T1216",
     "T1127"
    ],
-   "dropped_attack_ids": []
+   "dropped_attack_ids": [],
+   "multi_event": "eql_sequence"
   },
   {
    "rule_id": "e00c7862-43f1-48fd-aa30-950db838eded",
@@ -45487,19 +45768,20 @@
    "rule_url": "https://github.com/elastic/detection-rules/blob/195f15c0bac84540bfe47abb8e26dbf8184eb69a/rules/linux/lateral_movement_telnet_network_activity_external.toml",
    "rule_type": "eql/eql",
    "status": "rejected",
-   "rejection": "translation_gap",
+   "rejection": "telemetry_gap",
    "profiles": [],
    "logsources": [],
    "conjuncts_total": 0,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "rule_type:eql_sequence": 1
+    "index:no_supported_data_stream": 1
    },
    "attack_ids": [
     "T1071",
     "T1021"
    ],
-   "dropped_attack_ids": []
+   "dropped_attack_ids": [],
+   "multi_event": "eql_sequence"
   },
   {
    "content_tier": "enrich",
@@ -45650,19 +45932,20 @@
    "rule_url": "https://github.com/elastic/detection-rules/blob/195f15c0bac84540bfe47abb8e26dbf8184eb69a/rules/macos/credential_access_high_volume_of_pbpaste.toml",
    "rule_type": "eql/eql",
    "status": "rejected",
-   "rejection": "translation_gap",
+   "rejection": "telemetry_gap",
    "profiles": [],
    "logsources": [],
    "conjuncts_total": 0,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "rule_type:eql_sequence": 1
+    "index:no_supported_data_stream": 1
    },
    "attack_ids": [
     "T1115",
     "T1056"
    ],
-   "dropped_attack_ids": []
+   "dropped_attack_ids": [],
+   "multi_event": "eql_sequence"
   },
   {
    "rule_id": "e2a67480-3b79-403d-96e3-fdd2992c50ef",
@@ -45868,20 +46151,21 @@
    "rule_url": "https://github.com/elastic/detection-rules/blob/195f15c0bac84540bfe47abb8e26dbf8184eb69a/rules/network/persistence_fortigate_sso_login_followed_by_admin_creation.toml",
    "rule_type": "eql/eql",
    "status": "rejected",
-   "rejection": "translation_gap",
+   "rejection": "telemetry_gap",
    "profiles": [],
    "logsources": [],
    "conjuncts_total": 0,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "rule_type:eql_sequence": 1
+    "index:no_supported_data_stream": 1
    },
    "attack_ids": [
     "T1190",
     "T1136.001",
     "T1136"
    ],
-   "dropped_attack_ids": []
+   "dropped_attack_ids": [],
+   "multi_event": "eql_sequence"
   },
   {
    "rule_id": "e3acc6d4-cd6e-4748-baeb-1c57a0f37635",
@@ -46179,13 +46463,13 @@
    "rule_url": "https://github.com/elastic/detection-rules/blob/195f15c0bac84540bfe47abb8e26dbf8184eb69a/rules/windows/privilege_escalation_krbrelayup_service_creation.toml",
    "rule_type": "eql/eql",
    "status": "rejected",
-   "rejection": "translation_gap",
+   "rejection": "telemetry_gap",
    "profiles": [],
    "logsources": [],
-   "conjuncts_total": 0,
+   "conjuncts_total": 4,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "rule_type:eql_sequence": 1
+    "telemetry_gap:field:winlog.computer_name": 4
    },
    "attack_ids": [
     "T1557",
@@ -46193,7 +46477,8 @@
     "T1543.003",
     "T1558"
    ],
-   "dropped_attack_ids": []
+   "dropped_attack_ids": [],
+   "multi_event": "eql_sequence"
   },
   {
    "rule_id": "e4feea34-3b62-4c83-b77f-018fbef48c00",
@@ -46579,7 +46864,7 @@
    "conjuncts_total": 0,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "rule_type:eql_sequence": 1
+    "eql_sequence:stages:3": 1
    },
    "attack_ids": [
     "T1218.011",
@@ -46595,7 +46880,8 @@
     "T1127.001",
     "T1127"
    ],
-   "dropped_attack_ids": []
+   "dropped_attack_ids": [],
+   "multi_event": "eql_sequence"
   },
   {
    "content_tier": "enrich",
@@ -46857,20 +47143,21 @@
    "rule_url": "https://github.com/elastic/detection-rules/blob/195f15c0bac84540bfe47abb8e26dbf8184eb69a/rules/macos/command_and_control_suspicious_outbound_network_via_unsigned_binary.toml",
    "rule_type": "eql/eql",
    "status": "rejected",
-   "rejection": "translation_gap",
+   "rejection": "telemetry_gap",
    "profiles": [],
    "logsources": [],
    "conjuncts_total": 0,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "rule_type:eql_sequence": 1
+    "index:no_supported_data_stream": 1
    },
    "attack_ids": [
     "T1553.001",
     "T1571",
     "T1553"
    ],
-   "dropped_attack_ids": []
+   "dropped_attack_ids": [],
+   "multi_event": "eql_sequence"
   },
   {
    "rule_id": "e7f2c4a1-9b3d-5e8f-c6a0-2d1b4e7f8c3a",
@@ -46908,20 +47195,21 @@
    "rule_url": "https://github.com/elastic/detection-rules/blob/195f15c0bac84540bfe47abb8e26dbf8184eb69a/rules/linux/command_and_control_cupsd_foomatic_rip_netcon.toml",
    "rule_type": "eql/eql",
    "status": "rejected",
-   "rejection": "translation_gap",
+   "rejection": "telemetry_gap",
    "profiles": [],
    "logsources": [],
    "conjuncts_total": 0,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "rule_type:eql_sequence": 1
+    "index:no_supported_data_stream": 1
    },
    "attack_ids": [
     "T1059",
     "T1059.004",
     "T1203"
    ],
-   "dropped_attack_ids": []
+   "dropped_attack_ids": [],
+   "multi_event": "eql_sequence"
   },
   {
    "rule_id": "e819b7eb-c2d4-4adc-b0c9-658aeb140450",
@@ -47074,21 +47362,36 @@
    "path": "rules/windows/defense_evasion_wsl_filesystem.toml",
    "rule_url": "https://github.com/elastic/detection-rules/blob/195f15c0bac84540bfe47abb8e26dbf8184eb69a/rules/windows/defense_evasion_wsl_filesystem.toml",
    "rule_type": "eql/eql",
-   "status": "rejected",
-   "rejection": "translation_gap",
-   "profiles": [],
-   "logsources": [],
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "rule_type:eql_sequence": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "profiles": [
+    "sysmon:1",
+    "sysmon:7",
+    "sysmon:11",
+    "sysmon:15",
+    "sysmon:17",
+    "sysmon:18",
+    "sysmon:23"
+   ],
+   "logsources": [
+    "windows/create_stream_hash",
+    "windows/file_delete",
+    "windows/file_event",
+    "windows/image_load",
+    "windows/pipe_connected",
+    "windows/pipe_created",
+    "windows/process_creation"
+   ],
+   "conjuncts_total": 7,
+   "conjuncts_imported": 7,
+   "gap_reasons": {},
    "attack_ids": [
     "T1202",
     "T1059",
     "T1059.004"
    ],
-   "dropped_attack_ids": []
+   "dropped_attack_ids": [],
+   "multi_event": "eql_sequence"
   },
   {
    "rule_id": "e89e4744-039e-4290-9835-63ea42fe531e",
@@ -47578,13 +47881,13 @@
    "rule_url": "https://github.com/elastic/detection-rules/blob/195f15c0bac84540bfe47abb8e26dbf8184eb69a/rules/linux/persistence_apt_package_manager_netcon.toml",
    "rule_type": "eql/eql",
    "status": "rejected",
-   "rejection": "translation_gap",
+   "rejection": "telemetry_gap",
    "profiles": [],
    "logsources": [],
    "conjuncts_total": 0,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "rule_type:eql_sequence": 1
+    "index:no_supported_data_stream": 1
    },
    "attack_ids": [
     "T1543",
@@ -47594,7 +47897,8 @@
     "T1546",
     "T1546.016"
    ],
-   "dropped_attack_ids": []
+   "dropped_attack_ids": [],
+   "multi_event": "eql_sequence"
   },
   {
    "rule_id": "eb079c62-4481-4d6e-9643-3ca499df7aaa",
@@ -47621,20 +47925,21 @@
    "rule_url": "https://github.com/elastic/detection-rules/blob/195f15c0bac84540bfe47abb8e26dbf8184eb69a/rules/linux/initial_access_telnet_auth_bypass_envar_auditd.toml",
    "rule_type": "eql/eql",
    "status": "rejected",
-   "rejection": "translation_gap",
+   "rejection": "telemetry_gap",
    "profiles": [],
    "logsources": [],
    "conjuncts_total": 0,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "rule_type:eql_sequence": 1
+    "index:no_supported_data_stream": 1
    },
    "attack_ids": [
     "T1190",
     "T1210",
     "T1068"
    ],
-   "dropped_attack_ids": []
+   "dropped_attack_ids": [],
+   "multi_event": "eql_sequence"
   },
   {
    "rule_id": "eb44611f-62a8-4036-a5ef-587098be6c43",
@@ -47754,19 +48059,20 @@
    "rule_url": "https://github.com/elastic/detection-rules/blob/195f15c0bac84540bfe47abb8e26dbf8184eb69a/rules/linux/privilege_escalation_potential_privesc_via_general_sequence_parent.toml",
    "rule_type": "eql/eql",
    "status": "rejected",
-   "rejection": "translation_gap",
+   "rejection": "telemetry_gap",
    "profiles": [],
    "logsources": [],
    "conjuncts_total": 0,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "rule_type:eql_sequence": 1
+    "index:no_supported_data_stream": 1
    },
    "attack_ids": [
     "T1548",
     "T1548.001"
    ],
-   "dropped_attack_ids": []
+   "dropped_attack_ids": [],
+   "multi_event": "eql_sequence"
   },
   {
    "rule_id": "eb958cb3-dead-42b6-94ff-b9de6721fab2",
@@ -48338,13 +48644,11 @@
    "rejection": null,
    "profiles": [
     "sysmon:1",
-    "sysmon:7",
-    "security:4688"
+    "sysmon:7"
    ],
    "logsources": [
     "windows/image_load",
-    "windows/process_creation",
-    "windows/security"
+    "windows/process_creation"
    ],
    "conjuncts_total": 48,
    "conjuncts_imported": 32,
@@ -48526,13 +48830,13 @@
    "rule_url": "https://github.com/elastic/detection-rules/blob/195f15c0bac84540bfe47abb8e26dbf8184eb69a/rules/linux/credential_access_proc_credential_dumping.toml",
    "rule_type": "eql/eql",
    "status": "rejected",
-   "rejection": "translation_gap",
+   "rejection": "telemetry_gap",
    "profiles": [],
    "logsources": [],
    "conjuncts_total": 0,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "rule_type:eql_sequence": 1
+    "index:no_supported_data_stream": 1
    },
    "attack_ids": [
     "T1003",
@@ -48540,7 +48844,8 @@
     "T1057",
     "T1212"
    ],
-   "dropped_attack_ids": []
+   "dropped_attack_ids": [],
+   "multi_event": "eql_sequence"
   },
   {
    "content_tier": "enrich",
@@ -48697,16 +49002,18 @@
    "rejection": "translation_gap",
    "profiles": [],
    "logsources": [],
-   "conjuncts_total": 0,
+   "conjuncts_total": 6,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "rule_type:eql_sequence": 1
+    "telemetry_gap:field:process.args_count": 4,
+    "translation_gap:eql:regex": 4
    },
    "attack_ids": [
     "T1218.011",
     "T1218"
    ],
-   "dropped_attack_ids": []
+   "dropped_attack_ids": [],
+   "multi_event": "eql_sequence"
   },
   {
    "rule_id": "f0493cb4-9b15-43a9-9359-68c23a7f2cf3",
@@ -48715,13 +49022,13 @@
    "rule_url": "https://github.com/elastic/detection-rules/blob/195f15c0bac84540bfe47abb8e26dbf8184eb69a/rules/windows/initial_access_evasion_suspicious_htm_file_creation.toml",
    "rule_type": "eql/eql",
    "status": "rejected",
-   "rejection": "translation_gap",
+   "rejection": "telemetry_gap",
    "profiles": [],
    "logsources": [],
    "conjuncts_total": 0,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "rule_type:eql_sequence": 1
+    "index:no_supported_data_stream": 1
    },
    "attack_ids": [
     "T1204.002",
@@ -48732,7 +49039,8 @@
     "T1027",
     "T1027.006"
    ],
-   "dropped_attack_ids": []
+   "dropped_attack_ids": [],
+   "multi_event": "eql_sequence"
   },
   {
    "rule_id": "f06414a6-f2a4-466d-8eba-10f85e8abf71",
@@ -49401,13 +49709,13 @@
    "rule_url": "https://github.com/elastic/detection-rules/blob/195f15c0bac84540bfe47abb8e26dbf8184eb69a/rules/integrations/google_workspace/initial_access_object_copied_to_external_drive_with_app_consent.toml",
    "rule_type": "eql/eql",
    "status": "rejected",
-   "rejection": "translation_gap",
+   "rejection": "telemetry_gap",
    "profiles": [],
    "logsources": [],
    "conjuncts_total": 0,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "rule_type:eql_sequence": 1
+    "index:no_supported_data_stream": 1
    },
    "attack_ids": [
     "T1566.002",
@@ -49417,7 +49725,8 @@
     "T1566",
     "T1204.001"
    ],
-   "dropped_attack_ids": []
+   "dropped_attack_ids": [],
+   "multi_event": "eql_sequence"
   },
   {
    "content_tier": "enrich",
@@ -49449,21 +49758,30 @@
    "path": "rules/windows/lateral_movement_incoming_wmi.toml",
    "rule_url": "https://github.com/elastic/detection-rules/blob/195f15c0bac84540bfe47abb8e26dbf8184eb69a/rules/windows/lateral_movement_incoming_wmi.toml",
    "rule_type": "eql/eql",
-   "status": "rejected",
-   "rejection": "translation_gap",
-   "profiles": [],
-   "logsources": [],
-   "conjuncts_total": 0,
-   "conjuncts_imported": 0,
-   "gap_reasons": {
-    "rule_type:eql_sequence": 1
-   },
+   "status": "imported",
+   "rejection": null,
+   "profiles": [
+    "sysmon:3",
+    "sysmon:22",
+    "sysmon:1",
+    "sysmon:7"
+   ],
+   "logsources": [
+    "windows/dns_query",
+    "windows/image_load",
+    "windows/network_connection",
+    "windows/process_creation"
+   ],
+   "conjuncts_total": 10,
+   "conjuncts_imported": 10,
+   "gap_reasons": {},
    "attack_ids": [
     "T1047",
     "T1021",
     "T1021.003"
    ],
-   "dropped_attack_ids": []
+   "dropped_attack_ids": [],
+   "multi_event": "eql_sequence"
   },
   {
    "rule_id": "f3818c85-2207-4b51-8a28-d70fb156ee87",
@@ -49472,13 +49790,13 @@
    "rule_url": "https://github.com/elastic/detection-rules/blob/195f15c0bac84540bfe47abb8e26dbf8184eb69a/rules/linux/persistence_systemd_netcon.toml",
    "rule_type": "eql/eql",
    "status": "rejected",
-   "rejection": "translation_gap",
+   "rejection": "telemetry_gap",
    "profiles": [],
    "logsources": [],
    "conjuncts_total": 0,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "rule_type:eql_sequence": 1
+    "index:no_supported_data_stream": 1
    },
    "attack_ids": [
     "T1543",
@@ -49486,7 +49804,8 @@
     "T1574",
     "T1543.002"
    ],
-   "dropped_attack_ids": []
+   "dropped_attack_ids": [],
+   "multi_event": "eql_sequence"
   },
   {
    "content_tier": "enrich",
@@ -49818,19 +50137,20 @@
    "rule_url": "https://github.com/elastic/detection-rules/blob/195f15c0bac84540bfe47abb8e26dbf8184eb69a/rules/linux/impact_data_encrypted_via_openssl.toml",
    "rule_type": "eql/eql",
    "status": "rejected",
-   "rejection": "translation_gap",
+   "rejection": "telemetry_gap",
    "profiles": [],
    "logsources": [],
    "conjuncts_total": 0,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "rule_type:eql_sequence": 1
+    "index:no_supported_data_stream": 1
    },
    "attack_ids": [
     "T1059",
     "T1486"
    ],
-   "dropped_attack_ids": []
+   "dropped_attack_ids": [],
+   "multi_event": "eql_sequence"
   },
   {
    "rule_id": "f541ca3a-5752-11f0-b44b-f661ea17fbcd",
@@ -49928,11 +50248,13 @@
    "rejection": "translation_gap",
    "profiles": [],
    "logsources": [],
-   "conjuncts_total": 2,
+   "conjuncts_total": 12,
    "conjuncts_imported": 0,
    "gap_reasons": {
     "new_terms:incomplete_query": 1,
-    "telemetry_gap:field:destination.ip": 2
+    "telemetry_gap:field:process.pid": 12,
+    "translation_gap:value_semantics:destination.ip:equals": 12,
+    "translation_gap:value_semantics:source.ip:equals": 12
    },
    "attack_ids": [
     "T1048",
@@ -49971,13 +50293,13 @@
    "rule_url": "https://github.com/elastic/detection-rules/blob/195f15c0bac84540bfe47abb8e26dbf8184eb69a/rules/integrations/macos/credential_access_potential_successful_macos_ssh_bruteforce_via_security_events.toml",
    "rule_type": "eql/eql",
    "status": "rejected",
-   "rejection": "translation_gap",
+   "rejection": "telemetry_gap",
    "profiles": [],
    "logsources": [],
    "conjuncts_total": 0,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "rule_type:eql_sequence": 1
+    "index:no_supported_data_stream": 1
    },
    "attack_ids": [
     "T1110.001",
@@ -49986,7 +50308,8 @@
     "T1078",
     "T1078.003"
    ],
-   "dropped_attack_ids": []
+   "dropped_attack_ids": [],
+   "multi_event": "eql_sequence"
   },
   {
    "content_tier": "enrich",
@@ -49996,19 +50319,20 @@
    "rule_url": "https://github.com/elastic/detection-rules/blob/195f15c0bac84540bfe47abb8e26dbf8184eb69a/rules/integrations/cloud_defend/discovery_kubelet_pod_discovery_via_builtin_utilities.toml",
    "rule_type": "eql/eql",
    "status": "rejected",
-   "rejection": "translation_gap",
+   "rejection": "telemetry_gap",
    "profiles": [],
    "logsources": [],
    "conjuncts_total": 0,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "rule_type:eql_sequence": 1
+    "index:no_supported_data_stream": 1
    },
    "attack_ids": [
     "T1613",
     "T1083"
    ],
-   "dropped_attack_ids": []
+   "dropped_attack_ids": [],
+   "multi_event": "eql_sequence"
   },
   {
    "content_tier": "enrich",
@@ -51180,20 +51504,21 @@
    "rule_url": "https://github.com/elastic/detection-rules/blob/195f15c0bac84540bfe47abb8e26dbf8184eb69a/rules/linux/credential_access_potential_linux_ssh_bruteforce_external.toml",
    "rule_type": "eql/eql",
    "status": "rejected",
-   "rejection": "translation_gap",
+   "rejection": "telemetry_gap",
    "profiles": [],
    "logsources": [],
    "conjuncts_total": 0,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "rule_type:eql_sequence": 1
+    "index:no_supported_data_stream": 1
    },
    "attack_ids": [
     "T1110.001",
     "T1110.003",
     "T1110"
    ],
-   "dropped_attack_ids": []
+   "dropped_attack_ids": [],
+   "multi_event": "eql_sequence"
   },
   {
    "rule_id": "fa3a59dc-33c3-43bf-80a9-e8437a922c7f",
@@ -51202,13 +51527,13 @@
    "rule_url": "https://github.com/elastic/detection-rules/blob/195f15c0bac84540bfe47abb8e26dbf8184eb69a/rules/linux/execution_shell_via_suspicious_binary.toml",
    "rule_type": "eql/eql",
    "status": "rejected",
-   "rejection": "translation_gap",
+   "rejection": "telemetry_gap",
    "profiles": [],
    "logsources": [],
    "conjuncts_total": 0,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "rule_type:eql_sequence": 1
+    "index:no_supported_data_stream": 1
    },
    "attack_ids": [
     "T1071",
@@ -51216,7 +51541,8 @@
     "T1059.004",
     "T1095"
    ],
-   "dropped_attack_ids": []
+   "dropped_attack_ids": [],
+   "multi_event": "eql_sequence"
   },
   {
    "rule_id": "fa488440-04cc-41d7-9279-539387bf2a17",
@@ -51332,14 +51658,15 @@
    "conjuncts_total": 0,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "rule_type:eql_sequence": 1
+    "eql_sequence:no_maxspan": 1
    },
    "attack_ids": [
     "T1218",
     "T1218.010",
     "T1218.009"
    ],
-   "dropped_attack_ids": []
+   "dropped_attack_ids": [],
+   "multi_event": "eql_sequence"
   },
   {
    "content_tier": "enrich",
@@ -51504,19 +51831,20 @@
    "rule_url": "https://github.com/elastic/detection-rules/blob/195f15c0bac84540bfe47abb8e26dbf8184eb69a/rules/macos/defense_evasion_dylib_injection_via_env_vars.toml",
    "rule_type": "eql/eql",
    "status": "rejected",
-   "rejection": "translation_gap",
+   "rejection": "telemetry_gap",
    "profiles": [],
    "logsources": [],
    "conjuncts_total": 0,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "rule_type:eql_sequence": 1
+    "index:no_supported_data_stream": 1
    },
    "attack_ids": [
     "T1574.006",
     "T1574"
    ],
-   "dropped_attack_ids": []
+   "dropped_attack_ids": [],
+   "multi_event": "eql_sequence"
   },
   {
    "rule_id": "fb935960-d132-4bb5-853d-62f86cccc250",
@@ -51650,20 +51978,21 @@
    "rule_url": "https://github.com/elastic/detection-rules/blob/195f15c0bac84540bfe47abb8e26dbf8184eb69a/rules/cross-platform/defense_evasion_missing_events_after_alert.toml",
    "rule_type": "eql/eql",
    "status": "rejected",
-   "rejection": "translation_gap",
+   "rejection": "telemetry_gap",
    "profiles": [],
    "logsources": [],
    "conjuncts_total": 0,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "rule_type:eql_sequence": 1
+    "index:no_supported_data_stream": 1
    },
    "attack_ids": [
     "T1204.002",
     "T1204",
     "T1685"
    ],
-   "dropped_attack_ids": []
+   "dropped_attack_ids": [],
+   "multi_event": "eql_sequence"
   },
   {
    "rule_id": "fc7c0fa4-8f03-4b3e-8336-c5feab0be022",
@@ -51761,7 +52090,7 @@
    "conjuncts_total": 0,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "rule_type:eql_sequence": 1
+    "eql_sequence:stages:3": 1
    },
    "attack_ids": [
     "T1566.002",
@@ -51770,7 +52099,8 @@
     "T1098",
     "T1566"
    ],
-   "dropped_attack_ids": []
+   "dropped_attack_ids": [],
+   "multi_event": "eql_sequence"
   },
   {
    "rule_id": "fcf18de8-ad7d-4d01-b3f7-a11d5b3883af",
@@ -52249,13 +52579,13 @@
    "rule_url": "https://github.com/elastic/detection-rules/blob/195f15c0bac84540bfe47abb8e26dbf8184eb69a/rules_building_block/defense_evasion_execution_via_visualstudio_prebuildevent.toml",
    "rule_type": "eql/eql",
    "status": "rejected",
-   "rejection": "translation_gap",
+   "rejection": "telemetry_gap",
    "profiles": [],
    "logsources": [],
    "conjuncts_total": 0,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "rule_type:eql_sequence": 1
+    "index:no_supported_data_stream": 1
    },
    "attack_ids": [
     "T1059",
@@ -52263,7 +52593,8 @@
     "T1059.003",
     "T1127"
    ],
-   "dropped_attack_ids": []
+   "dropped_attack_ids": [],
+   "multi_event": "eql_sequence"
   },
   {
    "rule_id": "feeed87c-5e95-4339-aef1-47fd79bcfbe3",
@@ -52561,13 +52892,13 @@
    "rule_url": "https://github.com/elastic/detection-rules/blob/195f15c0bac84540bfe47abb8e26dbf8184eb69a/rules/linux/privilege_escalation_sudo_token_via_process_injection.toml",
    "rule_type": "eql/eql",
    "status": "rejected",
-   "rejection": "translation_gap",
+   "rejection": "telemetry_gap",
    "profiles": [],
    "logsources": [],
    "conjuncts_total": 0,
    "conjuncts_imported": 0,
    "gap_reasons": {
-    "rule_type:eql_sequence": 1
+    "index:no_supported_data_stream": 1
    },
    "attack_ids": [
     "T1548.003",
@@ -52575,7 +52906,8 @@
     "T1548",
     "T1055.008"
    ],
-   "dropped_attack_ids": []
+   "dropped_attack_ids": [],
+   "multi_event": "eql_sequence"
   },
   {
    "rule_id": "ffa676dc-09b0-11f0-94ba-b66272739ecb",

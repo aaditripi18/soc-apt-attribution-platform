@@ -372,3 +372,52 @@ fixture. It is listed as such in the conformance test.
 
 **Result.** 21 Azure rules imported: 514 usable Elastic rules, 303 ATT&CK ids; covered techniques **404 of 697**
 (322 of the 498 used by Groups). Field map `elastic-field-map/5`.
+
+## Amendment E (2026-10-24) — two-stage EQL sequences, and the fields they join on
+
+**Why.** Lateral movement is the platform's largest documented gap (ADR-0027: T1021.002, T1021.003 and T1047 among
+the most-missed techniques). Elastic writes exactly these detections as EQL *sequences* — "Incoming DCOM Lateral
+Movement with MMC", "Remotely Started Services via RPC", "WMI Incoming Lateral Movement" — and all 206 sequence rules
+were rejected as one translation gap (`rule_type:eql_sequence`). The engine already evaluates a two-stage sequence
+exactly (ADR-0026 D1: a stage-2 event detects when a stage-1 event on the same host with the same key preceded it
+within a span), so translating Elastic's own rules replaces writing new ones (CLAUDE.md principle 8).
+
+**What is translated, exactly.** `sequence [by …] with maxspan=… [q1] by k1… [q2] by k2…`:
+
+- each stage query through the existing single-event path (every branch, per data stream and event profile, with
+  the same exactness rules); the stages are two rules of one family; only stage 2 maps to techniques;
+- the join: the header's fields for both stages, then the per-stage fields **paired by position**; `host.id`
+  is dropped from the key because every engine sequence is on one host — a sequence Elastic joins across hosts is
+  only ever narrowed by that, never widened; a key field a profile's events never carry means that profile is never
+  joined (as in EQL); `maxspan` is the span;
+- the engine's sequence key may now be zero or more fields, compared together in order (zero: the same host only,
+  as Elastic's `sequence by host.id` with no stage keys).
+
+**Refused, each with its reason** (`eql_sequence:…`): more than two stages, no `maxspan` (the engine needs a span;
+Elastic's would be the rule's look-back), `until`, `with runs`, missing-event stages (`![…]`), unpaired join keys,
+and `host.id` paired with another field.
+
+**Fields added to the Sysmon view, from the pinned Elastic pipeline**, each checked against Elastic's own test
+fixtures by the conformance test: `process.entity_id`, `process.parent.entity_id` (the GUIDs as written),
+`source.ip`, `destination.ip` (type `ip`, held in canonical form), and `network.direction` (`egress` / `ingress`
+from Sysmon's `Initiated`, the pipeline's own `set` processors — so the adapter now records it; ADR-0008's note that
+the mapping was unverified is answered by the pipeline text). Field map `elastic-field-map/6`.
+
+**Two engine operator families, both narrow.** An `ip` comparison is exact equality of a written address
+(canonical form); CIDR, ranges and wildcards stay gaps. Integer ordering (`gt`, `gte`, `lt`, `lte`) on `long`
+fields, **positive only**: EQL's `not (port > 1024)` on an event without a port is null, not true, so a negated
+ordering comparison is a gap rather than a broader match.
+
+**Result.** 17 of the 206 sequence rules import exactly (was 0), including Incoming DCOM Lateral Movement with MMC,
+via MSHTA and with ShellBrowserWindow / ShellWindows, Remotely Started Services via RPC, WMI Incoming Lateral
+Movement, Remote Scheduled Task Creation, Service Command Lateral Movement and Incoming Execution via PowerShell
+Remoting. The other 189, by cause: 133 read only Elastic Defend or other unsupported data streams; 24 need a field
+these streams do not carry; 8 have a stage query with an untranslatable construct; 24 have a shape refused above
+(8 no `maxspan`, 6 `until` / `runs` / missing events, 5 three or four stages, 4 unreadable join fields, 1 does not
+parse). Elastic rules: 505 imported, 26 partial; covered techniques unchanged at 404 (Elastic alone 303 → 305).
+
+**Checks.** `tests/test_elastic_import.py` (a DCOM sequence imports with the right keys and span and fires on the
+right pair only — not outside the span, in the wrong order, on another process's child, on another host, on an
+outgoing connection, below the port bound or from loopback; every refused shape gives its reason; a negated
+ordering comparison is refused); `tests/test_elastic_stream_conformance.py` (the five new fields against Elastic's
+expected documents); the tracked pack regenerates byte for byte.

@@ -100,7 +100,11 @@ def test_eql_boolean_literals_are_marked() -> None:
 
 def test_eql_unsupported_constructs_are_named_not_approximated() -> None:
     assert _eql('process.name regex~ "a.*"') == Unsupported("eql:regex")
-    assert _eql("process.pid > 4") == Unsupported("eql:ordering_comparison")
+    # ordering against a whole number is the engine's integer operator (Amendment E) ...
+    assert _eql("process.pid > 4") == Pred("process.pid", "gt", "4", False)
+    # ... against anything else it is not reproduced
+    assert _eql('process.name > "a"') == Unsupported("eql:ordering_comparison")
+    assert _eql("process.pid > 4.5") == Unsupported("eql:ordering_comparison")
     assert _eql("length(process.name) > 4") == Unsupported("eql:compare_on_expression")
     assert _eql("startsWith(process.name, process.parent.name)") == Unsupported(
         "eql:function_args:startswith"

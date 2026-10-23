@@ -10,6 +10,7 @@ here as it would in Elasticsearch (ADR-0015 D2).
 from __future__ import annotations
 
 import hashlib
+import ipaddress
 import json
 from pathlib import Path
 from typing import Any
@@ -17,6 +18,7 @@ from typing import Any
 import pytest
 
 from attribution_platform.detection.derived_fields import (
+    ECS_FIELD_TYPES,
     KEYWORD_IGNORE_ABOVE,
     SYSMON_DERIVED_FIELDS,
     windows_argv,
@@ -92,6 +94,9 @@ def test_every_derived_view_equals_the_pipeline_output() -> None:
                 theirs = tuple(str(v) for v in theirs)
             elif theirs is not None:
                 theirs = str(theirs)
+            if ECS_FIELD_TYPES.get(ecs_field) == "ip" and theirs is not None:
+                # the document keeps the address as written; queries compare addresses
+                theirs = str(ipaddress.ip_address(str(theirs)))
             if ours is None and theirs is None:
                 continue
             compared[ecs_field] = compared.get(ecs_field, 0) + 1

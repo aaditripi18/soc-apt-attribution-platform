@@ -67,10 +67,10 @@ class Aggregation:
         if self.kind not in AGGREGATION_KINDS:
             raise DetectionError(f"Aggregation.kind must be one of {AGGREGATION_KINDS}")
         if self.kind == "sequence":
-            if self.stage not in (1, 2) or len(self.fields) != 1 or self.span_seconds <= 0:
-                raise DetectionError(
-                    "a sequence needs stage 1 or 2, exactly one key field and span_seconds > 0"
-                )
+            # Key fields beyond the host: none (same host only), one, or several
+            # compared together in order (ADR-0015 Amendment E).
+            if self.stage not in (1, 2) or self.span_seconds <= 0:
+                raise DetectionError("a sequence needs stage 1 or 2 and span_seconds > 0")
             if self.key_form not in KEY_FORMS or self.cardinality:
                 raise DetectionError(f"a sequence key_form must be one of {KEY_FORMS}")
             return

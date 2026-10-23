@@ -393,6 +393,8 @@ COMMENT: /\/\/[^\n]*/ | /\/\*(.|\n)*?\*\//
 '''
 
 _eql_parser: Lark | None = None
+#: EQL ordering comparisons -> the engine's integer operators (ADR-0015 Amendment E).
+_ORDERING = {">": "gt", ">=": "gte", "<": "lt", "<=": "lte"}
 _EQL_ESCAPES = {"n": "\n", "r": "\r", "t": "\t", '"': '"', "'": "'", "\\": "\\"}
 _STRING_FUNCTIONS = {
     "startswith": "startswith",
@@ -491,9 +493,13 @@ def _eql_node(node: Any) -> Node:
             return Unsupported("eql:regex")
         if data == "compare":
             operator, rhs = str(rest[0]), rest[1]
-            if operator not in ("==", "!="):
-                return Unsupported("eql:ordering_comparison")
             kind, value = _eql_literal(rhs)
+            if operator in _ORDERING:
+                # a field against a whole number (ADR-0015 Amendment E); anything else
+                # (strings, decimals, two fields) is not reproduced
+                if kind != "number" or value is None or not value.lstrip("-").isdigit():
+                    return Unsupported("eql:ordering_comparison")
+                return Pred(field, _ORDERING[operator], value, False)
             if kind == "null":
                 exists = Pred(field, "exists", None, False)
                 return exists if operator == "!=" else Not(exists)
@@ -550,6 +556,118 @@ def is_single_event_eql(text: str) -> bool:
     return not re.match(r"(sequence|sample)\b", stripped)
 
 
+@dataclass(frozen=True)
+class SequenceStage:
+    """One bracketed query of a sequence and the join fields written after it."""
+
+    query: ParsedQuery
+    by: tuple[str, ...]
+
+
+@dataclass(frozen=True)
+class ParsedSequence:
+    """``sequence [by …] [with maxspan=…] [stage] by … [stage] by …`` (ADR-0015 Amendment E).
+
+    ``by`` are the join fields shared by every stage; ``maxspan_seconds`` is ``None``
+    when the query states none."""
+
+    by: tuple[str, ...]
+    maxspan_seconds: float | None
+    stages: tuple[SequenceStage, ...]
+
+
+_SEQUENCE_UNITS = {"ms": 0.001, "s": 1, "m": 60, "h": 3600, "d": 86400}
+_SEQUENCE_HEADER = re.compile(
+    r"\Asequence(?:\s+by\s+(?P<by>[^\[]+?))?"
+    r"(?:\s+with\s+maxspan\s*=\s*(?P<n>\d+)\s*(?P<unit>ms|s|m|h|d))?\s*\Z",
+    re.DOTALL,
+)
+_SEQUENCE_TAIL = re.compile(r"\A(?:by\s+(?P<by>.+?))?\s*\Z", re.DOTALL)
+_FIELD_LIST = re.compile(r"\A[A-Za-z_@][\w@.]*(\s*,\s*[A-Za-z_@][\w@.]*)*\Z")
+_COMMENTS = re.compile(r"//[^\n]*|/\*(.|\n)*?\*/")
+
+
+def _top_level_brackets(text: str) -> list[tuple[int, int]]:
+    """``(start, end)`` of every top-level ``[…]`` in ``text``, skipping brackets in
+    strings (``"…"``, ``\"\"\"…\"\"\"``, ``?"…"``) and comments (``//``, ``/* */``)."""
+    spans: list[tuple[int, int]] = []
+    depth, start, i = 0, -1, 0
+    while i < len(text):
+        if text.startswith('"""', i):
+            end = text.find('"""', i + 3)
+            i = len(text) if end < 0 else end + 3
+            continue
+        if text.startswith('?"', i):
+            end = text.find('"', i + 2)
+            i = len(text) if end < 0 else end + 1
+            continue
+        char = text[i]
+        if char == '"':
+            i += 1
+            while i < len(text) and text[i] != '"':
+                i += 2 if text[i] == "\\" else 1
+            i += 1
+            continue
+        if text.startswith("//", i):
+            end = text.find("\n", i)
+            i = len(text) if end < 0 else end
+            continue
+        if text.startswith("/*", i):
+            end = text.find("*/", i + 2)
+            i = len(text) if end < 0 else end + 2
+            continue
+        if char == "[":
+            if depth == 0:
+                start = i
+            depth += 1
+        elif char == "]":
+            depth -= 1
+            if depth < 0:
+                raise ElasticQueryError("EQL sequence: unbalanced ']'")
+            if depth == 0:
+                spans.append((start, i))
+        i += 1
+    if depth:
+        raise ElasticQueryError("EQL sequence: unbalanced '['")
+    return spans
+
+
+def _fields(text: str | None) -> tuple[str, ...]:
+    if text is None:
+        return ()
+    stripped = text.strip()
+    if not _FIELD_LIST.match(stripped):
+        raise ElasticQueryError("EQL sequence: unreadable join fields")
+    return tuple(f.strip() for f in stripped.split(","))
+
+
+def parse_eql_sequence(text: str) -> ParsedSequence:
+    """Parse an EQL ``sequence`` whose stages are single-event queries.
+
+    Refused (:class:`ElasticQueryError`, a translation gap): ``until``, ``with runs``,
+    missing-event stages (``![…]``) and anything else between stages but ``by``."""
+    spans = _top_level_brackets(text)
+    if not spans:
+        raise ElasticQueryError("EQL sequence: no stages")
+    header = _SEQUENCE_HEADER.match(_COMMENTS.sub(" ", text[: spans[0][0]]).strip())
+    if header is None:
+        raise ElasticQueryError("EQL sequence: unsupported header")
+    maxspan = (
+        int(header["n"]) * _SEQUENCE_UNITS[header["unit"]] if header["n"] is not None else None
+    )
+    stages = []
+    for index, (start, end) in enumerate(spans):
+        following = spans[index + 1][0] if index + 1 < len(spans) else len(text)
+        tail = _COMMENTS.sub(" ", text[end + 1 : following]).strip()
+        if re.search(r"\b(until|runs)\b", tail) or "!" in tail:
+            raise ElasticQueryError("EQL sequence: until / runs / missing-event stage")
+        matched = _SEQUENCE_TAIL.match(tail)
+        if matched is None:
+            raise ElasticQueryError("EQL sequence: unreadable text between stages")
+        stages.append(SequenceStage(parse_eql(text[start + 1 : end]), _fields(matched["by"])))
+    return ParsedSequence(_fields(header["by"]), maxspan, tuple(stages))
+
+
 def parse_eql(text: str) -> ParsedQuery:
     """Parse a single-event EQL query into the intermediate form."""
     if not is_single_event_eql(text):
@@ -573,7 +691,10 @@ __all__ = [
     "Not",
     "Node",
     "ParsedQuery",
+    "ParsedSequence",
+    "SequenceStage",
     "parse_kql",
     "parse_eql",
+    "parse_eql_sequence",
     "is_single_event_eql",
 ]

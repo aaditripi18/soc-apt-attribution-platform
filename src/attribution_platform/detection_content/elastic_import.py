@@ -30,11 +30,13 @@ unit on their own (ADR-0003 Amendment H), as for the Sigma enrich tier.
 from __future__ import annotations
 
 import hashlib
+import ipaddress
 import json
 import re
 import tomllib
-from collections.abc import Mapping
+from collections.abc import Callable, Mapping
 from dataclasses import dataclass, field
+from functools import partial
 from importlib.metadata import version as installed_version
 from pathlib import Path
 from typing import Any
@@ -57,10 +59,12 @@ from attribution_platform.detection_content.elastic_query import (
     Not,
     Or,
     ParsedQuery,
+    ParsedSequence,
     Pred,
     Unsupported,
     is_single_event_eql,
     parse_eql,
+    parse_eql_sequence,
     parse_kql,
 )
 from attribution_platform.detection_content.sigma_import import (
@@ -279,6 +283,12 @@ def _literal(pred: Pred, negate: bool, views: ViewSet) -> Item:
         case_insensitive = False
     elif pred.boolean:
         return Gap(GapKind.TRANSLATION, f"boolean_value:{pred.field}")
+    if operator in ("gt", "gte", "lt", "lte"):
+        # Integer ordering, positive only: a negated comparison would also match an
+        # event without the field, where EQL's comparison with null does not.
+        if ecs_type != "long" or negate:
+            return Gap(GapKind.TRANSLATION, f"ordering:{pred.field}:{ecs_type}:negate={negate}")
+        return Literal(views.path(pred.field), operator, str(int(str(value))), False, False)
     if ecs_type == "long":
         values = value if isinstance(value, tuple) else (value,)
         if operator not in ("equals", "in", "exists") or not all(
@@ -291,6 +301,22 @@ def _literal(pred: Pred, negate: bool, views: ViewSet) -> Item:
                 if isinstance(value, tuple)
                 else str(int(str(value)))
             )
+        case_insensitive = False
+    if ecs_type == "ip":
+        # An ip field compares addresses, not strings: exact equality of a written
+        # address (canonical form, as the view holds it). Ranges, CIDR and wildcards
+        # are not reproduced.
+        values = value if isinstance(value, tuple) else (value,)
+        try:
+            canonical = tuple(
+                str(ipaddress.ip_address(str(v))) for v in values if operator != "exists"
+            )
+        except ValueError:
+            return Gap(GapKind.TRANSLATION, f"value_semantics:{pred.field}:{operator}")
+        if operator not in ("equals", "in", "exists"):
+            return Gap(GapKind.TRANSLATION, f"value_semantics:{pred.field}:{operator}")
+        if operator != "exists":
+            value = canonical if isinstance(value, tuple) else canonical[0]
         case_insensitive = False
     if views.is_array(pred.field):
         operator = _ARRAY_OPERATORS[operator]
@@ -549,23 +575,19 @@ def _import_rule(
         return reject(RejectionReason.NO_ATTACK_MAPPING, "no_attack_mapping")
 
     # Amendment C: a threshold or new-terms rule is a KQL query plus a statement of
-    # which sets of matching events detect.
+    # which sets of matching events detect. Amendment E: a two-stage EQL sequence.
     multi_event = rule_type in ("threshold", "new_terms") and language == "kuery"
-    outcome.multi_event = rule_type if multi_event else None
-    single_event = (rule_type == "eql" and is_single_event_eql(str(rule.get("query", "")))) or (
+    sequence = rule_type == "eql" and not is_single_event_eql(str(rule.get("query", "")))
+    outcome.multi_event = rule_type if multi_event else ("eql_sequence" if sequence else None)
+    single_event = (rule_type == "eql" and not sequence) or (
         rule_type == "query" and language == "kuery"
     )
-    if not single_event and not multi_event:
-        kind = "eql_sequence" if rule_type == "eql" else f"{rule_type}/{language or '-'}"
-        return reject(RejectionReason.TRANSLATION_GAP, f"rule_type:{kind}")
+    if not single_event and not multi_event and not sequence:
+        return reject(RejectionReason.TRANSLATION_GAP, f"rule_type:{rule_type}/{language or '-'}")
     index_patterns = tuple(str(i) for i in rule.get("index", []) or [])
     streams = [stream for stream in STREAMS if stream.applies_to(index_patterns)]
     if not streams:
         return reject(RejectionReason.TELEMETRY_GAP, "index:no_supported_data_stream")
-    try:
-        query = _scope_query(_parse(rule))
-    except ElasticQueryError as exc:
-        return reject(RejectionReason.TRANSLATION_GAP, f"parse_error:{str(exc)[:40]}")
 
     technique_mappings = [
         {
@@ -590,6 +612,114 @@ def _import_rule(
     ]
     rules: list[dict[str, Any]] = []
     profiles: list[str] = []
+
+    def add(branches: list[_Branch], mapped: list[dict[str, Any]]) -> None:
+        for branch in branches:
+            if branch.profile_id not in profiles:
+                profiles.append(branch.profile_id)
+            rules.append(
+                {
+                    "rule_id": f"elastic:{outcome.rule_id}:{branch.profile_id}:{len(rules):03d}",
+                    "rule_version": f"{rule.get('version', 0)}@{commit[:12]}",
+                    "conditions": branch.conditions,
+                    "technique_mappings": mapped,
+                    "evidence_type": "behavioral",
+                    "rule_source": f"elastic:{outcome.rule_id}",
+                    # Branches of one Elastic rule are one detection (engine dedups).
+                    "rule_family": f"elastic:{outcome.rule_id}",
+                    **({"evidence_quality": "low"} if outcome.content_tier == "enrich" else {}),
+                    **({"aggregation": branch.aggregation} if branch.aggregation else {}),
+                }
+            )
+
+    if sequence:
+        try:
+            parsed_sequence = parse_eql_sequence(str(rule.get("query", "")))
+        except ElasticQueryError as exc:
+            detail = str(exc).removeprefix("EQL sequence: ")[:40]
+            return reject(RejectionReason.TRANSLATION_GAP, f"eql_sequence:{detail}")
+        shape = _sequence_shape(parsed_sequence)
+        if isinstance(shape, str):
+            return reject(RejectionReason.TRANSLATION_GAP, f"eql_sequence:{shape}")
+        span, keys = shape
+        total = 0
+        staged: list[list[_Branch]] = []
+        for stage, (stage_query, key_names) in enumerate(
+            zip((s.query for s in parsed_sequence.stages), keys, strict=True), start=1
+        ):
+            branches, counted = _branches(
+                _scope_query(stage_query),
+                streams,
+                bound,
+                outcome,
+                partial(_sequence_aggregation, stage=stage, span=span, key_names=key_names),
+            )
+            total += counted
+            staged.append(branches)
+        outcome.conjuncts_total = total
+        if all(staged):
+            # only the detecting stage maps to techniques; the first is a precondition
+            add(staged[0], [])
+            add(staged[1], technique_mappings)
+    else:
+        try:
+            query = _scope_query(_parse(rule))
+        except ElasticQueryError as exc:
+            return reject(RejectionReason.TRANSLATION_GAP, f"parse_error:{str(exc)[:40]}")
+        branches, total = _branches(
+            query,
+            streams,
+            bound,
+            outcome,
+            partial(_aggregation, rule) if multi_event else None,
+        )
+        outcome.conjuncts_total = total
+        add(branches, technique_mappings)
+    if rule_type == "new_terms" and outcome.reasons:
+        # A branch that is not reproduced is history that is not seen: a value could
+        # then be called new when it is not. All of the query, or none of the rule.
+        outcome.reasons["new_terms:incomplete_query"] = 1
+        rules = []
+    outcome.profiles = tuple(profiles) if rules else ()
+    outcome.conjuncts_imported = len(rules)
+    if not rules:
+        if outcome.conjuncts_total == 0:
+            # Every branch is decided false for every supported event kind: the rule
+            # targets events or field values these streams' documents never have.
+            return reject(RejectionReason.TELEMETRY_GAP, "event:no_supported_event_satisfies_scope")
+        outcome.rejection = (
+            RejectionReason.TELEMETRY_GAP
+            if all(k.startswith(GapKind.TELEMETRY.value) for k in outcome.reasons)
+            else RejectionReason.TRANSLATION_GAP
+        )
+        return outcome, []
+    outcome.status = (
+        RuleStatus.IMPORTED if len(rules) == outcome.conjuncts_total else RuleStatus.PARTIAL
+    )
+    return outcome, rules
+
+
+@dataclass(frozen=True)
+class _Branch:
+    """One translated conjunct of a query on one event profile."""
+
+    profile_id: str
+    conditions: list[dict[str, Any]]
+    aggregation: dict[str, Any] | None
+
+
+def _branches(
+    query: Node,
+    streams: list[DataStream],
+    bound: int,
+    outcome: ElasticRuleOutcome,
+    aggregation_for: Callable[[EventProfile, DataStream], dict[str, Any] | Gap | None] | None,
+) -> tuple[list[_Branch], int]:
+    """Every exactly translated conjunct of ``query`` on every event profile of
+    ``streams``, and how many conjuncts there were; each untranslated one is
+    counted in ``outcome.reasons``. ``aggregation_for`` gives a multi-event rule's
+    aggregation per profile (``None``: the profile's events are never counted)."""
+    branches: list[_Branch] = []
     total = 0
     for stream, profile in ((s, p) for s in streams for p in s.profiles):
         specialised = _specialise(query, profile, stream)
@@ -605,8 +735,8 @@ def _import_rule(
             total += 1
             continue
         aggregation: dict[str, Any] | None = None
-        if multi_event:
-            built = _aggregation(rule, profile, stream)
+        if aggregation_for is not None:
+            built = aggregation_for(profile, stream)
             if built is None:
                 continue  # these events never carry a grouping field: never counted
             if isinstance(built, Gap):
@@ -615,7 +745,6 @@ def _import_rule(
                 total += 1
                 continue
             aggregation = built
-        profiles.append(profile.profile_id)
         selector = [Literal(p, o, v, False, n) for p, o, v, n in profile.selector]  # type: ignore[arg-type]
         for raw in conjuncts:
             total += 1
@@ -627,41 +756,57 @@ def _import_rule(
                     outcome.reasons[key] = outcome.reasons.get(key, 0) + 1
                 continue
             literals = [item for item in conjunct if isinstance(item, Literal)]
-            rules.append(
-                {
-                    "rule_id": (f"elastic:{outcome.rule_id}:{profile.profile_id}:{len(rules):03d}"),
-                    "rule_version": f"{rule.get('version', 0)}@{commit[:12]}",
-                    "conditions": [_condition_json(lit) for lit in [*selector, *literals]],
-                    "technique_mappings": technique_mappings,
-                    "evidence_type": "behavioral",
-                    "rule_source": f"elastic:{outcome.rule_id}",
-                    # Branches of one Elastic rule are one detection (engine dedups).
-                    "rule_family": f"elastic:{outcome.rule_id}",
-                    **({"evidence_quality": "low"} if outcome.content_tier == "enrich" else {}),
-                    **({"aggregation": aggregation} if aggregation is not None else {}),
-                }
+            branches.append(
+                _Branch(
+                    profile.profile_id,
+                    [_condition_json(lit) for lit in [*selector, *literals]],
+                    aggregation,
+                )
             )
-    if rule_type == "new_terms" and outcome.reasons:
-        # A branch that is not reproduced is history that is not seen: a value could
-        # then be called new when it is not. All of the query, or none of the rule.
-        outcome.reasons["new_terms:incomplete_query"] = 1
-        rules = []
-    outcome.profiles = tuple(profiles) if rules else ()
-    outcome.conjuncts_total = total
-    outcome.conjuncts_imported = len(rules)
-    if not rules:
-        if total == 0:
-            # Every branch is decided false for every supported event kind: the rule
-            # targets events or field values these streams' documents never have.
-            return reject(RejectionReason.TELEMETRY_GAP, "event:no_supported_event_satisfies_scope")
-        outcome.rejection = (
-            RejectionReason.TELEMETRY_GAP
-            if all(k.startswith(GapKind.TELEMETRY.value) for k in outcome.reasons)
-            else RejectionReason.TRANSLATION_GAP
-        )
-        return outcome, []
-    outcome.status = RuleStatus.IMPORTED if len(rules) == total else RuleStatus.PARTIAL
-    return outcome, rules
+    return branches, total
+
+
+def _sequence_shape(
+    parsed: ParsedSequence,
+) -> tuple[float, tuple[tuple[str, ...], tuple[str, ...]]] | str:
+    """``(span, (stage-1 key fields, stage-2 key fields))`` of a sequence this
+    engine evaluates exactly, or why not. Two stages and a ``maxspan`` are needed.
+    ``host.id`` is dropped from the keys: the engine's sequences are always on one
+    host (a sequence Elastic joins across hosts is only ever narrowed by that)."""
+    if len(parsed.stages) != 2:
+        return f"stages:{len(parsed.stages)}"
+    if parsed.maxspan_seconds is None or parsed.maxspan_seconds <= 0:
+        return "no_maxspan"
+    first, second = (stage.by for stage in parsed.stages)
+    if len(first) != len(second):
+        return "join_keys_unpaired"
+    pairs = [(a, b) for a, b in zip(first, second, strict=True) if (a, b) != ("host.id", "host.id")]
+    if any("host.id" in pair for pair in pairs):
+        return "join_key_host_paired_with_another_field"
+    shared = tuple(f for f in parsed.by if f != "host.id")
+    return parsed.maxspan_seconds, (
+        shared + tuple(a for a, _ in pairs),
+        shared + tuple(b for _, b in pairs),
+    )
+
+
+def _sequence_aggregation(
+    profile: EventProfile,
+    stream: DataStream,
+    *,
+    stage: int,
+    span: float,
+    key_names: tuple[str, ...],
+) -> dict[str, Any] | Gap | None:
+    """One stage's ``sequence`` aggregation on ``profile``: its key fields as these
+    events carry them; ``None`` when they never carry one (never joined, as in EQL)."""
+    resolved = []
+    for name in key_names:
+        found = _aggregation_field(name, profile, stream)
+        if found is None or isinstance(found, Gap):
+            return found
+        resolved.append(found)
+    return {"kind": "sequence", "stage": stage, "span_seconds": span, "fields": resolved}
 
 
 def _condition_json(lit: Literal) -> dict[str, Any]:

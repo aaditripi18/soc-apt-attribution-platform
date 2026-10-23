@@ -529,14 +529,22 @@ def _process_ref(record: Mapping[str, Any], *, creation: bool) -> ProcessRef | N
     )
 
 
+#: Sysmon's ``Initiated`` -> ``network.direction``, as the pinned Elastic Sysmon pipeline
+#: sets it (``data/detection/elastic/conformance/sysmon_operational``).
+_INITIATED_DIRECTION = {"true": "egress", "false": "ingress"}
+
+
 def _network_info(record: Mapping[str, Any]) -> NetworkInfo | None:
     source_ip = _event_data_or_ecs(record, "SourceIp", "source", "ip")
     source_port = _event_data_or_ecs(record, "SourcePort", "source", "port")
     dest_ip = _event_data_or_ecs(record, "DestinationIp", "destination", "ip")
     dest_port = _event_data_or_ecs(record, "DestinationPort", "destination", "port")
     transport = _event_data_or_ecs(record, "Protocol", "network", "transport")
-    # Sysmon's ``Initiated`` -> ECS direction is not verified; ECS value only.
+    # A collector's ECS value; otherwise Sysmon's ``Initiated`` as Elastic's own Sysmon
+    # pipeline sets it (``set network.direction`` egress / ingress; ADR-0015 Amendment E).
     direction = _get(record, "network", "direction")
+    if direction is None:
+        direction = _INITIATED_DIRECTION.get(str(_event_data_or_ecs(record, "Initiated")))
 
     if source_ip is None and dest_ip is None:
         return None

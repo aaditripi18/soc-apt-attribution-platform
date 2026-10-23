@@ -180,7 +180,6 @@ def test_the_tracked_pack_is_what_the_builder_writes(knowledge: AttackKnowledge)
             "span_seconds": 0,
             "fields": [{"name": "a", "field_path": "x"}],
         },
-        {"kind": "sequence", "stage": 1, "span_seconds": 60, "fields": []},
         {
             "kind": "sequence",
             "stage": 1,

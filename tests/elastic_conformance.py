@@ -9,6 +9,7 @@ every input it accepts and compares each view with the expected document.
 from __future__ import annotations
 
 import hashlib
+import ipaddress
 import json
 from collections.abc import Callable, Iterable, Iterator, Mapping
 from dataclasses import dataclass, field
@@ -139,6 +140,10 @@ def compare(
             if ecs_field in views.analyzers and isinstance(theirs, str):
                 # an analysed text field: queries see its tokens, so compare those
                 theirs = views.analyzers[ecs_field](theirs)
+            if views.types.get(ecs_field) == "ip" and isinstance(theirs, str):
+                # an ip field: the document keeps the address as written, queries
+                # compare addresses, so compare the canonical form (as the view holds it)
+                theirs = str(ipaddress.ip_address(theirs))
             if ours is None and theirs is None:
                 continue
             if ours is UNDETERMINED:  # never matches anything: nothing to compare

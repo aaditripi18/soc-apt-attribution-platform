@@ -82,6 +82,11 @@ MATCH_OPERATORS = (
     "element_startswith",
     "element_endswith",
     "element_wildcard",
+    # integer ordering (ADR-0015 Amendment E): on integer-valued fields only
+    "gt",
+    "gte",
+    "lt",
+    "lte",
 )
 
 

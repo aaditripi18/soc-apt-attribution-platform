@@ -75,8 +75,9 @@ import dataclasses
 import functools
 import hashlib
 import json
+import operator as operator_module
 import re
-from collections.abc import Sequence
+from collections.abc import Callable, Sequence
 from dataclasses import dataclass, field
 from pathlib import Path
 from types import MappingProxyType
@@ -129,6 +130,14 @@ _ALLOWED_TOP_LEVEL_FIELDS = frozenset(
 )
 
 _OPERATORS_REQUIRING_VALUE = frozenset({"equals", "contains", "in"})
+#: Integer ordering (ADR-0015 Amendment E): the observed value and the rule's value
+#: are compared as integers; an observed value that is not an integer never matches.
+_ORDERING_OPERATORS: dict[str, Callable[[int, int], bool]] = {
+    "gt": operator_module.gt,
+    "gte": operator_module.ge,
+    "lt": operator_module.lt,
+    "lte": operator_module.le,
+}
 
 #: Operators that apply to each element of an array-typed field (true iff any
 #: element matches). ``has_element`` is element equality (ADR-0007 D4); the
@@ -157,6 +166,10 @@ _ANY_OF_OPERATORS = frozenset(
         "element_wildcard",
     }
 )
+
+
+def _is_integer(text: str) -> bool:
+    return text.lstrip("-").isdigit() and text.count("-") <= 1 and not text.endswith("-")
 
 
 @functools.lru_cache(maxsize=4096)
@@ -264,6 +277,17 @@ class FieldCondition:
                 raise DetectionError(
                     "FieldCondition.case_insensitive is meaningless for operator 'exists'"
                 )
+        elif self.operator in _ORDERING_OPERATORS:
+            if not isinstance(self.value, str) or not _is_integer(self.value):
+                raise DetectionError(
+                    f"FieldCondition.value must be an integer string for operator "
+                    f"{self.operator!r}"
+                )
+            if self.case_insensitive:
+                raise DetectionError(
+                    f"FieldCondition.case_insensitive is meaningless for operator "
+                    f"{self.operator!r}"
+                )
         elif self.operator in ("in", "element_in") or (
             self.operator in _ANY_OF_OPERATORS and isinstance(self.value, tuple)
         ):
@@ -295,6 +319,11 @@ class FieldCondition:
             return any(
                 _wildcard_regex(p, self.case_insensitive).fullmatch(text) is not None
                 for p in self._values()
+            )
+        if operator in _ORDERING_OPERATORS:
+            text = str(observed_raw)
+            return _is_integer(text) and _ORDERING_OPERATORS[operator](
+                int(text), int(cast(str, self.value))
             )
         observed = self._fold(str(observed_raw))
         expected = [self._fold(v) for v in self._values()]
