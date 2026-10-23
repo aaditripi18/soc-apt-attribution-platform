@@ -4,10 +4,9 @@ on:
   push:
   pull_request:
 
-# G0.0 scope only: formatting, linting, type checks, and unit tests.
-# No Elasticsearch, Docker, or Windows-specific steps exist yet — those are
-# introduced by later Phase-0 gates (see
-# docs/architecture/13-phase-0-implementation-plan.md).
+# Formatting, linting, strict type checks and the full test suite (unit, golden
+# real-record, end-to-end and reproducibility tests). The live Elasticsearch tests are
+# opt-in (ATTRIBUTION_LIVE_ELASTICSEARCH=1) and run locally against the docker-compose stack.
 jobs:
   checks:
     name: Format, lint, type-check, test

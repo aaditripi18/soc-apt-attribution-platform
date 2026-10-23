@@ -126,7 +126,11 @@ export function AssistantPanel({ investigationId, source }: { investigationId: s
           <div className="flex-1 space-y-4 overflow-y-auto px-4 py-4" data-assistant-messages>
             {status.state === "ready" && !status.data.enabled && (
               <div className="rounded-md border border-outline-variant/70 bg-surface-low p-4 text-body-md text-on-surface-variant">
-                <div className="text-headline-sm text-on-surface">The AI analyst is not available yet</div>
+                <div className="text-headline-sm text-on-surface">
+                  {status.data.reason === "snapshot"
+                    ? "The AI analyst runs on your own machine"
+                    : "The AI analyst is not available yet"}
+                </div>
                 <p className="mt-1.5">
                   It answers questions about this investigation with a language model that runs on this machine
                   through Ollama, so nothing is sent anywhere.
@@ -148,13 +152,15 @@ export function AssistantPanel({ investigationId, source }: { investigationId: s
                     machine, next to a local Ollama model.
                   </p>
                 )}
-                <button
-                  type="button"
-                  onClick={status.reload}
-                  className="mt-3 rounded-sm border border-outline-variant px-3 py-1.5 text-label-md text-on-surface hover:border-primary/60"
-                >
-                  Check again
-                </button>
+                {status.data.reason !== "snapshot" && (
+                  <button
+                    type="button"
+                    onClick={status.reload}
+                    className="mt-3 rounded-sm border border-outline-variant px-3 py-1.5 text-label-md text-on-surface hover:border-primary/60"
+                  >
+                    Check again
+                  </button>
+                )}
               </div>
             )}
             {enabled && messages.length === 0 && (

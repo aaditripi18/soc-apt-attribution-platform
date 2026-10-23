@@ -13,6 +13,7 @@ import {
 import type { ReactNode } from "react";
 import { Button } from "../components/ui";
 import {
+  SNAPSHOT,
   paths,
   useApi,
   type Coverage,
@@ -90,12 +91,24 @@ export function DashboardPage() {
           each traced back to the log event and detection rule it came from.
         </p>
         <div className="mt-6 flex flex-wrap gap-3">
-          <Button href={links.upload()} variant="primary">
-            <FileUp size={14} />
-            Analyze logs
-          </Button>
-          <Button href={links.actors()}>Browse threat actors</Button>
-          {analysed > 0 && <Button href={links.investigations()} variant="ghost">{`View ${integer(analysed)} ${analysed === 1 ? "investigation" : "investigations"}`}</Button>}
+          {SNAPSHOT ? (
+            // The hosted snapshot cannot upload: lead with the investigations it does hold.
+            <>
+              <Button href={links.investigations()} variant="primary">
+                {`View ${integer(analysed)} ${analysed === 1 ? "investigation" : "investigations"}`}
+              </Button>
+              <Button href={links.actors()}>Browse threat actors</Button>
+            </>
+          ) : (
+            <>
+              <Button href={links.upload()} variant="primary">
+                <FileUp size={14} />
+                Analyze logs
+              </Button>
+              <Button href={links.actors()}>Browse threat actors</Button>
+              {analysed > 0 && <Button href={links.investigations()} variant="ghost">{`View ${integer(analysed)} ${analysed === 1 ? "investigation" : "investigations"}`}</Button>}
+            </>
+          )}
         </div>
         <div className="mt-8 grid grid-cols-2 gap-6 border-t border-outline-variant/60 pt-6 lg:grid-cols-4">
           <Figure value={summary ? `${summary.techniques_by_status.covered}` : "—"} label={`of ${summary?.active_techniques ?? "—"} ATT&CK techniques detectable`} />

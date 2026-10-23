@@ -11,10 +11,9 @@ requires-python = ">=3.12,<3.13"
 license = { text = "Apache-2.0" }
 authors = [{ name = "aaditripi" }]
 
-# G0.0 introduces no runtime dependencies: no domain logic, no Elastic client, no
-# ATT&CK loader, and no API framework exist yet (see docs/architecture/13-phase-0-implementation-plan.md).
-# Runtime dependencies are added only in the gates that need them (e.g. mitreattack-python
-# in G0.1/G0.2, an Elasticsearch client in G0.7/G0.8, an API framework in G0.10).
+# No third-party runtime dependencies: the platform runs on the standard library alone
+# (ATT&CK STIX parsing, the detection engine, the API server and the Elasticsearch client
+# are all in-tree). Rule importers and their parsers are build-time only (dev extras below).
 dependencies = []
 
 [project.optional-dependencies]

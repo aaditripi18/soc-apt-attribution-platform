@@ -10,12 +10,12 @@ This is not a commercial product — do not over-engineer for enterprise require
 
 ## Current State
 
-The repository is intentionally empty. The project is in the **research and architecture phase**.
+The platform is **complete and validated**: detection, correlation, attribution, live mode, the analyst console, the Kibana dashboard and a hosted read-only demo are built, tested and documented (see [README.md](README.md) and the ADRs under `docs/architecture/adr`).
 
-- Do not scaffold the application yet.
-- Do not begin frontend implementation.
-- Do not begin application implementation until the architecture has been established and reviewed.
-- The immediate next phase is project reconnaissance and research (see "Research Before Implementation" below).
+- Work now consists of maintenance and incremental, evidence-driven improvements.
+- Any change to detection, correlation or attribution logic follows the Development Philosophy below and is recorded in an ADR.
+- Published validation results under `data/validation` are regenerated, never hand-edited; earlier runs stay published beside new ones.
+- The guidance below was written at the project's start and still governs every change.
 
 ## Lessons from the Previous Version (do not repeat)
 

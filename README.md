@@ -15,10 +15,21 @@ was counted — down to which branch of which rule matched which event — and e
 record behind it.
 
 > Status: complete — detection, correlation, attribution, live mode, analyst console and Kibana dashboard,
-> 2,946 tests, a served-model audit on every result set, and a pre-registered test on 105 recordings the
+> 2,947 tests, a served-model audit on every result set, and a pre-registered test on 105 recordings the
 > project had never seen. A personal research and portfolio project, governed by [CLAUDE.md](CLAUDE.md):
 > never fabricate functionality, never hard-code an attribution, explain every conclusion, measure instead
 > of assuming. Decisions are recorded in 28 ADRs under [docs/architecture/adr](docs/architecture/adr).
+
+**Same pipeline, two known-answer recordings, two different verdicts.** On the APT29 evaluation a rule
+written from reporting on APT29's own tooling matched, so the group is named, with the rule and the event
+shown. On the APT3 emulation nothing group-specific was in the logs: the closest behavioural profile is
+APT41 at 72% overlap, and the platform says only that, without naming anyone.
+
+| APT29: identified by group-specific evidence | APT3: behavioural overlap only, no group named |
+|---|---|
+| [![APT29 attribution: identified by one tooling-artefact rule](docs/images/apt29-attribution.png)](docs/images/apt29-attribution.png) | [![APT3 attribution: closest behavioural profiles, none identified](docs/images/apt3-attribution.png)](docs/images/apt3-attribution.png) |
+| **Attack chain**: tactics in first-observed order, each technique traced to its detections | **ATT&CK matrix**: observed techniques with evidence items and units |
+| [![Attack chain reconstructed from the APT29 recording](docs/images/apt29-attack-chain.png)](docs/images/apt29-attack-chain.png) | [![ATT&CK matrix of what was observed in the APT29 recording](docs/images/apt29-attck-matrix.png)](docs/images/apt29-attck-matrix.png) |
 
 ## Results
 
@@ -379,7 +390,7 @@ src/attribution_platform/
   dataplane/, api/    Elasticsearch persistence and the read-model HTTP API
   replay/             recording reader, routing, intake check
 data/                 pinned ATT&CK, Sigma, telemetry samples, intel — each with manifest + NOTICE
-docs/architecture/    architecture and 15 ADRs (decisions, measurements, rejected alternatives)
+docs/architecture/    architecture and 28 ADRs (decisions, measurements, rejected alternatives)
 scripts/              acquisition, import, reports, checks — run by a human, never at runtime
 tests/                unit, golden real-record, end-to-end and reproducibility tests
 ```
