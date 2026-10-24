@@ -34,6 +34,10 @@ UNSEEN_RESULTS = REPO_ROOT / "data" / "validation" / "unseen-otrf-atomic" / "res
 UNSEEN_FIRST_RUN = (
     REPO_ROOT / "data" / "validation" / "unseen-otrf-atomic" / "first-run" / "results.json"
 )
+#: ADR-0029: the second unseen test, on the registration commit and on the frozen build after it.
+_UNSEEN_SPLUNK = REPO_ROOT / "data" / "validation" / "unseen-splunk-windows"
+UNSEEN_SPLUNK_BASELINE = _UNSEEN_SPLUNK / "results-baseline.json"
+UNSEEN_SPLUNK_IMPROVED = _UNSEEN_SPLUNK / "results-improved.json"
 #: ADR-0007 D9/D10: the full-universe coverage report over the Sigma and Elastic packs.
 COVERAGE_REPORT = _SIGMA_GENERATED / "coverage-report.json"
 
@@ -60,4 +64,6 @@ __all__ = [
     "TECHNIQUE_SUPPORT_REVIEW",
     "UNSEEN_FIRST_RUN",
     "UNSEEN_RESULTS",
+    "UNSEEN_SPLUNK_BASELINE",
+    "UNSEEN_SPLUNK_IMPROVED",
 ]

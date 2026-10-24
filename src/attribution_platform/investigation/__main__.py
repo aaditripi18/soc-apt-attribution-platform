@@ -72,6 +72,8 @@ from attribution_platform.detection_content.pinned import (
     TECHNIQUE_SUPPORT_REVIEW,
     UNSEEN_FIRST_RUN,
     UNSEEN_RESULTS,
+    UNSEEN_SPLUNK_BASELINE,
+    UNSEEN_SPLUNK_IMPROVED,
 )
 from attribution_platform.detection_content.pinned import SIGMA_IMPORT_REPORT as IMPORT_REPORT
 from attribution_platform.detection_content.technique_support import (
@@ -247,6 +249,8 @@ def serving_context(workbench: Workbench) -> ApiContext:
             "technique_ground_truth": TECHNIQUE_GROUND_TRUTH,
             "unseen": UNSEEN_RESULTS,
             "unseen_first_run": UNSEEN_FIRST_RUN,
+            "unseen_splunk_baseline": UNSEEN_SPLUNK_BASELINE,
+            "unseen_splunk_improved": UNSEEN_SPLUNK_IMPROVED,
         },
     )
 

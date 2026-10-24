@@ -1,7 +1,9 @@
 # ADR-0029 — A second unseen test: 169 Splunk attack_data Windows recordings, before and after
 
-- **Status:** PRE-REGISTERED (2026-10-23). The selection and this protocol are committed before any recording's
-  content was downloaded; only Git LFS pointers (hash and size) and the dataset descriptors were read.
+- **Status:** RUN (2026-10-23/25). Pre-registered (`4de512a`, pushed) before any recording's content was
+  downloaded; only Git LFS pointers (hash and size) and the dataset descriptors were read. Baseline run on
+  `4de512a`; improved build frozen and pushed at `8d81d46` before either result was read; both from clean
+  checkouts. Results below, as measured.
 - **Context:** ADR-0027's 105 OTRF recordings became development data once their results were used (its
   "Development after the test"). Since then there has been no held-out data, so no change to detection can be
   shown to generalise. The README's figure, 54 of 107 of the authors' techniques counted, is now a development
@@ -80,6 +82,64 @@ A **named actor** is correct only if the recording's descriptor names that Group
 that Group alone; otherwise it is counted as wrong. A recording the intake refuses, or that fails, is reported with
 its reason; its labels stay in the denominator of "selected" figures and are reported separately, as in ADR-0027.
 
-## Results
+## Results (baseline `4de512a`, improved `8d81d46`; run 2026-10-23, read 2026-10-25)
 
-Not yet run.
+Files in `data/validation/unseen-splunk-windows/`: `run-baseline.json`, `run-improved.json` (each recording's
+outcome, the build commit, clean working tree), `results-baseline.json`, `results-improved.json` (per-recording
+comparison, same definitions as ADR-0027).
+
+| | Baseline | Improved |
+|---|--:|--:|
+| Recordings read (of 169) | 164 | 164 |
+| Authors' techniques counted (of 164) | **74 (45%)** — 63 exactly, 11 as parent or sub-technique | **74 (45%)** — same |
+| Missed but shown (detected, not counted) | 35 | 35 |
+| Counted but not listed by the authors | 720 | 723 |
+| Recordings naming an actor | 0 | 0 |
+
+**1. The changes made after registration did not change recall on this data.** That is the result, and it is the
+reason the test was registered first. Why, from the recordings (read only after both runs were stored):
+
+- *The Event Log rules (ADR-0026 Amendment C)* had nothing to act on: no recording in this set is labelled
+  T1685.001 (or T1562.002).
+- *The sequence rules (ADR-0015 Amendment E)*: one of the 17 fired here — "Mshta Making Network Connections", on 3
+  recordings, adding T1218 / T1218.005 where the label was already found or is another technique. The
+  lateral-movement sequences did not fire, and in the two recordings examined the cause is the data, not the
+  translation:
+  - `T1047/lateral_movement`: stage 1 **matched** four times (`svchost.exe` accepting RPC on port 135 from
+    10.0.1.14 — the new `network.direction` and `source.ip` fields working on unseen data); stage 2 needs a
+    process started by `WmiPrvSE.exe` on the target, and the recording holds none — the attacker's
+    `Invoke-WmiMethod` is there, the process it asked for is not.
+  - `T1021.003/lateral_movement`: stage 2 **matched** (`calc.exe` started by `mmc.exe`); stage 1 needs an incoming
+    connection *by `mmc.exe`*, and Sysmon logged the matching inbound connection with the image
+    `<unknown process>`. Elastic's own engine would not fire on this data either.
+
+**2. A measurement effect, stated so the figure is not misread.** "Counted" means compared with group profiles.
+14 of the 164 labels are techniques that **no Group or Campaign in ATT&CK v19.2 is recorded using** (for example
+T1021.003, Distributed Component Object Model: three software entries, no Group). Such a technique can be detected
+but never counted. 13 of them were missed, and **11 of those 13 were detected** — `T1021.003/lateral_movement` has
+Sigma's "MMC20 Lateral Movement" established on the target's `mmc.exe -Embedding`, inside a unit. On the 150 labels
+a Group does use: **73 counted (49%)**, both builds. The definition is not changed after the fact; both figures are
+reported.
+
+**3. Five recordings never reached detection**, all the platform's own intake limits (labels 5, kept in the
+"selected" denominator):
+
+| Recording | Refusal | What it is |
+|---|---|---|
+| `T1059.005/lotus_blossom_chrysalis`, `T1574.002/lotus_blossom_chrysalis` | no record converted | Splunk's own JSON export shape (`EventCode`, `EventData_Xml`), not a Sysmon record shape the adapters read |
+| `T1014` | no record converted | only Sysmon event 6 (driver loaded), an event the platform does not model |
+| `T1048.003/nslookup_exfil`, `T1562.004/atomic_red_team` | lines not readable | lines that are neither JSON nor one-line XML events |
+
+The two `lotus_blossom_chrysalis` recordings were the only ones named after a Group's campaign, so the actor
+question of this test went **untested**, not answered.
+
+**4. Against ADR-0027.** A different lab, collector and export: 45% of all labels (49% of group-used labels)
+here, against 49% on ADR-0027's first run and 50% after its fixes. The platform counts about half of what
+single-procedure recordings perform, on two independent public sources. No actor was named on either.
+
+**What follows.** Both changes stay: each is exact against its source and tested, and the stage matches above
+show the translation working on unseen data. But no recall improvement is claimed for them; the README reports
+this test's figure. The improvements this result points at, for a later registered test: (a) the intake reading
+Splunk's JSON export and multi-line events; (b) whether "counted" should also report detected techniques that no
+Group uses — a presentation question, recorded here, not decided by this result. From here these 169 recordings
+are development data.

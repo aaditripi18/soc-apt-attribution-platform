@@ -15,10 +15,10 @@ was counted — down to which branch of which rule matched which event — and e
 record behind it.
 
 > Status: complete — detection, correlation, attribution, live mode, analyst console and Kibana dashboard,
-> 2,947 tests, a served-model audit on every result set, and a pre-registered test on 105 recordings the
-> project had never seen. A personal research and portfolio project, governed by [CLAUDE.md](CLAUDE.md):
+> 2,979 tests, a served-model audit on every result set, and two pre-registered tests on recordings the
+> project had never seen (105 from OTRF, 169 from Splunk). A personal research and portfolio project, governed by [CLAUDE.md](CLAUDE.md):
 > never fabricate functionality, never hard-code an attribution, explain every conclusion, measure instead
-> of assuming. Decisions are recorded in 28 ADRs under [docs/architecture/adr](docs/architecture/adr).
+> of assuming. Decisions are recorded in 29 ADRs under [docs/architecture/adr](docs/architecture/adr).
 
 **Same pipeline, two known-answer recordings, two different verdicts.** On the APT29 evaluation a rule
 written from reporting on APT29's own tooling matched, so the group is named, with the rule and the event
@@ -36,14 +36,18 @@ APT41 at 72% overlap, and the platform says only that, without naming anyone.
 Every figure below is generated from stored, versioned results under [data/validation](data/validation);
 the method and its corrections are in the ADRs cited.
 
-**On 105 public attack recordings it had never seen, it counted about half of what the authors performed and
-named no group on any of them** ([ADR-0027](docs/architecture/adr/0027-unseen-validation-otrf-atomic.md)).
-The test was written down, recordings selected and the build frozen before anything was run:
+**On two sets of public attack recordings it had never seen, from two different labs, it counted about half of
+what the authors performed and named no group on any of them**
+([ADR-0027](docs/architecture/adr/0027-unseen-validation-otrf-atomic.md),
+[ADR-0029](docs/architecture/adr/0029-unseen-validation-splunk-windows.md)). Each test was written down,
+recordings selected and the build frozen before anything was run:
 
-| Unseen test (OTRF atomic recordings) | Recordings read | Authors' techniques counted | Groups named |
+| Unseen test | Recordings read | Authors' techniques counted | Groups named |
 |---|--:|--:|--:|
-| First run, as pre-registered | 61 of 105 | 32 of 65 (49%) | 0 |
-| After fixing what it exposed (now development data) | 103 of 105 | 54 of 107 (50%) | 0 |
+| OTRF atomic — first run, as pre-registered | 61 of 105 | 32 of 65 (49%) | 0 |
+| OTRF atomic — after fixing what it exposed (now development data) | 103 of 105 | 54 of 107 (50%) | 0 |
+| Splunk attack_data Windows — baseline | 164 of 169 | 74 of 164 (45%) | 0 |
+| Splunk attack_data Windows — after the detection changes made since | 164 of 169 | 74 of 164 (45%) | 0 |
 
 **Group identification is rare by design, and right when it happens.** On the known-answer recordings:
 
@@ -65,8 +69,15 @@ What the numbers say:
   rule tagging alternatives (say, LSASS dumping *or* masquerading) establishes neither until someone reads it.
   64 rules have recorded decisions, some per matched event: certutil with a URL proves a download, with
   `-decode` a decode. The console shows, for each detection, whether it counts and why.
+- **The second test showed the latest detection work did not raise recall on new data.** New rules for Event
+  Log tampering and 17 of Elastic's own two-stage sequence rules (DCOM, WMI and remote-service lateral movement)
+  are correct and tested, but this set has no Event Log tampering, and its lateral-movement recordings lack an
+  event each sequence needs (the remote process was never started, or Sysmon logged the connection's process as
+  unknown). Registered first, so reported as it came out.
 - **About half the techniques are still missed**, mostly lateral movement on Security-only hosts and behaviour
-  no rule targets; the gaps are listed by technique in the ADRs, not hidden.
+  no rule targets; 14 of the second test's 164 labels are techniques no ATT&CK Group is recorded using, which can
+  be detected but never compared with a group (on the other 150: 73, 49%). The gaps are listed by technique in the
+  ADRs, not hidden.
 
 ## How it relates to existing tools
 
@@ -157,16 +168,17 @@ against ATT&CK Enterprise v19.2, SigmaHQ `r2026-07-01` and Elastic `detection-ru
 
 - **1,913** Sigma rules imported (plus 78 partial), mapped to **344** ATT&CK ids; every rejected rule is
   listed with its reason (telemetry gap, untranslatable construct, policy).
-- **514** Elastic prebuilt rules translated exactly (488 whole, 26 partial) for Sysmon, Windows
+- **531** Elastic prebuilt rules translated exactly (505 whole, 26 partial) for Sysmon, Windows
   Security, PowerShell script blocks, AWS CloudTrail, Microsoft 365, Entra ID, Azure activity logs, Okta, GitHub and
-  Kubernetes telemetry, mapped to 303 ATT&CK ids — **68 not covered by Sigma**
+  Kubernetes telemetry, mapped to 305 ATT&CK ids — **68 not covered by Sigma**
   ([ADR-0015](docs/architecture/adr/0015-elastic-prebuilt-rules.md)). Every ECS field they read is
   reproduced from Elastic's own ingest pipeline for that source and checked against Elastic's own
   pipeline test fixtures — down to the Java `HashMap` key order of CloudTrail's request parameters, and
   the tokeniser Elasticsearch applies to PowerShell script text (phrase matches are token-exact).
   21 of them are multi-event rules: thresholds fire only for events close enough to be counted
   together under any rule schedule, and "new terms" rules only when the recording itself holds the
-  history the rule compares against (Amendment C).
+  history the rule compares against (Amendment C); 17 are two-stage sequences, joined on the same host by
+  Elastic's own keys within its `maxspan` (Amendment E).
 - **404 of 697** active techniques are covered, and **322 of 498** of those used by active Groups (336
   and 276 with Sigma alone); **163 of 176**
   active Groups have at least two covered techniques (the minimum to attribute at all).
@@ -206,7 +218,10 @@ reports, not a different way of counting.
   44 of them (Security-only domain controllers, archive metadata), and on the 61 read 32 of 65 of the authors'
   techniques were counted (49%), no actor named. After fixing the intake and an in-memory store fault the test
   exposed, then reading the rules it showed (these recordings are development data from then on): 103 read, 54 of
-  107 counted (50%), still no actor named on any.
+  107 counted (50%), still no actor named on any. A **second unseen test**
+  ([ADR-0029](docs/architecture/adr/0029-unseen-validation-splunk-windows.md)), 169 Splunk attack_data Windows
+  recordings selected from file pointers before any content was read, run on the registration commit and on a build
+  frozen after the next detection changes: 74 of 164 counted (45%) by both, no actor named.
 - **The known-answer check is a demonstration, not an accuracy figure.** Four public lab recordings, all used
   throughout development (none held out): two emulations (APT29, APT3) — not real intrusions — and two single tool
   runs with no actor. "Correct" means the verdict names the known actor and no other. Result: APT29 named, from one
@@ -390,7 +405,7 @@ src/attribution_platform/
   dataplane/, api/    Elasticsearch persistence and the read-model HTTP API
   replay/             recording reader, routing, intake check
 data/                 pinned ATT&CK, Sigma, telemetry samples, intel — each with manifest + NOTICE
-docs/architecture/    architecture and 28 ADRs (decisions, measurements, rejected alternatives)
+docs/architecture/    architecture and 29 ADRs (decisions, measurements, rejected alternatives)
 scripts/              acquisition, import, reports, checks — run by a human, never at runtime
 tests/                unit, golden real-record, end-to-end and reproducibility tests
 ```

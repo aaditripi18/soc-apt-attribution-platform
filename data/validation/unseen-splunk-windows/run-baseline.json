@@ -1,0 +1,1191 @@
+{
+ "version": "unseen-run/1",
+ "build_commit": "4de512a84e7eadb7e304914173454e4f3ac4016e",
+ "working_tree_clean": true,
+ "run_at_utc": "2026-10-23T20:51:38Z",
+ "recordings": [
+  {
+   "recording": "T1003.001/atomic_red_team/windows-sysmon.log",
+   "state": "investigated",
+   "investigation_id": "investigation::b645284ec009c533af0014e48f06d05d28cd5f0d4f016ec7dc92022204b1f6c3",
+   "evidence": 643,
+   "units": 29
+  },
+  {
+   "recording": "T1003.002/atomic_red_team/windows-sysmon.log",
+   "state": "investigated",
+   "investigation_id": "investigation::34be7b5de0e6464dbc86d13837f0f34865896edf74ca50071cfc147f245b104f",
+   "evidence": 303,
+   "units": 25
+  },
+  {
+   "recording": "T1003.003/atomic_red_team/windows-sysmon.log",
+   "state": "investigated",
+   "investigation_id": "investigation::451ce3aac045e14d83091fce67c19e200b3f4b9bdba0d6f0c8f386704c392a3f",
+   "evidence": 315,
+   "units": 22
+  },
+  {
+   "recording": "T1014/windows-sysmon.log",
+   "state": "refused by intake",
+   "problems": [
+    "no record converted to an Observation \u2014 unsupported shape or channels"
+   ]
+  },
+  {
+   "recording": "T1016/discovery_commands/windows-sysmon.log",
+   "state": "investigated",
+   "investigation_id": "investigation::233da1a274c7408b9a1fec5c11c81e0cb0eefa50a0e19e2ad34a00a19323e368",
+   "evidence": 127,
+   "units": 12
+  },
+  {
+   "recording": "T1018/AD_discovery/windows-sysmon.log",
+   "state": "investigated",
+   "investigation_id": "investigation::93d20687b8a382175eb8c6142bb584932083554efc33bb67ca0a1eedcdf9d92e",
+   "evidence": 52,
+   "units": 4
+  },
+  {
+   "recording": "T1020/windows-sysmon.log",
+   "state": "investigated",
+   "investigation_id": "investigation::6985276dbdec44efac8c9733d482ddfec2a6f1a2065f2db81402cdd4fae82af1",
+   "evidence": 17,
+   "units": 5
+  },
+  {
+   "recording": "T1021.002/atomic_red_team/windows-sysmon.log",
+   "state": "investigated",
+   "investigation_id": "investigation::7dc1a75c0bbd0024a9b9c27c9ba9111f29cfa96737e3cd3b6b6706c3267368f7",
+   "evidence": 16,
+   "units": 4
+  },
+  {
+   "recording": "T1021.003/impacket/windows-sysmon.log",
+   "state": "investigated",
+   "investigation_id": "investigation::67faf4e1b5aecddceee50f0ea1d8dfa63d3d6cd83325ac9ca2d7c98758358994",
+   "evidence": 45,
+   "units": 3
+  },
+  {
+   "recording": "T1021.003/lateral_movement/windows-sysmon.log",
+   "state": "investigated",
+   "investigation_id": "investigation::30f7fcfdc19c755d90f730ac03e005905a56598af6ec36c05a467528effbb573",
+   "evidence": 9,
+   "units": 1
+  },
+  {
+   "recording": "T1021.003/lateral_movement_lolbas/windows-sysmon.log",
+   "state": "investigated",
+   "investigation_id": "investigation::e1839c87f1ce24d5ed18ebc5e1d570e81622c6725d118d73171ea78bf7fbd23b",
+   "evidence": 1,
+   "units": 1
+  },
+  {
+   "recording": "T1021.003/lateral_movement_speechruntime/windows-sysmon.log",
+   "state": "investigated",
+   "investigation_id": "investigation::5b2ae28b3937956a8a6261ce31bd8be9ea01934c0725862464317d2dc5a34b6c",
+   "evidence": 3,
+   "units": 1
+  },
+  {
+   "recording": "T1021.006/lateral_movement/windows-sysmon.log",
+   "state": "investigated",
+   "investigation_id": "investigation::134c02aea130b48fec3e9ade00d64071c59c04eb105398ca67db81c41e6699c8",
+   "evidence": 2,
+   "units": 2
+  },
+  {
+   "recording": "T1021.006/lateral_movement_lolbas/windows-sysmon.log",
+   "state": "investigated",
+   "investigation_id": "investigation::12b6b2971f72189368067cd071cc780ca78f00b4faa2abea8da02a19637f7630",
+   "evidence": 7,
+   "units": 3
+  },
+  {
+   "recording": "T1021.006/lateral_movement_psh/windows-sysmon.log",
+   "state": "investigated",
+   "investigation_id": "investigation::c84a05ebc49a8af09d11b9fc56cb52ada8370efbac917f8783c5cf8f63fa1238",
+   "evidence": 7,
+   "units": 1
+  },
+  {
+   "recording": "T1027/atomic_red_team/windows-sysmon.log",
+   "state": "investigated",
+   "investigation_id": "investigation::1c9ffc60614bb19852c15fc7a9e18be5a314d4b1f021a72f1f21fae29f0297b9",
+   "evidence": 326,
+   "units": 20
+  },
+  {
+   "recording": "T1027/trickbot_drop/windows-sysmon.log",
+   "state": "investigated",
+   "investigation_id": "investigation::ad50ad1450bb71fa76f481f413881e1cb53dfd1dce70eb6b11a657fa5e0c8548",
+   "evidence": 0,
+   "units": 0
+  },
+  {
+   "recording": "T1027/url_encoded_curl/windows-sysmon.log",
+   "state": "investigated",
+   "investigation_id": "investigation::775ef133169a9060b22c2db1fea6a4c7531191915ecf2a8e9af8a089d07e35b2",
+   "evidence": 2,
+   "units": 2
+  },
+  {
+   "recording": "T1033/AD_discovery/windows-sysmon.log",
+   "state": "investigated",
+   "investigation_id": "investigation::7b95641833d76731c31cf3f3520a218a1a2a2715b199149a98089f63c46f15dc",
+   "evidence": 12,
+   "units": 0
+  },
+  {
+   "recording": "T1033/atomic_red_team/windows-sysmon.log",
+   "state": "investigated",
+   "investigation_id": "investigation::0b56756f733a188c6b4b4870893c57c139d6d4fcfaebbfd8162381f2833eb967",
+   "evidence": 296,
+   "units": 20
+  },
+  {
+   "recording": "T1036.003/atomic_red_team/windows-sysmon.log",
+   "state": "investigated",
+   "investigation_id": "investigation::fc111659aaf06abeb322a6e485fd2ce361336b2e7d78fd8ac2b04f823589e225",
+   "evidence": 310,
+   "units": 26
+  },
+  {
+   "recording": "T1036.003/samsam_extension/windows-sysmon.log",
+   "state": "investigated",
+   "investigation_id": "investigation::f0e89991366a5d078a21cddcac0a83e9418555a5d2c7253f2343b097572a3eac",
+   "evidence": 123,
+   "units": 13
+  },
+  {
+   "recording": "T1036/write_to_recycle_bin/windows-sysmon.log",
+   "state": "investigated",
+   "investigation_id": "investigation::4f84f45ac9ee699613a24f0f39905469a5bd8e1a072cbcfd79794471c6bd3295",
+   "evidence": 4,
+   "units": 0
+  },
+  {
+   "recording": "T1047/atomic_red_team/windows-sysmon.log",
+   "state": "investigated",
+   "investigation_id": "investigation::093a023fa5b83248013a05bf9702b257cc26458b2411281f8ba4a63749c19b44",
+   "evidence": 300,
+   "units": 27
+  },
+  {
+   "recording": "T1047/execution_scrcons/windows-sysmon.log",
+   "state": "investigated",
+   "investigation_id": "investigation::258680e4faef5bf04ab2120000f17c86d06f54feff83c5c5ab7d962e8d98362b",
+   "evidence": 6,
+   "units": 2
+  },
+  {
+   "recording": "T1047/lateral_movement/windows-sysmon.log",
+   "state": "investigated",
+   "investigation_id": "investigation::da0a96e591b8c938125871b3d03eefcb5d5ef719866b9199868959d9abf8506f",
+   "evidence": 2,
+   "units": 0
+  },
+  {
+   "recording": "T1047/lateral_movement_lolbas/windows-sysmon.log",
+   "state": "investigated",
+   "investigation_id": "investigation::8c6bfd70c5eecddd922316c003108a7baeddc91add3057baa35e5ac238fad90f",
+   "evidence": 3,
+   "units": 1
+  },
+  {
+   "recording": "T1048.003/long_dns_queries/windows-sysmon.log",
+   "state": "investigated",
+   "investigation_id": "investigation::906b3f38ea14b9394d0380675201e11caeb2fe3a2c184d2f7f8bac975708a890",
+   "evidence": 117,
+   "units": 12
+  },
+  {
+   "recording": "T1048.003/mass_file_creation/windows-sysmon.log",
+   "state": "investigated",
+   "investigation_id": "investigation::37c0a599d38d7fd9277d55ba78f8d13eb0041c299620ad8b25b5f0a5c331ca6d",
+   "evidence": 0,
+   "units": 0
+  },
+  {
+   "recording": "T1048.003/nslookup_exfil/windows-sysmon.log",
+   "state": "refused by intake",
+   "problems": [
+    "204 line(s) are not JSON objects"
+   ]
+  },
+  {
+   "recording": "T1049/AD_discovery/windows-sysmon.log",
+   "state": "investigated",
+   "investigation_id": "investigation::0b9458d696a5cb80625c68a5228a51320ae72c662e839e7108815e2711d25b04",
+   "evidence": 7,
+   "units": 0
+  },
+  {
+   "recording": "T1053.002/lateral_movement/windows-sysmon.log",
+   "state": "investigated",
+   "investigation_id": "investigation::798c21b21a2156edfb83aa03b66c591291eacfc76d0f52d1c3de203e69dd4718",
+   "evidence": 10,
+   "units": 1
+  },
+  {
+   "recording": "T1053.005/atomic_red_team/windows-sysmon.log",
+   "state": "investigated",
+   "investigation_id": "investigation::2b855008d8e2c58264e2d5c4fd96a0d854a0fbb549b3b37b66f517aadbf5bd09",
+   "evidence": 284,
+   "units": 23
+  },
+  {
+   "recording": "T1053.005/lateral_movement/windows-sysmon.log",
+   "state": "investigated",
+   "investigation_id": "investigation::5e1d0fa792d582d3ef24e5cfbea0d657caeb04fac57f57dd6d70611892953379",
+   "evidence": 4,
+   "units": 1
+  },
+  {
+   "recording": "T1053.005/lateral_movement_lolbas/windows-sysmon.log",
+   "state": "investigated",
+   "investigation_id": "investigation::7d4297a1574abc38a20dbf7d2c88bb62fc14997b6c0e0f92ddeab8eb6b524891",
+   "evidence": 3,
+   "units": 1
+  },
+  {
+   "recording": "T1053.005/schtask_shutdown/windows-sysmon.log",
+   "state": "investigated",
+   "investigation_id": "investigation::410a7d0fc489b181d8e7ea81fb52c570515d90340c49558a8fb95b37acc74f97",
+   "evidence": 124,
+   "units": 14
+  },
+  {
+   "recording": "T1053.005/schtask_system/windows-sysmon.log",
+   "state": "investigated",
+   "investigation_id": "investigation::b010b3e9e50d26fd5bc3da8ec3747e766615abd0b808e6d864aaf7a7570814cd",
+   "evidence": 2,
+   "units": 1
+  },
+  {
+   "recording": "T1053.005/schtasks/windows-sysmon.log",
+   "state": "investigated",
+   "investigation_id": "investigation::c92b8524406d75acd210d1e1e82dba0544e3bfeb68a2015f50685eccac661dbe",
+   "evidence": 2,
+   "units": 1
+  },
+  {
+   "recording": "T1055.001/rasautou/windows-sysmon.log",
+   "state": "investigated",
+   "investigation_id": "investigation::56c97c51419889226498c71a7c1299d4dd27b8bb2b68fdfda3b3461179dcb645",
+   "evidence": 5,
+   "units": 5
+  },
+  {
+   "recording": "T1055/named_pipes/windows-sysmon.log",
+   "state": "investigated",
+   "investigation_id": "investigation::3bd16a9e23fab0a4ca583f2aef24d385f14eda405f3361fa8d6ecef0c3bf51c6",
+   "evidence": 2,
+   "units": 1
+  },
+  {
+   "recording": "T1055/trickbot_inf/windows-sysmon.log",
+   "state": "investigated",
+   "investigation_id": "investigation::729b95a50166b98729944651d50ef59e99388be0c8ebd453c3ffcec030e71628",
+   "evidence": 0,
+   "units": 0
+  },
+  {
+   "recording": "T1059.001/atomic_red_team/windows-sysmon.log",
+   "state": "investigated",
+   "investigation_id": "investigation::fe32d4a0e38a2eeb55d499777815ab8fd5efa75dee3f884aa24427971678be37",
+   "evidence": 885,
+   "units": 117
+  },
+  {
+   "recording": "T1059.001/encoded_powershell/windows-sysmon.log",
+   "state": "investigated",
+   "investigation_id": "investigation::8596efd6af588a7b99dcbd331bafc9baa65f960b257aee4f6fd78dab69cb5bb0",
+   "evidence": 8,
+   "units": 1
+  },
+  {
+   "recording": "T1059.001/hidden_powershell/windows-sysmon.log",
+   "state": "investigated",
+   "investigation_id": "investigation::3bdea29a21643f65c4b78f6894c82f1b63533d60b38bf8cfd4cef0add632d6e2",
+   "evidence": 522,
+   "units": 48
+  },
+  {
+   "recording": "T1059.001/malicious_cmd_line_samples/windows-sysmon.log",
+   "state": "investigated",
+   "investigation_id": "investigation::439804437db6b1ea5f28d76dabcbde68274b16f9d75a2e5a4f48c1334f8cd1c0",
+   "evidence": 11,
+   "units": 4
+  },
+  {
+   "recording": "T1059.001/msix_powershell/windows-sysmon.log",
+   "state": "investigated",
+   "investigation_id": "investigation::8010b552baca4331493ea226dd6299a134d061d1a8beabde628b6652f8288678",
+   "evidence": 4,
+   "units": 1
+  },
+  {
+   "recording": "T1059.001/powershell_execution_policy/windows-sysmon.log",
+   "state": "investigated",
+   "investigation_id": "investigation::ba000486769405191de7c0a2a312854f0c6b2510f517ada1c275097a7ee50b7f",
+   "evidence": 114,
+   "units": 12
+  },
+  {
+   "recording": "T1059.001/powershell_script_block_logging/windows-sysmon.log",
+   "state": "investigated",
+   "investigation_id": "investigation::4156fc8e5b8794bc181faa857410286194d770ed3b29040ac9e0a1b58715a15c",
+   "evidence": 364,
+   "units": 11
+  },
+  {
+   "recording": "T1059.001/powershell_testing/windows-sysmon.log",
+   "state": "investigated",
+   "investigation_id": "investigation::9a3a0df397d545eff39359bef2a1fe5efc4bf77801e1fcdd97f84dbd137a2b1b",
+   "evidence": 380,
+   "units": 40
+  },
+  {
+   "recording": "T1059.001/powershell_xml_requests/windows-sysmon.log",
+   "state": "investigated",
+   "investigation_id": "investigation::efacdf4e8032e402eba9324a7821c20512feb5ee4bdd076683ed4a4842efb592",
+   "evidence": 293,
+   "units": 21
+  },
+  {
+   "recording": "T1059.001/sharphound/windows-sysmon.log",
+   "state": "investigated",
+   "investigation_id": "investigation::3c64e6767de8d44bce9dfe7b6bed38310bd23d7de8b8141e610c466dccf35557",
+   "evidence": 302,
+   "units": 14
+  },
+  {
+   "recording": "T1059.001/trickbot_cmd_powershell/windows-sysmon.log",
+   "state": "investigated",
+   "investigation_id": "investigation::baada7081c1997b7dcb96661b5a3317bb7ed62578fbe3e8cefe78c523e6582fd",
+   "evidence": 31,
+   "units": 7
+  },
+  {
+   "recording": "T1059.001/unmanaged_powershell_execution/windows-sysmon.log",
+   "state": "investigated",
+   "investigation_id": "investigation::195b13404621c76b8c81bd65dfa72d9b162d18ad334f33fd5e78eb7c9e742b32",
+   "evidence": 0,
+   "units": 0
+  },
+  {
+   "recording": "T1059.003/cmd_spawns_cscript/windows-sysmon.log",
+   "state": "investigated",
+   "investigation_id": "investigation::43b1778a5f3bd92f44c203b78a063cf5beb401d8330d89ce16920695b3a9a0ca",
+   "evidence": 0,
+   "units": 0
+  },
+  {
+   "recording": "T1059.003/powershell_spawn_cmd/windows-sysmon.log",
+   "state": "investigated",
+   "investigation_id": "investigation::84d8a389b4b137950cd1cfb3277f3f7f54e9d54fabe00bc901e2578a590d0e10",
+   "evidence": 0,
+   "units": 0
+  },
+  {
+   "recording": "T1059.003/ryuk/windows-sysmon.log",
+   "state": "investigated",
+   "investigation_id": "investigation::c6e39959c35b36d0612127afac8835d8ec5acbbaea31d4d9d06e181e2ecb8d09",
+   "evidence": 19,
+   "units": 2
+  },
+  {
+   "recording": "T1059.005/lotus_blossom_chrysalis/windows-sysmon.log",
+   "state": "refused by intake",
+   "problems": [
+    "no record converted to an Observation \u2014 unsupported shape or channels"
+   ]
+  },
+  {
+   "recording": "T1059/suspiciously_named_executables/windows-sysmon.log",
+   "state": "investigated",
+   "investigation_id": "investigation::50a1e7a72c987477a04d0c17f5f285dab81b02d3f1b8adf4673fe6f039fbbfc4",
+   "evidence": 0,
+   "units": 0
+  },
+  {
+   "recording": "T1068/bluehammer/windows-sysmon.log",
+   "state": "investigated",
+   "investigation_id": "investigation::363454f2ad453cbabcce3d973cbbb463965a647c83f89cd1d5992f3c0bd02103",
+   "evidence": 1,
+   "units": 1
+  },
+  {
+   "recording": "T1068/redsun/windows-sysmon.log",
+   "state": "investigated",
+   "investigation_id": "investigation::95c5b4facc6417aaa28f6600d15516b4c30629e876fe70af5eb21ef7caf4a799",
+   "evidence": 0,
+   "units": 0
+  },
+  {
+   "recording": "T1068/zoom_child_process/windows-sysmon.log",
+   "state": "investigated",
+   "investigation_id": "investigation::574a5547ad8443a0cc95f4b32269007a69ecf31fb5c5884324f1e75012604024",
+   "evidence": 6,
+   "units": 1
+  },
+  {
+   "recording": "T1069.002/AD_discovery/windows-sysmon.log",
+   "state": "investigated",
+   "investigation_id": "investigation::c9c189ac12ef398e99307be6020d7827aaca5c8f9186d1c00d814260a0145a3c",
+   "evidence": 18,
+   "units": 0
+  },
+  {
+   "recording": "T1070.001/atomic_red_team/windows-sysmon.log",
+   "state": "investigated",
+   "investigation_id": "investigation::e5628b66278b8a7d9c75806af9be9ff0f62d33e6e8ff757d1f79b6bf014ad15d",
+   "evidence": 288,
+   "units": 21
+  },
+  {
+   "recording": "T1070.005/atomic_red_team/windows-sysmon.log",
+   "state": "investigated",
+   "investigation_id": "investigation::f79c48db8455837604a838a40b29f38de6caf770e6b5c8819cff3b3da1ba8e60",
+   "evidence": 285,
+   "units": 20
+  },
+  {
+   "recording": "T1070/atomic_red_team/windows-sysmon.log",
+   "state": "investigated",
+   "investigation_id": "investigation::71bb993106027c82912f0018cef0bddaec5a37c726270bcc3188c2fb9e684d83",
+   "evidence": 283,
+   "units": 22
+  },
+  {
+   "recording": "T1078.002/account_lockout/windows-sysmon.log",
+   "state": "investigated",
+   "investigation_id": "investigation::2840fdb31688775b10651f15fe54d8fd4d8a31d8b3af7c79ac32cdb732bf5649",
+   "evidence": 202,
+   "units": 20
+  },
+  {
+   "recording": "T1078/defaultaccount/windows-sysmon.log",
+   "state": "investigated",
+   "investigation_id": "investigation::f96b74a34ba434031c950a929d16b12b62aff81f609185082b9b1101be691761",
+   "evidence": 22,
+   "units": 2
+  },
+  {
+   "recording": "T1082/atomic_red_team/windows-sysmon.log",
+   "state": "investigated",
+   "investigation_id": "investigation::9f40006d4860327c407d189e8cb41eeff9184548b5fcb9025a64e963aff2f6b5",
+   "evidence": 284,
+   "units": 22
+  },
+  {
+   "recording": "T1087.001/AD_discovery/windows-sysmon.log",
+   "state": "investigated",
+   "investigation_id": "investigation::2989adba6db673d7fa4ed7e8a3ac7b0b187c61dfd74df72b9a9c689f33670e2c",
+   "evidence": 10,
+   "units": 0
+  },
+  {
+   "recording": "T1087.002/AD_discovery/windows-sysmon.log",
+   "state": "investigated",
+   "investigation_id": "investigation::5792ce817cfaf663fdf210cccfc1b23e4e69ca4357ea05539ba30252b73e977e",
+   "evidence": 37,
+   "units": 2
+  },
+  {
+   "recording": "T1090.003/windows_tor_client_execution/windows-sysmon.log",
+   "state": "investigated",
+   "investigation_id": "investigation::f9a217b16d9d86a913d624a8936c0f558ef0a1116d9eb8916c639695ff229c46",
+   "evidence": 32,
+   "units": 3
+  },
+  {
+   "recording": "T1098/dsrm_account/windows-sysmon.log",
+   "state": "investigated",
+   "investigation_id": "investigation::da80db82531c9c5e8d4f5bc7476d13ede6f5c580ee762c71102fcb57e4a35bd6",
+   "evidence": 1,
+   "units": 1
+  },
+  {
+   "recording": "T1105/atomic_red_team/windows-sysmon.log",
+   "state": "investigated",
+   "investigation_id": "investigation::9ef14ad32cbd21aa02cc2e9d7e8bfb8ba9357f672c8fe44e97235c59614d6ed6",
+   "evidence": 123,
+   "units": 16
+  },
+  {
+   "recording": "T1112/atomic_red_team/windows-sysmon.log",
+   "state": "investigated",
+   "investigation_id": "investigation::3646caabeeb10711e1c28ad6dc311c6becc3f6aa3a1c7183ce85eb01801f2002",
+   "evidence": 290,
+   "units": 23
+  },
+  {
+   "recording": "T1127.001/windows-sysmon.log",
+   "state": "investigated",
+   "investigation_id": "investigation::e44df9ab611f01b27421884187c53975fdb3c083f98b0f17a9d698fe321669ca",
+   "evidence": 61,
+   "units": 12
+  },
+  {
+   "recording": "T1127/atomic_red_team/windows-sysmon.log",
+   "state": "investigated",
+   "investigation_id": "investigation::92cc3a4767b8a37767aad9b8fbd0401e9b53591be885b9b1b078d35441135b70",
+   "evidence": 154,
+   "units": 14
+  },
+  {
+   "recording": "T1135/net_share/windows-sysmon.log",
+   "state": "investigated",
+   "investigation_id": "investigation::9ec08d136b96a4bd7d7aea1c8ab2d5e69f8fb632015b15ea3811437a3d94ccd3",
+   "evidence": 4,
+   "units": 0
+  },
+  {
+   "recording": "T1136.001/atomic_red_team/windows-sysmon.log",
+   "state": "investigated",
+   "investigation_id": "investigation::b9aa31c30fe4faa54e72756e9940fe9f9320fde35b94b7103eca3d3e30fd9069",
+   "evidence": 301,
+   "units": 21
+  },
+  {
+   "recording": "T1140/atomic_red_team/windows-sysmon.log",
+   "state": "investigated",
+   "investigation_id": "investigation::8e26a510272c8e3bed370f15c86ef58cfb1cf6e3e1abefad607777f5330898a9",
+   "evidence": 48,
+   "units": 4
+  },
+  {
+   "recording": "T1189/dyn_dns_site/windows-sysmon.log",
+   "state": "investigated",
+   "investigation_id": "investigation::076a010cdf8335b69d61acbe0f1848dc6069c406eb22759b6a2e7dd2975f8798",
+   "evidence": 115,
+   "units": 12
+  },
+  {
+   "recording": "T1190/crushftp/windows-sysmon.log",
+   "state": "investigated",
+   "investigation_id": "investigation::819faaf27b1210f8b4f75821a28dc0fe3084cc78d9e565df5e7269af33887bc6",
+   "evidence": 0,
+   "units": 0
+  },
+  {
+   "recording": "T1190/outbound_java/windows-sysmon.log",
+   "state": "investigated",
+   "investigation_id": "investigation::886d9cb41db1132a7630778e92621461de51bc131047cb9419ca1a649ca727c2",
+   "evidence": 0,
+   "units": 0
+  },
+  {
+   "recording": "T1190/sap/windows-sysmon.log",
+   "state": "investigated",
+   "investigation_id": "investigation::bd0b1584111dd5db9f07e3422383b1239b006f6f291dde97191bb3feecc890bd",
+   "evidence": 0,
+   "units": 0
+  },
+  {
+   "recording": "T1197/atomic_red_team/windows-sysmon.log",
+   "state": "investigated",
+   "investigation_id": "investigation::802dd8a1098070876313f6bb930f36b9a1926835c1bc30bfdbf6eb38f6dc3a3d",
+   "evidence": 29,
+   "units": 5
+  },
+  {
+   "recording": "T1201/pwd_policy_discovery/windows-sysmon.log",
+   "state": "investigated",
+   "investigation_id": "investigation::31e4f1ff9d0a76620b2cf78953c3f840161b7df2b5f6301763c92754451b6a17",
+   "evidence": 17,
+   "units": 2
+  },
+  {
+   "recording": "T1202/atomic_red_team/windows-sysmon.log",
+   "state": "investigated",
+   "investigation_id": "investigation::7488e2afd4d35ea9f53b21cdef2e44ebf49a2753a322a6849ffc7dc79fb09c08",
+   "evidence": 9,
+   "units": 3
+  },
+  {
+   "recording": "T1204.002/atomic_red_team/windows-sysmon.log",
+   "state": "investigated",
+   "investigation_id": "investigation::0d78f8e0ccb2441e33071773d6837bfc1c363605aacf1c5e831f065a281402f2",
+   "evidence": 2,
+   "units": 0
+  },
+  {
+   "recording": "T1204.002/batch_file_in_system32/windows-sysmon.log",
+   "state": "investigated",
+   "investigation_id": "investigation::0d78f8e0ccb2441e33071773d6837bfc1c363605aacf1c5e831f065a281402f2",
+   "evidence": 2,
+   "units": 0
+  },
+  {
+   "recording": "T1204.002/single_letter_exe/windows-sysmon.log",
+   "state": "investigated",
+   "investigation_id": "investigation::e66f71f67759c351d1702c366f2bea92633f3ce60b0a9b749c153c882b11b964",
+   "evidence": 4,
+   "units": 0
+  },
+  {
+   "recording": "T1204/rare_executables/windows-sysmon.log",
+   "state": "investigated",
+   "investigation_id": "investigation::4b990e9012c8e6a93812d4a0273d46989de6823ed107f8863b26f0e143c300ba",
+   "evidence": 1394,
+   "units": 665
+  },
+  {
+   "recording": "T1216/atomic_red_team/windows-sysmon.log",
+   "state": "investigated",
+   "investigation_id": "investigation::f95ad3c8c1f1d78fd4faec076ebbf2f59860d58a0f8acee89336285bd5cb0383",
+   "evidence": 98,
+   "units": 4
+  },
+  {
+   "recording": "T1218.001/atomic_red_team/windows-sysmon.log",
+   "state": "investigated",
+   "investigation_id": "investigation::ef766464097e87a8b0d7aaba8fbed6010490fdaf741143a6591c158ec4844c6a",
+   "evidence": 437,
+   "units": 21
+  },
+  {
+   "recording": "T1218.002/atomic_red_team/windows-sysmon.log",
+   "state": "investigated",
+   "investigation_id": "investigation::fbd5091b577152d287eaaa8712e2df4424eb0b096cc9c0fa250f9d93f1614a8a",
+   "evidence": 31,
+   "units": 2
+  },
+  {
+   "recording": "T1218.004/atomic_red_team/windows-sysmon.log",
+   "state": "investigated",
+   "investigation_id": "investigation::5e8289075c14e2b2e10091c5897eb920b8b4445bdacc5514eeb55637b4753f9b",
+   "evidence": 7,
+   "units": 4
+  },
+  {
+   "recording": "T1218.005/atomic_red_team/windows-sysmon.log",
+   "state": "investigated",
+   "investigation_id": "investigation::17b8d2c7f07c42076fb9602703e061bf6da39446e0a0921166a9f444990d8487",
+   "evidence": 1000,
+   "units": 51
+  },
+  {
+   "recording": "T1218.007/atomic_red_team/windows-sysmon.log",
+   "state": "investigated",
+   "investigation_id": "investigation::0b93fb6630e5bf208701e61e520a77b363c805b3b7e13dea5680a64fcb0d2ee9",
+   "evidence": 45,
+   "units": 18
+  },
+  {
+   "recording": "T1218.009/atomic_red_team/windows-sysmon.log",
+   "state": "investigated",
+   "investigation_id": "investigation::1daea670a5d835f86708deb7506b2705c450eae06e41f069fc530d68502b5309",
+   "evidence": 77,
+   "units": 13
+  },
+  {
+   "recording": "T1218.010/atomic_red_team/windows-sysmon.log",
+   "state": "investigated",
+   "investigation_id": "investigation::887157bc1b7299372efa80169d6a23dce986355abb846dba4a2c56dcbea69816",
+   "evidence": 61,
+   "units": 13
+  },
+  {
+   "recording": "T1218.011/atomic_red_team/windows-sysmon.log",
+   "state": "investigated",
+   "investigation_id": "investigation::66a8bfd39ded6200f78391f5db27ab932f191d41efb7ade04457d9c469819cbb",
+   "evidence": 347,
+   "units": 36
+  },
+  {
+   "recording": "T1218.013/atomic_red_team/windows-sysmon.log",
+   "state": "investigated",
+   "investigation_id": "investigation::166f5ac02f835939259eed231b28bf8878be8ebf2070869bf642ca4b032c263b",
+   "evidence": 10,
+   "units": 3
+  },
+  {
+   "recording": "T1218/diskshadow/windows-sysmon.log",
+   "state": "investigated",
+   "investigation_id": "investigation::b006a06ecdf47a55cf81e9d52345083e218ebbc23e98d2c76066e13ada1f14c1",
+   "evidence": 1,
+   "units": 0
+  },
+  {
+   "recording": "T1218/eviltwin/windows-sysmon.log",
+   "state": "investigated",
+   "investigation_id": "investigation::9f1dd8d030e901c713e2d0e9df7483db3b0c83afaa20d7c404c40511f6d9090a",
+   "evidence": 21,
+   "units": 3
+  },
+  {
+   "recording": "T1219/atomic_red_team/windows-sysmon.log",
+   "state": "investigated",
+   "investigation_id": "investigation::ce1b6b37627aacf678334e5b61c2a75f0414e47c355bd750f3a5616282234775",
+   "evidence": 39,
+   "units": 6
+  },
+  {
+   "recording": "T1220/atomic_red_team/windows-sysmon.log",
+   "state": "investigated",
+   "investigation_id": "investigation::c665d84170a2c7304c02586d4cfd571aa8b1df941b0e8b6fb14ecd3f5e64f2ce",
+   "evidence": 28,
+   "units": 2
+  },
+  {
+   "recording": "T1222.001/atomic_red_team/windows-sysmon.log",
+   "state": "investigated",
+   "investigation_id": "investigation::c4fa31e04a3401338ce5b1fd9fd4f24a3fff5de6c74e85591e1e7f266de84eec",
+   "evidence": 299,
+   "units": 23
+  },
+  {
+   "recording": "T1482/atomic_red_team/windows-sysmon.log",
+   "state": "investigated",
+   "investigation_id": "investigation::07932f7c155a6b920854e757b7bed97bdb81c11da505bd3127cae53a5d0ce733",
+   "evidence": 72,
+   "units": 7
+  },
+  {
+   "recording": "T1482/discovery/windows-sysmon.log",
+   "state": "investigated",
+   "investigation_id": "investigation::2f642349599c9aa19d47592a4c729a2a172fafd7e5a784b06dd267252643412a",
+   "evidence": 17,
+   "units": 2
+  },
+  {
+   "recording": "T1485/atomic_red_team/windows-sysmon.log",
+   "state": "investigated",
+   "investigation_id": "investigation::757b2247353b798a4b59472d2155a648191f237f9710833778faecce63a61c68",
+   "evidence": 118,
+   "units": 13
+  },
+  {
+   "recording": "T1485/excessive_file_deletions/windows-sysmon.log",
+   "state": "investigated",
+   "investigation_id": "investigation::2686256788894bee2580d08ae7eb7186bc3e0cdc3bcf3651654c9b1a45275045",
+   "evidence": 0,
+   "units": 0
+  },
+  {
+   "recording": "T1485/ransomware_extensions/windows-sysmon.log",
+   "state": "investigated",
+   "investigation_id": "investigation::ddddd435a1dfcfa4ebbb01ae2b1884e6627964bc6a5a190dfd90335cd180ca04",
+   "evidence": 0,
+   "units": 0
+  },
+  {
+   "recording": "T1485/ransomware_notes/windows-sysmon.log",
+   "state": "investigated",
+   "investigation_id": "investigation::ddddd435a1dfcfa4ebbb01ae2b1884e6627964bc6a5a190dfd90335cd180ca04",
+   "evidence": 0,
+   "units": 0
+  },
+  {
+   "recording": "T1486/dcrypt/windows-sysmon.log",
+   "state": "investigated",
+   "investigation_id": "investigation::a820e82f8005844820947408ab87efa86fa1432d535113f5d3cbb5b615eac2ab",
+   "evidence": 4,
+   "units": 0
+  },
+  {
+   "recording": "T1486/sam_sam_note/windows-sysmon.log",
+   "state": "investigated",
+   "investigation_id": "investigation::59ce1b4cc05be7ed985c54065a585975907ed0fa5ff9f70e257bf1b7b11f1f92",
+   "evidence": 114,
+   "units": 12
+  },
+  {
+   "recording": "T1490/atomic_red_team/windows-sysmon.log",
+   "state": "investigated",
+   "investigation_id": "investigation::be1dba719556a4b9031f4c1e4879235ffdbf5fec9c43c0aa5bdd159438efe826",
+   "evidence": 30,
+   "units": 7
+  },
+  {
+   "recording": "T1490/ransomware_notes/windows-sysmon.log",
+   "state": "investigated",
+   "investigation_id": "investigation::e042ba02d0f66aabae3b9625f4ac0c32bbac562c78cb313137f89ccb90661dc0",
+   "evidence": 308,
+   "units": 24
+  },
+  {
+   "recording": "T1543.003/atomic_red_team/windows-sysmon.log",
+   "state": "investigated",
+   "investigation_id": "investigation::93e7a13ce536e401b103453f25cfb5834d5913cc6c81191f35ce78dea6ee208f",
+   "evidence": 302,
+   "units": 21
+  },
+  {
+   "recording": "T1543.003/lateral_movement/windows-sysmon.log",
+   "state": "investigated",
+   "investigation_id": "investigation::b2b7d54c76eca5c72ec836dfeed86b4f193049376cc5f341169097e119991532",
+   "evidence": 4,
+   "units": 1
+  },
+  {
+   "recording": "T1543.003/lateral_movement_lolbas/windows-sysmon.log",
+   "state": "investigated",
+   "investigation_id": "investigation::c006a26ea65e17edaa347ce0f4f17a72c9d8812417735a97e3fbeb1a11b9dbf5",
+   "evidence": 35,
+   "units": 8
+  },
+  {
+   "recording": "T1543.003/lateral_movement_powershell/windows-sysmon.log",
+   "state": "investigated",
+   "investigation_id": "investigation::462859404b9ab114585c8bf39faa0d869e7b30310a1932a5f20d72ac7ee53750",
+   "evidence": 42,
+   "units": 1
+  },
+  {
+   "recording": "T1546.003/atomic_red_team/windows-sysmon.log",
+   "state": "investigated",
+   "investigation_id": "investigation::5d3af4ebd07225f3cb1fe83bc9838788307ae42831ea62fa877d3fc7040f6c7d",
+   "evidence": 283,
+   "units": 22
+  },
+  {
+   "recording": "T1546.003/wmi_event_subscription/windows-sysmon.log",
+   "state": "investigated",
+   "investigation_id": "investigation::edc47d1a3f418f626fed2eb8473236799306a84ab496aa58d2cabc745df13a7c",
+   "evidence": 3,
+   "units": 2
+  },
+  {
+   "recording": "T1546.008/atomic_red_team/windows-sysmon.log",
+   "state": "investigated",
+   "investigation_id": "investigation::55c4ca13b3b07215f4e7aba3f5960b43298effe871b95b52b6f1bb7161f9e2ed",
+   "evidence": 178,
+   "units": 9
+  },
+  {
+   "recording": "T1546.011/atomic_red_team/windows-sysmon.log",
+   "state": "investigated",
+   "investigation_id": "investigation::e1e1273bcda9e25a234182516ff9556a146beb2fbb563ba134eb796f691afc8f",
+   "evidence": 334,
+   "units": 22
+  },
+  {
+   "recording": "T1546.012/atomic_red_team/windows-sysmon.log",
+   "state": "investigated",
+   "investigation_id": "investigation::7600b2417b634664245d592763938ecbccaa077ee80c0033fcb5e3295bf3b40a",
+   "evidence": 278,
+   "units": 21
+  },
+  {
+   "recording": "T1546.015/atomic_red_team/windows-sysmon.log",
+   "state": "investigated",
+   "investigation_id": "investigation::dc6ee946148330dcc90ae0998153f47d408a99838422d5b543d9374b60c80a74",
+   "evidence": 1,
+   "units": 1
+  },
+  {
+   "recording": "T1546.015/uac_colorui/windows-sysmon.log",
+   "state": "investigated",
+   "investigation_id": "investigation::b21cca122329724d5841637488dc0a29940e7a12011d6df37bbb88d8f61346a0",
+   "evidence": 25,
+   "units": 5
+  },
+  {
+   "recording": "T1547.001/atomic_red_team/windows-sysmon.log",
+   "state": "investigated",
+   "investigation_id": "investigation::057243efed8d9e5b59d5e2123b34b77496acfe246a0f395d31c2f11e735ef6c6",
+   "evidence": 327,
+   "units": 25
+  },
+  {
+   "recording": "T1547.005/malicious_ssp/windows-sysmon.log",
+   "state": "investigated",
+   "investigation_id": "investigation::8a78c4c3a1ac19e1fdade41bfcc4d49c698b67b74d10ed3d75a4b1f4d8e33c7c",
+   "evidence": 4,
+   "units": 1
+  },
+  {
+   "recording": "T1547.008/atomic_red_team/windows-sysmon.log",
+   "state": "investigated",
+   "investigation_id": "investigation::bba8b9a8966c8cfbbd078e157a7c5a3fcf925f47da6d9817a4a6b7015d44605f",
+   "evidence": 7,
+   "units": 7
+  },
+  {
+   "recording": "T1547.010/atomic_red_team/windows-sysmon.log",
+   "state": "investigated",
+   "investigation_id": "investigation::1da75754a71e6f708829181cecd65da28746867b18dec1b017b8063c471be2b9",
+   "evidence": 289,
+   "units": 22
+  },
+  {
+   "recording": "T1547.012/printnightmare/windows-sysmon.log",
+   "state": "investigated",
+   "investigation_id": "investigation::0a93e65793fed4a3ed08e80990eb7c2891cc44d6c5731c09279840ac52097fe1",
+   "evidence": 30,
+   "units": 3
+  },
+  {
+   "recording": "T1548.002/atomic_red_team/windows-sysmon.log",
+   "state": "investigated",
+   "investigation_id": "investigation::5a5372480d51a265169163b21c21b5acacc039a4b878c48d5ea5c4e6f829d8cf",
+   "evidence": 330,
+   "units": 28
+  },
+  {
+   "recording": "T1548.002/slui/windows-sysmon.log",
+   "state": "investigated",
+   "investigation_id": "investigation::b304b0f73fee7be33fd32d9c5895611ef6f9f5c481a9d996d350f2207154a0a2",
+   "evidence": 48,
+   "units": 12
+  },
+  {
+   "recording": "T1548/uac_bypass/windows-sysmon.log",
+   "state": "investigated",
+   "investigation_id": "investigation::b4e132f836cabd4fbc44fb609605c1c6be9786dc1b89f6a1ff5dc3117d4fc1d2",
+   "evidence": 32,
+   "units": 11
+  },
+  {
+   "recording": "T1550.002/atomic_red_team/windows-sysmon.log",
+   "state": "investigated",
+   "investigation_id": "investigation::3541a2afffa8a6d2f16354a535f6523964b7ed68295d44b10a81ec15308fe9fd",
+   "evidence": 11,
+   "units": 3
+  },
+  {
+   "recording": "T1550.003/mimikatz/windows-sysmon.log",
+   "state": "investigated",
+   "investigation_id": "investigation::f6ba3155e155dfae478ca13311ffb02921232421b32ad3a57dec38c8375d5a66",
+   "evidence": 31,
+   "units": 5
+  },
+  {
+   "recording": "T1550.003/rubeus/windows-sysmon.log",
+   "state": "investigated",
+   "investigation_id": "investigation::8490b8b94f3ad405e7a333871642f609db470e0a3fbc885d21b3d64f28677750",
+   "evidence": 6,
+   "units": 2
+  },
+  {
+   "recording": "T1550/rubeus/windows-sysmon.log",
+   "state": "investigated",
+   "investigation_id": "investigation::83749395df4a5cb2f5812d2e37900c34daad0d446fd7a7b55ecd0cd5456a4732",
+   "evidence": 15,
+   "units": 2
+  },
+  {
+   "recording": "T1552.002/autoadminlogon/windows-sysmon.log",
+   "state": "investigated",
+   "investigation_id": "investigation::112bb696182b3648ce366715b74b0301f64b74f806da056d18ed8fc736133c55",
+   "evidence": 23,
+   "units": 12
+  },
+  {
+   "recording": "T1553.004/atomic_red_team/windows-sysmon.log",
+   "state": "investigated",
+   "investigation_id": "investigation::5ca0c292726ac9b4f2f32211a1271aebeeaf429d1d886876d73591efb7e04b96",
+   "evidence": 292,
+   "units": 20
+  },
+  {
+   "recording": "T1556/disable_credential_guard/windows-sysmon.log",
+   "state": "investigated",
+   "investigation_id": "investigation::601e09f15e8fee01bb870df7f0a060814bd87c91a8f1c44bea3aa754a5fcaff9",
+   "evidence": 1,
+   "units": 1
+  },
+  {
+   "recording": "T1556/disable_lsa_protection/windows-sysmon.log",
+   "state": "investigated",
+   "investigation_id": "investigation::979a50f0ef43d034bfdd046f28c11b4a04258293de4362d13a26d90abddeb727",
+   "evidence": 0,
+   "units": 0
+  },
+  {
+   "recording": "T1558.003/atomic_red_team/windows-sysmon.log",
+   "state": "investigated",
+   "investigation_id": "investigation::06d2ced1cc80baf87c12b316a572425792b4e1ce8e662e2eef73809d566f3428",
+   "evidence": 202,
+   "units": 20
+  },
+  {
+   "recording": "T1558.003/rubeus/windows-sysmon.log",
+   "state": "investigated",
+   "investigation_id": "investigation::9d6bc71f51daa804254ba22bf71f6494b0e46c071d1646eb50c354f6525142f1",
+   "evidence": 47,
+   "units": 3
+  },
+  {
+   "recording": "T1560.001/archive_utility/windows-sysmon.log",
+   "state": "investigated",
+   "investigation_id": "investigation::53bd0362f7d840c093308119ea5256cbcd002b0cde4f2a7a489ac737c0aaea5d",
+   "evidence": 26,
+   "units": 5
+  },
+  {
+   "recording": "T1562.001/atomic_red_team/windows-sysmon.log",
+   "state": "investigated",
+   "investigation_id": "investigation::3eaa7e413f1dcb2b4bb050aaa0eb569117cb769e904f9fdddcd09790ada24490",
+   "evidence": 167,
+   "units": 33
+  },
+  {
+   "recording": "T1562.001/hotkey_disabled_hidden_user/windows-sysmon.log",
+   "state": "investigated",
+   "investigation_id": "investigation::24a626014140d8667917881bbd055d6e9c121fb80c2d9cefba3ab75fd74787e4",
+   "evidence": 15,
+   "units": 6
+  },
+  {
+   "recording": "T1562.001/pwh_defender_disabling/windows-sysmon.log",
+   "state": "investigated",
+   "investigation_id": "investigation::8b9d94bbe1c70dab9ff1272a5984b7067aa8afda9fd44462e26ba95aef4bae9e",
+   "evidence": 37,
+   "units": 4
+  },
+  {
+   "recording": "T1562.001/sc_service_start_disabled/windows-sysmon.log",
+   "state": "investigated",
+   "investigation_id": "investigation::a1b23c18e58c56c860c42a280c82bc7421991248e13d035b7017b18537254d01",
+   "evidence": 2545,
+   "units": 2545
+  },
+  {
+   "recording": "T1562.001/unload_sysmon/windows-sysmon.log",
+   "state": "investigated",
+   "investigation_id": "investigation::03829af3532645b82eac83e82054a0cd839b0544ba3010a34ecf591898f2bcf3",
+   "evidence": 7,
+   "units": 1
+  },
+  {
+   "recording": "T1562.001/win_app_defender_disabling/windows-sysmon.log",
+   "state": "investigated",
+   "investigation_id": "investigation::3b206ef8fb11cc6a980b6043a4503c574bdd8c88062f4875f5b023fd62e83fb7",
+   "evidence": 202,
+   "units": 39
+  },
+  {
+   "recording": "T1562.001/win_defend_service_stop/windows-sysmon.log",
+   "state": "investigated",
+   "investigation_id": "investigation::e308ce37da8d1b2163f26c486ba9f85ecd2661c92601d3c73160b8c57fec9db0",
+   "evidence": 118,
+   "units": 14
+  },
+  {
+   "recording": "T1562.004/atomic_red_team/windows-sysmon.log",
+   "state": "refused by intake",
+   "problems": [
+    "55 line(s) are not JSON objects"
+   ]
+  },
+  {
+   "recording": "T1566.001/datasets2/windows-sysmon.log",
+   "state": "investigated",
+   "investigation_id": "investigation::367bb1b821a6f8441f79c1f05c76d1677d03cfcec31fa95ca445aa55c57ed0cc",
+   "evidence": 69,
+   "units": 2
+  },
+  {
+   "recording": "T1566.001/macro/windows-sysmon.log",
+   "state": "investigated",
+   "investigation_id": "investigation::59bc6fff94dd29d5e59362c8810b21e1a6625d389893f9169ee3eebef7b0c00e",
+   "evidence": 314,
+   "units": 7
+  },
+  {
+   "recording": "T1566.002/atomic_red_team/windows-sysmon.log",
+   "state": "investigated",
+   "investigation_id": "investigation::5a68b9658b1247fd9e84d4b5eb75f5a42ab977c9174631e7f7fe6d577429560f",
+   "evidence": 168,
+   "units": 8
+  },
+  {
+   "recording": "T1566.002/lnk_file_temp_folder/windows-sysmon.log",
+   "state": "investigated",
+   "investigation_id": "investigation::bbd3a8185810106bdb4e622b7dde3dfc3e0c6aa952e3186a74939667db3cee25",
+   "evidence": 114,
+   "units": 12
+  },
+  {
+   "recording": "T1569.002/atomic_red_team/windows-sysmon.log",
+   "state": "investigated",
+   "investigation_id": "investigation::269cc8c3233957115a6c2f16259248fa62902dad15b624137bf0d186f38bf227",
+   "evidence": 362,
+   "units": 24
+  },
+  {
+   "recording": "T1572/ngrok/windows-sysmon.log",
+   "state": "investigated",
+   "investigation_id": "investigation::2244d00c8616f7838e9a007a3077ac47240c3bd1e05a933779e526180a0b5c26",
+   "evidence": 14,
+   "units": 10
+  },
+  {
+   "recording": "T1572/plink/windows-sysmon.log",
+   "state": "investigated",
+   "investigation_id": "investigation::f1804dbababa1d45c4a17aa879fe9e14974da6e38e4a81cbb09a6c1d8bcb46f2",
+   "evidence": 28,
+   "units": 3
+  },
+  {
+   "recording": "T1574.001/atomic_red_team/windows-sysmon.log",
+   "state": "investigated",
+   "investigation_id": "investigation::cfe408ee75f152eca33e01c8cf320ad28016ddcf203628f350082650bc90c536",
+   "evidence": 0,
+   "units": 0
+  },
+  {
+   "recording": "T1574.002/lotus_blossom_chrysalis/windows-sysmon.log",
+   "state": "refused by intake",
+   "problems": [
+    "no record converted to an Observation \u2014 unsupported shape or channels"
+   ]
+  },
+  {
+   "recording": "T1574.002/msi_module_load/windows-sysmon.log",
+   "state": "investigated",
+   "investigation_id": "investigation::40cb5cc986c32dd80ad954b278e2d3de518425e3a978fd53160a6c2046a9101a",
+   "evidence": 0,
+   "units": 0
+  },
+  {
+   "recording": "T1574.009/atomic_red_team/windows-sysmon.log",
+   "state": "investigated",
+   "investigation_id": "investigation::e59acbd2ae405c0c0230824f7b566d69424bc408cecf58ecd29b930f85b43c24",
+   "evidence": 283,
+   "units": 21
+  },
+  {
+   "recording": "T1574.011/change_registry_path_service/windows-sysmon.log",
+   "state": "investigated",
+   "investigation_id": "investigation::5a95df406e5999f25ae69e4281218e4af5d89a66af5c29ad4fb5143139f1b155",
+   "evidence": 5,
+   "units": 1
+  },
+  {
+   "recording": "T1588.002/atomic_red_team/windows-sysmon.log",
+   "state": "investigated",
+   "investigation_id": "investigation::a39e29d7b8db7d01e8e3ce48eeaa60731c28ab1c2bad471c5e2cecab3f206796",
+   "evidence": 537,
+   "units": 50
+  },
+  {
+   "recording": "T1590.005/windows-sysmon.log",
+   "state": "investigated",
+   "investigation_id": "investigation::0b6930cd00719fd612df55cd3132172ada1cf35df45a2b1a4b658ea8ab785744",
+   "evidence": 0,
+   "units": 0
+  },
+  {
+   "recording": "T1595/attacker_scan_tools/windows-sysmon.log",
+   "state": "investigated",
+   "investigation_id": "investigation::c2324286f7a7f0398a185e0a255a48b248b2ed3d1ee42b440fb3ce4d1fb98987",
+   "evidence": 377,
+   "units": 6
+  },
+  {
+   "recording": "T1620/common_language_runtim_loaded/windows-sysmon.log",
+   "state": "investigated",
+   "investigation_id": "investigation::ab8553cf0fcbd5b16177171b0effe232f28f5c156f94093504bcd6f0f298eeba",
+   "evidence": 0,
+   "units": 0
+  }
+ ]
+}

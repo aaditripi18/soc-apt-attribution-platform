@@ -154,6 +154,8 @@ function TechniqueMeasurements({ measurements }: { measurements: Measurements })
   const truth = measurements.technique_ground_truth;
   const first = measurements.unseen_first_run;
   const unseen = measurements.unseen;
+  const splunkBaseline = measurements.unseen_splunk_baseline;
+  const splunkImproved = measurements.unseen_splunk_improved;
   return (
     <Card padded={false}>
       <CardHeader
@@ -200,6 +202,20 @@ function TechniqueMeasurements({ measurements }: { measurements: Measurements })
               label="Unseen test — after the fixes it exposed"
               report={unseen}
               note="The same recordings, now development data: intake and store faults fixed, and the rules they showed reviewed."
+            />
+          )}
+          {splunkBaseline && (
+            <UnseenRow
+              label="Second unseen test — baseline"
+              report={splunkBaseline}
+              note="169 Splunk attack_data Windows Sysmon recordings, another lab and export, selected and registered before any content was read; run on the registration commit (ADR-0029)."
+            />
+          )}
+          {splunkImproved && (
+            <UnseenRow
+              label="Second unseen test — after the changes made since"
+              report={splunkImproved}
+              note="The same recordings on the build frozen after the Event Log rules and Elastic sequence rules: no change in recall. 14 labels are techniques no Group is recorded using and can never be counted; on the other 150, 73 (49%)."
             />
           )}
         </tbody>

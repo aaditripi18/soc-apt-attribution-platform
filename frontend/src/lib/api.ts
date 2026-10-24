@@ -621,7 +621,7 @@ export interface UnseenReport {
     recordings_with_no_evidence: number;
     recordings_naming_an_actor: number;
   };
-  by_tactic_folder: Record<string, { recordings: number; authors_techniques: number; found: number; missed_but_shown: number }>;
+  by_tactic_folder?: Record<string, { recordings: number; authors_techniques: number; found: number; missed_but_shown: number }>;
 }
 
 /** `GET /validation/measurements`: each stored report without its per-recording rows. */
@@ -629,6 +629,9 @@ export interface Measurements {
   technique_ground_truth?: GroundTruthReport;
   unseen?: UnseenReport;
   unseen_first_run?: UnseenReport;
+  /** ADR-0029: the second unseen test, before and after the changes made in between. */
+  unseen_splunk_baseline?: UnseenReport;
+  unseen_splunk_improved?: UnseenReport;
 }
 
 /** One cycle of a live session (ADR-0028). */

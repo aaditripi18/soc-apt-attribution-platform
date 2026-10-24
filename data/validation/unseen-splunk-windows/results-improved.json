@@ -1,0 +1,6131 @@
+{
+ "version": "unseen-results/2",
+ "selection": "data/validation/unseen-splunk-windows/selection.json",
+ "run": "data/validation/unseen-splunk-windows/run-improved.json",
+ "recordings_selected": 169,
+ "recordings_investigated": 164,
+ "recordings_not_investigated": {
+  "refused by intake": 5
+ },
+ "refusal_reasons": {
+  "no record converted to an Observation \u2014 unsupported shape or channels": 3,
+  "\u2026 line(s) are not JSON objects": 2
+ },
+ "authors_techniques_in_refused_recordings": 5,
+ "summary": {
+  "authors_techniques": 164,
+  "found_exactly": 63,
+  "found_as_parent_or_sub": 11,
+  "missed": 90,
+  "missed_but_shown": 35,
+  "counted_but_not_listed_by_authors": 723,
+  "recordings_with_an_authors_technique_counted": 74,
+  "recordings_with_no_evidence": 19,
+  "recordings_naming_an_actor": 0
+ },
+ "by_technique_directory": {
+  "T1003.001": {
+   "recordings": 1,
+   "authors_techniques": 1,
+   "found": 1,
+   "missed_but_shown": 0
+  },
+  "T1003.002": {
+   "recordings": 1,
+   "authors_techniques": 1,
+   "found": 1,
+   "missed_but_shown": 0
+  },
+  "T1003.003": {
+   "recordings": 1,
+   "authors_techniques": 1,
+   "found": 1,
+   "missed_but_shown": 0
+  },
+  "T1016": {
+   "recordings": 1,
+   "authors_techniques": 1,
+   "found": 0,
+   "missed_but_shown": 1
+  },
+  "T1018": {
+   "recordings": 1,
+   "authors_techniques": 1,
+   "found": 0,
+   "missed_but_shown": 1
+  },
+  "T1020": {
+   "recordings": 1,
+   "authors_techniques": 1,
+   "found": 0,
+   "missed_but_shown": 0
+  },
+  "T1021.002": {
+   "recordings": 1,
+   "authors_techniques": 1,
+   "found": 0,
+   "missed_but_shown": 1
+  },
+  "T1021.003": {
+   "recordings": 4,
+   "authors_techniques": 4,
+   "found": 0,
+   "missed_but_shown": 4
+  },
+  "T1021.006": {
+   "recordings": 3,
+   "authors_techniques": 3,
+   "found": 3,
+   "missed_but_shown": 0
+  },
+  "T1027": {
+   "recordings": 3,
+   "authors_techniques": 3,
+   "found": 1,
+   "missed_but_shown": 0
+  },
+  "T1033": {
+   "recordings": 2,
+   "authors_techniques": 2,
+   "found": 1,
+   "missed_but_shown": 1
+  },
+  "T1036": {
+   "recordings": 1,
+   "authors_techniques": 1,
+   "found": 0,
+   "missed_but_shown": 0
+  },
+  "T1036.003": {
+   "recordings": 2,
+   "authors_techniques": 2,
+   "found": 2,
+   "missed_but_shown": 0
+  },
+  "T1047": {
+   "recordings": 4,
+   "authors_techniques": 4,
+   "found": 1,
+   "missed_but_shown": 1
+  },
+  "T1048.003": {
+   "recordings": 2,
+   "authors_techniques": 2,
+   "found": 0,
+   "missed_but_shown": 0
+  },
+  "T1049": {
+   "recordings": 1,
+   "authors_techniques": 1,
+   "found": 0,
+   "missed_but_shown": 1
+  },
+  "T1053.002": {
+   "recordings": 1,
+   "authors_techniques": 1,
+   "found": 1,
+   "missed_but_shown": 0
+  },
+  "T1053.005": {
+   "recordings": 6,
+   "authors_techniques": 6,
+   "found": 6,
+   "missed_but_shown": 0
+  },
+  "T1055": {
+   "recordings": 2,
+   "authors_techniques": 2,
+   "found": 0,
+   "missed_but_shown": 0
+  },
+  "T1055.001": {
+   "recordings": 1,
+   "authors_techniques": 1,
+   "found": 0,
+   "missed_but_shown": 0
+  },
+  "T1059": {
+   "recordings": 1,
+   "authors_techniques": 1,
+   "found": 0,
+   "missed_but_shown": 0
+  },
+  "T1059.001": {
+   "recordings": 12,
+   "authors_techniques": 12,
+   "found": 11,
+   "missed_but_shown": 0
+  },
+  "T1059.003": {
+   "recordings": 3,
+   "authors_techniques": 3,
+   "found": 0,
+   "missed_but_shown": 1
+  },
+  "T1068": {
+   "recordings": 3,
+   "authors_techniques": 3,
+   "found": 0,
+   "missed_but_shown": 0
+  },
+  "T1069.002": {
+   "recordings": 1,
+   "authors_techniques": 1,
+   "found": 0,
+   "missed_but_shown": 1
+  },
+  "T1070": {
+   "recordings": 1,
+   "authors_techniques": 1,
+   "found": 0,
+   "missed_but_shown": 1
+  },
+  "T1070.001": {
+   "recordings": 1,
+   "authors_techniques": 1,
+   "found": 0,
+   "missed_but_shown": 1
+  },
+  "T1070.005": {
+   "recordings": 1,
+   "authors_techniques": 1,
+   "found": 0,
+   "missed_but_shown": 1
+  },
+  "T1078": {
+   "recordings": 1,
+   "authors_techniques": 1,
+   "found": 0,
+   "missed_but_shown": 0
+  },
+  "T1078.002": {
+   "recordings": 1,
+   "authors_techniques": 1,
+   "found": 0,
+   "missed_but_shown": 0
+  },
+  "T1082": {
+   "recordings": 1,
+   "authors_techniques": 1,
+   "found": 1,
+   "missed_but_shown": 0
+  },
+  "T1087.001": {
+   "recordings": 1,
+   "authors_techniques": 1,
+   "found": 0,
+   "missed_but_shown": 1
+  },
+  "T1087.002": {
+   "recordings": 1,
+   "authors_techniques": 1,
+   "found": 0,
+   "missed_but_shown": 0
+  },
+  "T1090.003": {
+   "recordings": 1,
+   "authors_techniques": 1,
+   "found": 1,
+   "missed_but_shown": 0
+  },
+  "T1098": {
+   "recordings": 1,
+   "authors_techniques": 1,
+   "found": 0,
+   "missed_but_shown": 0
+  },
+  "T1105": {
+   "recordings": 1,
+   "authors_techniques": 1,
+   "found": 1,
+   "missed_but_shown": 0
+  },
+  "T1112": {
+   "recordings": 1,
+   "authors_techniques": 1,
+   "found": 0,
+   "missed_but_shown": 1
+  },
+  "T1127": {
+   "recordings": 1,
+   "authors_techniques": 1,
+   "found": 0,
+   "missed_but_shown": 0
+  },
+  "T1127.001": {
+   "recordings": 1,
+   "authors_techniques": 1,
+   "found": 0,
+   "missed_but_shown": 1
+  },
+  "T1135": {
+   "recordings": 1,
+   "authors_techniques": 1,
+   "found": 0,
+   "missed_but_shown": 1
+  },
+  "T1136.001": {
+   "recordings": 1,
+   "authors_techniques": 1,
+   "found": 1,
+   "missed_but_shown": 0
+  },
+  "T1140": {
+   "recordings": 1,
+   "authors_techniques": 1,
+   "found": 1,
+   "missed_but_shown": 0
+  },
+  "T1189": {
+   "recordings": 1,
+   "authors_techniques": 1,
+   "found": 0,
+   "missed_but_shown": 0
+  },
+  "T1190": {
+   "recordings": 3,
+   "authors_techniques": 3,
+   "found": 0,
+   "missed_but_shown": 0
+  },
+  "T1197": {
+   "recordings": 1,
+   "authors_techniques": 1,
+   "found": 1,
+   "missed_but_shown": 0
+  },
+  "T1201": {
+   "recordings": 1,
+   "authors_techniques": 1,
+   "found": 0,
+   "missed_but_shown": 0
+  },
+  "T1202": {
+   "recordings": 1,
+   "authors_techniques": 1,
+   "found": 0,
+   "missed_but_shown": 1
+  },
+  "T1204": {
+   "recordings": 1,
+   "authors_techniques": 1,
+   "found": 0,
+   "missed_but_shown": 0
+  },
+  "T1204.002": {
+   "recordings": 3,
+   "authors_techniques": 3,
+   "found": 0,
+   "missed_but_shown": 1
+  },
+  "T1216": {
+   "recordings": 1,
+   "authors_techniques": 1,
+   "found": 0,
+   "missed_but_shown": 1
+  },
+  "T1218": {
+   "recordings": 2,
+   "authors_techniques": 2,
+   "found": 0,
+   "missed_but_shown": 1
+  },
+  "T1218.001": {
+   "recordings": 1,
+   "authors_techniques": 1,
+   "found": 1,
+   "missed_but_shown": 0
+  },
+  "T1218.002": {
+   "recordings": 1,
+   "authors_techniques": 1,
+   "found": 1,
+   "missed_but_shown": 0
+  },
+  "T1218.004": {
+   "recordings": 1,
+   "authors_techniques": 1,
+   "found": 1,
+   "missed_but_shown": 0
+  },
+  "T1218.005": {
+   "recordings": 1,
+   "authors_techniques": 1,
+   "found": 1,
+   "missed_but_shown": 0
+  },
+  "T1218.007": {
+   "recordings": 1,
+   "authors_techniques": 1,
+   "found": 1,
+   "missed_but_shown": 0
+  },
+  "T1218.009": {
+   "recordings": 1,
+   "authors_techniques": 1,
+   "found": 0,
+   "missed_but_shown": 1
+  },
+  "T1218.010": {
+   "recordings": 1,
+   "authors_techniques": 1,
+   "found": 1,
+   "missed_but_shown": 0
+  },
+  "T1218.011": {
+   "recordings": 1,
+   "authors_techniques": 1,
+   "found": 1,
+   "missed_but_shown": 0
+  },
+  "T1218.013": {
+   "recordings": 1,
+   "authors_techniques": 1,
+   "found": 0,
+   "missed_but_shown": 1
+  },
+  "T1219": {
+   "recordings": 1,
+   "authors_techniques": 1,
+   "found": 1,
+   "missed_but_shown": 0
+  },
+  "T1220": {
+   "recordings": 1,
+   "authors_techniques": 1,
+   "found": 1,
+   "missed_but_shown": 0
+  },
+  "T1222.001": {
+   "recordings": 1,
+   "authors_techniques": 1,
+   "found": 1,
+   "missed_but_shown": 0
+  },
+  "T1482": {
+   "recordings": 2,
+   "authors_techniques": 2,
+   "found": 1,
+   "missed_but_shown": 0
+  },
+  "T1485": {
+   "recordings": 4,
+   "authors_techniques": 4,
+   "found": 0,
+   "missed_but_shown": 0
+  },
+  "T1486": {
+   "recordings": 2,
+   "authors_techniques": 2,
+   "found": 0,
+   "missed_but_shown": 0
+  },
+  "T1490": {
+   "recordings": 2,
+   "authors_techniques": 2,
+   "found": 2,
+   "missed_but_shown": 0
+  },
+  "T1543.003": {
+   "recordings": 4,
+   "authors_techniques": 4,
+   "found": 3,
+   "missed_but_shown": 1
+  },
+  "T1546.003": {
+   "recordings": 2,
+   "authors_techniques": 2,
+   "found": 2,
+   "missed_but_shown": 0
+  },
+  "T1546.008": {
+   "recordings": 1,
+   "authors_techniques": 1,
+   "found": 1,
+   "missed_but_shown": 0
+  },
+  "T1546.011": {
+   "recordings": 1,
+   "authors_techniques": 1,
+   "found": 1,
+   "missed_but_shown": 0
+  },
+  "T1546.012": {
+   "recordings": 1,
+   "authors_techniques": 1,
+   "found": 1,
+   "missed_but_shown": 0
+  },
+  "T1546.015": {
+   "recordings": 2,
+   "authors_techniques": 2,
+   "found": 1,
+   "missed_but_shown": 0
+  },
+  "T1547.001": {
+   "recordings": 1,
+   "authors_techniques": 1,
+   "found": 1,
+   "missed_but_shown": 0
+  },
+  "T1547.005": {
+   "recordings": 1,
+   "authors_techniques": 1,
+   "found": 0,
+   "missed_but_shown": 1
+  },
+  "T1547.008": {
+   "recordings": 1,
+   "authors_techniques": 1,
+   "found": 0,
+   "missed_but_shown": 1
+  },
+  "T1547.010": {
+   "recordings": 1,
+   "authors_techniques": 1,
+   "found": 0,
+   "missed_but_shown": 1
+  },
+  "T1547.012": {
+   "recordings": 1,
+   "authors_techniques": 1,
+   "found": 0,
+   "missed_but_shown": 0
+  },
+  "T1548": {
+   "recordings": 1,
+   "authors_techniques": 1,
+   "found": 1,
+   "missed_but_shown": 0
+  },
+  "T1548.002": {
+   "recordings": 2,
+   "authors_techniques": 2,
+   "found": 2,
+   "missed_but_shown": 0
+  },
+  "T1550": {
+   "recordings": 1,
+   "authors_techniques": 1,
+   "found": 0,
+   "missed_but_shown": 1
+  },
+  "T1550.002": {
+   "recordings": 1,
+   "authors_techniques": 1,
+   "found": 0,
+   "missed_but_shown": 0
+  },
+  "T1550.003": {
+   "recordings": 2,
+   "authors_techniques": 2,
+   "found": 1,
+   "missed_but_shown": 0
+  },
+  "T1552.002": {
+   "recordings": 1,
+   "authors_techniques": 1,
+   "found": 0,
+   "missed_but_shown": 0
+  },
+  "T1553.004": {
+   "recordings": 1,
+   "authors_techniques": 1,
+   "found": 0,
+   "missed_but_shown": 0
+  },
+  "T1556": {
+   "recordings": 2,
+   "authors_techniques": 2,
+   "found": 0,
+   "missed_but_shown": 0
+  },
+  "T1558.003": {
+   "recordings": 2,
+   "authors_techniques": 2,
+   "found": 0,
+   "missed_but_shown": 1
+  },
+  "T1560.001": {
+   "recordings": 1,
+   "authors_techniques": 1,
+   "found": 1,
+   "missed_but_shown": 0
+  },
+  "T1562.001": {
+   "recordings": 7,
+   "authors_techniques": 7,
+   "found": 6,
+   "missed_but_shown": 1
+  },
+  "T1566.001": {
+   "recordings": 2,
+   "authors_techniques": 2,
+   "found": 1,
+   "missed_but_shown": 1
+  },
+  "T1566.002": {
+   "recordings": 2,
+   "authors_techniques": 2,
+   "found": 0,
+   "missed_but_shown": 1
+  },
+  "T1569.002": {
+   "recordings": 1,
+   "authors_techniques": 1,
+   "found": 1,
+   "missed_but_shown": 0
+  },
+  "T1572": {
+   "recordings": 2,
+   "authors_techniques": 2,
+   "found": 2,
+   "missed_but_shown": 0
+  },
+  "T1574.001": {
+   "recordings": 1,
+   "authors_techniques": 1,
+   "found": 0,
+   "missed_but_shown": 0
+  },
+  "T1574.002": {
+   "recordings": 1,
+   "authors_techniques": 1,
+   "found": 0,
+   "missed_but_shown": 0
+  },
+  "T1574.009": {
+   "recordings": 1,
+   "authors_techniques": 1,
+   "found": 0,
+   "missed_but_shown": 1
+  },
+  "T1574.011": {
+   "recordings": 1,
+   "authors_techniques": 1,
+   "found": 1,
+   "missed_but_shown": 0
+  },
+  "T1588.002": {
+   "recordings": 1,
+   "authors_techniques": 1,
+   "found": 0,
+   "missed_but_shown": 0
+  },
+  "T1590.005": {
+   "recordings": 1,
+   "authors_techniques": 1,
+   "found": 0,
+   "missed_but_shown": 0
+  },
+  "T1595": {
+   "recordings": 1,
+   "authors_techniques": 1,
+   "found": 0,
+   "missed_but_shown": 0
+  },
+  "T1620": {
+   "recordings": 1,
+   "authors_techniques": 1,
+   "found": 0,
+   "missed_but_shown": 0
+  }
+ },
+ "cases": [
+  {
+   "recording": "datasets/attack_techniques/T1003.001/atomic_red_team/windows-sysmon.log",
+   "technique_directory": "T1003.001",
+   "investigated": true,
+   "evidence": 643,
+   "authors_techniques_as_labelled": [
+    "T1003.001"
+   ],
+   "authors_techniques": [
+    "T1003.001"
+   ],
+   "counted": [
+    "T1003",
+    "T1003.001",
+    "T1021.006",
+    "T1027.004",
+    "T1033",
+    "T1036",
+    "T1036.003",
+    "T1036.005",
+    "T1059",
+    "T1059.001",
+    "T1204",
+    "T1218",
+    "T1218.011",
+    "T1529",
+    "T1552.004",
+    "T1574.001",
+    "T1588.002"
+   ],
+   "found_exactly": [
+    "T1003.001"
+   ],
+   "found_as_parent_or_sub": [],
+   "missed": [],
+   "missed_but_shown": [],
+   "counted_but_not_listed_by_authors": [
+    "T1021.006",
+    "T1027.004",
+    "T1033",
+    "T1036",
+    "T1036.003",
+    "T1036.005",
+    "T1059",
+    "T1059.001",
+    "T1204",
+    "T1218",
+    "T1218.011",
+    "T1529",
+    "T1552.004",
+    "T1574.001",
+    "T1588.002"
+   ],
+   "verdict": "not_distinguishable",
+   "named_actors": []
+  },
+  {
+   "recording": "datasets/attack_techniques/T1003.002/atomic_red_team/windows-sysmon.log",
+   "technique_directory": "T1003.002",
+   "investigated": true,
+   "evidence": 303,
+   "authors_techniques_as_labelled": [
+    "T1003.002"
+   ],
+   "authors_techniques": [
+    "T1003.002"
+   ],
+   "counted": [
+    "T1003",
+    "T1003.001",
+    "T1012",
+    "T1021.006",
+    "T1027.004",
+    "T1033",
+    "T1036",
+    "T1036.005",
+    "T1059",
+    "T1059.001",
+    "T1204",
+    "T1529",
+    "T1574.001"
+   ],
+   "found_exactly": [],
+   "found_as_parent_or_sub": [
+    "T1003.002"
+   ],
+   "missed": [],
+   "missed_but_shown": [],
+   "counted_but_not_listed_by_authors": [
+    "T1003.001",
+    "T1012",
+    "T1021.006",
+    "T1027.004",
+    "T1033",
+    "T1036",
+    "T1036.005",
+    "T1059",
+    "T1059.001",
+    "T1204",
+    "T1529",
+    "T1574.001"
+   ],
+   "verdict": "not_distinguishable",
+   "named_actors": []
+  },
+  {
+   "recording": "datasets/attack_techniques/T1003.003/atomic_red_team/windows-sysmon.log",
+   "technique_directory": "T1003.003",
+   "investigated": true,
+   "evidence": 315,
+   "authors_techniques_as_labelled": [
+    "T1003.003"
+   ],
+   "authors_techniques": [
+    "T1003.003"
+   ],
+   "counted": [
+    "T1003",
+    "T1003.001",
+    "T1003.003",
+    "T1021.006",
+    "T1027.004",
+    "T1033",
+    "T1036",
+    "T1036.005",
+    "T1059",
+    "T1059.001",
+    "T1204",
+    "T1490",
+    "T1529",
+    "T1574.001"
+   ],
+   "found_exactly": [
+    "T1003.003"
+   ],
+   "found_as_parent_or_sub": [],
+   "missed": [],
+   "missed_but_shown": [],
+   "counted_but_not_listed_by_authors": [
+    "T1003.001",
+    "T1021.006",
+    "T1027.004",
+    "T1033",
+    "T1036",
+    "T1036.005",
+    "T1059",
+    "T1059.001",
+    "T1204",
+    "T1490",
+    "T1529",
+    "T1574.001"
+   ],
+   "verdict": "not_distinguishable",
+   "named_actors": []
+  },
+  {
+   "recording": "datasets/attack_techniques/T1014/windows-sysmon.log",
+   "investigated": false,
+   "state": "refused by intake",
+   "problems": [
+    "no record converted to an Observation \u2014 unsupported shape or channels"
+   ],
+   "authors_techniques": [
+    "T1014"
+   ]
+  },
+  {
+   "recording": "datasets/attack_techniques/T1016/discovery_commands/windows-sysmon.log",
+   "technique_directory": "T1016",
+   "investigated": true,
+   "evidence": 127,
+   "authors_techniques_as_labelled": [
+    "T1016"
+   ],
+   "authors_techniques": [
+    "T1016"
+   ],
+   "counted": [
+    "T1003",
+    "T1003.001",
+    "T1021.006",
+    "T1027.004",
+    "T1033",
+    "T1036",
+    "T1036.005",
+    "T1059",
+    "T1059.001",
+    "T1204",
+    "T1529",
+    "T1547.001"
+   ],
+   "found_exactly": [],
+   "found_as_parent_or_sub": [],
+   "missed": [
+    "T1016"
+   ],
+   "missed_but_shown": [
+    "T1016"
+   ],
+   "counted_but_not_listed_by_authors": [
+    "T1003",
+    "T1003.001",
+    "T1021.006",
+    "T1027.004",
+    "T1033",
+    "T1036",
+    "T1036.005",
+    "T1059",
+    "T1059.001",
+    "T1204",
+    "T1529",
+    "T1547.001"
+   ],
+   "verdict": "not_distinguishable",
+   "named_actors": []
+  },
+  {
+   "recording": "datasets/attack_techniques/T1018/AD_discovery/windows-sysmon.log",
+   "technique_directory": "T1018",
+   "investigated": true,
+   "evidence": 52,
+   "authors_techniques_as_labelled": [
+    "T1018"
+   ],
+   "authors_techniques": [
+    "T1018"
+   ],
+   "counted": [
+    "T1059",
+    "T1059.001"
+   ],
+   "found_exactly": [],
+   "found_as_parent_or_sub": [],
+   "missed": [
+    "T1018"
+   ],
+   "missed_but_shown": [
+    "T1018"
+   ],
+   "counted_but_not_listed_by_authors": [
+    "T1059",
+    "T1059.001"
+   ],
+   "verdict": "not_distinguishable",
+   "named_actors": []
+  },
+  {
+   "recording": "datasets/attack_techniques/T1020/windows-sysmon.log",
+   "technique_directory": "T1020",
+   "investigated": true,
+   "evidence": 17,
+   "authors_techniques_as_labelled": [
+    "T1020"
+   ],
+   "authors_techniques": [
+    "T1020"
+   ],
+   "counted": [
+    "T1036.005",
+    "T1567.002"
+   ],
+   "found_exactly": [],
+   "found_as_parent_or_sub": [],
+   "missed": [
+    "T1020"
+   ],
+   "missed_but_shown": [],
+   "counted_but_not_listed_by_authors": [
+    "T1036.005",
+    "T1567.002"
+   ],
+   "verdict": "not_distinguishable",
+   "named_actors": []
+  },
+  {
+   "recording": "datasets/attack_techniques/T1021.002/atomic_red_team/windows-sysmon.log",
+   "technique_directory": "T1021.002",
+   "investigated": true,
+   "evidence": 16,
+   "authors_techniques_as_labelled": [
+    "T1021.002"
+   ],
+   "authors_techniques": [
+    "T1021.002"
+   ],
+   "counted": [
+    "T1059.001"
+   ],
+   "found_exactly": [],
+   "found_as_parent_or_sub": [],
+   "missed": [
+    "T1021.002"
+   ],
+   "missed_but_shown": [
+    "T1021.002"
+   ],
+   "counted_but_not_listed_by_authors": [
+    "T1059.001"
+   ],
+   "verdict": "not_distinguishable",
+   "named_actors": []
+  },
+  {
+   "recording": "datasets/attack_techniques/T1021.003/impacket/windows-sysmon.log",
+   "technique_directory": "T1021.003",
+   "investigated": true,
+   "evidence": 63,
+   "authors_techniques_as_labelled": [
+    "T1021.003"
+   ],
+   "authors_techniques": [
+    "T1021.003"
+   ],
+   "counted": [
+    "T1033",
+    "T1048"
+   ],
+   "found_exactly": [],
+   "found_as_parent_or_sub": [],
+   "missed": [
+    "T1021.003"
+   ],
+   "missed_but_shown": [
+    "T1021.003"
+   ],
+   "counted_but_not_listed_by_authors": [
+    "T1033",
+    "T1048"
+   ],
+   "verdict": "not_distinguishable",
+   "named_actors": []
+  },
+  {
+   "recording": "datasets/attack_techniques/T1021.003/lateral_movement/windows-sysmon.log",
+   "technique_directory": "T1021.003",
+   "investigated": true,
+   "evidence": 9,
+   "authors_techniques_as_labelled": [
+    "T1021.003"
+   ],
+   "authors_techniques": [
+    "T1021.003"
+   ],
+   "counted": [],
+   "found_exactly": [],
+   "found_as_parent_or_sub": [],
+   "missed": [
+    "T1021.003"
+   ],
+   "missed_but_shown": [
+    "T1021.003"
+   ],
+   "counted_but_not_listed_by_authors": [],
+   "verdict": "no_decision_features",
+   "named_actors": []
+  },
+  {
+   "recording": "datasets/attack_techniques/T1021.003/lateral_movement_lolbas/windows-sysmon.log",
+   "technique_directory": "T1021.003",
+   "investigated": true,
+   "evidence": 7,
+   "authors_techniques_as_labelled": [
+    "T1021.003"
+   ],
+   "authors_techniques": [
+    "T1021.003"
+   ],
+   "counted": [],
+   "found_exactly": [],
+   "found_as_parent_or_sub": [],
+   "missed": [
+    "T1021.003"
+   ],
+   "missed_but_shown": [
+    "T1021.003"
+   ],
+   "counted_but_not_listed_by_authors": [],
+   "verdict": "no_decision_features",
+   "named_actors": []
+  },
+  {
+   "recording": "datasets/attack_techniques/T1021.003/lateral_movement_speechruntime/windows-sysmon.log",
+   "technique_directory": "T1021.003",
+   "investigated": true,
+   "evidence": 3,
+   "authors_techniques_as_labelled": [
+    "T1021.003"
+   ],
+   "authors_techniques": [
+    "T1021.003"
+   ],
+   "counted": [],
+   "found_exactly": [],
+   "found_as_parent_or_sub": [],
+   "missed": [
+    "T1021.003"
+   ],
+   "missed_but_shown": [
+    "T1021.003"
+   ],
+   "counted_but_not_listed_by_authors": [],
+   "verdict": "no_decision_features",
+   "named_actors": []
+  },
+  {
+   "recording": "datasets/attack_techniques/T1021.006/lateral_movement/windows-sysmon.log",
+   "technique_directory": "T1021.006",
+   "investigated": true,
+   "evidence": 2,
+   "authors_techniques_as_labelled": [
+    "T1021.006"
+   ],
+   "authors_techniques": [
+    "T1021.006"
+   ],
+   "counted": [
+    "T1021.006"
+   ],
+   "found_exactly": [
+    "T1021.006"
+   ],
+   "found_as_parent_or_sub": [],
+   "missed": [],
+   "missed_but_shown": [],
+   "counted_but_not_listed_by_authors": [],
+   "verdict": "not_distinguishable",
+   "named_actors": []
+  },
+  {
+   "recording": "datasets/attack_techniques/T1021.006/lateral_movement_lolbas/windows-sysmon.log",
+   "technique_directory": "T1021.006",
+   "investigated": true,
+   "evidence": 11,
+   "authors_techniques_as_labelled": [
+    "T1021.006"
+   ],
+   "authors_techniques": [
+    "T1021.006"
+   ],
+   "counted": [
+    "T1021.006"
+   ],
+   "found_exactly": [
+    "T1021.006"
+   ],
+   "found_as_parent_or_sub": [],
+   "missed": [],
+   "missed_but_shown": [],
+   "counted_but_not_listed_by_authors": [],
+   "verdict": "not_distinguishable",
+   "named_actors": []
+  },
+  {
+   "recording": "datasets/attack_techniques/T1021.006/lateral_movement_psh/windows-sysmon.log",
+   "technique_directory": "T1021.006",
+   "investigated": true,
+   "evidence": 11,
+   "authors_techniques_as_labelled": [
+    "T1021.006"
+   ],
+   "authors_techniques": [
+    "T1021.006"
+   ],
+   "counted": [
+    "T1021.006"
+   ],
+   "found_exactly": [
+    "T1021.006"
+   ],
+   "found_as_parent_or_sub": [],
+   "missed": [],
+   "missed_but_shown": [],
+   "counted_but_not_listed_by_authors": [],
+   "verdict": "not_distinguishable",
+   "named_actors": []
+  },
+  {
+   "recording": "datasets/attack_techniques/T1027/atomic_red_team/windows-sysmon.log",
+   "technique_directory": "T1027",
+   "investigated": true,
+   "evidence": 326,
+   "authors_techniques_as_labelled": [
+    "T1027"
+   ],
+   "authors_techniques": [
+    "T1027"
+   ],
+   "counted": [
+    "T1003",
+    "T1003.001",
+    "T1021.006",
+    "T1027.004",
+    "T1033",
+    "T1036",
+    "T1036.005",
+    "T1059",
+    "T1059.001",
+    "T1204",
+    "T1529",
+    "T1574.001"
+   ],
+   "found_exactly": [],
+   "found_as_parent_or_sub": [
+    "T1027"
+   ],
+   "missed": [],
+   "missed_but_shown": [],
+   "counted_but_not_listed_by_authors": [
+    "T1003",
+    "T1003.001",
+    "T1021.006",
+    "T1033",
+    "T1036",
+    "T1036.005",
+    "T1059",
+    "T1059.001",
+    "T1204",
+    "T1529",
+    "T1574.001"
+   ],
+   "verdict": "not_distinguishable",
+   "named_actors": []
+  },
+  {
+   "recording": "datasets/attack_techniques/T1027/trickbot_drop/windows-sysmon.log",
+   "technique_directory": "T1027",
+   "investigated": true,
+   "evidence": 0,
+   "authors_techniques_as_labelled": [
+    "T1027"
+   ],
+   "authors_techniques": [
+    "T1027"
+   ],
+   "counted": [],
+   "found_exactly": [],
+   "found_as_parent_or_sub": [],
+   "missed": [
+    "T1027"
+   ],
+   "missed_but_shown": [],
+   "counted_but_not_listed_by_authors": [],
+   "verdict": "no_decision_features",
+   "named_actors": []
+  },
+  {
+   "recording": "datasets/attack_techniques/T1027/url_encoded_curl/windows-sysmon.log",
+   "technique_directory": "T1027",
+   "investigated": true,
+   "evidence": 2,
+   "authors_techniques_as_labelled": [
+    "T1027"
+   ],
+   "authors_techniques": [
+    "T1027"
+   ],
+   "counted": [
+    "T1059.001"
+   ],
+   "found_exactly": [],
+   "found_as_parent_or_sub": [],
+   "missed": [
+    "T1027"
+   ],
+   "missed_but_shown": [],
+   "counted_but_not_listed_by_authors": [
+    "T1059.001"
+   ],
+   "verdict": "not_distinguishable",
+   "named_actors": []
+  },
+  {
+   "recording": "datasets/attack_techniques/T1033/AD_discovery/windows-sysmon.log",
+   "technique_directory": "T1033",
+   "investigated": true,
+   "evidence": 12,
+   "authors_techniques_as_labelled": [
+    "T1033"
+   ],
+   "authors_techniques": [
+    "T1033"
+   ],
+   "counted": [],
+   "found_exactly": [],
+   "found_as_parent_or_sub": [],
+   "missed": [
+    "T1033"
+   ],
+   "missed_but_shown": [
+    "T1033"
+   ],
+   "counted_but_not_listed_by_authors": [],
+   "verdict": "no_decision_features",
+   "named_actors": []
+  },
+  {
+   "recording": "datasets/attack_techniques/T1033/atomic_red_team/windows-sysmon.log",
+   "technique_directory": "T1033",
+   "investigated": true,
+   "evidence": 296,
+   "authors_techniques_as_labelled": [
+    "T1033"
+   ],
+   "authors_techniques": [
+    "T1033"
+   ],
+   "counted": [
+    "T1003",
+    "T1003.001",
+    "T1021.006",
+    "T1027.004",
+    "T1033",
+    "T1036",
+    "T1036.005",
+    "T1059",
+    "T1059.001",
+    "T1087.001",
+    "T1204",
+    "T1529",
+    "T1574.001"
+   ],
+   "found_exactly": [
+    "T1033"
+   ],
+   "found_as_parent_or_sub": [],
+   "missed": [],
+   "missed_but_shown": [],
+   "counted_but_not_listed_by_authors": [
+    "T1003",
+    "T1003.001",
+    "T1021.006",
+    "T1027.004",
+    "T1036",
+    "T1036.005",
+    "T1059",
+    "T1059.001",
+    "T1087.001",
+    "T1204",
+    "T1529",
+    "T1574.001"
+   ],
+   "verdict": "not_distinguishable",
+   "named_actors": []
+  },
+  {
+   "recording": "datasets/attack_techniques/T1036.003/atomic_red_team/windows-sysmon.log",
+   "technique_directory": "T1036.003",
+   "investigated": true,
+   "evidence": 310,
+   "authors_techniques_as_labelled": [
+    "T1036.003"
+   ],
+   "authors_techniques": [
+    "T1036.003"
+   ],
+   "counted": [
+    "T1003",
+    "T1003.001",
+    "T1021.006",
+    "T1027.004",
+    "T1033",
+    "T1036",
+    "T1036.003",
+    "T1036.005",
+    "T1059",
+    "T1059.001",
+    "T1204",
+    "T1529",
+    "T1574.001"
+   ],
+   "found_exactly": [
+    "T1036.003"
+   ],
+   "found_as_parent_or_sub": [],
+   "missed": [],
+   "missed_but_shown": [],
+   "counted_but_not_listed_by_authors": [
+    "T1003",
+    "T1003.001",
+    "T1021.006",
+    "T1027.004",
+    "T1033",
+    "T1036.005",
+    "T1059",
+    "T1059.001",
+    "T1204",
+    "T1529",
+    "T1574.001"
+   ],
+   "verdict": "not_distinguishable",
+   "named_actors": []
+  },
+  {
+   "recording": "datasets/attack_techniques/T1036.003/samsam_extension/windows-sysmon.log",
+   "technique_directory": "T1036.003",
+   "investigated": true,
+   "evidence": 123,
+   "authors_techniques_as_labelled": [
+    "T1036.003"
+   ],
+   "authors_techniques": [
+    "T1036.003"
+   ],
+   "counted": [
+    "T1003",
+    "T1003.001",
+    "T1021.006",
+    "T1027.004",
+    "T1033",
+    "T1036",
+    "T1036.005",
+    "T1059",
+    "T1059.001",
+    "T1204",
+    "T1529",
+    "T1547.001"
+   ],
+   "found_exactly": [],
+   "found_as_parent_or_sub": [
+    "T1036.003"
+   ],
+   "missed": [],
+   "missed_but_shown": [],
+   "counted_but_not_listed_by_authors": [
+    "T1003",
+    "T1003.001",
+    "T1021.006",
+    "T1027.004",
+    "T1033",
+    "T1036.005",
+    "T1059",
+    "T1059.001",
+    "T1204",
+    "T1529",
+    "T1547.001"
+   ],
+   "verdict": "not_distinguishable",
+   "named_actors": []
+  },
+  {
+   "recording": "datasets/attack_techniques/T1036/write_to_recycle_bin/windows-sysmon.log",
+   "technique_directory": "T1036",
+   "investigated": true,
+   "evidence": 4,
+   "authors_techniques_as_labelled": [
+    "T1036"
+   ],
+   "authors_techniques": [
+    "T1036"
+   ],
+   "counted": [],
+   "found_exactly": [],
+   "found_as_parent_or_sub": [],
+   "missed": [
+    "T1036"
+   ],
+   "missed_but_shown": [],
+   "counted_but_not_listed_by_authors": [],
+   "verdict": "no_decision_features",
+   "named_actors": []
+  },
+  {
+   "recording": "datasets/attack_techniques/T1047/atomic_red_team/windows-sysmon.log",
+   "technique_directory": "T1047",
+   "investigated": true,
+   "evidence": 300,
+   "authors_techniques_as_labelled": [
+    "T1047"
+   ],
+   "authors_techniques": [
+    "T1047"
+   ],
+   "counted": [
+    "T1003",
+    "T1003.001",
+    "T1021.006",
+    "T1027.004",
+    "T1033",
+    "T1036",
+    "T1036.005",
+    "T1047",
+    "T1059",
+    "T1059.001",
+    "T1087.001",
+    "T1204",
+    "T1529",
+    "T1574.001"
+   ],
+   "found_exactly": [
+    "T1047"
+   ],
+   "found_as_parent_or_sub": [],
+   "missed": [],
+   "missed_but_shown": [],
+   "counted_but_not_listed_by_authors": [
+    "T1003",
+    "T1003.001",
+    "T1021.006",
+    "T1027.004",
+    "T1033",
+    "T1036",
+    "T1036.005",
+    "T1059",
+    "T1059.001",
+    "T1087.001",
+    "T1204",
+    "T1529",
+    "T1574.001"
+   ],
+   "verdict": "not_distinguishable",
+   "named_actors": []
+  },
+  {
+   "recording": "datasets/attack_techniques/T1047/execution_scrcons/windows-sysmon.log",
+   "technique_directory": "T1047",
+   "investigated": true,
+   "evidence": 6,
+   "authors_techniques_as_labelled": [
+    "T1047"
+   ],
+   "authors_techniques": [
+    "T1047"
+   ],
+   "counted": [
+    "T1027.004",
+    "T1547.001"
+   ],
+   "found_exactly": [],
+   "found_as_parent_or_sub": [],
+   "missed": [
+    "T1047"
+   ],
+   "missed_but_shown": [],
+   "counted_but_not_listed_by_authors": [
+    "T1027.004",
+    "T1547.001"
+   ],
+   "verdict": "not_distinguishable",
+   "named_actors": []
+  },
+  {
+   "recording": "datasets/attack_techniques/T1047/lateral_movement/windows-sysmon.log",
+   "technique_directory": "T1047",
+   "investigated": true,
+   "evidence": 2,
+   "authors_techniques_as_labelled": [
+    "T1047"
+   ],
+   "authors_techniques": [
+    "T1047"
+   ],
+   "counted": [],
+   "found_exactly": [],
+   "found_as_parent_or_sub": [],
+   "missed": [
+    "T1047"
+   ],
+   "missed_but_shown": [],
+   "counted_but_not_listed_by_authors": [],
+   "verdict": "no_decision_features",
+   "named_actors": []
+  },
+  {
+   "recording": "datasets/attack_techniques/T1047/lateral_movement_lolbas/windows-sysmon.log",
+   "technique_directory": "T1047",
+   "investigated": true,
+   "evidence": 6,
+   "authors_techniques_as_labelled": [
+    "T1047"
+   ],
+   "authors_techniques": [
+    "T1047"
+   ],
+   "counted": [],
+   "found_exactly": [],
+   "found_as_parent_or_sub": [],
+   "missed": [
+    "T1047"
+   ],
+   "missed_but_shown": [
+    "T1047"
+   ],
+   "counted_but_not_listed_by_authors": [],
+   "verdict": "no_decision_features",
+   "named_actors": []
+  },
+  {
+   "recording": "datasets/attack_techniques/T1048.003/long_dns_queries/windows-sysmon.log",
+   "technique_directory": "T1048.003",
+   "investigated": true,
+   "evidence": 117,
+   "authors_techniques_as_labelled": [
+    "T1048.003"
+   ],
+   "authors_techniques": [
+    "T1048.003"
+   ],
+   "counted": [
+    "T1003",
+    "T1003.001",
+    "T1021.006",
+    "T1027.004",
+    "T1033",
+    "T1036",
+    "T1036.005",
+    "T1059",
+    "T1059.001",
+    "T1204",
+    "T1529",
+    "T1547.001"
+   ],
+   "found_exactly": [],
+   "found_as_parent_or_sub": [],
+   "missed": [
+    "T1048.003"
+   ],
+   "missed_but_shown": [],
+   "counted_but_not_listed_by_authors": [
+    "T1003",
+    "T1003.001",
+    "T1021.006",
+    "T1027.004",
+    "T1033",
+    "T1036",
+    "T1036.005",
+    "T1059",
+    "T1059.001",
+    "T1204",
+    "T1529",
+    "T1547.001"
+   ],
+   "verdict": "not_distinguishable",
+   "named_actors": []
+  },
+  {
+   "recording": "datasets/attack_techniques/T1048.003/mass_file_creation/windows-sysmon.log",
+   "technique_directory": "T1048.003",
+   "investigated": true,
+   "evidence": 0,
+   "authors_techniques_as_labelled": [
+    "T1048.003"
+   ],
+   "authors_techniques": [
+    "T1048.003"
+   ],
+   "counted": [],
+   "found_exactly": [],
+   "found_as_parent_or_sub": [],
+   "missed": [
+    "T1048.003"
+   ],
+   "missed_but_shown": [],
+   "counted_but_not_listed_by_authors": [],
+   "verdict": "no_decision_features",
+   "named_actors": []
+  },
+  {
+   "recording": "datasets/attack_techniques/T1048.003/nslookup_exfil/windows-sysmon.log",
+   "investigated": false,
+   "state": "refused by intake",
+   "problems": [
+    "204 line(s) are not JSON objects"
+   ],
+   "authors_techniques": [
+    "T1048.003"
+   ]
+  },
+  {
+   "recording": "datasets/attack_techniques/T1049/AD_discovery/windows-sysmon.log",
+   "technique_directory": "T1049",
+   "investigated": true,
+   "evidence": 7,
+   "authors_techniques_as_labelled": [
+    "T1049"
+   ],
+   "authors_techniques": [
+    "T1049"
+   ],
+   "counted": [],
+   "found_exactly": [],
+   "found_as_parent_or_sub": [],
+   "missed": [
+    "T1049"
+   ],
+   "missed_but_shown": [
+    "T1049"
+   ],
+   "counted_but_not_listed_by_authors": [],
+   "verdict": "no_decision_features",
+   "named_actors": []
+  },
+  {
+   "recording": "datasets/attack_techniques/T1053.002/lateral_movement/windows-sysmon.log",
+   "technique_directory": "T1053.002",
+   "investigated": true,
+   "evidence": 10,
+   "authors_techniques_as_labelled": [
+    "T1053.002"
+   ],
+   "authors_techniques": [
+    "T1053.002"
+   ],
+   "counted": [
+    "T1053",
+    "T1053.005"
+   ],
+   "found_exactly": [],
+   "found_as_parent_or_sub": [
+    "T1053.002"
+   ],
+   "missed": [],
+   "missed_but_shown": [],
+   "counted_but_not_listed_by_authors": [
+    "T1053.005"
+   ],
+   "verdict": "not_distinguishable",
+   "named_actors": []
+  },
+  {
+   "recording": "datasets/attack_techniques/T1053.005/atomic_red_team/windows-sysmon.log",
+   "technique_directory": "T1053.005",
+   "investigated": true,
+   "evidence": 292,
+   "authors_techniques_as_labelled": [
+    "T1053.005"
+   ],
+   "authors_techniques": [
+    "T1053.005"
+   ],
+   "counted": [
+    "T1003",
+    "T1003.001",
+    "T1021.006",
+    "T1027.004",
+    "T1033",
+    "T1036",
+    "T1036.005",
+    "T1053.005",
+    "T1059",
+    "T1059.001",
+    "T1204",
+    "T1529",
+    "T1574.001"
+   ],
+   "found_exactly": [
+    "T1053.005"
+   ],
+   "found_as_parent_or_sub": [],
+   "missed": [],
+   "missed_but_shown": [],
+   "counted_but_not_listed_by_authors": [
+    "T1003",
+    "T1003.001",
+    "T1021.006",
+    "T1027.004",
+    "T1033",
+    "T1036",
+    "T1036.005",
+    "T1059",
+    "T1059.001",
+    "T1204",
+    "T1529",
+    "T1574.001"
+   ],
+   "verdict": "not_distinguishable",
+   "named_actors": []
+  },
+  {
+   "recording": "datasets/attack_techniques/T1053.005/lateral_movement/windows-sysmon.log",
+   "technique_directory": "T1053.005",
+   "investigated": true,
+   "evidence": 4,
+   "authors_techniques_as_labelled": [
+    "T1053.005"
+   ],
+   "authors_techniques": [
+    "T1053.005"
+   ],
+   "counted": [
+    "T1053.005"
+   ],
+   "found_exactly": [
+    "T1053.005"
+   ],
+   "found_as_parent_or_sub": [],
+   "missed": [],
+   "missed_but_shown": [],
+   "counted_but_not_listed_by_authors": [],
+   "verdict": "not_distinguishable",
+   "named_actors": []
+  },
+  {
+   "recording": "datasets/attack_techniques/T1053.005/lateral_movement_lolbas/windows-sysmon.log",
+   "technique_directory": "T1053.005",
+   "investigated": true,
+   "evidence": 3,
+   "authors_techniques_as_labelled": [
+    "T1053.005"
+   ],
+   "authors_techniques": [
+    "T1053.005"
+   ],
+   "counted": [
+    "T1053.005"
+   ],
+   "found_exactly": [
+    "T1053.005"
+   ],
+   "found_as_parent_or_sub": [],
+   "missed": [],
+   "missed_but_shown": [],
+   "counted_but_not_listed_by_authors": [],
+   "verdict": "not_distinguishable",
+   "named_actors": []
+  },
+  {
+   "recording": "datasets/attack_techniques/T1053.005/schtask_shutdown/windows-sysmon.log",
+   "technique_directory": "T1053.005",
+   "investigated": true,
+   "evidence": 126,
+   "authors_techniques_as_labelled": [
+    "T1053.005"
+   ],
+   "authors_techniques": [
+    "T1053.005"
+   ],
+   "counted": [
+    "T1003",
+    "T1003.001",
+    "T1021.006",
+    "T1027.004",
+    "T1033",
+    "T1036",
+    "T1036.005",
+    "T1053.005",
+    "T1059",
+    "T1059.001",
+    "T1204",
+    "T1529",
+    "T1547.001"
+   ],
+   "found_exactly": [
+    "T1053.005"
+   ],
+   "found_as_parent_or_sub": [],
+   "missed": [],
+   "missed_but_shown": [],
+   "counted_but_not_listed_by_authors": [
+    "T1003",
+    "T1003.001",
+    "T1021.006",
+    "T1027.004",
+    "T1033",
+    "T1036",
+    "T1036.005",
+    "T1059",
+    "T1059.001",
+    "T1204",
+    "T1529",
+    "T1547.001"
+   ],
+   "verdict": "not_distinguishable",
+   "named_actors": []
+  },
+  {
+   "recording": "datasets/attack_techniques/T1053.005/schtask_system/windows-sysmon.log",
+   "technique_directory": "T1053.005",
+   "investigated": true,
+   "evidence": 2,
+   "authors_techniques_as_labelled": [
+    "T1053.005"
+   ],
+   "authors_techniques": [
+    "T1053.005"
+   ],
+   "counted": [
+    "T1053.005"
+   ],
+   "found_exactly": [
+    "T1053.005"
+   ],
+   "found_as_parent_or_sub": [],
+   "missed": [],
+   "missed_but_shown": [],
+   "counted_but_not_listed_by_authors": [],
+   "verdict": "not_distinguishable",
+   "named_actors": []
+  },
+  {
+   "recording": "datasets/attack_techniques/T1053.005/schtasks/windows-sysmon.log",
+   "technique_directory": "T1053.005",
+   "investigated": true,
+   "evidence": 2,
+   "authors_techniques_as_labelled": [
+    "T1053.005"
+   ],
+   "authors_techniques": [
+    "T1053.005"
+   ],
+   "counted": [
+    "T1047",
+    "T1053.005"
+   ],
+   "found_exactly": [
+    "T1053.005"
+   ],
+   "found_as_parent_or_sub": [],
+   "missed": [],
+   "missed_but_shown": [],
+   "counted_but_not_listed_by_authors": [
+    "T1047"
+   ],
+   "verdict": "not_distinguishable",
+   "named_actors": []
+  },
+  {
+   "recording": "datasets/attack_techniques/T1055.001/rasautou/windows-sysmon.log",
+   "technique_directory": "T1055.001",
+   "investigated": true,
+   "evidence": 5,
+   "authors_techniques_as_labelled": [
+    "T1055.001"
+   ],
+   "authors_techniques": [
+    "T1055.001"
+   ],
+   "counted": [
+    "T1218"
+   ],
+   "found_exactly": [],
+   "found_as_parent_or_sub": [],
+   "missed": [
+    "T1055.001"
+   ],
+   "missed_but_shown": [],
+   "counted_but_not_listed_by_authors": [
+    "T1218"
+   ],
+   "verdict": "not_distinguishable",
+   "named_actors": []
+  },
+  {
+   "recording": "datasets/attack_techniques/T1055/named_pipes/windows-sysmon.log",
+   "technique_directory": "T1055",
+   "investigated": true,
+   "evidence": 2,
+   "authors_techniques_as_labelled": [
+    "T1055"
+   ],
+   "authors_techniques": [
+    "T1055"
+   ],
+   "counted": [
+    "T1059.001"
+   ],
+   "found_exactly": [],
+   "found_as_parent_or_sub": [],
+   "missed": [
+    "T1055"
+   ],
+   "missed_but_shown": [],
+   "counted_but_not_listed_by_authors": [
+    "T1059.001"
+   ],
+   "verdict": "not_distinguishable",
+   "named_actors": []
+  },
+  {
+   "recording": "datasets/attack_techniques/T1055/trickbot_inf/windows-sysmon.log",
+   "technique_directory": "T1055",
+   "investigated": true,
+   "evidence": 0,
+   "authors_techniques_as_labelled": [
+    "T1055"
+   ],
+   "authors_techniques": [
+    "T1055"
+   ],
+   "counted": [],
+   "found_exactly": [],
+   "found_as_parent_or_sub": [],
+   "missed": [
+    "T1055"
+   ],
+   "missed_but_shown": [],
+   "counted_but_not_listed_by_authors": [],
+   "verdict": "no_decision_features",
+   "named_actors": []
+  },
+  {
+   "recording": "datasets/attack_techniques/T1059.001/atomic_red_team/windows-sysmon.log",
+   "technique_directory": "T1059.001",
+   "investigated": true,
+   "evidence": 885,
+   "authors_techniques_as_labelled": [
+    "T1059.001"
+   ],
+   "authors_techniques": [
+    "T1059.001"
+   ],
+   "counted": [
+    "T1003",
+    "T1003.001",
+    "T1021.006",
+    "T1027.004",
+    "T1033",
+    "T1036",
+    "T1047",
+    "T1059",
+    "T1059.001",
+    "T1218.005",
+    "T1564.004"
+   ],
+   "found_exactly": [
+    "T1059.001"
+   ],
+   "found_as_parent_or_sub": [],
+   "missed": [],
+   "missed_but_shown": [],
+   "counted_but_not_listed_by_authors": [
+    "T1003",
+    "T1003.001",
+    "T1021.006",
+    "T1027.004",
+    "T1033",
+    "T1036",
+    "T1047",
+    "T1218.005",
+    "T1564.004"
+   ],
+   "verdict": "not_distinguishable",
+   "named_actors": []
+  },
+  {
+   "recording": "datasets/attack_techniques/T1059.001/encoded_powershell/windows-sysmon.log",
+   "technique_directory": "T1059.001",
+   "investigated": true,
+   "evidence": 8,
+   "authors_techniques_as_labelled": [
+    "T1059.001"
+   ],
+   "authors_techniques": [
+    "T1059.001"
+   ],
+   "counted": [
+    "T1059",
+    "T1059.001"
+   ],
+   "found_exactly": [
+    "T1059.001"
+   ],
+   "found_as_parent_or_sub": [],
+   "missed": [],
+   "missed_but_shown": [],
+   "counted_but_not_listed_by_authors": [],
+   "verdict": "not_distinguishable",
+   "named_actors": []
+  },
+  {
+   "recording": "datasets/attack_techniques/T1059.001/hidden_powershell/windows-sysmon.log",
+   "technique_directory": "T1059.001",
+   "investigated": true,
+   "evidence": 522,
+   "authors_techniques_as_labelled": [
+    "T1059.001"
+   ],
+   "authors_techniques": [
+    "T1059.001"
+   ],
+   "counted": [
+    "T1003",
+    "T1003.001",
+    "T1021.006",
+    "T1027.004",
+    "T1033",
+    "T1036",
+    "T1036.005",
+    "T1059",
+    "T1059.001",
+    "T1204",
+    "T1218.005",
+    "T1529",
+    "T1547.001",
+    "T1564.004",
+    "T1574.001"
+   ],
+   "found_exactly": [
+    "T1059.001"
+   ],
+   "found_as_parent_or_sub": [],
+   "missed": [],
+   "missed_but_shown": [],
+   "counted_but_not_listed_by_authors": [
+    "T1003",
+    "T1003.001",
+    "T1021.006",
+    "T1027.004",
+    "T1033",
+    "T1036",
+    "T1036.005",
+    "T1204",
+    "T1218.005",
+    "T1529",
+    "T1547.001",
+    "T1564.004",
+    "T1574.001"
+   ],
+   "verdict": "not_distinguishable",
+   "named_actors": []
+  },
+  {
+   "recording": "datasets/attack_techniques/T1059.001/malicious_cmd_line_samples/windows-sysmon.log",
+   "technique_directory": "T1059.001",
+   "investigated": true,
+   "evidence": 11,
+   "authors_techniques_as_labelled": [
+    "T1059.001"
+   ],
+   "authors_techniques": [
+    "T1059.001"
+   ],
+   "counted": [
+    "T1036.003",
+    "T1059"
+   ],
+   "found_exactly": [],
+   "found_as_parent_or_sub": [
+    "T1059.001"
+   ],
+   "missed": [],
+   "missed_but_shown": [],
+   "counted_but_not_listed_by_authors": [
+    "T1036.003"
+   ],
+   "verdict": "not_distinguishable",
+   "named_actors": []
+  },
+  {
+   "recording": "datasets/attack_techniques/T1059.001/msix_powershell/windows-sysmon.log",
+   "technique_directory": "T1059.001",
+   "investigated": true,
+   "evidence": 4,
+   "authors_techniques_as_labelled": [
+    "T1059.001"
+   ],
+   "authors_techniques": [
+    "T1059.001"
+   ],
+   "counted": [
+    "T1059"
+   ],
+   "found_exactly": [],
+   "found_as_parent_or_sub": [
+    "T1059.001"
+   ],
+   "missed": [],
+   "missed_but_shown": [],
+   "counted_but_not_listed_by_authors": [],
+   "verdict": "not_distinguishable",
+   "named_actors": []
+  },
+  {
+   "recording": "datasets/attack_techniques/T1059.001/powershell_execution_policy/windows-sysmon.log",
+   "technique_directory": "T1059.001",
+   "investigated": true,
+   "evidence": 114,
+   "authors_techniques_as_labelled": [
+    "T1059.001"
+   ],
+   "authors_techniques": [
+    "T1059.001"
+   ],
+   "counted": [
+    "T1003",
+    "T1003.001",
+    "T1021.006",
+    "T1027.004",
+    "T1033",
+    "T1036",
+    "T1036.005",
+    "T1059",
+    "T1059.001",
+    "T1204",
+    "T1529",
+    "T1547.001"
+   ],
+   "found_exactly": [
+    "T1059.001"
+   ],
+   "found_as_parent_or_sub": [],
+   "missed": [],
+   "missed_but_shown": [],
+   "counted_but_not_listed_by_authors": [
+    "T1003",
+    "T1003.001",
+    "T1021.006",
+    "T1027.004",
+    "T1033",
+    "T1036",
+    "T1036.005",
+    "T1204",
+    "T1529",
+    "T1547.001"
+   ],
+   "verdict": "not_distinguishable",
+   "named_actors": []
+  },
+  {
+   "recording": "datasets/attack_techniques/T1059.001/powershell_script_block_logging/windows-sysmon.log",
+   "technique_directory": "T1059.001",
+   "investigated": true,
+   "evidence": 364,
+   "authors_techniques_as_labelled": [
+    "T1059.001"
+   ],
+   "authors_techniques": [
+    "T1059.001"
+   ],
+   "counted": [
+    "T1027.004",
+    "T1059",
+    "T1059.001",
+    "T1087.002",
+    "T1140",
+    "T1218.005",
+    "T1482",
+    "T1574.001"
+   ],
+   "found_exactly": [
+    "T1059.001"
+   ],
+   "found_as_parent_or_sub": [],
+   "missed": [],
+   "missed_but_shown": [],
+   "counted_but_not_listed_by_authors": [
+    "T1027.004",
+    "T1087.002",
+    "T1140",
+    "T1218.005",
+    "T1482",
+    "T1574.001"
+   ],
+   "verdict": "not_distinguishable",
+   "named_actors": []
+  },
+  {
+   "recording": "datasets/attack_techniques/T1059.001/powershell_testing/windows-sysmon.log",
+   "technique_directory": "T1059.001",
+   "investigated": true,
+   "evidence": 386,
+   "authors_techniques_as_labelled": [
+    "T1059.001"
+   ],
+   "authors_techniques": [
+    "T1059.001"
+   ],
+   "counted": [
+    "T1003",
+    "T1003.001",
+    "T1021.006",
+    "T1027.004",
+    "T1047",
+    "T1059",
+    "T1059.001",
+    "T1087.002",
+    "T1140",
+    "T1218",
+    "T1218.005",
+    "T1482",
+    "T1564.004"
+   ],
+   "found_exactly": [
+    "T1059.001"
+   ],
+   "found_as_parent_or_sub": [],
+   "missed": [],
+   "missed_but_shown": [],
+   "counted_but_not_listed_by_authors": [
+    "T1003",
+    "T1003.001",
+    "T1021.006",
+    "T1027.004",
+    "T1047",
+    "T1087.002",
+    "T1140",
+    "T1218",
+    "T1218.005",
+    "T1482",
+    "T1564.004"
+   ],
+   "verdict": "not_distinguishable",
+   "named_actors": []
+  },
+  {
+   "recording": "datasets/attack_techniques/T1059.001/powershell_xml_requests/windows-sysmon.log",
+   "technique_directory": "T1059.001",
+   "investigated": true,
+   "evidence": 293,
+   "authors_techniques_as_labelled": [
+    "T1059.001"
+   ],
+   "authors_techniques": [
+    "T1059.001"
+   ],
+   "counted": [
+    "T1003",
+    "T1003.001",
+    "T1021.006",
+    "T1027.004",
+    "T1033",
+    "T1036",
+    "T1036.005",
+    "T1059",
+    "T1059.001",
+    "T1204",
+    "T1529",
+    "T1574.001"
+   ],
+   "found_exactly": [
+    "T1059.001"
+   ],
+   "found_as_parent_or_sub": [],
+   "missed": [],
+   "missed_but_shown": [],
+   "counted_but_not_listed_by_authors": [
+    "T1003",
+    "T1003.001",
+    "T1021.006",
+    "T1027.004",
+    "T1033",
+    "T1036",
+    "T1036.005",
+    "T1204",
+    "T1529",
+    "T1574.001"
+   ],
+   "verdict": "not_distinguishable",
+   "named_actors": []
+  },
+  {
+   "recording": "datasets/attack_techniques/T1059.001/sharphound/windows-sysmon.log",
+   "technique_directory": "T1059.001",
+   "investigated": true,
+   "evidence": 302,
+   "authors_techniques_as_labelled": [
+    "T1059.001"
+   ],
+   "authors_techniques": [
+    "T1059.001"
+   ],
+   "counted": [
+    "T1059"
+   ],
+   "found_exactly": [],
+   "found_as_parent_or_sub": [
+    "T1059.001"
+   ],
+   "missed": [],
+   "missed_but_shown": [],
+   "counted_but_not_listed_by_authors": [],
+   "verdict": "not_distinguishable",
+   "named_actors": []
+  },
+  {
+   "recording": "datasets/attack_techniques/T1059.001/trickbot_cmd_powershell/windows-sysmon.log",
+   "technique_directory": "T1059.001",
+   "investigated": true,
+   "evidence": 31,
+   "authors_techniques_as_labelled": [
+    "T1059.001"
+   ],
+   "authors_techniques": [
+    "T1059.001"
+   ],
+   "counted": [
+    "T1059",
+    "T1059.001",
+    "T1140"
+   ],
+   "found_exactly": [
+    "T1059.001"
+   ],
+   "found_as_parent_or_sub": [],
+   "missed": [],
+   "missed_but_shown": [],
+   "counted_but_not_listed_by_authors": [
+    "T1140"
+   ],
+   "verdict": "not_distinguishable",
+   "named_actors": []
+  },
+  {
+   "recording": "datasets/attack_techniques/T1059.001/unmanaged_powershell_execution/windows-sysmon.log",
+   "technique_directory": "T1059.001",
+   "investigated": true,
+   "evidence": 0,
+   "authors_techniques_as_labelled": [
+    "T1059.001"
+   ],
+   "authors_techniques": [
+    "T1059.001"
+   ],
+   "counted": [],
+   "found_exactly": [],
+   "found_as_parent_or_sub": [],
+   "missed": [
+    "T1059.001"
+   ],
+   "missed_but_shown": [],
+   "counted_but_not_listed_by_authors": [],
+   "verdict": "no_decision_features",
+   "named_actors": []
+  },
+  {
+   "recording": "datasets/attack_techniques/T1059.003/cmd_spawns_cscript/windows-sysmon.log",
+   "technique_directory": "T1059.003",
+   "investigated": true,
+   "evidence": 0,
+   "authors_techniques_as_labelled": [
+    "T1059.003"
+   ],
+   "authors_techniques": [
+    "T1059.003"
+   ],
+   "counted": [],
+   "found_exactly": [],
+   "found_as_parent_or_sub": [],
+   "missed": [
+    "T1059.003"
+   ],
+   "missed_but_shown": [],
+   "counted_but_not_listed_by_authors": [],
+   "verdict": "no_decision_features",
+   "named_actors": []
+  },
+  {
+   "recording": "datasets/attack_techniques/T1059.003/powershell_spawn_cmd/windows-sysmon.log",
+   "technique_directory": "T1059.003",
+   "investigated": true,
+   "evidence": 0,
+   "authors_techniques_as_labelled": [
+    "T1059.003"
+   ],
+   "authors_techniques": [
+    "T1059.003"
+   ],
+   "counted": [],
+   "found_exactly": [],
+   "found_as_parent_or_sub": [],
+   "missed": [
+    "T1059.003"
+   ],
+   "missed_but_shown": [],
+   "counted_but_not_listed_by_authors": [],
+   "verdict": "no_decision_features",
+   "named_actors": []
+  },
+  {
+   "recording": "datasets/attack_techniques/T1059.003/ryuk/windows-sysmon.log",
+   "technique_directory": "T1059.003",
+   "investigated": true,
+   "evidence": 19,
+   "authors_techniques_as_labelled": [
+    "T1059.003"
+   ],
+   "authors_techniques": [
+    "T1059.003"
+   ],
+   "counted": [
+    "T1036",
+    "T1036.003",
+    "T1036.005"
+   ],
+   "found_exactly": [],
+   "found_as_parent_or_sub": [],
+   "missed": [
+    "T1059.003"
+   ],
+   "missed_but_shown": [
+    "T1059.003"
+   ],
+   "counted_but_not_listed_by_authors": [
+    "T1036",
+    "T1036.003",
+    "T1036.005"
+   ],
+   "verdict": "not_distinguishable",
+   "named_actors": []
+  },
+  {
+   "recording": "datasets/attack_techniques/T1059.005/lotus_blossom_chrysalis/windows-sysmon.log",
+   "investigated": false,
+   "state": "refused by intake",
+   "problems": [
+    "no record converted to an Observation \u2014 unsupported shape or channels"
+   ],
+   "authors_techniques": [
+    "T1059.005"
+   ]
+  },
+  {
+   "recording": "datasets/attack_techniques/T1059/suspiciously_named_executables/windows-sysmon.log",
+   "technique_directory": "T1059",
+   "investigated": true,
+   "evidence": 0,
+   "authors_techniques_as_labelled": [
+    "T1059"
+   ],
+   "authors_techniques": [
+    "T1059"
+   ],
+   "counted": [],
+   "found_exactly": [],
+   "found_as_parent_or_sub": [],
+   "missed": [
+    "T1059"
+   ],
+   "missed_but_shown": [],
+   "counted_but_not_listed_by_authors": [],
+   "verdict": "no_decision_features",
+   "named_actors": []
+  },
+  {
+   "recording": "datasets/attack_techniques/T1068/bluehammer/windows-sysmon.log",
+   "technique_directory": "T1068",
+   "investigated": true,
+   "evidence": 1,
+   "authors_techniques_as_labelled": [
+    "T1068"
+   ],
+   "authors_techniques": [
+    "T1068"
+   ],
+   "counted": [],
+   "found_exactly": [],
+   "found_as_parent_or_sub": [],
+   "missed": [
+    "T1068"
+   ],
+   "missed_but_shown": [],
+   "counted_but_not_listed_by_authors": [],
+   "verdict": "no_decision_features",
+   "named_actors": []
+  },
+  {
+   "recording": "datasets/attack_techniques/T1068/redsun/windows-sysmon.log",
+   "technique_directory": "T1068",
+   "investigated": true,
+   "evidence": 0,
+   "authors_techniques_as_labelled": [
+    "T1068"
+   ],
+   "authors_techniques": [
+    "T1068"
+   ],
+   "counted": [],
+   "found_exactly": [],
+   "found_as_parent_or_sub": [],
+   "missed": [
+    "T1068"
+   ],
+   "missed_but_shown": [],
+   "counted_but_not_listed_by_authors": [],
+   "verdict": "no_decision_features",
+   "named_actors": []
+  },
+  {
+   "recording": "datasets/attack_techniques/T1068/zoom_child_process/windows-sysmon.log",
+   "technique_directory": "T1068",
+   "investigated": true,
+   "evidence": 6,
+   "authors_techniques_as_labelled": [
+    "T1068"
+   ],
+   "authors_techniques": [
+    "T1068"
+   ],
+   "counted": [],
+   "found_exactly": [],
+   "found_as_parent_or_sub": [],
+   "missed": [
+    "T1068"
+   ],
+   "missed_but_shown": [],
+   "counted_but_not_listed_by_authors": [],
+   "verdict": "no_decision_features",
+   "named_actors": []
+  },
+  {
+   "recording": "datasets/attack_techniques/T1069.002/AD_discovery/windows-sysmon.log",
+   "technique_directory": "T1069.002",
+   "investigated": true,
+   "evidence": 18,
+   "authors_techniques_as_labelled": [
+    "T1069.002"
+   ],
+   "authors_techniques": [
+    "T1069.002"
+   ],
+   "counted": [],
+   "found_exactly": [],
+   "found_as_parent_or_sub": [],
+   "missed": [
+    "T1069.002"
+   ],
+   "missed_but_shown": [
+    "T1069.002"
+   ],
+   "counted_but_not_listed_by_authors": [],
+   "verdict": "no_decision_features",
+   "named_actors": []
+  },
+  {
+   "recording": "datasets/attack_techniques/T1070.001/atomic_red_team/windows-sysmon.log",
+   "technique_directory": "T1070.001",
+   "investigated": true,
+   "evidence": 288,
+   "authors_techniques_as_labelled": [
+    "T1070.001"
+   ],
+   "authors_techniques": [
+    "T1685.005"
+   ],
+   "counted": [
+    "T1003",
+    "T1003.001",
+    "T1021.006",
+    "T1027.004",
+    "T1033",
+    "T1036",
+    "T1036.005",
+    "T1059",
+    "T1059.001",
+    "T1204",
+    "T1529",
+    "T1574.001"
+   ],
+   "found_exactly": [],
+   "found_as_parent_or_sub": [],
+   "missed": [
+    "T1685.005"
+   ],
+   "missed_but_shown": [
+    "T1685.005"
+   ],
+   "counted_but_not_listed_by_authors": [
+    "T1003",
+    "T1003.001",
+    "T1021.006",
+    "T1027.004",
+    "T1033",
+    "T1036",
+    "T1036.005",
+    "T1059",
+    "T1059.001",
+    "T1204",
+    "T1529",
+    "T1574.001"
+   ],
+   "verdict": "not_distinguishable",
+   "named_actors": []
+  },
+  {
+   "recording": "datasets/attack_techniques/T1070.005/atomic_red_team/windows-sysmon.log",
+   "technique_directory": "T1070.005",
+   "investigated": true,
+   "evidence": 285,
+   "authors_techniques_as_labelled": [
+    "T1070.005"
+   ],
+   "authors_techniques": [
+    "T1070.005"
+   ],
+   "counted": [
+    "T1003",
+    "T1003.001",
+    "T1021.006",
+    "T1027.004",
+    "T1033",
+    "T1036",
+    "T1036.005",
+    "T1059",
+    "T1059.001",
+    "T1204",
+    "T1529",
+    "T1574.001"
+   ],
+   "found_exactly": [],
+   "found_as_parent_or_sub": [],
+   "missed": [
+    "T1070.005"
+   ],
+   "missed_but_shown": [
+    "T1070.005"
+   ],
+   "counted_but_not_listed_by_authors": [
+    "T1003",
+    "T1003.001",
+    "T1021.006",
+    "T1027.004",
+    "T1033",
+    "T1036",
+    "T1036.005",
+    "T1059",
+    "T1059.001",
+    "T1204",
+    "T1529",
+    "T1574.001"
+   ],
+   "verdict": "not_distinguishable",
+   "named_actors": []
+  },
+  {
+   "recording": "datasets/attack_techniques/T1070/atomic_red_team/windows-sysmon.log",
+   "technique_directory": "T1070",
+   "investigated": true,
+   "evidence": 283,
+   "authors_techniques_as_labelled": [
+    "T1070"
+   ],
+   "authors_techniques": [
+    "T1070"
+   ],
+   "counted": [
+    "T1003",
+    "T1003.001",
+    "T1021.006",
+    "T1027.004",
+    "T1033",
+    "T1036",
+    "T1036.005",
+    "T1059",
+    "T1059.001",
+    "T1204",
+    "T1529",
+    "T1574.001"
+   ],
+   "found_exactly": [],
+   "found_as_parent_or_sub": [],
+   "missed": [
+    "T1070"
+   ],
+   "missed_but_shown": [
+    "T1070"
+   ],
+   "counted_but_not_listed_by_authors": [
+    "T1003",
+    "T1003.001",
+    "T1021.006",
+    "T1027.004",
+    "T1033",
+    "T1036",
+    "T1036.005",
+    "T1059",
+    "T1059.001",
+    "T1204",
+    "T1529",
+    "T1574.001"
+   ],
+   "verdict": "not_distinguishable",
+   "named_actors": []
+  },
+  {
+   "recording": "datasets/attack_techniques/T1078.002/account_lockout/windows-sysmon.log",
+   "technique_directory": "T1078.002",
+   "investigated": true,
+   "evidence": 202,
+   "authors_techniques_as_labelled": [
+    "T1078.002"
+   ],
+   "authors_techniques": [
+    "T1078.002"
+   ],
+   "counted": [
+    "T1003",
+    "T1003.001",
+    "T1021.006",
+    "T1027.004",
+    "T1033",
+    "T1036",
+    "T1036.005",
+    "T1059",
+    "T1059.001",
+    "T1204",
+    "T1529"
+   ],
+   "found_exactly": [],
+   "found_as_parent_or_sub": [],
+   "missed": [
+    "T1078.002"
+   ],
+   "missed_but_shown": [],
+   "counted_but_not_listed_by_authors": [
+    "T1003",
+    "T1003.001",
+    "T1021.006",
+    "T1027.004",
+    "T1033",
+    "T1036",
+    "T1036.005",
+    "T1059",
+    "T1059.001",
+    "T1204",
+    "T1529"
+   ],
+   "verdict": "not_distinguishable",
+   "named_actors": []
+  },
+  {
+   "recording": "datasets/attack_techniques/T1078/defaultaccount/windows-sysmon.log",
+   "technique_directory": "T1078",
+   "investigated": true,
+   "evidence": 22,
+   "authors_techniques_as_labelled": [
+    "T1078"
+   ],
+   "authors_techniques": [
+    "T1078"
+   ],
+   "counted": [
+    "T1098",
+    "T1136.001"
+   ],
+   "found_exactly": [],
+   "found_as_parent_or_sub": [],
+   "missed": [
+    "T1078"
+   ],
+   "missed_but_shown": [],
+   "counted_but_not_listed_by_authors": [
+    "T1098",
+    "T1136.001"
+   ],
+   "verdict": "not_distinguishable",
+   "named_actors": []
+  },
+  {
+   "recording": "datasets/attack_techniques/T1082/atomic_red_team/windows-sysmon.log",
+   "technique_directory": "T1082",
+   "investigated": true,
+   "evidence": 284,
+   "authors_techniques_as_labelled": [
+    "T1082"
+   ],
+   "authors_techniques": [
+    "T1082"
+   ],
+   "counted": [
+    "T1003",
+    "T1003.001",
+    "T1021.006",
+    "T1027.004",
+    "T1033",
+    "T1036",
+    "T1036.005",
+    "T1047",
+    "T1059",
+    "T1059.001",
+    "T1082",
+    "T1204",
+    "T1529",
+    "T1574.001"
+   ],
+   "found_exactly": [
+    "T1082"
+   ],
+   "found_as_parent_or_sub": [],
+   "missed": [],
+   "missed_but_shown": [],
+   "counted_but_not_listed_by_authors": [
+    "T1003",
+    "T1003.001",
+    "T1021.006",
+    "T1027.004",
+    "T1033",
+    "T1036",
+    "T1036.005",
+    "T1047",
+    "T1059",
+    "T1059.001",
+    "T1204",
+    "T1529",
+    "T1574.001"
+   ],
+   "verdict": "not_distinguishable",
+   "named_actors": []
+  },
+  {
+   "recording": "datasets/attack_techniques/T1087.001/AD_discovery/windows-sysmon.log",
+   "technique_directory": "T1087.001",
+   "investigated": true,
+   "evidence": 10,
+   "authors_techniques_as_labelled": [
+    "T1087.001"
+   ],
+   "authors_techniques": [
+    "T1087.001"
+   ],
+   "counted": [],
+   "found_exactly": [],
+   "found_as_parent_or_sub": [],
+   "missed": [
+    "T1087.001"
+   ],
+   "missed_but_shown": [
+    "T1087.001"
+   ],
+   "counted_but_not_listed_by_authors": [],
+   "verdict": "no_decision_features",
+   "named_actors": []
+  },
+  {
+   "recording": "datasets/attack_techniques/T1087.002/AD_discovery/windows-sysmon.log",
+   "technique_directory": "T1087.002",
+   "investigated": true,
+   "evidence": 37,
+   "authors_techniques_as_labelled": [
+    "T1087.002"
+   ],
+   "authors_techniques": [
+    "T1087.002"
+   ],
+   "counted": [
+    "T1059"
+   ],
+   "found_exactly": [],
+   "found_as_parent_or_sub": [],
+   "missed": [
+    "T1087.002"
+   ],
+   "missed_but_shown": [],
+   "counted_but_not_listed_by_authors": [
+    "T1059"
+   ],
+   "verdict": "not_distinguishable",
+   "named_actors": []
+  },
+  {
+   "recording": "datasets/attack_techniques/T1090.003/windows_tor_client_execution/windows-sysmon.log",
+   "technique_directory": "T1090.003",
+   "investigated": true,
+   "evidence": 32,
+   "authors_techniques_as_labelled": [
+    "T1090.003"
+   ],
+   "authors_techniques": [
+    "T1090.003"
+   ],
+   "counted": [
+    "T1090.003"
+   ],
+   "found_exactly": [
+    "T1090.003"
+   ],
+   "found_as_parent_or_sub": [],
+   "missed": [],
+   "missed_but_shown": [],
+   "counted_but_not_listed_by_authors": [],
+   "verdict": "not_distinguishable",
+   "named_actors": []
+  },
+  {
+   "recording": "datasets/attack_techniques/T1098/dsrm_account/windows-sysmon.log",
+   "technique_directory": "T1098",
+   "investigated": true,
+   "evidence": 1,
+   "authors_techniques_as_labelled": [
+    "T1098"
+   ],
+   "authors_techniques": [
+    "T1098"
+   ],
+   "counted": [
+    "T1556"
+   ],
+   "found_exactly": [],
+   "found_as_parent_or_sub": [],
+   "missed": [
+    "T1098"
+   ],
+   "missed_but_shown": [],
+   "counted_but_not_listed_by_authors": [
+    "T1556"
+   ],
+   "verdict": "not_distinguishable",
+   "named_actors": []
+  },
+  {
+   "recording": "datasets/attack_techniques/T1105/atomic_red_team/windows-sysmon.log",
+   "technique_directory": "T1105",
+   "investigated": true,
+   "evidence": 123,
+   "authors_techniques_as_labelled": [
+    "T1105"
+   ],
+   "authors_techniques": [
+    "T1105"
+   ],
+   "counted": [
+    "T1036.003",
+    "T1036.005",
+    "T1059",
+    "T1059.001",
+    "T1105",
+    "T1197"
+   ],
+   "found_exactly": [
+    "T1105"
+   ],
+   "found_as_parent_or_sub": [],
+   "missed": [],
+   "missed_but_shown": [],
+   "counted_but_not_listed_by_authors": [
+    "T1036.003",
+    "T1036.005",
+    "T1059",
+    "T1059.001",
+    "T1197"
+   ],
+   "verdict": "not_distinguishable",
+   "named_actors": []
+  },
+  {
+   "recording": "datasets/attack_techniques/T1112/atomic_red_team/windows-sysmon.log",
+   "technique_directory": "T1112",
+   "investigated": true,
+   "evidence": 290,
+   "authors_techniques_as_labelled": [
+    "T1112"
+   ],
+   "authors_techniques": [
+    "T1112"
+   ],
+   "counted": [
+    "T1003",
+    "T1003.001",
+    "T1021.006",
+    "T1027.004",
+    "T1033",
+    "T1036",
+    "T1036.005",
+    "T1059",
+    "T1059.001",
+    "T1204",
+    "T1529",
+    "T1547.001",
+    "T1574.001"
+   ],
+   "found_exactly": [],
+   "found_as_parent_or_sub": [],
+   "missed": [
+    "T1112"
+   ],
+   "missed_but_shown": [
+    "T1112"
+   ],
+   "counted_but_not_listed_by_authors": [
+    "T1003",
+    "T1003.001",
+    "T1021.006",
+    "T1027.004",
+    "T1033",
+    "T1036",
+    "T1036.005",
+    "T1059",
+    "T1059.001",
+    "T1204",
+    "T1529",
+    "T1547.001",
+    "T1574.001"
+   ],
+   "verdict": "not_distinguishable",
+   "named_actors": []
+  },
+  {
+   "recording": "datasets/attack_techniques/T1127.001/windows-sysmon.log",
+   "technique_directory": "T1127.001",
+   "investigated": true,
+   "evidence": 61,
+   "authors_techniques_as_labelled": [
+    "T1127.001"
+   ],
+   "authors_techniques": [
+    "T1127.001"
+   ],
+   "counted": [
+    "T1003",
+    "T1003.001",
+    "T1027.004"
+   ],
+   "found_exactly": [],
+   "found_as_parent_or_sub": [],
+   "missed": [
+    "T1127.001"
+   ],
+   "missed_but_shown": [
+    "T1127.001"
+   ],
+   "counted_but_not_listed_by_authors": [
+    "T1003",
+    "T1003.001",
+    "T1027.004"
+   ],
+   "verdict": "not_distinguishable",
+   "named_actors": []
+  },
+  {
+   "recording": "datasets/attack_techniques/T1127/atomic_red_team/windows-sysmon.log",
+   "technique_directory": "T1127",
+   "investigated": true,
+   "evidence": 154,
+   "authors_techniques_as_labelled": [
+    "T1127"
+   ],
+   "authors_techniques": [
+    "T1127"
+   ],
+   "counted": [
+    "T1003",
+    "T1003.001",
+    "T1021.006",
+    "T1027.004",
+    "T1033",
+    "T1036",
+    "T1036.005",
+    "T1059",
+    "T1059.001",
+    "T1204",
+    "T1529",
+    "T1547.001",
+    "T1574.001"
+   ],
+   "found_exactly": [],
+   "found_as_parent_or_sub": [],
+   "missed": [
+    "T1127"
+   ],
+   "missed_but_shown": [],
+   "counted_but_not_listed_by_authors": [
+    "T1003",
+    "T1003.001",
+    "T1021.006",
+    "T1027.004",
+    "T1033",
+    "T1036",
+    "T1036.005",
+    "T1059",
+    "T1059.001",
+    "T1204",
+    "T1529",
+    "T1547.001",
+    "T1574.001"
+   ],
+   "verdict": "not_distinguishable",
+   "named_actors": []
+  },
+  {
+   "recording": "datasets/attack_techniques/T1135/net_share/windows-sysmon.log",
+   "technique_directory": "T1135",
+   "investigated": true,
+   "evidence": 4,
+   "authors_techniques_as_labelled": [
+    "T1135"
+   ],
+   "authors_techniques": [
+    "T1135"
+   ],
+   "counted": [],
+   "found_exactly": [],
+   "found_as_parent_or_sub": [],
+   "missed": [
+    "T1135"
+   ],
+   "missed_but_shown": [
+    "T1135"
+   ],
+   "counted_but_not_listed_by_authors": [],
+   "verdict": "no_decision_features",
+   "named_actors": []
+  },
+  {
+   "recording": "datasets/attack_techniques/T1136.001/atomic_red_team/windows-sysmon.log",
+   "technique_directory": "T1136.001",
+   "investigated": true,
+   "evidence": 301,
+   "authors_techniques_as_labelled": [
+    "T1136.001"
+   ],
+   "authors_techniques": [
+    "T1136.001"
+   ],
+   "counted": [
+    "T1003",
+    "T1003.001",
+    "T1021.006",
+    "T1027.004",
+    "T1033",
+    "T1036",
+    "T1036.005",
+    "T1059",
+    "T1059.001",
+    "T1087.001",
+    "T1098",
+    "T1136.001",
+    "T1204",
+    "T1529",
+    "T1574.001"
+   ],
+   "found_exactly": [
+    "T1136.001"
+   ],
+   "found_as_parent_or_sub": [],
+   "missed": [],
+   "missed_but_shown": [],
+   "counted_but_not_listed_by_authors": [
+    "T1003",
+    "T1003.001",
+    "T1021.006",
+    "T1027.004",
+    "T1033",
+    "T1036",
+    "T1036.005",
+    "T1059",
+    "T1059.001",
+    "T1087.001",
+    "T1098",
+    "T1204",
+    "T1529",
+    "T1574.001"
+   ],
+   "verdict": "not_distinguishable",
+   "named_actors": []
+  },
+  {
+   "recording": "datasets/attack_techniques/T1140/atomic_red_team/windows-sysmon.log",
+   "technique_directory": "T1140",
+   "investigated": true,
+   "evidence": 48,
+   "authors_techniques_as_labelled": [
+    "T1140"
+   ],
+   "authors_techniques": [
+    "T1140"
+   ],
+   "counted": [
+    "T1027",
+    "T1036",
+    "T1036.003",
+    "T1140"
+   ],
+   "found_exactly": [
+    "T1140"
+   ],
+   "found_as_parent_or_sub": [],
+   "missed": [],
+   "missed_but_shown": [],
+   "counted_but_not_listed_by_authors": [
+    "T1027",
+    "T1036",
+    "T1036.003"
+   ],
+   "verdict": "not_distinguishable",
+   "named_actors": []
+  },
+  {
+   "recording": "datasets/attack_techniques/T1189/dyn_dns_site/windows-sysmon.log",
+   "technique_directory": "T1189",
+   "investigated": true,
+   "evidence": 115,
+   "authors_techniques_as_labelled": [
+    "T1189"
+   ],
+   "authors_techniques": [
+    "T1189"
+   ],
+   "counted": [
+    "T1003",
+    "T1003.001",
+    "T1021.006",
+    "T1027.004",
+    "T1033",
+    "T1036",
+    "T1036.005",
+    "T1059",
+    "T1059.001",
+    "T1204",
+    "T1529",
+    "T1547.001"
+   ],
+   "found_exactly": [],
+   "found_as_parent_or_sub": [],
+   "missed": [
+    "T1189"
+   ],
+   "missed_but_shown": [],
+   "counted_but_not_listed_by_authors": [
+    "T1003",
+    "T1003.001",
+    "T1021.006",
+    "T1027.004",
+    "T1033",
+    "T1036",
+    "T1036.005",
+    "T1059",
+    "T1059.001",
+    "T1204",
+    "T1529",
+    "T1547.001"
+   ],
+   "verdict": "not_distinguishable",
+   "named_actors": []
+  },
+  {
+   "recording": "datasets/attack_techniques/T1190/crushftp/windows-sysmon.log",
+   "technique_directory": "T1190",
+   "investigated": true,
+   "evidence": 0,
+   "authors_techniques_as_labelled": [
+    "T1190"
+   ],
+   "authors_techniques": [
+    "T1190"
+   ],
+   "counted": [],
+   "found_exactly": [],
+   "found_as_parent_or_sub": [],
+   "missed": [
+    "T1190"
+   ],
+   "missed_but_shown": [],
+   "counted_but_not_listed_by_authors": [],
+   "verdict": "no_decision_features",
+   "named_actors": []
+  },
+  {
+   "recording": "datasets/attack_techniques/T1190/outbound_java/windows-sysmon.log",
+   "technique_directory": "T1190",
+   "investigated": true,
+   "evidence": 0,
+   "authors_techniques_as_labelled": [
+    "T1190"
+   ],
+   "authors_techniques": [
+    "T1190"
+   ],
+   "counted": [],
+   "found_exactly": [],
+   "found_as_parent_or_sub": [],
+   "missed": [
+    "T1190"
+   ],
+   "missed_but_shown": [],
+   "counted_but_not_listed_by_authors": [],
+   "verdict": "no_decision_features",
+   "named_actors": []
+  },
+  {
+   "recording": "datasets/attack_techniques/T1190/sap/windows-sysmon.log",
+   "technique_directory": "T1190",
+   "investigated": true,
+   "evidence": 0,
+   "authors_techniques_as_labelled": [
+    "T1190"
+   ],
+   "authors_techniques": [
+    "T1190"
+   ],
+   "counted": [],
+   "found_exactly": [],
+   "found_as_parent_or_sub": [],
+   "missed": [
+    "T1190"
+   ],
+   "missed_but_shown": [],
+   "counted_but_not_listed_by_authors": [],
+   "verdict": "no_decision_features",
+   "named_actors": []
+  },
+  {
+   "recording": "datasets/attack_techniques/T1197/atomic_red_team/windows-sysmon.log",
+   "technique_directory": "T1197",
+   "investigated": true,
+   "evidence": 29,
+   "authors_techniques_as_labelled": [
+    "T1197"
+   ],
+   "authors_techniques": [
+    "T1197"
+   ],
+   "counted": [
+    "T1027.004",
+    "T1059.001",
+    "T1105",
+    "T1197"
+   ],
+   "found_exactly": [
+    "T1197"
+   ],
+   "found_as_parent_or_sub": [],
+   "missed": [],
+   "missed_but_shown": [],
+   "counted_but_not_listed_by_authors": [
+    "T1027.004",
+    "T1059.001",
+    "T1105"
+   ],
+   "verdict": "not_distinguishable",
+   "named_actors": []
+  },
+  {
+   "recording": "datasets/attack_techniques/T1201/pwd_policy_discovery/windows-sysmon.log",
+   "technique_directory": "T1201",
+   "investigated": true,
+   "evidence": 17,
+   "authors_techniques_as_labelled": [
+    "T1201"
+   ],
+   "authors_techniques": [
+    "T1201"
+   ],
+   "counted": [
+    "T1059"
+   ],
+   "found_exactly": [],
+   "found_as_parent_or_sub": [],
+   "missed": [
+    "T1201"
+   ],
+   "missed_but_shown": [],
+   "counted_but_not_listed_by_authors": [
+    "T1059"
+   ],
+   "verdict": "not_distinguishable",
+   "named_actors": []
+  },
+  {
+   "recording": "datasets/attack_techniques/T1202/atomic_red_team/windows-sysmon.log",
+   "technique_directory": "T1202",
+   "investigated": true,
+   "evidence": 9,
+   "authors_techniques_as_labelled": [
+    "T1202"
+   ],
+   "authors_techniques": [
+    "T1202"
+   ],
+   "counted": [
+    "T1059"
+   ],
+   "found_exactly": [],
+   "found_as_parent_or_sub": [],
+   "missed": [
+    "T1202"
+   ],
+   "missed_but_shown": [
+    "T1202"
+   ],
+   "counted_but_not_listed_by_authors": [
+    "T1059"
+   ],
+   "verdict": "not_distinguishable",
+   "named_actors": []
+  },
+  {
+   "recording": "datasets/attack_techniques/T1204.002/atomic_red_team/windows-sysmon.log",
+   "technique_directory": "T1204.002",
+   "investigated": true,
+   "evidence": 2,
+   "authors_techniques_as_labelled": [
+    "T1204.002"
+   ],
+   "authors_techniques": [
+    "T1204.002"
+   ],
+   "counted": [],
+   "found_exactly": [],
+   "found_as_parent_or_sub": [],
+   "missed": [
+    "T1204.002"
+   ],
+   "missed_but_shown": [],
+   "counted_but_not_listed_by_authors": [],
+   "verdict": "no_decision_features",
+   "named_actors": []
+  },
+  {
+   "recording": "datasets/attack_techniques/T1204.002/batch_file_in_system32/windows-sysmon.log",
+   "technique_directory": "T1204.002",
+   "investigated": true,
+   "evidence": 2,
+   "authors_techniques_as_labelled": [
+    "T1204.002"
+   ],
+   "authors_techniques": [
+    "T1204.002"
+   ],
+   "counted": [],
+   "found_exactly": [],
+   "found_as_parent_or_sub": [],
+   "missed": [
+    "T1204.002"
+   ],
+   "missed_but_shown": [],
+   "counted_but_not_listed_by_authors": [],
+   "verdict": "no_decision_features",
+   "named_actors": []
+  },
+  {
+   "recording": "datasets/attack_techniques/T1204.002/single_letter_exe/windows-sysmon.log",
+   "technique_directory": "T1204.002",
+   "investigated": true,
+   "evidence": 4,
+   "authors_techniques_as_labelled": [
+    "T1204.002"
+   ],
+   "authors_techniques": [
+    "T1204.002"
+   ],
+   "counted": [],
+   "found_exactly": [],
+   "found_as_parent_or_sub": [],
+   "missed": [
+    "T1204.002"
+   ],
+   "missed_but_shown": [
+    "T1204.002"
+   ],
+   "counted_but_not_listed_by_authors": [],
+   "verdict": "no_decision_features",
+   "named_actors": []
+  },
+  {
+   "recording": "datasets/attack_techniques/T1204/rare_executables/windows-sysmon.log",
+   "technique_directory": "T1204",
+   "investigated": true,
+   "evidence": 1394,
+   "authors_techniques_as_labelled": [
+    "T1204"
+   ],
+   "authors_techniques": [
+    "T1204"
+   ],
+   "counted": [
+    "T1021.006",
+    "T1027.004",
+    "T1047",
+    "T1059",
+    "T1059.001",
+    "T1140",
+    "T1529"
+   ],
+   "found_exactly": [],
+   "found_as_parent_or_sub": [],
+   "missed": [
+    "T1204"
+   ],
+   "missed_but_shown": [],
+   "counted_but_not_listed_by_authors": [
+    "T1021.006",
+    "T1027.004",
+    "T1047",
+    "T1059",
+    "T1059.001",
+    "T1140",
+    "T1529"
+   ],
+   "verdict": "not_distinguishable",
+   "named_actors": []
+  },
+  {
+   "recording": "datasets/attack_techniques/T1216/atomic_red_team/windows-sysmon.log",
+   "technique_directory": "T1216",
+   "investigated": true,
+   "evidence": 98,
+   "authors_techniques_as_labelled": [
+    "T1216"
+   ],
+   "authors_techniques": [
+    "T1216"
+   ],
+   "counted": [
+    "T1059",
+    "T1059.001"
+   ],
+   "found_exactly": [],
+   "found_as_parent_or_sub": [],
+   "missed": [
+    "T1216"
+   ],
+   "missed_but_shown": [
+    "T1216"
+   ],
+   "counted_but_not_listed_by_authors": [
+    "T1059",
+    "T1059.001"
+   ],
+   "verdict": "not_distinguishable",
+   "named_actors": []
+  },
+  {
+   "recording": "datasets/attack_techniques/T1218.001/atomic_red_team/windows-sysmon.log",
+   "technique_directory": "T1218.001",
+   "investigated": true,
+   "evidence": 443,
+   "authors_techniques_as_labelled": [
+    "T1218.001"
+   ],
+   "authors_techniques": [
+    "T1218.001"
+   ],
+   "counted": [
+    "T1027.004",
+    "T1036",
+    "T1059",
+    "T1059.001",
+    "T1059.003",
+    "T1218",
+    "T1218.001"
+   ],
+   "found_exactly": [
+    "T1218.001"
+   ],
+   "found_as_parent_or_sub": [],
+   "missed": [],
+   "missed_but_shown": [],
+   "counted_but_not_listed_by_authors": [
+    "T1027.004",
+    "T1036",
+    "T1059",
+    "T1059.001",
+    "T1059.003"
+   ],
+   "verdict": "not_distinguishable",
+   "named_actors": []
+  },
+  {
+   "recording": "datasets/attack_techniques/T1218.002/atomic_red_team/windows-sysmon.log",
+   "technique_directory": "T1218.002",
+   "investigated": true,
+   "evidence": 31,
+   "authors_techniques_as_labelled": [
+    "T1218.002"
+   ],
+   "authors_techniques": [
+    "T1218.002"
+   ],
+   "counted": [
+    "T1218",
+    "T1218.011"
+   ],
+   "found_exactly": [],
+   "found_as_parent_or_sub": [
+    "T1218.002"
+   ],
+   "missed": [],
+   "missed_but_shown": [],
+   "counted_but_not_listed_by_authors": [
+    "T1218.011"
+   ],
+   "verdict": "not_distinguishable",
+   "named_actors": []
+  },
+  {
+   "recording": "datasets/attack_techniques/T1218.004/atomic_red_team/windows-sysmon.log",
+   "technique_directory": "T1218.004",
+   "investigated": true,
+   "evidence": 7,
+   "authors_techniques_as_labelled": [
+    "T1218.004"
+   ],
+   "authors_techniques": [
+    "T1218.004"
+   ],
+   "counted": [
+    "T1027.004",
+    "T1036",
+    "T1036.003",
+    "T1218"
+   ],
+   "found_exactly": [],
+   "found_as_parent_or_sub": [
+    "T1218.004"
+   ],
+   "missed": [],
+   "missed_but_shown": [],
+   "counted_but_not_listed_by_authors": [
+    "T1027.004",
+    "T1036",
+    "T1036.003"
+   ],
+   "verdict": "not_distinguishable",
+   "named_actors": []
+  },
+  {
+   "recording": "datasets/attack_techniques/T1218.005/atomic_red_team/windows-sysmon.log",
+   "technique_directory": "T1218.005",
+   "investigated": true,
+   "evidence": 1004,
+   "authors_techniques_as_labelled": [
+    "T1218.005"
+   ],
+   "authors_techniques": [
+    "T1218.005"
+   ],
+   "counted": [
+    "T1027.004",
+    "T1036",
+    "T1036.003",
+    "T1059",
+    "T1059.001",
+    "T1106",
+    "T1218",
+    "T1218.005",
+    "T1547.001",
+    "T1685.001"
+   ],
+   "found_exactly": [
+    "T1218.005"
+   ],
+   "found_as_parent_or_sub": [],
+   "missed": [],
+   "missed_but_shown": [],
+   "counted_but_not_listed_by_authors": [
+    "T1027.004",
+    "T1036",
+    "T1036.003",
+    "T1059",
+    "T1059.001",
+    "T1106",
+    "T1547.001",
+    "T1685.001"
+   ],
+   "verdict": "not_distinguishable",
+   "named_actors": []
+  },
+  {
+   "recording": "datasets/attack_techniques/T1218.007/atomic_red_team/windows-sysmon.log",
+   "technique_directory": "T1218.007",
+   "investigated": true,
+   "evidence": 45,
+   "authors_techniques_as_labelled": [
+    "T1218.007"
+   ],
+   "authors_techniques": [
+    "T1218.007"
+   ],
+   "counted": [
+    "T1036.005",
+    "T1218.007"
+   ],
+   "found_exactly": [
+    "T1218.007"
+   ],
+   "found_as_parent_or_sub": [],
+   "missed": [],
+   "missed_but_shown": [],
+   "counted_but_not_listed_by_authors": [
+    "T1036.005"
+   ],
+   "verdict": "not_distinguishable",
+   "named_actors": []
+  },
+  {
+   "recording": "datasets/attack_techniques/T1218.009/atomic_red_team/windows-sysmon.log",
+   "technique_directory": "T1218.009",
+   "investigated": true,
+   "evidence": 77,
+   "authors_techniques_as_labelled": [
+    "T1218.009"
+   ],
+   "authors_techniques": [
+    "T1218.009"
+   ],
+   "counted": [
+    "T1027.004",
+    "T1059",
+    "T1059.001",
+    "T1588.002",
+    "T1685.001"
+   ],
+   "found_exactly": [],
+   "found_as_parent_or_sub": [],
+   "missed": [
+    "T1218.009"
+   ],
+   "missed_but_shown": [
+    "T1218.009"
+   ],
+   "counted_but_not_listed_by_authors": [
+    "T1027.004",
+    "T1059",
+    "T1059.001",
+    "T1588.002",
+    "T1685.001"
+   ],
+   "verdict": "not_distinguishable",
+   "named_actors": []
+  },
+  {
+   "recording": "datasets/attack_techniques/T1218.010/atomic_red_team/windows-sysmon.log",
+   "technique_directory": "T1218.010",
+   "investigated": true,
+   "evidence": 61,
+   "authors_techniques_as_labelled": [
+    "T1218.010"
+   ],
+   "authors_techniques": [
+    "T1218.010"
+   ],
+   "counted": [
+    "T1036.003",
+    "T1218.010"
+   ],
+   "found_exactly": [
+    "T1218.010"
+   ],
+   "found_as_parent_or_sub": [],
+   "missed": [],
+   "missed_but_shown": [],
+   "counted_but_not_listed_by_authors": [
+    "T1036.003"
+   ],
+   "verdict": "not_distinguishable",
+   "named_actors": []
+  },
+  {
+   "recording": "datasets/attack_techniques/T1218.011/atomic_red_team/windows-sysmon.log",
+   "technique_directory": "T1218.011",
+   "investigated": true,
+   "evidence": 347,
+   "authors_techniques_as_labelled": [
+    "T1218.011"
+   ],
+   "authors_techniques": [
+    "T1218.011"
+   ],
+   "counted": [
+    "T1003",
+    "T1003.001",
+    "T1021.006",
+    "T1027.004",
+    "T1033",
+    "T1036",
+    "T1036.003",
+    "T1036.005",
+    "T1055",
+    "T1059",
+    "T1059.001",
+    "T1202",
+    "T1204",
+    "T1218.011",
+    "T1529",
+    "T1574.001"
+   ],
+   "found_exactly": [
+    "T1218.011"
+   ],
+   "found_as_parent_or_sub": [],
+   "missed": [],
+   "missed_but_shown": [],
+   "counted_but_not_listed_by_authors": [
+    "T1003",
+    "T1003.001",
+    "T1021.006",
+    "T1027.004",
+    "T1033",
+    "T1036",
+    "T1036.003",
+    "T1036.005",
+    "T1055",
+    "T1059",
+    "T1059.001",
+    "T1202",
+    "T1204",
+    "T1529",
+    "T1574.001"
+   ],
+   "verdict": "not_distinguishable",
+   "named_actors": []
+  },
+  {
+   "recording": "datasets/attack_techniques/T1218.013/atomic_red_team/windows-sysmon.log",
+   "technique_directory": "T1218.013",
+   "investigated": true,
+   "evidence": 10,
+   "authors_techniques_as_labelled": [
+    "T1218.013"
+   ],
+   "authors_techniques": [
+    "T1218.013"
+   ],
+   "counted": [],
+   "found_exactly": [],
+   "found_as_parent_or_sub": [],
+   "missed": [
+    "T1218.013"
+   ],
+   "missed_but_shown": [
+    "T1218.013"
+   ],
+   "counted_but_not_listed_by_authors": [],
+   "verdict": "no_decision_features",
+   "named_actors": []
+  },
+  {
+   "recording": "datasets/attack_techniques/T1218/diskshadow/windows-sysmon.log",
+   "technique_directory": "T1218",
+   "investigated": true,
+   "evidence": 1,
+   "authors_techniques_as_labelled": [
+    "T1218"
+   ],
+   "authors_techniques": [
+    "T1218"
+   ],
+   "counted": [],
+   "found_exactly": [],
+   "found_as_parent_or_sub": [],
+   "missed": [
+    "T1218"
+   ],
+   "missed_but_shown": [],
+   "counted_but_not_listed_by_authors": [],
+   "verdict": "no_decision_features",
+   "named_actors": []
+  },
+  {
+   "recording": "datasets/attack_techniques/T1218/eviltwin/windows-sysmon.log",
+   "technique_directory": "T1218",
+   "investigated": true,
+   "evidence": 21,
+   "authors_techniques_as_labelled": [
+    "T1218"
+   ],
+   "authors_techniques": [
+    "T1218"
+   ],
+   "counted": [],
+   "found_exactly": [],
+   "found_as_parent_or_sub": [],
+   "missed": [
+    "T1218"
+   ],
+   "missed_but_shown": [
+    "T1218"
+   ],
+   "counted_but_not_listed_by_authors": [],
+   "verdict": "no_decision_features",
+   "named_actors": []
+  },
+  {
+   "recording": "datasets/attack_techniques/T1219/atomic_red_team/windows-sysmon.log",
+   "technique_directory": "T1219",
+   "investigated": true,
+   "evidence": 39,
+   "authors_techniques_as_labelled": [
+    "T1219"
+   ],
+   "authors_techniques": [
+    "T1219"
+   ],
+   "counted": [
+    "T1059.001",
+    "T1219.002"
+   ],
+   "found_exactly": [],
+   "found_as_parent_or_sub": [
+    "T1219"
+   ],
+   "missed": [],
+   "missed_but_shown": [],
+   "counted_but_not_listed_by_authors": [
+    "T1059.001"
+   ],
+   "verdict": "not_distinguishable",
+   "named_actors": []
+  },
+  {
+   "recording": "datasets/attack_techniques/T1220/atomic_red_team/windows-sysmon.log",
+   "technique_directory": "T1220",
+   "investigated": true,
+   "evidence": 31,
+   "authors_techniques_as_labelled": [
+    "T1220"
+   ],
+   "authors_techniques": [
+    "T1220"
+   ],
+   "counted": [
+    "T1220"
+   ],
+   "found_exactly": [
+    "T1220"
+   ],
+   "found_as_parent_or_sub": [],
+   "missed": [],
+   "missed_but_shown": [],
+   "counted_but_not_listed_by_authors": [],
+   "verdict": "not_distinguishable",
+   "named_actors": []
+  },
+  {
+   "recording": "datasets/attack_techniques/T1222.001/atomic_red_team/windows-sysmon.log",
+   "technique_directory": "T1222.001",
+   "investigated": true,
+   "evidence": 299,
+   "authors_techniques_as_labelled": [
+    "T1222.001"
+   ],
+   "authors_techniques": [
+    "T1222.001"
+   ],
+   "counted": [
+    "T1003",
+    "T1003.001",
+    "T1021.006",
+    "T1027.004",
+    "T1033",
+    "T1036",
+    "T1036.005",
+    "T1059",
+    "T1059.001",
+    "T1204",
+    "T1222.001",
+    "T1529",
+    "T1564.001",
+    "T1574.001"
+   ],
+   "found_exactly": [
+    "T1222.001"
+   ],
+   "found_as_parent_or_sub": [],
+   "missed": [],
+   "missed_but_shown": [],
+   "counted_but_not_listed_by_authors": [
+    "T1003",
+    "T1003.001",
+    "T1021.006",
+    "T1027.004",
+    "T1033",
+    "T1036",
+    "T1036.005",
+    "T1059",
+    "T1059.001",
+    "T1204",
+    "T1529",
+    "T1564.001",
+    "T1574.001"
+   ],
+   "verdict": "not_distinguishable",
+   "named_actors": []
+  },
+  {
+   "recording": "datasets/attack_techniques/T1482/atomic_red_team/windows-sysmon.log",
+   "technique_directory": "T1482",
+   "investigated": true,
+   "evidence": 72,
+   "authors_techniques_as_labelled": [
+    "T1482"
+   ],
+   "authors_techniques": [
+    "T1482"
+   ],
+   "counted": [
+    "T1059",
+    "T1087.002",
+    "T1482"
+   ],
+   "found_exactly": [
+    "T1482"
+   ],
+   "found_as_parent_or_sub": [],
+   "missed": [],
+   "missed_but_shown": [],
+   "counted_but_not_listed_by_authors": [
+    "T1059",
+    "T1087.002"
+   ],
+   "verdict": "not_distinguishable",
+   "named_actors": []
+  },
+  {
+   "recording": "datasets/attack_techniques/T1482/discovery/windows-sysmon.log",
+   "technique_directory": "T1482",
+   "investigated": true,
+   "evidence": 17,
+   "authors_techniques_as_labelled": [
+    "T1482"
+   ],
+   "authors_techniques": [
+    "T1482"
+   ],
+   "counted": [
+    "T1059",
+    "T1059.001"
+   ],
+   "found_exactly": [],
+   "found_as_parent_or_sub": [],
+   "missed": [
+    "T1482"
+   ],
+   "missed_but_shown": [],
+   "counted_but_not_listed_by_authors": [
+    "T1059",
+    "T1059.001"
+   ],
+   "verdict": "not_distinguishable",
+   "named_actors": []
+  },
+  {
+   "recording": "datasets/attack_techniques/T1485/atomic_red_team/windows-sysmon.log",
+   "technique_directory": "T1485",
+   "investigated": true,
+   "evidence": 118,
+   "authors_techniques_as_labelled": [
+    "T1485"
+   ],
+   "authors_techniques": [
+    "T1485"
+   ],
+   "counted": [
+    "T1003",
+    "T1003.001",
+    "T1021.006",
+    "T1027.004",
+    "T1033",
+    "T1036",
+    "T1036.005",
+    "T1059",
+    "T1059.001",
+    "T1204",
+    "T1529",
+    "T1547.001"
+   ],
+   "found_exactly": [],
+   "found_as_parent_or_sub": [],
+   "missed": [
+    "T1485"
+   ],
+   "missed_but_shown": [],
+   "counted_but_not_listed_by_authors": [
+    "T1003",
+    "T1003.001",
+    "T1021.006",
+    "T1027.004",
+    "T1033",
+    "T1036",
+    "T1036.005",
+    "T1059",
+    "T1059.001",
+    "T1204",
+    "T1529",
+    "T1547.001"
+   ],
+   "verdict": "not_distinguishable",
+   "named_actors": []
+  },
+  {
+   "recording": "datasets/attack_techniques/T1485/excessive_file_deletions/windows-sysmon.log",
+   "technique_directory": "T1485",
+   "investigated": true,
+   "evidence": 0,
+   "authors_techniques_as_labelled": [
+    "T1485"
+   ],
+   "authors_techniques": [
+    "T1485"
+   ],
+   "counted": [],
+   "found_exactly": [],
+   "found_as_parent_or_sub": [],
+   "missed": [
+    "T1485"
+   ],
+   "missed_but_shown": [],
+   "counted_but_not_listed_by_authors": [],
+   "verdict": "no_decision_features",
+   "named_actors": []
+  },
+  {
+   "recording": "datasets/attack_techniques/T1485/ransomware_extensions/windows-sysmon.log",
+   "technique_directory": "T1485",
+   "investigated": true,
+   "evidence": 0,
+   "authors_techniques_as_labelled": [
+    "T1485"
+   ],
+   "authors_techniques": [
+    "T1485"
+   ],
+   "counted": [],
+   "found_exactly": [],
+   "found_as_parent_or_sub": [],
+   "missed": [
+    "T1485"
+   ],
+   "missed_but_shown": [],
+   "counted_but_not_listed_by_authors": [],
+   "verdict": "no_decision_features",
+   "named_actors": []
+  },
+  {
+   "recording": "datasets/attack_techniques/T1485/ransomware_notes/windows-sysmon.log",
+   "technique_directory": "T1485",
+   "investigated": true,
+   "evidence": 0,
+   "authors_techniques_as_labelled": [
+    "T1485"
+   ],
+   "authors_techniques": [
+    "T1485"
+   ],
+   "counted": [],
+   "found_exactly": [],
+   "found_as_parent_or_sub": [],
+   "missed": [
+    "T1485"
+   ],
+   "missed_but_shown": [],
+   "counted_but_not_listed_by_authors": [],
+   "verdict": "no_decision_features",
+   "named_actors": []
+  },
+  {
+   "recording": "datasets/attack_techniques/T1486/dcrypt/windows-sysmon.log",
+   "technique_directory": "T1486",
+   "investigated": true,
+   "evidence": 4,
+   "authors_techniques_as_labelled": [
+    "T1486"
+   ],
+   "authors_techniques": [
+    "T1486"
+   ],
+   "counted": [],
+   "found_exactly": [],
+   "found_as_parent_or_sub": [],
+   "missed": [
+    "T1486"
+   ],
+   "missed_but_shown": [],
+   "counted_but_not_listed_by_authors": [],
+   "verdict": "no_decision_features",
+   "named_actors": []
+  },
+  {
+   "recording": "datasets/attack_techniques/T1486/sam_sam_note/windows-sysmon.log",
+   "technique_directory": "T1486",
+   "investigated": true,
+   "evidence": 114,
+   "authors_techniques_as_labelled": [
+    "T1486"
+   ],
+   "authors_techniques": [
+    "T1486"
+   ],
+   "counted": [
+    "T1003",
+    "T1003.001",
+    "T1021.006",
+    "T1027.004",
+    "T1033",
+    "T1036",
+    "T1036.005",
+    "T1059",
+    "T1059.001",
+    "T1204",
+    "T1529",
+    "T1547.001"
+   ],
+   "found_exactly": [],
+   "found_as_parent_or_sub": [],
+   "missed": [
+    "T1486"
+   ],
+   "missed_but_shown": [],
+   "counted_but_not_listed_by_authors": [
+    "T1003",
+    "T1003.001",
+    "T1021.006",
+    "T1027.004",
+    "T1033",
+    "T1036",
+    "T1036.005",
+    "T1059",
+    "T1059.001",
+    "T1204",
+    "T1529",
+    "T1547.001"
+   ],
+   "verdict": "not_distinguishable",
+   "named_actors": []
+  },
+  {
+   "recording": "datasets/attack_techniques/T1490/atomic_red_team/windows-sysmon.log",
+   "technique_directory": "T1490",
+   "investigated": true,
+   "evidence": 30,
+   "authors_techniques_as_labelled": [
+    "T1490"
+   ],
+   "authors_techniques": [
+    "T1490"
+   ],
+   "counted": [
+    "T1490"
+   ],
+   "found_exactly": [
+    "T1490"
+   ],
+   "found_as_parent_or_sub": [],
+   "missed": [],
+   "missed_but_shown": [],
+   "counted_but_not_listed_by_authors": [],
+   "verdict": "not_distinguishable",
+   "named_actors": []
+  },
+  {
+   "recording": "datasets/attack_techniques/T1490/ransomware_notes/windows-sysmon.log",
+   "technique_directory": "T1490",
+   "investigated": true,
+   "evidence": 308,
+   "authors_techniques_as_labelled": [
+    "T1490"
+   ],
+   "authors_techniques": [
+    "T1490"
+   ],
+   "counted": [
+    "T1003",
+    "T1003.001",
+    "T1021.006",
+    "T1027.004",
+    "T1033",
+    "T1036",
+    "T1036.005",
+    "T1059",
+    "T1059.001",
+    "T1204",
+    "T1490",
+    "T1529",
+    "T1574.001"
+   ],
+   "found_exactly": [
+    "T1490"
+   ],
+   "found_as_parent_or_sub": [],
+   "missed": [],
+   "missed_but_shown": [],
+   "counted_but_not_listed_by_authors": [
+    "T1003",
+    "T1003.001",
+    "T1021.006",
+    "T1027.004",
+    "T1033",
+    "T1036",
+    "T1036.005",
+    "T1059",
+    "T1059.001",
+    "T1204",
+    "T1529",
+    "T1574.001"
+   ],
+   "verdict": "not_distinguishable",
+   "named_actors": []
+  },
+  {
+   "recording": "datasets/attack_techniques/T1543.003/atomic_red_team/windows-sysmon.log",
+   "technique_directory": "T1543.003",
+   "investigated": true,
+   "evidence": 302,
+   "authors_techniques_as_labelled": [
+    "T1543.003"
+   ],
+   "authors_techniques": [
+    "T1543.003"
+   ],
+   "counted": [
+    "T1003",
+    "T1003.001",
+    "T1021.006",
+    "T1027.004",
+    "T1033",
+    "T1036",
+    "T1036.005",
+    "T1059",
+    "T1059.001",
+    "T1204",
+    "T1529",
+    "T1543.003",
+    "T1574.001"
+   ],
+   "found_exactly": [
+    "T1543.003"
+   ],
+   "found_as_parent_or_sub": [],
+   "missed": [],
+   "missed_but_shown": [],
+   "counted_but_not_listed_by_authors": [
+    "T1003",
+    "T1003.001",
+    "T1021.006",
+    "T1027.004",
+    "T1033",
+    "T1036",
+    "T1036.005",
+    "T1059",
+    "T1059.001",
+    "T1204",
+    "T1529",
+    "T1574.001"
+   ],
+   "verdict": "not_distinguishable",
+   "named_actors": []
+  },
+  {
+   "recording": "datasets/attack_techniques/T1543.003/lateral_movement/windows-sysmon.log",
+   "technique_directory": "T1543.003",
+   "investigated": true,
+   "evidence": 4,
+   "authors_techniques_as_labelled": [
+    "T1543.003"
+   ],
+   "authors_techniques": [
+    "T1543.003"
+   ],
+   "counted": [],
+   "found_exactly": [],
+   "found_as_parent_or_sub": [],
+   "missed": [
+    "T1543.003"
+   ],
+   "missed_but_shown": [
+    "T1543.003"
+   ],
+   "counted_but_not_listed_by_authors": [],
+   "verdict": "no_decision_features",
+   "named_actors": []
+  },
+  {
+   "recording": "datasets/attack_techniques/T1543.003/lateral_movement_lolbas/windows-sysmon.log",
+   "technique_directory": "T1543.003",
+   "investigated": true,
+   "evidence": 35,
+   "authors_techniques_as_labelled": [
+    "T1543.003"
+   ],
+   "authors_techniques": [
+    "T1543.003"
+   ],
+   "counted": [
+    "T1202",
+    "T1543.003"
+   ],
+   "found_exactly": [
+    "T1543.003"
+   ],
+   "found_as_parent_or_sub": [],
+   "missed": [],
+   "missed_but_shown": [],
+   "counted_but_not_listed_by_authors": [
+    "T1202"
+   ],
+   "verdict": "not_distinguishable",
+   "named_actors": []
+  },
+  {
+   "recording": "datasets/attack_techniques/T1543.003/lateral_movement_powershell/windows-sysmon.log",
+   "technique_directory": "T1543.003",
+   "investigated": true,
+   "evidence": 42,
+   "authors_techniques_as_labelled": [
+    "T1543.003"
+   ],
+   "authors_techniques": [
+    "T1543.003"
+   ],
+   "counted": [
+    "T1059",
+    "T1059.001",
+    "T1132.001",
+    "T1543.003",
+    "T1569.002"
+   ],
+   "found_exactly": [
+    "T1543.003"
+   ],
+   "found_as_parent_or_sub": [],
+   "missed": [],
+   "missed_but_shown": [],
+   "counted_but_not_listed_by_authors": [
+    "T1059",
+    "T1059.001",
+    "T1132.001",
+    "T1569.002"
+   ],
+   "verdict": "not_distinguishable",
+   "named_actors": []
+  },
+  {
+   "recording": "datasets/attack_techniques/T1546.003/atomic_red_team/windows-sysmon.log",
+   "technique_directory": "T1546.003",
+   "investigated": true,
+   "evidence": 283,
+   "authors_techniques_as_labelled": [
+    "T1546.003"
+   ],
+   "authors_techniques": [
+    "T1546.003"
+   ],
+   "counted": [
+    "T1003",
+    "T1003.001",
+    "T1021.006",
+    "T1027.004",
+    "T1033",
+    "T1036",
+    "T1036.005",
+    "T1059",
+    "T1059.001",
+    "T1204",
+    "T1218",
+    "T1529",
+    "T1546",
+    "T1546.003",
+    "T1574.001"
+   ],
+   "found_exactly": [
+    "T1546.003"
+   ],
+   "found_as_parent_or_sub": [],
+   "missed": [],
+   "missed_but_shown": [],
+   "counted_but_not_listed_by_authors": [
+    "T1003",
+    "T1003.001",
+    "T1021.006",
+    "T1027.004",
+    "T1033",
+    "T1036",
+    "T1036.005",
+    "T1059",
+    "T1059.001",
+    "T1204",
+    "T1218",
+    "T1529",
+    "T1574.001"
+   ],
+   "verdict": "not_distinguishable",
+   "named_actors": []
+  },
+  {
+   "recording": "datasets/attack_techniques/T1546.003/wmi_event_subscription/windows-sysmon.log",
+   "technique_directory": "T1546.003",
+   "investigated": true,
+   "evidence": 3,
+   "authors_techniques_as_labelled": [
+    "T1546.003"
+   ],
+   "authors_techniques": [
+    "T1546.003"
+   ],
+   "counted": [
+    "T1059.005",
+    "T1546",
+    "T1546.003"
+   ],
+   "found_exactly": [
+    "T1546.003"
+   ],
+   "found_as_parent_or_sub": [],
+   "missed": [],
+   "missed_but_shown": [],
+   "counted_but_not_listed_by_authors": [
+    "T1059.005"
+   ],
+   "verdict": "not_distinguishable",
+   "named_actors": []
+  },
+  {
+   "recording": "datasets/attack_techniques/T1546.008/atomic_red_team/windows-sysmon.log",
+   "technique_directory": "T1546.008",
+   "investigated": true,
+   "evidence": 178,
+   "authors_techniques_as_labelled": [
+    "T1546.008"
+   ],
+   "authors_techniques": [
+    "T1546.008"
+   ],
+   "counted": [
+    "T1021.006",
+    "T1027.004",
+    "T1033",
+    "T1059",
+    "T1059.001",
+    "T1546.008",
+    "T1574.001"
+   ],
+   "found_exactly": [
+    "T1546.008"
+   ],
+   "found_as_parent_or_sub": [],
+   "missed": [],
+   "missed_but_shown": [],
+   "counted_but_not_listed_by_authors": [
+    "T1021.006",
+    "T1027.004",
+    "T1033",
+    "T1059",
+    "T1059.001",
+    "T1574.001"
+   ],
+   "verdict": "not_distinguishable",
+   "named_actors": []
+  },
+  {
+   "recording": "datasets/attack_techniques/T1546.011/atomic_red_team/windows-sysmon.log",
+   "technique_directory": "T1546.011",
+   "investigated": true,
+   "evidence": 334,
+   "authors_techniques_as_labelled": [
+    "T1546.011"
+   ],
+   "authors_techniques": [
+    "T1546.011"
+   ],
+   "counted": [
+    "T1003",
+    "T1003.001",
+    "T1021.006",
+    "T1027.004",
+    "T1033",
+    "T1036",
+    "T1036.005",
+    "T1059",
+    "T1059.001",
+    "T1204",
+    "T1529",
+    "T1546",
+    "T1546.011",
+    "T1547.009",
+    "T1574.001"
+   ],
+   "found_exactly": [
+    "T1546.011"
+   ],
+   "found_as_parent_or_sub": [],
+   "missed": [],
+   "missed_but_shown": [],
+   "counted_but_not_listed_by_authors": [
+    "T1003",
+    "T1003.001",
+    "T1021.006",
+    "T1027.004",
+    "T1033",
+    "T1036",
+    "T1036.005",
+    "T1059",
+    "T1059.001",
+    "T1204",
+    "T1529",
+    "T1547.009",
+    "T1574.001"
+   ],
+   "verdict": "not_distinguishable",
+   "named_actors": []
+  },
+  {
+   "recording": "datasets/attack_techniques/T1546.012/atomic_red_team/windows-sysmon.log",
+   "technique_directory": "T1546.012",
+   "investigated": true,
+   "evidence": 278,
+   "authors_techniques_as_labelled": [
+    "T1546.012"
+   ],
+   "authors_techniques": [
+    "T1546.012"
+   ],
+   "counted": [
+    "T1003",
+    "T1003.001",
+    "T1021.006",
+    "T1027.004",
+    "T1033",
+    "T1059",
+    "T1059.001",
+    "T1204",
+    "T1529",
+    "T1546.012",
+    "T1574.001"
+   ],
+   "found_exactly": [
+    "T1546.012"
+   ],
+   "found_as_parent_or_sub": [],
+   "missed": [],
+   "missed_but_shown": [],
+   "counted_but_not_listed_by_authors": [
+    "T1003",
+    "T1003.001",
+    "T1021.006",
+    "T1027.004",
+    "T1033",
+    "T1059",
+    "T1059.001",
+    "T1204",
+    "T1529",
+    "T1574.001"
+   ],
+   "verdict": "not_distinguishable",
+   "named_actors": []
+  },
+  {
+   "recording": "datasets/attack_techniques/T1546.015/atomic_red_team/windows-sysmon.log",
+   "technique_directory": "T1546.015",
+   "investigated": true,
+   "evidence": 1,
+   "authors_techniques_as_labelled": [
+    "T1546.015"
+   ],
+   "authors_techniques": [
+    "T1546.015"
+   ],
+   "counted": [
+    "T1546.015"
+   ],
+   "found_exactly": [
+    "T1546.015"
+   ],
+   "found_as_parent_or_sub": [],
+   "missed": [],
+   "missed_but_shown": [],
+   "counted_but_not_listed_by_authors": [],
+   "verdict": "not_distinguishable",
+   "named_actors": []
+  },
+  {
+   "recording": "datasets/attack_techniques/T1546.015/uac_colorui/windows-sysmon.log",
+   "technique_directory": "T1546.015",
+   "investigated": true,
+   "evidence": 25,
+   "authors_techniques_as_labelled": [
+    "T1546.015"
+   ],
+   "authors_techniques": [
+    "T1546.015"
+   ],
+   "counted": [
+    "T1003",
+    "T1003.001",
+    "T1059",
+    "T1548.002",
+    "T1685"
+   ],
+   "found_exactly": [],
+   "found_as_parent_or_sub": [],
+   "missed": [
+    "T1546.015"
+   ],
+   "missed_but_shown": [],
+   "counted_but_not_listed_by_authors": [
+    "T1003",
+    "T1003.001",
+    "T1059",
+    "T1548.002",
+    "T1685"
+   ],
+   "verdict": "not_distinguishable",
+   "named_actors": []
+  },
+  {
+   "recording": "datasets/attack_techniques/T1547.001/atomic_red_team/windows-sysmon.log",
+   "technique_directory": "T1547.001",
+   "investigated": true,
+   "evidence": 327,
+   "authors_techniques_as_labelled": [
+    "T1547.001"
+   ],
+   "authors_techniques": [
+    "T1547.001"
+   ],
+   "counted": [
+    "T1003",
+    "T1003.001",
+    "T1021.006",
+    "T1027.004",
+    "T1033",
+    "T1036",
+    "T1036.005",
+    "T1059",
+    "T1059.001",
+    "T1204",
+    "T1529",
+    "T1547.001",
+    "T1574.001"
+   ],
+   "found_exactly": [
+    "T1547.001"
+   ],
+   "found_as_parent_or_sub": [],
+   "missed": [],
+   "missed_but_shown": [],
+   "counted_but_not_listed_by_authors": [
+    "T1003",
+    "T1003.001",
+    "T1021.006",
+    "T1027.004",
+    "T1033",
+    "T1036",
+    "T1036.005",
+    "T1059",
+    "T1059.001",
+    "T1204",
+    "T1529",
+    "T1574.001"
+   ],
+   "verdict": "not_distinguishable",
+   "named_actors": []
+  },
+  {
+   "recording": "datasets/attack_techniques/T1547.005/malicious_ssp/windows-sysmon.log",
+   "technique_directory": "T1547.005",
+   "investigated": true,
+   "evidence": 4,
+   "authors_techniques_as_labelled": [
+    "T1547.005"
+   ],
+   "authors_techniques": [
+    "T1547.005"
+   ],
+   "counted": [],
+   "found_exactly": [],
+   "found_as_parent_or_sub": [],
+   "missed": [
+    "T1547.005"
+   ],
+   "missed_but_shown": [
+    "T1547.005"
+   ],
+   "counted_but_not_listed_by_authors": [],
+   "verdict": "no_decision_features",
+   "named_actors": []
+  },
+  {
+   "recording": "datasets/attack_techniques/T1547.008/atomic_red_team/windows-sysmon.log",
+   "technique_directory": "T1547.008",
+   "investigated": true,
+   "evidence": 7,
+   "authors_techniques_as_labelled": [
+    "T1547.008"
+   ],
+   "authors_techniques": [
+    "T1547.008"
+   ],
+   "counted": [],
+   "found_exactly": [],
+   "found_as_parent_or_sub": [],
+   "missed": [
+    "T1547.008"
+   ],
+   "missed_but_shown": [
+    "T1547.008"
+   ],
+   "counted_but_not_listed_by_authors": [],
+   "verdict": "no_decision_features",
+   "named_actors": []
+  },
+  {
+   "recording": "datasets/attack_techniques/T1547.010/atomic_red_team/windows-sysmon.log",
+   "technique_directory": "T1547.010",
+   "investigated": true,
+   "evidence": 289,
+   "authors_techniques_as_labelled": [
+    "T1547.010"
+   ],
+   "authors_techniques": [
+    "T1547.010"
+   ],
+   "counted": [
+    "T1003",
+    "T1003.001",
+    "T1021.006",
+    "T1027.004",
+    "T1033",
+    "T1036",
+    "T1036.005",
+    "T1059",
+    "T1059.001",
+    "T1204",
+    "T1529",
+    "T1574.001"
+   ],
+   "found_exactly": [],
+   "found_as_parent_or_sub": [],
+   "missed": [
+    "T1547.010"
+   ],
+   "missed_but_shown": [
+    "T1547.010"
+   ],
+   "counted_but_not_listed_by_authors": [
+    "T1003",
+    "T1003.001",
+    "T1021.006",
+    "T1027.004",
+    "T1033",
+    "T1036",
+    "T1036.005",
+    "T1059",
+    "T1059.001",
+    "T1204",
+    "T1529",
+    "T1574.001"
+   ],
+   "verdict": "not_distinguishable",
+   "named_actors": []
+  },
+  {
+   "recording": "datasets/attack_techniques/T1547.012/printnightmare/windows-sysmon.log",
+   "technique_directory": "T1547.012",
+   "investigated": true,
+   "evidence": 30,
+   "authors_techniques_as_labelled": [
+    "T1547.012"
+   ],
+   "authors_techniques": [
+    "T1547.012"
+   ],
+   "counted": [
+    "T1033",
+    "T1068"
+   ],
+   "found_exactly": [],
+   "found_as_parent_or_sub": [],
+   "missed": [
+    "T1547.012"
+   ],
+   "missed_but_shown": [],
+   "counted_but_not_listed_by_authors": [
+    "T1033",
+    "T1068"
+   ],
+   "verdict": "not_distinguishable",
+   "named_actors": []
+  },
+  {
+   "recording": "datasets/attack_techniques/T1548.002/atomic_red_team/windows-sysmon.log",
+   "technique_directory": "T1548.002",
+   "investigated": true,
+   "evidence": 330,
+   "authors_techniques_as_labelled": [
+    "T1548.002"
+   ],
+   "authors_techniques": [
+    "T1548.002"
+   ],
+   "counted": [
+    "T1003",
+    "T1003.001",
+    "T1021.006",
+    "T1027.004",
+    "T1033",
+    "T1036",
+    "T1036.005",
+    "T1059",
+    "T1059.001",
+    "T1204",
+    "T1529",
+    "T1548.002",
+    "T1574.001"
+   ],
+   "found_exactly": [
+    "T1548.002"
+   ],
+   "found_as_parent_or_sub": [],
+   "missed": [],
+   "missed_but_shown": [],
+   "counted_but_not_listed_by_authors": [
+    "T1003",
+    "T1003.001",
+    "T1021.006",
+    "T1027.004",
+    "T1033",
+    "T1036",
+    "T1036.005",
+    "T1059",
+    "T1059.001",
+    "T1204",
+    "T1529",
+    "T1574.001"
+   ],
+   "verdict": "not_distinguishable",
+   "named_actors": []
+  },
+  {
+   "recording": "datasets/attack_techniques/T1548.002/slui/windows-sysmon.log",
+   "technique_directory": "T1548.002",
+   "investigated": true,
+   "evidence": 48,
+   "authors_techniques_as_labelled": [
+    "T1548.002"
+   ],
+   "authors_techniques": [
+    "T1548.002"
+   ],
+   "counted": [
+    "T1003",
+    "T1027.004",
+    "T1033",
+    "T1059",
+    "T1547.001",
+    "T1548.002"
+   ],
+   "found_exactly": [
+    "T1548.002"
+   ],
+   "found_as_parent_or_sub": [],
+   "missed": [],
+   "missed_but_shown": [],
+   "counted_but_not_listed_by_authors": [
+    "T1003",
+    "T1027.004",
+    "T1033",
+    "T1059",
+    "T1547.001"
+   ],
+   "verdict": "not_distinguishable",
+   "named_actors": []
+  },
+  {
+   "recording": "datasets/attack_techniques/T1548/uac_bypass/windows-sysmon.log",
+   "technique_directory": "T1548",
+   "investigated": true,
+   "evidence": 32,
+   "authors_techniques_as_labelled": [
+    "T1548"
+   ],
+   "authors_techniques": [
+    "T1548"
+   ],
+   "counted": [
+    "T1036.003",
+    "T1548.002",
+    "T1685"
+   ],
+   "found_exactly": [],
+   "found_as_parent_or_sub": [
+    "T1548"
+   ],
+   "missed": [],
+   "missed_but_shown": [],
+   "counted_but_not_listed_by_authors": [
+    "T1036.003",
+    "T1685"
+   ],
+   "verdict": "not_distinguishable",
+   "named_actors": []
+  },
+  {
+   "recording": "datasets/attack_techniques/T1550.002/atomic_red_team/windows-sysmon.log",
+   "technique_directory": "T1550.002",
+   "investigated": true,
+   "evidence": 11,
+   "authors_techniques_as_labelled": [
+    "T1550.002"
+   ],
+   "authors_techniques": [
+    "T1550.002"
+   ],
+   "counted": [
+    "T1003"
+   ],
+   "found_exactly": [],
+   "found_as_parent_or_sub": [],
+   "missed": [
+    "T1550.002"
+   ],
+   "missed_but_shown": [],
+   "counted_but_not_listed_by_authors": [
+    "T1003"
+   ],
+   "verdict": "not_distinguishable",
+   "named_actors": []
+  },
+  {
+   "recording": "datasets/attack_techniques/T1550.003/mimikatz/windows-sysmon.log",
+   "technique_directory": "T1550.003",
+   "investigated": true,
+   "evidence": 31,
+   "authors_techniques_as_labelled": [
+    "T1550.003"
+   ],
+   "authors_techniques": [
+    "T1550.003"
+   ],
+   "counted": [
+    "T1003",
+    "T1003.001",
+    "T1588.002"
+   ],
+   "found_exactly": [],
+   "found_as_parent_or_sub": [],
+   "missed": [
+    "T1550.003"
+   ],
+   "missed_but_shown": [],
+   "counted_but_not_listed_by_authors": [
+    "T1003",
+    "T1003.001",
+    "T1588.002"
+   ],
+   "verdict": "not_distinguishable",
+   "named_actors": []
+  },
+  {
+   "recording": "datasets/attack_techniques/T1550.003/rubeus/windows-sysmon.log",
+   "technique_directory": "T1550.003",
+   "investigated": true,
+   "evidence": 6,
+   "authors_techniques_as_labelled": [
+    "T1550.003"
+   ],
+   "authors_techniques": [
+    "T1550.003"
+   ],
+   "counted": [
+    "T1550.003"
+   ],
+   "found_exactly": [
+    "T1550.003"
+   ],
+   "found_as_parent_or_sub": [],
+   "missed": [],
+   "missed_but_shown": [],
+   "counted_but_not_listed_by_authors": [],
+   "verdict": "not_distinguishable",
+   "named_actors": []
+  },
+  {
+   "recording": "datasets/attack_techniques/T1550/rubeus/windows-sysmon.log",
+   "technique_directory": "T1550",
+   "investigated": true,
+   "evidence": 15,
+   "authors_techniques_as_labelled": [
+    "T1550"
+   ],
+   "authors_techniques": [
+    "T1550"
+   ],
+   "counted": [
+    "T1685.001"
+   ],
+   "found_exactly": [],
+   "found_as_parent_or_sub": [],
+   "missed": [
+    "T1550"
+   ],
+   "missed_but_shown": [
+    "T1550"
+   ],
+   "counted_but_not_listed_by_authors": [
+    "T1685.001"
+   ],
+   "verdict": "not_distinguishable",
+   "named_actors": []
+  },
+  {
+   "recording": "datasets/attack_techniques/T1552.002/autoadminlogon/windows-sysmon.log",
+   "technique_directory": "T1552.002",
+   "investigated": true,
+   "evidence": 23,
+   "authors_techniques_as_labelled": [
+    "T1552.002"
+   ],
+   "authors_techniques": [
+    "T1552.002"
+   ],
+   "counted": [
+    "T1685"
+   ],
+   "found_exactly": [],
+   "found_as_parent_or_sub": [],
+   "missed": [
+    "T1552.002"
+   ],
+   "missed_but_shown": [],
+   "counted_but_not_listed_by_authors": [
+    "T1685"
+   ],
+   "verdict": "not_distinguishable",
+   "named_actors": []
+  },
+  {
+   "recording": "datasets/attack_techniques/T1553.004/atomic_red_team/windows-sysmon.log",
+   "technique_directory": "T1553.004",
+   "investigated": true,
+   "evidence": 292,
+   "authors_techniques_as_labelled": [
+    "T1553.004"
+   ],
+   "authors_techniques": [
+    "T1553.004"
+   ],
+   "counted": [
+    "T1003",
+    "T1003.001",
+    "T1021.006",
+    "T1027.004",
+    "T1033",
+    "T1036",
+    "T1036.005",
+    "T1059",
+    "T1059.001",
+    "T1204",
+    "T1529",
+    "T1574.001"
+   ],
+   "found_exactly": [],
+   "found_as_parent_or_sub": [],
+   "missed": [
+    "T1553.004"
+   ],
+   "missed_but_shown": [],
+   "counted_but_not_listed_by_authors": [
+    "T1003",
+    "T1003.001",
+    "T1021.006",
+    "T1027.004",
+    "T1033",
+    "T1036",
+    "T1036.005",
+    "T1059",
+    "T1059.001",
+    "T1204",
+    "T1529",
+    "T1574.001"
+   ],
+   "verdict": "not_distinguishable",
+   "named_actors": []
+  },
+  {
+   "recording": "datasets/attack_techniques/T1556/disable_credential_guard/windows-sysmon.log",
+   "technique_directory": "T1556",
+   "investigated": true,
+   "evidence": 1,
+   "authors_techniques_as_labelled": [
+    "T1556"
+   ],
+   "authors_techniques": [
+    "T1556"
+   ],
+   "counted": [
+    "T1685"
+   ],
+   "found_exactly": [],
+   "found_as_parent_or_sub": [],
+   "missed": [
+    "T1556"
+   ],
+   "missed_but_shown": [],
+   "counted_but_not_listed_by_authors": [
+    "T1685"
+   ],
+   "verdict": "not_distinguishable",
+   "named_actors": []
+  },
+  {
+   "recording": "datasets/attack_techniques/T1556/disable_lsa_protection/windows-sysmon.log",
+   "technique_directory": "T1556",
+   "investigated": true,
+   "evidence": 0,
+   "authors_techniques_as_labelled": [
+    "T1556"
+   ],
+   "authors_techniques": [
+    "T1556"
+   ],
+   "counted": [],
+   "found_exactly": [],
+   "found_as_parent_or_sub": [],
+   "missed": [
+    "T1556"
+   ],
+   "missed_but_shown": [],
+   "counted_but_not_listed_by_authors": [],
+   "verdict": "no_decision_features",
+   "named_actors": []
+  },
+  {
+   "recording": "datasets/attack_techniques/T1558.003/atomic_red_team/windows-sysmon.log",
+   "technique_directory": "T1558.003",
+   "investigated": true,
+   "evidence": 202,
+   "authors_techniques_as_labelled": [
+    "T1558.003"
+   ],
+   "authors_techniques": [
+    "T1558.003"
+   ],
+   "counted": [
+    "T1003",
+    "T1003.001",
+    "T1021.006",
+    "T1027.004",
+    "T1033",
+    "T1036",
+    "T1036.005",
+    "T1059",
+    "T1059.001",
+    "T1204",
+    "T1529"
+   ],
+   "found_exactly": [],
+   "found_as_parent_or_sub": [],
+   "missed": [
+    "T1558.003"
+   ],
+   "missed_but_shown": [],
+   "counted_but_not_listed_by_authors": [
+    "T1003",
+    "T1003.001",
+    "T1021.006",
+    "T1027.004",
+    "T1033",
+    "T1036",
+    "T1036.005",
+    "T1059",
+    "T1059.001",
+    "T1204",
+    "T1529"
+   ],
+   "verdict": "not_distinguishable",
+   "named_actors": []
+  },
+  {
+   "recording": "datasets/attack_techniques/T1558.003/rubeus/windows-sysmon.log",
+   "technique_directory": "T1558.003",
+   "investigated": true,
+   "evidence": 47,
+   "authors_techniques_as_labelled": [
+    "T1558.003"
+   ],
+   "authors_techniques": [
+    "T1558.003"
+   ],
+   "counted": [
+    "T1685.001"
+   ],
+   "found_exactly": [],
+   "found_as_parent_or_sub": [],
+   "missed": [
+    "T1558.003"
+   ],
+   "missed_but_shown": [
+    "T1558.003"
+   ],
+   "counted_but_not_listed_by_authors": [
+    "T1685.001"
+   ],
+   "verdict": "not_distinguishable",
+   "named_actors": []
+  },
+  {
+   "recording": "datasets/attack_techniques/T1560.001/archive_utility/windows-sysmon.log",
+   "technique_directory": "T1560.001",
+   "investigated": true,
+   "evidence": 26,
+   "authors_techniques_as_labelled": [
+    "T1560.001"
+   ],
+   "authors_techniques": [
+    "T1560.001"
+   ],
+   "counted": [
+    "T1036.003",
+    "T1197",
+    "T1202",
+    "T1560",
+    "T1560.001"
+   ],
+   "found_exactly": [
+    "T1560.001"
+   ],
+   "found_as_parent_or_sub": [],
+   "missed": [],
+   "missed_but_shown": [],
+   "counted_but_not_listed_by_authors": [
+    "T1036.003",
+    "T1197",
+    "T1202"
+   ],
+   "verdict": "not_distinguishable",
+   "named_actors": []
+  },
+  {
+   "recording": "datasets/attack_techniques/T1562.001/atomic_red_team/windows-sysmon.log",
+   "technique_directory": "T1562.001",
+   "investigated": true,
+   "evidence": 167,
+   "authors_techniques_as_labelled": [
+    "T1562.001"
+   ],
+   "authors_techniques": [
+    "T1685"
+   ],
+   "counted": [
+    "T1003",
+    "T1003.001",
+    "T1021.006",
+    "T1027.004",
+    "T1033",
+    "T1036",
+    "T1036.005",
+    "T1059",
+    "T1059.001",
+    "T1204",
+    "T1529",
+    "T1547.001",
+    "T1548.002",
+    "T1685",
+    "T1685.001"
+   ],
+   "found_exactly": [
+    "T1685"
+   ],
+   "found_as_parent_or_sub": [],
+   "missed": [],
+   "missed_but_shown": [],
+   "counted_but_not_listed_by_authors": [
+    "T1003",
+    "T1003.001",
+    "T1021.006",
+    "T1027.004",
+    "T1033",
+    "T1036",
+    "T1036.005",
+    "T1059",
+    "T1059.001",
+    "T1204",
+    "T1529",
+    "T1547.001",
+    "T1548.002"
+   ],
+   "verdict": "not_distinguishable",
+   "named_actors": []
+  },
+  {
+   "recording": "datasets/attack_techniques/T1562.001/hotkey_disabled_hidden_user/windows-sysmon.log",
+   "technique_directory": "T1562.001",
+   "investigated": true,
+   "evidence": 15,
+   "authors_techniques_as_labelled": [
+    "T1562.001"
+   ],
+   "authors_techniques": [
+    "T1685"
+   ],
+   "counted": [
+    "T1098",
+    "T1112",
+    "T1136.001",
+    "T1564.002",
+    "T1588.002",
+    "T1685"
+   ],
+   "found_exactly": [
+    "T1685"
+   ],
+   "found_as_parent_or_sub": [],
+   "missed": [],
+   "missed_but_shown": [],
+   "counted_but_not_listed_by_authors": [
+    "T1098",
+    "T1112",
+    "T1136.001",
+    "T1564.002",
+    "T1588.002"
+   ],
+   "verdict": "not_distinguishable",
+   "named_actors": []
+  },
+  {
+   "recording": "datasets/attack_techniques/T1562.001/pwh_defender_disabling/windows-sysmon.log",
+   "technique_directory": "T1562.001",
+   "investigated": true,
+   "evidence": 37,
+   "authors_techniques_as_labelled": [
+    "T1562.001"
+   ],
+   "authors_techniques": [
+    "T1685"
+   ],
+   "counted": [
+    "T1685"
+   ],
+   "found_exactly": [
+    "T1685"
+   ],
+   "found_as_parent_or_sub": [],
+   "missed": [],
+   "missed_but_shown": [],
+   "counted_but_not_listed_by_authors": [],
+   "verdict": "not_distinguishable",
+   "named_actors": []
+  },
+  {
+   "recording": "datasets/attack_techniques/T1562.001/sc_service_start_disabled/windows-sysmon.log",
+   "technique_directory": "T1562.001",
+   "investigated": true,
+   "evidence": 2545,
+   "authors_techniques_as_labelled": [
+    "T1562.001"
+   ],
+   "authors_techniques": [
+    "T1685"
+   ],
+   "counted": [
+    "T1685"
+   ],
+   "found_exactly": [
+    "T1685"
+   ],
+   "found_as_parent_or_sub": [],
+   "missed": [],
+   "missed_but_shown": [],
+   "counted_but_not_listed_by_authors": [],
+   "verdict": "not_distinguishable",
+   "named_actors": []
+  },
+  {
+   "recording": "datasets/attack_techniques/T1562.001/unload_sysmon/windows-sysmon.log",
+   "technique_directory": "T1562.001",
+   "investigated": true,
+   "evidence": 7,
+   "authors_techniques_as_labelled": [
+    "T1562.001"
+   ],
+   "authors_techniques": [
+    "T1685"
+   ],
+   "counted": [
+    "T1685"
+   ],
+   "found_exactly": [
+    "T1685"
+   ],
+   "found_as_parent_or_sub": [],
+   "missed": [],
+   "missed_but_shown": [],
+   "counted_but_not_listed_by_authors": [],
+   "verdict": "not_distinguishable",
+   "named_actors": []
+  },
+  {
+   "recording": "datasets/attack_techniques/T1562.001/win_app_defender_disabling/windows-sysmon.log",
+   "technique_directory": "T1562.001",
+   "investigated": true,
+   "evidence": 202,
+   "authors_techniques_as_labelled": [
+    "T1562.001"
+   ],
+   "authors_techniques": [
+    "T1685"
+   ],
+   "counted": [
+    "T1003",
+    "T1003.001",
+    "T1021.006",
+    "T1027.004",
+    "T1033",
+    "T1036",
+    "T1036.005",
+    "T1059",
+    "T1059.001",
+    "T1112",
+    "T1137",
+    "T1204",
+    "T1490",
+    "T1529",
+    "T1547.001",
+    "T1564.001",
+    "T1686.003"
+   ],
+   "found_exactly": [],
+   "found_as_parent_or_sub": [],
+   "missed": [
+    "T1685"
+   ],
+   "missed_but_shown": [
+    "T1685"
+   ],
+   "counted_but_not_listed_by_authors": [
+    "T1003",
+    "T1003.001",
+    "T1021.006",
+    "T1027.004",
+    "T1033",
+    "T1036",
+    "T1036.005",
+    "T1059",
+    "T1059.001",
+    "T1112",
+    "T1137",
+    "T1204",
+    "T1490",
+    "T1529",
+    "T1547.001",
+    "T1564.001",
+    "T1686.003"
+   ],
+   "verdict": "not_distinguishable",
+   "named_actors": []
+  },
+  {
+   "recording": "datasets/attack_techniques/T1562.001/win_defend_service_stop/windows-sysmon.log",
+   "technique_directory": "T1562.001",
+   "investigated": true,
+   "evidence": 118,
+   "authors_techniques_as_labelled": [
+    "T1562.001"
+   ],
+   "authors_techniques": [
+    "T1685"
+   ],
+   "counted": [
+    "T1003",
+    "T1003.001",
+    "T1021.006",
+    "T1027.004",
+    "T1033",
+    "T1036",
+    "T1036.005",
+    "T1059",
+    "T1059.001",
+    "T1204",
+    "T1529",
+    "T1547.001",
+    "T1685"
+   ],
+   "found_exactly": [
+    "T1685"
+   ],
+   "found_as_parent_or_sub": [],
+   "missed": [],
+   "missed_but_shown": [],
+   "counted_but_not_listed_by_authors": [
+    "T1003",
+    "T1003.001",
+    "T1021.006",
+    "T1027.004",
+    "T1033",
+    "T1036",
+    "T1036.005",
+    "T1059",
+    "T1059.001",
+    "T1204",
+    "T1529",
+    "T1547.001"
+   ],
+   "verdict": "not_distinguishable",
+   "named_actors": []
+  },
+  {
+   "recording": "datasets/attack_techniques/T1562.004/atomic_red_team/windows-sysmon.log",
+   "investigated": false,
+   "state": "refused by intake",
+   "problems": [
+    "55 line(s) are not JSON objects"
+   ],
+   "authors_techniques": [
+    "T1686"
+   ]
+  },
+  {
+   "recording": "datasets/attack_techniques/T1566.001/datasets2/windows-sysmon.log",
+   "technique_directory": "T1566.001",
+   "investigated": true,
+   "evidence": 89,
+   "authors_techniques_as_labelled": [
+    "T1566.001"
+   ],
+   "authors_techniques": [
+    "T1566.001"
+   ],
+   "counted": [
+    "T1204.002",
+    "T1218",
+    "T1218.005"
+   ],
+   "found_exactly": [],
+   "found_as_parent_or_sub": [],
+   "missed": [
+    "T1566.001"
+   ],
+   "missed_but_shown": [
+    "T1566.001"
+   ],
+   "counted_but_not_listed_by_authors": [
+    "T1204.002",
+    "T1218",
+    "T1218.005"
+   ],
+   "verdict": "not_distinguishable",
+   "named_actors": []
+  },
+  {
+   "recording": "datasets/attack_techniques/T1566.001/macro/windows-sysmon.log",
+   "technique_directory": "T1566.001",
+   "investigated": true,
+   "evidence": 314,
+   "authors_techniques_as_labelled": [
+    "T1566.001"
+   ],
+   "authors_techniques": [
+    "T1566.001"
+   ],
+   "counted": [
+    "T1003",
+    "T1003.001",
+    "T1033",
+    "T1059",
+    "T1059.001",
+    "T1082",
+    "T1112",
+    "T1204",
+    "T1204.002",
+    "T1566.001"
+   ],
+   "found_exactly": [
+    "T1566.001"
+   ],
+   "found_as_parent_or_sub": [],
+   "missed": [],
+   "missed_but_shown": [],
+   "counted_but_not_listed_by_authors": [
+    "T1003",
+    "T1003.001",
+    "T1033",
+    "T1059",
+    "T1059.001",
+    "T1082",
+    "T1112",
+    "T1204",
+    "T1204.002"
+   ],
+   "verdict": "not_distinguishable",
+   "named_actors": []
+  },
+  {
+   "recording": "datasets/attack_techniques/T1566.002/atomic_red_team/windows-sysmon.log",
+   "technique_directory": "T1566.002",
+   "investigated": true,
+   "evidence": 168,
+   "authors_techniques_as_labelled": [
+    "T1566.002"
+   ],
+   "authors_techniques": [
+    "T1566.002"
+   ],
+   "counted": [],
+   "found_exactly": [],
+   "found_as_parent_or_sub": [],
+   "missed": [
+    "T1566.002"
+   ],
+   "missed_but_shown": [
+    "T1566.002"
+   ],
+   "counted_but_not_listed_by_authors": [],
+   "verdict": "no_decision_features",
+   "named_actors": []
+  },
+  {
+   "recording": "datasets/attack_techniques/T1566.002/lnk_file_temp_folder/windows-sysmon.log",
+   "technique_directory": "T1566.002",
+   "investigated": true,
+   "evidence": 114,
+   "authors_techniques_as_labelled": [
+    "T1566.002"
+   ],
+   "authors_techniques": [
+    "T1566.002"
+   ],
+   "counted": [
+    "T1003",
+    "T1003.001",
+    "T1021.006",
+    "T1027.004",
+    "T1033",
+    "T1036",
+    "T1036.005",
+    "T1059",
+    "T1059.001",
+    "T1204",
+    "T1529",
+    "T1547.001"
+   ],
+   "found_exactly": [],
+   "found_as_parent_or_sub": [],
+   "missed": [
+    "T1566.002"
+   ],
+   "missed_but_shown": [],
+   "counted_but_not_listed_by_authors": [
+    "T1003",
+    "T1003.001",
+    "T1021.006",
+    "T1027.004",
+    "T1033",
+    "T1036",
+    "T1036.005",
+    "T1059",
+    "T1059.001",
+    "T1204",
+    "T1529",
+    "T1547.001"
+   ],
+   "verdict": "not_distinguishable",
+   "named_actors": []
+  },
+  {
+   "recording": "datasets/attack_techniques/T1569.002/atomic_red_team/windows-sysmon.log",
+   "technique_directory": "T1569.002",
+   "investigated": true,
+   "evidence": 362,
+   "authors_techniques_as_labelled": [
+    "T1569.002"
+   ],
+   "authors_techniques": [
+    "T1569.002"
+   ],
+   "counted": [
+    "T1003",
+    "T1003.001",
+    "T1021.006",
+    "T1027.004",
+    "T1033",
+    "T1036",
+    "T1036.003",
+    "T1036.005",
+    "T1047",
+    "T1059",
+    "T1059.001",
+    "T1204",
+    "T1529",
+    "T1543.003",
+    "T1569.002",
+    "T1574.001",
+    "T1588.002"
+   ],
+   "found_exactly": [
+    "T1569.002"
+   ],
+   "found_as_parent_or_sub": [],
+   "missed": [],
+   "missed_but_shown": [],
+   "counted_but_not_listed_by_authors": [
+    "T1003",
+    "T1003.001",
+    "T1021.006",
+    "T1027.004",
+    "T1033",
+    "T1036",
+    "T1036.003",
+    "T1036.005",
+    "T1047",
+    "T1059",
+    "T1059.001",
+    "T1204",
+    "T1529",
+    "T1543.003",
+    "T1574.001",
+    "T1588.002"
+   ],
+   "verdict": "not_distinguishable",
+   "named_actors": []
+  },
+  {
+   "recording": "datasets/attack_techniques/T1572/ngrok/windows-sysmon.log",
+   "technique_directory": "T1572",
+   "investigated": true,
+   "evidence": 14,
+   "authors_techniques_as_labelled": [
+    "T1572"
+   ],
+   "authors_techniques": [
+    "T1572"
+   ],
+   "counted": [
+    "T1059.001",
+    "T1572"
+   ],
+   "found_exactly": [
+    "T1572"
+   ],
+   "found_as_parent_or_sub": [],
+   "missed": [],
+   "missed_but_shown": [],
+   "counted_but_not_listed_by_authors": [
+    "T1059.001"
+   ],
+   "verdict": "not_distinguishable",
+   "named_actors": []
+  },
+  {
+   "recording": "datasets/attack_techniques/T1572/plink/windows-sysmon.log",
+   "technique_directory": "T1572",
+   "investigated": true,
+   "evidence": 28,
+   "authors_techniques_as_labelled": [
+    "T1572"
+   ],
+   "authors_techniques": [
+    "T1572"
+   ],
+   "counted": [
+    "T1021",
+    "T1036",
+    "T1572"
+   ],
+   "found_exactly": [
+    "T1572"
+   ],
+   "found_as_parent_or_sub": [],
+   "missed": [],
+   "missed_but_shown": [],
+   "counted_but_not_listed_by_authors": [
+    "T1021",
+    "T1036"
+   ],
+   "verdict": "not_distinguishable",
+   "named_actors": []
+  },
+  {
+   "recording": "datasets/attack_techniques/T1574.001/atomic_red_team/windows-sysmon.log",
+   "technique_directory": "T1574.001",
+   "investigated": true,
+   "evidence": 0,
+   "authors_techniques_as_labelled": [
+    "T1574.001"
+   ],
+   "authors_techniques": [
+    "T1574.001"
+   ],
+   "counted": [],
+   "found_exactly": [],
+   "found_as_parent_or_sub": [],
+   "missed": [
+    "T1574.001"
+   ],
+   "missed_but_shown": [],
+   "counted_but_not_listed_by_authors": [],
+   "verdict": "no_decision_features",
+   "named_actors": []
+  },
+  {
+   "recording": "datasets/attack_techniques/T1574.002/lotus_blossom_chrysalis/windows-sysmon.log",
+   "investigated": false,
+   "state": "refused by intake",
+   "problems": [
+    "no record converted to an Observation \u2014 unsupported shape or channels"
+   ],
+   "authors_techniques": [
+    "T1574.001"
+   ]
+  },
+  {
+   "recording": "datasets/attack_techniques/T1574.002/msi_module_load/windows-sysmon.log",
+   "technique_directory": "T1574.002",
+   "investigated": true,
+   "evidence": 0,
+   "authors_techniques_as_labelled": [
+    "T1574.002"
+   ],
+   "authors_techniques": [
+    "T1574.001"
+   ],
+   "counted": [],
+   "found_exactly": [],
+   "found_as_parent_or_sub": [],
+   "missed": [
+    "T1574.001"
+   ],
+   "missed_but_shown": [],
+   "counted_but_not_listed_by_authors": [],
+   "verdict": "no_decision_features",
+   "named_actors": []
+  },
+  {
+   "recording": "datasets/attack_techniques/T1574.009/atomic_red_team/windows-sysmon.log",
+   "technique_directory": "T1574.009",
+   "investigated": true,
+   "evidence": 283,
+   "authors_techniques_as_labelled": [
+    "T1574.009"
+   ],
+   "authors_techniques": [
+    "T1574.009"
+   ],
+   "counted": [
+    "T1003",
+    "T1003.001",
+    "T1021.006",
+    "T1027.004",
+    "T1033",
+    "T1036",
+    "T1036.005",
+    "T1059",
+    "T1059.001",
+    "T1204",
+    "T1529",
+    "T1547.009",
+    "T1574.001"
+   ],
+   "found_exactly": [],
+   "found_as_parent_or_sub": [],
+   "missed": [
+    "T1574.009"
+   ],
+   "missed_but_shown": [
+    "T1574.009"
+   ],
+   "counted_but_not_listed_by_authors": [
+    "T1003",
+    "T1003.001",
+    "T1021.006",
+    "T1027.004",
+    "T1033",
+    "T1036",
+    "T1036.005",
+    "T1059",
+    "T1059.001",
+    "T1204",
+    "T1529",
+    "T1547.009",
+    "T1574.001"
+   ],
+   "verdict": "not_distinguishable",
+   "named_actors": []
+  },
+  {
+   "recording": "datasets/attack_techniques/T1574.011/change_registry_path_service/windows-sysmon.log",
+   "technique_directory": "T1574.011",
+   "investigated": true,
+   "evidence": 5,
+   "authors_techniques_as_labelled": [
+    "T1574.011"
+   ],
+   "authors_techniques": [
+    "T1574.011"
+   ],
+   "counted": [
+    "T1574.011"
+   ],
+   "found_exactly": [
+    "T1574.011"
+   ],
+   "found_as_parent_or_sub": [],
+   "missed": [],
+   "missed_but_shown": [],
+   "counted_but_not_listed_by_authors": [],
+   "verdict": "not_distinguishable",
+   "named_actors": []
+  },
+  {
+   "recording": "datasets/attack_techniques/T1588.002/atomic_red_team/windows-sysmon.log",
+   "technique_directory": "T1588.002",
+   "investigated": true,
+   "evidence": 537,
+   "authors_techniques_as_labelled": [
+    "T1588.002"
+   ],
+   "authors_techniques": [
+    "T1588.002"
+   ],
+   "counted": [
+    "T1003",
+    "T1003.001",
+    "T1033",
+    "T1059",
+    "T1059.001",
+    "T1134.002"
+   ],
+   "found_exactly": [],
+   "found_as_parent_or_sub": [],
+   "missed": [
+    "T1588.002"
+   ],
+   "missed_but_shown": [],
+   "counted_but_not_listed_by_authors": [
+    "T1003",
+    "T1003.001",
+    "T1033",
+    "T1059",
+    "T1059.001",
+    "T1134.002"
+   ],
+   "verdict": "not_distinguishable",
+   "named_actors": []
+  },
+  {
+   "recording": "datasets/attack_techniques/T1590.005/windows-sysmon.log",
+   "technique_directory": "T1590.005",
+   "investigated": true,
+   "evidence": 0,
+   "authors_techniques_as_labelled": [
+    "T1590.005"
+   ],
+   "authors_techniques": [
+    "T1590.005"
+   ],
+   "counted": [],
+   "found_exactly": [],
+   "found_as_parent_or_sub": [],
+   "missed": [
+    "T1590.005"
+   ],
+   "missed_but_shown": [],
+   "counted_but_not_listed_by_authors": [],
+   "verdict": "no_decision_features",
+   "named_actors": []
+  },
+  {
+   "recording": "datasets/attack_techniques/T1595/attacker_scan_tools/windows-sysmon.log",
+   "technique_directory": "T1595",
+   "investigated": true,
+   "evidence": 377,
+   "authors_techniques_as_labelled": [
+    "T1595"
+   ],
+   "authors_techniques": [
+    "T1595"
+   ],
+   "counted": [
+    "T1003",
+    "T1003.001",
+    "T1027.004",
+    "T1033",
+    "T1036.003",
+    "T1059",
+    "T1059.001",
+    "T1218",
+    "T1218.011",
+    "T1552.004",
+    "T1552.006",
+    "T1574.001",
+    "T1588.002"
+   ],
+   "found_exactly": [],
+   "found_as_parent_or_sub": [],
+   "missed": [
+    "T1595"
+   ],
+   "missed_but_shown": [],
+   "counted_but_not_listed_by_authors": [
+    "T1003",
+    "T1003.001",
+    "T1027.004",
+    "T1033",
+    "T1036.003",
+    "T1059",
+    "T1059.001",
+    "T1218",
+    "T1218.011",
+    "T1552.004",
+    "T1552.006",
+    "T1574.001",
+    "T1588.002"
+   ],
+   "verdict": "not_distinguishable",
+   "named_actors": []
+  },
+  {
+   "recording": "datasets/attack_techniques/T1620/common_language_runtim_loaded/windows-sysmon.log",
+   "technique_directory": "T1620",
+   "investigated": true,
+   "evidence": 0,
+   "authors_techniques_as_labelled": [
+    "T1620"
+   ],
+   "authors_techniques": [
+    "T1620"
+   ],
+   "counted": [],
+   "found_exactly": [],
+   "found_as_parent_or_sub": [],
+   "missed": [
+    "T1620"
+   ],
+   "missed_but_shown": [],
+   "counted_but_not_listed_by_authors": [],
+   "verdict": "no_decision_features",
+   "named_actors": []
+  }
+ ]
+}
